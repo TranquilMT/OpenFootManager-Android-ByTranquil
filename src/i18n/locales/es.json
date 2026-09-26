@@ -2372,7 +2372,8 @@
         "headline": "¡BLOQUEADO!",
         "lines": {
           "0": "El disparo de {{player}} es bloqueado por un valiente defensa.",
-          "1": "¡Cuerpos en el camino! {{player}} es neutralizado."
+          "1": "¡Cuerpos en el camino! {{player}} es neutralizado.",
+          "2": "La defensa bloquea el remate de {{player}}."
         },
         "bigChance": {
           "headline": "¡GRAN BLOQUEO!",
