@@ -2467,7 +2467,8 @@
         "headline": "CEDERA",
         "lines": {
           "0": "{{player}} terjatuh dan membutuhkan perawatan.",
-          "1": "Kekhawatiran bagi {{team}} — {{player}} terjatuh cedera."
+          "1": "Kekhawatiran bagi {{team}} — {{player}} terjatuh cedera.",
+          "2": "Permainan berhenti saat {{player}} mendapat perawatan."
         }
       },
       "Substitution": {
