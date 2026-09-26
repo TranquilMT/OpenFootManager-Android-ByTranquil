@@ -2309,7 +2309,8 @@
         "headline": "RIGORE — GOL!",
         "lines": {
           "0": "{{player}} spiazza il portiere dal dischetto! Il {{team}} segna su rigore.",
-          "1": "Freddezza assoluta di {{player}} — rigore trasformato per il {{team}}!"
+          "1": "Freddezza assoluta di {{player}} — rigore trasformato per il {{team}}!",
+          "2": "{{player}} trasforma il rigore per {{team}}!"
         }
       },
       "PenaltyMiss": {
