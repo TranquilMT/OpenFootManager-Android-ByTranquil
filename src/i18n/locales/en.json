@@ -2274,7 +2274,8 @@
         "lines": {
           "0": "{{player}} finds the net for {{team}}!",
           "1": "{{player}} buries it! What a finish!",
-          "2": "{{player}} scores for {{team}}!"
+          "2": "{{player}} scores for {{team}}!",
+          "3": "{{player}} finishes the move for {{team}}!"
         },
         "opener": {
           "headline": "GOOAL!",
