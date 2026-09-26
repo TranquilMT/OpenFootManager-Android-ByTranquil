@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { createPlayer } from "../../test-utils/factories";
 import FinancesPayrollTable from "./FinancesPayrollTable";
@@ -23,7 +23,7 @@ describe("FinancesPayrollTable", () => {
     const onSelectPlayer = vi.fn();
     render(<FinancesPayrollTable roster={roster} onSelectPlayer={onSelectPlayer} />);
 
-    fireEvent.click(screen.getByRole("button", { name: /John Smith/ }));
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /John Smith/ }));
 
     expect(onSelectPlayer).toHaveBeenCalledWith("player-1");
   });
@@ -32,7 +32,7 @@ describe("FinancesPayrollTable", () => {
     const onSelectPlayer = vi.fn();
     render(<FinancesPayrollTable roster={roster} onSelectPlayer={onSelectPlayer} />);
 
-    const row = screen.getByRole("button", { name: /Ana Ruiz/ });
+    const row = within(screen.getByRole("table")).getByRole("button", { name: /Ana Ruiz/ });
     expect(row).toHaveAttribute("tabindex", "0");
 
     fireEvent.keyDown(row, { key: "Enter" });
@@ -46,6 +46,7 @@ describe("FinancesPayrollTable", () => {
   it("leaves rows out of the tab order when selection is unavailable", () => {
     render(<FinancesPayrollTable roster={roster} />);
 
-    expect(screen.queryByRole("button", { name: /John Smith/ })).toBeNull();
+    expect(within(screen.getByRole("table")).queryByRole("button", { name: /John Smith/ })).toBeNull();
+    expect(screen.getByRole("button", { name: /John Smith/ })).toBeDisabled();
   });
 });
