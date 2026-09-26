@@ -506,15 +506,15 @@ describe("TransfersTab", (): void => {
       />,
     );
 
-    expect(screen.getAllByText(/^Market Player \d+$/)).toHaveLength(30);
-    expect(screen.getByText("Market Player 30")).toBeInTheDocument();
-    expect(screen.queryByText("Market Player 31")).not.toBeInTheDocument();
+    expect(within(screen.getByRole("table")).getAllByText(/^Market Player \d+$/)).toHaveLength(30);
+    expect(within(screen.getByRole("table")).getByText("Market Player 30")).toBeInTheDocument();
+    expect(within(screen.getByRole("table")).queryByText("Market Player 31")).not.toBeInTheDocument();
     expect(screen.getByText("Showing 1-30 of 65")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Next page" }));
 
     expect(screen.queryByText("Market Player 1")).not.toBeInTheDocument();
-    expect(screen.getByText("Market Player 31")).toBeInTheDocument();
+    expect(within(screen.getByRole("table")).getByText("Market Player 31")).toBeInTheDocument();
     expect(screen.getByText("Showing 31-60 of 65")).toBeInTheDocument();
   });
 
