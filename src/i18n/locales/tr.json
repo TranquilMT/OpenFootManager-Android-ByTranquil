@@ -2348,7 +2348,8 @@
         "headline": "MÜTHİŞ KURTARIŞ!",
         "lines": {
           "0": "{{player}} kaleciye kurtarış yaptırıyor.",
-          "1": "Kaleci {{player}}'a geçit vermiyor!"
+          "1": "Kaleci {{player}}'a geçit vermiyor!",
+          "2": "Kaleci {{player}} oyuncusunun şutunu kurtarıyor."
         },
         "routine": {
           "headline": "KURTARIŞ",
