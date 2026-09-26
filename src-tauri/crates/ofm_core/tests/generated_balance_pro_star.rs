@@ -1,0 +1,1 @@
+use ofm_core::generated_balance::{role_target_ovr,rating_band,LeagueTier,SquadRole};#[test]fn pro_star_within_ceiling(){assert!(role_target_ovr(LeagueTier::Professional,SquadRole::Star)<=rating_band(LeagueTier::Professional).ceiling);}
