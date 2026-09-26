@@ -1875,6 +1875,8 @@
     "live": "Langsung",
     "paused": "Dijeda",
     "events": "Peristiwa",
+    "voiceOn": "Aktifkan komentar suara",
+    "voiceOff": "Matikan komentar suara",
     "stats": "Statistik",
     "lineups": "Susunan Pemain",
     "simSpeed": "Kecepatan Simulasi",
@@ -2265,6 +2267,8 @@
       "PenaltyAwarded": "Penalti Diberikan"
     },
     "commentary": {
+      "Corner": {"headline": "Sepak pojok untuk", "lines": {"0": "Sepak pojok untuk {{team}}.", "1": "{{team}} bersiap mengambil sepak pojok."}},
+      "FreeKick": {"headline": "Tendangan bebas untuk", "lines": {"0": "Tendangan bebas untuk {{team}}.", "1": "{{team}} bersiap mengambil tendangan bebas."}},
       "Goal": {
         "headline": "GOL!",
         "lines": {
