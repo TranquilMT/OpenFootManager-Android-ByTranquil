@@ -1875,6 +1875,8 @@
     "live": "En Vivo",
     "paused": "Pausado",
     "events": "Eventos",
+    "voiceOn": "Activar comentarios de voz",
+    "voiceOff": "Desactivar comentarios de voz",
     "stats": "Estadísticas",
     "lineups": "Alineaciones",
     "simSpeed": "Velocidad de Simulación",
@@ -2231,6 +2233,8 @@
       "PenaltyAwarded": "Penalti Señalado"
     },
     "commentary": {
+      "Corner": {"headline": "Córner para", "lines": {"0": "Córner para {{team}}.", "1": "{{team}} se prepara para sacar de esquina."}},
+      "FreeKick": {"headline": "Falta a favor de", "lines": {"0": "Falta a favor de {{team}}.", "1": "{{team}} prepara el tiro libre."}},
       "Goal": {
         "headline": "¡GOOOL!",
         "lines": {
