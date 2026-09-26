@@ -1224,6 +1224,40 @@ export default function TransfersTab({
                         <span><span className="block text-[10px] uppercase text-gray-400">{t("common.value")}</span><span className="font-semibold text-gray-700 dark:text-gray-200">{formatVal(player.market_value)}</span></span>
                         <span><span className="block text-[10px] uppercase text-gray-400">{t("common.wage")}</span><span className="font-semibold text-gray-700 dark:text-gray-200">{formatAnnualAmount(formatVal(player.wage), annualSuffix)}</span></span>
                       </div>
+                      {view === "offers" ? (
+                        <div className="mt-2 space-y-2">
+                          {mobileTransferOffers.map((offer) => (
+                            <div key={offer.id} className="rounded-lg border border-gray-200 p-2 dark:border-navy-600">
+                              <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                                <span className="font-semibold">{getTeamName(gameState.teams, offer.from_team_id)}</span>
+                                <Badge variant={getTransferOfferBadgeVariant(offer.status)} size="sm">{formatVal(offer.fee)} — {getTransferOfferStatusLabel(t, offer.status)}</Badge>
+                              </div>
+                              {offer.status === "Pending" && player.team_id === userTeamId ? (
+                                <div className="mt-2 grid grid-cols-3 gap-2">
+                                  <button type="button" onClick={() => handleRespondOffer(player.id, offer.id, true)} className="min-h-11 rounded-lg bg-green-500/20 text-xs font-bold text-green-600">{t("transfers.acceptOffer")}</button>
+                                  <button type="button" onClick={() => handleRespondOffer(player.id, offer.id, false)} className="min-h-11 rounded-lg bg-red-500/20 text-xs font-bold text-red-500">{t("transfers.rejectOffer")}</button>
+                                  <button type="button" onClick={() => openCounterNegotiation(player, offer)} className="min-h-11 rounded-lg bg-amber-500/20 text-xs font-bold text-amber-600">{t("transfers.counter")}</button>
+                                </div>
+                              ) : null}
+                            </div>
+                          ))}
+                          {mobileLoanOffers.map((offer) => (
+                            <div key={`mobile-loan-${offer.id}`} className="rounded-lg border border-gray-200 p-2 dark:border-navy-600">
+                              <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                                <span className="font-semibold">{getTeamName(gameState.teams, offer.from_team_id)}</span>
+                                <Badge variant={getTransferOfferBadgeVariant(offer.status)} size="sm">{t("transfers.loanOfferTerms", { percent: offer.wage_contribution_pct, endDate: offer.end_date })}</Badge>
+                              </div>
+                              {offer.status === "Pending" && player.team_id === userTeamId && offer.from_team_id !== userTeamId ? (
+                                <div className="mt-2 grid grid-cols-3 gap-2">
+                                  <button type="button" onClick={() => handleRespondLoanOffer(player.id, offer.id, true)} className="min-h-11 rounded-lg bg-green-500/20 text-xs font-bold text-green-600">{t("transfers.acceptLoanOffer")}</button>
+                                  <button type="button" onClick={() => handleRespondLoanOffer(player.id, offer.id, false)} className="min-h-11 rounded-lg bg-red-500/20 text-xs font-bold text-red-500">{t("transfers.rejectLoanOffer")}</button>
+                                  <button type="button" onClick={() => openLoanCounterOffer(player, offer)} className="min-h-11 rounded-lg bg-amber-500/20 text-xs font-bold text-amber-600">{t("transfers.counter")}</button>
+                                </div>
+                              ) : null}
+                            </div>
+                          ))}
+                        </div>
+                      ) : null}
                       {isScoutingView ? (
                         <button type="button" onClick={() => openDealEntry(player)} className="mt-2 flex min-h-11 w-full items-center justify-center gap-1 rounded-lg bg-primary-500/10 px-3 text-xs font-heading font-bold uppercase tracking-wider text-primary-500 active:bg-primary-500/20">
                           {getDealEntryIcon(player, "w-4 h-4")}{getDealEntryLabel(player)}
