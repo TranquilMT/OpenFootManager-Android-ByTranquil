@@ -2470,7 +2470,8 @@
         "headline": "TEMPO FINAL",
         "lines": {
           "0": "É isso — tempo final!",
-          "1": "O árbitro encerra o encontro."
+          "1": "O árbitro encerra o encontro.",
+          "2": "O apito final confirma o resultado."
         }
       }
     },
