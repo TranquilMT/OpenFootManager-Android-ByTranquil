@@ -2406,7 +2406,8 @@
         "headline": "BLOKE EDİLDİ!",
         "lines": {
           "0": "{{player}}'ın şutu cesur bir savunmacıya çarpıyor.",
-          "1": "Araya giren vücutlar! {{player}}'a izin yok."
+          "1": "Araya giren vücutlar! {{player}}'a izin yok.",
+          "2": "Savunma {{player}} oyuncusunun şutunu engelliyor."
         },
         "bigChance": {
           "headline": "MÜTHİŞ BLOK!",
