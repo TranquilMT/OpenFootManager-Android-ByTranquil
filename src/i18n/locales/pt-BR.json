@@ -2376,7 +2376,8 @@
         "headline": "LESÃO",
         "lines": {
           "0": "{{player}} está no chão e precisa de atendimento.",
-          "1": "Preocupação no {{team}}: {{player}} cai lesionado."
+          "1": "Preocupação no {{team}}: {{player}} cai lesionado.",
+          "2": "O jogo para enquanto {{player}} recebe atendimento."
         }
       },
       "Substitution": {
