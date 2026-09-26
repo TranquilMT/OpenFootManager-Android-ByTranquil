@@ -177,7 +177,7 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
           <button
             type="button"
             onClick={() => setView("mystaff")}
-            className={`px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+            className={`flex min-h-11 items-center justify-center gap-1.5 rounded-lg px-3 py-2 font-heading text-xs font-bold uppercase tracking-wider transition-all sm:px-4 sm:text-sm ${
               view === "mystaff"
                 ? "bg-primary-500 text-white shadow-md shadow-primary-500/20"
                 : "bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600"
@@ -188,7 +188,7 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
           <button
             type="button"
             onClick={() => setView("available")}
-            className={`px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+            className={`flex min-h-11 items-center justify-center gap-1.5 rounded-lg px-3 py-2 font-heading text-xs font-bold uppercase tracking-wider transition-all sm:px-4 sm:text-sm ${
               view === "available"
                 ? "bg-primary-500 text-white shadow-md shadow-primary-500/20"
                 : "bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600"
@@ -199,22 +199,22 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
           </button>
         </div>
 
-        <div className="relative flex-1 min-w-[180px] max-w-xs">
+        <div className="relative w-full min-w-0 flex-1 sm:min-w-[180px] sm:max-w-xs">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
           <input
             type="text"
             placeholder={t("staff.searchStaff")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-3 py-2 rounded-lg bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-600 text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+            className="min-h-11 w-full rounded-lg bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-600 text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
           />
         </div>
 
-        <div className="flex gap-1.5">
+        <div className="touch-x -mx-1 flex w-[calc(100%+0.5rem)] gap-1.5 overflow-x-auto px-1 pb-1 sm:mx-0 sm:w-auto sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
           <button
             type="button"
             onClick={() => setRoleFilter(null)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-heading font-bold uppercase tracking-wider transition-all ${
+            className={`min-h-11 shrink-0 rounded-lg px-3 py-1.5 text-xs font-heading font-bold uppercase tracking-wider transition-all sm:min-h-0 ${
               !roleFilter
                 ? "bg-primary-500 text-white shadow-sm"
                 : "bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600"
@@ -227,7 +227,7 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
               type="button"
               key={r}
               onClick={() => setRoleFilter(roleFilter === r ? null : r)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-heading font-bold uppercase tracking-wider transition-all flex items-center gap-1 ${
+              className={`flex min-h-11 shrink-0 items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-heading font-bold uppercase tracking-wider transition-all sm:min-h-0 ${
                 roleFilter === r
                   ? "bg-primary-500 text-white shadow-sm"
                   : "bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600"
@@ -390,7 +390,7 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
                         {staff.role === "Scout" && onNavigate ? (
                           <button
                             type="button"
-                            className="mt-3 text-xs font-heading font-bold uppercase tracking-wider text-primary-500 hover:text-primary-600"
+                            className="mt-2 flex min-h-11 items-center text-xs font-heading font-bold uppercase tracking-wider text-primary-500 active:text-primary-600 sm:mt-3 sm:min-h-0 sm:hover:text-primary-600"
                             onClick={() => onNavigate("Scouting")}
                           >
                             {openScoutingWorkflowLabel}
@@ -404,7 +404,7 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
                           type="button"
                           disabled={isLoading}
                           onClick={() => handleRelease(staff.id)}
-                          className={`p-2 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors ${isLoading ? "opacity-50 pointer-events-none" : ""}`}
+                          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors ${isLoading ? "opacity-50 pointer-events-none" : ""}`}
                           title={t("staff.releaseStaff")}
                         >
                           <UserMinus className="w-4 h-4" />
@@ -415,7 +415,7 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
                           type="button"
                           disabled={isLoading}
                           onClick={() => handleHire(staff.id)}
-                          className={`p-2 rounded-lg bg-primary-50 dark:bg-primary-500/10 text-primary-500 hover:bg-primary-100 dark:hover:bg-primary-500/20 transition-colors ${isLoading ? "opacity-50 pointer-events-none" : ""}`}
+                          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-primary-50 dark:bg-primary-500/10 text-primary-500 hover:bg-primary-100 dark:hover:bg-primary-500/20 transition-colors ${isLoading ? "opacity-50 pointer-events-none" : ""}`}
                           title={t("staff.hireStaff")}
                         >
                           <UserPlus className="w-4 h-4" />
