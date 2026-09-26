@@ -2360,7 +2360,8 @@
         "headline": "CARTÃO VERMELHO!",
         "lines": {
           "0": "{{player}} é expulso! O {{team}} fica com dez!",
-          "1": "Vermelho direto para {{player}}! Desastre para o {{team}}."
+          "1": "Vermelho direto para {{player}}! Desastre para o {{team}}.",
+          "2": "{{player}} é expulso; {{team}} segue com dez."
         }
       },
       "SecondYellow": {
