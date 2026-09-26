@@ -2306,7 +2306,8 @@
         "headline": "PENALTY !",
         "lines": {
           "0": "L'arbitre pointe le point de penalty — penalty pour {{team}} !",
-          "1": "C'est un penalty pour {{team}} ! Moment capital."
+          "1": "C'est un penalty pour {{team}} ! Moment capital.",
+          "2": "L'arbitre accorde un penalty à {{team}}."
         }
       },
       "ShotSaved": {
