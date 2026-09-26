@@ -24,6 +24,14 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Require and validate committed 2026/27 database snapshot
+        run: |
+          set -euo pipefail
+          DB="src-tauri/databases/openfootball-2026-27.json"
+          test -s "$DB" || { echo 'ERROR: no release-ready committed snapshot; see docs/DATABASE-AUDIT-2026-09-26.md'; exit 1; }
+          git ls-files --error-unmatch "$DB" "$DB.sha256" >/dev/null
+          node scripts/validate-real-database.mjs "$DB" --checksum
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -37,28 +45,6 @@ jobs:
 
       - name: Install frontend dependencies
         run: npm ci
-
-      - name: Require and validate committed 2026/27 database snapshot
-        run: |
-          set -euo pipefail
-          DB="src-tauri/databases/openfootball-2026-27.json"
-          test -s "$DB" || { echo 'ERROR: committed 2026/27 database snapshot is missing or empty'; exit 1; }
-          git ls-files --error-unmatch "$DB" >/dev/null || { echo 'ERROR: database exists in workspace but is not tracked by Git'; exit 1; }
-          node scripts/validate-real-database.mjs "$DB"
-          node - "$DB" <<'NODE'
-          const fs = require('fs');
-          const db = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
-          const players = Array.isArray(db.players) ? db.players.length : 0;
-          const teams = Array.isArray(db.teams) ? db.teams.length : 0;
-          const nationalTeams = Array.isArray(db.national_teams) ? db.national_teams.length :
-            (Array.isArray(db.nationalTeams) ? db.nationalTeams.length : 0);
-          console.log(`Committed database: ${teams} teams, ${players} players, ${nationalTeams} national teams`);
-          if (players < 12000) throw new Error(`Player count too low: ${players}`);
-          if (teams < 800) throw new Error(`Team count too low: ${teams}`);
-          NODE
-
-      - name: Install Tauri CLI
-        run: npm install --global @tauri-apps/cli@^2
 
       - name: Frontend build
         env:

@@ -1,130 +1,83 @@
-<div align="center">
+# OpenFootManager Android by Tranquil
 
-![Openfoot logo](images/openfootlogo.svg)
+An Android port of the GPLv3 OpenFoot Manager football-management game. **Nightly development; not Stable.**
 
-[![License: GPL v3](https://img.shields.io/github/license/openfootmanager/openfootmanager
-)](https://www.gnu.org/licenses/gpl-3.0)
-[![Rust](https://shields.io/badge/-Rust-FF4500?style=flat&logo=rust)](https://www.rust-lang.org/)
-[![Tauri](https://shields.io/badge/-Tauri-2E8B57?style=flat&logo=tauri)](https://tauri.app/)
-[![React](https://shields.io/badge/-React-1434A4?style=flat&logo=react)](https://react.dev/)
-[![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/openfootmanager/openfootmanager?utm_source=oss&utm_medium=github&utm_campaign=openfootmanager%2Fopenfootmanager&labelColor=171717&color=FF570A&label=CodeRabbit+Reviews)](https://coderabbit.ai)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/openfootmanager/openfootmanager/graphs/commit-activity)
-[![Last commit](https://img.shields.io/github/last-commit/openfootmanager/openfootmanager)](https://github.com/openfootmanager/openfootmanager/commits/develop)
+Canonical repository: https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil
 
-**A free and open source football management simulation game**
+## Current status
 
-[Vision](VISION.md) • [Roadmap](https://github.com/openfootmanager/openfootmanager/issues/11) • [Features](#features) • [Screenshots](#screenshots) • [Installation](#installation--development) • [Contributing](#contributing) • [License](#license)
+The complete 1,112-file Android development tree was migrated from
+`TranquilMT/openfootmanagerforandroid`, branch `android/phase-1-bootstrap`, commit
+`4c0574afebc40b6cb601d8a6120108bc514d7697`, into migration commit
+`68589d443ecd76d82b70b164b9b3918871d70889`. Both source trees have Git tree SHA
+`23441b61b7a0e94982f28b2b691bfa2e357ac7af`.
 
-Join the community on Discord: https://discord.gg/2CXaesaukT
+The frontend, Rust/Tauri backend, match engine, management systems, mobile work,
+assets, lockfiles, scripts, licences and workflows are preserved. The historical
+repository is a source reference only; it is not a build dependency.
 
-</div>
+**The next Android release is blocked on the database.** The earlier 12,755-player
+artifact is not compatible with the native loader and contains data with redistribution
+restrictions. It has not been committed here. Read the [database audit](docs/DATABASE-AUDIT-2026-09-26.md)
+for verified evidence and remaining work. No successful APK, career creation or save
+round trip is claimed by the migration.
 
----
+## Build from source
 
-**Openfoot Manager** is a free and open source football/soccer manager game, licensed under the [GPLv3](LICENSE.md), inspired by the management genre that Football Manager&trade;, Championship Manager and Bygfoot built.
+Use Node 22, npm and the committed lockfile:
 
-It is **not a clone of any of them**. There is no licensed database, no online requirement, and no monetization — instead the world is data you author and share, and the depth is a dial you set. Read [VISION.md](VISION.md) for what that means and where the project is going.
-
-## FEATURES
-
-- **Text-based match simulation** with event-driven commentary and score progression.
-- **Full squad management** for roles, depth planning, and player development decisions.
-- **Transfer and contract workflows** to buy, sell, and negotiate player moves.
-- **Training and staff systems** to improve performance through coaching and planning.
-- **Dynamic inbox and news generation** that keeps you updated on club and world events.
-- **Scouting support** for discovering talent and evaluating future signings.
-- **Persistent game data** backed by SQLite for local saves and progression.
-- **Modern desktop app experience** built with Tauri + React for speed and low overhead.
-- **Multi-language support** with i18n foundations and community translation growth.
-- **Free and open source** under GPLv3, with community-driven development.
-
-## SCREENSHOTS
-
-Click any image to open the full-size version.
-
-<a href="images/screenshots/inbox.png"><img src="images/screenshots/inbox.png" alt="Inbox screen" width="220" /></a>
-<a href="images/screenshots/news.png"><img src="images/screenshots/news.png" alt="News screen" width="220" /></a>
-<a href="images/screenshots/manage_squad.png"><img src="images/screenshots/manage_squad.png" alt="Manage squad screen" width="220" /></a>
-
-<a href="images/screenshots/matchlive.png"><img src="images/screenshots/matchlive.png" alt="Match live screen" width="220" /></a>
-<a href="images/screenshots/training.png"><img src="images/screenshots/training.png" alt="Training screen" width="220" /></a>
-<a href="images/screenshots/playertalk.png"><img src="images/screenshots/playertalk.png" alt="Player talk screen" width="220" /></a>
-
-<a href="images/screenshots/presstalk.png"><img src="images/screenshots/presstalk.png" alt="Press talk screen" width="220" /></a>
-
-## ARCHITECTURE
-
-OpenFootManager is built using modern web technologies:
-
-- **Rust**: Blazing-fast backend for the Match Simulation Engine and Game State.
-- **Tauri**: Lightweight desktop application shell.
-- **React + TypeScript + TailwindCSS**: A highly responsive frontend interface.
-- **SQLite**: Local persistence for game saves.
-
-## INSTALLATION & DEVELOPMENT
-
-The game is still in early active development. To build and run the debug version, you need to install standard tools for Rust, Node, and Tauri development:
-
-1. Install **Rust** (via `rustup`)
-2. Install **Node.js** (v18+)
-3. Install Tauri dependencies for your specific OS (see the [Tauri Prerequisites Guide](https://v2.tauri.app/start/prerequisites/))
-
-Clone the repository and install dependencies:
-
-```bash
-git clone https://github.com/openfootmanager/openfootmanager.git
-cd openfootmanager
-npm install
+```sh
+npm ci
+npm run build
+npm test -- --maxWorkers=2
+node --test scripts/validate-real-database.test.mjs
 ```
 
-Run the development desktop app:
+Backend checks require stable Rust and the Tauri platform prerequisites:
 
-```bash
-npm run tauri dev
+```sh
+cargo test --manifest-path src-tauri/Cargo.toml --workspace
+cargo clippy --manifest-path src-tauri/Cargo.toml --workspace --all-targets
 ```
 
-### Linux graphics
+For Android, install Java 17, Android SDK/NDK and Rust target
+`aarch64-linux-android`. A corrected native database and checksum must first be
+committed under `src-tauri/databases/openfootball-2026-27.json[.sha256]`:
 
-Linux renders through WebKitGTK, which has known trouble with NVIDIA's proprietary driver. The
-app detects your GPUs at startup and picks a rendering path automatically; if you get a blank
-window or a sluggish UI, [docs/LINUX_GRAPHICS.md](docs/LINUX_GRAPHICS.md) explains the
-`OFM_GPU_PROFILE` override and records the measurements behind the default.
-
-## CONTRIBUTING
-
-Contributions are welcome. For full guidelines, read [CONTRIBUTING](CONTRIBUTING.md).
-
-Start with [VISION.md](VISION.md) to understand what the project is for, then the [roadmap index](https://github.com/openfootmanager/openfootmanager/issues/11) to see what is being worked on and what you can pick up.
-
-If you want to discuss ideas, share feedback, or follow development more casually, join the Discord server: https://discord.gg/2CXaesaukT
-
-Quick contribution checklist:
-
-1. Open an Issue first for bugs, enhancements, or larger feature ideas.
-2. Work from a feature branch and open Pull Requests targeting `develop`.
-3. Run tests before submitting:
-
-```bash
-npm test
-cd src-tauri
-cargo test --workspace
+```sh
+git ls-files --error-unmatch src-tauri/databases/openfootball-2026-27.json src-tauri/databases/openfootball-2026-27.json.sha256
+node scripts/validate-real-database.mjs src-tauri/databases/openfootball-2026-27.json --checksum
+npx tauri android init --ci
+npx tauri android build --debug --apk --target aarch64
 ```
 
-## LICENSE
+The Android project is generated by the lockfile-pinned Tauri CLI; the source branch
+did not track generated Gradle project files. CI initializes it from a fresh checkout.
+The Tauri config packages the database and built-in names/nations resources, but APK
+contents and Android resource loading must still be verified for the next release.
 
-    Openfoot Manager - A free and open source soccer management game
-    Copyright (C) 2020-2026  Pedrenrique G. Guimarães
+## CI and releases
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+- Source Verification checks the frontend and validator without claiming an APK build.
+- Android APK is the preserved manual/development workflow. It fails early without a
+  tracked, valid snapshot/checksum. It uses ARM64 and cancels superseded builds.
+- Database refresh is separate and manual. Its legacy generator is currently blocked;
+  see the audit before replacing it. Normal APK builds never regenerate data.
+- Use the new repository's actual workflow run number for `BuildN-Nightly` filenames.
+  New repository run numbers restart independently of historical builds.
+- Publish only after signature, ARM64-only payload, embedded database/checksum,
+  game resources and version metadata are inspected. Record the commit and run URL.
+- Do not label a release Stable until career, save/load, matches, seasons and installation
+  have been exercised. Debug signing does not guarantee update compatibility.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+For a milestone, archive the exact release commit with `git archive`, excluding caches
+and credentials. Attach APK, its SHA-256 and the source archive. Preserve all upstream
+copyright and licence notices. Signing keys belong in GitHub Secrets, never source.
 
-Check [LICENSE](LICENSE.md) for more information.
+## Contributing and attribution
+
+See [CONTRIBUTING.md](CONTRIBUTING.md), [AGENTS.md](AGENTS.md), [LICENSE.md](LICENSE.md)
+and the preserved [upstream project overview](docs/UPSTREAM-README.md).
+Submit Android work to this repository. Existing desktop documentation remains useful
+for engine architecture; desktop packaging workflows are historical and are not Android
+release evidence. Data licences are separate from the GPLv3 game code licence.

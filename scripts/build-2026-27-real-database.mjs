@@ -5,6 +5,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
+// The audited legacy pipeline incorporates a source that prohibits redistribution.
+// Do not run network imports until the replacement source policy is implemented.
+throw new Error('Database refresh blocked: legacy StatsBomb redistribution and native-schema defects. See docs/DATABASE-AUDIT-2026-09-26.md.');
 const root=process.cwd(), cache=path.join(root,'.cache','ofm-real-2026-27');
 const normalized=path.join(cache,'normalized-2026-27.json');
 const output=path.join(root,'src-tauri','databases','openfootball-2026-27.json');
