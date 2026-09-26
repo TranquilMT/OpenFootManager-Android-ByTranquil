@@ -505,14 +505,14 @@ function MatchdayGroupCard({
               return (
                 <ContextMenu items={contextItems} key={fixture.id}>
                   <div
-                    className={`flex items-center px-5 py-3 transition-colors ${
+                    className={`grid grid-cols-[minmax(0,1fr)_3.5rem_minmax(0,1fr)] items-center gap-1 px-2 py-2 transition-colors sm:flex sm:gap-0 sm:px-5 sm:py-3 ${
                       isUserMatch ? "bg-primary-50/50 dark:bg-primary-500/5" : ""
                     }`}
                     data-testid={`schedule-fixture-${fixture.id}`}
                   >
                     <span
                       onClick={() => onSelectTeam(fixture.home_team_id)}
-                      className={`flex-1 cursor-pointer text-right text-sm font-semibold hover:underline ${
+                      className={`flex min-h-11 min-w-0 cursor-pointer items-center justify-end break-words text-right text-xs font-semibold active:underline sm:min-h-0 sm:flex-1 sm:text-sm sm:hover:underline ${
                         fixture.home_team_id === userTeamId
                           ? "text-primary-600 dark:text-primary-400"
                           : "text-gray-800 dark:text-gray-200"
@@ -520,7 +520,7 @@ function MatchdayGroupCard({
                     >
                       {fixture.home_team_name}
                     </span>
-                    <div className="mx-3 w-24 text-center">
+                    <div className="w-14 text-center sm:mx-3 sm:w-24">
                       {completed && fixture.result ? (
                         <span className="font-heading text-lg font-bold text-gray-800 dark:text-gray-100">
                           {fixture.result.home_goals} - {fixture.result.away_goals}
@@ -533,7 +533,7 @@ function MatchdayGroupCard({
                     </div>
                     <span
                       onClick={() => onSelectTeam(fixture.away_team_id)}
-                      className={`flex-1 cursor-pointer text-left text-sm font-semibold hover:underline ${
+                      className={`flex min-h-11 min-w-0 cursor-pointer items-center break-words text-left text-xs font-semibold active:underline sm:min-h-0 sm:flex-1 sm:text-sm sm:hover:underline ${
                         fixture.away_team_id === userTeamId
                           ? "text-primary-600 dark:text-primary-400"
                           : "text-gray-800 dark:text-gray-200"
