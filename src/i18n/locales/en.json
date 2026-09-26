@@ -1748,6 +1748,7 @@
     "matchCommentaryDesc": "Show event commentary during live matches",
     "confirmAdvance": "Confirm Before Advancing",
     "confirmAdvanceDesc": "Ask for confirmation before advancing a day",
+    "confirmAdvancePrompt": "Advance to the next day?",
     "continueToNextEvent": "Continue Skips to Next Event",
     "continueToNextEventDesc": "Continue rolls forward until your next match, a blocker, a transfer deadline, or important news",
     "savesData": "Saves & Data",

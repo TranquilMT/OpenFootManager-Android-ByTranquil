@@ -21,6 +21,7 @@ const mockedInvoke = vi.mocked(invoke);
 function HookHarness(props: {
   defaultMatchMode?: "live" | "spectator" | "delegate";
   hasMatchToday: boolean;
+  confirmAdvance?: boolean;
 }): JSX.Element {
   const [, setGameState] = useState<GameStateData | null>(null);
   const {
@@ -35,6 +36,8 @@ function HookHarness(props: {
     props.defaultMatchMode,
     true,
     false,
+    false,
+    props.confirmAdvance,
   );
 
   return (
@@ -58,6 +61,15 @@ describe("useAdvanceTime", (): void => {
   beforeEach(function resetMocks(): void {
     mockedInvoke.mockReset();
     navigateMock.mockReset();
+  });
+
+  it("respects a declined next-day confirmation", async (): Promise<void> => {
+    const confirm = vi.spyOn(window, "confirm").mockReturnValue(false);
+    render(<HookHarness hasMatchToday={false} confirmAdvance />);
+    fireEvent.click(screen.getByRole("button", { name: "Continue" }));
+    expect(confirm).toHaveBeenCalledOnce();
+    expect(mockedInvoke).not.toHaveBeenCalled();
+    confirm.mockRestore();
   });
 
   it("shows match confirmation before advancing on match day", async (): Promise<void> => {

@@ -1748,6 +1748,7 @@
     "matchCommentaryDesc": "Canlı maçlarda olay anlatımını göster",
     "confirmAdvance": "İlerlemeden Önce Onayla",
     "confirmAdvanceDesc": "Bir günü ilerletmeden önce onay iste",
+    "confirmAdvancePrompt": "Sonraki güne geçilsin mi?",
     "continueToNextEvent": "Devam Et Bir Sonraki Olaya Atlar",
     "continueToNextEventDesc": "Devam Et; bir sonraki maçınıza, bir engele, transfer son gününe veya önemli bir habere kadar ilerler",
     "savesData": "Kayıtlar ve Veriler",

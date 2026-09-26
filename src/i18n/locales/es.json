@@ -1748,6 +1748,7 @@
     "matchCommentaryDesc": "Mostrar comentarios de eventos durante partidos en vivo",
     "confirmAdvance": "Confirmar Antes de Avanzar",
     "confirmAdvanceDesc": "Pedir confirmación antes de avanzar un día",
+    "confirmAdvancePrompt": "¿Avanzar al día siguiente?",
     "continueToNextEvent": "Continuar salta al próximo evento",
     "continueToNextEventDesc": "Continuar avanza hasta tu próximo partido, un bloqueo, una fecha límite de fichajes o una noticia importante",
     "savesData": "Guardados y Datos",

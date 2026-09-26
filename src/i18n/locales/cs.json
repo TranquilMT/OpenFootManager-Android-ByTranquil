@@ -1748,6 +1748,7 @@
     "matchCommentaryDesc": "Zobrazovat komentář k událostem během živých zápasů",
     "confirmAdvance": "Potvrdit před postoupit",
     "confirmAdvanceDesc": "Vyžádat potvrzení před posunem o další den",
+    "confirmAdvancePrompt": "Přejít na další den?",
     "continueToNextEvent": "Tlačítko Pokračovat přeskočí k další události",
     "continueToNextEventDesc": "Pokračovat posouvá čas dopředu až do vašeho dalšího zápasu, blokační události, uzávěrky přestupů nebo důležitých zpráv",
     "savesData": "Uložené pozice a data",

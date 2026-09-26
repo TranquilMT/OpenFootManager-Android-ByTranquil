@@ -1748,6 +1748,7 @@
     "matchCommentaryDesc": "Tampilkan komentar peristiwa selama pertandingan langsung",
     "confirmAdvance": "Konfirmasi Sebelum Melanjutkan",
     "confirmAdvanceDesc": "Minta konfirmasi sebelum melanjutkan satu hari",
+    "confirmAdvancePrompt": "Lanjut ke hari berikutnya?",
     "continueToNextEvent": "Lanjut Melompat ke Peristiwa Berikutnya",
     "continueToNextEventDesc": "Lanjut berjalan maju hingga pertandingan berikutnya, hambatan, batas tenggat transfer, atau berita penting",
     "savesData": "Simpanan & Data",

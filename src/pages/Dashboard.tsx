@@ -302,6 +302,7 @@ export default function Dashboard(): JSX.Element {
     settingsLoaded,
     isUnemployed ?? false,
     settings.continue_to_next_event,
+    settings.confirm_advance,
   );
 
   const handleSave = useCallback(async () => {
@@ -317,6 +318,21 @@ export default function Dashboard(): JSX.Element {
       setIsSaving(false);
     }
   }, [markClean]);
+
+  const previousAutoSaveDate = useRef<{ saveId: string | null; date: string | null }>({
+    saveId: null,
+    date: null,
+  });
+  useEffect(() => {
+    const date = gameState?.clock.current_date ?? null;
+    const previous = previousAutoSaveDate.current;
+    previousAutoSaveDate.current = { saveId: activeSaveId, date };
+    if (!date || !previous.date || previous.saveId !== activeSaveId || previous.date === date || !settingsLoaded || !settings.auto_save) return;
+    void invoke("save_game").then(() => {
+      // A later update may still need saving.
+      if (latestGameStateRef.current?.clock.current_date === date) markClean();
+    }).catch((err) => console.error("Failed to auto-save after advancing:", err));
+  }, [activeSaveId, gameState?.clock.current_date, settingsLoaded, settings.auto_save, markClean]);
 
   // Intercept window close to warn about unsaved changes
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
