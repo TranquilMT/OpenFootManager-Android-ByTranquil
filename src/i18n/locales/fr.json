@@ -1875,6 +1875,8 @@
     "live": "En Direct",
     "paused": "En Pause",
     "events": "Événements",
+    "voiceOn": "Activer les commentaires vocaux",
+    "voiceOff": "Désactiver les commentaires vocaux",
     "stats": "Statistiques",
     "lineups": "Compositions",
     "simSpeed": "Vitesse de Simulation",
@@ -2231,6 +2233,8 @@
       "PenaltyAwarded": "Penalty accordé"
     },
     "commentary": {
+      "Corner": {"headline": "Corner pour", "lines": {"0": "Corner pour {{team}}.", "1": "{{team}} se prépare à tirer le corner."}},
+      "FreeKick": {"headline": "Coup franc pour", "lines": {"0": "Coup franc pour {{team}}.", "1": "{{team}} se prépare à tirer le coup franc."}},
       "Goal": {
         "headline": "BUUUT !",
         "lines": {
