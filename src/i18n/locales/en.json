@@ -2324,7 +2324,8 @@
         "headline": "PENALTY — GOAL!",
         "lines": {
           "0": "{{player}} sends the keeper the wrong way! {{team}} score from the spot.",
-          "1": "Ice cold from {{player}} — penalty converted for {{team}}!"
+          "1": "Ice cold from {{player}} — penalty converted for {{team}}!",
+          "2": "{{player}} converts the penalty for {{team}}!"
         }
       },
       "PenaltyMiss": {
