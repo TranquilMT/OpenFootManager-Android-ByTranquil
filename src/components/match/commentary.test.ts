@@ -142,4 +142,20 @@ describe("getCommentary", () => {
     expect(result!.line.length).toBeGreaterThan(0);
     expect(result!.line).not.toMatch(/\{\{.*?\}\}/);
   });
+
+  it("narrates set pieces with the correct attacking team", () => {
+    for (const event_type of ["Corner", "FreeKick"]) {
+      const evt: MatchEvent = {
+        minute: 42,
+        event_type,
+        side: "Away",
+        zone: "HomeBox",
+        player_id: null,
+        secondary_player_id: null,
+        detail: null,
+      };
+      const result = getCommentary(evt, snapshot([evt]), i18n.t.bind(i18n));
+      expect(result?.line).toContain("Away");
+    }
+  });
 });
