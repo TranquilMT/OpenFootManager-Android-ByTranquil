@@ -2467,7 +2467,8 @@
         "headline": "SAKATLIK",
         "lines": {
           "0": "{{player}} yerde ve tedaviye ihtiyacı var.",
-          "1": "{{player}} sakatlanarak yerde kalıyor; {{team}} cephesinde endişe var."
+          "1": "{{player}} sakatlanarak yerde kalıyor; {{team}} cephesinde endişe var.",
+          "2": "{{player}} tedavi görürken oyun duruyor."
         }
       },
       "Substitution": {
