@@ -2377,7 +2377,8 @@
         "headline": "THAT WAS CLOSE!",
         "lines": {
           "0": "{{player}} drags it just wide for {{team}}.",
-          "1": "So close! {{player}} can't quite find the target."
+          "1": "So close! {{player}} can't quite find the target.",
+          "2": "{{player}} sends the attempt wide of the target."
         },
         "speculative": {
           "headline": "OFF TARGET",
