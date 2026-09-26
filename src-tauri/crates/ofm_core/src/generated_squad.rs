@@ -5,7 +5,7 @@ pub const GENERATED_SQUAD_SIZE:usize=22;pub const STARTING_CORE_SLOTS:[usize;11]
 pub fn group_for_slot(slot:usize)->SquadGroup{match slot{0..=1=>SquadGroup::Goalkeeper,2..=8=>SquadGroup::Defender,9..=15=>SquadGroup::Midfielder,_=>SquadGroup::Forward}}
 pub fn minimum_group_count(group:SquadGroup)->usize{match group{SquadGroup::Goalkeeper=>2,SquadGroup::Defender=>4,SquadGroup::Midfielder=>4,SquadGroup::Forward=>2}}
 pub fn role_for_slot(slot:usize)->SquadRole{match slot{0|2|3|9|10|16=>SquadRole::Starter,4|5|11|12|17=>SquadRole::Rotation,6|13|18|19=>SquadRole::Depth,7|14|20=>SquadRole::Prospect,1|8|15|21=>SquadRole::Academy,_=>SquadRole::Depth}}
-pub fn academy_slot_count()->usize{(0..GENERATED_SQUAD_SIZE).filter(|s|role_for_slot(*s)==SquadRole::Academy).count()}
+pub fn academy_slot_count()->usize{(0..22).filter(|s|role_for_slot(*s)==SquadRole::Academy).count()}
 pub fn senior_age_range(role:SquadRole)->(u8,u8){match role{SquadRole::Star=>(22,31),SquadRole::Starter=>(21,32),SquadRole::Rotation=>(20,33),SquadRole::Depth=>(20,34),SquadRole::Prospect=>(17,22),SquadRole::Academy=>(16,20)}}
 pub fn target_age_for_slot(slot:usize)->u8{let(lo,hi)=senior_age_range(role_for_slot(slot));lo+((slot as u8*3)%(hi-lo+1))}
 pub fn captain_candidate(slot:usize)->bool{matches!(slot,0|2|3|9|10)&&target_age_for_slot(slot)>=24}
@@ -20,4 +20,5 @@ pub fn target_potential_for_slot(slot:usize,tier:LeagueTier,reputation:u8,academ
 pub fn target_weekly_wage_for_slot(slot:usize,tier:LeagueTier,reputation:u8,financial_strength:u8)->i64{weekly_wage_eur(target_ovr_for_slot(slot,tier,reputation,financial_strength),reputation)}
 pub fn estimated_weekly_payroll(tier:LeagueTier,reputation:u8,financial_strength:u8)->i64{(0..22).map(|s|target_weekly_wage_for_slot(s,tier,reputation,financial_strength)).sum()}
 pub fn payroll_guardrail(tier:LeagueTier,reputation:u8,financial_strength:u8,weekly_budget:i64)->bool{estimated_weekly_payroll(tier,reputation,financial_strength)<=weekly_budget}
-#[cfg(test)]mod tests{use super::*;#[test]fn elite_club_has_larger_transfer_budget(){assert!(suggested_transfer_budget(LeagueTier::Elite,90,95)>suggested_transfer_budget(LeagueTier::Lower,45,35))}#[test]fn academy_has_one_player_per_group(){assert_eq!(academy_slot_count(),4)}}
+pub fn squad_plan_is_valid(tier:LeagueTier,reputation:u8,financial_strength:u8)->bool{academy_slot_count()==4&&(0..22).all(|s|{let o=target_ovr_for_slot(s,tier,reputation,financial_strength);o>=30&&o<=94})&&STARTING_CORE_SLOTS.iter().all(|s|*s<22)}
+#[cfg(test)]mod tests{use super::*;#[test]fn plans_validate_across_tiers(){for tier in[LeagueTier::Elite,LeagueTier::Top,LeagueTier::Professional,LeagueTier::Lower,LeagueTier::Grassroots]{assert!(squad_plan_is_valid(tier,70,70))}}#[test]fn elite_club_has_larger_transfer_budget(){assert!(suggested_transfer_budget(LeagueTier::Elite,90,95)>suggested_transfer_budget(LeagueTier::Lower,45,35))}}
