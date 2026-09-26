@@ -479,7 +479,7 @@ describe("TransfersTab", (): void => {
 
     fireEvent.click(screen.getByRole("button", { name: /my transfer list/i }));
 
-    expect(screen.getAllByText("Dual Listed")).toHaveLength(1);
+    expect(within(screen.getByRole("table")).getAllByText("Dual Listed")).toHaveLength(1);
     expect(screen.getByText("TRANSFER")).toBeInTheDocument();
     expect(screen.getByText("LOAN")).toBeInTheDocument();
     expect(screen.getByText(/My Transfer List \(1\)/)).toBeInTheDocument();
