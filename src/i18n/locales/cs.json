@@ -2267,7 +2267,7 @@
       "PenaltyAwarded": "Nařízená penalta"
     },
     "commentary": {
-      "Corner": {"headline": "Rohový kop pro", "lines": {"0": "Rohový kop pro {{team}}.", "1": "{{team}} se chystá rozehrát roh."}},
+      "Corner": {"headline": "Rohový kop pro", "lines": {"0": "Rohový kop pro {{team}}.", "1": "{{team}} se chystá rozehrát roh.", "2": "{{team}} má příležitost rozehrát roh."}},
       "FreeKick": {"headline": "Přímý kop pro", "lines": {"0": "Přímý kop pro {{team}}.", "1": "{{team}} se chystá rozehrát přímý kop."}},
       "Goal": {
         "headline": "GÓÓÓL!",
