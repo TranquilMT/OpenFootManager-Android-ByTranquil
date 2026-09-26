@@ -1875,6 +1875,8 @@
     "live": "Canlı",
     "paused": "Duraklatıldı",
     "events": "Olaylar",
+    "voiceOn": "Sesli anlatımı aç",
+    "voiceOff": "Sesli anlatımı kapat",
     "stats": "İstatistikler",
     "lineups": "Dizilişler",
     "simSpeed": "Simülasyon Hızı",
@@ -2265,6 +2267,8 @@
       "PenaltyAwarded": "Penaltı Kazanıldı"
     },
     "commentary": {
+      "Corner": {"headline": "için korner", "lines": {"0": "{{team}} için korner.", "1": "{{team}} korneri kullanmaya hazırlanıyor."}},
+      "FreeKick": {"headline": "için serbest vuruş", "lines": {"0": "{{team}} için serbest vuruş.", "1": "{{team}} serbest vuruşa hazırlanıyor."}},
       "Goal": {
         "headline": "GOOOL!",
         "lines": {
