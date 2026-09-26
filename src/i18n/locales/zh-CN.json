@@ -2723,7 +2723,7 @@
         "nameMaxLength": "名字和姓氏都不能超过 30 个字符。",
         "nationalityRequired": "国籍为必填项。",
         "invalidDobFormat": "出生日期无效。请使用 YYYY-MM-DD 格式。",
-        "minAge": "经理年龄必须至少为 30 岁。",
+        "minAge": "经理年龄必须至少为 18 岁。",
         "invalidDob": "出生日期无效。",
         "startYearMin": "开始年份必须为 1900 或之后。",
         "invalidStartYear": "所选开始年份无效。",
