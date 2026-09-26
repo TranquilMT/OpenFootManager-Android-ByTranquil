@@ -661,7 +661,7 @@ export default function MainMenu() {
   };
 
   return (
-    <div className="touch-scroll relative flex min-h-[100dvh] items-start justify-center overflow-x-hidden overflow-y-auto bg-gray-100 px-3 pb-[calc(4.5rem+env(safe-area-inset-bottom))] pt-[calc(4rem+env(safe-area-inset-top))] transition-colors duration-500 sm:items-center sm:px-0 sm:py-16 dark:bg-navy-900">
+    <div className="touch-scroll relative flex h-[100dvh] min-h-0 w-full items-start justify-center overflow-x-hidden overflow-y-scroll bg-gray-100 px-3 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-[calc(4rem+env(safe-area-inset-top))] transition-colors duration-500 sm:items-center sm:px-0 sm:py-16 dark:bg-navy-900" style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}>
       {/* Background gradient accents */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl" />
@@ -672,7 +672,7 @@ export default function MainMenu() {
       <ThemeToggle className="fixed right-3 top-[calc(0.75rem+env(safe-area-inset-top))] z-20 sm:absolute sm:right-6 sm:top-6" />
 
       {/* Main Card */}
-      <div className="relative z-10 w-full max-w-md shrink-0">
+      <div className="relative z-10 w-full max-w-md shrink-0 pb-4">
         {/* Top accent bar */}
         <div className="h-1.5 bg-gradient-to-r from-primary-500 via-accent-400 to-primary-500 rounded-t-2xl" />
 
