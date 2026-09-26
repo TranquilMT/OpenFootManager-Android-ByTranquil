@@ -659,7 +659,7 @@ describe("TransfersTab", (): void => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /^bid$/i }));
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /^bid$/i }));
 
     await waitFor(() => {
       expect(mockedInvoke).toHaveBeenCalledWith("preview_transfer_bid_financial_impact", {
