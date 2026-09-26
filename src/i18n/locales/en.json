@@ -2504,7 +2504,8 @@
         "headline": "FULL TIME",
         "lines": {
           "0": "That's it — full time!",
-          "1": "The referee brings the match to an end."
+          "1": "The referee brings the match to an end.",
+          "2": "The final whistle sounds; the result is settled."
         }
       }
     },
