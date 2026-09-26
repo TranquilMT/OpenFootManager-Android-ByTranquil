@@ -15,6 +15,7 @@ pub mod finances;
 pub mod firing;
 pub mod football_identity;
 pub mod game;
+pub mod generated_balance;
 pub mod generator;
 pub mod group_stage;
 pub mod history_generation;
