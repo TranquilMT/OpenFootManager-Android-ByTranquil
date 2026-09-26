@@ -101,14 +101,17 @@ vi.mock("../components/ui", () => ({
     value,
     onChange,
     children,
+    id,
     "aria-label": ariaLabel,
   }: {
     value?: string | number | readonly string[];
     onChange?: (event: { target: { value: string } }) => void;
     children?: ReactNode;
+    id?: string;
     "aria-label"?: string;
   }) => (
     <select
+      id={id}
       aria-label={ariaLabel}
       value={value}
       onChange={(event) => onChange?.({ target: { value: event.target.value } })}
@@ -523,7 +526,7 @@ describe("MainMenu", () => {
     expect(screen.queryByTestId("world-select")).not.toBeInTheDocument();
   });
 
-  it("allows a manager who is 30 by the selected start year to continue", async () => {
+  it("allows a manager who is 18 by the selected start year to continue", async () => {
     render(<MainMenu />);
 
     await openCreateManagerForm();
@@ -534,7 +537,7 @@ describe("MainMenu", () => {
       target: { value: "Lovelace" },
     });
     fireEvent.change(screen.getByLabelText("manager-date-of-birth"), {
-      target: { value: "2008-01-01" },
+      target: { value: "2020-01-01" },
     });
     fillCareerStartDetails("2038", "seasonStart");
     await selectNationality("en", "ES");
@@ -558,7 +561,7 @@ describe("MainMenu", () => {
       target: { value: "Lovelace" },
     });
     fireEvent.change(screen.getByLabelText("manager-date-of-birth"), {
-      target: { value: "2008-08-01" },
+      target: { value: "2020-08-01" },
     });
     fillCareerStartDetails("2038", "seasonStart");
 
