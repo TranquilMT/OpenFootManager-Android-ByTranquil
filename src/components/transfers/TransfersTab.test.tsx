@@ -704,7 +704,7 @@ describe("TransfersTab", (): void => {
         />,
       );
 
-      const playerRow = screen.getByText("John Smith").closest("tr");
+      const playerRow = within(screen.getByRole("table")).getByText("John Smith").closest("tr");
       expect(playerRow).not.toBeNull();
 
       fireEvent.contextMenu(playerRow as HTMLTableRowElement);
