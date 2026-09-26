@@ -2421,7 +2421,8 @@
         "headline": "FOUL",
         "lines": {
           "0": "{{player}} fouls {{victim}}. Free kick to {{opponent}}.",
-          "1": "{{player}} gives away a free kick against {{victim}}."
+          "1": "{{player}} gives away a free kick against {{victim}}.",
+          "2": "The whistle goes for a foul by {{team}}."
         },
         "hard": {
           "headline": "IT'S A FOUL",
