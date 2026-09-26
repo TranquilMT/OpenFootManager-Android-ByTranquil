@@ -2274,7 +2274,8 @@
         "lines": {
           "0": "{{player}} menjebol gawang {{team}}!",
           "1": "{{player}} melepaskan tembakan! Finishing yang luar biasa!",
-          "2": "{{player}} mencetak gol untuk {{team}}!"
+          "2": "{{player}} mencetak gol untuk {{team}}!",
+          "3": "{{player}} menuntaskan serangan untuk {{team}}!"
         },
         "opener": {
           "headline": "GOL!",
