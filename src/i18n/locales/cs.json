@@ -2340,7 +2340,8 @@
         "headline": "PENALTA!",
         "lines": {
           "0": "Rozhodčí ukazuje na značku pokutového kopu — penalta pro tým {{team}}!",
-          "1": "To je penalta pro tým {{team}}! Obrovský moment."
+          "1": "To je penalta pro tým {{team}}! Obrovský moment.",
+          "2": "Rozhodčí nařizuje penaltu pro {{team}}."
         }
       },
       "ShotSaved": {
