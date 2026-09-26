@@ -2233,7 +2233,7 @@
       "PenaltyAwarded": "Penalty accordé"
     },
     "commentary": {
-      "Corner": {"headline": "Corner pour", "lines": {"0": "Corner pour {{team}}.", "1": "{{team}} se prépare à tirer le corner."}},
+      "Corner": {"headline": "Corner pour", "lines": {"0": "Corner pour {{team}}.", "1": "{{team}} se prépare à tirer le corner.", "2": "{{team}} peut centrer depuis le corner."}},
       "FreeKick": {"headline": "Coup franc pour", "lines": {"0": "Coup franc pour {{team}}.", "1": "{{team}} se prépare à tirer le coup franc."}},
       "Goal": {
         "headline": "BUUUT !",
