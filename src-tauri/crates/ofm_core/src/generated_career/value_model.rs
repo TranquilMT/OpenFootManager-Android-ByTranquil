@@ -1,0 +1,1 @@
+pub fn value_eur(ovr:u8,potential:u8,age:u8,reputation:u8)->i64{let ability=(ovr.saturating_sub(25)as i64).pow(3)*700;let upside=potential.saturating_sub(ovr)as i64*220_000;let rep=75+reputation.min(100)as i64/2;let age_pct=match age{0..=21=>125,22..=25=>120,26..=28=>110,29..=31=>90,32..=34=>65,_=>40};((ability+upside).max(20_000)*rep/100*age_pct/100).min(250_000_000)}
