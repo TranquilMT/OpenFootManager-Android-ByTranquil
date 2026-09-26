@@ -206,7 +206,7 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
             placeholder={t("staff.searchStaff")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="min-h-11 w-full rounded-lg bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-600 text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+            className="min-h-11 w-full rounded-lg bg-white py-2 pl-9 pr-3 dark:bg-navy-800 border border-gray-200 dark:border-navy-600 text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
           />
         </div>
 
