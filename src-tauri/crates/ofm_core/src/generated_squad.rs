@@ -1,14 +1,11 @@
 //! Generated-squad planning for database-free careers.
-use crate::generated_balance::{LeagueTier,SquadRole};
-
-pub const GENERATED_SQUAD_SIZE: usize = 22;
+use crate::generated_balance::{club_role_target_ovr,LeagueTier,SquadRole};
+pub const GENERATED_SQUAD_SIZE:usize=22;
 #[derive(Debug,Clone,Copy,PartialEq,Eq)]pub enum SquadGroup{Goalkeeper,Defender,Midfielder,Forward}
-
 pub fn group_for_slot(slot:usize)->SquadGroup{match slot{0..=1=>SquadGroup::Goalkeeper,2..=8=>SquadGroup::Defender,9..=15=>SquadGroup::Midfielder,_=>SquadGroup::Forward}}
 pub fn minimum_group_count(group:SquadGroup)->usize{match group{SquadGroup::Goalkeeper=>2,SquadGroup::Defender=>4,SquadGroup::Midfielder=>4,SquadGroup::Forward=>2}}
-
 pub fn role_for_slot(slot:usize)->SquadRole{match slot{0|2|3|9|10|16=>SquadRole::Starter,4|5|11|12|17=>SquadRole::Rotation,6|13|18|19=>SquadRole::Depth,7|14|20=>SquadRole::Prospect,1|8|15|21=>SquadRole::Academy,_=>SquadRole::Depth}}
 pub fn senior_age_range(role:SquadRole)->(u8,u8){match role{SquadRole::Star=>(22,31),SquadRole::Starter=>(21,32),SquadRole::Rotation=>(20,33),SquadRole::Depth=>(20,34),SquadRole::Prospect=>(17,22),SquadRole::Academy=>(16,20)}}
 pub fn elite_star_slots(tier:LeagueTier,reputation:u8,financial_strength:u8)->usize{if !matches!(tier,LeagueTier::Elite|LeagueTier::Top){return 0}let strength=(reputation.min(100)as u16+financial_strength.min(100)as u16)/2;match strength{90..=100=>4,80..=89=>3,70..=79=>2,60..=69=>1,_=>0}}
-
-#[cfg(test)]mod tests{use super::*;#[test]fn academy_slots_stay_young(){for slot in [1,8,15,21]{assert_eq!(role_for_slot(slot),SquadRole::Academy)}}#[test]fn poor_lower_clubs_have_no_forced_stars(){assert_eq!(elite_star_slots(LeagueTier::Lower,95,95),0)}#[test]fn generated_shape_has_two_goalkeepers(){assert_eq!((0..GENERATED_SQUAD_SIZE).filter(|s|group_for_slot(*s)==SquadGroup::Goalkeeper).count(),2)}}
+pub fn target_ovr_for_slot(slot:usize,tier:LeagueTier,reputation:u8,financial_strength:u8)->u8{let mut role=role_for_slot(slot);let stars=elite_star_slots(tier,reputation,financial_strength);if stars>0&&matches!(slot,0|2|9|10|16){let rank=match slot{16=>0,10=>1,9=>2,2=>3,_=>4};if rank<stars{role=SquadRole::Star}}club_role_target_ovr(tier,role,reputation,financial_strength)}
+#[cfg(test)]mod tests{use super::*;#[test]fn academy_slots_stay_young(){for slot in[1,8,15,21]{assert_eq!(role_for_slot(slot),SquadRole::Academy)}}#[test]fn poor_lower_clubs_have_no_forced_stars(){assert_eq!(elite_star_slots(LeagueTier::Lower,95,95),0)}#[test]fn generated_shape_has_two_goalkeepers(){assert_eq!((0..GENERATED_SQUAD_SIZE).filter(|s|group_for_slot(*s)==SquadGroup::Goalkeeper).count(),2)}#[test]fn rich_elite_starter_beats_lower_tier_equivalent(){assert!(target_ovr_for_slot(16,LeagueTier::Elite,95,95)>target_ovr_for_slot(16,LeagueTier::Lower,45,40))}}
