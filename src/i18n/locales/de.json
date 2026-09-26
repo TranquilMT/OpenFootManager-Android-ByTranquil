@@ -2234,7 +2234,7 @@
     },
     "commentary": {
       "Corner": {"headline": "Eckball für", "lines": {"0": "Eckball für {{team}}.", "1": "{{team}} bere Maß für die Ecke.", "2": "{{team}} kann den Ball von der Ecke hereinbringen."}},
-      "FreeKick": {"headline": "Freistoß für", "lines": {"0": "Freistoß für {{team}}.", "1": "{{team}} bere Maß für den Freistoß."}},
+      "FreeKick": {"headline": "Freistoß für", "lines": {"0": "Freistoß für {{team}}.", "1": "{{team}} bere Maß für den Freistoß.", "2": "Der Freistoß eröffnet {{team}} eine neue Angriffschance."}},
       "Goal": {
         "headline": "TOOOR!",
         "lines": {
