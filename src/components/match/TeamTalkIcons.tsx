@@ -1,30 +1,8 @@
 import { Wind, Flame, Swords, Angry, ThumbsUp, Frown } from "lucide-react";
 
-const TALK_ICON_MAP: Record<string, { icon: React.ReactNode; color: string }> = {
-  calm: { icon: <Wind className="w-5 h-5" />, color: "text-sky-400" },
-  motivational: { icon: <Flame className="w-5 h-5" />, color: "text-orange-400" },
-  assertive: { icon: <Swords className="w-5 h-5" />, color: "text-amber-400" },
-  aggressive: { icon: <Angry className="w-5 h-5" />, color: "text-red-400" },
-  praise: { icon: <ThumbsUp className="w-5 h-5" />, color: "text-green-400" },
-  disappointed: { icon: <Frown className="w-5 h-5" />, color: "text-gray-400" },
-};
-
-export function getTalkIcon(key: string): React.ReactNode {
-  const entry = TALK_ICON_MAP[key];
-  if (!entry) return null;
-  return <span className={entry.color}>{entry.icon}</span>;
-}
-
-export function getTalkIconSmall(key: string): React.ReactNode {
-  const map: Record<string, { icon: React.ReactNode; color: string }> = {
-    calm: { icon: <Wind className="w-8 h-8" />, color: "text-sky-400" },
-    motivational: { icon: <Flame className="w-8 h-8" />, color: "text-orange-400" },
-    assertive: { icon: <Swords className="w-8 h-8" />, color: "text-amber-400" },
-    aggressive: { icon: <Angry className="w-8 h-8" />, color: "text-red-400" },
-    praise: { icon: <ThumbsUp className="w-8 h-8" />, color: "text-green-400" },
-    disappointed: { icon: <Frown className="w-8 h-8" />, color: "text-gray-400" },
-  };
-  const entry = map[key];
-  if (!entry) return null;
-  return <span className={entry.color}>{entry.icon}</span>;
-}
+type TalkIconName = "calm" | "motivational" | "assertive" | "aggressive" | "praise" | "disappointed";
+const COLORS: Record<TalkIconName,string>={calm:"text-sky-400",motivational:"text-orange-400",assertive:"text-amber-400",aggressive:"text-red-400",praise:"text-green-400",disappointed:"text-gray-400"};
+function Icon({name,large=false}:{name:TalkIconName;large?:boolean}){const cls=large?"h-7 w-7 sm:h-8 sm:w-8":"h-5 w-5";switch(name){case"calm":return <Wind className={cls}/>;case"motivational":return <Flame className={cls}/>;case"assertive":return <Swords className={cls}/>;case"aggressive":return <Angry className={cls}/>;case"praise":return <ThumbsUp className={cls}/>;case"disappointed":return <Frown className={cls}/>;}}
+function render(key:string,large=false):React.ReactNode{if(!(key in COLORS))return null;const name=key as TalkIconName;return <span className={`inline-flex shrink-0 items-center justify-center ${COLORS[name]}`} aria-hidden="true"><Icon name={name} large={large}/></span>;}
+export function getTalkIcon(key:string):React.ReactNode{return render(key);}
+export function getTalkIconSmall(key:string):React.ReactNode{return render(key,true);}
