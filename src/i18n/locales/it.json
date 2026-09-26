@@ -2259,7 +2259,8 @@
         "lines": {
           "0": "{{player}} trova la rete per il {{team}}!",
           "1": "{{player}} la mette dentro! Che finalizzazione!",
-          "2": "{{player}} segna per il {{team}}!"
+          "2": "{{player}} segna per il {{team}}!",
+          "3": "{{player}} conclude l'azione per {{team}}!"
         },
         "opener": {
           "headline": "GOOOL!",
