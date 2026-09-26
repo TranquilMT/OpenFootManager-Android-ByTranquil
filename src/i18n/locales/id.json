@@ -2406,7 +2406,8 @@
         "headline": "DIBLOK!",
         "lines": {
           "0": "Tembakan {{player}} diblok oleh bek yang berani.",
-          "1": "Badan-badan menghadang! {{player}} dihalau."
+          "1": "Badan-badan menghadang! {{player}} dihalau.",
+          "2": "Bek memblok tembakan {{player}}."
         },
         "bigChance": {
           "headline": "BLOK HEBAT!",
