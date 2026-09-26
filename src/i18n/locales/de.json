@@ -1875,6 +1875,8 @@
     "live": "Live",
     "paused": "Pausiert",
     "events": "Ereignisse",
+    "voiceOn": "Gesprochenen Kommentar einschalten",
+    "voiceOff": "Gesprochenen Kommentar ausschalten",
     "stats": "Statistiken",
     "lineups": "Aufstellungen",
     "simSpeed": "Simulationsgeschwindigkeit",
@@ -2231,6 +2233,8 @@
       "PenaltyAwarded": "Elfmeter gegeben"
     },
     "commentary": {
+      "Corner": {"headline": "Eckball für", "lines": {"0": "Eckball für {{team}}.", "1": "{{team}} bere Maß für die Ecke."}},
+      "FreeKick": {"headline": "Freistoß für", "lines": {"0": "Freistoß für {{team}}.", "1": "{{team}} bere Maß für den Freistoß."}},
       "Goal": {
         "headline": "TOOOR!",
         "lines": {
