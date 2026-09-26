@@ -95,7 +95,7 @@ pub async fn start_new_game(
     }
     let reference_date = clock.current_date.date_naive();
     let age = age_on_date(birth_date, reference_date);
-    if age < 30 { return Err("be.error.createManager.minAge".to_string()); }
+    if age < 18 { return Err("be.error.createManager.minAge".to_string()); }
     if age > 99 { return Err("be.error.createManager.invalidDob".to_string()); }
 
     let manager = Manager::new("mgr_user".to_string(), first_name, last_name, dob, nationality);
