@@ -2723,7 +2723,7 @@
         "nameMaxLength": "Vorname und Nachname dürfen jeweils höchstens 30 Zeichen lang sein.",
         "nationalityRequired": "Nationalität ist erforderlich.",
         "invalidDobFormat": "Ungültiges Geburtsdatum. Verwende das Format JJJJ-MM-TT.",
-        "minAge": "Der Manager muss mindestens 30 Jahre alt sein.",
+        "minAge": "Der Manager muss mindestens 18 Jahre alt sein.",
         "invalidDob": "Ungültiges Geburtsdatum.",
         "startYearMin": "Das Startjahr muss 1900 oder später sein.",
         "invalidStartYear": "Ungültiges Startjahr ausgewählt.",
