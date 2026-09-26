@@ -2267,7 +2267,7 @@
       "PenaltyAwarded": "Penaltı Kazanıldı"
     },
     "commentary": {
-      "Corner": {"headline": "için korner", "lines": {"0": "{{team}} için korner.", "1": "{{team}} korneri kullanmaya hazırlanıyor."}},
+      "Corner": {"headline": "için korner", "lines": {"0": "{{team}} için korner.", "1": "{{team}} korneri kullanmaya hazırlanıyor.", "2": "{{team}} kornerden orta yapma şansı buluyor."}},
       "FreeKick": {"headline": "için serbest vuruş", "lines": {"0": "{{team}} için serbest vuruş.", "1": "{{team}} serbest vuruşa hazırlanıyor."}},
       "Goal": {
         "headline": "GOOOL!",
