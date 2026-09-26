@@ -2459,7 +2459,8 @@
         "headline": "İKİNCİ SARIDAN KIRMIZI!",
         "lines": {
           "0": "{{player}} ikinci sarı kartını görüyor ve oyun dışı kalıyor!",
-          "1": "İki sarı ve dışarı — {{player}}, {{team}} takımını eksik bırakıyor."
+          "1": "İki sarı ve dışarı — {{player}}, {{team}} takımını eksik bırakıyor.",
+          "2": "İkinci sarı kart {{player}} için maçı bitiriyor."
         }
       },
       "Injury": {
