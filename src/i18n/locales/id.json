@@ -2340,7 +2340,8 @@
         "headline": "PENALTI!",
         "lines": {
           "0": "Wasit menunjuk titik putih — penalti untuk {{team}}!",
-          "1": "Penalti untuk {{team}}! Momen besar."
+          "1": "Penalti untuk {{team}}! Momen besar.",
+          "2": "Wasit memberikan penalti untuk {{team}}."
         }
       },
       "ShotSaved": {
