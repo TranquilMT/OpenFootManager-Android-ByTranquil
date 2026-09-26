@@ -2731,7 +2731,7 @@
         "nameMaxLength": "Nama depan dan nama belakang tidak boleh melebihi 30 karakter.",
         "nationalityRequired": "Kewarganegaraan wajib diisi.",
         "invalidDobFormat": "Tanggal lahir tidak valid. Gunakan format YYYY-MM-DD.",
-        "minAge": "Manajer harus berusia setidaknya 30 tahun.",
+        "minAge": "Manajer harus berusia setidaknya 18 tahun.",
         "invalidDob": "Tanggal lahir tidak valid.",
         "startYearMin": "Tahun mulai harus 1900 atau lebih baru.",
         "invalidStartYear": "Tahun mulai yang dipilih tidak valid.",
