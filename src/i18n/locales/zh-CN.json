@@ -2417,7 +2417,8 @@
         "headline": "红牌！",
         "lines": {
           "0": "{{player}}被罚下场！{{team}}少打一人！",
-          "1": "{{player}}直接红牌！{{team}}遭受重创。"
+          "1": "{{player}}直接红牌！{{team}}遭受重创。",
+          "2": "{{player}}被罚下，{{team}}只能以十人应战。"
         }
       },
       "SecondYellow": {
