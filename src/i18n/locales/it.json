@@ -2406,7 +2406,8 @@
         "headline": "FALLO",
         "lines": {
           "0": "{{player}} commette fallo su {{victim}}. Punizione per il {{opponent}}.",
-          "1": "{{player}} regala un calcio di punizione contro {{victim}}."
+          "1": "{{player}} regala un calcio di punizione contro {{victim}}.",
+          "2": "L'arbitro fischia un fallo di {{team}}."
         },
         "hard": {
           "headline": "È FALLO",
