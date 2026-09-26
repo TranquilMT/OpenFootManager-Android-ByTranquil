@@ -50,11 +50,11 @@ export default function InboxToolbar({
   const { t } = useTranslation();
 
   return (
-    <div className="flex gap-2 mb-4 flex-wrap shrink-0">
+    <div className="mb-3 flex shrink-0 flex-col gap-2 sm:mb-4">\n      <div className="touch-x -mx-1 flex gap-2 px-1 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
       <button
         type="button"
         onClick={onShowAll}
-        className={getFilterButtonClassName(!categoryFilter)}
+        className={getFilterButtonClassName(!categoryFilter, "min-h-11 shrink-0 sm:min-h-0")}
       >
         {t("common.all")} ({allMessagesCount})
       </button>
@@ -62,7 +62,7 @@ export default function InboxToolbar({
         <button
           type="button"
           onClick={onShowUnread}
-          className={getFilterButtonClassName(categoryFilter === UNREAD_FILTER)}
+          className={getFilterButtonClassName(categoryFilter === UNREAD_FILTER, "min-h-11 shrink-0 sm:min-h-0")}
         >
           {t("inbox.unread", { count: unreadCount })}
         </button>
@@ -78,7 +78,7 @@ export default function InboxToolbar({
             onClick={() => onToggleCategory(category)}
             className={getFilterButtonClassName(
               categoryFilter === category,
-              "flex items-center gap-1.5",
+              "flex min-h-11 shrink-0 items-center gap-1.5 sm:min-h-0",
             )}
           >
             {categoryIcon} {t(`inbox.categories.${category}`)} ({count})
@@ -99,7 +99,7 @@ export default function InboxToolbar({
             value={sortOrder}
             onChange={(event) => onSortOrderChange(event.target.value as MessageSortOrder)}
             selectSize="sm"
-            wrapperClassName="min-w-[170px]"
+            wrapperClassName="min-w-0 flex-1 sm:min-w-[170px]"\n            className="min-h-11 sm:min-h-0"
             aria-label={t("inbox.sortByDate")}
           >
             <option value="newest">{t("inbox.sortNewest")}</option>
@@ -128,7 +128,7 @@ export default function InboxToolbar({
               onClick={onDeleteSelected}
               disabled={selectedMessageCount === 0}
               icon={<Trash2 className="w-4 h-4" />}
-              className="bg-red-500 hover:bg-red-600 active:bg-red-700 focus:ring-red-500"
+              className="min-h-11 w-full bg-red-500 hover:bg-red-600 active:bg-red-700 focus:ring-red-500 sm:min-h-0 sm:w-auto"
               data-testid="inbox-delete-selected"
             >
               {t("inbox.deleteSelected")}
@@ -139,7 +139,7 @@ export default function InboxToolbar({
           <button
             type="button"
             onClick={onMarkAllRead}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-heading font-bold uppercase tracking-wider bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600 hover:text-primary-500 hover:border-primary-300 transition-all"
+            className="flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-heading font-bold uppercase tracking-wider text-gray-500 transition-all active:text-primary-500 dark:border-navy-600 dark:bg-navy-800 dark:text-gray-400 sm:min-h-0 sm:w-auto"
           >
             <CheckCheck className="w-3.5 h-3.5" />
             {t("inbox.markAllRead")}
@@ -148,7 +148,7 @@ export default function InboxToolbar({
         <button
           type="button"
           onClick={onClearOld}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-heading font-bold uppercase tracking-wider bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600 hover:text-red-500 hover:border-red-300 transition-all"
+          className="flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-heading font-bold uppercase tracking-wider text-gray-500 transition-all active:text-red-500 dark:border-navy-600 dark:bg-navy-800 dark:text-gray-400 sm:min-h-0 sm:w-auto"
         >
           <Trash2 className="w-3.5 h-3.5" />
           {t("inbox.clearOld")}
