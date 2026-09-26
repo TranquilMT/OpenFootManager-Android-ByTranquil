@@ -2348,7 +2348,8 @@
         "headline": "SKVĚLÝ ZÁKROK!",
         "lines": {
           "0": "{{player}} prověřil brankáře, ten ale střelu vyráží.",
-          "1": "Brankář vychytal hráče {{player}}!"
+          "1": "Brankář vychytal hráče {{player}}!",
+          "2": "Brankář zastavuje střelu hráče {{player}}."
         },
         "routine": {
           "headline": "CHYCENO",
