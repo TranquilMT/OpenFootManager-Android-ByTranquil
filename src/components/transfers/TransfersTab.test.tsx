@@ -914,7 +914,7 @@ describe("TransfersTab", (): void => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /^bid$/i }));
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /^bid$/i }));
     expect(screen.getByRole("dialog", { name: /john smith/i })).toBeInTheDocument();
 
     await waitFor((): void => {
