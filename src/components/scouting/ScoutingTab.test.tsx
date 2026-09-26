@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type {
@@ -300,7 +300,7 @@ describe("ScoutingTab", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /Scout/i }));
+    fireEvent.click(screen.getAllByRole("button", { name: /^Scout$/i })[0]);
 
     await waitFor(() => {
       expect(invokeMock).toHaveBeenCalledWith("send_scout", {
@@ -324,7 +324,7 @@ describe("ScoutingTab", () => {
         />,
       );
 
-      fireEvent.click(screen.getByRole("button", { name: /Scout/i }));
+      fireEvent.click(screen.getAllByRole("button", { name: /^Scout$/i })[0]);
 
       await waitFor(() => {
         expect(screen.getByRole("alert")).toHaveTextContent(
@@ -505,7 +505,7 @@ describe("ScoutingTab", () => {
       />,
     );
 
-    const playerRow = screen.getByText("John Smith").closest("tr");
+    const playerRow = within(screen.getByRole("table")).getByText("John Smith").closest("tr");
     expect(playerRow).not.toBeNull();
 
     fireEvent.contextMenu(playerRow as HTMLTableRowElement);
