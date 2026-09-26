@@ -2348,7 +2348,8 @@
         "headline": "GREAT SAVE!",
         "lines": {
           "0": "{{player}} forces a save out of the keeper.",
-          "1": "The keeper denies {{player}}!"
+          "1": "The keeper denies {{player}}!",
+          "2": "The goalkeeper stands firm against {{player}}."
         },
         "routine": {
           "headline": "SAVED",
