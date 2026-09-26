@@ -2183,7 +2183,8 @@
         "lines": {
           "0": "{{player}} balança as redes para o {{team}}!",
           "1": "{{player}} marca! Que finalização!",
-          "2": "{{player}} faz o gol para o {{team}}!"
+          "2": "{{player}} faz o gol para o {{team}}!",
+          "3": "{{player}} conclui a jogada para {{team}}!"
         },
         "opener": {
           "headline": "GOOOL!",
