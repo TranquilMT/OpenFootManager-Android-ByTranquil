@@ -2459,7 +2459,8 @@
         "headline": "SECOND YELLOW — OFF!",
         "lines": {
           "0": "{{player}} picks up a second yellow and is sent off!",
-          "1": "Two yellows and gone — {{player}} leaves {{team}} a man short."
+          "1": "Two yellows and gone — {{player}} leaves {{team}} a man short.",
+          "2": "A second booking ends {{player}}'s match early."
         }
       },
       "Injury": {
