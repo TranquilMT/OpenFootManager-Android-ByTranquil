@@ -2504,7 +2504,8 @@
         "headline": "KONEC ZÁPASU",
         "lines": {
           "0": "A je to tady — konec zápasu!",
-          "1": "Rozhodčí ukončil dnešní utkání."
+          "1": "Rozhodčí ukončil dnešní utkání.",
+          "2": "Závěrečný hvizd potvrzuje výsledek."
         }
       }
     },
