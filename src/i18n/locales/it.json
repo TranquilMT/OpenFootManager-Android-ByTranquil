@@ -2362,7 +2362,8 @@
         "headline": "CHE OCCASIONE!",
         "lines": {
           "0": "{{player}} manda di poco fuori per il {{team}}.",
-          "1": "Così vicino! {{player}} non riesce a trovare lo specchio."
+          "1": "Così vicino! {{player}} non riesce a trovare lo specchio.",
+          "2": "{{player}} manda la conclusione fuori dallo specchio."
         },
         "speculative": {
           "headline": "FUORI",
