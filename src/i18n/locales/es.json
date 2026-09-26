@@ -2387,7 +2387,8 @@
         "headline": "FALTA",
         "lines": {
           "0": "{{player}} comete falta sobre {{victim}}. Libre directo para el {{opponent}}.",
-          "1": "{{player}} regala un tiro libre contra {{victim}}."
+          "1": "{{player}} regala un tiro libre contra {{victim}}.",
+          "2": "El árbitro señala una falta de {{team}}."
         },
         "hard": {
           "headline": "ES FALTA",
