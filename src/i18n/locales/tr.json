@@ -2443,7 +2443,8 @@
         "headline": "SARI KART",
         "lines": {
           "0": "{{team}} oyuncusu {{player}} deftere yazılıyor.",
-          "1": "{{player}} sarı kart görüyor."
+          "1": "{{player}} sarı kart görüyor.",
+          "2": "Hakem {{player}} oyuncusuna sarı kart gösteriyor."
         }
       },
       "RedCard": {
