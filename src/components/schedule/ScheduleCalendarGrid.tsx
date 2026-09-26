@@ -175,23 +175,23 @@ export default function ScheduleCalendarGrid({
   return (
     <div className="rounded-xl border border-gray-200 bg-white dark:border-navy-600 dark:bg-navy-800 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-navy-600">
+      <div className="flex items-center justify-between gap-2 px-2 py-2 sm:px-4 sm:py-3 border-b border-gray-100 dark:border-navy-600">
         <button
           type="button"
           onClick={prevMonth}
           aria-label={t("schedule.calendar.prevMonth", "Previous month")}
-          className="p-1 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-navy-700 transition-colors"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors active:bg-gray-100 active:text-gray-700 dark:active:bg-navy-700 dark:active:text-gray-200 sm:h-8 sm:w-8 sm:hover:bg-gray-100 sm:hover:text-gray-700 dark:sm:hover:bg-navy-700 dark:sm:hover:text-gray-200"
         >
           <ChevronLeft className="w-4 h-4" />
         </button>
-        <span className="font-heading font-bold text-sm uppercase tracking-wider text-gray-700 dark:text-gray-200">
+        <span className="min-w-0 truncate text-center font-heading text-sm font-bold uppercase tracking-wider text-gray-700 dark:text-gray-200">
           {monthLabel}
         </span>
         <button
           type="button"
           onClick={nextMonth}
           aria-label={t("schedule.calendar.nextMonth", "Next month")}
-          className="p-1 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-navy-700 transition-colors"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-gray-400 transition-colors active:bg-gray-100 active:text-gray-700 dark:active:bg-navy-700 dark:active:text-gray-200 sm:h-8 sm:w-8 sm:hover:bg-gray-100 sm:hover:text-gray-700 dark:sm:hover:bg-navy-700 dark:sm:hover:text-gray-200"
         >
           <ChevronRight className="w-4 h-4" />
         </button>
@@ -220,7 +220,7 @@ export default function ScheduleCalendarGrid({
               disabled={!clickable}
               onClick={() => clickable && onSelectDate(day.date)}
               className={[
-                "relative flex flex-col items-center py-2 gap-1 text-xs font-heading font-bold transition-colors",
+                "relative flex min-h-11 flex-col items-center justify-center gap-1 py-1 text-xs font-heading font-bold transition-colors sm:min-h-0 sm:py-2",
                 day.isCurrentMonth
                   ? "text-gray-800 dark:text-gray-100"
                   : "text-gray-300 dark:text-navy-600",
@@ -263,7 +263,7 @@ export default function ScheduleCalendarGrid({
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-4 border-t border-gray-100 dark:border-navy-600 px-4 py-2 text-xs text-gray-400 dark:text-gray-500">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-gray-100 dark:border-navy-600 px-4 py-2 text-xs text-gray-400 dark:text-gray-500">
         <span className="flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-primary-500" />
           {t("schedule.calendar.yourMatch", "Your match")}
