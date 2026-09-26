@@ -2274,7 +2274,8 @@
         "lines": {
           "0": "{{player}} rozvlnil síť za tým {{team}}!",
           "1": "{{player}} to tam uklidil! Skvělý závěr!",
-          "2": "{{player}} skóruje za tým {{team}}!"
+          "2": "{{player}} skóruje za tým {{team}}!",
+          "3": "{{player}} zakončuje akci týmu {{team}} gólem!"
         },
         "opener": {
           "headline": "GÓÓÓL!",
