@@ -2387,7 +2387,8 @@
         "headline": "FAUTE",
         "lines": {
           "0": "{{player}} fait faute sur {{victim}}. Coup franc pour {{opponent}}.",
-          "1": "{{player}} concède un coup franc contre {{victim}}."
+          "1": "{{player}} concède un coup franc contre {{victim}}.",
+          "2": "L'arbitre siffle une faute de {{team}}."
         },
         "hard": {
           "headline": "C'EST UNE FAUTE",
