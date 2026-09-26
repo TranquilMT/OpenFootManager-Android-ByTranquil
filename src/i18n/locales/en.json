@@ -2406,7 +2406,8 @@
         "headline": "BLOCKED!",
         "lines": {
           "0": "{{player}}'s shot is blocked by a brave defender.",
-          "1": "Bodies in the way! {{player}} is denied."
+          "1": "Bodies in the way! {{player}} is denied.",
+          "2": "The defender gets in the way of {{player}}'s shot."
         },
         "bigChance": {
           "headline": "GREAT BLOCK!",
