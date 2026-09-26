@@ -1,0 +1,1 @@
+pub fn suitable(free_agent_ovr:u8,club_target:u8)->bool{let d=(free_agent_ovr as i16-club_target as i16).abs();d<=8}pub fn wage_discount(months_unattached:u8)->u8{(months_unattached.saturating_mul(3)).min(25)}
