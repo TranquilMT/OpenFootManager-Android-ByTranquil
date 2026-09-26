@@ -1875,6 +1875,8 @@
     "live": "直播中",
     "paused": "已暂停",
     "events": "事件",
+    "voiceOn": "开启语音解说",
+    "voiceOff": "关闭语音解说",
     "stats": "数据",
     "lineups": "首发名单",
     "simSpeed": "模拟速度",
@@ -2231,6 +2233,8 @@
       "PenaltyAwarded": "判罚点球"
     },
     "commentary": {
+      "Corner": {"headline": "获得角球", "lines": {"0": "{{team}}获得角球。", "1": "{{team}}准备开出角球。"}},
+      "FreeKick": {"headline": "获得任意球", "lines": {"0": "{{team}}获得任意球。", "1": "{{team}}准备主罚任意球。"}},
       "Goal": {
         "headline": "进球啦！",
         "lines": {
