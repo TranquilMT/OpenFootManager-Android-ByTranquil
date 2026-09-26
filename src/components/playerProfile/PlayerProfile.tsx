@@ -209,11 +209,11 @@ export default function PlayerProfile({
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between gap-3">
+      <div className="mb-4 flex min-w-0 items-center justify-between gap-2 sm:gap-3">
         <button
           type="button"
           onClick={onClose}
-          className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+          className="flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm text-gray-500 transition-colors active:bg-gray-100 active:text-gray-800 dark:text-gray-400 dark:active:bg-navy-700 dark:active:text-gray-200 sm:min-h-0 sm:px-0 sm:hover:bg-transparent sm:hover:text-gray-800 dark:sm:hover:text-gray-200"
         >
           <ArrowLeft className="w-4 h-4" />
           <span className="font-heading font-bold uppercase tracking-wider">
@@ -275,7 +275,7 @@ export default function PlayerProfile({
       {player.injury ? <PlayerProfileInjuryBanner injury={player.injury} t={t} /> : null}
 
       {isOwnClub && onGameUpdate && (
-        <div className="mb-4 flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 dark:border-navy-600 dark:bg-navy-800">
+        <div className="mb-4 flex flex-col items-stretch gap-2 rounded-xl border border-gray-200 bg-white px-3 py-3 dark:border-navy-600 dark:bg-navy-800 sm:flex-row sm:items-center sm:gap-3 sm:px-4">
           <span className="shrink-0 text-sm font-medium text-gray-600 dark:text-gray-300">
             {t("tactics.playerRoleLabel")}
           </span>
