@@ -988,7 +988,7 @@ export default function TransfersTab({
       )}
 
       {/* Tab navigation */}
-      <div className="flex gap-2 mb-4 flex-wrap">
+      <div className="touch-x -mx-1 mb-4 flex gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
         {tabs.map((tab) => (
           <button
             type="button"
@@ -1000,7 +1000,7 @@ export default function TransfersTab({
                 setAvailabilityFilter("all");
               }
             }}
-            className={`px-4 py-2 rounded-lg font-heading font-bold text-sm uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+            className={`flex min-h-11 shrink-0 items-center gap-1.5 rounded-lg px-4 py-2 font-heading text-sm font-bold uppercase tracking-wider transition-all sm:min-h-0 ${
               view === tab.id
                 ? "bg-primary-700 text-white shadow-md shadow-primary-700/20"
                 : "bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600 hover:text-gray-700 dark:hover:text-gray-200"
@@ -1012,8 +1012,8 @@ export default function TransfersTab({
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-3 mb-4 items-center">
-        <div className="relative flex-1 min-w-[180px] max-w-xs">
+      <div className="mb-4 flex min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+        <div className="relative w-full min-w-0 flex-1 sm:min-w-[180px] sm:max-w-xs">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
           <input
             type="text"
@@ -1023,7 +1023,7 @@ export default function TransfersTab({
               setSearch(e.target.value);
               setMarketPage(1);
             }}
-            className="w-full pl-9 pr-3 py-2 rounded-lg bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-600 text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+            className="min-h-11 w-full rounded-lg bg-white dark:bg-navy-800 border border-gray-200 dark:border-navy-600 text-sm text-gray-800 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
           />
         </div>
         <div ref={positionFilterRef} className="flex gap-1.5">
@@ -1032,7 +1032,7 @@ export default function TransfersTab({
             onClick={() => handleSelectPositionGroup(null)}
             aria-pressed={specificPositions.length === 0}
             aria-label={t("transfers.allPositions")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-heading font-bold uppercase tracking-wider transition-all ${specificPositions.length === 0 ? "bg-primary-700 text-white shadow-sm" : "bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600"}`}
+            className={`min-h-11 shrink-0 rounded-lg px-3 py-1.5 text-xs font-heading font-bold uppercase tracking-wider transition-all sm:min-h-0 ${specificPositions.length === 0 ? "bg-primary-700 text-white shadow-sm" : "bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600"}`}
           >
             {t("common.all")}
           </button>
@@ -1065,7 +1065,7 @@ export default function TransfersTab({
                         })
                       : groupLabel
                   }
-                  className={`px-3 py-1.5 rounded-lg text-xs font-heading font-bold uppercase tracking-wider transition-all inline-flex items-center gap-1 ${isActive ? "bg-primary-700 text-white shadow-sm" : "bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600"}`}
+                  className={`inline-flex min-h-11 shrink-0 items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-heading font-bold uppercase tracking-wider transition-all sm:min-h-0 ${isActive ? "bg-primary-700 text-white shadow-sm" : "bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600"}`}
                 >
                   {t(`common.posAbbr.${pos}`)}
                   {isPartial && (
@@ -1097,7 +1097,7 @@ export default function TransfersTab({
                             aria-pressed={selected}
                             aria-label={positionLabel}
                             title={positionLabel}
-                            className={`px-2.5 py-1 rounded-md text-xs font-heading font-bold uppercase tracking-wider transition-all ${selected ? "bg-primary-700 text-white shadow-sm" : "bg-gray-50 dark:bg-navy-700 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600 hover:text-gray-700 dark:hover:text-gray-200"}`}
+                            className={`min-h-11 rounded-md px-2.5 py-1 text-xs font-heading font-bold uppercase tracking-wider transition-all sm:min-h-0 ${selected ? "bg-primary-700 text-white shadow-sm" : "bg-gray-50 dark:bg-navy-700 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600 hover:text-gray-700 dark:hover:text-gray-200"}`}
                           >
                             {t(`common.posAbbr.${position}`)}
                           </button>
@@ -1120,7 +1120,7 @@ export default function TransfersTab({
                   setAvailabilityFilter(filter.id);
                   setMarketPage(1);
                 }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-heading font-bold uppercase tracking-wider transition-all ${availabilityFilter === filter.id ? "bg-accent-500 text-navy-900 shadow-sm" : "bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600"}`}
+                className={`min-h-11 shrink-0 rounded-lg px-3 py-1.5 text-xs font-heading font-bold uppercase tracking-wider transition-all sm:min-h-0 ${availabilityFilter === filter.id ? "bg-accent-500 text-navy-900 shadow-sm" : "bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600"}`}
               >
                 {filter.label} ({filter.count})
               </button>
@@ -1134,7 +1134,7 @@ export default function TransfersTab({
                 }}
                 aria-pressed={affordableOnly}
                 title={t("transfers.affordableOnlyHint")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-heading font-bold uppercase tracking-wider transition-all ${affordableOnly ? "bg-primary-700 text-white shadow-sm" : "bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600"}`}
+                className={`min-h-11 shrink-0 rounded-lg px-3 py-1.5 text-xs font-heading font-bold uppercase tracking-wider transition-all sm:min-h-0 ${affordableOnly ? "bg-primary-700 text-white shadow-sm" : "bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600"}`}
               >
                 {t("transfers.affordableOnly")}
               </button>
