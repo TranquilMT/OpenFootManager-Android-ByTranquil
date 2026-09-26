@@ -2731,7 +2731,7 @@
         "nameMaxLength": "Jméno a příjmení nesmí přesáhnout 30 znaků.",
         "nationalityRequired": "Národnost je povinný údaj.",
         "invalidDobFormat": "Neplatný formát data narození. Použijte formát RRRR-MM-DD.",
-        "minAge": "Manažer musí mít alespoň 30 let.",
+        "minAge": "Manažer musí mít alespoň 18 let.",
         "invalidDob": "Neplatné datum narození.",
         "startYearMin": "Počáteční rok musí být 1900 nebo novější.",
         "invalidStartYear": "Byl vybrán neplatný počáteční rok.",
