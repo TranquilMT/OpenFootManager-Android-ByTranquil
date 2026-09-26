@@ -2377,7 +2377,8 @@
         "headline": "TO BYLO TĚSNÉ!",
         "lines": {
           "0": "{{player}} posílá míč těsně vedle branky týmu {{team}}.",
-          "1": "Tak blízko! {{player}} nedokázal přesně zacílit."
+          "1": "Tak blízko! {{player}} nedokázal přesně zacílit.",
+          "2": "{{player}} posílá střelu mimo branku."
         },
         "speculative": {
           "headline": "MIMO BRÁNU",
