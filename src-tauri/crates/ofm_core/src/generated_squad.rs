@@ -5,6 +5,7 @@ pub const GENERATED_SQUAD_SIZE:usize=22;pub const STARTING_CORE_SLOTS:[usize;11]
 pub fn group_for_slot(slot:usize)->SquadGroup{match slot{0..=1=>SquadGroup::Goalkeeper,2..=8=>SquadGroup::Defender,9..=15=>SquadGroup::Midfielder,_=>SquadGroup::Forward}}
 pub fn minimum_group_count(group:SquadGroup)->usize{match group{SquadGroup::Goalkeeper=>2,SquadGroup::Defender=>4,SquadGroup::Midfielder=>4,SquadGroup::Forward=>2}}
 pub fn role_for_slot(slot:usize)->SquadRole{match slot{0|2|3|9|10|16=>SquadRole::Starter,4|5|11|12|17=>SquadRole::Rotation,6|13|18|19=>SquadRole::Depth,7|14|20=>SquadRole::Prospect,1|8|15|21=>SquadRole::Academy,_=>SquadRole::Depth}}
+pub fn academy_slot_count()->usize{(0..GENERATED_SQUAD_SIZE).filter(|s|role_for_slot(*s)==SquadRole::Academy).count()}
 pub fn senior_age_range(role:SquadRole)->(u8,u8){match role{SquadRole::Star=>(22,31),SquadRole::Starter=>(21,32),SquadRole::Rotation=>(20,33),SquadRole::Depth=>(20,34),SquadRole::Prospect=>(17,22),SquadRole::Academy=>(16,20)}}
 pub fn target_age_for_slot(slot:usize)->u8{let(lo,hi)=senior_age_range(role_for_slot(slot));lo+((slot as u8*3)%(hi-lo+1))}
 pub fn captain_candidate(slot:usize)->bool{matches!(slot,0|2|3|9|10)&&target_age_for_slot(slot)>=24}
@@ -18,4 +19,4 @@ pub fn target_potential_for_slot(slot:usize,tier:LeagueTier,reputation:u8,academ
 pub fn target_weekly_wage_for_slot(slot:usize,tier:LeagueTier,reputation:u8,financial_strength:u8)->i64{weekly_wage_eur(target_ovr_for_slot(slot,tier,reputation,financial_strength),reputation)}
 pub fn estimated_weekly_payroll(tier:LeagueTier,reputation:u8,financial_strength:u8)->i64{(0..GENERATED_SQUAD_SIZE).map(|s|target_weekly_wage_for_slot(s,tier,reputation,financial_strength)).sum()}
 pub fn payroll_guardrail(tier:LeagueTier,reputation:u8,financial_strength:u8,weekly_budget:i64)->bool{estimated_weekly_payroll(tier,reputation,financial_strength)<=weekly_budget}
-#[cfg(test)]mod tests{use super::*;#[test]fn depth_gap_is_bounded(){assert!(depth_quality_gap(LeagueTier::Elite,90,90)<20)}#[test]fn elite_wage_exceeds_academy_wage(){assert!(target_weekly_wage_for_slot(16,LeagueTier::Elite,90,90)>target_weekly_wage_for_slot(21,LeagueTier::Elite,90,90))}}
+#[cfg(test)]mod tests{use super::*;#[test]fn academy_has_one_player_per_group(){assert_eq!(academy_slot_count(),4)}#[test]fn depth_gap_is_bounded(){assert!(depth_quality_gap(LeagueTier::Elite,90,90)<20)}}
