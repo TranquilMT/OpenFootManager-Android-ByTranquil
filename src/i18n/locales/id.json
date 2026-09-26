@@ -2332,7 +2332,8 @@
         "headline": "PENALTI GAGAL!",
         "lines": {
           "0": "{{player}} gagal dari titik putih! Kelegaan besar bagi {{opponent}}!",
-          "1": "Diselamatkan! {{player}} akan mimpi buruk dengan penalti itu."
+          "1": "Diselamatkan! {{player}} akan mimpi buruk dengan penalti itu.",
+          "2": "{{player}} gagal mencetak gol dari titik penalti."
         }
       },
       "PenaltyAwarded": {
