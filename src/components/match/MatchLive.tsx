@@ -16,6 +16,7 @@ import { getEventDisplay, getPlayerName, makeTeamFallback, phaseLabel } from "./
 import { Badge, TeamLogo } from "../ui";
 import { useSettingsStore } from "../../store/settingsStore";
 import { EventFeed, MatchStats, Lineups } from "./MatchPanels";
+import { cancelSpokenCommentary, spokenCommentaryAvailable, useSpokenCommentary } from "./useSpokenCommentary";
 import MatchScreenLayout from "./MatchScreenLayout";
 import { SubPanel } from "./SubPanel";
 import {
@@ -34,6 +35,8 @@ import {
   Crosshair,
   Target,
   Flag,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 
 type ActivePanel = "events" | "stats" | "lineups";
@@ -67,7 +70,7 @@ export default function MatchLive({
   onFullTime,
   onPenaltyShootout,
 }: MatchLiveProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { settings } = useSettingsStore();
   const initialSpeed: SimSpeed =
     preferredSpeed ??
@@ -78,7 +81,9 @@ export default function MatchLive({
   const [activePanel, setActivePanel] = useState<ActivePanel>("events");
   const [isRunning, setIsRunning] = useState(true);
   const [showSubPanel, setShowSubPanel] = useState(false);
+  const [voiceEnabled, setVoiceEnabled] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const stepInFlightRef = useRef(false);
   const eventFeedRef = useRef<HTMLDivElement>(null);
   // Track phases we've already signaled to avoid double-firing
   const signaledRef = useRef<Set<string>>(new Set());
@@ -104,6 +109,8 @@ export default function MatchLive({
   // ofm_core/live_match_manager.rs; MINUTES_PER_TICK on this side is what makes batches possible.
   const stepMatch = useCallback(
     async (minutes: number) => {
+      if (stepInFlightRef.current) return;
+      stepInFlightRef.current = true;
       try {
         const results = await invoke<MinuteResult[]>("step_live_match", { minutes });
         if (results.length > 0) {
@@ -161,6 +168,8 @@ export default function MatchLive({
       } catch (err) {
         console.error("Failed to step match:", err);
         setIsRunning(false);
+      } finally {
+        stepInFlightRef.current = false;
       }
     },
     [onSnapshotUpdate, onImportantEvent, onHalfTime, onFullTime, onPenaltyShootout],
@@ -198,6 +207,8 @@ export default function MatchLive({
       eventFeedRef.current.scrollTop = eventFeedRef.current.scrollHeight;
     }
   }, [importantEvents.length]);
+
+  useSpokenCommentary(importantEvents, snapshot, t, i18n.language, voiceEnabled);
 
   // Apply substitution
   const handleSubstitution = async (playerOffId: string, playerOnId: string) => {
@@ -390,6 +401,20 @@ export default function MatchLive({
                 {tab.label}
               </button>
             ))}
+            {spokenCommentaryAvailable() && (
+              <button
+                type="button"
+                aria-label={t(voiceEnabled ? "match.voiceOff" : "match.voiceOn")}
+                aria-pressed={voiceEnabled}
+                onClick={() => {
+                  setVoiceEnabled((enabled) => !enabled);
+                  if (voiceEnabled) cancelSpokenCommentary();
+                }}
+                className="ml-auto flex min-h-11 min-w-11 shrink-0 items-center justify-center text-gray-500 dark:text-gray-300"
+              >
+                {voiceEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+              </button>
+            )}
           </div>
 
           <div className="touch-scroll min-h-0 flex-1 overflow-auto p-3 sm:p-4">
