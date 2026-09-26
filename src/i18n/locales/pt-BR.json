@@ -2176,7 +2176,7 @@
       "PenaltyAwarded": "Pênalti Marcado"
     },
     "commentary": {
-      "Corner": {"headline": "Escanteio para", "lines": {"0": "Escanteio para {{team}}.", "1": "{{team}} se prepara para cobrar o escanteio."}},
+      "Corner": {"headline": "Escanteio para", "lines": {"0": "Escanteio para {{team}}.", "1": "{{team}} se prepara para cobrar o escanteio.", "2": "{{team}} tem a chance de cruzar na cobrança de escanteio."}},
       "FreeKick": {"headline": "Falta a favor de", "lines": {"0": "Falta a favor de {{team}}.", "1": "{{team}} se prepara para cobrar a falta."}},
       "Goal": {
         "headline": "GOOOL!",
