@@ -2315,7 +2315,8 @@
         "headline": "BLOQUEADO!",
         "lines": {
           "0": "O chute de {{player}} é bloqueado por um defensor corajoso.",
-          "1": "Corpos no caminho! {{player}} é parado."
+          "1": "Corpos no caminho! {{player}} é parado.",
+          "2": "A defesa bloqueia o chute de {{player}}."
         },
         "bigChance": {
           "headline": "GRANDE BLOQUEIO!",
