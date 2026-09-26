@@ -56,7 +56,7 @@ interface SaveEntry {
 /**
  * Minimum manager age (years) on create.
  */
-const MANAGER_MINIMUM_AGE = 30;
+const MANAGER_MINIMUM_AGE = 18;
 /**
  * Earliest year a career may start. Historical world packages recreate eras
  * decades before the modern game, so the floor only keeps the clock inside a
