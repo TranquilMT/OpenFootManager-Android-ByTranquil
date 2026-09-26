@@ -8,7 +8,7 @@ use std::sync::OnceLock;
 use std::time::Instant;
 use tauri::{AppHandle, Manager};
 
-const GENERATOR_VERSION: &str = "runtime-component-recipe-rust-v1";
+const GENERATOR_VERSION: &str = "runtime-component-recipe-rust-v2";
 const SIZE: u32 = 384;
 
 #[derive(Debug, Deserialize)]
@@ -138,6 +138,14 @@ const SOURCE_BYTES: &[(&str, &[u8])] = &[
     (
         "chroma-12-polynesian",
         include_bytes!("../../assets/portrait-sources/chroma-12-polynesian.webp"),
+    ),
+    (
+        "chroma-13-north-african-curly",
+        include_bytes!("../../assets/portrait-sources/chroma-13-north-african-curly.webp"),
+    ),
+    (
+        "chroma-14-northern-european-bearded",
+        include_bytes!("../../assets/portrait-sources/chroma-14-northern-european-bearded.webp"),
     ),
 ];
 
@@ -682,7 +690,7 @@ mod tests {
     fn loads_only_male_eligible_sources() {
         let sources = portrait_sources().expect("portrait sources should load");
 
-        assert_eq!(sources.len(), 11);
+        assert_eq!(sources.len(), 13);
         assert!(sources
             .iter()
             .all(|source| source.id != "chroma-03-northern-european"));
