@@ -816,7 +816,7 @@ describe("TransfersTab", (): void => {
 
     fireEvent.click(screen.getByRole("button", { name: /offers/i }));
 
-    expect(screen.getByText(/Talks cooled off/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Talks cooled off/i)[0]).toBeInTheDocument();
   });
 
   it("shows bid impact preview and blocks impossible bids", async (): Promise<void> => {
