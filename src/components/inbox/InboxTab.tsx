@@ -327,7 +327,7 @@ export default function InboxTab({
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden">
       <InboxToolbar
         allMessagesCount={allMessages.length}
         bulkSelectionEnabled={bulkSelectionEnabled}
@@ -351,7 +351,7 @@ export default function InboxTab({
         onToggleCategory={handleToggleCategory}
       />
 
-      <div className="flex-1 flex gap-0 rounded-xl overflow-hidden border border-gray-200 dark:border-navy-600 bg-white dark:bg-navy-800 min-h-0">
+      <div className="flex min-h-0 flex-1 gap-0 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-navy-600 dark:bg-navy-800">
         <InboxMessageListPane
           bulkSelectionEnabled={bulkSelectionEnabled}
           filteredMessages={filteredMessages}
@@ -371,7 +371,7 @@ export default function InboxTab({
           onToggleMessageSelection={handleToggleMessageSelection}
         />
 
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
           <InboxMessageDetailPane
             effectFeedback={effectFeedback}
             currentTeamId={currentTeamId}
