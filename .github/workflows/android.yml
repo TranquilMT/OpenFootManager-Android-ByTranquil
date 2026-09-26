@@ -1,4 +1,4 @@
-name: Android APK
+name: OFMtouch Android Nightly 0.3.0
 
 on:
   workflow_dispatch:
@@ -70,12 +70,12 @@ jobs:
             exit 1
           fi
           mkdir -p dist-apk
-          cp "$APK" "dist-apk/OpenFootManagerAndroid-Build${GITHUB_RUN_NUMBER}-Nightly.apk"
-          sha256sum "dist-apk/OpenFootManagerAndroid-Build${GITHUB_RUN_NUMBER}-Nightly.apk" | tee "dist-apk/OpenFootManagerAndroid-Build${GITHUB_RUN_NUMBER}-Nightly.apk.sha256"
+          cp "$APK" "dist-apk/OFMtouch-0.3.0-Build${GITHUB_RUN_NUMBER}-Nightly.apk"
+          sha256sum "dist-apk/OFMtouch-0.3.0-Build${GITHUB_RUN_NUMBER}-Nightly.apk" | tee "dist-apk/OFMtouch-0.3.0-Build${GITHUB_RUN_NUMBER}-Nightly.apk.sha256"
 
       - name: Upload installable ARM64 APK
         uses: actions/upload-artifact@v4
         with:
-          name: OpenFootManagerAndroid-Build${{ github.run_number }}-Nightly
+          name: OFMtouch-0.3.0-Build${{ github.run_number }}-Nightly
           path: dist-apk/*
           if-no-files-found: error
