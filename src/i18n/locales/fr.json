@@ -2372,7 +2372,8 @@
         "headline": "BLOQUÉ !",
         "lines": {
           "0": "Le tir de {{player}} est contré par un défenseur courageux.",
-          "1": "Des corps sur la trajectoire ! {{player}} est stoppé."
+          "1": "Des corps sur la trajectoire ! {{player}} est stoppé.",
+          "2": "La défense bloque la tentative de {{player}}."
         },
         "bigChance": {
           "headline": "QUEL BLOCAGE !",
