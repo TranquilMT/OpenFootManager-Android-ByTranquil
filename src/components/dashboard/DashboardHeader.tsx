@@ -351,7 +351,7 @@ export default function DashboardHeader({
         </div>
       </div>
 
-      <div className="relative col-span-2 row-start-2 w-full lg:col-auto lg:row-auto lg:mx-auto lg:flex-1 lg:px-10>
+      <div className="relative col-span-2 row-start-2 w-full lg:col-auto lg:row-auto lg:mx-auto lg:flex-1 lg:px-10">
         <Search className="absolute left-3 top-1/2 lg:left-13 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
         <input
           type="text"
