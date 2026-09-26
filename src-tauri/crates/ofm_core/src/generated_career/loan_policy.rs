@@ -1,0 +1,1 @@
+pub fn should_loan(age:u8,ovr:u8,potential:u8,minutes_share:u8)->bool{age<=23&&potential>=ovr.saturating_add(8)&&minutes_share<30}pub fn suitable_level(player_ovr:u8)->u8{match player_ovr{75..=>0,65..=74=>1,55..=64=>2,45..=54=>3,_=>4}}
