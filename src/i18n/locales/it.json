@@ -2452,7 +2452,8 @@
         "headline": "INFORTUNIO",
         "lines": {
           "0": "{{player}} è a terra e ha bisogno di cure.",
-          "1": "Preoccupazione nel {{team}}: {{player}} cade infortunato."
+          "1": "Preoccupazione nel {{team}}: {{player}} cade infortunato.",
+          "2": "Il gioco si ferma mentre {{player}} riceve le cure."
         }
       },
       "Substitution": {
