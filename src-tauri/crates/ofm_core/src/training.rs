@@ -98,7 +98,7 @@ struct TrainingDay {
 /// recovery) and never climbs out. This guard breaks that fatigue spiral so a
 /// rested bench can recover and the condition-aware lineup picker can rotate.
 /// The user's own team is exempt — managers have manual control over training.
-const AI_FATIGUE_GUARD_CONDITION: u8 = 40;
+const FATIGUE_GUARD_CONDITION: u8 = 45;
 
 /// Per-team data collected before mutating players.
 struct TeamTrainingPlan {
@@ -109,9 +109,6 @@ struct TeamTrainingPlan {
     medical_facility_mult: f64,
     /// player_id → group focus override (players not in any group use default_focus)
     group_overrides: std::collections::HashMap<String, TrainingFocus>,
-    /// Whether this team is controlled by the human manager (exempt from the
-    /// automatic fatigue guard, which compensates for the AI's lack of agency).
-    is_user_team: bool,
 }
 
 /// Process daily training for all teams.
@@ -133,7 +130,6 @@ pub fn process_training(game: &mut Game, weekday_num: u32) {
 
     // Index each team's plan by id so players are visited once (O(teams + players))
     // instead of rescanning every player for every team (O(teams * players)).
-    let user_team_id = game.manager.team_id.clone();
     let plans: std::collections::HashMap<String, TeamTrainingPlan> = game
         .teams
         .iter()
@@ -156,7 +152,6 @@ pub fn process_training(game: &mut Game, weekday_num: u32) {
                     bonus,
                     medical_facility_mult,
                     group_overrides,
-                    is_user_team: user_team_id.as_deref() == Some(t.id.as_str()),
                 },
             )
         })
@@ -191,15 +186,14 @@ fn train_player(
     // AI fatigue guard: an exhausted player on an AI team is automatically rested
     // (treated as Recovery focus) so they can recover instead of being run further
     // into the ground by the squad-average-driven team intensity. See
-    // `AI_FATIGUE_GUARD_CONDITION`. The user's team is exempt — it has manual agency.
+    // `FATIGUE_GUARD_CONDITION`. The user's team is exempt — it has manual agency.
     // Injured players are exempt: they don't train regardless, and routing them
     // through Recovery focus here would inflate the injured-recovery base below
     // (9.0 instead of 3.0), giving exhausted injured AI players ~3x recovery.
     let recovery_focus = TrainingFocus::Recovery;
-    let player_focus = if !plan.is_user_team
-        && is_training_day
+    let player_focus = if is_training_day
         && player.injury.is_none()
-        && player.condition < AI_FATIGUE_GUARD_CONDITION
+        && player.condition < FATIGUE_GUARD_CONDITION
     {
         &recovery_focus
     } else {
@@ -218,19 +212,19 @@ fn train_player(
     } else {
         match (player_focus, &plan.intensity) {
             (TrainingFocus::Recovery, _) => 0,
-            (_, TrainingIntensity::Low) => 3,
-            (_, TrainingIntensity::Medium) => 6,
-            (_, TrainingIntensity::High) => 10,
+            (_, TrainingIntensity::Low) => 1,
+            (_, TrainingIntensity::Medium) => 2,
+            (_, TrainingIntensity::High) => 4,
         }
     };
 
     // Recovery amount: rest days get boosted recovery (like Recovery focus)
     let recovery_base: f64 = if !is_training_day {
-        7.0 * plan.bonus.physio_mult * plan.medical_facility_mult
+        10.0 * plan.bonus.physio_mult * plan.medical_facility_mult
     } else {
         match player_focus {
-            TrainingFocus::Recovery => 9.0 * plan.bonus.physio_mult * plan.medical_facility_mult,
-            _ => 3.0 * plan.bonus.physio_mult * plan.medical_facility_mult,
+            TrainingFocus::Recovery => 12.0 * plan.bonus.physio_mult * plan.medical_facility_mult,
+            _ => 4.0 * plan.bonus.physio_mult * plan.medical_facility_mult,
         }
     };
 
@@ -441,9 +435,9 @@ fn recovery_factor_from_morale(morale: u8) -> f64 {
 /// Recovery multiplier from current condition: severely fatigued players recover more slowly.
 fn recovery_factor_from_condition(condition: u8) -> f64 {
     if condition < 30 {
-        0.80
+        1.20
     } else if condition < 50 {
-        0.90
+        1.10
     } else {
         1.00
     }
@@ -452,9 +446,9 @@ fn recovery_factor_from_condition(condition: u8) -> f64 {
 /// Recovery multiplier from fitness: fitter players recover condition faster.
 fn recovery_factor_from_fitness(fitness: u8) -> f64 {
     if fitness < 30 {
-        0.75
+        0.95
     } else if fitness < 50 {
-        0.88
+        0.98
     } else if fitness < 70 {
         1.00
     } else if fitness < 90 {
