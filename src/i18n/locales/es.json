@@ -2470,7 +2470,8 @@
         "headline": "FINAL",
         "lines": {
           "0": "¡Y aquí termina — tiempo reglamentario!",
-          "1": "El árbitro pita el final del partido."
+          "1": "El árbitro pita el final del partido.",
+          "2": "Suena el pitido final y el resultado queda decidido."
         }
       }
     },
