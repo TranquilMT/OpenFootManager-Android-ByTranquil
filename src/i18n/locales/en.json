@@ -2268,7 +2268,7 @@
     },
     "commentary": {
       "Corner": {"headline": "CORNER", "lines": {"0": "Corner kick for {{team}}.", "1": "{{team}} prepare to deliver from the corner.", "2": "{{team}} have a chance to deliver from the corner."}},
-      "FreeKick": {"headline": "FREE KICK", "lines": {"0": "Free kick for {{team}}.", "1": "{{team}} line up the free kick."}},
+      "FreeKick": {"headline": "FREE KICK", "lines": {"0": "Free kick for {{team}}.", "1": "{{team}} line up the free kick.", "2": "The free kick gives {{team}} a chance to build an attack."}},
       "Goal": {
         "headline": "GOOAL!",
         "lines": {
