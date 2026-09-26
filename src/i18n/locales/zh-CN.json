@@ -2387,7 +2387,8 @@
         "headline": "犯规",
         "lines": {
           "0": "{{player}}对{{victim}}犯规。{{opponent}}获得任意球。",
-          "1": "{{player}}在{{victim}}身上送出一个任意球。"
+          "1": "{{player}}在{{victim}}身上送出一个任意球。",
+          "2": "裁判吹罚{{team}}犯规。"
         },
         "hard": {
           "headline": "这是犯规",
