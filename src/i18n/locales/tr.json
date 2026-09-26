@@ -2451,7 +2451,8 @@
         "headline": "KIRMIZI KART!",
         "lines": {
           "0": "{{player}} oyun dışı kalıyor! {{team}} 10 kişi!",
-          "1": "{{player}} direkt kırmızı görüyor! {{team}} için felaket."
+          "1": "{{player}} direkt kırmızı görüyor! {{team}} için felaket.",
+          "2": "{{player}} atılıyor; {{team}} on kişiyle devam edecek."
         }
       },
       "SecondYellow": {
