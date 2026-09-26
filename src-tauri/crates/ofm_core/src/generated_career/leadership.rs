@@ -1,0 +1,1 @@
+pub fn captain_score(age:u8,composure:u8,loyalty:u8,reputation:u8)->u8{let age=age.min(34);((age as u16*2+composure as u16*3+loyalty as u16*2+reputation as u16)/8).min(100)as u8}pub fn captain_material(score:u8)->bool{score>=65}
