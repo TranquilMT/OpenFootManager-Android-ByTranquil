@@ -2460,7 +2460,8 @@
         "headline": "SOSTITUZIONE",
         "lines": {
           "0": "Il {{team}} effettua un cambio: {{player}} entra, {{victim}} esce.",
-          "1": "{{player}} sostituisce {{victim}} nel {{team}}."
+          "1": "{{player}} sostituisce {{victim}} nel {{team}}.",
+          "2": "{{team}} sostituisce {{victim}} con {{player}}."
         }
       },
       "KickOff": {
