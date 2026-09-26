@@ -2372,7 +2372,8 @@
         "headline": "GEBLOCKT!",
         "lines": {
           "0": "Der Schuss von {{player}} wird von einem mutigen Verteidiger geblockt.",
-          "1": "Körper im Weg! {{player}} wird abgeblockt."
+          "1": "Körper im Weg! {{player}} wird abgeblockt.",
+          "2": "Die Abwehr blockt den Schuss von {{player}}."
         },
         "bigChance": {
           "headline": "TOLLE GRÄTSCHE!",
