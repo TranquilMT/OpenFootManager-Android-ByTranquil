@@ -2240,7 +2240,8 @@
         "lines": {
           "0": "{{player}} faz golo para o {{team}}!",
           "1": "{{player}} marca! Que finalização!",
-          "2": "{{player}} marca para o {{team}}!"
+          "2": "{{player}} marca para o {{team}}!",
+          "3": "{{player}} conclui a jogada para {{team}}!"
         },
         "opener": {
           "headline": "GOOOL!",
