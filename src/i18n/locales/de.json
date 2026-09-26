@@ -2240,7 +2240,8 @@
         "lines": {
           "0": "{{player}} trifft für {{team}}!",
           "1": "{{player}} versenkt den Ball! Was für ein Abschluss!",
-          "2": "{{player}} erzielt das Tor für {{team}}!"
+          "2": "{{player}} erzielt das Tor für {{team}}!",
+          "3": "{{player}} vollendet den Angriff für {{team}}!"
         },
         "opener": {
           "headline": "TOOOR!",
