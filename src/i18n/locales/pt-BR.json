@@ -2257,7 +2257,8 @@
         "headline": "GRANDE DEFESA!",
         "lines": {
           "0": "{{player}} obriga o goleiro a uma defesa.",
-          "1": "O goleiro impede o gol de {{player}}!"
+          "1": "O goleiro impede o gol de {{player}}!",
+          "2": "O goleiro defende a finalização de {{player}}."
         },
         "routine": {
           "headline": "DEFENDIDO",
