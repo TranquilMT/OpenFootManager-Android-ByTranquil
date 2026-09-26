@@ -2314,7 +2314,8 @@
         "headline": "GRANDE DEFESA!",
         "lines": {
           "0": "{{player}} obriga o guarda-redes a uma defesa.",
-          "1": "O guarda-redes nega o golo a {{player}}!"
+          "1": "O guarda-redes nega o golo a {{player}}!",
+          "2": "O guarda-redes defende o remate de {{player}}."
         },
         "routine": {
           "headline": "DEFESA",
