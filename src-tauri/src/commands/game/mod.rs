@@ -32,26 +32,21 @@ use world_build::*;
 use world_load::*;
 pub use validation::*;
 
-const BUNDLED_2026_27_DATABASE: &str = "databases/openfootball-2026-27.json";
-
 fn resolve_default_world_source(
-    app_handle: &tauri::AppHandle,
+    _app_handle: &tauri::AppHandle,
     requested: Option<&str>,
 ) -> Result<String, String> {
-    if let Some(source) = requested.filter(|source| !source.trim().is_empty()) {
-        return Ok(source.to_string());
-    }
-    let resource_dir = app_handle.path().resource_dir().map_err(|e| e.to_string())?;
-    let database = resource_dir.join(BUNDLED_2026_27_DATABASE);
-    if !database.is_file() {
-        return Err("be.error.worldBundledDatabaseMissing".to_string());
-    }
-    Ok(database.to_string_lossy().into_owned())
+    // OFMtouch no longer requires the abandoned bundled real-player database.
+    // With no package/file explicitly selected, start a procedural generated world.
+    Ok(requested
+        .filter(|source| !source.trim().is_empty())
+        .unwrap_or("random")
+        .to_string())
 }
 
 /// Step 1: Create manager + load the selected world. No team assigned yet.
-/// An omitted world source uses the bundled 2026/27 real-player database.
-/// Procedural generation remains available only when `world_source` is explicitly `random`.
+/// An omitted world source starts the built-in procedural generated world.
+/// Installed packages or explicit world files remain optional overrides.
 #[tauri::command]
 #[allow(clippy::too_many_arguments)]
 pub async fn start_new_game(
