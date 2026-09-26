@@ -2731,7 +2731,7 @@
         "nameMaxLength": "Ad ve soyad 30 karakteri aşmamalıdır.",
         "nationalityRequired": "Uyruk zorunludur.",
         "invalidDobFormat": "Geçersiz doğum tarihi. YYYY-AA-GG biçimini kullanın.",
-        "minAge": "Menajer en az 30 yaşında olmalıdır.",
+        "minAge": "Menajer en az 18 yaşında olmalıdır.",
         "invalidDob": "Geçersiz doğum tarihi.",
         "startYearMin": "Başlangıç yılı 1900 veya sonrası olmalıdır.",
         "invalidStartYear": "Geçersiz başlangıç yılı seçildi.",
