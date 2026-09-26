@@ -2343,7 +2343,8 @@
         "headline": "¡QUÉ CERCA!",
         "lines": {
           "0": "{{player}} la manda fuera por poco para el {{team}}.",
-          "1": "¡Qué cerca! {{player}} no puede encontrar la portería."
+          "1": "¡Qué cerca! {{player}} no puede encontrar la portería.",
+          "2": "{{player}} envía el disparo fuera de la portería."
         },
         "speculative": {
           "headline": "FUERA",
