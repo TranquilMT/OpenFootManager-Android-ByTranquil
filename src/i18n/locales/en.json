@@ -2340,7 +2340,8 @@
         "headline": "PENALTY!",
         "lines": {
           "0": "The referee points to the spot — penalty to {{team}}!",
-          "1": "It's a penalty for {{team}}! Huge moment."
+          "1": "It's a penalty for {{team}}! Huge moment.",
+          "2": "The official awards {{team}} a penalty."
         }
       },
       "ShotSaved": {
