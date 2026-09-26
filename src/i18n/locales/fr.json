@@ -2314,7 +2314,8 @@
         "headline": "QUEL ARRÊT !",
         "lines": {
           "0": "{{player}} contraint le gardien à une belle parade.",
-          "1": "Le gardien refuse le but à {{player}} !"
+          "1": "Le gardien refuse le but à {{player}} !",
+          "2": "Le gardien repousse la frappe de {{player}}."
         },
         "routine": {
           "headline": "ARRÊT",
