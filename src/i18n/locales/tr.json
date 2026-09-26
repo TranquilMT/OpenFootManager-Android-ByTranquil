@@ -2274,7 +2274,8 @@
         "lines": {
           "0": "{{player}} topu ağlarla buluşturuyor, {{team}} golü buldu!",
           "1": "{{player}} bitiriyor! Ne müthiş bir vuruş!",
-          "2": "{{player}}, {{team}} adına skoru değiştiriyor!"
+          "2": "{{player}}, {{team}} adına skoru değiştiriyor!",
+          "3": "{{player}}, {{team}} adına atağı golle tamamlıyor!"
         },
         "opener": {
           "headline": "GOOOL!",
