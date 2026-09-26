@@ -2470,7 +2470,8 @@
         "headline": "COUP DE SIFFLET FINAL",
         "lines": {
           "0": "Et voilà — c'est terminé !",
-          "1": "L'arbitre siffle la fin du match."
+          "1": "L'arbitre siffle la fin du match.",
+          "2": "Le coup de sifflet final confirme le résultat."
         }
       }
     },
