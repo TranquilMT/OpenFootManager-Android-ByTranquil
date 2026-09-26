@@ -2298,7 +2298,8 @@
         "headline": "ELFMETER VERSCHOSSEN!",
         "lines": {
           "0": "{{player}} scheitert vom Punkt! Was für eine Erleichterung für {{opponent}}!",
-          "1": "Gehalten! {{player}} wird von diesem Elfmeter noch träumen."
+          "1": "Gehalten! {{player}} wird von diesem Elfmeter noch träumen.",
+          "2": "{{player}} verfehlt vom Punkt das Tor."
         }
       },
       "PenaltyAwarded": {
