@@ -2377,7 +2377,8 @@
         "headline": "NYARIS!",
         "lines": {
           "0": "Tembakan {{player}} melenceng tipis untuk {{team}}.",
-          "1": "Begitu dekat! {{player}} belum berhasil menemukan sasaran."
+          "1": "Begitu dekat! {{player}} belum berhasil menemukan sasaran.",
+          "2": "Tembakan {{player}} melebar dari gawang."
         },
         "speculative": {
           "headline": "MELENCENG",
