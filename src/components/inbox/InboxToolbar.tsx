@@ -99,7 +99,8 @@ export default function InboxToolbar({
             value={sortOrder}
             onChange={(event) => onSortOrderChange(event.target.value as MessageSortOrder)}
             selectSize="sm"
-            wrapperClassName="min-w-0 flex-1 sm:min-w-[170px]"\n            className="min-h-11 sm:min-h-0"
+            wrapperClassName="min-w-0 flex-1 sm:min-w-[170px]"
+            className="min-h-11 sm:min-h-0"
             aria-label={t("inbox.sortByDate")}
           >
             <option value="newest">{t("inbox.sortNewest")}</option>
