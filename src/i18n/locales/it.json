@@ -2317,7 +2317,8 @@
         "headline": "RIGORE SBAGLIATO!",
         "lines": {
           "0": "{{player}} fallisce dal dischetto! Che sollievo per il {{opponent}}!",
-          "1": "Parato! {{player}} avrà degli incubi per questo rigore."
+          "1": "Parato! {{player}} avrà degli incubi per questo rigore.",
+          "2": "{{player}} non trova la rete dal dischetto."
         }
       },
       "PenaltyAwarded": {
