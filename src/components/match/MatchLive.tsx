@@ -71,7 +71,7 @@ export default function MatchLive({
   onPenaltyShootout,
 }: MatchLiveProps) {
   const { t, i18n } = useTranslation();
-  const { settings } = useSettingsStore();
+  const { settings, updateSettings } = useSettingsStore();
   const initialSpeed: SimSpeed =
     preferredSpeed ??
     (settings.match_speed === "slow" || settings.match_speed === "fast"
@@ -81,7 +81,7 @@ export default function MatchLive({
   const [activePanel, setActivePanel] = useState<ActivePanel>("events");
   const [isRunning, setIsRunning] = useState(true);
   const [showSubPanel, setShowSubPanel] = useState(false);
-  const [voiceEnabled, setVoiceEnabled] = useState(false);
+  const [voiceEnabled, setVoiceEnabled] = useState(settings.spoken_match_commentary);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stepInFlightRef = useRef(false);
   const eventFeedRef = useRef<HTMLDivElement>(null);
@@ -208,7 +208,7 @@ export default function MatchLive({
     }
   }, [importantEvents.length]);
 
-  useSpokenCommentary(importantEvents, snapshot, t, i18n.language, voiceEnabled);
+  useSpokenCommentary(importantEvents, snapshot, t, i18n.language, voiceEnabled && settings.show_match_commentary);
 
   // Apply substitution
   const handleSubstitution = async (playerOffId: string, playerOnId: string) => {
@@ -408,6 +408,7 @@ export default function MatchLive({
                 aria-pressed={voiceEnabled}
                 onClick={() => {
                   setVoiceEnabled((enabled) => !enabled);
+                  void updateSettings({ spoken_match_commentary: !voiceEnabled });
                   if (voiceEnabled) cancelSpokenCommentary();
                 }}
                 className="ml-auto flex min-h-11 min-w-11 shrink-0 items-center justify-center text-gray-500 dark:text-gray-300"
@@ -424,6 +425,7 @@ export default function MatchLive({
                 snapshot={snapshot}
                 feedRef={eventFeedRef}
                 playerJerseyMap={playerJerseyMap}
+                showCommentary={settings.show_match_commentary}
               />
             )}
             {activePanel === "stats" && <MatchStats snapshot={snapshot} />}

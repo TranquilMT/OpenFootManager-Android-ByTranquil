@@ -10,11 +10,13 @@ export function EventFeed({
   snapshot,
   feedRef,
   playerJerseyMap,
+  showCommentary = true,
 }: {
   events: MatchEvent[];
   snapshot: MatchSnapshot;
   feedRef: React.RefObject<HTMLDivElement | null>;
   playerJerseyMap?: Map<string, number>;
+  showCommentary?: boolean;
 }) {
   function displayName(playerId: string | null): string {
     const name = getPlayerName(snapshot, playerId);
@@ -35,7 +37,7 @@ export function EventFeed({
         events.map((evt, i) => {
           const display = getEventDisplay(evt);
           const isHome = evt.side === "Home";
-          const commentary = getCommentary(evt, snapshot, t);
+          const commentary = showCommentary ? getCommentary(evt, snapshot, t) : null;
           return (
             <div
               key={i}
