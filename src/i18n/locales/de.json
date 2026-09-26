@@ -2233,7 +2233,7 @@
       "PenaltyAwarded": "Elfmeter gegeben"
     },
     "commentary": {
-      "Corner": {"headline": "Eckball für", "lines": {"0": "Eckball für {{team}}.", "1": "{{team}} bere Maß für die Ecke."}},
+      "Corner": {"headline": "Eckball für", "lines": {"0": "Eckball für {{team}}.", "1": "{{team}} bere Maß für die Ecke.", "2": "{{team}} kann den Ball von der Ecke hereinbringen."}},
       "FreeKick": {"headline": "Freistoß für", "lines": {"0": "Freistoß für {{team}}.", "1": "{{team}} bere Maß für den Freistoß."}},
       "Goal": {
         "headline": "TOOOR!",
