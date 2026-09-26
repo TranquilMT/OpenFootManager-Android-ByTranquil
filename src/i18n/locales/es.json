@@ -2298,7 +2298,8 @@
         "headline": "¡PENALTI FALLADO!",
         "lines": {
           "0": "¡{{player}} falla desde el punto de penalti! ¡Qué alivio para el {{opponent}}!",
-          "1": "¡Parado! {{player}} se llevará esta pesadilla a casa."
+          "1": "¡Parado! {{player}} se llevará esta pesadilla a casa.",
+          "2": "{{player}} no consigue marcar desde el punto de penalti."
         }
       },
       "PenaltyAwarded": {
