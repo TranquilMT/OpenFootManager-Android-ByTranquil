@@ -1195,7 +1195,46 @@ export default function TransfersTab({
       {filteredList.length > 0 && (
         <Card>
           <CardBody className="p-0">
-            <div className="overflow-x-auto">
+            <div className="divide-y divide-gray-100 dark:divide-navy-600 md:hidden">
+              {visibleList.map((player) => {
+                const ovr = getPlayerOvr(player);
+                const age = calcAge(player.date_of_birth);
+                const contextItems = [
+                  buildViewProfileMenuItem(t, () => onSelectPlayer(player.id)),
+                  ...(player.team_id ? [buildViewTeamMenuItem(t, () => onSelectTeam(player.team_id!))] : []),
+                ];
+                return (
+                  <ContextMenu items={contextItems} key={`mobile-${player.id}`}>
+                    <div className="p-3" data-testid={`transfer-player-mobile-${player.id}`}>
+                      <button type="button" onClick={() => onSelectPlayer(player.id)} className="flex min-h-12 w-full items-center gap-3 text-left">
+                        <PlayerAvatar player={player} />
+                        <span className="min-w-0 flex-1">
+                          <span className="flex items-center gap-2">
+                            <span className="truncate font-semibold text-sm text-gray-800 dark:text-gray-200">{player.full_name}</span>
+                            <Badge variant={positionBadgeVariant(player.natural_position || player.position)} size="sm">{translatePositionAbbreviation(t, player.natural_position || player.position)}</Badge>
+                          </span>
+                          <span className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+                            <span>{t("common.age")} {age}</span>
+                            <span>{player.team_id ? getTeamName(gameState.teams, player.team_id) : t("common.freeAgent")}</span>
+                          </span>
+                        </span>
+                        <span className="text-right"><span className="block font-heading text-lg font-bold tabular-nums text-primary-500">{ovr}</span><span className="block text-[10px] uppercase text-gray-400">{t("common.ovr")}</span></span>
+                      </button>
+                      <div className="mt-2 grid grid-cols-2 gap-2 rounded-lg bg-gray-50 p-2 text-xs dark:bg-navy-700/50">
+                        <span><span className="block text-[10px] uppercase text-gray-400">{t("common.value")}</span><span className="font-semibold text-gray-700 dark:text-gray-200">{formatVal(player.market_value)}</span></span>
+                        <span><span className="block text-[10px] uppercase text-gray-400">{t("common.wage")}</span><span className="font-semibold text-gray-700 dark:text-gray-200">{formatAnnualAmount(formatVal(player.wage), annualSuffix)}</span></span>
+                      </div>
+                      {isScoutingView ? (
+                        <button type="button" onClick={() => openDealEntry(player)} className="mt-2 flex min-h-11 w-full items-center justify-center gap-1 rounded-lg bg-primary-500/10 px-3 text-xs font-heading font-bold uppercase tracking-wider text-primary-500 active:bg-primary-500/20">
+                          {getDealEntryIcon(player, "w-4 h-4")}{getDealEntryLabel(player)}
+                        </button>
+                      ) : null}
+                    </div>
+                  </ContextMenu>
+                );
+              })}
+            </div>
+            <div className="hidden overflow-x-auto md:block">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-50 dark:bg-navy-800 border-b border-gray-200 dark:border-navy-600 text-xs">
@@ -1431,7 +1470,7 @@ export default function TransfersTab({
                                                 e.stopPropagation();
                                                 handleRespondOffer(player.id, offer.id, true);
                                               }}
-                                              className="p-1 rounded bg-green-500/20 hover:bg-green-500/30 text-green-500"
+                                              className="flex h-11 w-11 items-center justify-center rounded bg-green-500/20 text-green-500 hover:bg-green-500/30"
                                               title={t("transfers.acceptOffer")}
                                             >
                                               <Check className="w-3 h-3" />
@@ -1442,7 +1481,7 @@ export default function TransfersTab({
                                                 e.stopPropagation();
                                                 handleRespondOffer(player.id, offer.id, false);
                                               }}
-                                              className="p-1 rounded bg-red-500/20 hover:bg-red-500/30 text-red-500"
+                                              className="flex h-11 w-11 items-center justify-center rounded bg-red-500/20 text-red-500 hover:bg-red-500/30"
                                               title={t("transfers.rejectOffer")}
                                             >
                                               <X className="w-3 h-3" />
@@ -1512,7 +1551,7 @@ export default function TransfersTab({
                                                   e.stopPropagation();
                                                   handleRespondLoanOffer(player.id, offer.id, true);
                                                 }}
-                                                className="p-1 rounded bg-green-500/20 hover:bg-green-500/30 text-green-500"
+                                                className="flex h-11 w-11 items-center justify-center rounded bg-green-500/20 text-green-500 hover:bg-green-500/30"
                                                 title={t("transfers.acceptLoanOffer")}
                                               >
                                                 <Check className="w-3 h-3" />
@@ -1527,7 +1566,7 @@ export default function TransfersTab({
                                                     false,
                                                   );
                                                 }}
-                                                className="p-1 rounded bg-red-500/20 hover:bg-red-500/30 text-red-500"
+                                                className="flex h-11 w-11 items-center justify-center rounded bg-red-500/20 text-red-500 hover:bg-red-500/30"
                                                 title={t("transfers.rejectLoanOffer")}
                                               >
                                                 <X className="w-3 h-3" />
