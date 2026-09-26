@@ -2343,7 +2343,8 @@
         "headline": "TOUT PRÈS !",
         "lines": {
           "0": "{{player}} envoie ça à côté de peu pour {{team}}.",
-          "1": "Si proche ! {{player}} ne parvient pas à cadrer."
+          "1": "Si proche ! {{player}} ne parvient pas à cadrer.",
+          "2": "{{player}} envoie sa frappe à côté du but."
         },
         "speculative": {
           "headline": "HORS CADRE",
