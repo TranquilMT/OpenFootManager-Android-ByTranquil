@@ -2409,7 +2409,8 @@
         "headline": "TARJETA AMARILLA",
         "lines": {
           "0": "{{player}} ve la amarilla con el {{team}}.",
-          "1": "Tarjeta amarilla para {{player}}."
+          "1": "Tarjeta amarilla para {{player}}.",
+          "2": "El árbitro amonesta a {{player}}."
         }
       },
       "RedCard": {
