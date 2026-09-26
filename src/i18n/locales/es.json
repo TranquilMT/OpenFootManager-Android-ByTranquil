@@ -2233,7 +2233,7 @@
       "PenaltyAwarded": "Penalti Señalado"
     },
     "commentary": {
-      "Corner": {"headline": "Córner para", "lines": {"0": "Córner para {{team}}.", "1": "{{team}} se prepara para sacar de esquina."}},
+      "Corner": {"headline": "Córner para", "lines": {"0": "Córner para {{team}}.", "1": "{{team}} se prepara para sacar de esquina.", "2": "{{team}} tiene la ocasión de centrar desde el córner."}},
       "FreeKick": {"headline": "Falta a favor de", "lines": {"0": "Falta a favor de {{team}}.", "1": "{{team}} prepara el tiro libre."}},
       "Goal": {
         "headline": "¡GOOOL!",
