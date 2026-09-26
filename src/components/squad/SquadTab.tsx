@@ -45,14 +45,16 @@ export default function SquadTab({
   }
 
   return (
-    <SquadRosterView
-      players={players}
-      team={team}
-      clockDate={clockDate}
-      onSelectPlayer={onSelectPlayer}
-      onMutationComplete={handleMutationComplete}
-      sortState={sortState}
-      onSortStateChange={onSortStateChange}
-    />
+    <div className="android-squad-roster pb-20 md:pb-0">
+      <SquadRosterView
+        players={players}
+        team={team}
+        clockDate={clockDate}
+        onSelectPlayer={onSelectPlayer}
+        onMutationComplete={handleMutationComplete}
+        sortState={sortState}
+        onSortStateChange={onSortStateChange}
+      />
+    </div>
   );
 }
