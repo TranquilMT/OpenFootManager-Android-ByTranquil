@@ -2324,7 +2324,8 @@
         "headline": "PENALTI — GOL!",
         "lines": {
           "0": "{{player}} mengecoh penjaga gawang! {{team}} mencetak gol dari titik putih.",
-          "1": "Dingin dari {{player}} — penalti berhasil dikonversi untuk {{team}}!"
+          "1": "Dingin dari {{player}} — penalti berhasil dikonversi untuk {{team}}!",
+          "2": "{{player}} mencetak gol penalti untuk {{team}}!"
         }
       },
       "PenaltyMiss": {
