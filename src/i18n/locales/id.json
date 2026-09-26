@@ -2475,7 +2475,8 @@
         "headline": "PERGANTIAN PEMAIN",
         "lines": {
           "0": "{{team}} melakukan pergantian: {{player}} masuk, {{victim}} keluar.",
-          "1": "{{player}} menggantikan {{victim}} untuk {{team}}."
+          "1": "{{player}} menggantikan {{victim}} untuk {{team}}.",
+          "2": "{{team}} memasukkan {{player}} menggantikan {{victim}}."
         }
       },
       "KickOff": {
