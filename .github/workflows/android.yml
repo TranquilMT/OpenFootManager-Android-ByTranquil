@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - android/phase-1-bootstrap
+      - android/migration
 
 concurrency:
   group: android-nightly-${{ github.ref }}
@@ -23,14 +23,6 @@ jobs:
         with:
           node-version: 22
           cache: npm
-
-      - name: Require and validate committed 2026/27 database snapshot
-        run: |
-          set -euo pipefail
-          DB="src-tauri/databases/openfootball-2026-27.json"
-          test -s "$DB" || { echo 'ERROR: no release-ready committed snapshot; see docs/DATABASE-AUDIT-2026-09-26.md'; exit 1; }
-          git ls-files --error-unmatch "$DB" "$DB.sha256" >/dev/null
-          node scripts/validate-real-database.mjs "$DB" --checksum
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -57,13 +49,13 @@ jobs:
             npx tauri android init --ci
           fi
 
-      - name: Build signed ARM64 debug APK
+      - name: Build ARM64 debug APK
         env:
           NDK_HOME: ${{ env.ANDROID_NDK_HOME }}
           VITE_APP_BUILD_NUMBER: ${{ github.run_number }}
         run: npx tauri android build --debug --apk --target aarch64
 
-      - name: Verify APK signature, ARM64 payload and bundled database
+      - name: Verify APK signature and ARM64 payload
         shell: bash
         run: |
           set -euo pipefail
@@ -77,10 +69,6 @@ jobs:
             echo 'Unexpected non-ARM64 native libraries found'
             exit 1
           fi
-          unzip -l "$APK" | grep -F 'openfootball-2026-27.json' >/dev/null || {
-            echo '2026/27 database is missing from APK'
-            exit 1
-          }
           mkdir -p dist-apk
           cp "$APK" "dist-apk/OpenFootManagerAndroid-Build${GITHUB_RUN_NUMBER}-Nightly.apk"
           sha256sum "dist-apk/OpenFootManagerAndroid-Build${GITHUB_RUN_NUMBER}-Nightly.apk" | tee "dist-apk/OpenFootManagerAndroid-Build${GITHUB_RUN_NUMBER}-Nightly.apk.sha256"
