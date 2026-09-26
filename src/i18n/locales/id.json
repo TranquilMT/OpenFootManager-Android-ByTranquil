@@ -2443,7 +2443,8 @@
         "headline": "KARTU KUNING",
         "lines": {
           "0": "{{player}} tercatat di buku wasit untuk {{team}}.",
-          "1": "Kartu kuning untuk {{player}}."
+          "1": "Kartu kuning untuk {{player}}.",
+          "2": "Wasit memberi {{player}} kartu kuning."
         }
       },
       "RedCard": {
