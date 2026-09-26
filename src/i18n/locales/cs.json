@@ -2332,7 +2332,8 @@
         "headline": "NEPROMĚNĚNÁ PENALTA!",
         "lines": {
           "0": "{{player}} to z penalty zvoral! Obrovská úleva pro tým {{opponent}}!",
-          "1": "Chyceno! O tlesknuté penaltě se bude hráči {{player}} ještě dlouho zdát."
+          "1": "Chyceno! O tlesknuté penaltě se bude hráči {{player}} ještě dlouho zdát.",
+          "2": "{{player}} z penalty míjí branku."
         }
       },
       "PenaltyAwarded": {
