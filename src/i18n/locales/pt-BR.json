@@ -2249,7 +2249,8 @@
         "headline": "PÊNALTI!",
         "lines": {
           "0": "O árbitro aponta para a marca do pênalti — pênalti para o {{team}}!",
-          "1": "É pênalti para o {{team}}! Momento decisivo."
+          "1": "É pênalti para o {{team}}! Momento decisivo.",
+          "2": "O árbitro marca pênalti para {{team}}."
         }
       },
       "ShotSaved": {
