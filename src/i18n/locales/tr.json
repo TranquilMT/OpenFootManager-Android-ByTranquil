@@ -2324,7 +2324,8 @@
         "headline": "PENALTI — GOL!",
         "lines": {
           "0": "{{player}} kaleciyi ters köşeye yatırıyor! {{team}} penaltıdan skoru değiştiriyor.",
-          "1": "{{player}} buz gibi soğukkanlı — penaltı gole dönüşüyor, {{team}} yükseliyor!"
+          "1": "{{player}} buz gibi soğukkanlı — penaltı gole dönüşüyor, {{team}} yükseliyor!",
+          "2": "{{player}}, {{team}} için penaltıyı gole çeviriyor!"
         }
       },
       "PenaltyMiss": {
