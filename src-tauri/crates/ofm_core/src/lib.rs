@@ -16,6 +16,7 @@ pub mod firing;
 pub mod football_identity;
 pub mod game;
 pub mod generated_balance;
+pub mod generated_rules;
 pub mod generated_squad;
 pub mod generator;
 pub mod group_stage;
