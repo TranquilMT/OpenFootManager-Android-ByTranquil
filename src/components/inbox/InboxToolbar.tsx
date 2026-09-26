@@ -50,7 +50,8 @@ export default function InboxToolbar({
   const { t } = useTranslation();
 
   return (
-    <div className="mb-3 flex shrink-0 flex-col gap-2 sm:mb-4">\n      <div className="touch-x -mx-1 flex gap-2 px-1 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
+    <div className="mb-3 flex shrink-0 flex-col gap-2 sm:mb-4">
+      <div className="touch-x -mx-1 flex gap-2 px-1 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
       <button
         type="button"
         onClick={onShowAll}
@@ -154,6 +155,7 @@ export default function InboxToolbar({
           <Trash2 className="w-3.5 h-3.5" />
           {t("inbox.clearOld")}
         </button>
+      </div>
       </div>
     </div>
   );
