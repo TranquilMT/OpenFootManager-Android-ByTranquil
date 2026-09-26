@@ -2268,7 +2268,7 @@
     },
     "commentary": {
       "Corner": {"headline": "Sepak pojok untuk", "lines": {"0": "Sepak pojok untuk {{team}}.", "1": "{{team}} bersiap mengambil sepak pojok.", "2": "{{team}} punya kesempatan mengirim bola dari sepak pojok."}},
-      "FreeKick": {"headline": "Tendangan bebas untuk", "lines": {"0": "Tendangan bebas untuk {{team}}.", "1": "{{team}} bersiap mengambil tendangan bebas."}},
+      "FreeKick": {"headline": "Tendangan bebas untuk", "lines": {"0": "Tendangan bebas untuk {{team}}.", "1": "{{team}} bersiap mengambil tendangan bebas.", "2": "Tendangan bebas memberi {{team}} peluang membangun serangan."}},
       "Goal": {
         "headline": "GOL!",
         "lines": {
