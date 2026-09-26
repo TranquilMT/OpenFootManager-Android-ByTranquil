@@ -40,9 +40,9 @@ export default function InboxDeleteConfirmModal({
           <h3 className="text-lg font-heading font-bold text-gray-900 dark:text-gray-100">
             {title}
           </h3>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">{message}</p>
+          <p className="mt-2 break-words text-sm leading-relaxed text-gray-600 dark:text-gray-300">{message}</p>
         </div>
-        <div className="flex items-center justify-end gap-3">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
           <Button
             type="button"
             variant="outline"
@@ -57,7 +57,7 @@ export default function InboxDeleteConfirmModal({
             size="sm"
             onClick={onConfirm}
             disabled={isDeleting}
-            className="bg-red-500 hover:bg-red-600 active:bg-red-700 focus:ring-red-500"
+            className="min-h-12 w-full bg-red-500 hover:bg-red-600 active:bg-red-700 focus:ring-red-500"
             data-testid="inbox-confirm-delete"
           >
             {t("inbox.deleteAction")}
