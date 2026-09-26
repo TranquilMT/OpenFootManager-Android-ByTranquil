@@ -2451,7 +2451,8 @@
         "headline": "KARTU MERAH!",
         "lines": {
           "0": "{{player}} dikeluarkan! {{team}} bermain dengan sepuluh pemain!",
-          "1": "Kartu merah langsung untuk {{player}}! Bencana bagi {{team}}."
+          "1": "Kartu merah langsung untuk {{player}}! Bencana bagi {{team}}.",
+          "2": "{{player}} diusir; {{team}} harus bermain dengan sepuluh pemain."
         }
       },
       "SecondYellow": {
