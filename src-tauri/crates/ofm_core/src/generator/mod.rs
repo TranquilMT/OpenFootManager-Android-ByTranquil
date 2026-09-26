@@ -287,7 +287,8 @@ pub fn generate_youth_academy_recruit_with_nationality(
         &names_def,
         &mut rng,
     );
-    rebalance_generated_player_for_club(&mut player, team, slot_index, current_year, &mut rng);\n    player.squad_role = SquadRole::Youth;
+    rebalance_generated_player_for_club(&mut player, team, slot_index, current_year, &mut rng);
+    player.squad_role = SquadRole::Youth;
     player.transfer_listed = false;
     player.loan_listed = false;
     player
@@ -776,7 +777,8 @@ fn build_club(
             names_def,
             rng,
         );
-        rebalance_generated_player_for_club(&mut player, &team, slot, opening_year, rng);\n        if rng.random_range(0..100) < 12 {
+        rebalance_generated_player_for_club(&mut player, &team, slot, opening_year, rng);
+        if rng.random_range(0..100) < 12 {
             player.transfer_listed = true;
         } else if rng.random_range(0..100) < 8 {
             player.loan_listed = true;
