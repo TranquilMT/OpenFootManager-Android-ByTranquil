@@ -2409,7 +2409,8 @@
         "headline": "GELBE KARTE",
         "lines": {
           "0": "{{player}} sieht Gelb für {{team}}.",
-          "1": "Gelbe Karte für {{player}}."
+          "1": "Gelbe Karte für {{player}}.",
+          "2": "Der Schiedsrichter zeigt {{player}} Gelb."
         }
       },
       "RedCard": {
