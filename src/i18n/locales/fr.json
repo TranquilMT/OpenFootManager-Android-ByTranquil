@@ -2417,7 +2417,8 @@
         "headline": "CARTON ROUGE !",
         "lines": {
           "0": "{{player}} est expulsé ! {{team}} se retrouve à dix !",
-          "1": "Carton rouge direct pour {{player}} ! Catastrophe pour {{team}}."
+          "1": "Carton rouge direct pour {{player}} ! Catastrophe pour {{team}}.",
+          "2": "{{player}} est expulsé ; {{team}} jouera à dix."
         }
       },
       "SecondYellow": {
