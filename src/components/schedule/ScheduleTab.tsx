@@ -730,6 +730,7 @@ function StandingsView({
             );
           })}
         </div>
+        </div>
         <div className="hidden overflow-x-auto md:block">
           <table className="w-full border-collapse text-left">
             <thead>
