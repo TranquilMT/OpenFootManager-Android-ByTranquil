@@ -1,6 +1,6 @@
 import { convertFileSrc, invoke, isTauri } from "@tauri-apps/api/core";
 
-import { findNextFixture } from "../lib/fixtures";
+import { getUserNextFixture } from "../lib/fixtures";
 import { resolveLocalMediaPath } from "../lib/mediaAssets";
 import type { GameStateData, PlayerData } from "../store/gameStore";
 
@@ -52,7 +52,7 @@ export interface PrewarmPlayerPortraitsResponse {
 
 const runtimePortraitRequests = new Map<string, Promise<GeneratedPlayerPortrait | null>>();
 const queuedBackgroundPrewarmKeys = new Set<string>();
-const DEFAULT_BACKGROUND_PREWARM_LIMIT = 48;
+const DEFAULT_BACKGROUND_PREWARM_LIMIT = 72;
 const DEFAULT_BACKGROUND_PREWARM_BATCH_SIZE = 4;
 const DEFAULT_BACKGROUND_PREWARM_BATCH_DELAY_MS = 150;
 const noop = () => undefined;
@@ -111,9 +111,7 @@ export function selectBackgroundPortraitPlayers(
   const managerSquadIds = new Set(
     selectManagerSquadPortraitPlayers(gameState).map((player) => player.id),
   );
-  const nextFixture = gameState.league
-    ? findNextFixture(gameState.league.fixtures, managerTeamId)
-    : undefined;
+  const nextFixture = getUserNextFixture(gameState);
   const nextOpponentTeamId = nextFixture
     ? nextFixture.home_team_id === managerTeamId
       ? nextFixture.away_team_id
