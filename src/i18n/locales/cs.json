@@ -1875,6 +1875,8 @@
     "live": "Živě",
     "paused": "Pozastaveno",
     "events": "Události",
+    "voiceOn": "Zapnout mluvený komentář",
+    "voiceOff": "Vypnout mluvený komentář",
     "stats": "Statistiky",
     "lineups": "Sestavy",
     "simSpeed": "Rychlost simulace",
@@ -2265,6 +2267,8 @@
       "PenaltyAwarded": "Nařízená penalta"
     },
     "commentary": {
+      "Corner": {"headline": "Rohový kop pro", "lines": {"0": "Rohový kop pro {{team}}.", "1": "{{team}} se chystá rozehrát roh."}},
+      "FreeKick": {"headline": "Přímý kop pro", "lines": {"0": "Přímý kop pro {{team}}.", "1": "{{team}} se chystá rozehrát přímý kop."}},
       "Goal": {
         "headline": "GÓÓÓL!",
         "lines": {
