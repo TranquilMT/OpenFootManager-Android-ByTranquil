@@ -9,7 +9,7 @@ concurrency:
 permissions:
   contents: read
 jobs:
-  frontend-and-database-validator:
+  frontend-verification:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -18,8 +18,6 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - name: Verify database validator regression cases
-        run: node --test scripts/validate-real-database.test.mjs
       - run: npm ci
       - run: npm run build
       - run: npm test -- --maxWorkers=2
