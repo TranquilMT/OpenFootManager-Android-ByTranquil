@@ -344,7 +344,7 @@ fn rebalance_generated_player_for_club(
     };
     let youth = is_youth_reserved_slot(slot);
     let base = club_strength_ovr(tier, reputation, financial_strength);
-    let slot_target = crate::generated_career::quality_curve::apply_for_tier(base, slot, tier);
+    let slot_target = crate::generated_career::quality_curve::apply_for_club(base, slot, tier, &team.id);
     let target = clamp_generated_ovr(
         tier,
         if youth { slot_target as i16 - 12 } else { slot_target as i16 },
@@ -1391,6 +1391,36 @@ fn generate_world_with_rng(
         teams_out.push(team);
     }
 
+    // Give every club's local market a senior free agent to discover. Spread
+    // positions evenly and keep wages off the books until someone signs them.
+    const MARKET_SLOTS: [usize; 4] = [0, 2, 9, 16];
+    for (index, team) in teams_out.iter().enumerate() {
+        let slot = MARKET_SLOTS[index % MARKET_SLOTS.len()];
+        let mut player = generate_random_player_from_def(
+            "free-agent-market",
+            slot,
+            &team.country,
+            opening_year,
+            &names_def,
+            &mut rng,
+        );
+        let target_ovr = rng.random_range(50..=78);
+        player.attributes = attributes_for_overall(target_ovr, &player.position, &mut rng);
+        let current = crate::player_rating::natural_ovr(&player).round().clamp(1.0, 96.0) as u8;
+        let age = player.date_of_birth.get(0..4)
+            .and_then(|year| year.parse::<u32>().ok())
+            .map(|year| opening_year.saturating_sub(year))
+            .unwrap_or(24) as u8;
+        player.potential = crate::generated_career::potential_curve::potential(current, age, 40);
+        player.market_value = crate::generated_balance::market_value_eur(current, player.potential, age).max(0) as u64;
+        player.team_id = None;
+        player.contract_end = None;
+        player.wage = 0;
+        player.transfer_listed = false;
+        player.loan_listed = false;
+        players.push(player);
+    }
+
     // Generate free-agent staff
     for role in standard_available_staff_roles() {
         let nat = &country_codes[rng.random_range(0..country_codes.len())];
@@ -1973,7 +2003,8 @@ mod tests {
         let (teams, players, staff) =
             generate_world_with(&config, &definitions::DefinitionSources::embedded_only());
         assert_eq!(teams.len(), expected);
-        assert_eq!(players.len(), expected * 22);
+        assert_eq!(players.len(), expected * (SQUAD_SLOTS + 1));
+        assert_eq!(players.iter().filter(|player| player.team_id.is_none()).count(), expected);
         assert_eq!(staff.len(), expected * 4 + 12);
     }
 
@@ -2522,7 +2553,7 @@ mod tests {
             "every club should come from the overridden nation: {:?}",
             teams.iter().map(|t| &t.country).collect::<Vec<_>>()
         );
-        assert_eq!(players.len(), 4 * 22);
+        assert_eq!(players.len(), 4 * (SQUAD_SLOTS + 1));
 
         std::fs::remove_dir_all(&dir).ok();
     }
