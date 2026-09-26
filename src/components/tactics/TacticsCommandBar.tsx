@@ -143,7 +143,7 @@ export default function TacticsCommandBar({
 
   return (
     <Card className="overflow-visible">
-      <div ref={wrapperRef} className="p-4 sm:p-5">
+      <div ref={wrapperRef} className="p-3 sm:p-5">
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
             <div className="min-w-0">
@@ -165,11 +165,11 @@ export default function TacticsCommandBar({
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-2 xl:justify-end">
-              <Button type="button" variant="ghost" size="sm" icon={<Plus />} onClick={onCreateNew}>
+            <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap xl:justify-end">
+              <Button type="button" variant="ghost" size="sm" icon={<Plus />} className="min-h-11 w-full sm:min-h-0 sm:w-auto" onClick={onCreateNew}>
                 {t("tactics.newTactic")}
               </Button>
-              <Button type="button" variant="ghost" size="sm" icon={<Copy />} onClick={onDuplicate}>
+              <Button type="button" variant="ghost" size="sm" icon={<Copy />} className="min-h-11 w-full sm:min-h-0 sm:w-auto" onClick={onDuplicate}>
                 {t("tactics.duplicateTactic")}
               </Button>
               <Button
@@ -179,7 +179,7 @@ export default function TacticsCommandBar({
                 icon={showSavedCue && !isDirty ? <Check /> : <Save />}
                 onClick={handleSaveClick}
                 disabled={isSaveDisabled}
-                className="min-w-[9.5rem]"
+                className="col-span-2 min-h-11 w-full sm:min-h-0 sm:w-auto sm:min-w-[9.5rem]"
               >
                 {showSavedCue && !isDirty ? t("tactics.tacticSaved") : saveLabel}
               </Button>
@@ -203,7 +203,7 @@ export default function TacticsCommandBar({
                 aria-expanded={isOpen}
                 aria-haspopup="listbox"
                 onClick={() => setIsOpen((open) => !open)}
-                className="flex w-full items-center justify-between rounded-xl border border-gray-200 bg-white px-3 py-3 text-left transition-colors hover:border-primary-300 dark:border-white/10 dark:bg-navy-800/90 dark:hover:border-primary-400"
+                className="flex min-h-12 w-full items-center justify-between rounded-xl border border-gray-200 bg-white px-3 py-3 text-left transition-colors hover:border-primary-300 dark:border-white/10 dark:bg-navy-800/90 dark:hover:border-primary-400"
               >
                 <div className="min-w-0">
                   <div className="truncate text-base font-heading font-bold text-gray-900 dark:text-gray-100">
@@ -220,7 +220,7 @@ export default function TacticsCommandBar({
 
               {isOpen ? (
                 <div className="absolute left-0 right-0 top-full z-50 mt-2 rounded-2xl border border-gray-200 bg-white p-2 shadow-2xl dark:border-navy-600 dark:bg-navy-800">
-                  <div className="mb-2 flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 dark:border-navy-600 dark:bg-navy-700">
+                  <div className="mb-2 flex min-h-11 items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 dark:border-navy-600 dark:bg-navy-700">
                     <Search className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                     <input
                       type="text"
