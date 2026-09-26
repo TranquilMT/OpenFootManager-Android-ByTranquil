@@ -2409,7 +2409,8 @@
         "headline": "CARTON JAUNE",
         "lines": {
           "0": "{{player}} prend un carton jaune avec {{team}}.",
-          "1": "Carton jaune pour {{player}}."
+          "1": "Carton jaune pour {{player}}.",
+          "2": "L'arbitre avertit {{player}}."
         }
       },
       "RedCard": {
