@@ -2233,7 +2233,7 @@
       "PenaltyAwarded": "判罚点球"
     },
     "commentary": {
-      "Corner": {"headline": "获得角球", "lines": {"0": "{{team}}获得角球。", "1": "{{team}}准备开出角球。"}},
+      "Corner": {"headline": "获得角球", "lines": {"0": "{{team}}获得角球。", "1": "{{team}}准备开出角球。", "2": "{{team}}获得角球传中的机会。"}},
       "FreeKick": {"headline": "获得任意球", "lines": {"0": "{{team}}获得任意球。", "1": "{{team}}准备主罚任意球。"}},
       "Goal": {
         "headline": "进球啦！",
