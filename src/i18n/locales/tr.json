@@ -2377,7 +2377,8 @@
         "headline": "ÇOK YAKINDI!",
         "lines": {
           "0": "{{player}}'ın vuruşu {{team}} adına az farkla dışarı gidiyor.",
-          "1": "Çok yakın! {{player}} hedefi bir türlü bulamıyor."
+          "1": "Çok yakın! {{player}} hedefi bir türlü bulamıyor.",
+          "2": "{{player}} şutu kalenin dışına gönderiyor."
         },
         "speculative": {
           "headline": "İSABETSİZ",
