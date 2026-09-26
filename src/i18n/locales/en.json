@@ -2467,7 +2467,8 @@
         "headline": "INJURY",
         "lines": {
           "0": "{{player}} is down and needs treatment.",
-          "1": "Concern for {{team}} as {{player}} goes down injured."
+          "1": "Concern for {{team}} as {{player}} goes down injured.",
+          "2": "Play stops while {{player}} receives medical attention."
         }
       },
       "Substitution": {
