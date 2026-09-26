@@ -14,6 +14,7 @@ const DEFAULT_SETTINGS = {
   auto_save: true,
   match_speed: "normal",
   show_match_commentary: true,
+  spoken_match_commentary: false,
   confirm_advance: false,
   continue_to_next_event: false,
   ui_scale: "normal",
@@ -146,5 +147,19 @@ describe("useSettingsStore", () => {
     expect(consoleError).toHaveBeenCalledWith("Failed to save settings:", error);
 
     consoleError.mockRestore();
+  });
+
+  it("persists rapid toggle changes in tap order", async () => {
+    let releaseFirst!: () => void;
+    const first = new Promise<void>((resolve) => { releaseFirst = resolve; });
+    vi.mocked(invoke).mockImplementationOnce(() => first).mockResolvedValue(undefined);
+    const firstUpdate = useSettingsStore.getState().updateSettings({ high_contrast: true });
+    const secondUpdate = useSettingsStore.getState().updateSettings({ spoken_match_commentary: true });
+    expect(useSettingsStore.getState().settings.spoken_match_commentary).toBe(true);
+    releaseFirst();
+    await Promise.all([firstUpdate, secondUpdate]);
+    expect(invoke).toHaveBeenNthCalledWith(2, "save_settings", {
+      settings: expect.objectContaining({ high_contrast: true, spoken_match_commentary: true }),
+    });
   });
 });

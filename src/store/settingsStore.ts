@@ -9,6 +9,7 @@ export interface AppSettings {
   auto_save: boolean;
   match_speed: "slow" | "normal" | "fast";
   show_match_commentary: boolean;
+  spoken_match_commentary: boolean;
   confirm_advance: boolean;
   continue_to_next_event: boolean;
   ui_scale: "small" | "normal" | "large" | "xlarge";
@@ -35,6 +36,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   auto_save: true,
   match_speed: "normal",
   show_match_commentary: true,
+  spoken_match_commentary: false,
   confirm_advance: false,
   continue_to_next_event: false,
   ui_scale: "normal",
@@ -54,6 +56,9 @@ function mergeWithDefaultSettings(settings: Partial<AppSettings> = {}): AppSetti
 async function persistSettings(settings: AppSettings) {
   await invoke("save_settings", { settings });
 }
+
+// WebView taps can arrive before an earlier write completes. Preserve their order.
+let pendingSave: Promise<void> = Promise.resolve();
 
 function indexSupportedCurrencies(
   currencies: CurrencyDefinition[] = [],
@@ -124,13 +129,18 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
 
     set({ settings: merged, currency });
     try {
-      await persistSettings(merged);
+      const write = pendingSave.then(() => persistSettings(merged));
+      pendingSave = write.catch(() => {});
+      await write;
     } catch (err) {
-      set({
-        settings: previousSettings,
-        currency: previousState.currency,
-        supportedCurrencies: previousState.supportedCurrencies,
-      });
+      // A newer tap already replaced this state; its queued write will persist it.
+      if (get().settings === merged) {
+        set({
+          settings: previousSettings,
+          currency: previousState.currency,
+          supportedCurrencies: previousState.supportedCurrencies,
+        });
+      }
       console.error("Failed to save settings:", err);
     }
   },
