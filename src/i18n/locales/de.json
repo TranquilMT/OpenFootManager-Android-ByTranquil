@@ -2343,7 +2343,8 @@
         "headline": "KNAPP DANEBEN!",
         "lines": {
           "0": "{{player}} zieht den Ball knapp am Tor vorbei für {{team}}.",
-          "1": "So nah! {{player}} findet das Tor nicht."
+          "1": "So nah! {{player}} findet das Tor nicht.",
+          "2": "{{player}} schießt am Tor vorbei."
         },
         "speculative": {
           "headline": "AM TOR VORBEI",
