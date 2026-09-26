@@ -2451,7 +2451,8 @@
         "headline": "RED CARD!",
         "lines": {
           "0": "{{player}} is sent off! {{team}} down to ten!",
-          "1": "Straight red for {{player}}! Disaster for {{team}}."
+          "1": "Straight red for {{player}}! Disaster for {{team}}.",
+          "2": "{{player}} is sent off; {{team}} must play on with ten."
         }
       },
       "SecondYellow": {
