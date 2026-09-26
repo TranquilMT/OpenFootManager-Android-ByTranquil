@@ -553,6 +553,22 @@ describe("InboxTab", (): void => {
     expect(onGameUpdate).toHaveBeenCalledWith(resolvedGameState);
   });
 
+  it("shows a failed reply so the manager can retry it", async (): Promise<void> => {
+    const action: MessageAction = {
+      id: "respond",
+      label: "Respond",
+      action_type: { ChooseOption: { options: [{ id: "yes", label: "Accept", description: "Accept the request" }] } },
+      resolved: false,
+    };
+    const gameState = createGameState([createMessage({ id: "m1", read: true, actions: [action] })]);
+    mockedInvoke.mockRejectedValue(new Error("Reply could not be sent"));
+    await renderInboxTab({ gameState, initialMessageId: "m1" });
+
+    fireEvent.click(screen.getByText("Accept"));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Reply could not be sent");
+    expect(screen.getByText("Accept")).toBeInTheDocument();
+  });
+
   it("renders localized effect feedback when the backend returns an effect key", async (): Promise<void> => {
     const onGameUpdate = vi.fn();
     const action: MessageAction = {
