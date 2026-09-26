@@ -2233,7 +2233,8 @@
         "headline": "PÊNALTI — GOL!",
         "lines": {
           "0": "{{player}} encobre o goleiro e o {{team}} marca de pênalti.",
-          "1": "Sangue frio de {{player}} — pênalti convertido para o {{team}}!"
+          "1": "Sangue frio de {{player}} — pênalti convertido para o {{team}}!",
+          "2": "{{player}} converte o pênalti para {{team}}!"
         }
       },
       "PenaltyMiss": {
