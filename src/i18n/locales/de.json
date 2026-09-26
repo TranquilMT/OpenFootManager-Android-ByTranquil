@@ -2290,7 +2290,8 @@
         "headline": "ELFMETER — TOR!",
         "lines": {
           "0": "{{player}} lässt dem Keeper keine Chance! {{team}} trifft vom Punkt.",
-          "1": "Eiskalt von {{player}} — Elfmeter verwandelt für {{team}}!"
+          "1": "Eiskalt von {{player}} — Elfmeter verwandelt für {{team}}!",
+          "2": "{{player}} verwandelt den Elfmeter für {{team}}!"
         }
       },
       "PenaltyMiss": {
