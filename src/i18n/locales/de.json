@@ -2314,7 +2314,8 @@
         "headline": "TOLLE PARADE!",
         "lines": {
           "0": "{{player}} zwingt den Keeper zu einer Parade.",
-          "1": "Der Keeper verweigert {{player}} den Treffer!"
+          "1": "Der Keeper verweigert {{player}} den Treffer!",
+          "2": "Der Torhüter pariert den Schuss von {{player}}."
         },
         "routine": {
           "headline": "GEHALTEN",
