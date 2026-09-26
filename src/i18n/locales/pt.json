@@ -2387,7 +2387,8 @@
         "headline": "FALTA",
         "lines": {
           "0": "{{player}} faz falta sobre {{victim}}. Livre para o {{opponent}}.",
-          "1": "{{player}} oferece um livre direto contra {{victim}}."
+          "1": "{{player}} oferece um livre direto contra {{victim}}.",
+          "2": "O árbitro assinala falta de {{team}}."
         },
         "hard": {
           "headline": "É FALTA",
