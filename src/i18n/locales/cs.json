@@ -2443,7 +2443,8 @@
         "headline": "ŽLUTÁ KARTA",
         "lines": {
           "0": "{{player}} byl napomínán a končí v zápisníku rozhodčího za tým {{team}}.",
-          "1": "Žlutá karta pro hráče {{player}}."
+          "1": "Žlutá karta pro hráče {{player}}.",
+          "2": "Rozhodčí uděluje hráči {{player}} žlutou kartu."
         }
       },
       "RedCard": {
