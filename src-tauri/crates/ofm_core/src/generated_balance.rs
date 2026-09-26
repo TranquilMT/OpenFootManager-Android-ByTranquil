@@ -1,0 +1,59 @@
+//! Balancing primitives for generated-player careers.
+//! No external player database is required by this module.
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum LeagueTier { Elite, Top, Professional, Lower, Grassroots }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct RatingBand { pub floor: u8, pub core_low: u8, pub core_high: u8, pub ceiling: u8 }
+
+pub const fn rating_band(tier: LeagueTier) -> RatingBand {
+    match tier {
+        LeagueTier::Elite => RatingBand { floor: 55, core_low: 72, core_high: 84, ceiling: 91 },
+        LeagueTier::Top => RatingBand { floor: 50, core_low: 65, core_high: 78, ceiling: 87 },
+        LeagueTier::Professional => RatingBand { floor: 45, core_low: 57, core_high: 70, ceiling: 80 },
+        LeagueTier::Lower => RatingBand { floor: 40, core_low: 49, core_high: 62, ceiling: 72 },
+        LeagueTier::Grassroots => RatingBand { floor: 34, core_low: 40, core_high: 54, ceiling: 64 },
+    }
+}
+
+pub const fn youth_floor(tier: LeagueTier) -> u8 {
+    match tier { LeagueTier::Elite => 45, LeagueTier::Top => 42, LeagueTier::Professional => 38, LeagueTier::Lower => 34, LeagueTier::Grassroots => 30 }
+}
+
+pub fn clamp_generated_ovr(tier: LeagueTier, ovr: i16, youth: bool) -> u8 {
+    let band = rating_band(tier);
+    let floor = if youth { youth_floor(tier) } else { band.floor };
+    ovr.clamp(floor as i16, band.ceiling as i16) as u8
+}
+
+pub fn potential_ceiling(tier: LeagueTier, academy_quality: u8) -> u8 {
+    let base = rating_band(tier).ceiling;
+    base.saturating_add((academy_quality / 20).min(4)).min(94)
+}
+
+pub fn market_value_eur(ovr: u8, potential: u8, age: u8) -> i64 {
+    let ability = (ovr.saturating_sub(30) as i64).pow(3) * 650;
+    let upside = potential.saturating_sub(ovr) as i64 * 180_000;
+    let age_factor = match age { 0..=20 => 125, 21..=24 => 120, 25..=28 => 110, 29..=31 => 90, 32..=34 => 65, _ => 40 };
+    ((ability + upside).max(25_000) * age_factor / 100).min(220_000_000)
+}
+
+pub fn weekly_wage_eur(ovr: u8, reputation: u8) -> i64 {
+    let quality = (ovr.saturating_sub(30) as i64).pow(2);
+    let rep = 75 + reputation.min(100) as i64;
+    (quality * rep / 3).clamp(150, 450_000)
+}
+
+pub fn club_can_afford(player_value: i64, weekly_wage: i64, transfer_budget: i64, weekly_wage_room: i64) -> bool {
+    player_value <= transfer_budget && weekly_wage <= weekly_wage_room
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test] fn elite_has_higher_core_than_lower(){ assert!(rating_band(LeagueTier::Elite).core_low > rating_band(LeagueTier::Lower).core_high); }
+    #[test] fn youth_can_start_below_senior_floor(){ assert!(youth_floor(LeagueTier::Elite) < rating_band(LeagueTier::Elite).floor); }
+    #[test] fn elite_values_are_millions(){ assert!(market_value_eur(85, 88, 25) > 10_000_000); }
+    #[test] fn affordability_checks_fee_and_wage(){ assert!(!club_can_afford(20_000_000, 80_000, 5_000_000, 100_000)); }
+}
