@@ -2391,7 +2391,8 @@
         "headline": "BLOCCATO!",
         "lines": {
           "0": "Il tiro di {{player}} è bloccato da un coraggioso difensore.",
-          "1": "Corpi sulla traiettoria! {{player}} viene fermato."
+          "1": "Corpi sulla traiettoria! {{player}} viene fermato.",
+          "2": "La difesa blocca il tiro di {{player}}."
         },
         "bigChance": {
           "headline": "CHE BLOCCO!",
