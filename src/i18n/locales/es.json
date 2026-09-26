@@ -2306,7 +2306,8 @@
         "headline": "¡PENALTI!",
         "lines": {
           "0": "¡El árbitro señala el punto de penalti — penalti para el {{team}}!",
-          "1": "¡Penalti para el {{team}}! Momento clave."
+          "1": "¡Penalti para el {{team}}! Momento clave.",
+          "2": "El árbitro concede un penalti a {{team}}."
         }
       },
       "ShotSaved": {
