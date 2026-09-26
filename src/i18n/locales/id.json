@@ -2421,7 +2421,8 @@
         "headline": "PELANGGARAN",
         "lines": {
           "0": "{{player}} melanggar {{victim}}. Tendangan bebas untuk {{opponent}}.",
-          "1": "{{player}} melakukan pelanggaran terhadap {{victim}}."
+          "1": "{{player}} melakukan pelanggaran terhadap {{victim}}.",
+          "2": "Peluit berbunyi untuk pelanggaran oleh {{team}}."
         },
         "hard": {
           "headline": "ITU PELANGGARAN",
