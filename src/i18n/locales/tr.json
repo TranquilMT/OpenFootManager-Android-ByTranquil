@@ -2475,7 +2475,8 @@
         "headline": "OYUNCU DEĞİŞİKLİĞİ",
         "lines": {
           "0": "{{team}} değişikliğe gidiyor: {{player}} oyunda, {{victim}} kenarda.",
-          "1": "{{team}} takımında {{player}}, {{victim}}'ın yerine oyuna giriyor."
+          "1": "{{team}} takımında {{player}}, {{victim}}'ın yerine oyuna giriyor.",
+          "2": "{{team}}, {{victim}} yerine {{player}} oyuncusunu oyuna alıyor."
         }
       },
       "KickOff": {
