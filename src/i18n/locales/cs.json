@@ -2421,7 +2421,8 @@
         "headline": "FAUL",
         "lines": {
           "0": "{{player}} fauluje hráče {{victim}}. Přímý kop pro tým {{opponent}}.",
-          "1": "{{player}} se dopustil faulu na hráče {{victim}} a daruje soupeři přímý kop."
+          "1": "{{player}} se dopustil faulu na hráče {{victim}} a daruje soupeři přímý kop.",
+          "2": "Rozhodčí píská faul týmu {{team}}."
         },
         "hard": {
           "headline": "TO JE FAUL",
