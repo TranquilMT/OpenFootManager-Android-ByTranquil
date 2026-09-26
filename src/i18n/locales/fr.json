@@ -2240,7 +2240,8 @@
         "lines": {
           "0": "{{player}} trouve le fond des filets pour {{team}} !",
           "1": "{{player}} l'envoie ! Quelle finition !",
-          "2": "{{player}} marque pour {{team}} !"
+          "2": "{{player}} marque pour {{team}} !",
+          "3": "{{player}} conclut l'action pour {{team}} !"
         },
         "opener": {
           "headline": "BUUUT !",
