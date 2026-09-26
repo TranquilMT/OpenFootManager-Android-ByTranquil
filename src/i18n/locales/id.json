@@ -2267,7 +2267,7 @@
       "PenaltyAwarded": "Penalti Diberikan"
     },
     "commentary": {
-      "Corner": {"headline": "Sepak pojok untuk", "lines": {"0": "Sepak pojok untuk {{team}}.", "1": "{{team}} bersiap mengambil sepak pojok."}},
+      "Corner": {"headline": "Sepak pojok untuk", "lines": {"0": "Sepak pojok untuk {{team}}.", "1": "{{team}} bersiap mengambil sepak pojok.", "2": "{{team}} punya kesempatan mengirim bola dari sepak pojok."}},
       "FreeKick": {"headline": "Tendangan bebas untuk", "lines": {"0": "Tendangan bebas untuk {{team}}.", "1": "{{team}} bersiap mengambil tendangan bebas."}},
       "Goal": {
         "headline": "GOL!",
