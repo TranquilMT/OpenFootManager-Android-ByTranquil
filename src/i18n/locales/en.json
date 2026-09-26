@@ -2731,7 +2731,7 @@
         "nameMaxLength": "First name and last name must not exceed 30 characters.",
         "nationalityRequired": "Nationality is required.",
         "invalidDobFormat": "Invalid date of birth. Use YYYY-MM-DD format.",
-        "minAge": "Manager must be at least 30 years old.",
+        "minAge": "Manager must be at least 18 years old.",
         "invalidDob": "Invalid date of birth.",
         "startYearMin": "Start year must be 1900 or later.",
         "invalidStartYear": "Invalid start year selected.",
