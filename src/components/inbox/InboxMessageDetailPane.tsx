@@ -159,7 +159,7 @@ export default function InboxMessageDetailPane({
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto overscroll-contain p-3 pb-[max(1rem,env(safe-area-inset-bottom))] sm:p-6">
+      <div className="p-3 pb-[calc(6rem+env(safe-area-inset-bottom))] sm:p-6">
         <div className="min-w-0 max-w-2xl break-words">
           {selectedMessage.body
             .split("\n")
