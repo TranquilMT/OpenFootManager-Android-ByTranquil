@@ -2240,7 +2240,8 @@
         "lines": {
           "0": "¡{{player}} bate al portero y marca para el {{team}}!",
           "1": "¡{{player}} la mete! ¡Qué definición!",
-          "2": "¡{{player}} marca para el {{team}}!"
+          "2": "¡{{player}} marca para el {{team}}!",
+          "3": "¡{{player}} culmina la jugada para {{team}}!"
         },
         "opener": {
           "headline": "¡GOOOL!",
