@@ -2234,7 +2234,7 @@
     },
     "commentary": {
       "Corner": {"headline": "Canto para", "lines": {"0": "Canto para {{team}}.", "1": "{{team}} prepara-se para marcar o canto.", "2": "{{team}} tem a oportunidade de cruzar no canto."}},
-      "FreeKick": {"headline": "Livre para", "lines": {"0": "Livre para {{team}}.", "1": "{{team}} prepara-se para marcar o livre."}},
+      "FreeKick": {"headline": "Livre para", "lines": {"0": "Livre para {{team}}.", "1": "{{team}} prepara-se para marcar o livre.", "2": "O livre dá a {{team}} uma nova oportunidade de atacar."}},
       "Goal": {
         "headline": "GOOOL!",
         "lines": {
