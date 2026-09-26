@@ -2314,7 +2314,8 @@
         "headline": "¡GRAN PARADA!",
         "lines": {
           "0": "{{player}} obliga al portero a emplearse a fondo.",
-          "1": "¡El portero le niega el gol a {{player}}!"
+          "1": "¡El portero le niega el gol a {{player}}!",
+          "2": "El portero detiene el remate de {{player}}."
         },
         "routine": {
           "headline": "PARADA",
