@@ -2425,7 +2425,8 @@
         "headline": "¡SEGUNDA AMARILLA — EXPULSADO!",
         "lines": {
           "0": "¡{{player}} ve la segunda amarilla y es expulsado!",
-          "1": "Dos amarillas y se va — {{player}} deja al {{team}} en inferioridad."
+          "1": "Dos amarillas y se va — {{player}} deja al {{team}} en inferioridad.",
+          "2": "La segunda amarilla pone fin al partido de {{player}}."
         }
       },
       "Injury": {
