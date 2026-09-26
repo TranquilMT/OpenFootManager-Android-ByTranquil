@@ -173,7 +173,7 @@ describe("ScoutingAssignmentsList", () => {
     expect(screen.getByText("Scout Sam Scout")).toBeInTheDocument();
     expect(screen.getByText("3 days left")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "John Smith" }));
+    fireEvent.click(screen.getByRole("button", { name: /John Smith/ }));
 
     expect(onSelectPlayer).toHaveBeenCalledWith("player-1");
   });
