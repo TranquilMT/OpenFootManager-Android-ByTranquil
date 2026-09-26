@@ -2723,7 +2723,7 @@
         "nameMaxLength": "Nome e cognome non possono superare i 30 caratteri.",
         "nationalityRequired": "La nazionalità è obbligatoria.",
         "invalidDobFormat": "Data di nascita non valida. Usa il formato AAAA-MM-GG.",
-        "minAge": "L'allenatore deve avere almeno 30 anni.",
+        "minAge": "L'allenatore deve avere almeno 18 anni.",
         "invalidDob": "Data di nascita non valida.",
         "startYearMin": "L'anno di inizio deve essere 1900 o successivo.",
         "invalidStartYear": "L'anno di inizio selezionato non è valido.",
