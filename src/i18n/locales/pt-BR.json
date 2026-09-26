@@ -2352,7 +2352,8 @@
         "headline": "CARTÃO AMARELO",
         "lines": {
           "0": "{{player}} recebe o cartão amarelo pelo {{team}}.",
-          "1": "Cartão amarelo para {{player}}."
+          "1": "Cartão amarelo para {{player}}.",
+          "2": "O árbitro mostra cartão amarelo para {{player}}."
         }
       },
       "RedCard": {
