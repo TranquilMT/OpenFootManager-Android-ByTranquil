@@ -2441,7 +2441,8 @@
         "headline": "SUSTITUCIÓN",
         "lines": {
           "0": "{{team}} realiza un cambio: entra {{player}}, sale {{victim}}.",
-          "1": "{{player}} reemplaza a {{victim}} en el {{team}}."
+          "1": "{{player}} reemplaza a {{victim}} en el {{team}}.",
+          "2": "{{team}} mueve el banquillo: entra {{player}} por {{victim}}."
         }
       },
       "KickOff": {
