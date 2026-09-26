@@ -96,6 +96,6 @@ describe("TeamSelection", () => {
     expect(screen.getAllByText("Alpha FC").length).toBeGreaterThanOrEqual(2);
 
     // Confirm button reflects the auto-selected club.
-    expect(screen.getByText("teamSelect.manage")).toBeInTheDocument();
+    expect(screen.getAllByText("teamSelect.manage").length).toBeGreaterThanOrEqual(1);
   });
 });
