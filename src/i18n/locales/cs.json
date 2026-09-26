@@ -1761,6 +1761,12 @@
     "clearSavesDesc": "Trvale odstranit všechny uložené hry",
     "clear": "Smazat",
     "savesCleared": "Uložené hry byly smazány!",
+    "spokenCommentary": "Mluvený komentář",
+    "spokenCommentaryDesc": "Přehrávat důležité momenty zápasu nahlas, pokud to zařízení podporuje",
+    "whatsNew": "Novinky",
+    "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
+    "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
+    "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
     "about": "O hře",
     "matchModes": {
       "live": "Vstoupit na hřiště",

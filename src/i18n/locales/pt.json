@@ -1761,6 +1761,12 @@
     "clearSavesDesc": "Eliminar permanentemente todos os jogos guardados",
     "clear": "Apagar",
     "savesCleared": "Saves apagados!",
+    "spokenCommentary": "Comentário por voz",
+    "spokenCommentaryDesc": "Ler os momentos importantes em voz alta quando o dispositivo permitir",
+    "whatsNew": "Novidades",
+    "patchPlayers": "Mais jogadores de destaque, incluindo raras estrelas de nível 96.",
+    "patchMatches": "Mais reações, remates à trave e comentário por voz opcional.",
+    "patchMobile": "Controlos móveis, caixa de entrada, seleções e início de carreira melhorados.",
     "about": "Sobre",
     "matchModes": {
       "live": "Ir para o Campo",

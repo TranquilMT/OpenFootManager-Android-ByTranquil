@@ -1761,6 +1761,12 @@
     "clearSavesDesc": "Supprimer définitivement toutes les parties sauvegardées",
     "clear": "Supprimer",
     "savesCleared": "Sauvegardes supprimées !",
+    "spokenCommentary": "Commentaire vocal",
+    "spokenCommentaryDesc": "Lire les moments forts à voix haute si votre appareil le permet",
+    "whatsNew": "Nouveautés",
+    "patchPlayers": "Plus de talents, dont de rares stars notées 96 et de solides candidats à la montée.",
+    "patchMatches": "Plus de réactions, des frappes sur les montants et un commentaire vocal facultatif.",
+    "patchMobile": "Commandes mobiles, boîte de réception, sélections nationales et carrière améliorées.",
     "about": "À propos",
     "matchModes": {
       "live": "Aller sur le Terrain",

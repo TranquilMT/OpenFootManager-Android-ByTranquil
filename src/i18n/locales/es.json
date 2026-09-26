@@ -1761,6 +1761,12 @@
     "clearSavesDesc": "Eliminar permanentemente todas las partidas guardadas",
     "clear": "Borrar",
     "savesCleared": "¡Guardados borrados!",
+    "spokenCommentary": "Narración de voz",
+    "spokenCommentaryDesc": "Leer en voz alta las jugadas clave cuando el dispositivo lo permita",
+    "whatsNew": "Novedades",
+    "patchPlayers": "Más jugadores destacados, incluidas raras estrellas de 96 y aspirantes al ascenso.",
+    "patchMatches": "Más reacciones, tiros al palo y narración de voz opcional.",
+    "patchMobile": "Mejoras en controles móviles, bandeja de entrada, selecciones y carrera.",
     "about": "Acerca de",
     "matchModes": {
       "live": "Ir al Campo",

@@ -1780,6 +1780,12 @@
     "clearSavesDesc": "Elimina definitivamente tutte le partite salvate",
     "clear": "Cancella",
     "savesCleared": "Salvataggi cancellati!",
+    "spokenCommentary": "Telecronaca vocale",
+    "spokenCommentaryDesc": "Leggi ad alta voce i momenti chiave se il dispositivo lo supporta",
+    "whatsNew": "Novità",
+    "patchPlayers": "Più giocatori di spicco, incluse rare stelle da 96 e squadre in lotta per la promozione.",
+    "patchMatches": "Più reazioni, tiri sui legni e telecronaca vocale facoltativa.",
+    "patchMobile": "Comandi mobili, posta, nazionali e inizio carriera migliorati.",
     "about": "Informazioni",
     "matchModes": {
       "live": "Vai in campo",

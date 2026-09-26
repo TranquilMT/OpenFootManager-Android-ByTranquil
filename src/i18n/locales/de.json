@@ -1761,6 +1761,12 @@
     "clearSavesDesc": "Alle gespeicherten Spiele dauerhaft löschen",
     "clear": "Löschen",
     "savesCleared": "Speicherstände gelöscht!",
+    "spokenCommentary": "Gesprochener Kommentar",
+    "spokenCommentaryDesc": "Wichtige Spielszenen vorlesen, wenn das Gerät dies unterstützt",
+    "whatsNew": "Was ist neu?",
+    "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
+    "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
+    "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
     "about": "Über",
     "matchModes": {
       "live": "Aufs Spielfeld",

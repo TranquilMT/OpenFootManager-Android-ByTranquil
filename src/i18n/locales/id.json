@@ -1761,6 +1761,12 @@
     "clearSavesDesc": "Hapus permanen semua permainan tersimpan",
     "clear": "Hapus",
     "savesCleared": "Simpanan dihapus!",
+    "spokenCommentary": "Komentar suara",
+    "spokenCommentaryDesc": "Bacakan momen penting pertandingan jika perangkat mendukung",
+    "whatsNew": "Yang baru",
+    "patchPlayers": "Lebih banyak pemain unggulan, termasuk bintang langka berperingkat 96.",
+    "patchMatches": "Lebih banyak reaksi, tembakan membentur tiang, dan komentar suara opsional.",
+    "patchMobile": "Kontrol seluler, kotak masuk, tim nasional, dan awal karier ditingkatkan.",
     "about": "Tentang",
     "matchModes": {
       "live": "Ke Lapangan",

@@ -1761,6 +1761,12 @@
     "clearSavesDesc": "Permanently delete all saved games",
     "clear": "Clear",
     "savesCleared": "Saves cleared!",
+    "spokenCommentary": "Spoken commentary",
+    "spokenCommentaryDesc": "Read key match moments aloud when supported by your device",
+    "whatsNew": "What’s new",
+    "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
+    "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
+    "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
     "about": "About",
     "matchModes": {
       "live": "Go to the Field",

@@ -1761,6 +1761,12 @@
     "clearSavesDesc": "永久删除所有已保存的游戏",
     "clear": "清除",
     "savesCleared": "存档已清除！",
+    "spokenCommentary": "语音解说",
+    "spokenCommentaryDesc": "设备支持时朗读比赛中的关键时刻",
+    "whatsNew": "更新内容",
+    "patchPlayers": "新增更多优秀球员，包括稀有的96分球星和升级热门球队。",
+    "patchMatches": "比赛解说更加丰富，加入门框射门和可选语音解说。",
+    "patchMobile": "改进移动端操作、收件箱、国家队与生涯创建。",
     "about": "关于",
     "matchModes": {
       "live": "亲临赛场",

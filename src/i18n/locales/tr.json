@@ -1761,6 +1761,12 @@
     "clearSavesDesc": "Tüm kayıtlı oyunları kalıcı olarak sil",
     "clear": "Temizle",
     "savesCleared": "Kayıtlar silindi!",
+    "spokenCommentary": "Sesli anlatım",
+    "spokenCommentaryDesc": "Cihaz destekliyorsa önemli maç anlarını sesli oku",
+    "whatsNew": "Yenilikler",
+    "patchPlayers": "Nadir 96 puanlı yıldızlar dahil daha fazla öne çıkan oyuncu.",
+    "patchMatches": "Daha fazla maç tepkisi, direğe çarpan şutlar ve isteğe bağlı sesli anlatım.",
+    "patchMobile": "Mobil kontroller, gelen kutusu, millî takımlar ve kariyer başlangıcı iyileştirildi.",
     "about": "Hakkında",
     "matchModes": {
       "live": "Sahaya Çık",

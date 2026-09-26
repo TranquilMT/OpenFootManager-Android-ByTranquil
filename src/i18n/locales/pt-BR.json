@@ -1761,6 +1761,12 @@
     "clearSavesDesc": "Excluir permanentemente todos os jogos salvos",
     "clear": "Apagar",
     "savesCleared": "Saves apagados!",
+    "spokenCommentary": "Narração por voz",
+    "spokenCommentaryDesc": "Ler os lances importantes em voz alta quando o dispositivo permitir",
+    "whatsNew": "Novidades",
+    "patchPlayers": "Mais craques, incluindo raras estrelas de nível 96 e candidatos ao acesso.",
+    "patchMatches": "Mais reações, bolas na trave e narração por voz opcional.",
+    "patchMobile": "Controles no celular, caixa de entrada, seleções e início de carreira melhorados.",
     "about": "Sobre",
     "matchModes": {
       "live": "Ir para o Campo",
