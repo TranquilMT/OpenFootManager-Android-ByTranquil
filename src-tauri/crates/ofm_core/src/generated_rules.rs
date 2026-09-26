@@ -1,4 +1,5 @@
 //! Rules used by database-free generated careers.
+pub mod academy;pub mod attacking_midfielder;pub mod bench;pub mod captain;pub mod centre_back;pub mod contract;pub mod decline;pub mod development;pub mod finance;pub mod fitness;pub mod form;pub mod free_agent;pub mod full_back;pub mod goalkeeper;pub mod injury;pub mod leadership;pub mod loan;pub mod midfielder;pub mod morale;pub mod prospect;pub mod registration;pub mod reputation;pub mod scouting;pub mod squad_depth;pub mod starting_xi;pub mod striker;pub mod training;pub mod transfer;pub mod value;pub mod veteran;pub mod wage;pub mod winger;
 pub fn clamp_rating(value:i16)->u8{value.clamp(25,94) as u8}
 pub fn tier_floor(tier:u8)->u8{match tier{0=>55,1=>50,2=>45,3=>40,_=>34}}
 pub fn tier_ceiling(tier:u8)->u8{match tier{0=>92,1=>88,2=>81,3=>73,_=>65}}
