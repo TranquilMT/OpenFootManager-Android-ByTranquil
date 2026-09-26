@@ -2441,7 +2441,8 @@
         "headline": "AUSWECHSLUNG",
         "lines": {
           "0": "{{team}} wechselt: {{player}} kommt, {{victim}} geht.",
-          "1": "{{player}} ersetzt {{victim}} bei {{team}}."
+          "1": "{{player}} ersetzt {{victim}} bei {{team}}.",
+          "2": "{{team}} wechselt: {{player}} kommt für {{victim}}."
         }
       },
       "KickOff": {
