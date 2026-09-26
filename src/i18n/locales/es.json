@@ -2417,7 +2417,8 @@
         "headline": "¡TARJETA ROJA!",
         "lines": {
           "0": "¡{{player}} es expulsado! ¡El {{team}} se queda con diez!",
-          "1": "¡Roja directa para {{player}}! Un desastre para el {{team}}."
+          "1": "¡Roja directa para {{player}}! Un desastre para el {{team}}.",
+          "2": "{{player}} es expulsado; {{team}} sigue con diez."
         }
       },
       "SecondYellow": {
