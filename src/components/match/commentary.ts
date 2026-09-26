@@ -19,6 +19,8 @@ const COMMENTARY_EVENTS = new Set([
   "ShotSaved",
   "ShotOffTarget",
   "ShotBlocked",
+  "Corner",
+  "FreeKick",
   "Foul",
   "YellowCard",
   "RedCard",
@@ -38,7 +40,7 @@ export interface Commentary {
 
 /** Stable, RNG-free hash so a given event always renders the same variant. */
 function hashEvent(evt: MatchEvent): number {
-  const key = `${evt.minute}|${evt.event_type}|${evt.player_id ?? ""}`;
+  const key = `${evt.minute}|${evt.event_type}|${evt.side}|${evt.zone}|${evt.player_id ?? ""}|${evt.secondary_player_id ?? ""}`;
   let h = 5381;
   for (let i = 0; i < key.length; i++) {
     h = ((h << 5) + h + key.charCodeAt(i)) | 0;
