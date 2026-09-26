@@ -2252,7 +2252,7 @@
       "PenaltyAwarded": "Rigore Assegnato"
     },
     "commentary": {
-      "Corner": {"headline": "Calcio d’angolo per", "lines": {"0": "Calcio d’angolo per {{team}}.", "1": "{{team}} si prepara a battere il corner."}},
+      "Corner": {"headline": "Calcio d’angolo per", "lines": {"0": "Calcio d’angolo per {{team}}.", "1": "{{team}} si prepara a battere il corner.", "2": "{{team}} ha la possibilità di crossare dal corner."}},
       "FreeKick": {"headline": "Punizione per", "lines": {"0": "Punizione per {{team}}.", "1": "{{team}} si prepara a battere la punizione."}},
       "Goal": {
         "headline": "GOOOL!",
