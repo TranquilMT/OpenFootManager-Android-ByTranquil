@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { invoke } from "@tauri-apps/api/core";
 
@@ -315,7 +315,7 @@ describe("YouthAcademyTab", () => {
         screen.getByText("No eligible under-21 senior players are available right now."),
       ).toBeInTheDocument();
     });
-    expect(screen.getByText("Senior Prospect").closest("tr")).not.toBeNull();
+    expect(within(screen.getByRole("table")).getByText("Senior Prospect").closest("tr")).not.toBeNull();
   });
 
   it("opens the scouting tab from the recovery card", async () => {
@@ -414,11 +414,11 @@ describe("YouthAcademyTab", () => {
     render(<YouthAcademyTab gameState={state} onSelectPlayer={onSelectPlayer} />);
 
     await waitFor(() => {
-      expect(screen.getByText("Rising Star")).toBeInTheDocument();
+      expect(within(screen.getByRole("table")).getByText("Rising Star")).toBeInTheDocument();
     });
     expect(screen.queryByText("Senior Pro")).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByText("Rising Star"));
+    fireEvent.click(within(screen.getByRole("table")).getByText("Rising Star"));
 
     expect(onSelectPlayer).toHaveBeenCalledWith("player-young");
   });
@@ -456,9 +456,9 @@ describe("YouthAcademyTab", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Rising Star")).toBeInTheDocument();
+      expect(within(screen.getByRole("table")).getByText("Rising Star")).toBeInTheDocument();
     });
-    fireEvent.contextMenu(screen.getByText("Rising Star").closest("tr") as HTMLTableRowElement);
+    fireEvent.contextMenu(within(screen.getByRole("table")).getByText("Rising Star").closest("tr") as HTMLTableRowElement);
     fireEvent.click(screen.getByRole("menuitem", { name: "Promote to senior squad" }));
 
     await waitFor(() => {
@@ -466,7 +466,7 @@ describe("YouthAcademyTab", () => {
     });
     // The promoted 18-year-old leaves the prospects table (no <tr> ancestor)
     // and reappears in the recovery card as an eligible under-21 senior.
-    expect(screen.getByText("Rising Star").closest("tr")).toBeNull();
+    expect(screen.queryByRole("table")).toBeNull();
   });
 
   it("promotes youth academy players through the context menu", async () => {
@@ -499,9 +499,9 @@ describe("YouthAcademyTab", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("Rising Star")).toBeInTheDocument();
+      expect(within(screen.getByRole("table")).getByText("Rising Star")).toBeInTheDocument();
     });
-    const playerRow = screen.getByText("Rising Star").closest("tr");
+    const playerRow = within(screen.getByRole("table")).getByText("Rising Star").closest("tr");
     expect(playerRow).not.toBeNull();
     fireEvent.contextMenu(playerRow as HTMLTableRowElement);
     fireEvent.click(screen.getByRole("menuitem", { name: "Promote to senior squad" }));
