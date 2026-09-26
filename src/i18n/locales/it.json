@@ -2428,7 +2428,8 @@
         "headline": "CARTELLINO GIALLO",
         "lines": {
           "0": "{{player}} viene ammonito con il {{team}}.",
-          "1": "Cartellino giallo per {{player}}."
+          "1": "Cartellino giallo per {{player}}.",
+          "2": "L'arbitro ammonisce {{player}}."
         }
       },
       "RedCard": {
