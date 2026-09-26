@@ -2384,7 +2384,8 @@
         "headline": "SUBSTITUIÇÃO",
         "lines": {
           "0": "O {{team}} faz uma mudança: {{player}} entra, {{victim}} sai.",
-          "1": "{{player}} substitui {{victim}} no {{team}}."
+          "1": "{{player}} substitui {{victim}} no {{team}}.",
+          "2": "{{team}} coloca {{player}} no lugar de {{victim}}."
         }
       },
       "KickOff": {
