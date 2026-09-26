@@ -2425,7 +2425,8 @@
         "headline": "DEUXIÈME JAUNE — EXPULSÉ !",
         "lines": {
           "0": "{{player}} prend un deuxième jaune et est expulsé !",
-          "1": "Deux jaunes et dehors — {{player}} laisse {{team}} à dix."
+          "1": "Deux jaunes et dehors — {{player}} laisse {{team}} à dix.",
+          "2": "Un deuxième avertissement met fin au match de {{player}}."
         }
       },
       "Injury": {
