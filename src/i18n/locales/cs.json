@@ -2467,7 +2467,8 @@
         "headline": "ZRANĚNÍ",
         "lines": {
           "0": "{{player}} leží na zemi a potřebuje ošetření.",
-          "1": "Obavy pro tým {{team}} — {{player}} jde k zemi kvůli zranění."
+          "1": "Obavy pro tým {{team}} — {{player}} jde k zemi kvůli zranění.",
+          "2": "Hra je přerušena, hráč {{player}} potřebuje ošetření."
         }
       },
       "Substitution": {
