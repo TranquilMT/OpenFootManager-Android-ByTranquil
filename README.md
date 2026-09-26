@@ -6,6 +6,19 @@
 
 > 🧪 **0.3.0 Nightly is ready for testing** — this is a major gameplay and mobile update. Nightly builds are test releases, so you may still find bugs while playing.
 
+## Latest mobile gameplay sweep
+
+- Career creation accepts managers aged 18 and over, with matching validation in the Android backend and the creation form.
+- Team selection lists every competition in the generated world, including leagues outside England and South America, so inactive leagues can be enabled before choosing a club.
+- Generated clubs in the top two league tiers receive a wider spread of standout players without raising every squad member.
+- International fixtures show country names such as England and Spain; existing saves with older national-team names display cleanly. World Cup squads select the highest-rated eligible generated players in each nation.
+- Inbox replies now show an error if an action fails, and an older message fetch cannot overwrite a newer reply or inbox update.
+- Scouting actions are available from the player search context menu on both the phone card and the table view. Payroll rows respond to keyboard activation, and transfer deal details remain visible.
+- The mobile match path, scheduling, squad, dashboard, transfers, scouting, inbox, and team-selection screens received regression checks. The frontend suite passes 1,559 tests across 194 files; the production web build and lint checks pass.
+- The skip-to-match control keeps advancing through quiet days and pauses at a scheduled match or a blocking action; fatigue by itself is not a blocker.
+
+The next Android APK must be built from the commits containing this sweep. The earlier build #278 predates these fixes.
+
 ## 🌟 What's new in 0.3.0?
 
 This release brings a large update to the career experience, with major improvements to generated players, clubs, transfers, progression and Android usability.
