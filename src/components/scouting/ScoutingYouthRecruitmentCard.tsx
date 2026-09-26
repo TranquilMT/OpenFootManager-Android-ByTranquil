@@ -74,7 +74,7 @@ export default function ScoutingYouthRecruitmentCard({
     <Card accent="primary">
       <CardHeader
         action={
-          <Button size="sm" className="min-h-11 w-full sm:w-auto sm:min-h-0" icon={<ScanSearch />} disabled={!canStart> onClick={onStartSearch}>
+          <Button size="sm" className="min-h-11 w-full sm:w-auto sm:min-h-0" icon={<ScanSearch />} disabled={!canStart} onClick={onStartSearch}>
             {t("scouting.startYouthSearch")}
           </Button>
         }
@@ -92,7 +92,8 @@ export default function ScoutingYouthRecruitmentCard({
               {t("scouting.youthSearchScoutLabel")}
             </span>
             <Select
-              selectSize="sm"\n              className="min-h-11 w-full sm:min-h-0"
+              selectSize="sm"
+              className="min-h-11 w-full sm:min-h-0"
               value={selectedScoutId}
               aria-label={t("scouting.youthSearchScoutLabel")}
               onChange={(event) => onScoutChange(event.target.value)}
@@ -111,7 +112,8 @@ export default function ScoutingYouthRecruitmentCard({
               {t("scouting.youthSearchRegionLabel")}
             </span>
             <Select
-              selectSize="sm"\n              className="min-h-11 w-full sm:min-h-0"
+              selectSize="sm"
+              className="min-h-11 w-full sm:min-h-0"
               value={region}
               aria-label={t("scouting.youthSearchRegionLabel")}
               onChange={(event) => onRegionChange(event.target.value)}
@@ -126,7 +128,8 @@ export default function ScoutingYouthRecruitmentCard({
               {t("scouting.youthSearchObjectiveLabel")}
             </span>
             <Select
-              selectSize="sm"\n              className="min-h-11 w-full sm:min-h-0"
+              selectSize="sm"
+              className="min-h-11 w-full sm:min-h-0"
               value={objective}
               aria-label={t("scouting.youthSearchObjectiveLabel")}
               onChange={(event) => onObjectiveChange(event.target.value)}
@@ -142,7 +145,8 @@ export default function ScoutingYouthRecruitmentCard({
               {t("scouting.youthTargetLabel")}
             </span>
             <Select
-              selectSize="sm"\n              className="min-h-11 w-full sm:min-h-0"
+              selectSize="sm"
+              className="min-h-11 w-full sm:min-h-0"
               value={targetPosition}
               aria-label={t("scouting.youthTargetLabel")}
               onChange={(event) => onTargetPositionChange(event.target.value)}
@@ -238,7 +242,8 @@ export default function ScoutingYouthRecruitmentCard({
 
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                       <Select
-                        selectSize="sm"\n              className="min-h-11 w-full sm:min-h-0"
+                        selectSize="sm"
+              className="min-h-11 w-full sm:min-h-0"
                         value={reassignTarget}
                         aria-label={`${t("scouting.reassignSearch")} ${assignment.id}`}
                         onChange={(event) =>
