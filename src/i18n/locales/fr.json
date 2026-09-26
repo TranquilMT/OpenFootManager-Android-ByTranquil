@@ -2290,7 +2290,8 @@
         "headline": "PENALTY — BUT !",
         "lines": {
           "0": "{{player}} trompe le gardien sur penalty ! {{team}} marque.",
-          "1": "Sang-froid absolu de {{player}} — penalty transformé pour {{team}} !"
+          "1": "Sang-froid absolu de {{player}} — penalty transformé pour {{team}} !",
+          "2": "{{player}} transforme le penalty pour {{team}} !"
         }
       },
       "PenaltyMiss": {
