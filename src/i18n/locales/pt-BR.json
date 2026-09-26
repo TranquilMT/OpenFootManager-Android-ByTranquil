@@ -2330,7 +2330,8 @@
         "headline": "FALTA",
         "lines": {
           "0": "{{player}} comete falta em {{victim}}. Falta para o {{opponent}}.",
-          "1": "{{player}} dá uma falta contra {{victim}}."
+          "1": "{{player}} dá uma falta contra {{victim}}.",
+          "2": "O árbitro apita falta de {{team}}."
         },
         "hard": {
           "headline": "É FALTA",
