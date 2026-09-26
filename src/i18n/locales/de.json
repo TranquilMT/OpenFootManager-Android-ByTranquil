@@ -2433,7 +2433,8 @@
         "headline": "VERLETZUNG",
         "lines": {
           "0": "{{player}} liegt am Boden und braucht Behandlung.",
-          "1": "Sorge bei {{team}}: {{player}} geht verletzt zu Boden."
+          "1": "Sorge bei {{team}}: {{player}} geht verletzt zu Boden.",
+          "2": "Das Spiel ruht, während {{player}} behandelt wird."
         }
       },
       "Substitution": {
