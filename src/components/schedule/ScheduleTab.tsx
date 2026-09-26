@@ -710,6 +710,7 @@ function StandingsView({
           </p>
         </CardBody>
       ) : (
+        <>
         <div className="divide-y divide-gray-100 dark:divide-navy-600 md:hidden">
           {standings.map((entry, index) => {
             const isUser = entry.team_id === userTeamId;
@@ -729,7 +730,6 @@ function StandingsView({
               </ContextMenu>
             );
           })}
-        </div>
         </div>
         <div className="hidden overflow-x-auto md:block">
           <table className="w-full border-collapse text-left">
@@ -855,6 +855,7 @@ function StandingsView({
             </div>
           )}
         </div>
+        </>
       )}
     </Card>
   );
