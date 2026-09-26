@@ -2417,7 +2417,8 @@
         "headline": "ROTE KARTE!",
         "lines": {
           "0": "{{player}} fliegt vom Platz! {{team}} ist nur noch zu zehnt!",
-          "1": "Direkter Platzverweis für {{player}}! Eine Katastrophe für {{team}}."
+          "1": "Direkter Platzverweis für {{player}}! Eine Katastrophe für {{team}}.",
+          "2": "{{player}} sieht Rot; {{team}} spielt mit zehn weiter."
         }
       },
       "SecondYellow": {
