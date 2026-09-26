@@ -2240,7 +2240,8 @@
         "lines": {
           "0": "{{player}} 为{{team}}攻破球门！",
           "1": "{{player}} 破门！多么精彩的射门！",
-          "2": "{{player}} 为{{team}}打进一球！"
+          "2": "{{player}} 为{{team}}打进一球！",
+          "3": "{{player}}为{{team}}完成这次进攻并破门！"
         },
         "opener": {
           "headline": "进球啦！",
