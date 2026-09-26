@@ -6,6 +6,18 @@
 
 > 🧪 **0.3.0 Nightly is ready for testing** — this is a major gameplay and mobile update. Nightly builds are test releases, so you may still find bugs while playing.
 
+## Next gameplay and narration update
+
+- Generated top-division clubs now have a featured outfield player; many reach 90+, while a 96-rated player remains rare. Clubs in the next tiers can also produce standout players to drive promotion campaigns.
+- Rating ceilings, potential, scouting estimates, form and match-strength helpers now accept the expanded 96-point range together.
+- Every generated club adds a position-balanced local free agent to the starting market, increasing the number of available players without changing squad limits.
+- The portrait generator has two more fictional source faces, and background generation covers more players while prioritising the next opponent across league and cup fixtures.
+- Match commentary has 192 additional event lines across all 12 supported languages, plus new corner and free-kick narration. Supported devices can enable optional spoken commentary during live matches.
+- Live match steps cannot overlap while the Android backend responds. Legacy injury codes such as `.calfinjury` display as a readable calf strain in inbox messages and injury panels.
+- Frontend verification: 1,563 tests across 195 files passed; lint, locale coverage and the production web build passed. Android backend compilation and an APK containing these changes are pending the next Android workflow.
+
+The preceding mobile sweep shipped in [Android Nightly #279](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/actions/runs/36273749888). The updates above will be in a subsequent build.
+
 ## Latest mobile gameplay sweep
 
 - Career creation accepts managers aged 18 and over, with matching validation in the Android backend and the creation form.
