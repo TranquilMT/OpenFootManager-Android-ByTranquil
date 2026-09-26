@@ -2325,7 +2325,8 @@
         "headline": "RIGORE!",
         "lines": {
           "0": "L'arbitro indica il dischetto — rigore per il {{team}}!",
-          "1": "È rigore per il {{team}}! Momento decisivo."
+          "1": "È rigore per il {{team}}! Momento decisivo.",
+          "2": "L'arbitro assegna un rigore a {{team}}."
         }
       },
       "ShotSaved": {
