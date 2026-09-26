@@ -2433,7 +2433,8 @@
         "headline": "LESIÓN",
         "lines": {
           "0": "{{player}} está en el suelo y necesita atención médica.",
-          "1": "Preocupación en el {{team}}: {{player}} cae lesionado."
+          "1": "Preocupación en el {{team}}: {{player}} cae lesionado.",
+          "2": "El juego se detiene mientras atienden a {{player}}."
         }
       },
       "Substitution": {
