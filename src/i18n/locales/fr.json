@@ -2433,7 +2433,8 @@
         "headline": "BLESSURE",
         "lines": {
           "0": "{{player}} est à terre et nécessite des soins.",
-          "1": "Inquiétude dans {{team}} : {{player}} s'effondre blessé."
+          "1": "Inquiétude dans {{team}} : {{player}} s'effondre blessé.",
+          "2": "Le jeu s'arrête pendant que {{player}} reçoit des soins."
         }
       },
       "Substitution": {
