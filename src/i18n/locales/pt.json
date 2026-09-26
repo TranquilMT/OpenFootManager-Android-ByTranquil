@@ -2343,7 +2343,8 @@
         "headline": "QUE PERTO!",
         "lines": {
           "0": "{{player}} manda ao lado por pouco para o {{team}}.",
-          "1": "Tão perto! {{player}} não consegue acertar na baliza."
+          "1": "Tão perto! {{player}} não consegue acertar na baliza.",
+          "2": "{{player}} remata ao lado da baliza."
         },
         "speculative": {
           "headline": "FORA",
