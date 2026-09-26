@@ -2459,7 +2459,8 @@
         "headline": "DRUHÁ ŽLUTÁ — VEN!",
         "lines": {
           "0": "{{player}} inkasuje druhou žlutou kartu a je vyloučen!",
-          "1": "Dvě žluté a konec — {{player}} oslabuje tým {{team}}, který bude hrát o deseti."
+          "1": "Dvě žluté a konec — {{player}} oslabuje tým {{team}}, který bude hrát o deseti.",
+          "2": "Druhá žlutá karta znamená pro hráče {{player}} konec zápasu."
         }
       },
       "Injury": {
