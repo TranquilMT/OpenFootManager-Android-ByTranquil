@@ -2444,7 +2444,8 @@
         "headline": "SECONDO GIALLO — FUORI!",
         "lines": {
           "0": "{{player}} riceve il secondo giallo e viene espulso!",
-          "1": "Due gialli e via — {{player}} lascia il {{team}} in inferiorità numerica."
+          "1": "Due gialli e via — {{player}} lascia il {{team}} in inferiorità numerica.",
+          "2": "Il secondo giallo chiude la partita di {{player}}."
         }
       },
       "Injury": {
