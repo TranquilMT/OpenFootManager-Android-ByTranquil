@@ -2425,7 +2425,8 @@
         "headline": "SEGUNDO AMARELO — EXPULSO!",
         "lines": {
           "0": "{{player}} vê o segundo amarelo e é expulso!",
-          "1": "Dois amarelos e fora — {{player}} deixa o {{team}} reduzido."
+          "1": "Dois amarelos e fora — {{player}} deixa o {{team}} reduzido.",
+          "2": "O segundo amarelo termina o jogo de {{player}}."
         }
       },
       "Injury": {
