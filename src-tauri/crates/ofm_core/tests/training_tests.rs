@@ -1018,7 +1018,7 @@ fn injured_player_loses_fitness_over_time() {
 /// teams. The user's team is exempt (manual agency), so an identical exhausted
 /// player on the user's side keeps spiralling down.
 #[test]
-fn ai_fatigue_guard_rests_exhausted_ai_player_but_not_user_team() {
+fn fatigue_guard_recovers_exhausted_players_on_all_teams() {
     let mut game = make_game(); // manager is hired to "team1" (the user team)
 
     // Add an AI-controlled team that trains hard (Medium, non-recovery focus).
@@ -1059,14 +1059,13 @@ fn ai_fatigue_guard_rests_exhausted_ai_player_but_not_user_team() {
         ai_after > 22,
         "AI exhausted player should recover under the fatigue guard, got {ai_after}"
     );
-    // Exempt: the user's identical player keeps net-losing condition at Medium.
     assert!(
-        user_after < 22,
-        "user-team exhausted player should not be auto-rested, got {user_after}"
+        user_after > 22,
+        "user exhausted player should recover under the fatigue guard, got {user_after}"
     );
     assert!(
-        ai_after > user_after,
-        "guarded AI player ({ai_after}) should end fresher than the user player ({user_after})"
+        ai_after > 22,
+        "AI exhausted player should recover under the fatigue guard, got {ai_after}"
     );
 }
 
@@ -1160,4 +1159,26 @@ fn peaked_player_does_not_gain_from_training() {
          ovr drifted {} → {}",
         initial_ovr, final_player.ovr
     );
+}
+
+#[test]
+fn recovery_focus_rescues_critical_user_player_quickly() {
+    let mut game = make_game();
+    game.teams[0].training_focus = TrainingFocus::Recovery;
+    game.teams[0].training_intensity = TrainingIntensity::High;
+    game.teams[0].training_schedule = TrainingSchedule::Intense;
+    for p in game.players.iter_mut() { p.condition = 20; p.fitness = 60; }
+    for _ in 0..3 { training::process_training(&mut game, 0); }
+    assert!(game.players.iter().all(|p| p.condition >= 45), "three recovery days must lift critical players out of danger");
+}
+
+#[test]
+fn light_schedule_rest_week_recovers_squad_condition() {
+    let mut game = make_game();
+    game.teams[0].training_schedule = TrainingSchedule::Light;
+    game.teams[0].training_focus = TrainingFocus::Technical;
+    game.teams[0].training_intensity = TrainingIntensity::Low;
+    for p in game.players.iter_mut() { p.condition = 35; p.fitness = 65; }
+    for day in 0..7 { training::process_training(&mut game, day); }
+    assert!(game.players.iter().all(|p| p.condition >= 80), "a light recovery week must substantially restore a tired squad");
 }
