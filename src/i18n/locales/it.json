@@ -1894,6 +1894,8 @@
     "live": "Diretta",
     "paused": "In pausa",
     "events": "Eventi",
+    "voiceOn": "Attiva la telecronaca vocale",
+    "voiceOff": "Disattiva la telecronaca vocale",
     "stats": "Statistiche",
     "lineups": "Formazioni",
     "simSpeed": "Velocità simulazione",
@@ -2250,6 +2252,8 @@
       "PenaltyAwarded": "Rigore Assegnato"
     },
     "commentary": {
+      "Corner": {"headline": "Calcio d’angolo per", "lines": {"0": "Calcio d’angolo per {{team}}.", "1": "{{team}} si prepara a battere il corner."}},
+      "FreeKick": {"headline": "Punizione per", "lines": {"0": "Punizione per {{team}}.", "1": "{{team}} si prepara a battere la punizione."}},
       "Goal": {
         "headline": "GOOOL!",
         "lines": {
