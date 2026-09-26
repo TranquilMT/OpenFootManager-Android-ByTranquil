@@ -3,7 +3,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { useTranslation } from "react-i18next";
 
 import type { GameStateData, LeagueData, PlayerData, TeamData } from "../store/gameStore";
-import { getActiveCompetitions, getPlayerOvr } from "../lib/helpers";
+import { getPlayerOvr } from "../lib/helpers";
 import { buildRegionLabel, inferRegionId } from "../lib/teamRegions";
 import { competitionDisplayName } from "../lib/competitionName";
 import { resolveBackendError } from "../utils/backendI18n";
@@ -50,7 +50,16 @@ export function useTeamSelection({
   const [isConfirming, setIsConfirming] = useState(false);
 
   const competitions = useMemo(
-    () => (gameState ? sortCompetitions(getActiveCompetitions(gameState)) : []),
+    () =>
+      gameState
+        ? sortCompetitions(
+            gameState.competitions?.length
+              ? gameState.competitions
+              : gameState.league
+                ? [gameState.league]
+                : [],
+          )
+        : [],
     [gameState],
   );
 
@@ -119,10 +128,15 @@ export function useTeamSelection({
 
     setCompetitionSelection((current) =>
       Object.fromEntries(
-        competitions.map((competition) => [competition.id, current[competition.id] ?? true]),
+        competitions.map((competition) => [
+          competition.id,
+          current[competition.id] ??
+            (!gameState?.active_competition_ids?.length ||
+              gameState.active_competition_ids.includes(competition.id)),
+        ]),
       ),
     );
-  }, [competitions]);
+  }, [competitions, gameState]);
 
   const activeRegionIds = regions
     .filter((region) => region.id === selectedHomeRegionId || Boolean(regionSelection[region.id]))
