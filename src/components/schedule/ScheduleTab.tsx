@@ -710,7 +710,27 @@ function StandingsView({
           </p>
         </CardBody>
       ) : (
-        <div className="overflow-x-auto">
+        <div className="divide-y divide-gray-100 dark:divide-navy-600 md:hidden">
+          {standings.map((entry, index) => {
+            const isUser = entry.team_id === userTeamId;
+            const gd = entry.goals_for - entry.goals_against;
+            const inPromotionZone = index < zones.promotionSlots;
+            const inRelegationZone = zones.relegationSlots > 0 && index >= standings.length - zones.relegationSlots;
+            const contextItems = [buildTeamMenuItem(t("common.viewTeam"), entry.team_id)];
+            return (
+              <ContextMenu items={contextItems} key={entry.team_id}>
+                <button type="button" onClick={() => onSelectTeam(entry.team_id)}
+                  className={`grid min-h-14 w-full grid-cols-[2.25rem_minmax(0,1fr)_3rem] items-center gap-2 px-2 py-2 text-left active:bg-gray-50 dark:active:bg-navy-700/50 ${isUser ? "bg-primary-50 dark:bg-primary-500/10" : ""}`}
+                  data-testid={`schedule-standings-mobile-${entry.team_id}`}>
+                  <span className={`flex h-full items-center justify-center border-l-2 font-heading text-sm font-bold ${inPromotionZone ? "border-primary-500 text-primary-500" : inRelegationZone ? "border-red-500 text-red-500" : "border-transparent text-gray-400"}`}>{index + 1}</span>
+                  <span className="min-w-0"><span className={`block truncate text-sm font-semibold ${isUser ? "text-primary-600 dark:text-primary-400" : "text-gray-800 dark:text-gray-200"}`}>{getTeamName(gameState.teams, entry.team_id)}</span><span className="mt-0.5 block text-[11px] tabular-nums text-gray-500 dark:text-gray-400">{t("common.played")} {entry.played} · {entry.won}-{entry.drawn}-{entry.lost} · {t("common.gd")} {gd > 0 ? `+${gd}` : gd}</span></span>
+                  <span className="text-right"><span className="block font-heading text-base font-bold tabular-nums text-gray-900 dark:text-gray-100">{entry.points}</span><span className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">{t("common.pts")}</span></span>
+                </button>
+              </ContextMenu>
+            );
+          })}
+        </div>
+        <div className="hidden overflow-x-auto md:block">
           <table className="w-full border-collapse text-left">
             <thead>
               <tr className="border-b border-gray-200 bg-gray-50 text-xs dark:border-navy-600 dark:bg-navy-800">
@@ -818,7 +838,7 @@ function StandingsView({
             </tbody>
           </table>
           {(zones.promotionSlots > 0 || zones.relegationSlots > 0) && (
-            <div className="flex gap-5 border-t border-gray-100 px-4 py-2.5 text-xs text-gray-500 dark:border-navy-600 dark:text-gray-400">
+            <div className="flex flex-wrap gap-x-5 gap-y-1 border-t border-gray-100 px-4 py-2.5 text-xs text-gray-500 dark:border-navy-600 dark:text-gray-400">
               {zones.promotionSlots > 0 && (
                 <span className="flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-primary-500" />
