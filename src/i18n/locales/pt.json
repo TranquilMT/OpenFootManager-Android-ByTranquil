@@ -2298,7 +2298,8 @@
         "headline": "GRANDE PENALIDADE FALHADA!",
         "lines": {
           "0": "{{player}} falha da marca dos onze metros! Que alívio para o {{opponent}}!",
-          "1": "Defendida! {{player}} vai ter pesadelos com este penálti."
+          "1": "Defendida! {{player}} vai ter pesadelos com este penálti.",
+          "2": "{{player}} falha a finalização da marca de penálti."
         }
       },
       "PenaltyAwarded": {
