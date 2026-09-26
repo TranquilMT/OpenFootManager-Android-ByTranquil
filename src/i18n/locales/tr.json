@@ -2504,7 +2504,8 @@
         "headline": "MAÇ SONU",
         "lines": {
           "0": "İşte bu kadar — maç bitti!",
-          "1": "Hakem maçı sona erdiriyor."
+          "1": "Hakem maçı sona erdiriyor.",
+          "2": "Son düdükle sonuç kesinleşiyor."
         }
       }
     },
