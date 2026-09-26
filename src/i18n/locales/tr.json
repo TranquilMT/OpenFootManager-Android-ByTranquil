@@ -2332,7 +2332,8 @@
         "headline": "PENALTI KAÇTI!",
         "lines": {
           "0": "{{player}} penaltı noktasından harcıyor! {{opponent}} için ne büyük şans!",
-          "1": "Kurtardı! {{player}} bu penaltıyı kabuslarında görecek."
+          "1": "Kurtardı! {{player}} bu penaltıyı kabuslarında görecek.",
+          "2": "{{player}} penaltı noktasından golü bulamıyor."
         }
       },
       "PenaltyAwarded": {
