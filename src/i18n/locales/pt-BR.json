@@ -2413,7 +2413,8 @@
         "headline": "FIM DE JOGO",
         "lines": {
           "0": "É isso — fim de jogo!",
-          "1": "O árbitro encerra a partida."
+          "1": "O árbitro encerra a partida.",
+          "2": "O apito final confirma o resultado."
         }
       }
     },
