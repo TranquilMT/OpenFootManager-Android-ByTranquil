@@ -2333,7 +2333,8 @@
         "headline": "CHE PARATA!",
         "lines": {
           "0": "{{player}} costringe il portiere a un intervento.",
-          "1": "Il portiere nega il gol a {{player}}!"
+          "1": "Il portiere nega il gol a {{player}}!",
+          "2": "Il portiere respinge il tiro di {{player}}."
         },
         "routine": {
           "headline": "PARATA",
