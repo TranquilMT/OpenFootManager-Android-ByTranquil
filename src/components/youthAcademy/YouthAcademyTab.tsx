@@ -423,6 +423,7 @@ export default function YouthAcademyTab({
               </p>
             </div>
           ) : (
+            <>
             <div className="divide-y divide-gray-100 dark:divide-navy-600 md:hidden">{youthPlayers.map((player)=>{const potLabel=getPotentialLabel(player.potential,t),growthRoom=player.potential-player.ovr,contextItems=[buildViewProfileMenuItem(t,()=>onSelectPlayer?.(player.id)),buildPromoteToSeniorSquadMenuItem(t,()=>{void handleSetSquadRole(player.id,"Senior")})];return <ContextMenu items={contextItems} key={`mobile-${player.id}`}><article className="p-3 active:bg-gray-50 dark:active:bg-navy-700/50"><button type="button" onClick={()=>onSelectPlayer?.(player.id)} className="flex min-h-12 w-full min-w-0 items-center gap-3 text-left"><PlayerAvatar player={player}/><span className="min-w-0 flex-1"><span className="block truncate text-sm font-heading font-bold text-gray-800 dark:text-gray-100">{player.full_name}</span><span className="mt-1 flex items-center gap-1.5 text-[11px] text-gray-500"><CountryFlag code={player.nationality} locale={i18n.language} className="text-xs leading-none"/><span className="truncate">{countryName(player.nationality,i18n.language)}</span><span>· {player.age}</span></span></span><Badge variant={positionBadgeVariant(player.natural_position||player.position)} size="sm">{translatePositionAbbreviation(t,player.natural_position||player.position)}</Badge></button><div className="mt-3 grid grid-cols-3 gap-2"><div className="rounded-lg bg-gray-50 p-2 text-center dark:bg-navy-800"><p className="text-[9px] uppercase text-gray-400">{t("youthAcademy.ovr")}</p><p className="font-heading text-lg font-bold">{player.ovr}</p></div><div className="rounded-lg bg-gray-50 p-2 text-center dark:bg-navy-800"><p className="text-[9px] uppercase text-gray-400">{t("youthAcademy.potential")}</p><p className={`font-heading text-lg font-bold ${potLabel.color}`}>{player.potential}</p></div><div className="rounded-lg bg-gray-50 p-2 text-center dark:bg-navy-800"><p className="text-[9px] uppercase text-gray-400">{t("youthAcademy.condition")}</p><p className="font-heading text-lg font-bold">{player.condition}%</p></div></div><div className="mt-3 flex items-center gap-2"><ProgressBar value={Math.min(100,(player.ovr/player.potential)*100)} variant={growthRoom>15?"accent":growthRoom>5?"primary":"auto"} size="sm"/><span className="text-xs font-bold text-gray-500">+{growthRoom}</span></div></article></ContextMenu>})}</div><table className="hidden w-full text-left border-collapse md:table">
               <thead>
                 <tr className="bg-gray-50 dark:bg-navy-800 border-b border-gray-200 dark:border-navy-600 text-xs">
@@ -590,6 +591,7 @@ export default function YouthAcademyTab({
                 })}
               </tbody>
             </table>
+            </>
           )}
         </CardBody>
       </Card>
