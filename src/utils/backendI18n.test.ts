@@ -392,6 +392,16 @@ describe("resolveAction", () => {
 // ---------------------------------------------------------------------------
 
 describe("resolveMessage", () => {
+  it("renders a legacy calf injury code in inbox replies", () => {
+    const msg = makeMessage({
+      subject_key: "be.msg.trainingInjury.subject",
+      body_key: "be.msg.trainingInjury.body0",
+      i18n_params: { player: "Alex", injury: ".calfinjury", days: "9" },
+    });
+    const resolved = resolveMessage(msg);
+    expect(resolved.body).toMatch(/calf strain/i);
+    expect(resolved.body).not.toContain(".calfinjury");
+  });
   it("resolves all translatable fields when keys exist", () => {
     const msg = makeMessage({
       subject: "raw",
