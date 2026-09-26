@@ -2348,7 +2348,8 @@
         "headline": "PENYELAMATAN GEMILANG!",
         "lines": {
           "0": "{{player}} memaksa penjaga gawang melakukan penyelamatan.",
-          "1": "Penjaga gawang menggagalkan {{player}}!"
+          "1": "Penjaga gawang menggagalkan {{player}}!",
+          "2": "Kiper menggagalkan tembakan {{player}}."
         },
         "routine": {
           "headline": "DITEPIS",
