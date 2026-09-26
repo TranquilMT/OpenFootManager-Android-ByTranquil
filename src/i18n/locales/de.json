@@ -2306,7 +2306,8 @@
         "headline": "ELFMETER!",
         "lines": {
           "0": "Der Schiedsrichter zeigt auf den Punkt — Elfmeter für {{team}}!",
-          "1": "Es gibt Elfmeter für {{team}}! Entscheidender Moment."
+          "1": "Es gibt Elfmeter für {{team}}! Entscheidender Moment.",
+          "2": "Der Schiedsrichter gibt Elfmeter für {{team}}."
         }
       },
       "ShotSaved": {
