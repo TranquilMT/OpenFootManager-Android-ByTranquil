@@ -1,2 +1,2 @@
-pub fn valid_player(ovr:u8,potential:u8,age:u8)->bool{(20..=94).contains(&ovr)&&potential>=ovr&&potential<=94&&(15..=45).contains(&age)}pub fn valid_squad(size:usize,gk_count:usize)->bool{(18..=35).contains(&size)&&gk_count>=2}
+pub fn valid_player(ovr:u8,potential:u8,age:u8)->bool{(20..=96).contains(&ovr)&&potential>=ovr&&potential<=96&&(15..=45).contains(&age)}pub fn valid_squad(size:usize,gk_count:usize)->bool{(18..=35).contains(&size)&&gk_count>=2}
 #[cfg(test)]mod tests{use super::*;#[test]fn rejects_invalid_potential(){assert!(!valid_player(70,65,24))}#[test]fn requires_two_goalkeepers(){assert!(!valid_squad(22,1))}}
