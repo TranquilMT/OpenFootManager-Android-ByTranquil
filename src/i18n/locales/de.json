@@ -2425,7 +2425,8 @@
         "headline": "ZWEITE GELBE — VOM PLATZ!",
         "lines": {
           "0": "{{player}} sieht die zweite Gelbe und wird des Feldes verwiesen!",
-          "1": "Zwei Gelbe und weg — {{player}} lässt {{team}} in Unterzahl."
+          "1": "Zwei Gelbe und weg — {{player}} lässt {{team}} in Unterzahl.",
+          "2": "Die zweite Gelbe beendet das Spiel für {{player}}."
         }
       },
       "Injury": {
