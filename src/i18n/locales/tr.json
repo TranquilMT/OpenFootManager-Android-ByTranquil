@@ -2421,7 +2421,8 @@
         "headline": "FAUL",
         "lines": {
           "0": "{{player}}, {{victim}}'a faul yapıyor. Serbest vuruş {{opponent}} lehine.",
-          "1": "{{player}}, {{victim}}'a yaptığı faulle serbest vuruş veriyor."
+          "1": "{{player}}, {{victim}}'a yaptığı faulle serbest vuruş veriyor.",
+          "2": "Hakem {{team}} aleyhine faul düdüğü çalıyor."
         },
         "hard": {
           "headline": "FAUL VAR",
