@@ -1,0 +1,1 @@
+use ofm_core::generated_balance::{potential_ceiling,LeagueTier};#[test]fn lower_academy_ceiling_below_elite(){assert!(potential_ceiling(LeagueTier::Lower,100)<potential_ceiling(LeagueTier::Elite,100));}
