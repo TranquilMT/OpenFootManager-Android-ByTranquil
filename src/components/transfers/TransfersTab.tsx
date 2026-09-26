@@ -1199,6 +1199,8 @@ export default function TransfersTab({
               {visibleList.map((player) => {
                 const ovr = getPlayerOvr(player);
                 const age = calcAge(player.date_of_birth);
+                const mobileTransferOffers = player.transfer_offers ?? [];
+                const mobileLoanOffers: LoanOfferData[] = player.loan_offers ?? [];
                 const contextItems = [
                   buildViewProfileMenuItem(t, () => onSelectPlayer(player.id)),
                   ...(player.team_id ? [buildViewTeamMenuItem(t, () => onSelectTeam(player.team_id!))] : []),
