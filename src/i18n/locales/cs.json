@@ -2475,7 +2475,8 @@
         "headline": "STŘÍDÁNÍ",
         "lines": {
           "0": "Tým {{team}} střídá: na hřiště přichází {{player}}, odchází {{victim}}.",
-          "1": "{{player}} nahrazuje hráče {{victim}} v týmu {{team}}."
+          "1": "{{player}} nahrazuje hráče {{victim}} v týmu {{team}}.",
+          "2": "{{team}} střídá: {{player}} přichází místo hráče {{victim}}."
         }
       },
       "KickOff": {
