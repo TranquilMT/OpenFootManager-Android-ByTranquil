@@ -2406,7 +2406,8 @@
         "headline": "ZABLOKOVÁNO!",
         "lines": {
           "0": "Střelu, kterou vyslal {{player}}, zablokoval obětavý obránce.",
-          "1": "Hradba těl v cestě! {{player}} neprošel."
+          "1": "Hradba těl v cestě! {{player}} neprošel.",
+          "2": "Obránce blokuje střelu hráče {{player}}."
         },
         "bigChance": {
           "headline": "SKVĚLÝ BLOK!",
