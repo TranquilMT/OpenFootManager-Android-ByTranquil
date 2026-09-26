@@ -661,7 +661,7 @@ export default function MainMenu() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-navy-900 transition-colors duration-500 relative overflow-x-hidden">
+    <div className="touch-scroll relative flex min-h-[100dvh] items-start justify-center overflow-x-hidden overflow-y-auto bg-gray-100 px-3 pb-[calc(4.5rem+env(safe-area-inset-bottom))] pt-[calc(4rem+env(safe-area-inset-top))] transition-colors duration-500 sm:items-center sm:px-0 sm:py-16 dark:bg-navy-900">
       {/* Background gradient accents */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl" />
@@ -669,14 +669,14 @@ export default function MainMenu() {
       </div>
 
       {/* Theme Toggle */}
-      <ThemeToggle className="absolute top-6 right-6 z-20" />
+      <ThemeToggle className="fixed right-3 top-[calc(0.75rem+env(safe-area-inset-top))] z-20 sm:absolute sm:right-6 sm:top-6" />
 
       {/* Main Card */}
-      <div className="relative z-10 w-full max-w-md">
+      <div className="relative z-10 w-full max-w-md shrink-0">
         {/* Top accent bar */}
         <div className="h-1.5 bg-gradient-to-r from-primary-500 via-accent-400 to-primary-500 rounded-t-2xl" />
 
-        <div className="bg-white dark:bg-navy-800 p-8 rounded-b-2xl shadow-xl dark:shadow-2xl border border-gray-200 dark:border-navy-600 border-t-0 transition-all duration-500">
+        <div className="rounded-b-2xl bg-white p-4 sm:p-8 dark:bg-navy-800 shadow-xl dark:shadow-2xl border border-gray-200 dark:border-navy-600 border-t-0 transition-all duration-500">
           {/* Logo */}
           <img
             src="/openfootlogo.svg"
@@ -858,7 +858,7 @@ export default function MainMenu() {
       </div>
 
       {/* Community links */}
-      <div className="absolute bottom-3 left-4 flex items-center gap-1">
+      <div className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] left-3 z-20 flex items-center gap-1 sm:absolute sm:bottom-3 sm:left-4">
         <button
           type="button"
           aria-label={t("menu.openDiscord")}
@@ -884,7 +884,7 @@ export default function MainMenu() {
       </div>
 
       {/* Version */}
-      <div className="absolute bottom-4 right-4 text-gray-400 dark:text-gray-600 text-xs font-heading uppercase tracking-widest transition-colors">
+      <div className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-3 z-20 text-gray-400 sm:absolute sm:bottom-4 sm:right-4 dark:text-gray-600 text-xs font-heading uppercase tracking-widest transition-colors">
         {formatAppVersion()}
       </div>
     </div>
