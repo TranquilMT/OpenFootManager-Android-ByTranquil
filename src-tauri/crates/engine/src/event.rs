@@ -76,6 +76,8 @@ pub enum EventType {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum EventDetail {
     Shot { danger: DangerBand },
+    /// An off-target shot that strikes the frame before going out of play.
+    Woodwork,
     Save { quality: SaveQuality },
     Foul { severity: FoulSeverity },
     Goal { context: GoalContext },

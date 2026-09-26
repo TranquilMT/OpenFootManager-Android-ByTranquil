@@ -158,4 +158,22 @@ describe("getCommentary", () => {
       expect(result?.line).toContain("Away");
     }
   });
+
+  it("calls the crossbar only for an engine-confirmed woodwork shot", () => {
+    const evt: MatchEvent = {
+      minute: 56,
+      event_type: "ShotOffTarget",
+      side: "Home",
+      zone: "AwayBox",
+      player_id: "p1",
+      secondary_player_id: null,
+      detail: "Woodwork",
+    };
+    const reaction = getCommentary(evt, snapshot([evt]), i18n.t.bind(i18n));
+    expect(reaction?.headline).toBe("OFF THE WOODWORK!");
+    expect(reaction?.line).toMatch(/crossbar|post/);
+    const ordinaryMiss = { ...evt, detail: { Shot: { danger: "Decent" as const } } };
+    const missReaction = getCommentary(ordinaryMiss, snapshot([ordinaryMiss]), i18n.t.bind(i18n));
+    expect(missReaction?.headline).not.toBe("OFF THE WOODWORK!");
+  });
 });

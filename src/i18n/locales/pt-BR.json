@@ -2309,6 +2309,13 @@
             "0": "{{player}} tinha que ter marcado ali — foi para fora de forma agonizante!",
             "1": "Uma chance enorme desperdiçada pelo {{team}}! {{player}} não vai acreditar."
           }
+        },
+        "woodwork": {
+          "headline": "NA TRAVE!",
+          "lines": {
+            "0": "Nossa! {{player}} acerta o travessão para {{team}}!",
+            "1": "Quase! {{player}} acerta a trave!"
+          }
         }
       },
       "ShotBlocked": {

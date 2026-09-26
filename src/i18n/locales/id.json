@@ -2400,6 +2400,13 @@
             "0": "{{player}} seharusnya mencetak gol di situ — meleset dengan menyakitkan!",
             "1": "Peluang emas terbuang sia-sia bagi {{team}}! {{player}} pasti menyesal."
           }
+        },
+        "woodwork": {
+          "headline": "MEMBENTUR MISTAR!",
+          "lines": {
+            "0": "Aduh! Tembakan {{player}} membentur mistar untuk {{team}}!",
+            "1": "Nyaris! Tembakan {{player}} mengenai tiang!"
+          }
         }
       },
       "ShotBlocked": {

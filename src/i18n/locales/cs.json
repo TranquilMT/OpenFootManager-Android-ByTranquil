@@ -2400,6 +2400,13 @@
             "0": "{{player}} tady měl jednoznačně skórovat — míč šel trestuhodně vedle!",
             "1": "Tým {{team}} zahodil stoprocentní šanci! {{player}} si bude nadávat."
           }
+        },
+        "woodwork": {
+          "headline": "TYČKA!",
+          "lines": {
+            "0": "Au! {{player}} trefuje břevno za {{team}}!",
+            "1": "Tak blízko! {{player}} trefuje tyč!"
+          }
         }
       },
       "ShotBlocked": {

@@ -2366,6 +2366,13 @@
             "0": "{{player}} tinha mesmo de marcar ali — saiu ao lado de forma agónica!",
             "1": "Uma oportunidade enorme desperdiçada pelo {{team}}! {{player}} não vai acreditar."
           }
+        },
+        "woodwork": {
+          "headline": "NA TRAVE!",
+          "lines": {
+            "0": "Ui! {{player}} acerta na barra por {{team}}!",
+            "1": "Por pouco! {{player}} acerta no poste!"
+          }
         }
       },
       "ShotBlocked": {

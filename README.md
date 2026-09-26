@@ -13,6 +13,7 @@
 - Every generated club adds a position-balanced local free agent to the starting market, increasing the number of available players without changing squad limits.
 - The portrait generator has two more fictional source faces, and background generation covers more players while prioritising the next opponent across league and cup fixtures.
 - Match commentary has 192 additional event lines across all 12 supported languages, plus new corner and free-kick narration. Supported devices can enable optional spoken commentary during live matches.
+- Goals now get punchier reactions, and occasional shots genuinely strike the crossbar or post in both live and instant simulation, with a matching woodwork call in every supported language.
 - Live match steps cannot overlap while the Android backend responds. Legacy injury codes such as `.calfinjury` display as a readable calf strain in inbox messages and injury panels.
 - Frontend verification: 1,563 tests across 195 files passed; lint, locale coverage and the production web build passed. Android backend compilation and an APK containing these changes are pending the next Android workflow.
 

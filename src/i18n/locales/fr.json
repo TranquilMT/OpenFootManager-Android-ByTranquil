@@ -2366,6 +2366,13 @@
             "0": "{{player}} devait marquer là — ça passe à côté de façon agoniante !",
             "1": "Une occasion en or gâchée par {{team}} ! {{player}} n'en revient pas."
           }
+        },
+        "woodwork": {
+          "headline": "SUR LA BARRE !",
+          "lines": {
+            "0": "Aïe ! {{player}} frappe la barre pour {{team}} !",
+            "1": "Si près du but ! {{player}} trouve le poteau !"
+          }
         }
       },
       "ShotBlocked": {

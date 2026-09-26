@@ -2366,6 +2366,13 @@
             "0": "{{player}} hätte das wirklich treffen müssen — qualvoll knapp vorbei!",
             "1": "Eine große Chance ungenutzt für {{team}}! {{player}} kann es nicht fassen."
           }
+        },
+        "woodwork": {
+          "headline": "ALUMINIUM!",
+          "lines": {
+            "0": "Autsch! {{player}} trifft für {{team}} die Latte!",
+            "1": "So knapp! {{player}} trifft den Pfosten!"
+          }
         }
       },
       "ShotBlocked": {

@@ -2366,6 +2366,13 @@
             "0": "¡{{player}} tenía que haber marcado — increíblemente se va fuera!",
             "1": "¡Una ocasión clarísima se pierde para el {{team}}! {{player}} no podrá creerlo."
           }
+        },
+        "woodwork": {
+          "headline": "¡AL PALO!",
+          "lines": {
+            "0": "¡Uf! ¡{{player}} estrella el balón en el larguero para {{team}}!",
+            "1": "¡Por poco! ¡{{player}} golpea el poste!"
+          }
         }
       },
       "ShotBlocked": {

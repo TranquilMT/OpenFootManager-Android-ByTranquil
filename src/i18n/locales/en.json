@@ -2280,7 +2280,7 @@
         "opener": {
           "headline": "GOOAL!",
           "lines": {
-            "0": "{{player}} breaks the deadlock for {{team}}!",
+            "0": "What a goal! {{player}} fires {{team}} in front!",
             "1": "First blood to {{team}} — {{player}} strikes!"
           }
         },
@@ -2399,6 +2399,13 @@
           "lines": {
             "0": "{{player}} really should have scored there — agonisingly wide!",
             "1": "A glorious chance goes begging for {{team}}! {{player}} will be kicking himself."
+          }
+        },
+        "woodwork": {
+          "headline": "OFF THE WOODWORK!",
+          "lines": {
+            "0": "Ouch! {{player}} rattles the crossbar for {{team}}!",
+            "1": "So close! {{player}} crashes it against the post!"
           }
         }
       },

@@ -2400,6 +2400,13 @@
             "0": "{{player}} orada golü bulmalıydı — acı verecek kadar az farkla dışarı!",
             "1": "{{team}} adına altın değerinde bir fırsat harcanıyor! {{player}} kendine kızacak."
           }
+        },
+        "woodwork": {
+          "headline": "DİREKTEN DÖNDÜ!",
+          "lines": {
+            "0": "Ah! {{player}} {{team}} için üst direğe vurdu!",
+            "1": "Çok yakındı! {{player}} direğe takıldı!"
+          }
         }
       },
       "ShotBlocked": {

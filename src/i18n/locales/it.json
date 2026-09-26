@@ -2385,6 +2385,13 @@
             "0": "{{player}} doveva segnare lì — incredibilmente largo!",
             "1": "Un'occasione d'oro sprecata dal {{team}}! {{player}} non ci crede."
           }
+        },
+        "woodwork": {
+          "headline": "SULLA TRAVERSA!",
+          "lines": {
+            "0": "Ahia! {{player}} colpisce la traversa per {{team}}!",
+            "1": "Per un soffio! {{player}} centra il palo!"
+          }
         }
       },
       "ShotBlocked": {
