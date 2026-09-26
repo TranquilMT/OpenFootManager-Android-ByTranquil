@@ -2470,7 +2470,8 @@
         "headline": "ABPFIFF",
         "lines": {
           "0": "Das war's — Abpfiff!",
-          "1": "Der Schiedsrichter beendet das Spiel."
+          "1": "Der Schiedsrichter beendet das Spiel.",
+          "2": "Der Schlusspfiff besiegelt das Ergebnis."
         }
       }
     },
