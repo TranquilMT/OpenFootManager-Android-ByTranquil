@@ -2443,7 +2443,8 @@
         "headline": "YELLOW CARD",
         "lines": {
           "0": "{{player}} goes into the book for {{team}}.",
-          "1": "A yellow card for {{player}}."
+          "1": "A yellow card for {{player}}.",
+          "2": "The referee books {{player}}."
         }
       },
       "RedCard": {
