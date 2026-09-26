@@ -28,25 +28,42 @@ export default function MatchScreenLayout({
   themeToggleClassName,
 }: MatchScreenLayoutProps) {
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900 dark:bg-navy-900 dark:text-white flex flex-col transition-colors duration-300">
+    <div
+      className="min-h-[100dvh] bg-gray-100 text-gray-900 dark:bg-navy-900 dark:text-white flex flex-col transition-colors duration-300"
+      style={{
+        paddingTop: "env(safe-area-inset-top, 0px)",
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+      }}
+    >
       {header && (
         <header
-          className={joinClasses("border-b border-gray-200 dark:border-navy-700", headerClassName)}
+          className={joinClasses(
+            "shrink-0 border-b border-gray-200 dark:border-navy-700",
+            headerClassName,
+          )}
         >
-          <div className={joinClasses("relative mx-auto w-full px-6", headerContentClassName)}>
-            <div className={showThemeToggle ? "pr-14" : undefined}>{header}</div>
+          <div
+            className={joinClasses(
+              "relative mx-auto w-full px-3 sm:px-4 lg:px-6",
+              headerContentClassName,
+            )}
+          >
+            <div className={showThemeToggle ? "pr-11 sm:pr-14" : undefined}>{header}</div>
             {showThemeToggle && (
               <ThemeToggle
-                className={joinClasses("absolute right-6 top-4", themeToggleClassName)}
+                className={joinClasses(
+                  "absolute right-3 top-3 sm:right-4 lg:right-6 lg:top-4",
+                  themeToggleClassName,
+                )}
               />
             )}
           </div>
         </header>
       )}
 
-      <div className={joinClasses("flex-1", contentClassName)}>{children}</div>
+      <main className={joinClasses("min-h-0 flex-1", contentClassName)}>{children}</main>
 
-      {footer}
+      {footer ? <div className="shrink-0">{footer}</div> : null}
     </div>
   );
 }
