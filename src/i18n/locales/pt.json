@@ -2290,7 +2290,8 @@
         "headline": "GRANDE PENALIDADE — GOLO!",
         "lines": {
           "0": "{{player}} bate o guarda-redes da marca dos onze metros! O {{team}} marca.",
-          "1": "Sangue frio de {{player}} — grande penalidade convertida para o {{team}}!"
+          "1": "Sangue frio de {{player}} — grande penalidade convertida para o {{team}}!",
+          "2": "{{player}} converte o penálti para {{team}}!"
         }
       },
       "PenaltyMiss": {
