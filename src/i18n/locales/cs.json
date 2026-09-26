@@ -2324,7 +2324,8 @@
         "headline": "PENALTA — GÓL!",
         "lines": {
           "0": "{{player}} poslal brankáře na druhou stranu! Tým {{team}} skóruje z penalty.",
-          "1": "Ledově klidný {{player}} — penalta pro tým {{team}} je proměněna!"
+          "1": "Ledově klidný {{player}} — penalta pro tým {{team}} je proměněna!",
+          "2": "{{player}} proměňuje penaltu pro {{team}}!"
         }
       },
       "PenaltyMiss": {
