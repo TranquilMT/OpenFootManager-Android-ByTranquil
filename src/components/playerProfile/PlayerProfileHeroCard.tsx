@@ -60,11 +60,11 @@ export default function PlayerProfileHeroCard({
 
   return (
     <Card accent="primary" className="mb-5">
-      <div className="bg-linear-to-r from-navy-700 to-navy-800 p-8 rounded-t-xl">
-        <div className="flex items-start gap-6">
+      <div className="rounded-t-xl bg-linear-to-r from-navy-700 to-navy-800 p-4 sm:p-6 lg:p-8">
+        <div className="flex min-w-0 flex-wrap items-start gap-3 sm:gap-6">
           <PlayerAvatar
             player={player}
-            className={`w-24 h-24 rounded-2xl flex items-center justify-center font-heading font-bold text-4xl border-2 overflow-hidden ${
+            className={`h-16 w-16 shrink-0 rounded-2xl sm:h-24 sm:w-24 flex items-center justify-center font-heading font-bold text-4xl border-2 overflow-hidden ${
               ovr >= 75
                 ? "bg-primary-500/20 text-primary-400 border-primary-500/30"
                 : ovr >= 55
@@ -80,14 +80,14 @@ export default function PlayerProfileHeroCard({
               pattern={team.kit_pattern ?? "Solid"}
               number={player.jersey_number}
               size="lg"
-              className="flex-shrink-0 self-center"
+              className="shrink-0 self-center max-sm:[&_svg]:h-12 max-sm:[&_svg]:w-12"
             />
           )}
-          <div className="flex-1">
-            <h2 className="text-3xl font-heading font-bold text-white uppercase tracking-wide">
+          <div className="min-w-0 flex-1">
+            <h2 className="break-words font-heading text-xl font-bold uppercase tracking-wide text-white sm:text-3xl">
               {player.full_name}
             </h2>
-            <div className="flex items-center gap-3 mt-2">
+            <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1.5 sm:gap-x-3">
               <Badge variant={positionBadgeVariant(primaryPosition)}>
                 {translatePositionLabel(t, primaryPosition)}
               </Badge>
@@ -104,20 +104,20 @@ export default function PlayerProfileHeroCard({
                 />
                 {countryName(player.nationality, language)}
               </span>
-              <span className="text-gray-500">•</span>
+              <span className="hidden text-gray-500 sm:inline">•</span>
               <span className="text-gray-400 text-sm">
                 {t("common.age")} {age}
               </span>
-              <span className="text-gray-500">•</span>
+              <span className="hidden text-gray-500 sm:inline">•</span>
               <span className="text-gray-400 text-sm">
                 {t("common.footednessLabel")}: {footednessLabel}
               </span>
-              <span className="text-gray-500">•</span>
+              <span className="hidden text-gray-500 sm:inline">•</span>
               <span className="text-gray-400 text-sm">
                 {t("common.weakFoot")}: {weakFootValue}/5
               </span>
             </div>
-            <p className="text-gray-400 text-sm mt-2 flex items-center gap-1.5">
+            <p className="mt-2 flex min-h-11 items-center gap-1.5 text-sm text-gray-400 sm:min-h-0">
               <Shield className="w-4 h-4" />
               {player.team_id && onSelectTeam ? (
                 <ContextMenu items={teamContextItems}>
@@ -125,7 +125,7 @@ export default function PlayerProfileHeroCard({
                     type="button"
                     data-testid="player-profile-team-link"
                     onClick={() => onSelectTeam(player.team_id!)}
-                    className="hover:text-primary-400 transition-colors underline underline-offset-2"
+                    className="break-words py-2 text-left underline underline-offset-2 transition-colors active:text-primary-400 sm:py-0 sm:hover:text-primary-400"
                   >
                     {teamName}
                   </button>
@@ -177,7 +177,7 @@ export default function PlayerProfileHeroCard({
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-px bg-gray-200 dark:bg-navy-600 md:hidden">
+      <div className="grid grid-cols-2 gap-px bg-gray-200 dark:bg-navy-600 sm:grid-cols-4 md:hidden">
         <MobileQuickStat
           label={t("common.condition")}
           value={`${player.condition}%`}
@@ -214,11 +214,11 @@ function QuickStat({ label, value, color }: { label: string; value: string; colo
 
 function MobileQuickStat({ label, value, color }: { label: string; value: string; color: string }) {
   return (
-    <div className="bg-white dark:bg-navy-800 p-3 text-center">
+    <div className="min-w-0 bg-white p-2 text-center dark:bg-navy-800 sm:p-3">
       <p className="text-xs text-gray-400 dark:text-gray-500 font-heading uppercase tracking-wider">
         {label}
       </p>
-      <p className={`font-heading font-bold text-lg mt-0.5 ${color}`}>{value}</p>
+      <p className={`mt-0.5 break-words font-heading text-sm font-bold sm:text-lg ${color}`}>{value}</p>
     </div>
   );
 }
