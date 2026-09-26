@@ -2241,7 +2241,8 @@
         "headline": "PÊNALTI PERDIDO!",
         "lines": {
           "0": "{{player}} perde o pênalti! Que alívio para o {{opponent}}!",
-          "1": "Defendido! {{player}} vai ter pesadelos com este pênalti."
+          "1": "Defendido! {{player}} vai ter pesadelos com este pênalti.",
+          "2": "{{player}} não consegue marcar na cobrança de pênalti."
         }
       },
       "PenaltyAwarded": {
