@@ -36,7 +36,7 @@ fn national_team_name(game: &Game, team_id: &str) -> String {
     game.national_teams
         .iter()
         .find(|team| team.id == team_id)
-        .map(|team| team.name.clone())
+        .map(|team| team.name.trim_end_matches(" National Team").to_string())
         .unwrap_or_else(|| team_id.to_string())
 }
 
