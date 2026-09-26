@@ -2451,7 +2451,8 @@
         "headline": "ČERVENÁ KARTA!",
         "lines": {
           "0": "{{player}} je vyloučen! Tým {{team}} jde do deseti!",
-          "1": "Přímá červená pro hráče {{player}}! Pohroma pro tým {{team}}."
+          "1": "Přímá červená pro hráče {{player}}! Pohroma pro tým {{team}}.",
+          "2": "{{player}} je vyloučen; {{team}} dohraje v deseti."
         }
       },
       "SecondYellow": {
