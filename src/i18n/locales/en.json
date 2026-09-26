@@ -2332,7 +2332,8 @@
         "headline": "PENALTY MISSED!",
         "lines": {
           "0": "{{player}} fluffs it from the spot! What a let-off for {{opponent}}!",
-          "1": "Saved! {{player}} will be having nightmares about that penalty."
+          "1": "Saved! {{player}} will be having nightmares about that penalty.",
+          "2": "{{player}} fails to find the net from the spot."
         }
       },
       "PenaltyAwarded": {
