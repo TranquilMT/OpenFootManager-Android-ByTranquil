@@ -287,7 +287,7 @@ pub fn generate_youth_academy_recruit_with_nationality(
         &names_def,
         &mut rng,
     );
-    player.squad_role = SquadRole::Youth;
+    rebalance_generated_player_for_club(&mut player, team, slot_index, current_year, &mut rng);\n    player.squad_role = SquadRole::Youth;
     player.transfer_listed = false;
     player.loan_listed = false;
     player
@@ -321,6 +321,46 @@ pub fn generate_national_team_player(
     player.transfer_listed = false;
     player.loan_listed = false;
     player
+}
+
+fn rebalance_generated_player_for_club(
+    player: &mut Player,
+    team: &Team,
+    slot: usize,
+    opening_year: u32,
+    rng: &mut impl rand::Rng,
+) {
+    use crate::generated_balance::{club_strength_ovr, clamp_generated_ovr, market_value_eur, weekly_wage_eur, LeagueTier};
+
+    let reputation = (team.reputation / 10).min(100) as u8;
+    let financial_strength = ((team.finance.max(0) as u64 / 1_000_000).min(100)) as u8;
+    let tier = match team.reputation {
+        800.. => LeagueTier::Elite,
+        650..=799 => LeagueTier::Top,
+        450..=649 => LeagueTier::Professional,
+        250..=449 => LeagueTier::Lower,
+        _ => LeagueTier::Grassroots,
+    };
+    let youth = is_youth_reserved_slot(slot);
+    let base = club_strength_ovr(tier, reputation, financial_strength);
+    let slot_target = crate::generated_career::quality_curve::apply(base, slot);
+    let target = clamp_generated_ovr(
+        tier,
+        if youth { slot_target as i16 - 12 } else { slot_target as i16 },
+        youth,
+    );
+    player.attributes = attributes_for_overall(target, &player.position, rng);
+    let age = player
+        .date_of_birth
+        .get(0..4)
+        .and_then(|year| year.parse::<u32>().ok())
+        .map(|year| opening_year.saturating_sub(year))
+        .unwrap_or(24) as u8;
+    let current = crate::player_rating::natural_ovr(player).round().clamp(1.0, 99.0) as u8;
+    player.potential = crate::generated_career::potential_curve::potential(current, age, reputation);
+    player.market_value = market_value_eur(current, player.potential, age).max(0) as u64;
+    player.wage = weekly_wage_eur(current, reputation).clamp(100, u32::MAX as i64) as u32;
+    crate::player_rating::refresh_player_derived(player, opening_year);
 }
 
 fn normalize_generated_team(team: &mut Team, players: &mut [Player], opening_year: i32) {
@@ -736,7 +776,7 @@ fn build_club(
             names_def,
             rng,
         );
-        if rng.random_range(0..100) < 12 {
+        rebalance_generated_player_for_club(&mut player, &team, slot, opening_year, rng);\n        if rng.random_range(0..100) < 12 {
             player.transfer_listed = true;
         } else if rng.random_range(0..100) < 8 {
             player.loan_listed = true;
