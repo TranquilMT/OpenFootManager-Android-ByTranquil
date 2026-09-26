@@ -2436,7 +2436,8 @@
         "headline": "CARTELLINO ROSSO!",
         "lines": {
           "0": "{{player}} è espulso! Il {{team}} rimane in dieci!",
-          "1": "Rosso diretto per {{player}}! Un disastro per il {{team}}."
+          "1": "Rosso diretto per {{player}}! Un disastro per il {{team}}.",
+          "2": "{{player}} viene espulso; {{team}} resta in dieci."
         }
       },
       "SecondYellow": {
