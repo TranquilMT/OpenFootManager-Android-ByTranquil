@@ -2343,7 +2343,8 @@
         "headline": "差一点点！",
         "lines": {
           "0": "{{player}}的射门为{{team}}稍稍偏出。",
-          "1": "太接近了！{{player}}未能找到目标。"
+          "1": "太接近了！{{player}}未能找到目标。",
+          "2": "{{player}}的射门偏出了球门。"
         },
         "speculative": {
           "headline": "偏出",
