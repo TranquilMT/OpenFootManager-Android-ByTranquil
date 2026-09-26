@@ -2340,7 +2340,8 @@
         "headline": "PENALTI!",
         "lines": {
           "0": "Hakem noktayı gösteriyor — penaltı {{team}} lehine!",
-          "1": "{{team}} penaltı kazandı! Çok kritik bir an."
+          "1": "{{team}} penaltı kazandı! Çok kritik bir an.",
+          "2": "Hakem {{team}} lehine penaltı veriyor."
         }
       },
       "ShotSaved": {
