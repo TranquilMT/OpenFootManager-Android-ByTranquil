@@ -2387,7 +2387,8 @@
         "headline": "FOUL",
         "lines": {
           "0": "{{player}} foult {{victim}}. Freistoß für {{opponent}}.",
-          "1": "{{player}} verschuldet einen Freistoß gegen {{victim}}."
+          "1": "{{player}} verschuldet einen Freistoß gegen {{victim}}.",
+          "2": "Pfiff wegen eines Fouls von {{team}}."
         },
         "hard": {
           "headline": "DAS IST EIN FOUL",
