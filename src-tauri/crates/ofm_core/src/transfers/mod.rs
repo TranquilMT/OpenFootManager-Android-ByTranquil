@@ -113,6 +113,10 @@ pub(crate) struct MarketTarget {
     is_user_owned: bool,
     score: i32,
     fee: u64,
+    /// Age at the current game date. Used by club recruitment philosophy.
+    age: u8,
+    /// Current ceiling, used to distinguish development prospects from ready-made players.
+    potential: u8,
     /// Broad position group (0=GK, 1=DEF, 2=MID, 3=FWD), used to gate buyers
     /// that are already stacked in that area.
     position_group_index: usize,
