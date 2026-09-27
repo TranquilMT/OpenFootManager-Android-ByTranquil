@@ -18,7 +18,7 @@ pub(crate) fn position_group_index(position: &domain::player::Position) -> usize
     }
 }
 
-fn market_player_age(date_of_birth: &str, current_date: NaiveDate) -> u8 {
+pub(super) fn market_player_age(date_of_birth: &str, current_date: NaiveDate) -> u8 {
     let birth_year: i32 = date_of_birth
         .split('-')
         .next()
@@ -139,7 +139,6 @@ pub fn evaluate_transfer_market(game: &mut Game) {
     let mut completed_ai_transfers = 0_usize;
     let mut moved_player_ids: HashSet<String> = HashSet::new();
     let mut new_offers_per_player: std::collections::HashMap<String, usize> = std::collections::HashMap::new();
-    let mut new_loan_offers_per_player: std::collections::HashMap<String, usize> = std::collections::HashMap::new();
     let mut new_user_offers_today = 0_usize;
     let mut new_user_loan_offers_today = 0_usize;
     let mut approach_clubs: std::collections::HashMap<String, HashSet<String>> = game.players.iter()
@@ -174,13 +173,13 @@ pub fn evaluate_transfer_market(game: &mut Game) {
         let strategy = ClubStrategy::derive(&buyer_team);
 
         let loan_offer_player_id = if let Some(user_team_id) = user_team_id.as_deref() {
-            if new_user_loan_offers_today < max_user_offers {
+            if new_user_offers_today + new_user_loan_offers_today < max_user_offers {
                 create_incoming_user_loan_offer_if_any(game, user_team_id, &buyer_id, &buyer_team.name, &today, current_date,
-                    IncomingOfferBudget { new_today: &new_loan_offers_per_player, approach_clubs: &approach_clubs, cooled_clubs: &cooled_clubs })
+                    IncomingOfferBudget { new_today: &new_offers_per_player, approach_clubs: &approach_clubs, cooled_clubs: &cooled_clubs })
             } else { None }
         } else { None };
         if let Some(player_id) = loan_offer_player_id.as_ref() {
-            *new_loan_offers_per_player.entry(player_id.clone()).or_insert(0) += 1;
+            *new_offers_per_player.entry(player_id.clone()).or_insert(0) += 1;
             approach_clubs.entry(player_id.clone()).or_default().insert(buyer_id.clone());
             new_user_loan_offers_today += 1;
         }
@@ -191,7 +190,7 @@ pub fn evaluate_transfer_market(game: &mut Game) {
             if target.is_user_owned {
                 let budget = IncomingOfferBudget { new_today: &new_offers_per_player, approach_clubs: &approach_clubs, cooled_clubs: &cooled_clubs };
                 if !budget.accepts(&target.player_id, &buyer_id, MAX_NEW_INCOMING_OFFERS_PER_USER_PLAYER_PER_DAY)
-                    || new_user_offers_today >= max_user_offers { return false; }
+                    || new_user_offers_today + new_user_loan_offers_today >= max_user_offers { return false; }
             } else if completed_ai_transfers >= max_ai_transfers { return false; }
             if !buyer_has_genuine_interest(buyer_team.reputation, target.owner_reputation, buyer_depths[target.position_group_index]) { return false; }
             if buyer_team.transfer_budget < target.fee as i64 || buyer_team.finance < target.fee as i64 { return false; }

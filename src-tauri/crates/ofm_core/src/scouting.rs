@@ -519,20 +519,27 @@ fn generate_youth_recruitment_candidates(
         Some(team.football_nation.as_str())
     };
 
+    let mut seen_names = std::collections::HashSet::new();
     let mut prospects: Vec<Player> = (0..pool_size)
-        .map(|_| {
-            let mut prospect = crate::generator::generate_youth_academy_recruit_with_nationality(
-                team,
-                target_position,
-                match region {
-                    YouthScoutingRegion::Domestic => domestic_nationality,
-                    YouthScoutingRegion::International => None,
-                },
-                current_year,
-            );
-            prospect.team_id = None;
-            prospect.squad_role = SquadRole::Youth;
-            prospect
+        .filter_map(|_| {
+            // A scouting report should not show the same generated identity twice.
+            // Keep retries bounded when a small nationality name pool is exhausted.
+            for _ in 0..9 {
+                let mut prospect = crate::generator::generate_youth_academy_recruit_with_nationality(
+                    team,
+                    target_position,
+                    match region {
+                        YouthScoutingRegion::Domestic => domestic_nationality,
+                        YouthScoutingRegion::International => None,
+                    },
+                    current_year,
+                );
+                if !seen_names.insert(prospect.full_name.clone()) { continue; }
+                prospect.team_id = None;
+                prospect.squad_role = SquadRole::Youth;
+                return Some(prospect);
+            }
+            None
         })
         .collect();
 

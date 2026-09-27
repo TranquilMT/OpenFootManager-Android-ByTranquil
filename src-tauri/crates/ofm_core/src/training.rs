@@ -90,6 +90,19 @@ struct TrainingDay {
     year: u32,
 }
 
+/// Match exposure helps young players turn training into ability. An unused
+/// prospect still develops in training, but more slowly than a regular player.
+fn playing_time_growth_factor(age: u32, minutes: u32) -> f64 {
+    if age > 23 {
+        return 1.0;
+    }
+    match minutes {
+        0..=299 => 0.9,
+        300..=899 => 1.0,
+        _ => 1.1,
+    }
+}
+
 /// Below this individual condition, an AI-managed player is automatically rested
 /// in training (treated as Recovery focus) regardless of the team's plan. The AI
 /// sets one team-wide intensity from the squad's *average* condition, but the
@@ -276,6 +289,7 @@ fn train_player(
     let gain = 0.15
         * intensity_mult
         * age_factor
+        * playing_time_growth_factor(age, player.stats.minutes_played)
         * plan.bonus.coaching_mult
         * plan.bonus.specialization_mult;
 
@@ -461,4 +475,16 @@ fn recovery_factor_from_fitness(fitness: u8) -> f64 {
 /// Clamp a fitness value to 0–100.
 fn clamp_fitness(val: i16) -> u8 {
     val.clamp(0, 100) as u8
+}
+
+#[cfg(test)]
+mod development_tests {
+    use super::playing_time_growth_factor;
+
+    #[test]
+    fn young_regulars_develop_faster_than_unused_prospects() {
+        assert!(playing_time_growth_factor(19, 1200) > playing_time_growth_factor(19, 0));
+        assert_eq!(playing_time_growth_factor(19, 350), 1.0);
+        assert_eq!(playing_time_growth_factor(29, 1200), 1.0);
+    }
 }

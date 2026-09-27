@@ -2077,11 +2077,12 @@ mod tests {
         );
         let team_ids: Vec<&str> = teams.iter().map(|t| t.id.as_str()).collect();
         for p in &players {
-            assert!(p.team_id.is_some(), "Player {} has no team", p.full_name);
-            assert!(
-                team_ids.contains(&p.team_id.as_deref().unwrap()),
-                "Player has unknown team"
-            );
+            if let Some(team_id) = p.team_id.as_deref() {
+                assert!(team_ids.contains(&team_id), "Player has unknown team");
+            } else {
+                assert_eq!(p.wage, 0, "Free agents must not charge a club wages");
+                assert!(p.contract_end.is_none(), "Free agents must not have club contracts");
+            }
         }
     }
 

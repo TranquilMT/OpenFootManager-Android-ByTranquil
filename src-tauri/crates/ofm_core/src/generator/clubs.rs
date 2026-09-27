@@ -627,6 +627,24 @@ pub fn generate_club_defs(config: &WorldGenConfig, rng: &mut impl Rng) -> Vec<Te
                 names[index] = (club.name.to_string(), club.city.to_string());
             }
         }
+        // A featured club can have the same name as a procedural entry later
+        // in the list. Keep the featured name and rename only that later entry.
+        let mut used_names = HashSet::new();
+        for (name, _) in &mut names {
+            if used_names.insert(name.clone()) {
+                continue;
+            }
+            let original = name.clone();
+            let mut suffix = 2;
+            loop {
+                let alternative = format!("{original} {suffix}");
+                if used_names.insert(alternative.clone()) {
+                    *name = alternative;
+                    break;
+                }
+                suffix += 1;
+            }
+        }
         for (index, (name, city)) in names.into_iter().enumerate() {
             let center = if curated_english(nation, config.clubs_per_division) {
                 if index < ENGLISH_PREMIER.len() {
@@ -856,8 +874,8 @@ mod tests {
         );
         assert_eq!(defs.len(), 40);
         assert!(
-            defs.iter()
-                .all(|club| !club.name.starts_with("Club ") && !club.name.ends_with(" FC"))
+            defs.iter().all(|club| FEATURED_CLUBS.iter().any(|preset| preset.name == club.name)
+                || (!club.name.starts_with("Club ") && !club.name.ends_with(" FC")))
         );
         let forms: HashSet<&str> = defs
             .iter()

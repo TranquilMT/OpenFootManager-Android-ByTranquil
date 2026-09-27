@@ -1,4 +1,4 @@
-use ofm_domain::team::Team;
+use domain::team::Team;
 use serde::{Deserialize, Serialize};
 
 /// Long-term AI identity derived from a club's existing persistent state.

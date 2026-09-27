@@ -525,14 +525,14 @@ mod tests {
         );
 
         let nations = nations_definition(&sources);
-        assert_eq!(nations.nations.len(), 16, "the shipped generation nations");
+        assert_eq!(nations.nations.len(), 29, "the shipped generation nations");
         assert_eq!(
             nations
                 .nations
                 .iter()
                 .map(|n| n.cities.len())
                 .sum::<usize>(),
-            280,
+            508,
             "every curated city survived the move out of Rust"
         );
         assert_eq!(nations.clubs_per_division, 20);
@@ -584,7 +584,7 @@ mod tests {
 
         let def = nations_definition(&DefinitionSources::searching([dir.clone()]));
 
-        assert_eq!(def.nations.len(), 16, "the shipped nations");
+        assert_eq!(def.nations.len(), 29, "the shipped nations");
 
         std::fs::remove_dir_all(&dir).ok();
     }
@@ -661,7 +661,7 @@ mod tests {
 
             assert_eq!(
                 def.nations.len(),
-                16,
+                29,
                 "{what} should be rejected in favour of the shipped nations"
             );
             std::fs::remove_dir_all(&dir).ok();
@@ -697,7 +697,7 @@ mod tests {
 
         assert_eq!(
             def.nations.len(),
-            16,
+            29,
             "800,000 clubs across 40 legal-looking nations should be rejected"
         );
         std::fs::remove_dir_all(&dir).ok();

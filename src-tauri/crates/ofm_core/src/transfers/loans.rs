@@ -258,6 +258,8 @@ pub(crate) fn create_incoming_user_loan_offer_if_any(
     current_date: NaiveDate,
     budget: IncomingOfferBudget<'_>,
 ) -> Option<String> {
+    let buyer = game.teams.iter().find(|team| team.id == buyer_id)?;
+    let strategy = crate::club_strategy::ClubStrategy::derive(buyer);
     let candidate = game
         .players
         .iter()
@@ -270,12 +272,38 @@ pub(crate) fn create_incoming_user_loan_offer_if_any(
             )
         })
         .filter_map(|player| {
-            let score = incoming_loan_interest_score(player);
+            let base_score = incoming_loan_interest_score(player);
+            if base_score == 0 {
+                return None;
+            }
+            let score = crate::loan_strategy::strategic_loan_score(
+                &strategy,
+                crate::loan_strategy::LoanTarget {
+                    base_score,
+                    age: super::market::market_player_age(&player.date_of_birth, current_date),
+                    overall: player.ovr,
+                    potential: player.potential,
+                    wage: player.wage,
+                },
+            );
             if score >= 45 {
                 default_loan_end_date(current_date, player)?;
+                let wage_contribution_pct = suggested_loan_wage_contribution_pct(score, player).min(
+                    crate::loan_strategy::strategic_loan_wage_cap(&strategy, player.wage),
+                );
+                if validate_loan_borrower_affordability(
+                    game,
+                    buyer_id,
+                    player,
+                    wage_contribution_pct,
+                )
+                .is_err()
+                {
+                    return None;
+                }
                 Some(LoanMarketCandidate {
                     player_id: player.id.clone(),
-                    wage_contribution_pct: suggested_loan_wage_contribution_pct(score, player),
+                    wage_contribution_pct,
                     buy_option_fee: suggested_loan_buy_option_fee(player),
                     score,
                 })
