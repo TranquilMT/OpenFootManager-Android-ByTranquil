@@ -5,12 +5,18 @@
 
 pub(super) const TRANSFER_NEGOTIATION_STALE_DAYS: i64 = 14;
 pub(super) const MAX_COMPLETED_AI_TRANSFERS_PER_DAY: usize = 2;
+/// Deadline day deliberately allows more movement than a normal market day,
+/// while retaining a hard ceiling so simulation cost and squad churn stay bounded.
+pub(super) const MAX_COMPLETED_AI_TRANSFERS_DEADLINE_DAY: usize = 5;
+pub(super) const DEADLINE_DAY_INTEREST_BONUS: i32 = 12;
 pub(super) const AWARD_LEADERBOARD_INTEREST_BONUS: i32 = 25;
 /// Only one new club may open talks for a given user player on a single day,
 /// so stars draw steady interest over the window instead of a same-day flood.
 pub(super) const MAX_NEW_INCOMING_OFFERS_PER_USER_PLAYER_PER_DAY: usize = 1;
 /// Ceiling on brand-new incoming offers across the whole user squad per day.
 pub(super) const MAX_NEW_INCOMING_USER_OFFERS_PER_DAY: usize = 3;
+/// Deadline day is intentionally busier, but still capped to avoid notification spam.
+pub(super) const MAX_NEW_INCOMING_USER_OFFERS_DEADLINE_DAY: usize = 5;
 /// Ceiling on offers a user player may face *at once*, counting transfer and loan talks
 /// together.
 ///
@@ -25,19 +31,12 @@ pub(super) const MAX_PENDING_INCOMING_OFFERS_PER_USER_PLAYER: usize = 3;
 /// come back the next morning — or come back as a loan approach after a permanent bid was refused.
 pub(super) const REBID_COOLDOWN_DAYS: i64 = 30;
 /// How long a rejected or withdrawn offer is kept before being dropped.
-///
-/// Long enough for the UI to show recent history and for later work to tell how recently a club
-/// was turned away; short enough that a save does not carry every approach ever made.
 pub(super) const CLOSED_OFFER_RETENTION_DAYS: i64 = 120;
-/// The cooldown is read off the closed offers themselves, so retention has to outlast it. Were
-/// these ever reordered, pruning would erase the memory of a refusal while it was still meant to
-/// hold and the rejected club could come straight back.
 const _: () = assert!(CLOSED_OFFER_RETENTION_DAYS > REBID_COOLDOWN_DAYS);
 /// A club won't pursue a player whose current club out-reputes it by more than
 /// this margin — the player wouldn't realistically drop to a much smaller side.
 pub(super) const MAX_BUYER_REPUTATION_DEFICIT: i32 = 150;
-/// A club already this deep in a position group has no need to sign another
-/// there, so it looks elsewhere.
+/// A club already this deep in a position group has no need to sign another there.
 pub(super) const POSITION_GROUP_SURPLUS_THRESHOLD: usize = 8;
 pub(super) const ERR_TRANSFER_WINDOW_CLOSED: &str = "be.error.transfers.transferWindowClosed";
 pub(super) const ERR_CANNOT_BID_ON_OWN_PLAYER: &str = "be.error.transfers.cannotBidOnOwnPlayer";
