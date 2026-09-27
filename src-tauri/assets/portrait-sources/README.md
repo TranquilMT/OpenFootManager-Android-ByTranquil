@@ -9,6 +9,12 @@ footballer source portraits with OpenAI image generation for this project, then
 resized to 384 × 384 WebP. They depict no identified real players and have no
 club badges. Both are distributed under this project's GPLv3 license.
 
+`chroma-15-east-african-coils.webp`, `chroma-16-freckled-auburn.webp`, and
+`chroma-17-east-asian-long-hair.webp` were generated as original fictional
+footballer source portraits with OpenAI image generation for this project, then
+resized to 384 × 384 WebP. They depict no identified real players and have no
+club badges. All three are distributed under this project's GPLv3 license.
+
 They are synthetic/generated portrait sources prepared for OpenFootManager and
 are distributed with this repository under the same GPLv3 license as the
 project. They should not be replaced with third-party photos, face packs, or

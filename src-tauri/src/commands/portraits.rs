@@ -147,6 +147,18 @@ const SOURCE_BYTES: &[(&str, &[u8])] = &[
         "chroma-14-northern-european-bearded",
         include_bytes!("../../assets/portrait-sources/chroma-14-northern-european-bearded.webp"),
     ),
+    (
+        "chroma-15-east-african-coils",
+        include_bytes!("../../assets/portrait-sources/chroma-15-east-african-coils.webp"),
+    ),
+    (
+        "chroma-16-freckled-auburn",
+        include_bytes!("../../assets/portrait-sources/chroma-16-freckled-auburn.webp"),
+    ),
+    (
+        "chroma-17-east-asian-long-hair",
+        include_bytes!("../../assets/portrait-sources/chroma-17-east-asian-long-hair.webp"),
+    ),
 ];
 
 #[tauri::command]
@@ -690,13 +702,34 @@ mod tests {
     fn loads_only_male_eligible_sources() {
         let sources = portrait_sources().expect("portrait sources should load");
 
-        assert_eq!(sources.len(), 13);
+        assert_eq!(sources.len(), 16);
+        assert!(sources.iter().any(|source| source.id == "chroma-15-east-african-coils"));
+        assert!(sources.iter().any(|source| source.id == "chroma-16-freckled-auburn"));
+        assert!(sources.iter().any(|source| source.id == "chroma-17-east-asian-long-hair"));
         assert!(sources
             .iter()
             .all(|source| source.id != "chroma-03-northern-european"));
         assert!(sources.iter().all(|source| source.image.width() == SIZE));
         assert!(sources.iter().all(|source| source.image.height() == SIZE));
         assert!(SOURCE_BYTES.iter().all(|(_, bytes)| !bytes.is_empty()));
+    }
+
+    #[test]
+    fn varied_player_identities_reach_every_source_face() {
+        let sources = portrait_sources().expect("portrait sources should load");
+        let selected: std::collections::HashSet<&str> = (0..1_024)
+            .map(|index| {
+                let request = PlayerPortraitRequest {
+                    player_id: format!("portrait-variety-{index}"),
+                    full_name: None,
+                    match_name: None,
+                    nationality: None,
+                    date_of_birth: None,
+                };
+                select_source(sources, portrait_seed(&request)).id
+            })
+            .collect();
+        assert_eq!(selected.len(), sources.len());
     }
 
     #[test]
