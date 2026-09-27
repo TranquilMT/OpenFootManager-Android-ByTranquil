@@ -2,173 +2,246 @@
 
 **Build your club. Pick your team. Shape your tactics. Chase trophies.**
 
-**OFMtouch** is a free, open-source football management game for Android, based on OpenFootManager and adapted for a touch-first mobile experience by **TranquilMT**.
+**OFMtouch** is a free, open-source football management game for Android, based on OpenFootManager and adapted into a touch-first mobile football-management experience by **TranquilMT**.
 
-> 🧪 **0.3.0 Nightly Build #283** includes mobile scouting and save improvements plus three new fictional portrait faces. Nightly builds are test releases, so you may still find bugs while playing.
+> 🧪 **v0.3.1 — NightlyPreRelease** is the active Android development line. Nightly builds are test releases and may contain unfinished features or bugs.
 
-## Latest update: mobile careers and portrait variety
+## 🚧 Latest development build
 
-- Scout players into a career-specific shortlist and compare position, age, overall rating, value and club at a glance.
-- When Android backgrounds the game, enabled autosave saves unsaved career changes. Existing date-change and exit saves still apply.
-- The portrait generator now selects from 16 fictional source faces, including three new distinct footballers. Portraits are generated from original synthetic source art rather than photographs of real players.
-- The complete frontend suite passes 1,569 tests across 196 files; the production frontend build and source verification pass.
+The current `android/migration` development head contains the newest Android optimisation work. GitHub Actions automatically validates new commits and produces numbered Android Nightly builds.
 
-## Build #281: leagues and club ratings
+**Current source head:** `157661f`  
+**Current Source Verification run:** #292 — running when this README was updated  
+**Build identity shown in-game:** `Build #<build number> - v0.3.1 - NightlyPreRelease`
 
-- The 2026/27 English starting world now places Manchester United, Arsenal, Chelsea and Liverpool in the Premier League, and Birmingham City in the Championship. The English pyramid includes 20 Premier League and 24 Championship clubs.
-- Manchester United, Arsenal, Chelsea and Liverpool have stronger generated player attributes and a starting full-squad average of at least 86. Birmingham City's starting squad is lower rated.
-- Featured clubs in Spain, Germany, Italy, France, Portugal, the Netherlands and other European leagues have club-specific strength and generated player ratings. This includes Bayern München and Paris Saint-Germain.
-- Featured clubs in Brazil, Argentina, the United States, Japan, South Korea and Saudi Arabia receive stronger, distinct generated squads. Brazil remains under South America; USA appears under North America, while Japan, South Korea and Saudi Arabia appear under Asia.
-- The simulation-scope picker now lists domestic leagues outside the selected home region, so a manager in Europe can enable leagues in the Americas and Asia.
-- These ratings are OFMtouch game-balance estimates. Named featured clubs and the English division membership are curated; the remaining clubs and player identities in the default world are still procedurally generated. The update applies when starting a new career.
+➡️ [Open the latest GitHub Actions builds](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/actions)
 
-Club membership was checked against current listings from the [Premier League](https://www.premierleague.com/en/tables/premier-league/2026-27/all-matchweeks), [EFL](https://www.efl.com/competitions/efl-championship/), [Bundesliga](https://www.bundesliga.com/de/bundesliga/clubs), [Ligue 1](https://ligue1.com/en/articles/l1_article_5328-when-does-the-season-start-for-ligue-1-mc-donald-s-clubs), [LaLiga](https://www.laliga.com/en-GB/laliga-easports/clubs), [MLS](https://www.mlssoccer.com/clubs/), [CBF](https://www.cbf.com.br/futebol-brasileiro/tabelas/campeonato-brasileiro/serie-a) and [J.LEAGUE](https://www.jleague.jp/en/j1/club/).
+Because Nightly builds are generated continuously, use the newest **successful Android Nightly** workflow with an APK artifact rather than assuming the newest source-verification number is already installable.
 
-## Build #280: players, match commentary and mobile fixes
+## 📱 v0.3.1: Android navigation & mobile optimisation
 
-This update brings 250 gameplay, narration, translation, portrait and settings commits into the Android test build. Highlights and fixes:
+The newest development pass focuses heavily on making OFMtouch behave like a proper Android game rather than a desktop interface running inside a phone window.
 
-- Generated top-division clubs now have a featured outfield player; many reach 90+, while a 96-rated player remains rare. Clubs in the next tiers can also produce standout players to drive promotion campaigns.
-- Rating ceilings, potential, scouting estimates, form and match-strength helpers now accept the expanded 96-point range together.
-- Every generated club adds a position-balanced local free agent to the starting market, increasing the number of available players without changing squad limits.
-- The portrait generator has two more fictional source faces, and background generation covers more players while prioritising the next opponent across league and cup fixtures.
-- Match commentary has 192 additional event lines across all 12 supported languages, plus new corner and free-kick narration. Supported devices can enable optional spoken commentary during live matches.
-- Goals now get punchier reactions, and occasional shots genuinely strike the crossbar or post in both live and instant simulation, with a matching woodwork call in every supported language.
-- Settings switches now have a full touch target and correctly anchored thumb. Rapid changes save in order; match commentary visibility and the new spoken commentary preference affect live matches. About contains readable patch notes.
-- The confirmation preference prompts before moving to the next day, and auto-save writes progress after the in-game date changes.
-- Live match steps cannot overlap while the Android backend responds. Legacy injury codes such as `.calfinjury` display as a readable calf strain in inbox messages and injury panels.
-- Frontend verification before the Android build: 1,563 tests across 195 files passed; lint, locale coverage and the production web build passed.
+### Android gestures & navigation
 
-The preceding mobile sweep shipped in [Android Nightly #279](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/actions/runs/36273749888). This update is available in [Android Nightly #280](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/actions/runs/36306099975).
+- Android system Back/edge-swipe navigation is being integrated with the game's navigation history.
+- Back gestures on nested game screens are intended to return through the game instead of unexpectedly terminating the application.
+- The main-menu/root navigation state is protected against accidental edge-swipe exits.
+- Browser/WebView history is now explicitly marked for the native Android runtime.
+- Touch scrolling uses Android-friendly momentum behaviour and overscroll containment.
+- Horizontal touch areas can use dedicated pan behaviour without making the rest of the interface feel like a desktop page.
 
-## Latest mobile gameplay sweep
+### Modern Android display support
 
-- Career creation accepts managers aged 18 and over, with matching validation in the Android backend and the creation form.
-- Team selection lists every competition in the generated world, including leagues outside England and South America, so inactive leagues can be enabled before choosing a club.
-- Generated clubs in the top two league tiers receive a wider spread of standout players without raising every squad member.
-- International fixtures show country names such as England and Spain; existing saves with older national-team names display cleanly. World Cup squads select the highest-rated eligible generated players in each nation.
-- Inbox replies now show an error if an action fails, and an older message fetch cannot overwrite a newer reply or inbox update.
-- Scouting actions are available from the player search context menu on both the phone card and the table view. Payroll rows respond to keyboard activation, and transfer deal details remain visible.
-- The mobile match path, scheduling, squad, dashboard, transfers, scouting, inbox, and team-selection screens received regression checks. The frontend suite passes 1,559 tests across 194 files; the production web build and lint checks pass.
-- The skip-to-match control keeps advancing through quiet days and pauses at a scheduled match or a blocking action; fatigue by itself is not a blocker.
+- Layout height now uses dynamic viewport sizing (`100dvh`) for modern Android WebViews.
+- Safe-area handling accounts for display cut-outs, camera holes and gesture-navigation areas.
+- Top navigation can respect the Android status-bar safe area.
+- Bottom navigation and controls can respect the Android gesture-bar safe area.
+- Full-screen pages have additional protection against buttons becoming trapped behind system UI.
+- Fixed-position interface elements are constrained to the phone viewport.
 
-This sweep and the latest gameplay update are included in Android Nightly #280. The earlier build #278 predates these fixes.
+### Better touch controls
 
-## 🌟 What's new in 0.3.0?
+- Native mobile buttons and interactive controls target at least 48px touch height.
+- Existing game controls retain a minimum 44px accessibility target outside the native-mobile override.
+- Tap feedback has been improved for controls designed to behave like mobile buttons.
+- Touch controls use `touch-action` rules to reduce delayed or conflicting browser gestures.
+- Images cannot be accidentally dragged while managing the game.
+- Android long-press callout behaviour is suppressed where it interferes with the game UI.
+- Hover-only desktop behaviour is removed on coarse-pointer/touch devices.
 
-This release brings a large update to the career experience, with major improvements to generated players, clubs, transfers, progression and Android usability.
+### Mobile forms & keyboard behaviour
 
-### 👤 Better player generation
+- Inputs, selectors and text areas use mobile-safe sizing.
+- Native mobile form fields use a 16px font size to prevent unwanted WebView/browser zoom when focused.
+- Mobile forms can collapse to a single-column layout on narrow screens.
+- Action groups can stack vertically where side-by-side desktop buttons would become cramped.
+- Scrollable game pages retain room for the Android bottom safe area.
 
-- Generated players now have a much wider and more believable range of ability.
-- Player quality is influenced by the level and strength of the club they play for.
-- Lower-level teams can have players in the 40s and 50s, while stronger leagues produce stronger squads.
-- Elite clubs can generate genuine top-level players instead of every squad feeling similar.
-- Young prospects can begin with lower current ability while having much higher long-term potential.
-- Player potential now takes age and club environment into account.
-- Goalkeepers, defenders, midfielders, wingers and strikers receive more position-appropriate attribute profiles.
-- Elite players are deliberately rarer, making standout talent feel more valuable.
-- Squad age profiles now include a healthier mix of prospects, prime-age players and veterans.
-- Veteran decline and youth development have been rebalanced.
-- Playing time and training can have a more meaningful effect on development.
-- Player values and wage demands now better reflect ability, potential, age and club stature.
+### Accessibility & performance polish
 
-### 🏟️ Better club & squad generation
+- Reduced-motion preferences disable or heavily shorten unnecessary animations and transitions.
+- Touch feedback respects reduced-motion mode.
+- High-contrast support remains integrated with the game's settings system.
+- Lazy-loaded major screens reduce unnecessary startup work.
+- Mobile scrolling is isolated so long management pages do not move the entire WebView unexpectedly.
+- Global overscroll is disabled to reduce rubber-band/browser-style movement inside the native game shell.
 
-- Clubs now build squads around their level, reputation and financial strength.
-- Stronger and wealthier clubs can support higher-quality players and larger wages.
-- Starting elevens, substitutes and squad players now have a more natural quality spread.
-- Squad generation considers positional coverage instead of simply filling a team with similar players.
-- Clubs are less likely to stockpile too many players in the same position.
-- Youth players are represented more naturally within generated squads.
-- Squad wage budgets and transfer budgets are better connected to club stature.
-- Promotion and relegation can affect squad building and finances over time.
-- Club reputation can evolve as results and seasons progress.
-- Generated teams have additional balancing to keep leagues competitive without making every club equal.
+## 🔎 Scouting & career improvements
 
-### 🔄 Transfers & contracts
+Recent builds also expanded the football-management side of the game:
 
-- Transfer recruitment now considers positional needs.
-- Clubs are more careful about selling important first-team players.
+- Players can be added to a career-specific scouting shortlist.
+- Shortlist cards expose position, age, overall rating, value and club information more clearly on phones.
+- Scouting controls have larger Android-friendly touch targets and improved accessibility labels.
+- Android backgrounding can trigger an autosave when unsaved career changes exist and autosave is enabled.
+- Existing date-change and exit-save behaviour remains supported.
+- The fictional portrait generator now draws from 16 source faces, reducing repeated-looking generated players.
+- Portrait sources use original synthetic fictional footballer artwork rather than photographs of real players.
+
+## 🌍 2026/27 leagues, clubs & ratings
+
+The generated starting world has received a substantial balancing pass:
+
+- Manchester United, Arsenal, Chelsea and Liverpool are placed in the Premier League.
+- Birmingham City is placed in the Championship.
+- The English pyramid includes 20 Premier League and 24 Championship clubs.
+- Manchester United, Arsenal, Chelsea and Liverpool receive stronger generated squads appropriate to elite English clubs.
+- Manchester United's generated starting squad targets an average of at least 86, with comparable balancing applied to other elite clubs.
+- Featured European clubs receive club-specific strength profiles, including Bayern München and Paris Saint-Germain.
+- Spain, Germany, Italy, France, Portugal and the Netherlands have additional featured-club balancing.
+- Brazil and Argentina receive stronger South American club profiles.
+- United States clubs receive improved generated-player quality and remain under North America.
+- Japan, South Korea and Saudi Arabia receive stronger Asian club profiles.
+- Simulation scope can include domestic leagues outside the manager's home region, allowing careers to simulate Europe, the Americas and Asia together.
+- Elite players can reach 96 overall, while that level remains deliberately rare.
+- Second-tier leagues can still produce standout players capable of influencing promotion races.
+
+These are OFMtouch game-balance ratings. Curated club/division placement is combined with procedurally generated player identities in the default generated world.
+
+## ⚽ Match engine, commentary & gameplay fixes
+
+- Generated top-division clubs can contain featured elite outfield players.
+- Rating ceilings, potential, scouting estimates, form and match-strength helpers support the expanded 96-point range.
+- Generated clubs receive additional position-balanced free agents in the starting market.
+- Match commentary includes substantially more event variation.
+- Goal reactions are more expressive.
+- Shots can strike the crossbar or post in live and instant simulation.
+- Woodwork events have matching commentary.
+- Corner and free-kick narration has been expanded.
+- Optional spoken commentary is available on supported devices.
+- Live-match steps are protected against overlapping Android backend requests.
+- Legacy injury identifiers such as `.calfinjury` are converted into readable injury descriptions instead of appearing as raw internal codes.
+- Lineup logic better balances player ability and fitness.
+- Substitution decisions can consider fatigue and match context.
+- Short-term form and morale effects have been rebalanced so they do not overwhelm player quality.
+- Injury risk responds more naturally to age and condition.
+- Goalkeepers use a different ageing curve from outfield players.
+
+## 🔄 Transfers, contracts & squad building
+
+- AI recruitment considers positional needs.
+- Clubs are more reluctant to sell important first-team players.
 - Surplus players are more likely to become available.
-- Transfer budgets keep a reserve instead of clubs spending everything immediately.
-- Wage-budget headroom is considered when building and improving squads.
-- Player willingness to move is better connected to the clubs involved.
-- Young prospects have improved loan logic.
+- Clubs preserve part of their transfer budget instead of automatically spending everything.
+- Wage headroom is considered during recruitment.
+- Player willingness to move better reflects the clubs involved.
+- Young-player loan logic has been improved.
 - Free agents have more flexible wage expectations.
-- Contract lengths vary more naturally with player age and squad role.
-- Contract renewals give greater priority to important players.
-- Transfer and loan offers are now easier to review and respond to on mobile.
-- Accept, reject and counter-offer actions are available through touch-friendly controls.
+- Contract lengths vary with player age and squad role.
+- Important players receive greater renewal priority.
+- Transfer and loan offers use more touch-friendly mobile controls.
+- Accept, reject and counter-offer actions are available without desktop-specific interactions.
 
-### ⚽ Gameplay & career tweaks
+## 👤 Player generation & development
 
-- Player ability is translated into match strength with additional balancing.
-- Strong teams retain an advantage while upset results remain possible.
-- Fitness now has a more meaningful influence on performance.
-- Short-term form has been rebalanced so it helps without overpowering player quality.
-- Morale effects are more controlled.
-- Injury risk now varies more naturally with age and player condition.
-- Goalkeepers have a different ageing curve from outfield players.
-- Captaincy considers leadership and suitability rather than simply picking a highly rated player.
-- Substitution decisions can take fatigue and the match situation into account.
-- Lineup selection better balances ability and fitness.
-- Youth intake quality can benefit from stronger club facilities.
-- Homegrown-player development and eligibility have received additional support.
-- Scouting information includes more uncertainty when knowledge of a player is limited.
-- Career progression systems now work together with the updated generated-player model.
+- Generated players have a wider ability distribution.
+- Club reputation and league level influence generated player quality.
+- Lower-level teams can contain players in the 40s and 50s while elite squads can contain genuine stars.
+- Elite players are intentionally uncommon.
+- Young prospects can have lower current ability but significantly higher potential.
+- Position-specific attribute profiles differentiate goalkeepers, defenders, midfielders, wingers and strikers.
+- Squad age profiles include prospects, prime-age players and veterans.
+- Veteran decline and youth development have been rebalanced.
+- Playing time and training can influence development.
+- Player values and wage expectations better account for ability, potential, age and club stature.
+- Youth-intake quality can benefit from stronger club facilities.
 
-## 📱 Major Android & touch improvements
+## 📱 Mobile-first interface
 
-0.3.0 also contains a large mobile-first interface pass across the game:
+Across the wider 0.3.x development line:
 
-- 👆 Larger touch targets throughout menus and management screens.
-- 📜 Improved vertical scrolling on phone displays.
-- ↔️ Better horizontal touch scrolling where wide information is still required.
-- 📱 More screens now use compact mobile cards instead of desktop-style tables.
-- 🧠 Tactics are easier to operate with taps and tap-and-hold actions.
-- 🔁 Player swapping can be performed without relying on desktop drag-and-drop controls.
-- ⚽ Match-day controls have been adapted for smaller screens.
-- 👥 Squad management is easier to navigate on touch devices.
-- 🔎 Scouting and youth recruitment controls have been enlarged and reorganised.
-- 💰 Finance, payroll and facility screens have improved phone layouts.
-- 📩 Inbox controls and message views are more comfortable on mobile.
-- 📅 Fixtures, standings and calendar controls have received mobile layouts and larger targets.
-- 🎓 Youth academy prospects now have a dedicated phone-friendly presentation.
-- 🧑‍💼 Staff management filters and actions are easier to use by touch.
-- 🔄 Transfer-market filters, player results and offer actions have improved mobile layouts.
-- 👤 Player profiles have improved responsive layouts and management actions.
-- 🏠 The main menu and manager creation flow now handle smaller displays more reliably.
-- 🛡️ Safe-area handling has been improved for modern Android screens.
-- 📐 Layouts have been tightened to reduce clipped buttons, overflowing panels and unreachable controls.
-- 🎮 Dashboard navigation has been reworked for a more comfortable phone experience.
-- ✨ Numerous interface and touch-layout regressions have been cleaned up across the game.
+- Larger touch targets throughout menus and management screens.
+- Improved vertical scrolling on phone displays.
+- Better horizontal touch scrolling for data-heavy screens.
+- Compact phone cards replace desktop-style tables on more screens.
+- Tactics work with taps and tap-and-hold interactions.
+- Player swapping does not require desktop drag-and-drop.
+- Match-day controls are adapted for small screens.
+- Squad management has phone-oriented layouts.
+- Scouting and youth recruitment controls are enlarged and reorganised.
+- Finance, payroll and facility screens have improved responsive layouts.
+- Inbox messages and actions are easier to operate one-handed.
+- Fixtures, standings and calendar controls have larger targets.
+- Youth academy prospects have a dedicated mobile presentation.
+- Staff-management filters and actions are touch-friendly.
+- Transfer-market filters and offer controls are adapted for phones.
+- Player profiles have responsive layouts and mobile management actions.
+- Main-menu and manager-creation flows support smaller displays more reliably.
+- Dashboard navigation is designed around touch interaction.
+- Settings switches use full touch targets and correctly positioned thumbs.
+- Rapid setting changes are saved in order.
+
+## 💾 Career reliability
+
+- Autosave can write progress after the in-game date changes.
+- Android backgrounding can protect unsaved progress.
+- Confirmation settings can prompt before advancing to the next day.
+- Skip-to-match continues through quiet days and stops at a scheduled match or blocking action.
+- Fatigue alone does not incorrectly block skip-to-match.
+- Inbox replies report failed actions instead of silently appearing successful.
+- Older inbox requests cannot overwrite newer reply/update state.
+- International fixtures display country names cleanly.
+- World Cup squads select highly rated eligible generated players for each nation.
 
 ## 🎮 What can you do?
 
-- 🏟️ Manage your own football club
+- 🏟️ Manage a football club
 - 👥 Build and develop your squad
-- 📋 Pick your starting XI
+- 📋 Select your starting XI
 - 🧠 Create formations and tactics
 - 🔄 Make substitutions and match-day decisions
 - 🔎 Scout players and young prospects
 - 💰 Buy, sell and loan players
 - 📅 Play through fixtures and competitions
-- 🏆 Climb the table and compete for trophies
-- 📈 Develop players and your club over multiple seasons
+- 🏆 Compete for league and cup trophies
+- 📈 Develop players over multiple seasons
 - 💼 Manage finances, staff and football operations
-- 🎓 Develop your youth academy
-- 💾 Save your career and continue your journey
+- 🎓 Build your youth academy
+- 🌍 Simulate leagues across multiple regions
+- 💾 Save and continue long-term careers
 
-## 📦 Download OFMtouch 0.3.0 Nightly
+## 🧪 Recent Nightly history
 
-**Version:** 0.3.0 Nightly  
+| Build | Highlights |
+| --- | --- |
+| **#280** | Large gameplay/commentary/settings sweep, expanded 96 OVR support, woodwork events, injury-code fix and mobile regressions. |
+| **#281** | 2026/27 league placement and stronger club-specific ratings across Europe, USA, Brazil and Asia. |
+| **#283** | Career scouting shortlist, Android background autosave and expanded fictional portrait variety. |
+| **#285** | v0.3.1 `NightlyPreRelease` player-facing build identity. |
+| **Current development** | Android Back/edge gesture work, safe areas, dynamic viewport sizing, larger native touch targets, touch scrolling and mobile WebView optimisation. |
+
+Nightly numbering can advance more quickly than feature groups because source verification and Android workflows are continuously triggered while development is active.
+
+## 📦 Download & testing
+
+**Version line:** v0.3.1 NightlyPreRelease  
 **Platform:** Android  
-**Current target:** ARM64
+**Primary target:** ARM64  
+**Status:** active pre-release development
 
-**Latest test APK:** [Android Nightly Build #283](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/actions/runs/36310598201) → **Artifacts** → `OFMtouch-0.3.0-Build283-Nightly`. The artifact includes an ARM64 debug APK and its SHA-256 checksum.
+➡️ [GitHub Actions — newest builds](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/actions)
 
-0.3.0 is a **Nightly test release**. You're welcome to install it, start a career and put the new systems through their paces. If something behaves unexpectedly, crashes, becomes difficult to use on your phone, or produces strange career results, feedback is very welcome.
+For installation, open the newest **successful Android Nightly** workflow and download its APK artifact. Source Verification runs validate the source but do not themselves contain an APK.
+
+Nightly builds are intended for testing. If you encounter a crash, broken screen, incorrect football data, touch-control problem, Android gesture issue, clipped UI or career simulation problem, please report the screen and action that caused it so it can be reproduced.
+
+## 🗺️ Development direction
+
+The current mobile roadmap includes:
+
+- More Android system-gesture integration.
+- Deliberate exit confirmation instead of accidental app closure.
+- Better portrait-mode compression for dense management screens.
+- More one-handed navigation patterns.
+- Improved soft-keyboard handling.
+- Additional Android lifecycle/save-resume protection.
+- Haptic feedback where it improves touch interactions.
+- Performance tuning for lower-end Android phones.
+- Continued match-engine and career simulation regression testing.
+- Further league, club and generated-player balancing.
+- More fictional portrait variety.
+- Continued accessibility improvements.
 
 ## ❤️ Credits
 
@@ -177,10 +250,10 @@ This release brings a large update to the career experience, with major improvem
 
 OFMtouch is an independent, fan-made open-source project and is not an official upstream OpenFootManager Android release.
 
-The source code and licence information remain available in this repository for everyone who wants to follow, contribute to or improve the project.
+The source code and licence information remain available in this repository for anyone who wants to follow development, contribute or improve the project.
 
 ---
 
 ### ⚽ Your club. Your tactics. Your career.
 
-**OFMtouch 0.3.0 Nightly Build #283 — ready for Android testing.**
+**OFMtouch v0.3.1 NightlyPreRelease — active Android development.**
