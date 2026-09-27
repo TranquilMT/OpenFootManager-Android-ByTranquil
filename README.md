@@ -4,9 +4,11 @@
 
 **OFMtouch** is a free, open-source football management game for Android, based on OpenFootManager and adapted for a touch-first mobile experience by **TranquilMT**.
 
-> 🧪 **0.3.0 Nightly is ready for testing** — this is a major gameplay and mobile update. Nightly builds are test releases, so you may still find bugs while playing.
+> 🧪 **0.3.0 Nightly Build #280** includes the latest gameplay and mobile updates. Nightly builds are test releases, so you may still find bugs while playing.
 
-## Next gameplay and narration update
+## Latest update: players, match commentary and mobile fixes
+
+This update brings 250 gameplay, narration, translation, portrait and settings commits into the Android test build. Highlights and fixes:
 
 - Generated top-division clubs now have a featured outfield player; many reach 90+, while a 96-rated player remains rare. Clubs in the next tiers can also produce standout players to drive promotion campaigns.
 - Rating ceilings, potential, scouting estimates, form and match-strength helpers now accept the expanded 96-point range together.
@@ -17,9 +19,9 @@
 - Settings switches now have a full touch target and correctly anchored thumb. Rapid changes save in order; match commentary visibility and the new spoken commentary preference affect live matches. About contains readable patch notes.
 - The confirmation preference prompts before moving to the next day, and auto-save writes progress after the in-game date changes.
 - Live match steps cannot overlap while the Android backend responds. Legacy injury codes such as `.calfinjury` display as a readable calf strain in inbox messages and injury panels.
-- Frontend verification: 1,563 tests across 195 files passed; lint, locale coverage and the production web build passed. Android backend compilation and an APK containing these changes are pending the next Android workflow.
+- Frontend verification before the Android build: 1,563 tests across 195 files passed; lint, locale coverage and the production web build passed.
 
-The preceding mobile sweep shipped in [Android Nightly #279](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/actions/runs/36273749888). The updates above will be in a subsequent build.
+The preceding mobile sweep shipped in [Android Nightly #279](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/actions/runs/36273749888). This update is available in [Android Nightly #280](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/actions/runs/36306099975).
 
 ## Latest mobile gameplay sweep
 
@@ -32,7 +34,7 @@ The preceding mobile sweep shipped in [Android Nightly #279](https://github.com/
 - The mobile match path, scheduling, squad, dashboard, transfers, scouting, inbox, and team-selection screens received regression checks. The frontend suite passes 1,559 tests across 194 files; the production web build and lint checks pass.
 - The skip-to-match control keeps advancing through quiet days and pauses at a scheduled match or a blocking action; fatigue by itself is not a blocker.
 
-The next Android APK must be built from the commits containing this sweep. The earlier build #278 predates these fixes.
+This sweep and the latest gameplay update are included in Android Nightly #280. The earlier build #278 predates these fixes.
 
 ## 🌟 What's new in 0.3.0?
 
@@ -146,7 +148,7 @@ This release brings a large update to the career experience, with major improvem
 **Platform:** Android  
 **Current target:** ARM64
 
-The latest test APK is published through this repository's **GitHub Actions / Releases** as builds become available.
+**Latest test APK:** [Android Nightly Build #280](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/actions/runs/36306099975) → **Artifacts** → `OFMtouch-0.3.0-Build280-Nightly`. The artifact includes an ARM64 debug APK and its SHA-256 checksum.
 
 0.3.0 is a **Nightly test release**. You're welcome to install it, start a career and put the new systems through their paces. If something behaves unexpectedly, crashes, becomes difficult to use on your phone, or produces strange career results, feedback is very welcome.
 
@@ -163,4 +165,4 @@ The source code and licence information remain available in this repository for 
 
 ### ⚽ Your club. Your tactics. Your career.
 
-**OFMtouch 0.3.0 Nightly — now ready for Android testing.**
+**OFMtouch 0.3.0 Nightly Build #280 — ready for Android testing.**
