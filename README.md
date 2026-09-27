@@ -4,9 +4,20 @@
 
 **OFMtouch** is a free, open-source football management game for Android, based on OpenFootManager and adapted for a touch-first mobile experience by **TranquilMT**.
 
-> 🧪 **0.3.0 Nightly Build #280** includes the latest gameplay and mobile updates. Nightly builds are test releases, so you may still find bugs while playing.
+> 🧪 **0.3.0 Nightly Build #281** includes updated leagues, club strength and mobile gameplay fixes. Nightly builds are test releases, so you may still find bugs while playing.
 
-## Latest update: players, match commentary and mobile fixes
+## Latest update: leagues and club ratings
+
+- The 2026/27 English starting world now places Manchester United, Arsenal, Chelsea and Liverpool in the Premier League, and Birmingham City in the Championship. The English pyramid includes 20 Premier League and 24 Championship clubs.
+- Manchester United, Arsenal, Chelsea and Liverpool have stronger generated player attributes and a starting full-squad average of at least 86. Birmingham City's starting squad is lower rated.
+- Featured clubs in Spain, Germany, Italy, France, Portugal, the Netherlands and other European leagues have club-specific strength and generated player ratings. This includes Bayern München and Paris Saint-Germain.
+- Featured clubs in Brazil, Argentina, the United States, Japan, South Korea and Saudi Arabia receive stronger, distinct generated squads. Brazil remains under South America; USA appears under North America, while Japan, South Korea and Saudi Arabia appear under Asia.
+- The simulation-scope picker now lists domestic leagues outside the selected home region, so a manager in Europe can enable leagues in the Americas and Asia.
+- These ratings are OFMtouch game-balance estimates. Named featured clubs and the English division membership are curated; the remaining clubs and player identities in the default world are still procedurally generated. The update applies when starting a new career.
+
+Club membership was checked against current listings from the [Premier League](https://www.premierleague.com/en/tables/premier-league/2026-27/all-matchweeks), [EFL](https://www.efl.com/competitions/efl-championship/), [Bundesliga](https://www.bundesliga.com/de/bundesliga/clubs), [Ligue 1](https://ligue1.com/en/articles/l1_article_5328-when-does-the-season-start-for-ligue-1-mc-donald-s-clubs), [LaLiga](https://www.laliga.com/en-GB/laliga-easports/clubs), [MLS](https://www.mlssoccer.com/clubs/), [CBF](https://www.cbf.com.br/futebol-brasileiro/tabelas/campeonato-brasileiro/serie-a) and [J.LEAGUE](https://www.jleague.jp/en/j1/club/).
+
+## Build #280: players, match commentary and mobile fixes
 
 This update brings 250 gameplay, narration, translation, portrait and settings commits into the Android test build. Highlights and fixes:
 
@@ -148,7 +159,7 @@ This release brings a large update to the career experience, with major improvem
 **Platform:** Android  
 **Current target:** ARM64
 
-**Latest test APK:** [Android Nightly Build #280](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/actions/runs/36306099975) → **Artifacts** → `OFMtouch-0.3.0-Build280-Nightly`. The artifact includes an ARM64 debug APK and its SHA-256 checksum.
+**Latest test APK:** [Android Nightly Build #281](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/actions/runs/36308317259) → **Artifacts** → `OFMtouch-0.3.0-Build281-Nightly`. The artifact includes an ARM64 debug APK and its SHA-256 checksum.
 
 0.3.0 is a **Nightly test release**. You're welcome to install it, start a career and put the new systems through their paces. If something behaves unexpectedly, crashes, becomes difficult to use on your phone, or produces strange career results, feedback is very welcome.
 
@@ -165,4 +176,4 @@ The source code and licence information remain available in this repository for 
 
 ### ⚽ Your club. Your tactics. Your career.
 
-**OFMtouch 0.3.0 Nightly Build #280 — ready for Android testing.**
+**OFMtouch 0.3.0 Nightly Build #281 — ready for Android testing.**
