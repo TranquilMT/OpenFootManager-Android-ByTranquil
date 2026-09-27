@@ -354,6 +354,33 @@ describe("InboxTab", (): void => {
     expect(onGameUpdate).not.toHaveBeenCalled();
   });
 
+  it("opens a readable, independently scrolling message pane and returns to the list", async (): Promise<void> => {
+    await renderInboxTab({
+      gameState: createGameState([
+        createMessage({ id: "m1", read: true, body: "Medical update details" }),
+      ]),
+    });
+
+    const readingPane = screen.getByTestId("inbox-reading-pane");
+    expect(readingPane).toHaveClass("overflow-y-auto", "hidden");
+    fireEvent.click(screen.getByTestId("inbox-row-m1"));
+    expect(readingPane).toHaveClass("overflow-y-auto", "flex");
+    expect(screen.getByText("Medical update details")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "inbox.backToInbox" }).closest(".sticky"),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "inbox.backToInbox" }));
+    expect(readingPane).toHaveClass("hidden");
+  });
+
+  it("opens an inbox message using the keyboard", async (): Promise<void> => {
+    await renderInboxTab({ gameState: createGameState([createMessage({ id: "m1", read: true })]) });
+    const row = screen.getByTestId("inbox-row-m1");
+    expect(row).toHaveAttribute("tabindex", "0");
+    fireEvent.keyDown(row, { key: "Enter" });
+    expect(screen.getByTestId("inbox-reading-pane")).toHaveClass("flex");
+  });
+
   it("sorts messages by date when the sort order changes", async (): Promise<void> => {
     await renderInboxTab({
       gameState: createGameState([
@@ -557,7 +584,11 @@ describe("InboxTab", (): void => {
     const action: MessageAction = {
       id: "respond",
       label: "Respond",
-      action_type: { ChooseOption: { options: [{ id: "yes", label: "Accept", description: "Accept the request" }] } },
+      action_type: {
+        ChooseOption: {
+          options: [{ id: "yes", label: "Accept", description: "Accept the request" }],
+        },
+      },
       resolved: false,
     };
     const gameState = createGameState([createMessage({ id: "m1", read: true, actions: [action] })]);

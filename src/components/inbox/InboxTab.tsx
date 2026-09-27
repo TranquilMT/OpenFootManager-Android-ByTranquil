@@ -57,7 +57,8 @@ export default function InboxTab({
     const seq = ++inboxSeqRef.current;
     fetchMessages()
       .then((msgs) => {
-        if (!cancelled && seq === inboxSeqRef.current && Array.isArray(msgs)) setFetchedMessages(msgs);
+        if (!cancelled && seq === inboxSeqRef.current && Array.isArray(msgs))
+          setFetchedMessages(msgs);
       })
       .catch(() => {});
     return () => {
@@ -378,8 +379,15 @@ export default function InboxTab({
           onToggleMessageSelection={handleToggleMessageSelection}
         />
 
-        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-          {actionError && <p role="alert" className="px-4 py-2 text-sm text-red-500">{actionError}</p>}
+        <div
+          data-testid="inbox-reading-pane"
+          className={`${selectedMessage ? "flex" : "hidden md:flex"} min-h-0 min-w-0 flex-1 flex-col overflow-y-auto overscroll-contain`}
+        >
+          {actionError && (
+            <p role="alert" className="px-4 py-2 text-sm text-red-500">
+              {actionError}
+            </p>
+          )}
           <InboxMessageDetailPane
             effectFeedback={effectFeedback}
             currentTeamId={currentTeamId}

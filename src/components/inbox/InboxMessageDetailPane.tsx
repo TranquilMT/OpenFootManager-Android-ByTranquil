@@ -101,7 +101,7 @@ export default function InboxMessageDetailPane({
 
   return (
     <>
-      <div className="shrink-0 border-b border-gray-100 p-3 dark:border-navy-600 sm:p-5">
+      <div className="sticky top-0 z-10 shrink-0 border-b border-gray-100 bg-white p-3 dark:border-navy-600 dark:bg-navy-800 sm:p-5">
         <button
           type="button"
           onClick={onCloseSelectedMessage}
