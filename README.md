@@ -5,33 +5,62 @@
 OFMtouch is a free football management game built for Android. Take charge of a club, build your squad, scout talent, shape your tactics, develop young players and compete across multiple seasons in a growing football world.
 
 > 🧪 **Current version: v0.3.5 NightlyPreRelease**  
+> **Build:** generated automatically from the GitHub Actions build number  
 > NightlyPreRelease builds are playable test versions. New features and fixes arrive regularly, but some bugs and unfinished areas may remain.
 
 ## 🌟 Welcome to OFMtouch! Here's what's new in v0.3.5
 
-v0.3.5 is a major simulation update focused on making careers feel more believable from season to season. **Player Development V2.0** and **Transfer Market V2.0** are the headline milestones, backed by world-generation, portrait, loan, balance, mobile and regression improvements.
+v0.3.5 is not the introduction of Player Development V2.0 or Transfer Market V2.0 — both systems began in the previous update. This release **substantially expands and connects them to the wider career simulation**, turning them from individual features into systems that increasingly influence club strategy, recruitment, loans, squad building and long-term player careers.
 
-- **🎓 Player Development V2.0:** youth growth is connected more deeply to playing time and the wider club-development model, giving prospects a clearer route toward their potential.
-- **🔄 Transfer Market V2.0:** clubs now recruit more strategically using squad needs, age, potential and club strategy instead of treating the market as a simple list of available players.
-- **🤝 Strategic loans:** loan targeting is connected to club strategy and youth development, with affordability and incoming wage-share negotiation improved.
-- **⏱️ Deadline-day behaviour:** market activity can react to deadline-day urgency, giving transfer windows a stronger closing phase.
-- **🧠 Smarter clubs:** deterministic club strategy now feeds recruitment targeting and live market selection.
-- **⭐ Better player generation:** elite rating ceilings and featured-player generation have been aligned with the current world model, including rare players up to 96 OVR.
-- **👤 More portrait variety:** the fictional portrait generator now uses 20 source faces, with stronger duplicate/diversity regression checks.
-- **🌍 Improved football world:** stronger league and club balancing across Europe, North America, South America and Asia remains part of the current world-simulation update.
-- **📱 Mobile-first improvements:** the Android touch, navigation, safe-area, scrolling and settings work from v0.3.1 remains included and continues to be refined.
-- **🛠️ Fixes and safeguards:** additional build/regression checks cover portraits, generated-player ratings, market integration and loan affordability.
+### 🎓 Player Development V2.0 — Expanded
+
+- Development is now more tightly connected to **competitive playing time**, making squad selection matter more to a prospect's career.
+- Young-player development is connected to the wider club strategy/world simulation instead of operating as an isolated progression calculation.
+- **Strategic loans now form part of the development pathway**: clubs can identify young players who need minutes and seek more suitable loan opportunities.
+- Loan decisions consider the needs of both the developing player and the clubs involved.
+- Potential, current ability, age and opportunity have greater influence over how a player is treated by the simulation.
+- Elite development remains deliberately rare, preserving the importance of exceptional prospects and 90+ OVR players.
+- Featured-player generation has been stabilised around club identity, improving the quality distribution of generated squads.
+- Generated rating ceilings have been aligned with the latest player model, including extremely rare players reaching **96 OVR**.
+- Development and recruitment now interact: clubs can decide whether a young player should be retained, loaned for minutes or supplemented through recruitment.
+
+### 🔄 Transfer Market V2.0 — Major Upgrade
+
+- Recruitment now uses **strategic target scoring**, considering more than raw overall rating.
+- Clubs can consider **position, age, potential and squad need** when identifying targets.
+- A deterministic **Club Strategy Engine** now feeds directly into recruitment behaviour.
+- Strategic target data is connected to the live market sweep, allowing AI clubs to pursue players that better fit their squad-building plans.
+- **Deadline-day urgency** is now active in market behaviour, creating a stronger final phase to transfer windows.
+- Loan recruitment has been upgraded with club-strategy targeting rather than purely opportunistic movement.
+- Incoming loan wage shares are negotiated against affordability, reducing unrealistic loan deals that a club cannot sustain.
+- Clubs retain stronger budget and wage awareness when building their squads.
+- Age and potential are carried into market targets, giving prospects and established players different recruitment value.
+- Transfer Market V2.0 now works more closely with Player Development V2.0, allowing loans, prospects, squad needs and recruitment strategy to influence one another.
+
+### 🆕 New gameplay and simulation additions in v0.3.5
+
+- **Club Strategy Engine:** clubs now have a deterministic strategic layer that can influence how they approach squad construction.
+- **Strategic squad planning:** recruitment is increasingly based on what a club actually needs rather than simply selecting highly rated available players.
+- **Deadline-day pressure:** transfer activity can become more urgent as the window approaches its conclusion.
+- **Development-to-loan pipeline:** promising players who need football can be connected to strategic loan decisions.
+- **Loan affordability negotiation:** incoming wage contribution is adjusted to make proposed loans more financially plausible.
+- **Club-identity player generation:** featured-player generation uses stable club identity to produce more consistent squad profiles.
+- **Expanded elite-player model:** the world can contain rare 96 OVR footballers while keeping those players exceptional.
+- **20-source portrait generation:** the expanded fictional face pool is protected by stronger missing-source, duplicate and diversity regression checks.
+- **Wider world balancing:** stronger club/player profiles across Europe, North America, South America and Asia continue to improve the competitive hierarchy of generated careers.
+- **Simulation regression protection:** new automated checks cover player ratings, portraits, recruitment integration and other systems that could otherwise regress as the world simulation expands.
 
 ### 🏁 Major v0.3.5 milestones
 
-- [x] **Player Development V2.0** — strategic youth development and playing-time-driven growth integrated into the evolving world simulation.
-- [x] **Transfer Market V2.0** — strategic recruitment scoring, club-strategy targeting, live market selection, deadline-day tuning and smarter loans integrated.
+- [x] **Player Development V2.0 Expansion** — playing-time development, strategic youth handling and loan pathways connected more deeply to the evolving world.
+- [x] **Transfer Market V2.0 Expansion** — strategic recruitment scoring, club-strategy targeting, live market selection, deadline-day tuning and smarter loans integrated.
 - [x] **Club Strategy Engine** — deterministic club strategies now influence recruitment and loan decisions.
+- [x] **Strategic Loan System** — development needs, recruitment logic and affordable wage sharing are connected.
 - [x] **20-source Portrait Generation** — expanded source pool with stronger diversity validation.
 - [x] **Elite Player & Club Balancing** — updated rating ceilings and stronger top-club/world-generation profiles.
+- [x] **v0.3.5 version/build pipeline** — app metadata and Android Nightly workflow upgraded to v0.3.5 with GitHub run-number builds.
 - [ ] **Final v0.3.5 regression gate** — complete the full automated regression suite against the release candidate.
-- [ ] **v0.3.5 Android APK build** — produce the new ARM64 NightlyPreRelease package after the gate is green.
-- [ ] **APK verification** — verify package/version, signing, installation/update behaviour and core gameplay startup flows.
+- [ ] **v0.3.5 Android APK verification** — verify the generated ARM64 NightlyPreRelease APK, signature, package/version and startup flows.
 - [ ] **Phase 5+ development** — continue the next major simulation/gameplay phases after the v0.3.5 checkpoint build.
 
 Thank you for playing! Please help us improve future builds by [submitting issues on GitHub](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new).
@@ -271,7 +300,7 @@ OFMtouch is currently a NightlyPreRelease, so some areas are still being polishe
 The next milestones after the v0.3.5 checkpoint focus on validation and deeper career simulation:
 
 - Complete the v0.3.5 regression gate and resolve any remaining failures.
-- Produce and verify the v0.3.5 ARM64 Android APK.
+- Verify the v0.3.5 ARM64 Android APK.
 - Validate Transfer Market V2.0 over multi-season careers and continue economic/AI balancing.
 - Validate Player Development V2.0 over multi-season careers and tune growth, decline and loan-development outcomes.
 - Continue Phase 5+ world-simulation and gameplay development.
@@ -292,6 +321,7 @@ The next milestones after the v0.3.5 checkpoint focus on validation and deeper c
 ## 📦 Version
 
 **OFMtouch v0.3.5 — NightlyPreRelease**  
+**Build:** GitHub Actions run number  
 **Platform:** Android  
 **Primary build:** ARM64
 
