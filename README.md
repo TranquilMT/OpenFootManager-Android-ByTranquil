@@ -4,10 +4,45 @@
 
 OFMtouch is a free football management game built for Android. Take charge of a club, build your squad, scout talent, shape your tactics, develop young players and compete across multiple seasons in a growing football world.
 
-> 🧪 **Current version: v0.3.1 NightlyPreRelease**  
+> 🧪 **Current version: v0.3.5 NightlyPreRelease**  
 > NightlyPreRelease builds are playable test versions. New features and fixes arrive regularly, but some bugs and unfinished areas may remain.
 
-## 🌟 Welcome to OFMtouch! Here's what's new in v0.3.1
+## 🌟 Welcome to OFMtouch! Here's what's new in v0.3.5
+
+v0.3.5 is a major simulation update focused on making careers feel more believable from season to season. **Player Development V2.0** and **Transfer Market V2.0** are the headline milestones, backed by world-generation, portrait, loan, balance, mobile and regression improvements.
+
+- **🎓 Player Development V2.0:** youth growth is connected more deeply to playing time and the wider club-development model, giving prospects a clearer route toward their potential.
+- **🔄 Transfer Market V2.0:** clubs now recruit more strategically using squad needs, age, potential and club strategy instead of treating the market as a simple list of available players.
+- **🤝 Strategic loans:** loan targeting is connected to club strategy and youth development, with affordability and incoming wage-share negotiation improved.
+- **⏱️ Deadline-day behaviour:** market activity can react to deadline-day urgency, giving transfer windows a stronger closing phase.
+- **🧠 Smarter clubs:** deterministic club strategy now feeds recruitment targeting and live market selection.
+- **⭐ Better player generation:** elite rating ceilings and featured-player generation have been aligned with the current world model, including rare players up to 96 OVR.
+- **👤 More portrait variety:** the fictional portrait generator now uses 20 source faces, with stronger duplicate/diversity regression checks.
+- **🌍 Improved football world:** stronger league and club balancing across Europe, North America, South America and Asia remains part of the current world-simulation update.
+- **📱 Mobile-first improvements:** the Android touch, navigation, safe-area, scrolling and settings work from v0.3.1 remains included and continues to be refined.
+- **🛠️ Fixes and safeguards:** additional build/regression checks cover portraits, generated-player ratings, market integration and loan affordability.
+
+### 🏁 Major v0.3.5 milestones
+
+- [x] **Player Development V2.0** — strategic youth development and playing-time-driven growth integrated into the evolving world simulation.
+- [x] **Transfer Market V2.0** — strategic recruitment scoring, club-strategy targeting, live market selection, deadline-day tuning and smarter loans integrated.
+- [x] **Club Strategy Engine** — deterministic club strategies now influence recruitment and loan decisions.
+- [x] **20-source Portrait Generation** — expanded source pool with stronger diversity validation.
+- [x] **Elite Player & Club Balancing** — updated rating ceilings and stronger top-club/world-generation profiles.
+- [ ] **Final v0.3.5 regression gate** — complete the full automated regression suite against the release candidate.
+- [ ] **v0.3.5 Android APK build** — produce the new ARM64 NightlyPreRelease package after the gate is green.
+- [ ] **APK verification** — verify package/version, signing, installation/update behaviour and core gameplay startup flows.
+- [ ] **Phase 5+ development** — continue the next major simulation/gameplay phases after the v0.3.5 checkpoint build.
+
+Thank you for playing! Please help us improve future builds by [submitting issues on GitHub](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new).
+
+**Thanks, TranquilMT**
+
+---
+
+## 📜 Previous Update — v0.3.1
+
+### 🌟 Welcome to OFMtouch! Here's what's new in v0.3.1
 
 - **More varied players:** 20 fictional portrait source faces, rare 96-rated stars, stronger second-tier standouts and wider squad age profiles.
 - **A bigger world:** 29 generation nations with stronger clubs across Europe, the Americas and Asia.
@@ -15,18 +50,14 @@ OFMtouch is a free football management game built for Android. Take charge of a 
 - **Player development and youth:** playing time affects young players' training growth, and youth scouting reports avoid repeated names.
 - **Better match days:** expanded goal and woodwork commentary, improved lineups and optional spoken commentary.
 - **Mobile improvements:** better Android navigation, safe areas, touch controls, scrolling and settings switches.
-- **Welcome screen:** a launch summary of this update with an option to hide it on future v0.3.1 launches; the notes remain available in Settings.
+- **Welcome screen:** a launch summary of this update with an option to hide it on future launches; the notes remain available in Settings.
 - **Fixes:** readable injury names, improved inbox reliability, unique generated club names and corrected world-generation checks.
 
-Thank you for playing! Please help us improve future builds by [submitting issues on GitHub](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new).
-
-**Thanks, TranquilMT**
-
-The sections below describe the update in more detail.
+The sections below describe the cumulative updates in more detail.
 
 ### 📱 A better Android experience
 
-The latest update puts mobile play at the centre of OFMtouch.
+The latest updates put mobile play at the centre of OFMtouch.
 
 - Android Back and edge-swipe navigation has been improved so gestures behave more naturally while moving around the game.
 - Reduced accidental exits when using Android's Back gesture.
@@ -104,9 +135,16 @@ Matches now have more variety, atmosphere and meaningful player differences.
 - Goalkeepers have a different ageing curve from outfield players.
 - Strong teams retain an advantage while upsets remain possible.
 
-## 🔄 Transfers & Contracts
+## 🔄 Transfer Market V2.0 — Transfers, Loans & Contracts
+
+Transfer Market V2.0 makes recruitment more strategic and connects club identity to market behaviour.
 
 - Clubs consider positional needs when recruiting players.
+- Recruitment scoring can account for player age and potential.
+- Club strategy feeds into target selection and live transfer-market decisions.
+- Deadline-day urgency can influence market behaviour.
+- Strategic loan targeting is connected to club needs and youth development.
+- Incoming loan wage shares are negotiated with affordability in mind.
 - Teams are less willing to sell important first-team players without good reason.
 - Surplus players are more likely to become available.
 - Clubs keep some transfer budget in reserve instead of spending everything immediately.
@@ -119,15 +157,20 @@ Matches now have more variety, atmosphere and meaningful player differences.
 - Transfer and loan offers are easier to manage on a phone.
 - Accept, reject and counter-offer actions use touch-friendly controls.
 
-## 🎓 Youth & Player Development
+## 🎓 Player Development V2.0 — Youth & Progression
+
+Player Development V2.0 strengthens the connection between opportunity, potential and long-term squad building.
 
 - Young players can develop into significantly stronger footballers over time.
-- Playing time and training can have a greater effect on development.
+- Playing time and training have a greater effect on development.
+- Youth development is connected to the wider club-strategy/world-simulation layer.
+- Loans provide another development route for prospects who need competitive minutes.
 - Stronger youth facilities can improve youth intake quality.
 - Potential is influenced by age and player development conditions.
 - Position-specific development produces more believable player profiles.
 - Homegrown-player development has received additional support.
 - Scouting uncertainty makes unknown prospects harder to judge perfectly.
+- Elite potential remains rare so exceptional players retain their value.
 
 ## 💾 Career Improvements
 
@@ -145,6 +188,11 @@ Matches now have more variety, atmosphere and meaningful player differences.
 
 Recent fixes include:
 
+- Improved incoming-loan wage-share affordability negotiation.
+- Aligned generated-player rating regression expectations with the current rating model.
+- Stabilised featured-player generation around club identity.
+- Added stronger portrait-source diversity regression checks.
+- Improved build safety while strategic recruitment was connected to live market selection.
 - Fixed Android Back gestures unexpectedly closing the game from some screens.
 - Improved protection against accidental exits from edge gestures.
 - Fixed controls being hidden behind Android navigation areas on some phones.
@@ -215,12 +263,18 @@ OFMtouch is currently a NightlyPreRelease, so some areas are still being polishe
 - Some interface areas are still being converted from desktop-style layouts to fully mobile presentations.
 - Performance can vary on older or lower-end Android phones during heavier simulation or information-heavy screens.
 - Generated player portraits can still repeat during very large careers despite the expanded portrait pool.
+- Transfer Market V2.0 and Player Development V2.0 will continue to receive balance tuning as longer careers are tested.
 - Nightly builds may occasionally introduce temporary regressions while new systems are being tested.
 
-## 🔜 Coming Next
+## 🔜 Coming Next / Remaining Work
 
-Future updates are planned to continue improving the mobile football-management experience with:
+The next milestones after the v0.3.5 checkpoint focus on validation and deeper career simulation:
 
+- Complete the v0.3.5 regression gate and resolve any remaining failures.
+- Produce and verify the v0.3.5 ARM64 Android APK.
+- Validate Transfer Market V2.0 over multi-season careers and continue economic/AI balancing.
+- Validate Player Development V2.0 over multi-season careers and tune growth, decline and loan-development outcomes.
+- Continue Phase 5+ world-simulation and gameplay development.
 - Further Android Back and gesture improvements.
 - Better exit confirmation behaviour.
 - More compact portrait-mode layouts.
@@ -237,7 +291,7 @@ Future updates are planned to continue improving the mobile football-management 
 
 ## 📦 Version
 
-**OFMtouch v0.3.1 — NightlyPreRelease**  
+**OFMtouch v0.3.5 — NightlyPreRelease**  
 **Platform:** Android  
 **Primary build:** ARM64
 
@@ -256,4 +310,4 @@ OFMtouch is an independent, fan-made open-source project and is not an official 
 
 ### ⚽ Build your club. Create your story. Chase trophies.
 
-**OFMtouch v0.3.1 NightlyPreRelease**
+**OFMtouch v0.3.5 NightlyPreRelease**
