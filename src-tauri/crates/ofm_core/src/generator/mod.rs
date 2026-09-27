@@ -345,11 +345,22 @@ fn rebalance_generated_player_for_club(
     let youth = is_youth_reserved_slot(slot);
     let base = club_strength_ovr(tier, reputation, financial_strength);
     let slot_target = crate::generated_career::quality_curve::apply_for_club(base, slot, tier, &team.id);
-    let target = clamp_generated_ovr(
+    let generated_target = clamp_generated_ovr(
         tier,
         if youth { slot_target as i16 - 12 } else { slot_target as i16 },
         youth,
     );
+    // Factual club membership and game-designed ability are separate inputs.
+    // Stronger named clubs need genuinely stronger player attributes, not a
+    // cosmetic number on the team-selection card. Youth still starts lower.
+    let target = if let Some(club_average) = clubs::curated_squad_target(&team.name) {
+        const SLOT_OFFSETS: [i16; SQUAD_SLOTS] = [
+            8, 6, 6, 5, 4, 4, 3, 3, 2, 2, 1, 0, -1, -2, -3, -3, -4, -5, -6, -6, -14, -14,
+        ];
+        (club_average as i16 + 2 + SLOT_OFFSETS[slot.min(SQUAD_SLOTS - 1)]).clamp(45, 96) as u8
+    } else {
+        generated_target
+    };
     player.attributes = attributes_for_overall(target, &player.position, rng);
     let age = player
         .date_of_birth
@@ -764,6 +775,10 @@ fn build_club(
     rng: &mut impl rand::Rng,
 ) -> (domain::team::Team, Vec<Player>, Vec<Staff>) {
     let mut team = build_team(tdef, rng);
+    if tdef.country == "ENG" && matches!(tdef.name.as_str(), "Cardiff City" | "Swansea City" | "Wrexham") {
+        team.country = "WAL".to_string();
+        team.football_nation = "ENG".to_string();
+    }
     let team_id = team.id.clone();
 
     let mut team_players = Vec::with_capacity(SQUAD_SLOTS);
@@ -2006,6 +2021,30 @@ mod tests {
         assert_eq!(players.len(), expected * (SQUAD_SLOTS + 1));
         assert_eq!(players.iter().filter(|player| player.team_id.is_none()).count(), expected);
         assert_eq!(staff.len(), expected * 4 + 12);
+    }
+
+    #[test]
+    fn leading_english_clubs_have_stronger_generated_squads() {
+        let mut config = WorldGenConfig::standard();
+        config.nations.retain(|nation| nation.code == "ENG");
+        let (teams, players, _) = generate_world_with_rng(
+            StdRng::seed_from_u64(7),
+            &config,
+            &definitions::DefinitionSources::embedded_only(),
+        );
+        let average = |name: &str| {
+            let team = teams.iter().find(|team| team.name == name).unwrap();
+            let squad: Vec<_> = players.iter()
+                .filter(|player| player.team_id.as_deref() == Some(team.id.as_str()))
+                .collect();
+            assert_eq!(squad.len(), SQUAD_SLOTS);
+            squad.iter().map(|player| player.ovr as u32).sum::<u32>() / squad.len() as u32
+        };
+        assert!(average("Manchester United") >= 86);
+        assert!(average("Arsenal") >= 86);
+        assert!(average("Chelsea") >= 86);
+        assert!(average("Liverpool") >= 86);
+        assert!(average("Birmingham City") < average("Manchester United"));
     }
 
     #[test]

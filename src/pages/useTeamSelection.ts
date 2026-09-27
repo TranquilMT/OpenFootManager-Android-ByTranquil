@@ -142,27 +142,10 @@ export function useTeamSelection({
     .filter((region) => region.id === selectedHomeRegionId || Boolean(regionSelection[region.id]))
     .map((region) => region.id);
 
-  const homeRegionTeamIds = new Set(
-    (gameState?.teams ?? [])
-      .filter((team) => regionCountries.includes(team.country))
-      .map((team) => team.id),
-  );
-
-  const availableCompetitions = competitions.filter((competition) => {
-    if (!selectedHomeRegionId) {
-      return true;
-    }
-
-    const requiredRegions = competitionRequiredRegions(competition);
-    return (
-      requiredRegions.includes(selectedHomeRegionId) ||
-      competition.region_id === selectedHomeRegionId ||
-      (competition.country_id ? regionCountries.includes(competition.country_id) : false) ||
-      competition.participant_ids?.some((teamId) => homeRegionTeamIds.has(teamId)) ||
-      competition.scope === "Continental" ||
-      competition.scope === "International"
-    );
-  });
+  // The home country filters the club picker, not the simulation scope.
+  // Players managing an English club must still be able to enable Brazil,
+  // the United States or Asian domestic leagues before the career starts.
+  const availableCompetitions = competitions;
 
   const teams = (gameState?.teams ?? []).filter((team) => {
     if (selectedCountryCode) {
