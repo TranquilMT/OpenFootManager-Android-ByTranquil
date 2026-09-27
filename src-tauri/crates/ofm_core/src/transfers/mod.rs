@@ -58,8 +58,6 @@ pub struct TransferBidFinancialProjection {
     pub annual_wage_bill_before: i64,
     pub annual_wage_bill_after: i64,
     pub annual_wage_budget: i64,
-    /// Weekly wage figures (annual / 52), so the UI can show the same before →
-    /// after breakdown the renewal projection uses instead of a lone usage %.
     pub current_weekly_wage_spend: i64,
     pub projected_weekly_wage_spend: i64,
     pub weekly_wage_budget: i64,
@@ -67,9 +65,6 @@ pub struct TransferBidFinancialProjection {
     pub projected_wage_budget_usage_pct: i64,
     pub exceeds_transfer_budget: bool,
     pub exceeds_finance: bool,
-    /// Set when the window is closed and this bid would land as
-    /// PendingRegistration: the date the debit will actually fire. `None` when
-    /// the window is open and the debit fires immediately on acceptance.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pending_registration_date: Option<String>,
 }
@@ -105,22 +100,13 @@ pub(crate) struct MarketCandidate {
     fee: u64,
 }
 
-/// A player worth pursuing, with buyer-independent appeal precomputed once so
-/// every club can reuse it instead of re-scoring the whole world.
 pub(crate) struct MarketTarget {
     player_id: String,
     owner_team_id: String,
     is_user_owned: bool,
     score: i32,
     fee: u64,
-    /// Age at the current game date. Used by club recruitment philosophy.
-    age: u8,
-    /// Current ceiling, used to distinguish development prospects from ready-made players.
-    potential: u8,
-    /// Broad position group (0=GK, 1=DEF, 2=MID, 3=FWD), used to gate buyers
-    /// that are already stacked in that area.
     position_group_index: usize,
-    /// Reputation of the player's current club, used for reputation-fit gating.
     owner_reputation: u32,
 }
 
