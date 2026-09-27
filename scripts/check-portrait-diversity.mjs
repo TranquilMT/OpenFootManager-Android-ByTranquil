@@ -6,8 +6,8 @@ const sourceDir = path.resolve('src-tauri/assets/portrait-sources');
 const generatorPath = path.resolve('src-tauri/src/commands/portraits.rs');
 const files = (await readdir(sourceDir)).filter((name) => name.endsWith('.webp')).sort();
 
-if (files.length < 16) {
-  throw new Error(`Portrait regression: expected at least 16 source faces, found ${files.length}`);
+if (files.length < 20) {
+  throw new Error(`Portrait regression: expected at least 20 source faces, found ${files.length}`);
 }
 
 const hashes = new Set();

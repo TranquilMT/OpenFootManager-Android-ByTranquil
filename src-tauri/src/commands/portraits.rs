@@ -159,6 +159,22 @@ const SOURCE_BYTES: &[(&str, &[u8])] = &[
         "chroma-17-east-asian-long-hair",
         include_bytes!("../../assets/portrait-sources/chroma-17-east-asian-long-hair.webp"),
     ),
+    (
+        "chroma-18-american",
+        include_bytes!("../../assets/portrait-sources/chroma-18-american.webp"),
+    ),
+    (
+        "chroma-19-australian",
+        include_bytes!("../../assets/portrait-sources/chroma-19-australian.webp"),
+    ),
+    (
+        "chroma-20-french",
+        include_bytes!("../../assets/portrait-sources/chroma-20-french.webp"),
+    ),
+    (
+        "chroma-21-german",
+        include_bytes!("../../assets/portrait-sources/chroma-21-german.webp"),
+    ),
 ];
 
 #[tauri::command]
