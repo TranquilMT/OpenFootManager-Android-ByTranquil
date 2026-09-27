@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - android/migration
+      - major/world-simulation
 
 concurrency:
   group: android-nightly-${{ github.ref }}

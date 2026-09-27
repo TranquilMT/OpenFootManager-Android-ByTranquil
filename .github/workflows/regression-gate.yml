@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - android/migration
+      - major/world-simulation
   workflow_dispatch:
 
 concurrency:
