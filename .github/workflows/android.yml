@@ -1,4 +1,4 @@
-name: OFMtouch Android Nightly 0.3.1
+name: OFMtouch Android Nightly 0.3.5
 
 on:
   workflow_dispatch:
@@ -89,12 +89,12 @@ jobs:
             exit 1
           fi
           mkdir -p dist-apk
-          cp "$APK" "dist-apk/OFMtouch-0.3.1-Build${GITHUB_RUN_NUMBER}-NightlyPreRelease.apk"
-          sha256sum "dist-apk/OFMtouch-0.3.1-Build${GITHUB_RUN_NUMBER}-NightlyPreRelease.apk" | tee "dist-apk/OFMtouch-0.3.1-Build${GITHUB_RUN_NUMBER}-NightlyPreRelease.apk.sha256"
+          cp "$APK" "dist-apk/OFMtouch-0.3.5-Build${GITHUB_RUN_NUMBER}-NightlyPreRelease.apk"
+          sha256sum "dist-apk/OFMtouch-0.3.5-Build${GITHUB_RUN_NUMBER}-NightlyPreRelease.apk" | tee "dist-apk/OFMtouch-0.3.5-Build${GITHUB_RUN_NUMBER}-NightlyPreRelease.apk.sha256"
 
       - name: Upload installable ARM64 APK
         uses: actions/upload-artifact@v4
         with:
-          name: OFMtouch-0.3.1-Build${{ github.run_number }}-NightlyPreRelease
+          name: OFMtouch-0.3.5-Build${{ github.run_number }}-NightlyPreRelease
           path: dist-apk/*
           if-no-files-found: error
