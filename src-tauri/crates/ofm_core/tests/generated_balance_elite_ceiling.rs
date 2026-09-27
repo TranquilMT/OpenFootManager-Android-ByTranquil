@@ -1,4 +1,4 @@
-use ofm_core::generated_balance::{clamp_generated_ovr, LeagueTier};
+use ofm_core::generated_balance::{LeagueTier, clamp_generated_ovr};
 
 #[test]
 fn elite_generated_ceiling_is_96() {

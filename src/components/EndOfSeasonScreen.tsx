@@ -8,8 +8,265 @@ import { competitionDisplayName } from "../lib/competitionName";
 import AwardsCeremonyScreen from "./season/AwardsCeremonyScreen";
 import { Trophy, Star, ArrowRight, Crown } from "lucide-react";
 
-interface EndOfSeasonSummary { season:number;league_name:string;champion_id:string;champion_name:string;user_position:number;user_points:number;user_won:number;user_drawn:number;user_lost:number;user_goals_for:number;user_goals_against:number;golden_boot_player:string;golden_boot_goals:number;poty_player:string;poty_rating:number;total_teams:number;season_awards:SeasonAwardsData }
-interface EndOfSeasonScreenProps { gameState:GameStateData;onGameUpdate:(g:GameStateData)=>void }
-export default function EndOfSeasonScreen({gameState,onGameUpdate}:EndOfSeasonScreenProps){const{t}=useTranslation();const setShowFiredModal=useGameStore(s=>s.setShowFiredModal);const[loading,setLoading]=useState(false);const[summary,setSummary]=useState<EndOfSeasonSummary|null>(null);const[step,setStep]=useState<"review"|"ceremony"|"done">("review");const league=gameState.league,userTeamId=gameState.manager.team_id,userTeam=gameState.teams.find(t=>t.id===userTeamId);const standings=league?[...league.standings].sort((a,b)=>b.points-a.points||b.goals_for-b.goals_against-(a.goals_for-a.goals_against)||b.goals_for-a.goals_for):[];const userStandingIdx=standings.findIndex(s=>s.team_id===userTeamId),userStanding=standings[userStandingIdx],userPosition=userStandingIdx+1,champion=standings[0],championName=gameState.teams.find(t=>t.id===champion?.team_id)?.name||"",isChampion=champion?.team_id===userTeamId;
-const handleAdvance=async()=>{if(loading)return;setLoading(true);try{const result=await invoke<{action?:string;game:GameStateData;summary:EndOfSeasonSummary}>("advance_to_next_season");if(result.action==="fired"){onGameUpdate(result.game);setShowFiredModal(true);return}setSummary(result.summary);onGameUpdate(result.game);setStep("ceremony")}catch(err){console.error("Failed to advance season:",err)}finally{setLoading(false)}};const posLabel=(pos:number)=>pos===1?t("common.place.1"):pos===2?t("common.place.2"):pos===3?t("common.place.3"):t("common.place.other",{n:pos});
-return <div className="mx-auto w-full max-w-5xl overflow-x-hidden px-3 py-5 sm:px-4 sm:py-8">{step==="review"&&<><div className="mb-6 text-center sm:mb-8"><div className={`mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl sm:mb-4 sm:h-20 sm:w-20 ${isChampion?"bg-gradient-to-br from-accent-400 to-accent-600 shadow-lg shadow-accent-500/30":"bg-gradient-to-br from-navy-700 to-navy-800"}`}>{isChampion?<Crown className="h-8 w-8 text-white sm:h-10 sm:w-10"/>:<Trophy className="h-8 w-8 text-gray-300 sm:h-10 sm:w-10"/>}</div><h1 className="font-heading text-2xl font-bold uppercase tracking-wide text-gray-900 dark:text-gray-100 sm:text-3xl">{t("endOfSeason.seasonComplete")}</h1><p className="mt-1 break-words text-base text-gray-500 dark:text-gray-400 sm:text-lg">{t("endOfSeason.seasonLine",{league:league?competitionDisplayName(league,t):"",season:league?.season??""})}</p>{isChampion&&<p className="mt-2 font-heading text-lg font-bold uppercase tracking-wider text-accent-500 animate-pulse sm:text-xl">{t("endOfSeason.champions")}</p>}</div><Card accent={isChampion?"accent":"primary"} className="mb-4 sm:mb-6"><CardBody><div className="text-center"><p className="mb-1 break-words text-xs font-heading font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">{userTeam?.name}</p><div className="mb-4 grid grid-cols-[1fr_auto_1fr] items-center gap-3"><div><p className="font-heading text-3xl font-bold text-gray-900 dark:text-gray-100 sm:text-4xl">{posLabel(userPosition)}</p><p className="text-[10px] font-heading uppercase text-gray-400 dark:text-gray-500 sm:text-xs">{t("endOfSeason.position")}</p></div><div className="h-12 w-px bg-gray-200 dark:bg-navy-600"/><div><p className="font-heading text-3xl font-bold text-primary-500 sm:text-4xl">{userStanding?.points||0}</p><p className="text-[10px] font-heading uppercase text-gray-400 dark:text-gray-500 sm:text-xs">{t("endOfSeason.points")}</p></div></div><div className="grid grid-cols-2 gap-2 text-sm sm:flex sm:items-center sm:justify-center sm:gap-8"><span className="font-heading font-bold text-green-500">{userStanding?.won||0}{t("common.won")}</span><span className="font-heading font-bold text-gray-500">{userStanding?.drawn||0}{t("common.drawn")}</span><span className="font-heading font-bold text-red-500">{userStanding?.lost||0}{t("common.lost")}</span><span className="text-gray-400">{userStanding?.goals_for||0} {t("common.gf")} — {userStanding?.goals_against||0} {t("common.ga")}</span></div></div></CardBody></Card><Card className="mb-4 sm:mb-6"><CardBody><h3 className="mb-3 flex items-center gap-2 font-heading text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400"><Trophy className="h-4 w-4 text-accent-500"/>{t("endOfSeason.finalStandings")}</h3><div className="divide-y divide-gray-100 dark:divide-navy-600">{standings.slice(0,5).map((entry,idx)=>{const teamName=gameState.teams.find(t=>t.id===entry.team_id)?.name||"",isUser=entry.team_id===userTeamId,gd=entry.goals_for-entry.goals_against;return <div key={entry.team_id} className={`grid grid-cols-[1.5rem_minmax(0,1fr)_auto] items-center gap-2 py-3 sm:grid-cols-[1.5rem_minmax(0,1fr)_4rem_2rem_2rem] sm:gap-3 ${isUser?"-mx-2 rounded-lg bg-primary-50/50 px-2 dark:bg-primary-500/5":""}`}><span className={`text-center font-heading text-sm font-bold ${idx===0?"text-accent-500":"text-gray-400"}`}>{idx+1}</span><span className={`min-w-0 truncate text-sm font-semibold ${isUser?"text-primary-600 dark:text-primary-400":"text-gray-800 dark:text-gray-200"}`}>{teamName}</span><span className="font-heading text-sm font-bold tabular-nums text-gray-800 dark:text-gray-100 sm:order-5 sm:text-right">{entry.points}</span><span className="col-start-2 text-[11px] tabular-nums text-gray-500 dark:text-gray-400 sm:col-start-auto sm:text-center sm:text-xs">{entry.won}W {entry.drawn}D {entry.lost}L</span><span className={`text-right text-[11px] font-semibold tabular-nums sm:text-center sm:text-xs ${gd>0?"text-primary-500":gd<0?"text-red-500":"text-gray-500"}`}>{gd>0?`+${gd}`:gd}</span></div>})}</div></CardBody></Card>{!isChampion&&<Card className="mb-4 sm:mb-6"><CardBody><div className="flex items-center gap-3"><Crown className="h-6 w-6 shrink-0 text-accent-500"/><div className="min-w-0"><p className="text-sm font-heading font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">{t("endOfSeason.leagueChampions")}</p><p className="break-words font-heading text-lg font-bold text-accent-500">{championName}</p></div></div></CardBody></Card>}<div className="text-center"><button type="button" onClick={handleAdvance} disabled={loading} className="mx-auto flex min-h-12 w-full items-center justify-center gap-3 rounded-xl bg-primary-500 px-5 py-3 font-heading text-base font-bold uppercase tracking-wider text-white shadow-lg shadow-primary-500/20 transition-all active:scale-[.99] disabled:opacity-50 sm:w-auto sm:px-8 sm:py-4 sm:text-lg">{loading?t("endOfSeason.processing"):t("endOfSeason.startNextSeason")}<ArrowRight className="h-5 w-5 shrink-0"/></button><p className="mt-3 text-xs text-gray-400 dark:text-gray-500">{t("endOfSeason.statsArchived")}</p></div></>}{step==="ceremony"&&summary&&<AwardsCeremonyScreen season={summary.season} leagueName={summary.league_name} gameState={gameState} awards={summary.season_awards} onContinue={()=>setStep("done")}/>} {step==="done"&&summary&&<div className="text-center"><div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 shadow-lg shadow-primary-500/30 sm:h-20 sm:w-20"><Star className="h-8 w-8 text-white sm:h-10 sm:w-10"/></div><h1 className="mb-2 font-heading text-2xl font-bold uppercase tracking-wide text-gray-900 dark:text-gray-100 sm:text-3xl">{t("endOfSeason.newSeason",{n:summary.season+1})}</h1><p className="mb-6 text-gray-500 dark:text-gray-400 sm:mb-8">{t("endOfSeason.newScheduleReleased")}</p><button type="button" onClick={()=>{if(gameState)onGameUpdate(gameState)}} className="min-h-12 w-full rounded-xl bg-primary-500 px-5 py-3 font-heading font-bold uppercase tracking-wider text-white shadow-lg shadow-primary-500/20 active:scale-[.99] sm:w-auto sm:px-8">{t("endOfSeason.continueDashboard")}</button></div>}</div>}
+interface EndOfSeasonSummary {
+  season: number;
+  league_name: string;
+  champion_id: string;
+  champion_name: string;
+  user_position: number;
+  user_points: number;
+  user_won: number;
+  user_drawn: number;
+  user_lost: number;
+  user_goals_for: number;
+  user_goals_against: number;
+  golden_boot_player: string;
+  golden_boot_goals: number;
+  poty_player: string;
+  poty_rating: number;
+  total_teams: number;
+  season_awards: SeasonAwardsData;
+}
+interface EndOfSeasonScreenProps {
+  gameState: GameStateData;
+  onGameUpdate: (g: GameStateData) => void;
+}
+export default function EndOfSeasonScreen({ gameState, onGameUpdate }: EndOfSeasonScreenProps) {
+  const { t } = useTranslation();
+  const setShowFiredModal = useGameStore((s) => s.setShowFiredModal);
+  const [loading, setLoading] = useState(false);
+  const [summary, setSummary] = useState<EndOfSeasonSummary | null>(null);
+  const [step, setStep] = useState<"review" | "ceremony" | "done">("review");
+  const league = gameState.league,
+    userTeamId = gameState.manager.team_id,
+    userTeam = gameState.teams.find((t) => t.id === userTeamId);
+  const standings = league
+    ? [...league.standings].sort(
+        (a, b) =>
+          b.points - a.points ||
+          b.goals_for - b.goals_against - (a.goals_for - a.goals_against) ||
+          b.goals_for - a.goals_for,
+      )
+    : [];
+  const userStandingIdx = standings.findIndex((s) => s.team_id === userTeamId),
+    userStanding = standings[userStandingIdx],
+    userPosition = userStandingIdx + 1,
+    champion = standings[0],
+    championName = gameState.teams.find((t) => t.id === champion?.team_id)?.name || "",
+    isChampion = champion?.team_id === userTeamId;
+  const handleAdvance = async () => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      const result = await invoke<{
+        action?: string;
+        game: GameStateData;
+        summary: EndOfSeasonSummary;
+      }>("advance_to_next_season");
+      if (result.action === "fired") {
+        onGameUpdate(result.game);
+        setShowFiredModal(true);
+        return;
+      }
+      setSummary(result.summary);
+      onGameUpdate(result.game);
+      setStep("ceremony");
+    } catch (err) {
+      console.error("Failed to advance season:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const posLabel = (pos: number) =>
+    pos === 1
+      ? t("common.place.1")
+      : pos === 2
+        ? t("common.place.2")
+        : pos === 3
+          ? t("common.place.3")
+          : t("common.place.other", { n: pos });
+  return (
+    <div className="mx-auto w-full max-w-5xl overflow-x-hidden px-3 py-5 sm:px-4 sm:py-8">
+      {step === "review" && (
+        <>
+          <div className="mb-6 text-center sm:mb-8">
+            <div
+              className={`mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl sm:mb-4 sm:h-20 sm:w-20 ${isChampion ? "bg-gradient-to-br from-accent-400 to-accent-600 shadow-lg shadow-accent-500/30" : "bg-gradient-to-br from-navy-700 to-navy-800"}`}
+            >
+              {isChampion ? (
+                <Crown className="h-8 w-8 text-white sm:h-10 sm:w-10" />
+              ) : (
+                <Trophy className="h-8 w-8 text-gray-300 sm:h-10 sm:w-10" />
+              )}
+            </div>
+            <h1 className="font-heading text-2xl font-bold uppercase tracking-wide text-gray-900 dark:text-gray-100 sm:text-3xl">
+              {t("endOfSeason.seasonComplete")}
+            </h1>
+            <p className="mt-1 break-words text-base text-gray-500 dark:text-gray-400 sm:text-lg">
+              {t("endOfSeason.seasonLine", {
+                league: league ? competitionDisplayName(league, t) : "",
+                season: league?.season ?? "",
+              })}
+            </p>
+            {isChampion && (
+              <p className="mt-2 font-heading text-lg font-bold uppercase tracking-wider text-accent-500 animate-pulse sm:text-xl">
+                {t("endOfSeason.champions")}
+              </p>
+            )}
+          </div>
+          <Card accent={isChampion ? "accent" : "primary"} className="mb-4 sm:mb-6">
+            <CardBody>
+              <div className="text-center">
+                <p className="mb-1 break-words text-xs font-heading font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+                  {userTeam?.name}
+                </p>
+                <div className="mb-4 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+                  <div>
+                    <p className="font-heading text-3xl font-bold text-gray-900 dark:text-gray-100 sm:text-4xl">
+                      {posLabel(userPosition)}
+                    </p>
+                    <p className="text-[10px] font-heading uppercase text-gray-400 dark:text-gray-500 sm:text-xs">
+                      {t("endOfSeason.position")}
+                    </p>
+                  </div>
+                  <div className="h-12 w-px bg-gray-200 dark:bg-navy-600" />
+                  <div>
+                    <p className="font-heading text-3xl font-bold text-primary-500 sm:text-4xl">
+                      {userStanding?.points || 0}
+                    </p>
+                    <p className="text-[10px] font-heading uppercase text-gray-400 dark:text-gray-500 sm:text-xs">
+                      {t("endOfSeason.points")}
+                    </p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-sm sm:flex sm:items-center sm:justify-center sm:gap-8">
+                  <span className="font-heading font-bold text-green-500">
+                    {userStanding?.won || 0}
+                    {t("common.won")}
+                  </span>
+                  <span className="font-heading font-bold text-gray-500">
+                    {userStanding?.drawn || 0}
+                    {t("common.drawn")}
+                  </span>
+                  <span className="font-heading font-bold text-red-500">
+                    {userStanding?.lost || 0}
+                    {t("common.lost")}
+                  </span>
+                  <span className="text-gray-400">
+                    {userStanding?.goals_for || 0} {t("common.gf")} —{" "}
+                    {userStanding?.goals_against || 0} {t("common.ga")}
+                  </span>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+          <Card className="mb-4 sm:mb-6">
+            <CardBody>
+              <h3 className="mb-3 flex items-center gap-2 font-heading text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <Trophy className="h-4 w-4 text-accent-500" />
+                {t("endOfSeason.finalStandings")}
+              </h3>
+              <div className="divide-y divide-gray-100 dark:divide-navy-600">
+                {standings.slice(0, 5).map((entry, idx) => {
+                  const teamName = gameState.teams.find((t) => t.id === entry.team_id)?.name || "",
+                    isUser = entry.team_id === userTeamId,
+                    gd = entry.goals_for - entry.goals_against;
+                  return (
+                    <div
+                      key={entry.team_id}
+                      className={`grid grid-cols-[1.5rem_minmax(0,1fr)_auto] items-center gap-2 py-3 sm:grid-cols-[1.5rem_minmax(0,1fr)_4rem_2rem_2rem] sm:gap-3 ${isUser ? "-mx-2 rounded-lg bg-primary-50/50 px-2 dark:bg-primary-500/5" : ""}`}
+                    >
+                      <span
+                        className={`text-center font-heading text-sm font-bold ${idx === 0 ? "text-accent-500" : "text-gray-400"}`}
+                      >
+                        {idx + 1}
+                      </span>
+                      <span
+                        className={`min-w-0 truncate text-sm font-semibold ${isUser ? "text-primary-600 dark:text-primary-400" : "text-gray-800 dark:text-gray-200"}`}
+                      >
+                        {teamName}
+                      </span>
+                      <span className="font-heading text-sm font-bold tabular-nums text-gray-800 dark:text-gray-100 sm:order-5 sm:text-right">
+                        {entry.points}
+                      </span>
+                      <span className="col-start-2 text-[11px] tabular-nums text-gray-500 dark:text-gray-400 sm:col-start-auto sm:text-center sm:text-xs">
+                        {entry.won}W {entry.drawn}D {entry.lost}L
+                      </span>
+                      <span
+                        className={`text-right text-[11px] font-semibold tabular-nums sm:text-center sm:text-xs ${gd > 0 ? "text-primary-500" : gd < 0 ? "text-red-500" : "text-gray-500"}`}
+                      >
+                        {gd > 0 ? `+${gd}` : gd}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardBody>
+          </Card>
+          {!isChampion && (
+            <Card className="mb-4 sm:mb-6">
+              <CardBody>
+                <div className="flex items-center gap-3">
+                  <Crown className="h-6 w-6 shrink-0 text-accent-500" />
+                  <div className="min-w-0">
+                    <p className="text-sm font-heading font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200">
+                      {t("endOfSeason.leagueChampions")}
+                    </p>
+                    <p className="break-words font-heading text-lg font-bold text-accent-500">
+                      {championName}
+                    </p>
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
+          )}
+          <div className="text-center">
+            <button
+              type="button"
+              onClick={handleAdvance}
+              disabled={loading}
+              className="mx-auto flex min-h-12 w-full items-center justify-center gap-3 rounded-xl bg-primary-500 px-5 py-3 font-heading text-base font-bold uppercase tracking-wider text-white shadow-lg shadow-primary-500/20 transition-all active:scale-[.99] disabled:opacity-50 sm:w-auto sm:px-8 sm:py-4 sm:text-lg"
+            >
+              {loading ? t("endOfSeason.processing") : t("endOfSeason.startNextSeason")}
+              <ArrowRight className="h-5 w-5 shrink-0" />
+            </button>
+            <p className="mt-3 text-xs text-gray-400 dark:text-gray-500">
+              {t("endOfSeason.statsArchived")}
+            </p>
+          </div>
+        </>
+      )}
+      {step === "ceremony" && summary && (
+        <AwardsCeremonyScreen
+          season={summary.season}
+          leagueName={summary.league_name}
+          gameState={gameState}
+          awards={summary.season_awards}
+          onContinue={() => setStep("done")}
+        />
+      )}{" "}
+      {step === "done" && summary && (
+        <div className="text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 shadow-lg shadow-primary-500/30 sm:h-20 sm:w-20">
+            <Star className="h-8 w-8 text-white sm:h-10 sm:w-10" />
+          </div>
+          <h1 className="mb-2 font-heading text-2xl font-bold uppercase tracking-wide text-gray-900 dark:text-gray-100 sm:text-3xl">
+            {t("endOfSeason.newSeason", { n: summary.season + 1 })}
+          </h1>
+          <p className="mb-6 text-gray-500 dark:text-gray-400 sm:mb-8">
+            {t("endOfSeason.newScheduleReleased")}
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              if (gameState) onGameUpdate(gameState);
+            }}
+            className="min-h-12 w-full rounded-xl bg-primary-500 px-5 py-3 font-heading font-bold uppercase tracking-wider text-white shadow-lg shadow-primary-500/20 active:scale-[.99] sm:w-auto sm:px-8"
+          >
+            {t("endOfSeason.continueDashboard")}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}

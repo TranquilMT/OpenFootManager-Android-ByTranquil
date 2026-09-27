@@ -1,11 +1,251 @@
 import { useTranslation } from "react-i18next";
 import { AlertTriangle } from "lucide-react";
-import type { PlayerData,TeamData,TransferOfferData } from "../../store/gameStore";
-import { formatExactMoney,formatVal,getTeamName,positionBadgeVariant } from "../../lib/helpers";
-import type { TransferBidProjectionData,TransferNegotiationResponseData } from "../../services/transfersService";
-import NegotiationFeedbackPanel,{type NegotiationFeedbackPanelData} from "../NegotiationFeedbackPanel";
-import { Badge } from "../ui";import{translatePositionAbbreviation}from"../squad/SquadTab.helpers";import TransferNegotiationHistory from"./TransferNegotiationHistory";import{playerHasPendingRegistration}from"./TransfersTab.model";
-export interface TransferBidFormProps{bidTarget:PlayerData;teams:TeamData[];bidAmount:string;onBidAmountChange:(value:string)=>void;myTeam:TeamData|null;bidFee:number|null;bidProjection:TransferBidProjectionData["projection"]|null;bidFeedback:NegotiationFeedbackPanelData|null;activeBidOffer:TransferOfferData|null;hasExistingOffer:boolean;bidResult:TransferNegotiationResponseData["decision"]|"error"|null;bidError?:string|null;bidLoading:boolean;bidSubmitDisabled:boolean;blockingTitle?:string|null;blockingDetail?:string|null;showPlayerSummary?:boolean;onSubmit:()=>void;onClose:()=>void}
-type TransferBidModalProps=TransferBidFormProps;
-export function TransferBidForm({bidTarget,teams,bidAmount,onBidAmountChange,myTeam,bidFee,bidProjection,bidFeedback,activeBidOffer,hasExistingOffer,bidResult,bidError,bidLoading,bidSubmitDisabled,blockingTitle=null,blockingDetail=null,showPlayerSummary=true,onSubmit,onClose}:TransferBidFormProps){const{t}=useTranslation();const titleId=`transfer-bid-modal-title-${bidTarget.id}`;const pendingRegistration=playerHasPendingRegistration(bidTarget);return <><h3 id={titleId} className="mb-3 text-sm font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">{t("transfers.makeBid")}</h3>{showPlayerSummary?<div className="mb-4 flex min-w-0 items-center gap-3"><Badge variant={positionBadgeVariant(bidTarget.position)} size="sm">{translatePositionAbbreviation(t,bidTarget.position)}</Badge><div className="min-w-0"><p className="truncate text-sm font-semibold text-gray-800 dark:text-gray-200">{bidTarget.full_name}</p><p className="truncate text-xs text-gray-400">{getTeamName(teams,bidTarget.team_id)} • {t("transfers.playerValue",{value:formatVal(bidTarget.market_value)})}</p></div></div>:null}{blockingTitle?<div role="alert" className="mb-4 flex gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0"/><div className="text-xs"><p className="font-heading font-bold uppercase tracking-wider">{blockingTitle}</p>{blockingDetail?<p className="mt-1">{blockingDetail}</p>:null}</div></div>:null}{pendingRegistration?<div role="alert" className="mb-4 flex gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0"/><p className="text-xs">{t("transfers.bidBlockedPendingRegistration")}</p></div>:null}{hasExistingOffer?<p className="mb-3 text-xs text-gray-500 dark:text-gray-400">{t("transfers.resumeNegotiationHint")}</p>:null}<label htmlFor="bid-amount" className="mb-1 block text-xs font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">{t("transfers.bidAmount")}</label><input id="bid-amount" inputMode="decimal" type="number" step="0.1" min="0" value={bidAmount} onChange={e=>onBidAmountChange(e.target.value)} className="mb-3 min-h-12 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-base text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500/50 dark:border-navy-600 dark:bg-navy-700 dark:text-gray-200 sm:min-h-0 sm:text-sm"/>{myTeam&&bidFee!==null&&bidProjection?<div className="mb-3 space-y-2 rounded-lg border border-gray-200 bg-white/70 p-3 dark:border-navy-700 dark:bg-navy-900/40"><p className="text-[11px] font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">{t("transfers.bidImpactTitle")}</p><p className="text-xs text-gray-600 dark:text-gray-300">{t(bidProjection.pending_registration_date?"transfers.bidImpactTransferBudgetDeferred":"transfers.bidImpactTransferBudget",{before:formatExactMoney(bidProjection.transfer_budget_before),after:formatExactMoney(bidProjection.transfer_budget_after),date:bidProjection.pending_registration_date??""})}</p><p className="text-xs text-gray-600 dark:text-gray-300">{t(bidProjection.pending_registration_date?"transfers.bidImpactBalanceDeferred":"transfers.bidImpactBalance",{before:formatExactMoney(bidProjection.finance_before),after:formatExactMoney(bidProjection.finance_after),date:bidProjection.pending_registration_date??""})}</p><p className="text-xs text-gray-600 dark:text-gray-300">{t("transfers.bidImpactWageBill",{before:formatExactMoney(bidProjection.current_weekly_wage_spend),after:formatExactMoney(bidProjection.projected_weekly_wage_spend)})}</p><p className="text-xs text-gray-600 dark:text-gray-300">{t("transfers.bidImpactWeeklyWageBudget",{budget:formatExactMoney(bidProjection.weekly_wage_budget)})}</p><p className="text-xs text-gray-600 dark:text-gray-300">{t("transfers.bidImpactIncomingWage",{wage:formatExactMoney(bidProjection.incoming_player_weekly_wage)})}</p><p className="text-xs text-gray-600 dark:text-gray-300">{t("transfers.bidImpactWagePressure",{percent:bidProjection.projected_wage_budget_usage_pct})}</p>{bidProjection.exceeds_transfer_budget?<p className="text-xs text-red-600 dark:text-red-300">{t("transfers.bidImpactOverTransferBudget")}</p>:null}{bidProjection.exceeds_finance?<p className="text-xs text-red-600 dark:text-red-300">{t("transfers.bidImpactOverBalance")}</p>:null}</div>:null}<NegotiationFeedbackPanel feedback={bidFeedback} titleKey="transfers.negotiationPulse" roundKey="transfers.negotiationRound" patienceKey="transfers.negotiationPatience" tensionKey="transfers.negotiationTension" className="mb-3"/><TransferNegotiationHistory offer={activeBidOffer} mode="outgoing"/>{bidResult?<div className={`mb-3 text-xs font-heading font-bold uppercase tracking-wider ${bidResult==="accepted"?"text-green-500":bidResult==="rejected"?"text-red-600 dark:text-red-300":"text-amber-500"}`}>{bidResult==="accepted"?t("transfers.bidAccepted"):bidResult==="rejected"?t("transfers.bidRejected"):bidResult==="counter_offer"?t("transfers.bidCountered"):bidError}</div>:null}<div className="sticky bottom-0 -mx-1 flex flex-col-reverse gap-2 bg-white/95 px-1 pb-[max(.25rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur dark:bg-navy-800/95 sm:static sm:flex-row sm:bg-transparent sm:p-0 sm:backdrop-blur-none"><button type="button" onClick={onClose} className="min-h-12 rounded-lg bg-gray-200 px-4 py-2 text-sm font-heading font-bold uppercase tracking-wider text-gray-600 active:bg-gray-300 dark:bg-navy-700 dark:text-gray-300 dark:active:bg-navy-600 sm:min-h-0">{t("transfers.close")}</button><button type="button" onClick={onSubmit} disabled={bidSubmitDisabled||pendingRegistration} className="min-h-12 flex-1 rounded-lg bg-primary-700 py-2 text-sm font-heading font-bold uppercase tracking-wider text-white active:bg-primary-800 disabled:opacity-50 sm:min-h-0">{bidLoading?t("transfers.submitting"):t("transfers.submitBid")}</button></div></>}
-export default function TransferBidModal(props:TransferBidModalProps){const titleId=`transfer-bid-modal-title-${props.bidTarget.id}`;return <div role="presentation" className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center sm:p-4" onClick={props.onClose}><div role="dialog" aria-modal="true" aria-labelledby={titleId} className="max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-2xl border border-gray-200 bg-white p-4 shadow-2xl dark:border-navy-600 dark:bg-navy-800 sm:max-w-sm sm:rounded-xl sm:p-6" onClick={e=>e.stopPropagation()}><TransferBidForm {...props}/></div></div>}
+import type { PlayerData, TeamData, TransferOfferData } from "../../store/gameStore";
+import { formatExactMoney, formatVal, getTeamName, positionBadgeVariant } from "../../lib/helpers";
+import type {
+  TransferBidProjectionData,
+  TransferNegotiationResponseData,
+} from "../../services/transfersService";
+import NegotiationFeedbackPanel, {
+  type NegotiationFeedbackPanelData,
+} from "../NegotiationFeedbackPanel";
+import { Badge } from "../ui";
+import { translatePositionAbbreviation } from "../squad/SquadTab.helpers";
+import TransferNegotiationHistory from "./TransferNegotiationHistory";
+import { playerHasPendingRegistration } from "./TransfersTab.model";
+export interface TransferBidFormProps {
+  bidTarget: PlayerData;
+  teams: TeamData[];
+  bidAmount: string;
+  onBidAmountChange: (value: string) => void;
+  myTeam: TeamData | null;
+  bidFee: number | null;
+  bidProjection: TransferBidProjectionData["projection"] | null;
+  bidFeedback: NegotiationFeedbackPanelData | null;
+  activeBidOffer: TransferOfferData | null;
+  hasExistingOffer: boolean;
+  bidResult: TransferNegotiationResponseData["decision"] | "error" | null;
+  bidError?: string | null;
+  bidLoading: boolean;
+  bidSubmitDisabled: boolean;
+  blockingTitle?: string | null;
+  blockingDetail?: string | null;
+  showPlayerSummary?: boolean;
+  onSubmit: () => void;
+  onClose: () => void;
+}
+type TransferBidModalProps = TransferBidFormProps;
+export function TransferBidForm({
+  bidTarget,
+  teams,
+  bidAmount,
+  onBidAmountChange,
+  myTeam,
+  bidFee,
+  bidProjection,
+  bidFeedback,
+  activeBidOffer,
+  hasExistingOffer,
+  bidResult,
+  bidError,
+  bidLoading,
+  bidSubmitDisabled,
+  blockingTitle = null,
+  blockingDetail = null,
+  showPlayerSummary = true,
+  onSubmit,
+  onClose,
+}: TransferBidFormProps) {
+  const { t } = useTranslation();
+  const titleId = `transfer-bid-modal-title-${bidTarget.id}`;
+  const pendingRegistration = playerHasPendingRegistration(bidTarget);
+  return (
+    <>
+      <h3
+        id={titleId}
+        className="mb-3 text-sm font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400"
+      >
+        {t("transfers.makeBid")}
+      </h3>
+      {showPlayerSummary ? (
+        <div className="mb-4 flex min-w-0 items-center gap-3">
+          <Badge variant={positionBadgeVariant(bidTarget.position)} size="sm">
+            {translatePositionAbbreviation(t, bidTarget.position)}
+          </Badge>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-gray-800 dark:text-gray-200">
+              {bidTarget.full_name}
+            </p>
+            <p className="truncate text-xs text-gray-400">
+              {getTeamName(teams, bidTarget.team_id)} •{" "}
+              {t("transfers.playerValue", { value: formatVal(bidTarget.market_value) })}
+            </p>
+          </div>
+        </div>
+      ) : null}
+      {blockingTitle ? (
+        <div
+          role="alert"
+          className="mb-4 flex gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200"
+        >
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          <div className="text-xs">
+            <p className="font-heading font-bold uppercase tracking-wider">{blockingTitle}</p>
+            {blockingDetail ? <p className="mt-1">{blockingDetail}</p> : null}
+          </div>
+        </div>
+      ) : null}
+      {pendingRegistration ? (
+        <div
+          role="alert"
+          className="mb-4 flex gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200"
+        >
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          <p className="text-xs">{t("transfers.bidBlockedPendingRegistration")}</p>
+        </div>
+      ) : null}
+      {hasExistingOffer ? (
+        <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">
+          {t("transfers.resumeNegotiationHint")}
+        </p>
+      ) : null}
+      <label
+        htmlFor="bid-amount"
+        className="mb-1 block text-xs font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400"
+      >
+        {t("transfers.bidAmount")}
+      </label>
+      <input
+        id="bid-amount"
+        inputMode="decimal"
+        type="number"
+        step="0.1"
+        min="0"
+        value={bidAmount}
+        onChange={(e) => onBidAmountChange(e.target.value)}
+        className="mb-3 min-h-12 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-base text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500/50 dark:border-navy-600 dark:bg-navy-700 dark:text-gray-200 sm:min-h-0 sm:text-sm"
+      />
+      {myTeam && bidFee !== null && bidProjection ? (
+        <div className="mb-3 space-y-2 rounded-lg border border-gray-200 bg-white/70 p-3 dark:border-navy-700 dark:bg-navy-900/40">
+          <p className="text-[11px] font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+            {t("transfers.bidImpactTitle")}
+          </p>
+          <p className="text-xs text-gray-600 dark:text-gray-300">
+            {t(
+              bidProjection.pending_registration_date
+                ? "transfers.bidImpactTransferBudgetDeferred"
+                : "transfers.bidImpactTransferBudget",
+              {
+                before: formatExactMoney(bidProjection.transfer_budget_before),
+                after: formatExactMoney(bidProjection.transfer_budget_after),
+                date: bidProjection.pending_registration_date ?? "",
+              },
+            )}
+          </p>
+          <p className="text-xs text-gray-600 dark:text-gray-300">
+            {t(
+              bidProjection.pending_registration_date
+                ? "transfers.bidImpactBalanceDeferred"
+                : "transfers.bidImpactBalance",
+              {
+                before: formatExactMoney(bidProjection.finance_before),
+                after: formatExactMoney(bidProjection.finance_after),
+                date: bidProjection.pending_registration_date ?? "",
+              },
+            )}
+          </p>
+          <p className="text-xs text-gray-600 dark:text-gray-300">
+            {t("transfers.bidImpactWageBill", {
+              before: formatExactMoney(bidProjection.current_weekly_wage_spend),
+              after: formatExactMoney(bidProjection.projected_weekly_wage_spend),
+            })}
+          </p>
+          <p className="text-xs text-gray-600 dark:text-gray-300">
+            {t("transfers.bidImpactWeeklyWageBudget", {
+              budget: formatExactMoney(bidProjection.weekly_wage_budget),
+            })}
+          </p>
+          <p className="text-xs text-gray-600 dark:text-gray-300">
+            {t("transfers.bidImpactIncomingWage", {
+              wage: formatExactMoney(bidProjection.incoming_player_weekly_wage),
+            })}
+          </p>
+          <p className="text-xs text-gray-600 dark:text-gray-300">
+            {t("transfers.bidImpactWagePressure", {
+              percent: bidProjection.projected_wage_budget_usage_pct,
+            })}
+          </p>
+          {bidProjection.exceeds_transfer_budget ? (
+            <p className="text-xs text-red-600 dark:text-red-300">
+              {t("transfers.bidImpactOverTransferBudget")}
+            </p>
+          ) : null}
+          {bidProjection.exceeds_finance ? (
+            <p className="text-xs text-red-600 dark:text-red-300">
+              {t("transfers.bidImpactOverBalance")}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+      <NegotiationFeedbackPanel
+        feedback={bidFeedback}
+        titleKey="transfers.negotiationPulse"
+        roundKey="transfers.negotiationRound"
+        patienceKey="transfers.negotiationPatience"
+        tensionKey="transfers.negotiationTension"
+        className="mb-3"
+      />
+      <TransferNegotiationHistory offer={activeBidOffer} mode="outgoing" />
+      {bidResult ? (
+        <div
+          className={`mb-3 text-xs font-heading font-bold uppercase tracking-wider ${bidResult === "accepted" ? "text-green-500" : bidResult === "rejected" ? "text-red-600 dark:text-red-300" : "text-amber-500"}`}
+        >
+          {bidResult === "accepted"
+            ? t("transfers.bidAccepted")
+            : bidResult === "rejected"
+              ? t("transfers.bidRejected")
+              : bidResult === "counter_offer"
+                ? t("transfers.bidCountered")
+                : bidError}
+        </div>
+      ) : null}
+      <div className="sticky bottom-0 -mx-1 flex flex-col-reverse gap-2 bg-white/95 px-1 pb-[max(.25rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur dark:bg-navy-800/95 sm:static sm:flex-row sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+        <button
+          type="button"
+          onClick={onClose}
+          className="min-h-12 rounded-lg bg-gray-200 px-4 py-2 text-sm font-heading font-bold uppercase tracking-wider text-gray-600 active:bg-gray-300 dark:bg-navy-700 dark:text-gray-300 dark:active:bg-navy-600 sm:min-h-0"
+        >
+          {t("transfers.close")}
+        </button>
+        <button
+          type="button"
+          onClick={onSubmit}
+          disabled={bidSubmitDisabled || pendingRegistration}
+          className="min-h-12 flex-1 rounded-lg bg-primary-700 py-2 text-sm font-heading font-bold uppercase tracking-wider text-white active:bg-primary-800 disabled:opacity-50 sm:min-h-0"
+        >
+          {bidLoading ? t("transfers.submitting") : t("transfers.submitBid")}
+        </button>
+      </div>
+    </>
+  );
+}
+export default function TransferBidModal(props: TransferBidModalProps) {
+  const titleId = `transfer-bid-modal-title-${props.bidTarget.id}`;
+  return (
+    <div
+      role="presentation"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center sm:p-4"
+      onClick={props.onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        className="max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-2xl border border-gray-200 bg-white p-4 shadow-2xl dark:border-navy-600 dark:bg-navy-800 sm:max-w-sm sm:rounded-xl sm:p-6"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <TransferBidForm {...props} />
+      </div>
+    </div>
+  );
+}

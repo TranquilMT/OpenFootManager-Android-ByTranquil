@@ -166,10 +166,24 @@ export default function TacticsCommandBar({
             </div>
 
             <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap xl:justify-end">
-              <Button type="button" variant="ghost" size="sm" icon={<Plus />} className="min-h-11 w-full sm:min-h-0 sm:w-auto" onClick={onCreateNew}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                icon={<Plus />}
+                className="min-h-11 w-full sm:min-h-0 sm:w-auto"
+                onClick={onCreateNew}
+              >
                 {t("tactics.newTactic")}
               </Button>
-              <Button type="button" variant="ghost" size="sm" icon={<Copy />} className="min-h-11 w-full sm:min-h-0 sm:w-auto" onClick={onDuplicate}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                icon={<Copy />}
+                className="min-h-11 w-full sm:min-h-0 sm:w-auto"
+                onClick={onDuplicate}
+              >
                 {t("tactics.duplicateTactic")}
               </Button>
               <Button

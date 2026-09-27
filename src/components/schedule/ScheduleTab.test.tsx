@@ -366,7 +366,9 @@ describe("ScheduleTab", () => {
     await waitFor(() => {
       expect(screen.getByTestId("schedule-standings-row-team-2")).toBeInTheDocument();
     });
-    fireEvent.click(within(screen.getByTestId("schedule-standings-row-team-2")).getByText("Beta FC"));
+    fireEvent.click(
+      within(screen.getByTestId("schedule-standings-row-team-2")).getByText("Beta FC"),
+    );
     expect(onSelectTeam).toHaveBeenCalledWith("team-2");
   });
 

@@ -33,8 +33,8 @@ fn high_tier_bonus(tier: LeagueTier, slot: usize) -> i8 {
 }
 
 pub fn apply_for_tier(base: u8, slot: usize, tier: LeagueTier) -> u8 {
-    (base as i16 + quality_offset(slot) as i16 + high_tier_bonus(tier, slot) as i16)
-        .clamp(25, 96) as u8
+    (base as i16 + quality_offset(slot) as i16 + high_tier_bonus(tier, slot) as i16).clamp(25, 96)
+        as u8
 }
 
 const FEATURED_SLOTS: [usize; 11] = [2, 3, 4, 9, 10, 11, 16, 17, 18, 19, 20];
@@ -60,7 +60,11 @@ pub fn apply_for_club(base: u8, slot: usize, tier: LeagueTier, club_id: &str) ->
     let roll = club_hash(club_id);
     let featured = match tier {
         LeagueTier::Elite => {
-            if roll.is_multiple_of(17) { 96 } else { 90 + (roll % 6) as u8 }
+            if roll.is_multiple_of(17) {
+                96
+            } else {
+                90 + (roll % 6) as u8
+            }
         }
         LeagueTier::Top => 85 + (roll % 7) as u8,
         LeagueTier::Professional if roll.is_multiple_of(6) => 84 + ((roll / 6) % 6) as u8,

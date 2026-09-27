@@ -4,9 +4,11 @@ import { getCommentary } from "./commentary";
 import type { MatchEvent, MatchSnapshot } from "./types";
 
 export function spokenCommentaryAvailable(): boolean {
-  return typeof window !== "undefined" &&
+  return (
+    typeof window !== "undefined" &&
     "speechSynthesis" in window &&
-    typeof SpeechSynthesisUtterance !== "undefined";
+    typeof SpeechSynthesisUtterance !== "undefined"
+  );
 }
 
 export function cancelSpokenCommentary(): void {

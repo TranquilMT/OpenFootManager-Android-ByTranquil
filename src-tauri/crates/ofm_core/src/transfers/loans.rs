@@ -293,13 +293,11 @@ pub(crate) fn create_incoming_user_loan_offer_if_any(
                 );
                 // A club that cannot carry the preferred share can still make
                 // a realistic offer with the parent club covering more wages.
-                let wage_contribution_pct = [100, 75, 50, 25]
-                    .into_iter()
-                    .find(|share| {
-                        *share <= preferred_share
-                            && validate_loan_borrower_affordability(game, buyer_id, player, *share)
-                                .is_ok()
-                    })?;
+                let wage_contribution_pct = [100, 75, 50, 25].into_iter().find(|share| {
+                    *share <= preferred_share
+                        && validate_loan_borrower_affordability(game, buyer_id, player, *share)
+                            .is_ok()
+                })?;
                 Some(LoanMarketCandidate {
                     player_id: player.id.clone(),
                     wage_contribution_pct,

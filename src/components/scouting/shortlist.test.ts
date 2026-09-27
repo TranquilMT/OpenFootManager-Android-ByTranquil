@@ -6,7 +6,9 @@ describe("career scouting shortlists", () => {
     const storage = new Map<string, string>();
     const backing = {
       getItem: (key: string) => storage.get(key) ?? null,
-      setItem: (key: string, value: string) => { storage.set(key, value); },
+      setItem: (key: string, value: string) => {
+        storage.set(key, value);
+      },
     };
     saveShortlist("career-a", ["p1", "p1", "p2"], backing);
     expect(loadShortlist("career-a", backing)).toEqual(["p1", "p2"]);

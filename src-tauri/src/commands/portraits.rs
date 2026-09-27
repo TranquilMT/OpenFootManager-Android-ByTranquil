@@ -719,11 +719,21 @@ mod tests {
         let sources = portrait_sources().expect("portrait sources should load");
 
         assert_eq!(sources.len(), 20);
-        assert!(sources.iter().any(|source| source.id == "chroma-15-east-african-coils"));
-        assert!(sources.iter().any(|source| source.id == "chroma-16-freckled-auburn"));
-        assert!(sources.iter().any(|source| source.id == "chroma-17-east-asian-long-hair"));
-        assert!(sources.iter().any(|source| source.id == "chroma-18-american"));
-        assert!(sources.iter().any(|source| source.id == "chroma-19-australian"));
+        assert!(sources
+            .iter()
+            .any(|source| source.id == "chroma-15-east-african-coils"));
+        assert!(sources
+            .iter()
+            .any(|source| source.id == "chroma-16-freckled-auburn"));
+        assert!(sources
+            .iter()
+            .any(|source| source.id == "chroma-17-east-asian-long-hair"));
+        assert!(sources
+            .iter()
+            .any(|source| source.id == "chroma-18-american"));
+        assert!(sources
+            .iter()
+            .any(|source| source.id == "chroma-19-australian"));
         assert!(sources.iter().any(|source| source.id == "chroma-20-french"));
         assert!(sources.iter().any(|source| source.id == "chroma-21-german"));
         assert!(sources

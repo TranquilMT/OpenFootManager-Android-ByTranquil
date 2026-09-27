@@ -315,7 +315,9 @@ describe("YouthAcademyTab", () => {
         screen.getByText("No eligible under-21 senior players are available right now."),
       ).toBeInTheDocument();
     });
-    expect(within(screen.getByRole("table")).getByText("Senior Prospect").closest("tr")).not.toBeNull();
+    expect(
+      within(screen.getByRole("table")).getByText("Senior Prospect").closest("tr"),
+    ).not.toBeNull();
   });
 
   it("opens the scouting tab from the recovery card", async () => {
@@ -458,7 +460,11 @@ describe("YouthAcademyTab", () => {
     await waitFor(() => {
       expect(within(screen.getByRole("table")).getByText("Rising Star")).toBeInTheDocument();
     });
-    fireEvent.contextMenu(within(screen.getByRole("table")).getByText("Rising Star").closest("tr") as HTMLTableRowElement);
+    fireEvent.contextMenu(
+      within(screen.getByRole("table"))
+        .getByText("Rising Star")
+        .closest("tr") as HTMLTableRowElement,
+    );
     fireEvent.click(screen.getByRole("menuitem", { name: "Promote to senior squad" }));
 
     await waitFor(() => {

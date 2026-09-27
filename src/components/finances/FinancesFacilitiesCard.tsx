@@ -58,7 +58,9 @@ export default function FinancesFacilitiesCard({
                     <h3 className="font-heading text-sm font-bold uppercase tracking-wider text-gray-900 dark:text-gray-100 sm:text-base">
                       {t(facility.titleKey)}
                     </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{t(facility.effectKey)}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {t(facility.effectKey)}
+                    </p>
                   </div>
                   <span className="shrink-0 rounded-full bg-white px-2.5 py-1 text-xs font-heading font-bold text-gray-700 shadow-sm dark:bg-navy-700 dark:text-gray-200 md:mt-2 md:inline-block">
                     {t("finances.facilityLevel", { level })}
@@ -80,9 +82,13 @@ export default function FinancesFacilitiesCard({
                     {t("finances.upgradeFacility")}
                   </Button>
                   {!canAffordUpgrade && !upgradeReason && (
-                    <p className="text-xs text-red-500 dark:text-red-400">{t("finances.insufficientFunds")}</p>
+                    <p className="text-xs text-red-500 dark:text-red-400">
+                      {t("finances.insufficientFunds")}
+                    </p>
                   )}
-                  {upgradeReason && <p className="text-xs text-red-500 dark:text-red-400">{upgradeReason}</p>}
+                  {upgradeReason && (
+                    <p className="text-xs text-red-500 dark:text-red-400">{upgradeReason}</p>
+                  )}
                 </div>
               </div>
             );

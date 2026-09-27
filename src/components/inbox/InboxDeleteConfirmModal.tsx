@@ -40,7 +40,9 @@ export default function InboxDeleteConfirmModal({
           <h3 className="text-lg font-heading font-bold text-gray-900 dark:text-gray-100">
             {title}
           </h3>
-          <p className="mt-2 break-words text-sm leading-relaxed text-gray-600 dark:text-gray-300">{message}</p>
+          <p className="mt-2 break-words text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+            {message}
+          </p>
         </div>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
           <Button

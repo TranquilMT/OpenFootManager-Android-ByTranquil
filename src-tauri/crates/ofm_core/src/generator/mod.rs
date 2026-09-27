@@ -331,7 +331,9 @@ fn rebalance_generated_player_for_club(
     opening_year: u32,
     rng: &mut impl rand::Rng,
 ) {
-    use crate::generated_balance::{club_strength_ovr, clamp_generated_ovr, market_value_eur, weekly_wage_eur, LeagueTier};
+    use crate::generated_balance::{
+        LeagueTier, clamp_generated_ovr, club_strength_ovr, market_value_eur, weekly_wage_eur,
+    };
 
     let reputation = (team.reputation / 10).min(100) as u8;
     let financial_strength = ((team.finance.max(0) as u64 / 1_000_000).min(100)) as u8;
@@ -351,7 +353,11 @@ fn rebalance_generated_player_for_club(
         crate::generated_career::quality_curve::apply_for_club(base, slot, tier, &club_key);
     let generated_target = clamp_generated_ovr(
         tier,
-        if youth { slot_target as i16 - 12 } else { slot_target as i16 },
+        if youth {
+            slot_target as i16 - 12
+        } else {
+            slot_target as i16
+        },
         youth,
     );
     // Factual club membership and game-designed ability are separate inputs.
@@ -372,8 +378,11 @@ fn rebalance_generated_player_for_club(
         .and_then(|year| year.parse::<u32>().ok())
         .map(|year| opening_year.saturating_sub(year))
         .unwrap_or(24) as u8;
-    let current = crate::player_rating::natural_ovr(player).round().clamp(1.0, 99.0) as u8;
-    player.potential = crate::generated_career::potential_curve::potential(current, age, reputation);
+    let current = crate::player_rating::natural_ovr(player)
+        .round()
+        .clamp(1.0, 99.0) as u8;
+    player.potential =
+        crate::generated_career::potential_curve::potential(current, age, reputation);
     player.market_value = market_value_eur(current, player.potential, age).max(0) as u64;
     player.wage = weekly_wage_eur(current, reputation).clamp(100, u32::MAX as i64) as u32;
     crate::player_rating::refresh_player_derived(player, opening_year);
@@ -779,7 +788,12 @@ fn build_club(
     rng: &mut impl rand::Rng,
 ) -> (domain::team::Team, Vec<Player>, Vec<Staff>) {
     let mut team = build_team(tdef, rng);
-    if tdef.country == "ENG" && matches!(tdef.name.as_str(), "Cardiff City" | "Swansea City" | "Wrexham") {
+    if tdef.country == "ENG"
+        && matches!(
+            tdef.name.as_str(),
+            "Cardiff City" | "Swansea City" | "Wrexham"
+        )
+    {
         team.country = "WAL".to_string();
         team.football_nation = "ENG".to_string();
     }
@@ -1425,13 +1439,19 @@ fn generate_world_with_rng(
         );
         let target_ovr = rng.random_range(50..=78);
         player.attributes = attributes_for_overall(target_ovr, &player.position, &mut rng);
-        let current = crate::player_rating::natural_ovr(&player).round().clamp(1.0, 96.0) as u8;
-        let age = player.date_of_birth.get(0..4)
+        let current = crate::player_rating::natural_ovr(&player)
+            .round()
+            .clamp(1.0, 96.0) as u8;
+        let age = player
+            .date_of_birth
+            .get(0..4)
             .and_then(|year| year.parse::<u32>().ok())
             .map(|year| opening_year.saturating_sub(year))
             .unwrap_or(24) as u8;
         player.potential = crate::generated_career::potential_curve::potential(current, age, 40);
-        player.market_value = crate::generated_balance::market_value_eur(current, player.potential, age).max(0) as u64;
+        player.market_value =
+            crate::generated_balance::market_value_eur(current, player.potential, age).max(0)
+                as u64;
         player.team_id = None;
         player.contract_end = None;
         player.wage = 0;
@@ -2023,7 +2043,13 @@ mod tests {
             generate_world_with(&config, &definitions::DefinitionSources::embedded_only());
         assert_eq!(teams.len(), expected);
         assert_eq!(players.len(), expected * (SQUAD_SLOTS + 1));
-        assert_eq!(players.iter().filter(|player| player.team_id.is_none()).count(), expected);
+        assert_eq!(
+            players
+                .iter()
+                .filter(|player| player.team_id.is_none())
+                .count(),
+            expected
+        );
         assert_eq!(staff.len(), expected * 4 + 12);
     }
 
@@ -2038,7 +2064,8 @@ mod tests {
         );
         let average = |name: &str| {
             let team = teams.iter().find(|team| team.name == name).unwrap();
-            let squad: Vec<_> = players.iter()
+            let squad: Vec<_> = players
+                .iter()
                 .filter(|player| player.team_id.as_deref() == Some(team.id.as_str()))
                 .collect();
             assert_eq!(squad.len(), SQUAD_SLOTS);
@@ -2085,7 +2112,10 @@ mod tests {
                 assert!(team_ids.contains(&team_id), "Player has unknown team");
             } else {
                 assert_eq!(p.wage, 0, "Free agents must not charge a club wages");
-                assert!(p.contract_end.is_none(), "Free agents must not have club contracts");
+                assert!(
+                    p.contract_end.is_none(),
+                    "Free agents must not have club contracts"
+                );
             }
         }
     }

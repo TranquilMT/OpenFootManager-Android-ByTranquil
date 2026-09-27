@@ -327,11 +327,21 @@ export default function Dashboard(): JSX.Element {
     const date = gameState?.clock.current_date ?? null;
     const previous = previousAutoSaveDate.current;
     previousAutoSaveDate.current = { saveId: activeSaveId, date };
-    if (!date || !previous.date || previous.saveId !== activeSaveId || previous.date === date || !settingsLoaded || !settings.auto_save) return;
-    void invoke("save_game").then(() => {
-      // A later update may still need saving.
-      if (latestGameStateRef.current?.clock.current_date === date) markClean();
-    }).catch((err) => console.error("Failed to auto-save after advancing:", err));
+    if (
+      !date ||
+      !previous.date ||
+      previous.saveId !== activeSaveId ||
+      previous.date === date ||
+      !settingsLoaded ||
+      !settings.auto_save
+    )
+      return;
+    void invoke("save_game")
+      .then(() => {
+        // A later update may still need saving.
+        if (latestGameStateRef.current?.clock.current_date === date) markClean();
+      })
+      .catch((err) => console.error("Failed to auto-save after advancing:", err));
   }, [activeSaveId, gameState?.clock.current_date, settingsLoaded, settings.auto_save, markClean]);
 
   // Phones can suspend the WebView without a window-close event. Persist the
@@ -343,10 +353,14 @@ export default function Dashboard(): JSX.Element {
       if (document.visibilityState !== "hidden" || backgroundSavePending.current) return;
       backgroundSavePending.current = true;
       const stateAtSave = latestGameStateRef.current;
-      void invoke("save_game").then(() => {
-        if (latestGameStateRef.current === stateAtSave) markClean();
-      }).catch((err) => console.error("Failed to auto-save on background:", err))
-        .finally(() => { backgroundSavePending.current = false; });
+      void invoke("save_game")
+        .then(() => {
+          if (latestGameStateRef.current === stateAtSave) markClean();
+        })
+        .catch((err) => console.error("Failed to auto-save on background:", err))
+        .finally(() => {
+          backgroundSavePending.current = false;
+        });
     };
     document.addEventListener("visibilitychange", saveWhenHidden);
     return () => document.removeEventListener("visibilitychange", saveWhenHidden);

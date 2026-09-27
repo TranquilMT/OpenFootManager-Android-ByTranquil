@@ -110,7 +110,15 @@ describe("portraitService prewarm planning", () => {
       {
         ...state.league!,
         id: "cup",
-        fixtures: [{ ...state.league!.fixtures[0], id: "cup-1", date: "2026-08-01", away_team_id: "team-c", competition: "Cup" }],
+        fixtures: [
+          {
+            ...state.league!.fixtures[0],
+            id: "cup-1",
+            date: "2026-08-01",
+            away_team_id: "team-c",
+            competition: "Cup",
+          },
+        ],
       },
     ];
     expect(selectBackgroundPortraitPlayers(state).map((p) => p.id)).toEqual(["c-1", "b-1"]);

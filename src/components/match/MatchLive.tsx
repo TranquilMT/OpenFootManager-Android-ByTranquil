@@ -16,7 +16,11 @@ import { getEventDisplay, getPlayerName, makeTeamFallback, phaseLabel } from "./
 import { Badge, TeamLogo } from "../ui";
 import { useSettingsStore } from "../../store/settingsStore";
 import { EventFeed, MatchStats, Lineups } from "./MatchPanels";
-import { cancelSpokenCommentary, spokenCommentaryAvailable, useSpokenCommentary } from "./useSpokenCommentary";
+import {
+  cancelSpokenCommentary,
+  spokenCommentaryAvailable,
+  useSpokenCommentary,
+} from "./useSpokenCommentary";
 import MatchScreenLayout from "./MatchScreenLayout";
 import { SubPanel } from "./SubPanel";
 import {
@@ -208,7 +212,13 @@ export default function MatchLive({
     }
   }, [importantEvents.length]);
 
-  useSpokenCommentary(importantEvents, snapshot, t, i18n.language, voiceEnabled && settings.show_match_commentary);
+  useSpokenCommentary(
+    importantEvents,
+    snapshot,
+    t,
+    i18n.language,
+    voiceEnabled && settings.show_match_commentary,
+  );
 
   // Apply substitution
   const handleSubstitution = async (playerOffId: string, playerOnId: string) => {

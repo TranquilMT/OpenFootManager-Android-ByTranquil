@@ -13,7 +13,13 @@ interface TacticsFiltersProps {
   positionFilter: string;
 }
 
-export default function TacticsFilters({ onClear, onPlayerSearchChange, onPositionFilterChange, playerSearch, positionFilter }: TacticsFiltersProps): JSX.Element {
+export default function TacticsFilters({
+  onClear,
+  onPlayerSearchChange,
+  onPositionFilterChange,
+  playerSearch,
+  positionFilter,
+}: TacticsFiltersProps): JSX.Element {
   const { t } = useTranslation();
   const canClear = playerSearch.trim().length > 0 || positionFilter !== "All";
 
@@ -33,9 +39,18 @@ export default function TacticsFilters({ onClear, onPlayerSearchChange, onPositi
           />
         </div>
         <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-2">
-          <Select value={positionFilter} onChange={(event) => onPositionFilterChange(event.target.value)} fullWidth aria-label={t("squad.pos")}>
+          <Select
+            value={positionFilter}
+            onChange={(event) => onPositionFilterChange(event.target.value)}
+            fullWidth
+            aria-label={t("squad.pos")}
+          >
             <option value="All">{t("common.all")}</option>
-            {CORE_POSITIONS.map((position) => <option key={position} value={position}>{translatePositionAbbreviation(t, position)}</option>)}
+            {CORE_POSITIONS.map((position) => (
+              <option key={position} value={position}>
+                {translatePositionAbbreviation(t, position)}
+              </option>
+            ))}
           </Select>
           <button
             type="button"

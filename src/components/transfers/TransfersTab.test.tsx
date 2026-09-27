@@ -508,7 +508,9 @@ describe("TransfersTab", (): void => {
 
     expect(within(screen.getByRole("table")).getAllByText(/^Market Player \d+$/)).toHaveLength(30);
     expect(within(screen.getByRole("table")).getByText("Market Player 30")).toBeInTheDocument();
-    expect(within(screen.getByRole("table")).queryByText("Market Player 31")).not.toBeInTheDocument();
+    expect(
+      within(screen.getByRole("table")).queryByText("Market Player 31"),
+    ).not.toBeInTheDocument();
     expect(screen.getByText("Showing 1-30 of 65")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Next page" }));
@@ -968,7 +970,9 @@ describe("TransfersTab", (): void => {
     expect(within(screen.getByRole("table")).getByText("John Smith")).toBeInTheDocument();
     expect(screen.getAllByText("Free Agent").length).toBeGreaterThan(0);
 
-    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /offer contract/i }));
+    fireEvent.click(
+      within(screen.getByRole("table")).getByRole("button", { name: /offer contract/i }),
+    );
 
     await waitFor((): void => {
       expect(screen.getByText("Projected financial impact")).toBeInTheDocument();

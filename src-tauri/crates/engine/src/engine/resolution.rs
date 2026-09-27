@@ -346,9 +346,7 @@ fn resolve_shot<R: Rng>(ctx: &mut MatchContext, minute: u8, att_side: Side, rng:
             } else {
                 shot
             };
-            ctx.emit(
-                shot,
-            );
+            ctx.emit(shot);
             ctx.emit(MatchEvent::new(minute, EventType::GoalKick, def_side, zone));
             ctx.possession = def_side;
             ctx.ball_zone = Zone::defensive_third(def_side);

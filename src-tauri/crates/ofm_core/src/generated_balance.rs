@@ -1,29 +1,390 @@
 //! Balancing primitives for generated-player careers.
 //! No external player database is required by this module.
-#[derive(Debug,Clone,Copy,PartialEq,Eq)] pub enum LeagueTier{Elite,Top,Professional,Lower,Grassroots}
-#[derive(Debug,Clone,Copy,PartialEq,Eq)] pub enum SquadRole{Star,Starter,Rotation,Depth,Prospect,Academy}
-#[derive(Debug,Clone,Copy,PartialEq,Eq)] pub enum PositionGroup{Goalkeeper,CentreBack,FullBack,Midfield,AttackingMidfield,Winger,Striker}
-#[derive(Debug,Clone,Copy,PartialEq,Eq)] pub struct RatingBand{pub floor:u8,pub core_low:u8,pub core_high:u8,pub ceiling:u8}
-#[derive(Debug,Clone,Copy,PartialEq,Eq)] pub struct GeneratedAttributes{pub goalkeeping:u8,pub defending:u8,pub physical:u8,pub pace:u8,pub passing:u8,pub technique:u8,pub creativity:u8,pub finishing:u8,pub positioning:u8,pub composure:u8}
-#[derive(Debug,Clone,Copy,PartialEq,Eq)] pub struct RecruitmentContext{pub transfer_budget:i64,pub weekly_wage_room:i64,pub club_reputation:u8,pub league_reputation:u8,pub promised_role:SquadRole}
-pub const fn rating_band(tier:LeagueTier)->RatingBand{match tier{LeagueTier::Elite=>RatingBand{floor:55,core_low:72,core_high:84,ceiling:96},LeagueTier::Top=>RatingBand{floor:50,core_low:65,core_high:78,ceiling:92},LeagueTier::Professional=>RatingBand{floor:45,core_low:57,core_high:70,ceiling:90},LeagueTier::Lower=>RatingBand{floor:40,core_low:49,core_high:62,ceiling:72},LeagueTier::Grassroots=>RatingBand{floor:34,core_low:40,core_high:54,ceiling:64}}}
-pub const fn youth_floor(tier:LeagueTier)->u8{match tier{LeagueTier::Elite=>45,LeagueTier::Top=>42,LeagueTier::Professional=>38,LeagueTier::Lower=>34,LeagueTier::Grassroots=>30}}
-pub fn clamp_generated_ovr(tier:LeagueTier,ovr:i16,youth:bool)->u8{let b=rating_band(tier);let f=if youth{youth_floor(tier)}else{b.floor};ovr.clamp(f as i16,b.ceiling as i16) as u8}
-pub fn potential_ceiling(tier:LeagueTier,academy_quality:u8)->u8{rating_band(tier).ceiling.saturating_add((academy_quality/20).min(4)).min(96)}
-pub fn role_target_ovr(tier:LeagueTier,role:SquadRole)->u8{let b=rating_band(tier);match role{SquadRole::Star=>b.core_high.saturating_add(3).min(b.ceiling),SquadRole::Starter=>b.core_high,SquadRole::Rotation=>(b.core_low+b.core_high)/2,SquadRole::Depth=>b.core_low,SquadRole::Prospect=>b.core_low.saturating_sub(8).max(youth_floor(tier)),SquadRole::Academy=>youth_floor(tier)}}
-pub fn club_strength_ovr(tier:LeagueTier,reputation:u8,financial_strength:u8)->u8{let b=rating_band(tier);let rep=reputation.min(100)as u16;let money=financial_strength.min(100)as u16;let score=(rep*3+money*2)/5;let span=b.core_high.saturating_sub(b.core_low)as u16;(b.core_low as u16+span*score/100).min(b.ceiling as u16)as u8}
-pub fn club_role_target_ovr(tier:LeagueTier,role:SquadRole,reputation:u8,financial_strength:u8)->u8{let b=rating_band(tier);let base=club_strength_ovr(tier,reputation,financial_strength);let target=match role{SquadRole::Star=>base.saturating_add(7),SquadRole::Starter=>base.saturating_add(3),SquadRole::Rotation=>base,SquadRole::Depth=>base.saturating_sub(5),SquadRole::Prospect=>base.saturating_sub(12),SquadRole::Academy=>base.saturating_sub(20)};target.clamp(if matches!(role,SquadRole::Prospect|SquadRole::Academy){youth_floor(tier)}else{b.floor},b.ceiling)}
-pub fn academy_current_ovr(tier:LeagueTier,club_reputation:u8,academy_quality:u8,age:u8)->u8{let floor=youth_floor(tier);let senior=club_strength_ovr(tier,club_reputation,academy_quality);let age_gain=age.saturating_sub(15).min(6);senior.saturating_sub(28).saturating_add(academy_quality.min(100)/20).saturating_add(age_gain).max(floor).min(rating_band(tier).core_low)}
-pub fn academy_potential(tier:LeagueTier,club_reputation:u8,academy_quality:u8,current_ovr:u8)->u8{let tier_cap=potential_ceiling(tier,academy_quality);let boost=8+club_reputation.min(100)/10+academy_quality.min(100)/8;current_ovr.saturating_add(boost).min(tier_cap).max(current_ovr)}
-pub fn base_development_step(age:u8,current:u8,potential:u8)->i8{if current>=potential{return 0}match age{15..=17=>4,18..=20=>3,21..=23=>2,24..=27=>1,28..=30=>0,31..=33=>-1,_ if age>=34=>-2,_=>0}}
-fn weighted(values:&[(u8,u16)])->u8{let(total,weight)=values.iter().fold((0u32,0u32),|(t,w),(v,m)|(t+(*v as u32)*(*m as u32),w+*m as u32));total.checked_div(weight).unwrap_or(0).min(99)as u8}
-pub fn position_overall(position:PositionGroup,a:GeneratedAttributes)->u8{match position{PositionGroup::Goalkeeper=>weighted(&[(a.goalkeeping,45),(a.positioning,20),(a.composure,15),(a.passing,10),(a.physical,10)]),PositionGroup::CentreBack=>weighted(&[(a.defending,30),(a.positioning,25),(a.physical,20),(a.composure,10),(a.passing,10),(a.pace,5)]),PositionGroup::FullBack=>weighted(&[(a.defending,20),(a.pace,20),(a.physical,15),(a.positioning,15),(a.passing,15),(a.technique,15)]),PositionGroup::Midfield=>weighted(&[(a.passing,25),(a.technique,20),(a.positioning,15),(a.creativity,15),(a.composure,15),(a.physical,10)]),PositionGroup::AttackingMidfield=>weighted(&[(a.technique,25),(a.creativity,25),(a.passing,20),(a.composure,10),(a.finishing,10),(a.pace,10)]),PositionGroup::Winger=>weighted(&[(a.pace,25),(a.technique,25),(a.creativity,15),(a.passing,15),(a.finishing,10),(a.composure,10)]),PositionGroup::Striker=>weighted(&[(a.finishing,30),(a.composure,20),(a.positioning,20),(a.physical,10),(a.pace,10),(a.technique,10)])}}
-pub fn market_value_eur(ovr:u8,potential:u8,age:u8)->i64{let ability=(ovr.saturating_sub(30)as i64).pow(3)*650;let upside=potential.saturating_sub(ovr)as i64*180_000;let age_factor=match age{0..=20=>125,21..=24=>120,25..=28=>110,29..=31=>90,32..=34=>65,_=>40};((ability+upside).max(25_000)*age_factor/100).min(220_000_000)}
-pub fn weekly_wage_eur(ovr:u8,reputation:u8)->i64{let quality=(ovr.saturating_sub(30)as i64).pow(2);let rep=75+reputation.min(100)as i64;(quality*rep/3).clamp(150,450_000)}
-pub fn club_can_afford(player_value:i64,weekly_wage:i64,transfer_budget:i64,weekly_wage_room:i64)->bool{player_value<=transfer_budget&&weekly_wage<=weekly_wage_room}
-pub fn player_willingness(player_reputation:u8,player_ovr:u8,ctx:RecruitmentContext)->u8{let stature=((ctx.club_reputation.min(100)as u16*3+ctx.league_reputation.min(100)as u16*2)/5)as i16;let demand=((player_reputation.min(100)as u16*3+player_ovr.min(99)as u16*2)/5)as i16;let role_bonus=match ctx.promised_role{SquadRole::Star=>18,SquadRole::Starter=>12,SquadRole::Rotation=>5,SquadRole::Depth=>0,SquadRole::Prospect=>4,SquadRole::Academy=>2};(50+stature-demand+role_bonus).clamp(0,100)as u8}
-pub fn recruitment_viable(player_value:i64,weekly_wage:i64,player_reputation:u8,player_ovr:u8,ctx:RecruitmentContext)->bool{club_can_afford(player_value,weekly_wage,ctx.transfer_budget,ctx.weekly_wage_room)&&player_willingness(player_reputation,player_ovr,ctx)>=45}
-#[cfg(test)]mod tests{use super::*;#[test]fn elite_has_higher_core_than_lower(){assert!(rating_band(LeagueTier::Elite).core_low>rating_band(LeagueTier::Lower).core_high)}#[test]fn youth_can_start_below_senior_floor(){assert!(youth_floor(LeagueTier::Elite)<rating_band(LeagueTier::Elite).floor)}#[test]fn elite_values_are_millions(){assert!(market_value_eur(85,88,25)>10_000_000)}#[test]fn affordability_checks_fee_and_wage(){assert!(!club_can_afford(20_000_000,80_000,5_000_000,100_000))}#[test]fn rich_reputable_club_targets_stronger_players(){assert!(club_strength_ovr(LeagueTier::Top,90,90)>club_strength_ovr(LeagueTier::Top,30,30))}#[test]fn academy_keeps_current_below_senior_core(){assert!(academy_current_ovr(LeagueTier::Elite,95,95,17)<=rating_band(LeagueTier::Elite).core_low)}#[test]fn young_players_develop_faster(){assert!(base_development_step(17,55,85)>base_development_step(23,70,85))}#[test]fn position_weights_change_overall(){let a=GeneratedAttributes{goalkeeping:30,defending:45,physical:65,pace:80,passing:66,technique:82,creativity:80,finishing:74,positioning:64,composure:70};assert!(position_overall(PositionGroup::Winger,a)>position_overall(PositionGroup::CentreBack,a))}#[test]fn elite_player_rejects_low_stature_move(){let ctx=RecruitmentContext{transfer_budget:100_000_000,weekly_wage_room:300_000,club_reputation:20,league_reputation:25,promised_role:SquadRole::Starter};assert!(!recruitment_viable(20_000_000,80_000,90,86,ctx))}}
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum LeagueTier {
+    Elite,
+    Top,
+    Professional,
+    Lower,
+    Grassroots,
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum SquadRole {
+    Star,
+    Starter,
+    Rotation,
+    Depth,
+    Prospect,
+    Academy,
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PositionGroup {
+    Goalkeeper,
+    CentreBack,
+    FullBack,
+    Midfield,
+    AttackingMidfield,
+    Winger,
+    Striker,
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct RatingBand {
+    pub floor: u8,
+    pub core_low: u8,
+    pub core_high: u8,
+    pub ceiling: u8,
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct GeneratedAttributes {
+    pub goalkeeping: u8,
+    pub defending: u8,
+    pub physical: u8,
+    pub pace: u8,
+    pub passing: u8,
+    pub technique: u8,
+    pub creativity: u8,
+    pub finishing: u8,
+    pub positioning: u8,
+    pub composure: u8,
+}
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct RecruitmentContext {
+    pub transfer_budget: i64,
+    pub weekly_wage_room: i64,
+    pub club_reputation: u8,
+    pub league_reputation: u8,
+    pub promised_role: SquadRole,
+}
+pub const fn rating_band(tier: LeagueTier) -> RatingBand {
+    match tier {
+        LeagueTier::Elite => RatingBand {
+            floor: 55,
+            core_low: 72,
+            core_high: 84,
+            ceiling: 96,
+        },
+        LeagueTier::Top => RatingBand {
+            floor: 50,
+            core_low: 65,
+            core_high: 78,
+            ceiling: 92,
+        },
+        LeagueTier::Professional => RatingBand {
+            floor: 45,
+            core_low: 57,
+            core_high: 70,
+            ceiling: 90,
+        },
+        LeagueTier::Lower => RatingBand {
+            floor: 40,
+            core_low: 49,
+            core_high: 62,
+            ceiling: 72,
+        },
+        LeagueTier::Grassroots => RatingBand {
+            floor: 34,
+            core_low: 40,
+            core_high: 54,
+            ceiling: 64,
+        },
+    }
+}
+pub const fn youth_floor(tier: LeagueTier) -> u8 {
+    match tier {
+        LeagueTier::Elite => 45,
+        LeagueTier::Top => 42,
+        LeagueTier::Professional => 38,
+        LeagueTier::Lower => 34,
+        LeagueTier::Grassroots => 30,
+    }
+}
+pub fn clamp_generated_ovr(tier: LeagueTier, ovr: i16, youth: bool) -> u8 {
+    let b = rating_band(tier);
+    let f = if youth { youth_floor(tier) } else { b.floor };
+    ovr.clamp(f as i16, b.ceiling as i16) as u8
+}
+pub fn potential_ceiling(tier: LeagueTier, academy_quality: u8) -> u8 {
+    rating_band(tier)
+        .ceiling
+        .saturating_add((academy_quality / 20).min(4))
+        .min(96)
+}
+pub fn role_target_ovr(tier: LeagueTier, role: SquadRole) -> u8 {
+    let b = rating_band(tier);
+    match role {
+        SquadRole::Star => b.core_high.saturating_add(3).min(b.ceiling),
+        SquadRole::Starter => b.core_high,
+        SquadRole::Rotation => (b.core_low + b.core_high) / 2,
+        SquadRole::Depth => b.core_low,
+        SquadRole::Prospect => b.core_low.saturating_sub(8).max(youth_floor(tier)),
+        SquadRole::Academy => youth_floor(tier),
+    }
+}
+pub fn club_strength_ovr(tier: LeagueTier, reputation: u8, financial_strength: u8) -> u8 {
+    let b = rating_band(tier);
+    let rep = reputation.min(100) as u16;
+    let money = financial_strength.min(100) as u16;
+    let score = (rep * 3 + money * 2) / 5;
+    let span = b.core_high.saturating_sub(b.core_low) as u16;
+    (b.core_low as u16 + span * score / 100).min(b.ceiling as u16) as u8
+}
+pub fn club_role_target_ovr(
+    tier: LeagueTier,
+    role: SquadRole,
+    reputation: u8,
+    financial_strength: u8,
+) -> u8 {
+    let b = rating_band(tier);
+    let base = club_strength_ovr(tier, reputation, financial_strength);
+    let target = match role {
+        SquadRole::Star => base.saturating_add(7),
+        SquadRole::Starter => base.saturating_add(3),
+        SquadRole::Rotation => base,
+        SquadRole::Depth => base.saturating_sub(5),
+        SquadRole::Prospect => base.saturating_sub(12),
+        SquadRole::Academy => base.saturating_sub(20),
+    };
+    target.clamp(
+        if matches!(role, SquadRole::Prospect | SquadRole::Academy) {
+            youth_floor(tier)
+        } else {
+            b.floor
+        },
+        b.ceiling,
+    )
+}
+pub fn academy_current_ovr(
+    tier: LeagueTier,
+    club_reputation: u8,
+    academy_quality: u8,
+    age: u8,
+) -> u8 {
+    let floor = youth_floor(tier);
+    let senior = club_strength_ovr(tier, club_reputation, academy_quality);
+    let age_gain = age.saturating_sub(15).min(6);
+    senior
+        .saturating_sub(28)
+        .saturating_add(academy_quality.min(100) / 20)
+        .saturating_add(age_gain)
+        .max(floor)
+        .min(rating_band(tier).core_low)
+}
+pub fn academy_potential(
+    tier: LeagueTier,
+    club_reputation: u8,
+    academy_quality: u8,
+    current_ovr: u8,
+) -> u8 {
+    let tier_cap = potential_ceiling(tier, academy_quality);
+    let boost = 8 + club_reputation.min(100) / 10 + academy_quality.min(100) / 8;
+    current_ovr
+        .saturating_add(boost)
+        .min(tier_cap)
+        .max(current_ovr)
+}
+pub fn base_development_step(age: u8, current: u8, potential: u8) -> i8 {
+    if current >= potential {
+        return 0;
+    }
+    match age {
+        15..=17 => 4,
+        18..=20 => 3,
+        21..=23 => 2,
+        24..=27 => 1,
+        28..=30 => 0,
+        31..=33 => -1,
+        _ if age >= 34 => -2,
+        _ => 0,
+    }
+}
+fn weighted(values: &[(u8, u16)]) -> u8 {
+    let (total, weight) = values.iter().fold((0u32, 0u32), |(t, w), (v, m)| {
+        (t + (*v as u32) * (*m as u32), w + *m as u32)
+    });
+    total.checked_div(weight).unwrap_or(0).min(99) as u8
+}
+pub fn position_overall(position: PositionGroup, a: GeneratedAttributes) -> u8 {
+    match position {
+        PositionGroup::Goalkeeper => weighted(&[
+            (a.goalkeeping, 45),
+            (a.positioning, 20),
+            (a.composure, 15),
+            (a.passing, 10),
+            (a.physical, 10),
+        ]),
+        PositionGroup::CentreBack => weighted(&[
+            (a.defending, 30),
+            (a.positioning, 25),
+            (a.physical, 20),
+            (a.composure, 10),
+            (a.passing, 10),
+            (a.pace, 5),
+        ]),
+        PositionGroup::FullBack => weighted(&[
+            (a.defending, 20),
+            (a.pace, 20),
+            (a.physical, 15),
+            (a.positioning, 15),
+            (a.passing, 15),
+            (a.technique, 15),
+        ]),
+        PositionGroup::Midfield => weighted(&[
+            (a.passing, 25),
+            (a.technique, 20),
+            (a.positioning, 15),
+            (a.creativity, 15),
+            (a.composure, 15),
+            (a.physical, 10),
+        ]),
+        PositionGroup::AttackingMidfield => weighted(&[
+            (a.technique, 25),
+            (a.creativity, 25),
+            (a.passing, 20),
+            (a.composure, 10),
+            (a.finishing, 10),
+            (a.pace, 10),
+        ]),
+        PositionGroup::Winger => weighted(&[
+            (a.pace, 25),
+            (a.technique, 25),
+            (a.creativity, 15),
+            (a.passing, 15),
+            (a.finishing, 10),
+            (a.composure, 10),
+        ]),
+        PositionGroup::Striker => weighted(&[
+            (a.finishing, 30),
+            (a.composure, 20),
+            (a.positioning, 20),
+            (a.physical, 10),
+            (a.pace, 10),
+            (a.technique, 10),
+        ]),
+    }
+}
+pub fn market_value_eur(ovr: u8, potential: u8, age: u8) -> i64 {
+    let ability = (ovr.saturating_sub(30) as i64).pow(3) * 650;
+    let upside = potential.saturating_sub(ovr) as i64 * 180_000;
+    let age_factor = match age {
+        0..=20 => 125,
+        21..=24 => 120,
+        25..=28 => 110,
+        29..=31 => 90,
+        32..=34 => 65,
+        _ => 40,
+    };
+    ((ability + upside).max(25_000) * age_factor / 100).min(220_000_000)
+}
+pub fn weekly_wage_eur(ovr: u8, reputation: u8) -> i64 {
+    let quality = (ovr.saturating_sub(30) as i64).pow(2);
+    let rep = 75 + reputation.min(100) as i64;
+    (quality * rep / 3).clamp(150, 450_000)
+}
+pub fn club_can_afford(
+    player_value: i64,
+    weekly_wage: i64,
+    transfer_budget: i64,
+    weekly_wage_room: i64,
+) -> bool {
+    player_value <= transfer_budget && weekly_wage <= weekly_wage_room
+}
+pub fn player_willingness(player_reputation: u8, player_ovr: u8, ctx: RecruitmentContext) -> u8 {
+    let stature = ((ctx.club_reputation.min(100) as u16 * 3
+        + ctx.league_reputation.min(100) as u16 * 2)
+        / 5) as i16;
+    let demand =
+        ((player_reputation.min(100) as u16 * 3 + player_ovr.min(99) as u16 * 2) / 5) as i16;
+    let role_bonus = match ctx.promised_role {
+        SquadRole::Star => 18,
+        SquadRole::Starter => 12,
+        SquadRole::Rotation => 5,
+        SquadRole::Depth => 0,
+        SquadRole::Prospect => 4,
+        SquadRole::Academy => 2,
+    };
+    (50 + stature - demand + role_bonus).clamp(0, 100) as u8
+}
+pub fn recruitment_viable(
+    player_value: i64,
+    weekly_wage: i64,
+    player_reputation: u8,
+    player_ovr: u8,
+    ctx: RecruitmentContext,
+) -> bool {
+    club_can_afford(
+        player_value,
+        weekly_wage,
+        ctx.transfer_budget,
+        ctx.weekly_wage_room,
+    ) && player_willingness(player_reputation, player_ovr, ctx) >= 45
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn elite_has_higher_core_than_lower() {
+        assert!(rating_band(LeagueTier::Elite).core_low > rating_band(LeagueTier::Lower).core_high)
+    }
+    #[test]
+    fn youth_can_start_below_senior_floor() {
+        assert!(youth_floor(LeagueTier::Elite) < rating_band(LeagueTier::Elite).floor)
+    }
+    #[test]
+    fn elite_values_are_millions() {
+        assert!(market_value_eur(85, 88, 25) > 10_000_000)
+    }
+    #[test]
+    fn affordability_checks_fee_and_wage() {
+        assert!(!club_can_afford(20_000_000, 80_000, 5_000_000, 100_000))
+    }
+    #[test]
+    fn rich_reputable_club_targets_stronger_players() {
+        assert!(
+            club_strength_ovr(LeagueTier::Top, 90, 90) > club_strength_ovr(LeagueTier::Top, 30, 30)
+        )
+    }
+    #[test]
+    fn academy_keeps_current_below_senior_core() {
+        assert!(
+            academy_current_ovr(LeagueTier::Elite, 95, 95, 17)
+                <= rating_band(LeagueTier::Elite).core_low
+        )
+    }
+    #[test]
+    fn young_players_develop_faster() {
+        assert!(base_development_step(17, 55, 85) > base_development_step(23, 70, 85))
+    }
+    #[test]
+    fn position_weights_change_overall() {
+        let a = GeneratedAttributes {
+            goalkeeping: 30,
+            defending: 45,
+            physical: 65,
+            pace: 80,
+            passing: 66,
+            technique: 82,
+            creativity: 80,
+            finishing: 74,
+            positioning: 64,
+            composure: 70,
+        };
+        assert!(
+            position_overall(PositionGroup::Winger, a)
+                > position_overall(PositionGroup::CentreBack, a)
+        )
+    }
+    #[test]
+    fn elite_player_rejects_low_stature_move() {
+        let ctx = RecruitmentContext {
+            transfer_budget: 100_000_000,
+            weekly_wage_room: 300_000,
+            club_reputation: 20,
+            league_reputation: 25,
+            promised_role: SquadRole::Starter,
+        };
+        assert!(!recruitment_viable(20_000_000, 80_000, 90, 86, ctx))
+    }
+}
 
 #[cfg(test)]
 mod elite_rating_tests {

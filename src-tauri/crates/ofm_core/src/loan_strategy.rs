@@ -19,11 +19,15 @@ pub fn strategic_loan_score(strategy: &ClubStrategy, target: LoanTarget) -> i32 
     match strategy.recruitment {
         RecruitmentPhilosophy::YouthDevelopment => {
             score += upside * 3;
-            if target.age <= 21 { score += 18; }
+            if target.age <= 21 {
+                score += 18;
+            }
         }
         RecruitmentPhilosophy::Rebuild => {
             score += upside * 2;
-            if target.age <= 24 { score += 10; }
+            if target.age <= 24 {
+                score += 10;
+            }
         }
         RecruitmentPhilosophy::Value => {
             score += upside;
@@ -31,7 +35,9 @@ pub fn strategic_loan_score(strategy: &ClubStrategy, target: LoanTarget) -> i32 
         }
         RecruitmentPhilosophy::WinNow => {
             score += (target.overall as i32 - 60).max(0) * 2;
-            if (23..=29).contains(&target.age) { score += 12; }
+            if (23..=29).contains(&target.age) {
+                score += 12;
+            }
         }
         RecruitmentPhilosophy::Balanced => {
             score += upside;
@@ -71,12 +77,26 @@ mod tests {
             preferred_squad_age: 23,
             ..ClubStrategy::default()
         };
-        let prospect = strategic_loan_score(&strategy, LoanTarget {
-            base_score: 50, age: 19, overall: 64, potential: 84, wage: 100_000,
-        });
-        let veteran = strategic_loan_score(&strategy, LoanTarget {
-            base_score: 50, age: 31, overall: 76, potential: 76, wage: 100_000,
-        });
+        let prospect = strategic_loan_score(
+            &strategy,
+            LoanTarget {
+                base_score: 50,
+                age: 19,
+                overall: 64,
+                potential: 84,
+                wage: 100_000,
+            },
+        );
+        let veteran = strategic_loan_score(
+            &strategy,
+            LoanTarget {
+                base_score: 50,
+                age: 31,
+                overall: 76,
+                potential: 76,
+                wage: 100_000,
+            },
+        );
         assert!(prospect > veteran);
     }
 

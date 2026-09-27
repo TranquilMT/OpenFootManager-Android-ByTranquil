@@ -24,14 +24,17 @@ pub fn strategic_target_score(
         RecruitmentPhilosophy::YouthDevelopment => {
             growth_room * 2 + if target.age <= 21 { 18 } else { 0 }
         }
-        RecruitmentPhilosophy::Rebuild => {
-            growth_room + if target.age <= 24 { 12 } else { -4 }
-        }
+        RecruitmentPhilosophy::Rebuild => growth_room + if target.age <= 24 { 12 } else { -4 },
         RecruitmentPhilosophy::Value => {
             growth_room / 2 + value_efficiency_bonus(target.overall, target.potential, target.fee)
         }
         RecruitmentPhilosophy::WinNow => {
-            i32::from(target.overall) / 2 + if (24..=29).contains(&target.age) { 12 } else { 0 }
+            i32::from(target.overall) / 2
+                + if (24..=29).contains(&target.age) {
+                    12
+                } else {
+                    0
+                }
         }
         RecruitmentPhilosophy::Balanced => growth_room / 2 + i32::from(target.overall) / 4,
     };
@@ -87,8 +90,10 @@ mod tests {
             potential: 82,
             fee: 5_000_000,
         };
-        assert!(strategic_target_score(&youth, prospect, 30_000_000)
-            > strategic_target_score(&youth, veteran, 30_000_000));
+        assert!(
+            strategic_target_score(&youth, prospect, 30_000_000)
+                > strategic_target_score(&youth, veteran, 30_000_000)
+        );
     }
 
     #[test]
@@ -108,8 +113,10 @@ mod tests {
             potential: 94,
             fee: 8_000_000,
         };
-        assert!(strategic_target_score(&win_now, prime, 40_000_000)
-            > strategic_target_score(&win_now, prospect, 40_000_000));
+        assert!(
+            strategic_target_score(&win_now, prime, 40_000_000)
+                > strategic_target_score(&win_now, prospect, 40_000_000)
+        );
     }
 
     #[test]

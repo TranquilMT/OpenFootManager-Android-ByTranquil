@@ -1,3 +1,311 @@
-import{ChevronLeft,ChevronRight,ScanSearch,Search}from"lucide-react";import{useTranslation}from"react-i18next";import{countryName}from"../../lib/countries";import{calcAge,formatVal,getTeamName}from"../../lib/helpers";import type{PlayerData,TeamData}from"../../store/gameStore";import ContextMenu from"../ContextMenu";import{buildDividerMenuItem,buildOfferFreeAgentContractMenuItem,buildMakeTransferBidMenuItem,buildScoutPlayerMenuItem,buildViewProfileMenuItem,buildViewTeamMenuItem}from"../playerActions/playerContextMenuItems";import{Badge,Card,CardBody,CardHeader,CountryFlag,PlayerAvatar}from"../ui";import{translatePositionAbbreviation}from"../squad/SquadTab.helpers";
-const POSITION_FILTERS=["All","Goalkeeper","Defender","Midfielder","Forward"];interface Props{shortlistIds?:Set<string>;onToggleShortlist?:(id:string)=>void;players:PlayerData[];teams:TeamData[];posFilter:string;searchQuery:string;errorMessage?:string|null;alreadyScoutingIds:Set<string>;availableScoutCount:number;sendingPlayerId:string|null;safePage:number;totalPages:number;totalPlayers:number;pageSize:number;onPositionFilterChange:(position:string)=>void;onSearchQueryChange:(query:string)=>void;onBidPlayer?:(player:PlayerData)=>void;onOfferFreeAgent?:(player:PlayerData)=>void;onSelectPlayer?:(id:string)=>void;onSelectTeam?:(id:string)=>void;onSendScout:(playerId:string)=>void;onPreviousPage:()=>void;onNextPage:()=>void}
-export default function ScoutingPlayerSearchCard(p:Props){const{t,i18n}=useTranslation();return <Card><CardHeader><div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center"><span>{t("scouting.findPlayers")}</span><div className="touch-x -mx-1 flex gap-2 px-1 sm:ml-auto">{POSITION_FILTERS.map(pos=><button type="button" key={pos} onClick={()=>p.onPositionFilterChange(pos)} className={`min-h-11 shrink-0 rounded-lg px-3 py-1 text-xs font-heading font-bold uppercase tracking-wider sm:min-h-0 sm:px-2.5 ${p.posFilter===pos?"bg-primary-500 text-white":"bg-gray-100 text-gray-500 active:bg-gray-200 dark:bg-navy-700 dark:text-gray-400"}`}>{pos==="All"?t("common.all"):pos.slice(0,3)}</button>)}</div></div></CardHeader><CardBody><div className="relative mb-3"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"/><input type="search" enterKeyHint="search" autoComplete="off" placeholder={t("scouting.searchPlaceholder")} value={p.searchQuery} onChange={e=>p.onSearchQueryChange(e.target.value)} className="min-h-12 w-full rounded-lg border border-gray-200 bg-gray-50 py-2 pl-9 pr-4 text-base text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500/50 dark:border-navy-600 dark:bg-navy-700 dark:text-gray-100 sm:min-h-0 sm:text-sm"/></div>{p.errorMessage?<p role="alert" className="mb-3 text-xs font-heading font-bold uppercase tracking-wider text-red-500">{p.errorMessage}</p>:null}<div className="space-y-2 md:hidden">{p.players.map(player=>{const scouting=p.alreadyScoutingIds.has(player.id),team=player.team_id?getTeamName(p.teams,player.team_id):t("common.freeAgent"),state=scouting?"already-assigned":p.sendingPlayerId===player.id?"busy":p.availableScoutCount===0?"unavailable":"ready";const items=[...(p.onSelectPlayer?[buildViewProfileMenuItem(t,()=>p.onSelectPlayer?.(player.id))]:[]),...(player.team_id&&p.onSelectTeam?[buildViewTeamMenuItem(t,()=>p.onSelectTeam?.(player.team_id!))]:[]),buildDividerMenuItem(),...(player.team_id&&p.onBidPlayer?[buildMakeTransferBidMenuItem(t,()=>p.onBidPlayer?.(player))]:!player.team_id&&p.onOfferFreeAgent?[buildOfferFreeAgentContractMenuItem(t,()=>p.onOfferFreeAgent?.(player))]:[]),buildScoutPlayerMenuItem(t,state,()=>p.onSendScout(player.id))];return <ContextMenu items={items} key={player.id}><article className="rounded-xl border border-gray-100 bg-gray-50 p-3 active:bg-gray-100 dark:border-navy-700 dark:bg-navy-800 dark:active:bg-navy-700"><div className="flex items-center gap-3"><button type="button" onClick={()=>p.onSelectPlayer?.(player.id)} className="flex min-w-0 flex-1 items-center gap-3 text-left"><PlayerAvatar player={player} className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gray-100 text-[10px] font-heading font-bold text-gray-500 dark:bg-navy-700 dark:text-gray-300"/><span className="min-w-0 flex-1"><span className="block truncate text-sm font-heading font-bold text-gray-800 dark:text-gray-100">{player.full_name}</span><span className="mt-1 flex min-w-0 items-center gap-1.5 text-[11px] text-gray-500"><CountryFlag code={player.nationality} locale={i18n.language} className="text-xs leading-none"/><span className="truncate">{countryName(player.nationality,i18n.language)}</span><span>·</span><span>{calcAge(player.date_of_birth)}</span></span></span></button><Badge variant={player.position==="Goalkeeper"?"accent":player.position==="Defender"?"primary":player.position==="Midfielder"?"success":"danger"} size="sm">{translatePositionAbbreviation(t,player.position)}</Badge></div><div className="mt-3 flex items-center gap-2 border-t border-gray-200 pt-2 dark:border-navy-700"><span className="min-w-0 flex-1 truncate text-xs text-gray-500">{team} · {formatVal(player.market_value)}</span>{p.onToggleShortlist?<button type="button" aria-label={`${p.shortlistIds?.has(player.id)?t("scouting.removeShortlist"):t("scouting.addShortlist")}: ${player.full_name}`} onClick={()=>p.onToggleShortlist?.(player.id)} className="min-h-11 shrink-0 rounded-lg px-2 text-xs font-bold text-primary-500">{p.shortlistIds?.has(player.id)?"★":"☆"}</button>:null}{scouting?<span className="text-xs font-heading font-bold text-primary-400">{t("scouting.scoutingInProgress")}</span>:p.availableScoutCount===0?<span className="text-xs text-gray-400">{t("scouting.noScoutsFree")}</span>:<button type="button" disabled={p.sendingPlayerId===player.id} onClick={()=>p.onSendScout(player.id)} className="flex min-h-11 shrink-0 items-center gap-1 rounded-lg bg-primary-500/10 px-3 text-xs font-heading font-bold uppercase text-primary-500 active:bg-primary-500/20 disabled:opacity-50"><ScanSearch className="h-4 w-4"/>{p.sendingPlayerId===player.id?"...":t("scouting.scoutBtn")}</button>}</div></article></ContextMenu>})}</div><div className="hidden overflow-x-auto md:block"><table className="w-full text-sm"><thead><tr className="border-b border-gray-100 text-xs font-heading uppercase tracking-wider text-gray-500 dark:border-navy-700 dark:text-gray-400"><th className="px-2 py-2 text-left">{t("scouting.player")}</th><th>{t("scouting.pos")}</th><th>{t("scouting.age")}</th><th>{t("scouting.team")}</th><th>{t("scouting.value")}</th><th className="text-right">{t("scouting.action")}</th></tr></thead><tbody>{p.players.map(player=>{const state=p.alreadyScoutingIds.has(player.id)?"already-assigned":p.sendingPlayerId===player.id?"busy":p.availableScoutCount===0?"unavailable":"ready";const items=[...(p.onSelectPlayer?[buildViewProfileMenuItem(t,()=>p.onSelectPlayer?.(player.id))]:[]),...(player.team_id&&p.onSelectTeam?[buildViewTeamMenuItem(t,()=>p.onSelectTeam?.(player.team_id!))]:[]),buildDividerMenuItem(),...(player.team_id&&p.onBidPlayer?[buildMakeTransferBidMenuItem(t,()=>p.onBidPlayer?.(player))]:!player.team_id&&p.onOfferFreeAgent?[buildOfferFreeAgentContractMenuItem(t,()=>p.onOfferFreeAgent?.(player))]:[]),buildScoutPlayerMenuItem(t,state,()=>p.onSendScout(player.id))];return <ContextMenu items={items} key={player.id}><tr className="border-b border-gray-50 dark:border-navy-700/50"><td className="px-2 py-2 font-semibold">{player.full_name}</td><td>{translatePositionAbbreviation(t,player.position)}</td><td>{calcAge(player.date_of_birth)}</td><td>{player.team_id?getTeamName(p.teams,player.team_id):t("common.freeAgent")}</td><td>{formatVal(player.market_value)}</td><td className="text-right">{p.onToggleShortlist?<button type="button" aria-label={`${p.shortlistIds?.has(player.id)?t("scouting.removeShortlist"):t("scouting.addShortlist")}: ${player.full_name}`} onClick={()=>p.onToggleShortlist?.(player.id)} className="min-h-11 px-2 text-primary-500">{p.shortlistIds?.has(player.id)?"★":"☆"}</button>:null}<button type="button" disabled={p.alreadyScoutingIds.has(player.id)||p.availableScoutCount===0} onClick={()=>p.onSendScout(player.id)} className="rounded-lg px-2.5 py-1 text-xs font-bold text-primary-500 disabled:opacity-40">{t("scouting.scoutBtn")}</button></td></tr></ContextMenu>})}</tbody></table></div>{p.players.length===0?<p className="py-4 text-center text-sm text-gray-400">{t("scouting.noPlayersFound")}</p>:null}{p.totalPages>1?<div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-3 dark:border-navy-700"><span className="text-[11px] text-gray-400 sm:text-xs">{t("scouting.showingRange",{from:p.safePage*p.pageSize+1,to:Math.min((p.safePage+1)*p.pageSize,p.totalPlayers),total:p.totalPlayers})}</span><div className="flex items-center gap-2"><button type="button" aria-label={t("scouting.previousPage")} disabled={p.safePage===0} onClick={p.onPreviousPage} className="flex h-11 w-11 items-center justify-center rounded-lg bg-gray-100 text-gray-500 disabled:opacity-30 dark:bg-navy-700 sm:h-8 sm:w-8"><ChevronLeft className="h-4 w-4"/></button><span className="text-xs font-heading font-bold tabular-nums text-gray-500">{p.safePage+1}/{p.totalPages}</span><button type="button" aria-label={t("scouting.nextPage")} disabled={p.safePage>=p.totalPages-1} onClick={p.onNextPage} className="flex h-11 w-11 items-center justify-center rounded-lg bg-gray-100 text-gray-500 disabled:opacity-30 dark:bg-navy-700 sm:h-8 sm:w-8"><ChevronRight className="h-4 w-4"/></button></div></div>:null}</CardBody></Card>}
+import { ChevronLeft, ChevronRight, ScanSearch, Search } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { countryName } from "../../lib/countries";
+import { calcAge, formatVal, getTeamName } from "../../lib/helpers";
+import type { PlayerData, TeamData } from "../../store/gameStore";
+import ContextMenu from "../ContextMenu";
+import {
+  buildDividerMenuItem,
+  buildOfferFreeAgentContractMenuItem,
+  buildMakeTransferBidMenuItem,
+  buildScoutPlayerMenuItem,
+  buildViewProfileMenuItem,
+  buildViewTeamMenuItem,
+} from "../playerActions/playerContextMenuItems";
+import { Badge, Card, CardBody, CardHeader, CountryFlag, PlayerAvatar } from "../ui";
+import { translatePositionAbbreviation } from "../squad/SquadTab.helpers";
+const POSITION_FILTERS = ["All", "Goalkeeper", "Defender", "Midfielder", "Forward"];
+interface Props {
+  shortlistIds?: Set<string>;
+  onToggleShortlist?: (id: string) => void;
+  players: PlayerData[];
+  teams: TeamData[];
+  posFilter: string;
+  searchQuery: string;
+  errorMessage?: string | null;
+  alreadyScoutingIds: Set<string>;
+  availableScoutCount: number;
+  sendingPlayerId: string | null;
+  safePage: number;
+  totalPages: number;
+  totalPlayers: number;
+  pageSize: number;
+  onPositionFilterChange: (position: string) => void;
+  onSearchQueryChange: (query: string) => void;
+  onBidPlayer?: (player: PlayerData) => void;
+  onOfferFreeAgent?: (player: PlayerData) => void;
+  onSelectPlayer?: (id: string) => void;
+  onSelectTeam?: (id: string) => void;
+  onSendScout: (playerId: string) => void;
+  onPreviousPage: () => void;
+  onNextPage: () => void;
+}
+export default function ScoutingPlayerSearchCard(p: Props) {
+  const { t, i18n } = useTranslation();
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
+          <span>{t("scouting.findPlayers")}</span>
+          <div className="touch-x -mx-1 flex gap-2 px-1 sm:ml-auto">
+            {POSITION_FILTERS.map((pos) => (
+              <button
+                type="button"
+                key={pos}
+                onClick={() => p.onPositionFilterChange(pos)}
+                className={`min-h-11 shrink-0 rounded-lg px-3 py-1 text-xs font-heading font-bold uppercase tracking-wider sm:min-h-0 sm:px-2.5 ${p.posFilter === pos ? "bg-primary-500 text-white" : "bg-gray-100 text-gray-500 active:bg-gray-200 dark:bg-navy-700 dark:text-gray-400"}`}
+              >
+                {pos === "All" ? t("common.all") : pos.slice(0, 3)}
+              </button>
+            ))}
+          </div>
+        </div>
+      </CardHeader>
+      <CardBody>
+        <div className="relative mb-3">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <input
+            type="search"
+            enterKeyHint="search"
+            autoComplete="off"
+            placeholder={t("scouting.searchPlaceholder")}
+            value={p.searchQuery}
+            onChange={(e) => p.onSearchQueryChange(e.target.value)}
+            className="min-h-12 w-full rounded-lg border border-gray-200 bg-gray-50 py-2 pl-9 pr-4 text-base text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500/50 dark:border-navy-600 dark:bg-navy-700 dark:text-gray-100 sm:min-h-0 sm:text-sm"
+          />
+        </div>
+        {p.errorMessage ? (
+          <p
+            role="alert"
+            className="mb-3 text-xs font-heading font-bold uppercase tracking-wider text-red-500"
+          >
+            {p.errorMessage}
+          </p>
+        ) : null}
+        <div className="space-y-2 md:hidden">
+          {p.players.map((player) => {
+            const scouting = p.alreadyScoutingIds.has(player.id),
+              team = player.team_id ? getTeamName(p.teams, player.team_id) : t("common.freeAgent"),
+              state = scouting
+                ? "already-assigned"
+                : p.sendingPlayerId === player.id
+                  ? "busy"
+                  : p.availableScoutCount === 0
+                    ? "unavailable"
+                    : "ready";
+            const items = [
+              ...(p.onSelectPlayer
+                ? [buildViewProfileMenuItem(t, () => p.onSelectPlayer?.(player.id))]
+                : []),
+              ...(player.team_id && p.onSelectTeam
+                ? [buildViewTeamMenuItem(t, () => p.onSelectTeam?.(player.team_id!))]
+                : []),
+              buildDividerMenuItem(),
+              ...(player.team_id && p.onBidPlayer
+                ? [buildMakeTransferBidMenuItem(t, () => p.onBidPlayer?.(player))]
+                : !player.team_id && p.onOfferFreeAgent
+                  ? [buildOfferFreeAgentContractMenuItem(t, () => p.onOfferFreeAgent?.(player))]
+                  : []),
+              buildScoutPlayerMenuItem(t, state, () => p.onSendScout(player.id)),
+            ];
+            return (
+              <ContextMenu items={items} key={player.id}>
+                <article className="rounded-xl border border-gray-100 bg-gray-50 p-3 active:bg-gray-100 dark:border-navy-700 dark:bg-navy-800 dark:active:bg-navy-700">
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => p.onSelectPlayer?.(player.id)}
+                      className="flex min-w-0 flex-1 items-center gap-3 text-left"
+                    >
+                      <PlayerAvatar
+                        player={player}
+                        className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gray-100 text-[10px] font-heading font-bold text-gray-500 dark:bg-navy-700 dark:text-gray-300"
+                      />
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-heading font-bold text-gray-800 dark:text-gray-100">
+                          {player.full_name}
+                        </span>
+                        <span className="mt-1 flex min-w-0 items-center gap-1.5 text-[11px] text-gray-500">
+                          <CountryFlag
+                            code={player.nationality}
+                            locale={i18n.language}
+                            className="text-xs leading-none"
+                          />
+                          <span className="truncate">
+                            {countryName(player.nationality, i18n.language)}
+                          </span>
+                          <span>·</span>
+                          <span>{calcAge(player.date_of_birth)}</span>
+                        </span>
+                      </span>
+                    </button>
+                    <Badge
+                      variant={
+                        player.position === "Goalkeeper"
+                          ? "accent"
+                          : player.position === "Defender"
+                            ? "primary"
+                            : player.position === "Midfielder"
+                              ? "success"
+                              : "danger"
+                      }
+                      size="sm"
+                    >
+                      {translatePositionAbbreviation(t, player.position)}
+                    </Badge>
+                  </div>
+                  <div className="mt-3 flex items-center gap-2 border-t border-gray-200 pt-2 dark:border-navy-700">
+                    <span className="min-w-0 flex-1 truncate text-xs text-gray-500">
+                      {team} · {formatVal(player.market_value)}
+                    </span>
+                    {p.onToggleShortlist ? (
+                      <button
+                        type="button"
+                        aria-label={`${p.shortlistIds?.has(player.id) ? t("scouting.removeShortlist") : t("scouting.addShortlist")}: ${player.full_name}`}
+                        onClick={() => p.onToggleShortlist?.(player.id)}
+                        className="min-h-11 shrink-0 rounded-lg px-2 text-xs font-bold text-primary-500"
+                      >
+                        {p.shortlistIds?.has(player.id) ? "★" : "☆"}
+                      </button>
+                    ) : null}
+                    {scouting ? (
+                      <span className="text-xs font-heading font-bold text-primary-400">
+                        {t("scouting.scoutingInProgress")}
+                      </span>
+                    ) : p.availableScoutCount === 0 ? (
+                      <span className="text-xs text-gray-400">{t("scouting.noScoutsFree")}</span>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled={p.sendingPlayerId === player.id}
+                        onClick={() => p.onSendScout(player.id)}
+                        className="flex min-h-11 shrink-0 items-center gap-1 rounded-lg bg-primary-500/10 px-3 text-xs font-heading font-bold uppercase text-primary-500 active:bg-primary-500/20 disabled:opacity-50"
+                      >
+                        <ScanSearch className="h-4 w-4" />
+                        {p.sendingPlayerId === player.id ? "..." : t("scouting.scoutBtn")}
+                      </button>
+                    )}
+                  </div>
+                </article>
+              </ContextMenu>
+            );
+          })}
+        </div>
+        <div className="hidden overflow-x-auto md:block">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-100 text-xs font-heading uppercase tracking-wider text-gray-500 dark:border-navy-700 dark:text-gray-400">
+                <th className="px-2 py-2 text-left">{t("scouting.player")}</th>
+                <th>{t("scouting.pos")}</th>
+                <th>{t("scouting.age")}</th>
+                <th>{t("scouting.team")}</th>
+                <th>{t("scouting.value")}</th>
+                <th className="text-right">{t("scouting.action")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {p.players.map((player) => {
+                const state = p.alreadyScoutingIds.has(player.id)
+                  ? "already-assigned"
+                  : p.sendingPlayerId === player.id
+                    ? "busy"
+                    : p.availableScoutCount === 0
+                      ? "unavailable"
+                      : "ready";
+                const items = [
+                  ...(p.onSelectPlayer
+                    ? [buildViewProfileMenuItem(t, () => p.onSelectPlayer?.(player.id))]
+                    : []),
+                  ...(player.team_id && p.onSelectTeam
+                    ? [buildViewTeamMenuItem(t, () => p.onSelectTeam?.(player.team_id!))]
+                    : []),
+                  buildDividerMenuItem(),
+                  ...(player.team_id && p.onBidPlayer
+                    ? [buildMakeTransferBidMenuItem(t, () => p.onBidPlayer?.(player))]
+                    : !player.team_id && p.onOfferFreeAgent
+                      ? [buildOfferFreeAgentContractMenuItem(t, () => p.onOfferFreeAgent?.(player))]
+                      : []),
+                  buildScoutPlayerMenuItem(t, state, () => p.onSendScout(player.id)),
+                ];
+                return (
+                  <ContextMenu items={items} key={player.id}>
+                    <tr className="border-b border-gray-50 dark:border-navy-700/50">
+                      <td className="px-2 py-2 font-semibold">{player.full_name}</td>
+                      <td>{translatePositionAbbreviation(t, player.position)}</td>
+                      <td>{calcAge(player.date_of_birth)}</td>
+                      <td>
+                        {player.team_id
+                          ? getTeamName(p.teams, player.team_id)
+                          : t("common.freeAgent")}
+                      </td>
+                      <td>{formatVal(player.market_value)}</td>
+                      <td className="text-right">
+                        {p.onToggleShortlist ? (
+                          <button
+                            type="button"
+                            aria-label={`${p.shortlistIds?.has(player.id) ? t("scouting.removeShortlist") : t("scouting.addShortlist")}: ${player.full_name}`}
+                            onClick={() => p.onToggleShortlist?.(player.id)}
+                            className="min-h-11 px-2 text-primary-500"
+                          >
+                            {p.shortlistIds?.has(player.id) ? "★" : "☆"}
+                          </button>
+                        ) : null}
+                        <button
+                          type="button"
+                          disabled={
+                            p.alreadyScoutingIds.has(player.id) || p.availableScoutCount === 0
+                          }
+                          onClick={() => p.onSendScout(player.id)}
+                          className="rounded-lg px-2.5 py-1 text-xs font-bold text-primary-500 disabled:opacity-40"
+                        >
+                          {t("scouting.scoutBtn")}
+                        </button>
+                      </td>
+                    </tr>
+                  </ContextMenu>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        {p.players.length === 0 ? (
+          <p className="py-4 text-center text-sm text-gray-400">{t("scouting.noPlayersFound")}</p>
+        ) : null}
+        {p.totalPages > 1 ? (
+          <div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-3 dark:border-navy-700">
+            <span className="text-[11px] text-gray-400 sm:text-xs">
+              {t("scouting.showingRange", {
+                from: p.safePage * p.pageSize + 1,
+                to: Math.min((p.safePage + 1) * p.pageSize, p.totalPlayers),
+                total: p.totalPlayers,
+              })}
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                aria-label={t("scouting.previousPage")}
+                disabled={p.safePage === 0}
+                onClick={p.onPreviousPage}
+                className="flex h-11 w-11 items-center justify-center rounded-lg bg-gray-100 text-gray-500 disabled:opacity-30 dark:bg-navy-700 sm:h-8 sm:w-8"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <span className="text-xs font-heading font-bold tabular-nums text-gray-500">
+                {p.safePage + 1}/{p.totalPages}
+              </span>
+              <button
+                type="button"
+                aria-label={t("scouting.nextPage")}
+                disabled={p.safePage >= p.totalPages - 1}
+                onClick={p.onNextPage}
+                className="flex h-11 w-11 items-center justify-center rounded-lg bg-gray-100 text-gray-500 disabled:opacity-30 dark:bg-navy-700 sm:h-8 sm:w-8"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        ) : null}
+      </CardBody>
+    </Card>
+  );
+}

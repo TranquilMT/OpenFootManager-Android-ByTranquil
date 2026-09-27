@@ -1,4 +1,4 @@
-use ofm_core::generated_balance::{clamp_generated_ovr, LeagueTier};
+use ofm_core::generated_balance::{LeagueTier, clamp_generated_ovr};
 
 #[test]
 fn top_senior_overflow_clamps() {

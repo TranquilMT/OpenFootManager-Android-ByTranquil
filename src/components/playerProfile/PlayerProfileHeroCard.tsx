@@ -218,7 +218,9 @@ function MobileQuickStat({ label, value, color }: { label: string; value: string
       <p className="text-xs text-gray-400 dark:text-gray-500 font-heading uppercase tracking-wider">
         {label}
       </p>
-      <p className={`mt-0.5 break-words font-heading text-sm font-bold sm:text-lg ${color}`}>{value}</p>
+      <p className={`mt-0.5 break-words font-heading text-sm font-bold sm:text-lg ${color}`}>
+        {value}
+      </p>
     </div>
   );
 }

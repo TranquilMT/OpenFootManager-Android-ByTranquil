@@ -1167,9 +1167,17 @@ fn recovery_focus_rescues_critical_user_player_quickly() {
     game.teams[0].training_focus = TrainingFocus::Recovery;
     game.teams[0].training_intensity = TrainingIntensity::High;
     game.teams[0].training_schedule = TrainingSchedule::Intense;
-    for p in game.players.iter_mut() { p.condition = 20; p.fitness = 60; }
-    for _ in 0..3 { training::process_training(&mut game, 0); }
-    assert!(game.players.iter().all(|p| p.condition >= 45), "three recovery days must lift critical players out of danger");
+    for p in game.players.iter_mut() {
+        p.condition = 20;
+        p.fitness = 60;
+    }
+    for _ in 0..3 {
+        training::process_training(&mut game, 0);
+    }
+    assert!(
+        game.players.iter().all(|p| p.condition >= 45),
+        "three recovery days must lift critical players out of danger"
+    );
 }
 
 #[test]
@@ -1178,7 +1186,15 @@ fn light_schedule_rest_week_recovers_squad_condition() {
     game.teams[0].training_schedule = TrainingSchedule::Light;
     game.teams[0].training_focus = TrainingFocus::Technical;
     game.teams[0].training_intensity = TrainingIntensity::Low;
-    for p in game.players.iter_mut() { p.condition = 35; p.fitness = 65; }
-    for day in 0..7 { training::process_training(&mut game, day); }
-    assert!(game.players.iter().all(|p| p.condition >= 80), "a light recovery week must substantially restore a tired squad");
+    for p in game.players.iter_mut() {
+        p.condition = 35;
+        p.fitness = 65;
+    }
+    for day in 0..7 {
+        training::process_training(&mut game, day);
+    }
+    assert!(
+        game.players.iter().all(|p| p.condition >= 80),
+        "a light recovery week must substantially restore a tired squad"
+    );
 }

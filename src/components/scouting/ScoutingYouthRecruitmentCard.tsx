@@ -74,7 +74,13 @@ export default function ScoutingYouthRecruitmentCard({
     <Card accent="primary">
       <CardHeader
         action={
-          <Button size="sm" className="min-h-11 w-full sm:w-auto sm:min-h-0" icon={<ScanSearch />} disabled={!canStart} onClick={onStartSearch}>
+          <Button
+            size="sm"
+            className="min-h-11 w-full sm:w-auto sm:min-h-0"
+            icon={<ScanSearch />}
+            disabled={!canStart}
+            onClick={onStartSearch}
+          >
             {t("scouting.startYouthSearch")}
           </Button>
         }
@@ -243,7 +249,7 @@ export default function ScoutingYouthRecruitmentCard({
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                       <Select
                         selectSize="sm"
-              className="min-h-11 w-full sm:min-h-0"
+                        className="min-h-11 w-full sm:min-h-0"
                         value={reassignTarget}
                         aria-label={`${t("scouting.reassignSearch")} ${assignment.id}`}
                         onChange={(event) =>

@@ -173,14 +173,24 @@ fn competing_clubs_approach_same_player_on_separate_days() {
 
     evaluate_transfer_market(&mut game);
     let player = &game.players[0];
-    assert_eq!(player.transfer_offers.iter().filter(|offer| offer.status == TransferOfferStatus::Pending).count(), 1);
+    assert_eq!(
+        player
+            .transfer_offers
+            .iter()
+            .filter(|offer| offer.status == TransferOfferStatus::Pending)
+            .count(),
+        1
+    );
 
     game.clock.advance_days(1);
     evaluate_transfer_market(&mut game);
     let player = &game.players[0];
-    let clubs: std::collections::HashSet<_> = player.transfer_offers.iter()
+    let clubs: std::collections::HashSet<_> = player
+        .transfer_offers
+        .iter()
         .filter(|offer| offer.status == TransferOfferStatus::Pending)
-        .map(|offer| offer.from_team_id.as_str()).collect();
+        .map(|offer| offer.from_team_id.as_str())
+        .collect();
     assert_eq!(clubs, ["team2", "team3"].into_iter().collect());
 }
 
@@ -193,7 +203,15 @@ fn loan_and_transfer_interest_share_the_daily_player_limit() {
     evaluate_transfer_market(&mut game);
 
     let player = &game.players[0];
-    let loans = player.loan_offers.iter().filter(|offer| offer.status == LoanOfferStatus::Pending).count();
-    let transfers = player.transfer_offers.iter().filter(|offer| offer.status == TransferOfferStatus::Pending).count();
+    let loans = player
+        .loan_offers
+        .iter()
+        .filter(|offer| offer.status == LoanOfferStatus::Pending)
+        .count();
+    let transfers = player
+        .transfer_offers
+        .iter()
+        .filter(|offer| offer.status == TransferOfferStatus::Pending)
+        .count();
     assert_eq!(loans + transfers, 1);
 }

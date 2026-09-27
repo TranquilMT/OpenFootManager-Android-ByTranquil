@@ -151,10 +151,16 @@ describe("useSettingsStore", () => {
 
   it("persists rapid toggle changes in tap order", async () => {
     let releaseFirst!: () => void;
-    const first = new Promise<void>((resolve) => { releaseFirst = resolve; });
-    vi.mocked(invoke).mockImplementationOnce(() => first).mockResolvedValue(undefined);
+    const first = new Promise<void>((resolve) => {
+      releaseFirst = resolve;
+    });
+    vi.mocked(invoke)
+      .mockImplementationOnce(() => first)
+      .mockResolvedValue(undefined);
     const firstUpdate = useSettingsStore.getState().updateSettings({ high_contrast: true });
-    const secondUpdate = useSettingsStore.getState().updateSettings({ spoken_match_commentary: true });
+    const secondUpdate = useSettingsStore
+      .getState()
+      .updateSettings({ spoken_match_commentary: true });
     expect(useSettingsStore.getState().settings.spoken_match_commentary).toBe(true);
     releaseFirst();
     await Promise.all([firstUpdate, secondUpdate]);

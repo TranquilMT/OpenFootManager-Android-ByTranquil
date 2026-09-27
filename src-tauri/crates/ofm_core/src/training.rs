@@ -204,20 +204,19 @@ fn train_player(
     // through Recovery focus here would inflate the injured-recovery base below
     // (9.0 instead of 3.0), giving exhausted injured AI players ~3x recovery.
     let recovery_focus = TrainingFocus::Recovery;
-    let player_focus = if is_training_day
-        && player.injury.is_none()
-        && player.condition < FATIGUE_GUARD_CONDITION
-    {
-        &recovery_focus
-    } else {
-        // Determine this player's effective focus:
-        // player override > group override > team default
-        player
-            .training_focus
-            .as_ref()
-            .or_else(|| plan.group_overrides.get(&player.id))
-            .unwrap_or(&plan.default_focus)
-    };
+    let player_focus =
+        if is_training_day && player.injury.is_none() && player.condition < FATIGUE_GUARD_CONDITION
+        {
+            &recovery_focus
+        } else {
+            // Determine this player's effective focus:
+            // player override > group override > team default
+            player
+                .training_focus
+                .as_ref()
+                .or_else(|| plan.group_overrides.get(&player.id))
+                .unwrap_or(&plan.default_focus)
+        };
 
     // On rest days or Recovery focus: no training cost
     let condition_cost: u8 = if !is_training_day {

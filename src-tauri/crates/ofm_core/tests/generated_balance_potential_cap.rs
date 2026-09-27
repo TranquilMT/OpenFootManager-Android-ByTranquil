@@ -1,4 +1,4 @@
-use ofm_core::generated_balance::{potential_ceiling, LeagueTier};
+use ofm_core::generated_balance::{LeagueTier, potential_ceiling};
 
 #[test]
 fn generated_potential_never_reaches_100() {

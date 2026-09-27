@@ -1,1 +1,11 @@
-pub fn priority(ovr:u8,potential:u8,months_left:u8,role:u8)->u8{let quality=ovr/2+potential/4;let urgency=24u8.saturating_sub(months_left.min(24));quality.saturating_add(urgency).saturating_sub(role.saturating_mul(5)).min(100)}pub fn renew(priority:u8)->bool{priority>=55}
+pub fn priority(ovr: u8, potential: u8, months_left: u8, role: u8) -> u8 {
+    let quality = ovr / 2 + potential / 4;
+    let urgency = 24u8.saturating_sub(months_left.min(24));
+    quality
+        .saturating_add(urgency)
+        .saturating_sub(role.saturating_mul(5))
+        .min(100)
+}
+pub fn renew(priority: u8) -> bool {
+    priority >= 55
+}

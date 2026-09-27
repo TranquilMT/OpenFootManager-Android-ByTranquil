@@ -1,1 +1,195 @@
-import{cloneElement,forwardRef,isValidElement,useEffect,useImperativeHandle,useRef,useState,useCallback}from"react";import{createPortal}from"react-dom";export interface ContextMenuItem{label:string;icon?:React.ReactNode;onClick?:()=>void;danger?:boolean;urgent?:boolean;disabled?:boolean;divider?:boolean;type?:"label"}export interface ContextMenuHandle{open:(x:number,y:number)=>void}interface ContextMenuProps{items:ContextMenuItem[];children:React.ReactNode;onOpenChange?:(open:boolean)=>void}const ContextMenu=forwardRef<ContextMenuHandle,ContextMenuProps>(function ContextMenu({items,children,onOpenChange},ref){const[visible,setVisible]=useState(false);const[pos,setPos]=useState({x:0,y:0});const menuRef=useRef<HTMLDivElement>(null);const instanceId=useRef(Math.random().toString(36));const triggerRef=useRef<HTMLElement|null>(null);const onOpenChangeRef=useRef(onOpenChange);const reportedVisible=useRef(false);const holdTimer=useRef<number|null>(null);const holdStart=useRef({x:0,y:0});useEffect(()=>{onOpenChangeRef.current=onOpenChange},[onOpenChange]);useEffect(()=>{if(reportedVisible.current!==visible){reportedVisible.current=visible;onOpenChangeRef.current?.(visible)}},[visible]);const setOpen=useCallback((next:boolean)=>{setVisible(next)},[]);const closeAndRestoreFocus=useCallback(()=>{setOpen(false);triggerRef.current?.focus()},[setOpen]);const openAt=useCallback((x:number,y:number)=>{window.dispatchEvent(new CustomEvent("close-context-menus",{detail:instanceId.current}));triggerRef.current=document.activeElement as HTMLElement|null;const menuWidth=Math.min(280,window.innerWidth-16);const clampedX=Math.max(8,Math.min(x,window.innerWidth-menuWidth-8));const clampedY=Math.max(8,Math.min(y,window.innerHeight-320));setPos({x:clampedX,y:clampedY});setOpen(true)},[setOpen]);useImperativeHandle(ref,()=>({open:openAt}),[openAt]);const cancelHold=useCallback(()=>{if(holdTimer.current!==null){window.clearTimeout(holdTimer.current);holdTimer.current=null}},[]);const handleContextMenu=useCallback((e:React.MouseEvent)=>{e.preventDefault();e.stopPropagation();openAt(e.clientX,e.clientY)},[openAt]);const handlePointerDown=useCallback((e:React.PointerEvent)=>{if(e.pointerType==="mouse")return;holdStart.current={x:e.clientX,y:e.clientY};cancelHold();holdTimer.current=window.setTimeout(()=>{holdTimer.current=null;navigator.vibrate?.(18);openAt(e.clientX,e.clientY)},450)},[cancelHold,openAt]);const handlePointerMove=useCallback((e:React.PointerEvent)=>{if(Math.hypot(e.clientX-holdStart.current.x,e.clientY-holdStart.current.y)>12)cancelHold()},[cancelHold]);useEffect(()=>cancelHold,[cancelHold]);useEffect(()=>{const closeFromOther=(e:Event)=>{if((e as CustomEvent).detail!==instanceId.current)setOpen(false)};window.addEventListener("close-context-menus",closeFromOther);return()=>window.removeEventListener("close-context-menus",closeFromOther)},[setOpen]);useEffect(()=>{if(!visible)return;const close=()=>setOpen(false);const key=(e:KeyboardEvent)=>{if(e.key==="Escape")closeAndRestoreFocus()};window.addEventListener("click",close);window.addEventListener("scroll",close,true);window.addEventListener("keydown",key);menuRef.current?.querySelector<HTMLButtonElement>('button[role="menuitem"]:not([disabled])')?.focus();return()=>{window.removeEventListener("click",close);window.removeEventListener("scroll",close,true);window.removeEventListener("keydown",key)}},[visible,setOpen,closeAndRestoreFocus]);const pointerProps={onContextMenu:handleContextMenu,onPointerDown:handlePointerDown,onPointerMove:handlePointerMove,onPointerUp:cancelHold,onPointerCancel:cancelHold,onPointerLeave:cancelHold};const trigger=isValidElement(children)?cloneElement(children,pointerProps as React.HTMLAttributes<HTMLElement>):<div {...pointerProps} className="contents">{children}</div>;return <>{trigger}{visible&&createPortal(<div ref={menuRef} role="menu" className="fixed z-50 max-h-[min(70dvh,420px)] min-w-[200px] max-w-[calc(100vw-16px)] overflow-y-auto rounded-xl border border-gray-200 bg-white py-1 shadow-xl dark:border-navy-600 dark:bg-navy-800" style={{left:pos.x,top:pos.y}} onClick={e=>e.stopPropagation()}>{items.map((item,i)=>item.divider?<div key={i} className="my-1 border-t border-gray-100 dark:border-navy-600"/>:item.type==="label"?<div key={i} className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-500 dark:text-gray-400">{item.icon&&<span className="h-4 w-4 shrink-0 text-amber-500">{item.icon}</span>}<span>{item.label}</span></div>:<button type="button" key={i} role="menuitem" onClick={()=>{item.onClick?.();closeAndRestoreFocus()}} disabled={item.disabled} className={`flex min-h-12 w-full items-center gap-2.5 px-3 py-2 text-left text-sm active:bg-gray-100 dark:active:bg-navy-700 ${item.disabled?"text-gray-300 dark:text-gray-600":item.danger?"text-red-600 dark:text-red-400":item.urgent?"text-amber-600 dark:text-amber-400":"text-gray-700 dark:text-gray-200"}`}>{item.icon&&<span className="h-4 w-4 shrink-0">{item.icon}</span>}<span className="font-medium">{item.label}</span></button>)}</div>,document.body)}</>});export default ContextMenu;
+import {
+  cloneElement,
+  forwardRef,
+  isValidElement,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+  useCallback,
+} from "react";
+import { createPortal } from "react-dom";
+export interface ContextMenuItem {
+  label: string;
+  icon?: React.ReactNode;
+  onClick?: () => void;
+  danger?: boolean;
+  urgent?: boolean;
+  disabled?: boolean;
+  divider?: boolean;
+  type?: "label";
+}
+export interface ContextMenuHandle {
+  open: (x: number, y: number) => void;
+}
+interface ContextMenuProps {
+  items: ContextMenuItem[];
+  children: React.ReactNode;
+  onOpenChange?: (open: boolean) => void;
+}
+const ContextMenu = forwardRef<ContextMenuHandle, ContextMenuProps>(function ContextMenu(
+  { items, children, onOpenChange },
+  ref,
+) {
+  const [visible, setVisible] = useState(false);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const menuRef = useRef<HTMLDivElement>(null);
+  const instanceId = useRef(Math.random().toString(36));
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const onOpenChangeRef = useRef(onOpenChange);
+  const reportedVisible = useRef(false);
+  const holdTimer = useRef<number | null>(null);
+  const holdStart = useRef({ x: 0, y: 0 });
+  useEffect(() => {
+    onOpenChangeRef.current = onOpenChange;
+  }, [onOpenChange]);
+  useEffect(() => {
+    if (reportedVisible.current !== visible) {
+      reportedVisible.current = visible;
+      onOpenChangeRef.current?.(visible);
+    }
+  }, [visible]);
+  const setOpen = useCallback((next: boolean) => {
+    setVisible(next);
+  }, []);
+  const closeAndRestoreFocus = useCallback(() => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  }, [setOpen]);
+  const openAt = useCallback(
+    (x: number, y: number) => {
+      window.dispatchEvent(new CustomEvent("close-context-menus", { detail: instanceId.current }));
+      triggerRef.current = document.activeElement as HTMLElement | null;
+      const menuWidth = Math.min(280, window.innerWidth - 16);
+      const clampedX = Math.max(8, Math.min(x, window.innerWidth - menuWidth - 8));
+      const clampedY = Math.max(8, Math.min(y, window.innerHeight - 320));
+      setPos({ x: clampedX, y: clampedY });
+      setOpen(true);
+    },
+    [setOpen],
+  );
+  useImperativeHandle(ref, () => ({ open: openAt }), [openAt]);
+  const cancelHold = useCallback(() => {
+    if (holdTimer.current !== null) {
+      window.clearTimeout(holdTimer.current);
+      holdTimer.current = null;
+    }
+  }, []);
+  const handleContextMenu = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openAt(e.clientX, e.clientY);
+    },
+    [openAt],
+  );
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      if (e.pointerType === "mouse") return;
+      holdStart.current = { x: e.clientX, y: e.clientY };
+      cancelHold();
+      holdTimer.current = window.setTimeout(() => {
+        holdTimer.current = null;
+        navigator.vibrate?.(18);
+        openAt(e.clientX, e.clientY);
+      }, 450);
+    },
+    [cancelHold, openAt],
+  );
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent) => {
+      if (Math.hypot(e.clientX - holdStart.current.x, e.clientY - holdStart.current.y) > 12)
+        cancelHold();
+    },
+    [cancelHold],
+  );
+  useEffect(() => cancelHold, [cancelHold]);
+  useEffect(() => {
+    const closeFromOther = (e: Event) => {
+      if ((e as CustomEvent).detail !== instanceId.current) setOpen(false);
+    };
+    window.addEventListener("close-context-menus", closeFromOther);
+    return () => window.removeEventListener("close-context-menus", closeFromOther);
+  }, [setOpen]);
+  useEffect(() => {
+    if (!visible) return;
+    const close = () => setOpen(false);
+    const key = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeAndRestoreFocus();
+    };
+    window.addEventListener("click", close);
+    window.addEventListener("scroll", close, true);
+    window.addEventListener("keydown", key);
+    menuRef.current
+      ?.querySelector<HTMLButtonElement>('button[role="menuitem"]:not([disabled])')
+      ?.focus();
+    return () => {
+      window.removeEventListener("click", close);
+      window.removeEventListener("scroll", close, true);
+      window.removeEventListener("keydown", key);
+    };
+  }, [visible, setOpen, closeAndRestoreFocus]);
+  const pointerProps = {
+    onContextMenu: handleContextMenu,
+    onPointerDown: handlePointerDown,
+    onPointerMove: handlePointerMove,
+    onPointerUp: cancelHold,
+    onPointerCancel: cancelHold,
+    onPointerLeave: cancelHold,
+  };
+  const trigger = isValidElement(children) ? (
+    cloneElement(children, pointerProps as React.HTMLAttributes<HTMLElement>)
+  ) : (
+    <div {...pointerProps} className="contents">
+      {children}
+    </div>
+  );
+  return (
+    <>
+      {trigger}
+      {visible &&
+        createPortal(
+          <div
+            ref={menuRef}
+            role="menu"
+            className="fixed z-50 max-h-[min(70dvh,420px)] min-w-[200px] max-w-[calc(100vw-16px)] overflow-y-auto rounded-xl border border-gray-200 bg-white py-1 shadow-xl dark:border-navy-600 dark:bg-navy-800"
+            style={{ left: pos.x, top: pos.y }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {items.map((item, i) =>
+              item.divider ? (
+                <div key={i} className="my-1 border-t border-gray-100 dark:border-navy-600" />
+              ) : item.type === "label" ? (
+                <div
+                  key={i}
+                  className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-gray-500 dark:text-gray-400"
+                >
+                  {item.icon && (
+                    <span className="h-4 w-4 shrink-0 text-amber-500">{item.icon}</span>
+                  )}
+                  <span>{item.label}</span>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  key={i}
+                  role="menuitem"
+                  onClick={() => {
+                    item.onClick?.();
+                    closeAndRestoreFocus();
+                  }}
+                  disabled={item.disabled}
+                  className={`flex min-h-12 w-full items-center gap-2.5 px-3 py-2 text-left text-sm active:bg-gray-100 dark:active:bg-navy-700 ${item.disabled ? "text-gray-300 dark:text-gray-600" : item.danger ? "text-red-600 dark:text-red-400" : item.urgent ? "text-amber-600 dark:text-amber-400" : "text-gray-700 dark:text-gray-200"}`}
+                >
+                  {item.icon && <span className="h-4 w-4 shrink-0">{item.icon}</span>}
+                  <span className="font-medium">{item.label}</span>
+                </button>
+              ),
+            )}
+          </div>,
+          document.body,
+        )}
+    </>
+  );
+});
+export default ContextMenu;

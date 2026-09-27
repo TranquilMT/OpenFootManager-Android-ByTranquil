@@ -46,7 +46,9 @@ describe("FinancesPayrollTable", () => {
   it("leaves rows out of the tab order when selection is unavailable", () => {
     render(<FinancesPayrollTable roster={roster} />);
 
-    expect(within(screen.getByRole("table")).queryByRole("button", { name: /John Smith/ })).toBeNull();
+    expect(
+      within(screen.getByRole("table")).queryByRole("button", { name: /John Smith/ }),
+    ).toBeNull();
     expect(screen.getByRole("button", { name: /John Smith/ })).toBeDisabled();
   });
 });

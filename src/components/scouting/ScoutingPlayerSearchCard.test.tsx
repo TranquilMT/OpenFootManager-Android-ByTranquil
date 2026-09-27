@@ -150,7 +150,9 @@ describe("ScoutingPlayerSearchCard", () => {
         onNextPage={vi.fn()}
       />,
     );
-    fireEvent.click(screen.getAllByRole("button", { name: /scouting.addShortlist: John Smith/ })[0]);
+    fireEvent.click(
+      screen.getAllByRole("button", { name: /scouting.addShortlist: John Smith/ })[0],
+    );
     expect(onToggleShortlist).toHaveBeenCalledWith("player-1");
   });
   it("renders players and delegates search, filter, selection, scout, and pagination actions", () => {

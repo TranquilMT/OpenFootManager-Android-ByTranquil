@@ -58,8 +58,7 @@ impl ClubStrategy {
     /// behaviour.
     pub fn derive(team: &Team) -> Self {
         let reputation = team.reputation.min(1_000) as i32;
-        let facility_strength =
-            team.facilities.training as i32 + team.facilities.scouting as i32;
+        let facility_strength = team.facilities.training as i32 + team.facilities.scouting as i32;
         let healthy_cash = team.finance > 0;
         let stressed = team.finance < 0 || team.transfer_budget <= 0;
 
@@ -73,9 +72,7 @@ impl ClubStrategy {
         } else {
             clamp_score(32 + reputation / 25 + if healthy_cash { 8 } else { 0 })
         };
-        let manager_patience = clamp_score(
-            68 - reputation / 28 + if stressed { 8 } else { 0 },
-        );
+        let manager_patience = clamp_score(68 - reputation / 28 + if stressed { 8 } else { 0 });
 
         let status = if stressed {
             StrategicStatus::FinancialCrisis

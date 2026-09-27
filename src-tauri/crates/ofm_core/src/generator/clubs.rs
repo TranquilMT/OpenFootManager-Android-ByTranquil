@@ -267,30 +267,52 @@ impl WorldGenConfig {
 // Club names and division membership are factual inputs, while the ratings
 // below are game balance choices (not licensed player ratings).
 const ENGLISH_PREMIER: &[(&str, &str, u32)] = &[
-    ("Manchester City", "Manchester", 940), ("Arsenal", "London", 935),
-    ("Liverpool", "Liverpool", 930), ("Chelsea", "London", 915),
-    ("Manchester United", "Manchester", 910), ("Newcastle United", "Newcastle", 875),
-    ("Aston Villa", "Birmingham", 870), ("Tottenham Hotspur", "London", 855),
-    ("Brighton & Hove Albion", "Brighton", 830), ("Crystal Palace", "London", 810),
-    ("Nottingham Forest", "Nottingham", 800), ("Everton", "Liverpool", 785),
-    ("Brentford", "London", 775), ("Bournemouth", "Bournemouth", 765),
-    ("Fulham", "London", 755), ("Leeds United", "Leeds", 745),
-    ("Sunderland", "Sunderland", 730), ("Ipswich Town", "Ipswich", 715),
-    ("Coventry City", "Coventry", 705), ("Hull City", "Hull", 695),
+    ("Manchester City", "Manchester", 940),
+    ("Arsenal", "London", 935),
+    ("Liverpool", "Liverpool", 930),
+    ("Chelsea", "London", 915),
+    ("Manchester United", "Manchester", 910),
+    ("Newcastle United", "Newcastle", 875),
+    ("Aston Villa", "Birmingham", 870),
+    ("Tottenham Hotspur", "London", 855),
+    ("Brighton & Hove Albion", "Brighton", 830),
+    ("Crystal Palace", "London", 810),
+    ("Nottingham Forest", "Nottingham", 800),
+    ("Everton", "Liverpool", 785),
+    ("Brentford", "London", 775),
+    ("Bournemouth", "Bournemouth", 765),
+    ("Fulham", "London", 755),
+    ("Leeds United", "Leeds", 745),
+    ("Sunderland", "Sunderland", 730),
+    ("Ipswich Town", "Ipswich", 715),
+    ("Coventry City", "Coventry", 705),
+    ("Hull City", "Hull", 695),
 ];
 const ENGLISH_CHAMPIONSHIP: &[(&str, &str)] = &[
-    ("West Ham United", "London"), ("Southampton", "Southampton"),
-    ("Wolverhampton Wanderers", "Wolverhampton"), ("Burnley", "Burnley"),
-    ("Sheffield United", "Sheffield"), ("Middlesbrough", "Middlesbrough"),
-    ("West Bromwich Albion", "West Bromwich"), ("Birmingham City", "Birmingham"),
-    ("Swansea City", "Swansea"), ("Norwich City", "Norwich"),
-    ("Stoke City", "Stoke-on-Trent"), ("Watford", "Watford"),
-    ("Bristol City", "Bristol"), ("Blackburn Rovers", "Blackburn"),
-    ("Millwall", "London"), ("Queens Park Rangers", "London"),
-    ("Derby County", "Derby"), ("Preston North End", "Preston"),
-    ("Portsmouth", "Portsmouth"), ("Wrexham", "Wrexham"),
-    ("Charlton Athletic", "London"), ("Cardiff City", "Cardiff"),
-    ("Bolton Wanderers", "Bolton"), ("Lincoln City", "Lincoln"),
+    ("West Ham United", "London"),
+    ("Southampton", "Southampton"),
+    ("Wolverhampton Wanderers", "Wolverhampton"),
+    ("Burnley", "Burnley"),
+    ("Sheffield United", "Sheffield"),
+    ("Middlesbrough", "Middlesbrough"),
+    ("West Bromwich Albion", "West Bromwich"),
+    ("Birmingham City", "Birmingham"),
+    ("Swansea City", "Swansea"),
+    ("Norwich City", "Norwich"),
+    ("Stoke City", "Stoke-on-Trent"),
+    ("Watford", "Watford"),
+    ("Bristol City", "Bristol"),
+    ("Blackburn Rovers", "Blackburn"),
+    ("Millwall", "London"),
+    ("Queens Park Rangers", "London"),
+    ("Derby County", "Derby"),
+    ("Preston North End", "Preston"),
+    ("Portsmouth", "Portsmouth"),
+    ("Wrexham", "Wrexham"),
+    ("Charlton Athletic", "London"),
+    ("Cardiff City", "Cardiff"),
+    ("Bolton Wanderers", "Bolton"),
+    ("Lincoln City", "Lincoln"),
 ];
 
 #[derive(Clone, Copy)]
@@ -307,64 +329,412 @@ struct ClubPreset {
 // club lists; the average is an OFMtouch balance target, not an external rating.
 // The remaining clubs still come from the fictional procedural generator.
 const FEATURED_CLUBS: &[ClubPreset] = &[
-    ClubPreset { country: "ES", name: "Real Madrid", city: "Madrid", reputation: 945, average: 89 },
-    ClubPreset { country: "ES", name: "FC Barcelona", city: "Barcelona", reputation: 940, average: 89 },
-    ClubPreset { country: "ES", name: "Atlético de Madrid", city: "Madrid", reputation: 900, average: 86 },
-    ClubPreset { country: "ES", name: "Athletic Club", city: "Bilbao", reputation: 850, average: 82 },
-    ClubPreset { country: "ES", name: "Villarreal CF", city: "Villarreal", reputation: 830, average: 81 },
-    ClubPreset { country: "DE", name: "FC Bayern München", city: "Munich", reputation: 950, average: 89 },
-    ClubPreset { country: "DE", name: "Borussia Dortmund", city: "Dortmund", reputation: 910, average: 86 },
-    ClubPreset { country: "DE", name: "Bayer 04 Leverkusen", city: "Leverkusen", reputation: 890, average: 84 },
-    ClubPreset { country: "DE", name: "RB Leipzig", city: "Leipzig", reputation: 860, average: 82 },
-    ClubPreset { country: "DE", name: "VfB Stuttgart", city: "Stuttgart", reputation: 835, average: 81 },
-    ClubPreset { country: "IT", name: "Inter", city: "Milan", reputation: 940, average: 88 },
-    ClubPreset { country: "IT", name: "Napoli", city: "Naples", reputation: 920, average: 87 },
-    ClubPreset { country: "IT", name: "AC Milan", city: "Milan", reputation: 910, average: 86 },
-    ClubPreset { country: "IT", name: "Juventus", city: "Turin", reputation: 900, average: 85 },
-    ClubPreset { country: "IT", name: "AS Roma", city: "Rome", reputation: 865, average: 82 },
-    ClubPreset { country: "FR", name: "Paris Saint-Germain", city: "Paris", reputation: 950, average: 89 },
-    ClubPreset { country: "FR", name: "Olympique de Marseille", city: "Marseille", reputation: 885, average: 84 },
-    ClubPreset { country: "FR", name: "Olympique Lyonnais", city: "Lyon", reputation: 865, average: 83 },
-    ClubPreset { country: "FR", name: "AS Monaco", city: "Monaco", reputation: 860, average: 83 },
-    ClubPreset { country: "FR", name: "LOSC Lille", city: "Lille", reputation: 840, average: 81 },
-    ClubPreset { country: "PT", name: "Sporting CP", city: "Lisbon", reputation: 900, average: 84 },
-    ClubPreset { country: "PT", name: "SL Benfica", city: "Lisbon", reputation: 890, average: 84 },
-    ClubPreset { country: "PT", name: "FC Porto", city: "Porto", reputation: 875, average: 83 },
-    ClubPreset { country: "PT", name: "SC Braga", city: "Braga", reputation: 825, average: 79 },
-    ClubPreset { country: "NL", name: "PSV Eindhoven", city: "Eindhoven", reputation: 875, average: 83 },
-    ClubPreset { country: "NL", name: "Feyenoord", city: "Rotterdam", reputation: 850, average: 81 },
-    ClubPreset { country: "NL", name: "Ajax", city: "Amsterdam", reputation: 840, average: 80 },
-    ClubPreset { country: "BE", name: "Club Brugge", city: "Bruges", reputation: 815, average: 79 },
-    ClubPreset { country: "BE", name: "Union Saint-Gilloise", city: "Brussels", reputation: 800, average: 78 },
-    ClubPreset { country: "SCO", name: "Celtic", city: "Glasgow", reputation: 850, average: 80 },
-    ClubPreset { country: "SCO", name: "Rangers", city: "Glasgow", reputation: 835, average: 79 },
-    ClubPreset { country: "TR", name: "Galatasaray", city: "Istanbul", reputation: 875, average: 82 },
-    ClubPreset { country: "TR", name: "Fenerbahçe", city: "Istanbul", reputation: 860, average: 81 },
-    ClubPreset { country: "TR", name: "Beşiktaş", city: "Istanbul", reputation: 830, average: 78 },
-    ClubPreset { country: "BR", name: "Flamengo", city: "Rio de Janeiro", reputation: 900, average: 83 },
-    ClubPreset { country: "BR", name: "Palmeiras", city: "São Paulo", reputation: 890, average: 83 },
-    ClubPreset { country: "BR", name: "Corinthians", city: "São Paulo", reputation: 850, average: 79 },
-    ClubPreset { country: "BR", name: "São Paulo FC", city: "São Paulo", reputation: 835, average: 78 },
-    ClubPreset { country: "AR", name: "River Plate", city: "Buenos Aires", reputation: 850, average: 80 },
-    ClubPreset { country: "AR", name: "Boca Juniors", city: "Buenos Aires", reputation: 840, average: 79 },
-    ClubPreset { country: "AR", name: "Racing Club", city: "Avellaneda", reputation: 800, average: 76 },
-    ClubPreset { country: "US", name: "Inter Miami CF", city: "Miami", reputation: 820, average: 79 },
-    ClubPreset { country: "US", name: "Los Angeles FC", city: "Los Angeles", reputation: 800, average: 77 },
-    ClubPreset { country: "US", name: "Seattle Sounders FC", city: "Seattle", reputation: 775, average: 75 },
-    ClubPreset { country: "US", name: "LA Galaxy", city: "Los Angeles", reputation: 755, average: 74 },
-    ClubPreset { country: "US", name: "Columbus Crew", city: "Columbus", reputation: 745, average: 73 },
-    ClubPreset { country: "JP", name: "Kashima Antlers", city: "Kashima", reputation: 750, average: 74 },
-    ClubPreset { country: "JP", name: "Vissel Kobe", city: "Kobe", reputation: 740, average: 73 },
-    ClubPreset { country: "JP", name: "Sanfrecce Hiroshima", city: "Hiroshima", reputation: 730, average: 72 },
-    ClubPreset { country: "JP", name: "Urawa Reds", city: "Saitama", reputation: 725, average: 72 },
-    ClubPreset { country: "JP", name: "Yokohama F. Marinos", city: "Yokohama", reputation: 715, average: 71 },
-    ClubPreset { country: "JP", name: "Gamba Osaka", city: "Osaka", reputation: 705, average: 71 },
-    ClubPreset { country: "KR", name: "Ulsan HD", city: "Ulsan", reputation: 750, average: 73 },
-    ClubPreset { country: "KR", name: "Jeonbuk Hyundai Motors", city: "Jeonju", reputation: 740, average: 72 },
-    ClubPreset { country: "KR", name: "FC Seoul", city: "Seoul", reputation: 730, average: 71 },
-    ClubPreset { country: "SA", name: "Al Hilal", city: "Riyadh", reputation: 825, average: 80 },
-    ClubPreset { country: "SA", name: "Al Nassr", city: "Riyadh", reputation: 810, average: 79 },
-    ClubPreset { country: "SA", name: "Al Ittihad", city: "Jeddah", reputation: 790, average: 77 },
+    ClubPreset {
+        country: "ES",
+        name: "Real Madrid",
+        city: "Madrid",
+        reputation: 945,
+        average: 89,
+    },
+    ClubPreset {
+        country: "ES",
+        name: "FC Barcelona",
+        city: "Barcelona",
+        reputation: 940,
+        average: 89,
+    },
+    ClubPreset {
+        country: "ES",
+        name: "Atlético de Madrid",
+        city: "Madrid",
+        reputation: 900,
+        average: 86,
+    },
+    ClubPreset {
+        country: "ES",
+        name: "Athletic Club",
+        city: "Bilbao",
+        reputation: 850,
+        average: 82,
+    },
+    ClubPreset {
+        country: "ES",
+        name: "Villarreal CF",
+        city: "Villarreal",
+        reputation: 830,
+        average: 81,
+    },
+    ClubPreset {
+        country: "DE",
+        name: "FC Bayern München",
+        city: "Munich",
+        reputation: 950,
+        average: 89,
+    },
+    ClubPreset {
+        country: "DE",
+        name: "Borussia Dortmund",
+        city: "Dortmund",
+        reputation: 910,
+        average: 86,
+    },
+    ClubPreset {
+        country: "DE",
+        name: "Bayer 04 Leverkusen",
+        city: "Leverkusen",
+        reputation: 890,
+        average: 84,
+    },
+    ClubPreset {
+        country: "DE",
+        name: "RB Leipzig",
+        city: "Leipzig",
+        reputation: 860,
+        average: 82,
+    },
+    ClubPreset {
+        country: "DE",
+        name: "VfB Stuttgart",
+        city: "Stuttgart",
+        reputation: 835,
+        average: 81,
+    },
+    ClubPreset {
+        country: "IT",
+        name: "Inter",
+        city: "Milan",
+        reputation: 940,
+        average: 88,
+    },
+    ClubPreset {
+        country: "IT",
+        name: "Napoli",
+        city: "Naples",
+        reputation: 920,
+        average: 87,
+    },
+    ClubPreset {
+        country: "IT",
+        name: "AC Milan",
+        city: "Milan",
+        reputation: 910,
+        average: 86,
+    },
+    ClubPreset {
+        country: "IT",
+        name: "Juventus",
+        city: "Turin",
+        reputation: 900,
+        average: 85,
+    },
+    ClubPreset {
+        country: "IT",
+        name: "AS Roma",
+        city: "Rome",
+        reputation: 865,
+        average: 82,
+    },
+    ClubPreset {
+        country: "FR",
+        name: "Paris Saint-Germain",
+        city: "Paris",
+        reputation: 950,
+        average: 89,
+    },
+    ClubPreset {
+        country: "FR",
+        name: "Olympique de Marseille",
+        city: "Marseille",
+        reputation: 885,
+        average: 84,
+    },
+    ClubPreset {
+        country: "FR",
+        name: "Olympique Lyonnais",
+        city: "Lyon",
+        reputation: 865,
+        average: 83,
+    },
+    ClubPreset {
+        country: "FR",
+        name: "AS Monaco",
+        city: "Monaco",
+        reputation: 860,
+        average: 83,
+    },
+    ClubPreset {
+        country: "FR",
+        name: "LOSC Lille",
+        city: "Lille",
+        reputation: 840,
+        average: 81,
+    },
+    ClubPreset {
+        country: "PT",
+        name: "Sporting CP",
+        city: "Lisbon",
+        reputation: 900,
+        average: 84,
+    },
+    ClubPreset {
+        country: "PT",
+        name: "SL Benfica",
+        city: "Lisbon",
+        reputation: 890,
+        average: 84,
+    },
+    ClubPreset {
+        country: "PT",
+        name: "FC Porto",
+        city: "Porto",
+        reputation: 875,
+        average: 83,
+    },
+    ClubPreset {
+        country: "PT",
+        name: "SC Braga",
+        city: "Braga",
+        reputation: 825,
+        average: 79,
+    },
+    ClubPreset {
+        country: "NL",
+        name: "PSV Eindhoven",
+        city: "Eindhoven",
+        reputation: 875,
+        average: 83,
+    },
+    ClubPreset {
+        country: "NL",
+        name: "Feyenoord",
+        city: "Rotterdam",
+        reputation: 850,
+        average: 81,
+    },
+    ClubPreset {
+        country: "NL",
+        name: "Ajax",
+        city: "Amsterdam",
+        reputation: 840,
+        average: 80,
+    },
+    ClubPreset {
+        country: "BE",
+        name: "Club Brugge",
+        city: "Bruges",
+        reputation: 815,
+        average: 79,
+    },
+    ClubPreset {
+        country: "BE",
+        name: "Union Saint-Gilloise",
+        city: "Brussels",
+        reputation: 800,
+        average: 78,
+    },
+    ClubPreset {
+        country: "SCO",
+        name: "Celtic",
+        city: "Glasgow",
+        reputation: 850,
+        average: 80,
+    },
+    ClubPreset {
+        country: "SCO",
+        name: "Rangers",
+        city: "Glasgow",
+        reputation: 835,
+        average: 79,
+    },
+    ClubPreset {
+        country: "TR",
+        name: "Galatasaray",
+        city: "Istanbul",
+        reputation: 875,
+        average: 82,
+    },
+    ClubPreset {
+        country: "TR",
+        name: "Fenerbahçe",
+        city: "Istanbul",
+        reputation: 860,
+        average: 81,
+    },
+    ClubPreset {
+        country: "TR",
+        name: "Beşiktaş",
+        city: "Istanbul",
+        reputation: 830,
+        average: 78,
+    },
+    ClubPreset {
+        country: "BR",
+        name: "Flamengo",
+        city: "Rio de Janeiro",
+        reputation: 900,
+        average: 83,
+    },
+    ClubPreset {
+        country: "BR",
+        name: "Palmeiras",
+        city: "São Paulo",
+        reputation: 890,
+        average: 83,
+    },
+    ClubPreset {
+        country: "BR",
+        name: "Corinthians",
+        city: "São Paulo",
+        reputation: 850,
+        average: 79,
+    },
+    ClubPreset {
+        country: "BR",
+        name: "São Paulo FC",
+        city: "São Paulo",
+        reputation: 835,
+        average: 78,
+    },
+    ClubPreset {
+        country: "AR",
+        name: "River Plate",
+        city: "Buenos Aires",
+        reputation: 850,
+        average: 80,
+    },
+    ClubPreset {
+        country: "AR",
+        name: "Boca Juniors",
+        city: "Buenos Aires",
+        reputation: 840,
+        average: 79,
+    },
+    ClubPreset {
+        country: "AR",
+        name: "Racing Club",
+        city: "Avellaneda",
+        reputation: 800,
+        average: 76,
+    },
+    ClubPreset {
+        country: "US",
+        name: "Inter Miami CF",
+        city: "Miami",
+        reputation: 820,
+        average: 79,
+    },
+    ClubPreset {
+        country: "US",
+        name: "Los Angeles FC",
+        city: "Los Angeles",
+        reputation: 800,
+        average: 77,
+    },
+    ClubPreset {
+        country: "US",
+        name: "Seattle Sounders FC",
+        city: "Seattle",
+        reputation: 775,
+        average: 75,
+    },
+    ClubPreset {
+        country: "US",
+        name: "LA Galaxy",
+        city: "Los Angeles",
+        reputation: 755,
+        average: 74,
+    },
+    ClubPreset {
+        country: "US",
+        name: "Columbus Crew",
+        city: "Columbus",
+        reputation: 745,
+        average: 73,
+    },
+    ClubPreset {
+        country: "JP",
+        name: "Kashima Antlers",
+        city: "Kashima",
+        reputation: 750,
+        average: 74,
+    },
+    ClubPreset {
+        country: "JP",
+        name: "Vissel Kobe",
+        city: "Kobe",
+        reputation: 740,
+        average: 73,
+    },
+    ClubPreset {
+        country: "JP",
+        name: "Sanfrecce Hiroshima",
+        city: "Hiroshima",
+        reputation: 730,
+        average: 72,
+    },
+    ClubPreset {
+        country: "JP",
+        name: "Urawa Reds",
+        city: "Saitama",
+        reputation: 725,
+        average: 72,
+    },
+    ClubPreset {
+        country: "JP",
+        name: "Yokohama F. Marinos",
+        city: "Yokohama",
+        reputation: 715,
+        average: 71,
+    },
+    ClubPreset {
+        country: "JP",
+        name: "Gamba Osaka",
+        city: "Osaka",
+        reputation: 705,
+        average: 71,
+    },
+    ClubPreset {
+        country: "KR",
+        name: "Ulsan HD",
+        city: "Ulsan",
+        reputation: 750,
+        average: 73,
+    },
+    ClubPreset {
+        country: "KR",
+        name: "Jeonbuk Hyundai Motors",
+        city: "Jeonju",
+        reputation: 740,
+        average: 72,
+    },
+    ClubPreset {
+        country: "KR",
+        name: "FC Seoul",
+        city: "Seoul",
+        reputation: 730,
+        average: 71,
+    },
+    ClubPreset {
+        country: "SA",
+        name: "Al Hilal",
+        city: "Riyadh",
+        reputation: 825,
+        average: 80,
+    },
+    ClubPreset {
+        country: "SA",
+        name: "Al Nassr",
+        city: "Riyadh",
+        reputation: 810,
+        average: 79,
+    },
+    ClubPreset {
+        country: "SA",
+        name: "Al Ittihad",
+        city: "Jeddah",
+        reputation: 790,
+        average: 77,
+    },
 ];
 
 fn curated_english(nation: &NationGen, clubs_per_division: usize) -> bool {
@@ -390,7 +760,12 @@ pub(super) fn curated_squad_target(name: &str) -> Option<u8> {
         "Tottenham Hotspur" => Some(82),
         _ => None,
     };
-    english.or_else(|| FEATURED_CLUBS.iter().find(|club| club.name == name).map(|club| club.average))
+    english.or_else(|| {
+        FEATURED_CLUBS
+            .iter()
+            .find(|club| club.name == name)
+            .map(|club| club.average)
+    })
 }
 
 const PLAY_STYLES: &[&str] = &[
@@ -615,15 +990,26 @@ pub fn generate_club_defs(config: &WorldGenConfig, rng: &mut impl Rng) -> Vec<Te
     for nation in &config.nations {
         let mut used_codes = HashSet::new();
         let total = club_count(nation, config.clubs_per_division);
-        let mut names: Vec<(String, String)> = if curated_english(nation, config.clubs_per_division) {
-            ENGLISH_PREMIER.iter().map(|(name, city, _)| (name.to_string(), city.to_string()))
-                .chain(ENGLISH_CHAMPIONSHIP.iter().map(|(name, city)| (name.to_string(), city.to_string())))
+        let mut names: Vec<(String, String)> = if curated_english(nation, config.clubs_per_division)
+        {
+            ENGLISH_PREMIER
+                .iter()
+                .map(|(name, city, _)| (name.to_string(), city.to_string()))
+                .chain(
+                    ENGLISH_CHAMPIONSHIP
+                        .iter()
+                        .map(|(name, city)| (name.to_string(), city.to_string())),
+                )
                 .collect()
         } else {
             club_names(nation, total)
         };
         if !curated_english(nation, config.clubs_per_division) && config.clubs_per_division == 20 {
-            for (index, club) in FEATURED_CLUBS.iter().filter(|club| club.country == nation.code).enumerate() {
+            for (index, club) in FEATURED_CLUBS
+                .iter()
+                .filter(|club| club.country == nation.code)
+                .enumerate()
+            {
                 names[index] = (club.name.to_string(), club.city.to_string());
             }
         }
@@ -652,14 +1038,23 @@ pub fn generate_club_defs(config: &WorldGenConfig, rng: &mut impl Rng) -> Vec<Te
                 } else {
                     660 - (index - ENGLISH_PREMIER.len()) as u32 * 10
                 }
-            } else if let Some(club) = FEATURED_CLUBS.iter().find(|club| club.country == nation.code && club.name == name) {
+            } else if let Some(club) = FEATURED_CLUBS
+                .iter()
+                .find(|club| club.country == nation.code && club.name == name)
+            {
                 club.reputation
             } else {
                 reputation_center(nation.strength, index, total)
             };
             let variance = if curated_english(nation, config.clubs_per_division)
-                || FEATURED_CLUBS.iter().any(|club| club.country == nation.code && club.name == name)
-            { 4 } else { 25 };
+                || FEATURED_CLUBS
+                    .iter()
+                    .any(|club| club.country == nation.code && club.name == name)
+            {
+                4
+            } else {
+                25
+            };
             let rep_lo = center.saturating_sub(variance).max(80);
             let rep_hi = (center + variance).min(950).max(rep_lo + 1);
             let fin_lo = (center as i64) * 4_000;
@@ -786,9 +1181,17 @@ mod tests {
     #[test]
     fn english_2026_clubs_have_correct_divisions_and_strength() {
         let config = WorldGenConfig::standard();
-        let eng = config.nations.iter().find(|nation| nation.code == "ENG").unwrap().clone();
+        let eng = config
+            .nations
+            .iter()
+            .find(|nation| nation.code == "ENG")
+            .unwrap()
+            .clone();
         let defs = generate_club_defs(
-            &WorldGenConfig { nations: vec![eng], ..config },
+            &WorldGenConfig {
+                nations: vec![eng],
+                ..config
+            },
             &mut rand::rng(),
         );
         assert_eq!(defs.len(), 44);
@@ -798,17 +1201,30 @@ mod tests {
         assert!(premier.iter().any(|club| club.name == "Arsenal"));
         assert!(premier.iter().any(|club| club.name == "Chelsea"));
         assert!(premier.iter().any(|club| club.name == "Liverpool"));
-        assert!(championship.iter().any(|club| club.name == "Birmingham City"));
+        assert!(
+            championship
+                .iter()
+                .any(|club| club.name == "Birmingham City")
+        );
         assert!(!premier.iter().any(|club| club.name.contains("Birmingham")));
-        assert!(premier.iter().all(|club| club.reputation_range.unwrap()[0] >
-            championship.iter().map(|other| other.reputation_range.unwrap()[1]).max().unwrap()));
+        assert!(premier.iter().all(|club| {
+            club.reputation_range.unwrap()[0]
+                > championship
+                    .iter()
+                    .map(|other| other.reputation_range.unwrap()[1])
+                    .max()
+                    .unwrap()
+        }));
     }
 
     #[test]
     fn default_world_includes_brazil_usa_and_asia() {
         let config = WorldGenConfig::standard();
         for country in ["BR", "US", "JP", "KR", "SA"] {
-            assert!(config.nations.iter().any(|nation| nation.code == country), "{country}");
+            assert!(
+                config.nations.iter().any(|nation| nation.code == country),
+                "{country}"
+            );
         }
         let defs = generate_club_defs(&config, &mut rand::rng());
         for (country, name, floor) in [
@@ -821,7 +1237,10 @@ mod tests {
             ("KR", "Ulsan HD", 73),
             ("SA", "Al Hilal", 80),
         ] {
-            assert!(defs.iter().any(|club| club.country == country && club.name == name));
+            assert!(
+                defs.iter()
+                    .any(|club| club.country == country && club.name == name)
+            );
             assert_eq!(curated_squad_target(name), Some(floor));
         }
     }
@@ -873,10 +1292,10 @@ mod tests {
             &mut rng,
         );
         assert_eq!(defs.len(), 40);
-        assert!(
-            defs.iter().all(|club| FEATURED_CLUBS.iter().any(|preset| preset.name == club.name)
-                || (!club.name.starts_with("Club ") && !club.name.ends_with(" FC")))
-        );
+        assert!(defs.iter().all(
+            |club| FEATURED_CLUBS.iter().any(|preset| preset.name == club.name)
+                || (!club.name.starts_with("Club ") && !club.name.ends_with(" FC"))
+        ));
         let forms: HashSet<&str> = defs
             .iter()
             .filter_map(|club| {

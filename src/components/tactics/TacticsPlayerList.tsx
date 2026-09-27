@@ -9,6 +9,232 @@ import ContextMenu from "../ContextMenu";
 import { buildTacticsPlayerContextMenuItems } from "./TacticsContextMenu.helpers";
 import TacticsFilters from "./TacticsFilters";
 
-interface TacticsPlayerListProps { bench: PlayerData[]; comparePlayerId:string|null; dragState:DragState|null; matchRoles?:TeamMatchRolesData; onAssignMatchRole?:(role:keyof TeamMatchRolesData,playerId:string)=>void; onClearFilters:()=>void; onDemoteStarter:(playerId:string)=>void; onDragEnd:()=>void; onDragStart:(event:DragEvent<HTMLElement>,playerId:string,from:SquadSection,slotIndex:number|null)=>void; onOpenPlayerProfile:(playerId:string)=>void; onPlayerSearchChange:(search:string)=>void; onPositionFilterChange:(position:string)=>void; onPromoteBench:(playerId:string)=>void; onTacticalSelect:(playerId:string,section:SquadSection)=>void; playerSearch:string; positionFilter:string; selectedPlayerId:string|null; starters:PlayerData[]; xiActivePosition:Map<string,string> }
-function PlayerRow({comparePlayerId,deployedPosition,isSelected,matchRoles,onAssignMatchRole,onClearSelection,onDemoteStarter,onDragEnd,onDragStart,onOpenPlayerProfile,onPromoteBench,onTacticalSelect,player,section,selectedPlayerId}:{comparePlayerId:string|null;deployedPosition?:string;isSelected:boolean;matchRoles?:TeamMatchRolesData;onAssignMatchRole?:(role:keyof TeamMatchRolesData,playerId:string)=>void;onClearSelection:()=>void;onDemoteStarter?:(playerId:string)=>void;onDragEnd:()=>void;onDragStart:(event:DragEvent<HTMLElement>,playerId:string,from:SquadSection,slotIndex:number|null)=>void;onOpenPlayerProfile:(playerId:string)=>void;onPromoteBench?:(playerId:string)=>void;onTacticalSelect:(playerId:string,section:SquadSection)=>void;player:PlayerData;section:SquadSection;selectedPlayerId:string|null}):JSX.Element{const{t}=useTranslation();const ovr=getPlayerOvr(player);const isCompare=comparePlayerId===player.id;const position=translatePositionAbbreviation(t,deployedPosition||player.natural_position||player.position);const contextItems=buildTacticsPlayerContextMenuItems({isSelected,matchRoles,onAssignBestFit:undefined,onAssignMatchRole,onClearSelection,onDemoteStarter,onOpenProfile:onOpenPlayerProfile,onPromoteBench,onTacticalSelect,player,section,selectedPlayerId,t});const rowClassName=`tap-feedback flex min-h-12 w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left transition-colors sm:min-h-11 sm:rounded-lg sm:px-2 sm:py-1.5 ${isSelected?"bg-accent-500/15 ring-1 ring-accent-300/40":isCompare?"bg-primary-500/10 ring-1 ring-primary-300/30":"active:bg-gray-100 hover:bg-gray-50 dark:active:bg-navy-700 dark:hover:bg-navy-700/50"}`;const body=<button type="button" data-testid={section==="xi"?`xi-player-${player.id}`:`pitch-bench-player-${player.id}`} draggable={section==="bench"&&!player.injury} onClick={()=>onTacticalSelect(player.id,section)} onDragStart={(event)=>{if(section==="bench"&&!player.injury)onDragStart(event,player.id,"bench",null)}} onDragEnd={onDragEnd} className={`${rowClassName} ${section==="bench"?"flex-wrap gap-y-1":""}`} aria-label={`${player.match_name||player.full_name}, ${position}, OVR ${ovr}`}><Badge variant="neutral" size="sm">{position}</Badge><span className="w-7 shrink-0 rounded-md bg-gray-100 py-1 text-center text-[11px] font-heading font-bold tabular-nums text-gray-600 dark:bg-navy-700 dark:text-gray-300">{player.jersey_number??"–"}</span><span className="min-w-0 flex-1 truncate text-sm font-semibold text-gray-900 dark:text-gray-100">{player.match_name||player.full_name}</span>{player.injury&&section==="bench"?<InjuryBadge injury={player.injury}/>:<span className={`shrink-0 rounded-full px-2 py-1 text-xs font-heading font-bold ${ovr>=80?"bg-primary-500 text-white":ovr>=60?"bg-accent-500/20 text-accent-600 dark:text-accent-400":"bg-gray-100 text-gray-500 dark:bg-navy-700 dark:text-gray-400"}`}>{ovr}</span>}</button>;return <ContextMenu items={contextItems}>{section==="bench"?<div data-testid={`bench-player-${player.id}`} className="touch-manipulation">{body}</div>:body}</ContextMenu>}
-export default function TacticsPlayerList({bench,comparePlayerId,dragState,matchRoles,onAssignMatchRole,onClearFilters,onDemoteStarter,onDragEnd,onDragStart,onOpenPlayerProfile,onPlayerSearchChange,onPositionFilterChange,onPromoteBench,onTacticalSelect,playerSearch,positionFilter,selectedPlayerId,starters,xiActivePosition}:TacticsPlayerListProps):JSX.Element{const{t}=useTranslation();const draggedPlayerId=dragState?.playerId??null;function clearSelection(){if(selectedPlayerId){const section:SquadSection=starters.some(p=>p.id===selectedPlayerId)?"xi":"bench";onTacticalSelect(selectedPlayerId,section)}}const render=(player:PlayerData,section:SquadSection)=><PlayerRow key={player.id} comparePlayerId={comparePlayerId} deployedPosition={section==="xi"?xiActivePosition.get(player.id):undefined} isSelected={selectedPlayerId===player.id} matchRoles={matchRoles} onAssignMatchRole={onAssignMatchRole} onClearSelection={clearSelection} onDemoteStarter={section==="xi"?onDemoteStarter:undefined} onDragEnd={onDragEnd} onDragStart={onDragStart} onOpenPlayerProfile={onOpenPlayerProfile} onPromoteBench={section==="bench"?onPromoteBench:undefined} onTacticalSelect={onTacticalSelect} player={player} section={section} selectedPlayerId={selectedPlayerId}/>;return <div className="flex min-w-0 flex-col gap-3"><TacticsFilters onClear={onClearFilters} onPlayerSearchChange={onPlayerSearchChange} onPositionFilterChange={onPositionFilterChange} playerSearch={playerSearch} positionFilter={positionFilter}/><div className="rounded-xl border border-gray-200 bg-white dark:border-navy-600 dark:bg-navy-800"><div className="border-b border-gray-100 px-3 py-2 dark:border-navy-700"><span className="text-[11px] font-heading font-bold uppercase tracking-[.18em] text-gray-500 dark:text-gray-400">{t("preMatch.startingXI")} · {starters.length}</span></div><div className="space-y-1 p-2 sm:space-y-.5 sm:p-1.5">{starters.map(p=>render(p,"xi"))}</div></div><div className="rounded-xl border border-gray-200 bg-white dark:border-navy-600 dark:bg-navy-800"><div className="border-b border-gray-100 px-3 py-2 dark:border-navy-700"><span className="text-[11px] font-heading font-bold uppercase tracking-[.18em] text-gray-500 dark:text-gray-400">{t("preMatch.substitutes")} · {bench.length}</span></div><div className="space-y-1 p-2 sm:space-y-.5 sm:p-1.5">{bench.length===0?<p className="px-2 py-3 text-xs text-gray-500 dark:text-gray-400">{t("preMatch.noBench")}</p>:bench.map(p=>render(p,"bench"))}</div></div>{draggedPlayerId?<p className="hidden text-center text-[10px] text-gray-400 dark:text-gray-500 md:block">{t("tactics.pitchInteractionHint")}</p>:null}<p className="text-center text-[11px] text-gray-400 dark:text-gray-500 md:hidden">Tap players to select or swap. Tap and hold for more actions.</p></div>}
+interface TacticsPlayerListProps {
+  bench: PlayerData[];
+  comparePlayerId: string | null;
+  dragState: DragState | null;
+  matchRoles?: TeamMatchRolesData;
+  onAssignMatchRole?: (role: keyof TeamMatchRolesData, playerId: string) => void;
+  onClearFilters: () => void;
+  onDemoteStarter: (playerId: string) => void;
+  onDragEnd: () => void;
+  onDragStart: (
+    event: DragEvent<HTMLElement>,
+    playerId: string,
+    from: SquadSection,
+    slotIndex: number | null,
+  ) => void;
+  onOpenPlayerProfile: (playerId: string) => void;
+  onPlayerSearchChange: (search: string) => void;
+  onPositionFilterChange: (position: string) => void;
+  onPromoteBench: (playerId: string) => void;
+  onTacticalSelect: (playerId: string, section: SquadSection) => void;
+  playerSearch: string;
+  positionFilter: string;
+  selectedPlayerId: string | null;
+  starters: PlayerData[];
+  xiActivePosition: Map<string, string>;
+}
+function PlayerRow({
+  comparePlayerId,
+  deployedPosition,
+  isSelected,
+  matchRoles,
+  onAssignMatchRole,
+  onClearSelection,
+  onDemoteStarter,
+  onDragEnd,
+  onDragStart,
+  onOpenPlayerProfile,
+  onPromoteBench,
+  onTacticalSelect,
+  player,
+  section,
+  selectedPlayerId,
+}: {
+  comparePlayerId: string | null;
+  deployedPosition?: string;
+  isSelected: boolean;
+  matchRoles?: TeamMatchRolesData;
+  onAssignMatchRole?: (role: keyof TeamMatchRolesData, playerId: string) => void;
+  onClearSelection: () => void;
+  onDemoteStarter?: (playerId: string) => void;
+  onDragEnd: () => void;
+  onDragStart: (
+    event: DragEvent<HTMLElement>,
+    playerId: string,
+    from: SquadSection,
+    slotIndex: number | null,
+  ) => void;
+  onOpenPlayerProfile: (playerId: string) => void;
+  onPromoteBench?: (playerId: string) => void;
+  onTacticalSelect: (playerId: string, section: SquadSection) => void;
+  player: PlayerData;
+  section: SquadSection;
+  selectedPlayerId: string | null;
+}): JSX.Element {
+  const { t } = useTranslation();
+  const ovr = getPlayerOvr(player);
+  const isCompare = comparePlayerId === player.id;
+  const position = translatePositionAbbreviation(
+    t,
+    deployedPosition || player.natural_position || player.position,
+  );
+  const contextItems = buildTacticsPlayerContextMenuItems({
+    isSelected,
+    matchRoles,
+    onAssignBestFit: undefined,
+    onAssignMatchRole,
+    onClearSelection,
+    onDemoteStarter,
+    onOpenProfile: onOpenPlayerProfile,
+    onPromoteBench,
+    onTacticalSelect,
+    player,
+    section,
+    selectedPlayerId,
+    t,
+  });
+  const rowClassName = `tap-feedback flex min-h-12 w-full items-center gap-2 rounded-xl px-3 py-2.5 text-left transition-colors sm:min-h-11 sm:rounded-lg sm:px-2 sm:py-1.5 ${isSelected ? "bg-accent-500/15 ring-1 ring-accent-300/40" : isCompare ? "bg-primary-500/10 ring-1 ring-primary-300/30" : "active:bg-gray-100 hover:bg-gray-50 dark:active:bg-navy-700 dark:hover:bg-navy-700/50"}`;
+  const body = (
+    <button
+      type="button"
+      data-testid={section === "xi" ? `xi-player-${player.id}` : `pitch-bench-player-${player.id}`}
+      draggable={section === "bench" && !player.injury}
+      onClick={() => onTacticalSelect(player.id, section)}
+      onDragStart={(event) => {
+        if (section === "bench" && !player.injury) onDragStart(event, player.id, "bench", null);
+      }}
+      onDragEnd={onDragEnd}
+      className={`${rowClassName} ${section === "bench" ? "flex-wrap gap-y-1" : ""}`}
+      aria-label={`${player.match_name || player.full_name}, ${position}, OVR ${ovr}`}
+    >
+      <Badge variant="neutral" size="sm">
+        {position}
+      </Badge>
+      <span className="w-7 shrink-0 rounded-md bg-gray-100 py-1 text-center text-[11px] font-heading font-bold tabular-nums text-gray-600 dark:bg-navy-700 dark:text-gray-300">
+        {player.jersey_number ?? "–"}
+      </span>
+      <span className="min-w-0 flex-1 truncate text-sm font-semibold text-gray-900 dark:text-gray-100">
+        {player.match_name || player.full_name}
+      </span>
+      {player.injury && section === "bench" ? (
+        <InjuryBadge injury={player.injury} />
+      ) : (
+        <span
+          className={`shrink-0 rounded-full px-2 py-1 text-xs font-heading font-bold ${ovr >= 80 ? "bg-primary-500 text-white" : ovr >= 60 ? "bg-accent-500/20 text-accent-600 dark:text-accent-400" : "bg-gray-100 text-gray-500 dark:bg-navy-700 dark:text-gray-400"}`}
+        >
+          {ovr}
+        </span>
+      )}
+    </button>
+  );
+  return (
+    <ContextMenu items={contextItems}>
+      {section === "bench" ? (
+        <div data-testid={`bench-player-${player.id}`} className="touch-manipulation">
+          {body}
+        </div>
+      ) : (
+        body
+      )}
+    </ContextMenu>
+  );
+}
+export default function TacticsPlayerList({
+  bench,
+  comparePlayerId,
+  dragState,
+  matchRoles,
+  onAssignMatchRole,
+  onClearFilters,
+  onDemoteStarter,
+  onDragEnd,
+  onDragStart,
+  onOpenPlayerProfile,
+  onPlayerSearchChange,
+  onPositionFilterChange,
+  onPromoteBench,
+  onTacticalSelect,
+  playerSearch,
+  positionFilter,
+  selectedPlayerId,
+  starters,
+  xiActivePosition,
+}: TacticsPlayerListProps): JSX.Element {
+  const { t } = useTranslation();
+  const draggedPlayerId = dragState?.playerId ?? null;
+  function clearSelection() {
+    if (selectedPlayerId) {
+      const section: SquadSection = starters.some((p) => p.id === selectedPlayerId)
+        ? "xi"
+        : "bench";
+      onTacticalSelect(selectedPlayerId, section);
+    }
+  }
+  const render = (player: PlayerData, section: SquadSection) => (
+    <PlayerRow
+      key={player.id}
+      comparePlayerId={comparePlayerId}
+      deployedPosition={section === "xi" ? xiActivePosition.get(player.id) : undefined}
+      isSelected={selectedPlayerId === player.id}
+      matchRoles={matchRoles}
+      onAssignMatchRole={onAssignMatchRole}
+      onClearSelection={clearSelection}
+      onDemoteStarter={section === "xi" ? onDemoteStarter : undefined}
+      onDragEnd={onDragEnd}
+      onDragStart={onDragStart}
+      onOpenPlayerProfile={onOpenPlayerProfile}
+      onPromoteBench={section === "bench" ? onPromoteBench : undefined}
+      onTacticalSelect={onTacticalSelect}
+      player={player}
+      section={section}
+      selectedPlayerId={selectedPlayerId}
+    />
+  );
+  return (
+    <div className="flex min-w-0 flex-col gap-3">
+      <TacticsFilters
+        onClear={onClearFilters}
+        onPlayerSearchChange={onPlayerSearchChange}
+        onPositionFilterChange={onPositionFilterChange}
+        playerSearch={playerSearch}
+        positionFilter={positionFilter}
+      />
+      <div className="rounded-xl border border-gray-200 bg-white dark:border-navy-600 dark:bg-navy-800">
+        <div className="border-b border-gray-100 px-3 py-2 dark:border-navy-700">
+          <span className="text-[11px] font-heading font-bold uppercase tracking-[.18em] text-gray-500 dark:text-gray-400">
+            {t("preMatch.startingXI")} · {starters.length}
+          </span>
+        </div>
+        <div className="space-y-1 p-2 sm:space-y-.5 sm:p-1.5">
+          {starters.map((p) => render(p, "xi"))}
+        </div>
+      </div>
+      <div className="rounded-xl border border-gray-200 bg-white dark:border-navy-600 dark:bg-navy-800">
+        <div className="border-b border-gray-100 px-3 py-2 dark:border-navy-700">
+          <span className="text-[11px] font-heading font-bold uppercase tracking-[.18em] text-gray-500 dark:text-gray-400">
+            {t("preMatch.substitutes")} · {bench.length}
+          </span>
+        </div>
+        <div className="space-y-1 p-2 sm:space-y-.5 sm:p-1.5">
+          {bench.length === 0 ? (
+            <p className="px-2 py-3 text-xs text-gray-500 dark:text-gray-400">
+              {t("preMatch.noBench")}
+            </p>
+          ) : (
+            bench.map((p) => render(p, "bench"))
+          )}
+        </div>
+      </div>
+      {draggedPlayerId ? (
+        <p className="hidden text-center text-[10px] text-gray-400 dark:text-gray-500 md:block">
+          {t("tactics.pitchInteractionHint")}
+        </p>
+      ) : null}
+      <p className="text-center text-[11px] text-gray-400 dark:text-gray-500 md:hidden">
+        Tap players to select or swap. Tap and hold for more actions.
+      </p>
+    </div>
+  );
+}

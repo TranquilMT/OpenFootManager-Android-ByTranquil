@@ -424,87 +424,41 @@ export default function YouthAcademyTab({
             </div>
           ) : (
             <>
-            <div className="divide-y divide-gray-100 dark:divide-navy-600 md:hidden">{youthPlayers.map((player)=>{const potLabel=getPotentialLabel(player.potential,t),growthRoom=player.potential-player.ovr,contextItems=[buildViewProfileMenuItem(t,()=>onSelectPlayer?.(player.id)),buildPromoteToSeniorSquadMenuItem(t,()=>{void handleSetSquadRole(player.id,"Senior")})];return <ContextMenu items={contextItems} key={`mobile-${player.id}`}><article className="p-3 active:bg-gray-50 dark:active:bg-navy-700/50"><button type="button" onClick={()=>onSelectPlayer?.(player.id)} className="flex min-h-12 w-full min-w-0 items-center gap-3 text-left"><PlayerAvatar player={player}/><span className="min-w-0 flex-1"><span className="block truncate text-sm font-heading font-bold text-gray-800 dark:text-gray-100">{player.full_name}</span><span className="mt-1 flex items-center gap-1.5 text-[11px] text-gray-500"><CountryFlag code={player.nationality} locale={i18n.language} className="text-xs leading-none"/><span className="truncate">{countryName(player.nationality,i18n.language)}</span><span>· {player.age}</span></span></span><Badge variant={positionBadgeVariant(player.natural_position||player.position)} size="sm">{translatePositionAbbreviation(t,player.natural_position||player.position)}</Badge></button><div className="mt-3 grid grid-cols-3 gap-2"><div className="rounded-lg bg-gray-50 p-2 text-center dark:bg-navy-800"><p className="text-[9px] uppercase text-gray-400">{t("youthAcademy.ovr")}</p><p className="font-heading text-lg font-bold">{player.ovr}</p></div><div className="rounded-lg bg-gray-50 p-2 text-center dark:bg-navy-800"><p className="text-[9px] uppercase text-gray-400">{t("youthAcademy.potential")}</p><p className={`font-heading text-lg font-bold ${potLabel.color}`}>{player.potential}</p></div><div className="rounded-lg bg-gray-50 p-2 text-center dark:bg-navy-800"><p className="text-[9px] uppercase text-gray-400">{t("youthAcademy.condition")}</p><p className="font-heading text-lg font-bold">{player.condition}%</p></div></div><div className="mt-3 flex items-center gap-2"><ProgressBar value={Math.min(100,(player.ovr/player.potential)*100)} variant={growthRoom>15?"accent":growthRoom>5?"primary":"auto"} size="sm"/><span className="text-xs font-bold text-gray-500">+{growthRoom}</span></div></article></ContextMenu>})}</div><table className="hidden w-full text-left border-collapse md:table">
-              <thead>
-                <tr className="bg-gray-50 dark:bg-navy-800 border-b border-gray-200 dark:border-navy-600 text-xs">
-                  <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                    {t("youthAcademy.player")}
-                  </th>
-                  <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                    {t("youthAcademy.pos")}
-                  </th>
-                  <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
-                    {t("youthAcademy.age")}
-                  </th>
-                  <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
-                    {t("youthAcademy.ovr")}
-                  </th>
-                  <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
-                    {t("youthAcademy.potential")}
-                  </th>
-                  <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                    {t("youthAcademy.growth")}
-                  </th>
-                  <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                    {t("youthAcademy.traits")}
-                  </th>
-                  <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
-                    {t("youthAcademy.condition")}
-                  </th>
-                  <th className="py-3 px-4 w-10">
-                    <span className="sr-only">{t("common.actions")}</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-navy-600">
+              <div className="divide-y divide-gray-100 dark:divide-navy-600 md:hidden">
                 {youthPlayers.map((player) => {
-                  const potLabel = getPotentialLabel(player.potential, t);
-                  const growthRoom = player.potential - player.ovr;
-                  const contextItems = [
-                    buildViewProfileMenuItem(t, () => onSelectPlayer?.(player.id)),
-                    buildPromoteToSeniorSquadMenuItem(t, () => {
-                      void handleSetSquadRole(player.id, "Senior");
-                    }),
-                  ];
-
+                  const potLabel = getPotentialLabel(player.potential, t),
+                    growthRoom = player.potential - player.ovr,
+                    contextItems = [
+                      buildViewProfileMenuItem(t, () => onSelectPlayer?.(player.id)),
+                      buildPromoteToSeniorSquadMenuItem(t, () => {
+                        void handleSetSquadRole(player.id, "Senior");
+                      }),
+                    ];
                   return (
-                    <ContextMenu
-                      items={contextItems}
-                      key={player.id}
-                      ref={(handle) => {
-                        if (handle) menuRefs.current.set(player.id, handle);
-                        else menuRefs.current.delete(player.id);
-                      }}
-                      onOpenChange={(open) => {
-                        setOpenMenuPlayerId((prev) => {
-                          if (open) return player.id;
-                          return prev === player.id ? null : prev;
-                        });
-                      }}
-                    >
-                      <tr
-                        onClick={() => onSelectPlayer?.(player.id)}
-                        className="hover:bg-gray-50 dark:hover:bg-navy-700/50 cursor-pointer transition-colors"
-                      >
-                        <td className="py-2.5 px-4">
-                          <div className="flex items-center gap-3 min-w-0">
-                            <PlayerAvatar player={player} />
-                            <div className="min-w-0">
-                              <p className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
-                                {player.full_name}
-                              </p>
-                              <div className="text-[10px] text-gray-400 dark:text-gray-500 flex items-center gap-1 mt-0.5">
-                                <CountryFlag
-                                  code={player.nationality}
-                                  locale={i18n.language}
-                                  className="text-xs leading-none"
-                                />
-                                <span>{countryName(player.nationality, i18n.language)}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-2.5 px-4">
+                    <ContextMenu items={contextItems} key={`mobile-${player.id}`}>
+                      <article className="p-3 active:bg-gray-50 dark:active:bg-navy-700/50">
+                        <button
+                          type="button"
+                          onClick={() => onSelectPlayer?.(player.id)}
+                          className="flex min-h-12 w-full min-w-0 items-center gap-3 text-left"
+                        >
+                          <PlayerAvatar player={player} />
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate text-sm font-heading font-bold text-gray-800 dark:text-gray-100">
+                              {player.full_name}
+                            </span>
+                            <span className="mt-1 flex items-center gap-1.5 text-[11px] text-gray-500">
+                              <CountryFlag
+                                code={player.nationality}
+                                locale={i18n.language}
+                                className="text-xs leading-none"
+                              />
+                              <span className="truncate">
+                                {countryName(player.nationality, i18n.language)}
+                              </span>
+                              <span>· {player.age}</span>
+                            </span>
+                          </span>
                           <Badge
                             variant={positionBadgeVariant(
                               player.natural_position || player.position,
@@ -516,81 +470,211 @@ export default function YouthAcademyTab({
                               player.natural_position || player.position,
                             )}
                           </Badge>
-                        </td>
-                        <td className="py-2.5 px-4 text-center">
-                          <span className="text-sm font-heading font-bold text-gray-700 dark:text-gray-300 tabular-nums">
-                            {player.age}
-                          </span>
-                        </td>
-                        <td className="py-2.5 px-4 text-center">
-                          <span className="text-sm font-heading font-bold text-gray-800 dark:text-gray-100 tabular-nums">
-                            {player.ovr}
-                          </span>
-                        </td>
-                        <td className="py-2.5 px-4 text-center">
-                          <span
-                            className={`text-sm font-heading font-bold tabular-nums ${potLabel.color}`}
-                          >
-                            {player.potential}
-                          </span>
-                          <p
-                            className={`text-[9px] font-heading uppercase tracking-wider ${potLabel.color}`}
-                          >
-                            {potLabel.label}
-                          </p>
-                        </td>
-                        <td className="py-2.5 px-4">
-                          <div className="flex items-center gap-2">
-                            <ProgressBar
-                              value={Math.min(100, (player.ovr / player.potential) * 100)}
-                              variant={
-                                growthRoom > 15 ? "accent" : growthRoom > 5 ? "primary" : "auto"
-                              }
-                              size="sm"
-                            />
-                            <span className="text-[10px] font-heading font-bold text-gray-500 tabular-nums w-6">
-                              +{growthRoom}
-                            </span>
+                        </button>
+                        <div className="mt-3 grid grid-cols-3 gap-2">
+                          <div className="rounded-lg bg-gray-50 p-2 text-center dark:bg-navy-800">
+                            <p className="text-[9px] uppercase text-gray-400">
+                              {t("youthAcademy.ovr")}
+                            </p>
+                            <p className="font-heading text-lg font-bold">{player.ovr}</p>
                           </div>
-                        </td>
-                        <td className="py-2.5 px-4">
-                          <TraitList traits={player.traits || []} max={2} />
-                        </td>
-                        <td className="py-2.5 px-4 text-center">
-                          <span
-                            className={`text-xs font-heading font-bold tabular-nums ${
-                              player.condition >= 70
-                                ? "text-green-500"
-                                : player.condition >= 40
-                                  ? "text-yellow-500"
-                                  : "text-red-500"
-                            }`}
-                          >
-                            {player.condition}%
-                          </span>
-                        </td>
-                        <td className="py-2.5 px-4" onClick={(e) => e.stopPropagation()}>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              const rect = e.currentTarget.getBoundingClientRect();
-                              menuRefs.current.get(player.id)?.open(rect.left, rect.bottom + 4);
-                            }}
-                            aria-label={t("common.playerActions", { name: player.match_name })}
-                            aria-haspopup="menu"
-                            aria-expanded={openMenuPlayerId === player.id}
-                            className="rounded-md p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 transition-colors"
-                          >
-                            <MoreVertical className="h-4 w-4" />
-                          </button>
-                        </td>
-                      </tr>
+                          <div className="rounded-lg bg-gray-50 p-2 text-center dark:bg-navy-800">
+                            <p className="text-[9px] uppercase text-gray-400">
+                              {t("youthAcademy.potential")}
+                            </p>
+                            <p className={`font-heading text-lg font-bold ${potLabel.color}`}>
+                              {player.potential}
+                            </p>
+                          </div>
+                          <div className="rounded-lg bg-gray-50 p-2 text-center dark:bg-navy-800">
+                            <p className="text-[9px] uppercase text-gray-400">
+                              {t("youthAcademy.condition")}
+                            </p>
+                            <p className="font-heading text-lg font-bold">{player.condition}%</p>
+                          </div>
+                        </div>
+                        <div className="mt-3 flex items-center gap-2">
+                          <ProgressBar
+                            value={Math.min(100, (player.ovr / player.potential) * 100)}
+                            variant={
+                              growthRoom > 15 ? "accent" : growthRoom > 5 ? "primary" : "auto"
+                            }
+                            size="sm"
+                          />
+                          <span className="text-xs font-bold text-gray-500">+{growthRoom}</span>
+                        </div>
+                      </article>
                     </ContextMenu>
                   );
                 })}
-              </tbody>
-            </table>
+              </div>
+              <table className="hidden w-full text-left border-collapse md:table">
+                <thead>
+                  <tr className="bg-gray-50 dark:bg-navy-800 border-b border-gray-200 dark:border-navy-600 text-xs">
+                    <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                      {t("youthAcademy.player")}
+                    </th>
+                    <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                      {t("youthAcademy.pos")}
+                    </th>
+                    <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
+                      {t("youthAcademy.age")}
+                    </th>
+                    <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
+                      {t("youthAcademy.ovr")}
+                    </th>
+                    <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
+                      {t("youthAcademy.potential")}
+                    </th>
+                    <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                      {t("youthAcademy.growth")}
+                    </th>
+                    <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                      {t("youthAcademy.traits")}
+                    </th>
+                    <th className="py-3 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
+                      {t("youthAcademy.condition")}
+                    </th>
+                    <th className="py-3 px-4 w-10">
+                      <span className="sr-only">{t("common.actions")}</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 dark:divide-navy-600">
+                  {youthPlayers.map((player) => {
+                    const potLabel = getPotentialLabel(player.potential, t);
+                    const growthRoom = player.potential - player.ovr;
+                    const contextItems = [
+                      buildViewProfileMenuItem(t, () => onSelectPlayer?.(player.id)),
+                      buildPromoteToSeniorSquadMenuItem(t, () => {
+                        void handleSetSquadRole(player.id, "Senior");
+                      }),
+                    ];
+
+                    return (
+                      <ContextMenu
+                        items={contextItems}
+                        key={player.id}
+                        ref={(handle) => {
+                          if (handle) menuRefs.current.set(player.id, handle);
+                          else menuRefs.current.delete(player.id);
+                        }}
+                        onOpenChange={(open) => {
+                          setOpenMenuPlayerId((prev) => {
+                            if (open) return player.id;
+                            return prev === player.id ? null : prev;
+                          });
+                        }}
+                      >
+                        <tr
+                          onClick={() => onSelectPlayer?.(player.id)}
+                          className="hover:bg-gray-50 dark:hover:bg-navy-700/50 cursor-pointer transition-colors"
+                        >
+                          <td className="py-2.5 px-4">
+                            <div className="flex items-center gap-3 min-w-0">
+                              <PlayerAvatar player={player} />
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
+                                  {player.full_name}
+                                </p>
+                                <div className="text-[10px] text-gray-400 dark:text-gray-500 flex items-center gap-1 mt-0.5">
+                                  <CountryFlag
+                                    code={player.nationality}
+                                    locale={i18n.language}
+                                    className="text-xs leading-none"
+                                  />
+                                  <span>{countryName(player.nationality, i18n.language)}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-2.5 px-4">
+                            <Badge
+                              variant={positionBadgeVariant(
+                                player.natural_position || player.position,
+                              )}
+                              size="sm"
+                            >
+                              {translatePositionAbbreviation(
+                                t,
+                                player.natural_position || player.position,
+                              )}
+                            </Badge>
+                          </td>
+                          <td className="py-2.5 px-4 text-center">
+                            <span className="text-sm font-heading font-bold text-gray-700 dark:text-gray-300 tabular-nums">
+                              {player.age}
+                            </span>
+                          </td>
+                          <td className="py-2.5 px-4 text-center">
+                            <span className="text-sm font-heading font-bold text-gray-800 dark:text-gray-100 tabular-nums">
+                              {player.ovr}
+                            </span>
+                          </td>
+                          <td className="py-2.5 px-4 text-center">
+                            <span
+                              className={`text-sm font-heading font-bold tabular-nums ${potLabel.color}`}
+                            >
+                              {player.potential}
+                            </span>
+                            <p
+                              className={`text-[9px] font-heading uppercase tracking-wider ${potLabel.color}`}
+                            >
+                              {potLabel.label}
+                            </p>
+                          </td>
+                          <td className="py-2.5 px-4">
+                            <div className="flex items-center gap-2">
+                              <ProgressBar
+                                value={Math.min(100, (player.ovr / player.potential) * 100)}
+                                variant={
+                                  growthRoom > 15 ? "accent" : growthRoom > 5 ? "primary" : "auto"
+                                }
+                                size="sm"
+                              />
+                              <span className="text-[10px] font-heading font-bold text-gray-500 tabular-nums w-6">
+                                +{growthRoom}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="py-2.5 px-4">
+                            <TraitList traits={player.traits || []} max={2} />
+                          </td>
+                          <td className="py-2.5 px-4 text-center">
+                            <span
+                              className={`text-xs font-heading font-bold tabular-nums ${
+                                player.condition >= 70
+                                  ? "text-green-500"
+                                  : player.condition >= 40
+                                    ? "text-yellow-500"
+                                    : "text-red-500"
+                              }`}
+                            >
+                              {player.condition}%
+                            </span>
+                          </td>
+                          <td className="py-2.5 px-4" onClick={(e) => e.stopPropagation()}>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const rect = e.currentTarget.getBoundingClientRect();
+                                menuRefs.current.get(player.id)?.open(rect.left, rect.bottom + 4);
+                              }}
+                              aria-label={t("common.playerActions", { name: player.match_name })}
+                              aria-haspopup="menu"
+                              aria-expanded={openMenuPlayerId === player.id}
+                              className="rounded-md p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 transition-colors"
+                            >
+                              <MoreVertical className="h-4 w-4" />
+                            </button>
+                          </td>
+                        </tr>
+                      </ContextMenu>
+                    );
+                  })}
+                </tbody>
+              </table>
             </>
           )}
         </CardBody>

@@ -33,11 +33,14 @@ describe("useSpokenCommentary", () => {
     const speak = vi.fn();
     const cancel = vi.fn();
     vi.stubGlobal("speechSynthesis", { speak, cancel });
-    vi.stubGlobal("SpeechSynthesisUtterance", class {
-      lang = "";
-      rate = 1;
-      constructor(public text: string) {}
-    });
+    vi.stubGlobal(
+      "SpeechSynthesisUtterance",
+      class {
+        lang = "";
+        rate = 1;
+        constructor(public text: string) {}
+      },
+    );
 
     const t = i18n.t.bind(i18n);
     const { rerender, unmount } = renderHook(

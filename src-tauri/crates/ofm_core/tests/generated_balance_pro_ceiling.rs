@@ -1,4 +1,4 @@
-use ofm_core::generated_balance::{rating_band, LeagueTier};
+use ofm_core::generated_balance::{LeagueTier, rating_band};
 
 #[test]
 fn pro_ceiling_is_90() {
