@@ -4,9 +4,16 @@
 
 **OFMtouch** is a free, open-source football management game for Android, based on OpenFootManager and adapted for a touch-first mobile experience by **TranquilMT**.
 
-> 🧪 **0.3.0 Nightly Build #281** includes updated leagues, club strength and mobile gameplay fixes. Nightly builds are test releases, so you may still find bugs while playing.
+> 🧪 **0.3.0 Nightly Build #283** includes mobile scouting and save improvements plus three new fictional portrait faces. Nightly builds are test releases, so you may still find bugs while playing.
 
-## Latest update: leagues and club ratings
+## Latest update: mobile careers and portrait variety
+
+- Scout players into a career-specific shortlist and compare position, age, overall rating, value and club at a glance.
+- When Android backgrounds the game, enabled autosave saves unsaved career changes. Existing date-change and exit saves still apply.
+- The portrait generator now selects from 16 fictional source faces, including three new distinct footballers. Portraits are generated from original synthetic source art rather than photographs of real players.
+- The complete frontend suite passes 1,569 tests across 196 files; the production frontend build and source verification pass.
+
+## Build #281: leagues and club ratings
 
 - The 2026/27 English starting world now places Manchester United, Arsenal, Chelsea and Liverpool in the Premier League, and Birmingham City in the Championship. The English pyramid includes 20 Premier League and 24 Championship clubs.
 - Manchester United, Arsenal, Chelsea and Liverpool have stronger generated player attributes and a starting full-squad average of at least 86. Birmingham City's starting squad is lower rated.
@@ -159,7 +166,7 @@ This release brings a large update to the career experience, with major improvem
 **Platform:** Android  
 **Current target:** ARM64
 
-**Latest test APK:** [Android Nightly Build #281](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/actions/runs/36308317259) → **Artifacts** → `OFMtouch-0.3.0-Build281-Nightly`. The artifact includes an ARM64 debug APK and its SHA-256 checksum.
+**Latest test APK:** [Android Nightly Build #283](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/actions/runs/36310598201) → **Artifacts** → `OFMtouch-0.3.0-Build283-Nightly`. The artifact includes an ARM64 debug APK and its SHA-256 checksum.
 
 0.3.0 is a **Nightly test release**. You're welcome to install it, start a career and put the new systems through their paces. If something behaves unexpectedly, crashes, becomes difficult to use on your phone, or produces strange career results, feedback is very welcome.
 
@@ -176,4 +183,4 @@ The source code and licence information remain available in this repository for 
 
 ### ⚽ Your club. Your tactics. Your career.
 
-**OFMtouch 0.3.0 Nightly Build #281 — ready for Android testing.**
+**OFMtouch 0.3.0 Nightly Build #283 — ready for Android testing.**
