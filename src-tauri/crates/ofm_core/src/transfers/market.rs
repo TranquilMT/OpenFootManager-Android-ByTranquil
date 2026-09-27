@@ -27,9 +27,6 @@ fn market_player_age(date_of_birth: &str, current_date: NaiveDate) -> u8 {
     current_date.year().saturating_sub(birth_year).clamp(15, 50) as u8
 }
 
-/// Whether a club has a realistic reason to pursue a target: it isn't far below
-/// the player's current club in stature, and it isn't already overloaded in the
-/// player's position group.
 pub(crate) fn buyer_has_genuine_interest(
     buyer_reputation: u32,
     owner_reputation: u32,
@@ -40,49 +37,29 @@ pub(crate) fn buyer_has_genuine_interest(
         && buyer_position_depth < POSITION_GROUP_SURPLUS_THRESHOLD
 }
 
-/// Current squad depth per club and broad position group, computed once so the
-/// market sweep doesn't re-scan every roster.
 pub(crate) fn squad_position_depths(game: &Game) -> std::collections::HashMap<String, [usize; 4]> {
-    let mut depths: std::collections::HashMap<String, [usize; 4]> =
-        std::collections::HashMap::new();
+    let mut depths: std::collections::HashMap<String, [usize; 4]> = std::collections::HashMap::new();
     for player in &game.players {
-        let Some(team_id) = player.team_id.as_deref() else {
-            continue;
-        };
+        let Some(team_id) = player.team_id.as_deref() else { continue; };
         let slot = position_group_index(&player.natural_position);
         depths.entry(team_id.to_string()).or_default()[slot] += 1;
     }
     depths
 }
 
-pub(crate) fn contract_days_remaining(
-    current_date: NaiveDate,
-    contract_end: Option<&str>,
-) -> Option<i64> {
+pub(crate) fn contract_days_remaining(current_date: NaiveDate, contract_end: Option<&str>) -> Option<i64> {
     let contract_end = contract_end?;
     let contract_end_date = NaiveDate::parse_from_str(contract_end, "%Y-%m-%d").ok()?;
     Some((contract_end_date - current_date).num_days())
 }
 
-pub(crate) fn infer_player_importance(
-    player: &domain::player::Player,
-    owner_team: &domain::team::Team,
-) -> PlayerImportance {
-    if owner_team.starting_xi_ids.iter().any(|id| id == &player.id) {
-        return PlayerImportance::Key;
-    }
-    if player.market_value >= 1_500_000 {
-        return PlayerImportance::Regular;
-    }
+pub(crate) fn infer_player_importance(player: &domain::player::Player, owner_team: &domain::team::Team) -> PlayerImportance {
+    if owner_team.starting_xi_ids.iter().any(|id| id == &player.id) { return PlayerImportance::Key; }
+    if player.market_value >= 1_500_000 { return PlayerImportance::Regular; }
     PlayerImportance::Fringe
 }
 
-pub(crate) fn minimum_acceptable_fee(
-    current_date: NaiveDate,
-    player: &domain::player::Player,
-    owner_team: &domain::team::Team,
-    buyer_team: &domain::team::Team,
-) -> u64 {
+pub(crate) fn minimum_acceptable_fee(current_date: NaiveDate, player: &domain::player::Player, owner_team: &domain::team::Team, buyer_team: &domain::team::Team) -> u64 {
     let mut multiplier: f64 = if player.transfer_listed { 0.8 } else { 1.2 };
     if let Some(days_remaining) = contract_days_remaining(current_date, player.contract_end.as_deref()) {
         if days_remaining <= 60 { multiplier -= 0.25; }
@@ -102,24 +79,15 @@ pub(crate) fn minimum_acceptable_fee(
     ((player.market_value as f64) * multiplier).round() as u64
 }
 
-pub(crate) fn player_move_openness_score(
-    current_date: NaiveDate,
-    player: &domain::player::Player,
-    owner_team: &domain::team::Team,
-    buyer_team: &domain::team::Team,
-) -> i32 {
+pub(crate) fn player_move_openness_score(current_date: NaiveDate, player: &domain::player::Player, owner_team: &domain::team::Team, buyer_team: &domain::team::Team) -> i32 {
     let mut score = 0;
-    if player.morale <= 45 { score += 20; }
-    else if player.morale <= 60 { score += 10; }
-    if player.stats.appearances <= 2 { score += 15; }
-    else if player.stats.appearances <= 5 { score += 8; }
+    if player.morale <= 45 { score += 20; } else if player.morale <= 60 { score += 10; }
+    if player.stats.appearances <= 2 { score += 15; } else if player.stats.appearances <= 5 { score += 8; }
     if let Some(days_remaining) = contract_days_remaining(current_date, player.contract_end.as_deref()) {
-        if days_remaining <= 180 { score += 20; }
-        else if days_remaining <= 365 { score += 10; }
+        if days_remaining <= 180 { score += 20; } else if days_remaining <= 365 { score += 10; }
     }
     let reputation_gap = buyer_team.reputation as i32 - owner_team.reputation as i32;
-    if reputation_gap >= 200 { score += 25; }
-    else if reputation_gap >= 75 { score += 15; }
+    if reputation_gap >= 200 { score += 25; } else if reputation_gap >= 75 { score += 15; }
     if player.transfer_listed { score += 10; }
     score
 }
@@ -156,9 +124,11 @@ pub fn evaluate_transfer_market(game: &mut Game) {
     let user_team_id = game.manager.team_id.clone();
     let current_date = game.clock.current_date.date_naive();
     let today = game.clock.current_date.format("%Y-%m-%d").to_string();
+    let deadline_day = game.season_context.transfer_window.status == TransferWindowStatus::DeadlineDay;
+    let max_ai_transfers = if deadline_day { MAX_COMPLETED_AI_TRANSFERS_DEADLINE_DAY } else { MAX_COMPLETED_AI_TRANSFERS_PER_DAY };
+    let max_user_offers = if deadline_day { MAX_NEW_INCOMING_USER_OFFERS_DEADLINE_DAY } else { MAX_NEW_INCOMING_USER_OFFERS_PER_DAY };
     let award_leaderboards = award_leaderboard_player_ids(game);
-    let team_reputation: std::collections::HashMap<String, u32> = game.teams.iter()
-        .map(|team| (team.id.clone(), team.reputation)).collect();
+    let team_reputation: std::collections::HashMap<String, u32> = game.teams.iter().map(|team| (team.id.clone(), team.reputation)).collect();
     let position_depths = squad_position_depths(game);
     let active_team_ids = game.active_team_ids();
     let buyer_ids: Vec<String> = game.teams.iter()
@@ -185,16 +155,13 @@ pub fn evaluate_transfer_market(game: &mut Game) {
         if player_has_pending_registration(player) { continue; }
         let mut score = incoming_interest_score(current_date, player);
         if award_leaderboards.contains(&player.id) { score += AWARD_LEADERBOARD_INTEREST_BONUS; }
+        if deadline_day { score += DEADLINE_DAY_INTEREST_BONUS; }
         if score < 35 { continue; }
         shortlist.push(MarketTarget {
-            player_id: player.id.clone(),
-            owner_team_id: owner_team_id.to_string(),
-            is_user_owned: Some(owner_team_id) == user_team_id.as_deref(),
-            score,
-            fee: suggested_incoming_fee(current_date, player),
-            age: market_player_age(&player.date_of_birth, current_date),
-            overall: player.ovr,
-            potential: player.potential.max(player.ovr),
+            player_id: player.id.clone(), owner_team_id: owner_team_id.to_string(),
+            is_user_owned: Some(owner_team_id) == user_team_id.as_deref(), score,
+            fee: suggested_incoming_fee(current_date, player), age: market_player_age(&player.date_of_birth, current_date),
+            overall: player.ovr, potential: player.potential.max(player.ovr),
             position_group_index: position_group_index(&player.natural_position),
             owner_reputation: team_reputation.get(owner_team_id).copied().unwrap_or(0),
         });
@@ -207,7 +174,7 @@ pub fn evaluate_transfer_market(game: &mut Game) {
         let strategy = ClubStrategy::derive(&buyer_team);
 
         let loan_offer_player_id = if let Some(user_team_id) = user_team_id.as_deref() {
-            if new_user_loan_offers_today < MAX_NEW_INCOMING_USER_OFFERS_PER_DAY {
+            if new_user_loan_offers_today < max_user_offers {
                 create_incoming_user_loan_offer_if_any(game, user_team_id, &buyer_id, &buyer_team.name, &today, current_date,
                     IncomingOfferBudget { new_today: &new_loan_offers_per_player, approach_clubs: &approach_clubs, cooled_clubs: &cooled_clubs })
             } else { None }
@@ -218,40 +185,30 @@ pub fn evaluate_transfer_market(game: &mut Game) {
             new_user_loan_offers_today += 1;
         }
 
-        let chosen = shortlist.iter()
-            .filter(|target| {
-                if target.owner_team_id == buyer_id || moved_player_ids.contains(&target.player_id) { return false; }
-                if loan_offer_player_id.as_deref() == Some(target.player_id.as_str()) { return false; }
-                if target.is_user_owned {
-                    let budget = IncomingOfferBudget { new_today: &new_offers_per_player, approach_clubs: &approach_clubs, cooled_clubs: &cooled_clubs };
-                    if !budget.accepts(&target.player_id, &buyer_id, MAX_NEW_INCOMING_OFFERS_PER_USER_PLAYER_PER_DAY)
-                        || new_user_offers_today >= MAX_NEW_INCOMING_USER_OFFERS_PER_DAY { return false; }
-                } else if completed_ai_transfers >= MAX_COMPLETED_AI_TRANSFERS_PER_DAY { return false; }
-                if !buyer_has_genuine_interest(buyer_team.reputation, target.owner_reputation, buyer_depths[target.position_group_index]) { return false; }
-                if buyer_team.transfer_budget < target.fee as i64 || buyer_team.finance < target.fee as i64 { return false; }
-                strategy_allows_fee(&strategy, target.fee, buyer_team.transfer_budget)
-            })
-            .max_by_key(|target| strategic_target_score(&strategy, StrategicTarget {
-                base_score: target.score,
-                age: target.age,
-                overall: target.overall,
-                potential: target.potential,
-                fee: target.fee,
-            }, buyer_team.transfer_budget));
+        let chosen = shortlist.iter().filter(|target| {
+            if target.owner_team_id == buyer_id || moved_player_ids.contains(&target.player_id) { return false; }
+            if loan_offer_player_id.as_deref() == Some(target.player_id.as_str()) { return false; }
+            if target.is_user_owned {
+                let budget = IncomingOfferBudget { new_today: &new_offers_per_player, approach_clubs: &approach_clubs, cooled_clubs: &cooled_clubs };
+                if !budget.accepts(&target.player_id, &buyer_id, MAX_NEW_INCOMING_OFFERS_PER_USER_PLAYER_PER_DAY)
+                    || new_user_offers_today >= max_user_offers { return false; }
+            } else if completed_ai_transfers >= max_ai_transfers { return false; }
+            if !buyer_has_genuine_interest(buyer_team.reputation, target.owner_reputation, buyer_depths[target.position_group_index]) { return false; }
+            if buyer_team.transfer_budget < target.fee as i64 || buyer_team.finance < target.fee as i64 { return false; }
+            strategy_allows_fee(&strategy, target.fee, buyer_team.transfer_budget)
+        }).max_by_key(|target| strategic_target_score(&strategy, StrategicTarget {
+            base_score: target.score, age: target.age, overall: target.overall,
+            potential: target.potential, fee: target.fee,
+        }, buyer_team.transfer_budget));
 
         let Some(target) = chosen else { continue; };
         let strategic_score = strategic_target_score(&strategy, StrategicTarget {
-            base_score: target.score,
-            age: target.age,
-            overall: target.overall,
-            potential: target.potential,
-            fee: target.fee,
+            base_score: target.score, age: target.age, overall: target.overall,
+            potential: target.potential, fee: target.fee,
         }, buyer_team.transfer_budget);
         let candidate = MarketCandidate {
-            player_id: target.player_id.clone(),
-            owner_team_id: target.owner_team_id.clone(),
-            score: strategic_score,
-            fee: target.fee,
+            player_id: target.player_id.clone(), owner_team_id: target.owner_team_id.clone(),
+            score: strategic_score, fee: target.fee,
         };
 
         if Some(candidate.owner_team_id.as_str()) == user_team_id.as_deref() {
@@ -261,7 +218,7 @@ pub fn evaluate_transfer_market(game: &mut Game) {
             new_user_offers_today += 1;
             continue;
         }
-        if candidate.score <= 60 || completed_ai_transfers >= MAX_COMPLETED_AI_TRANSFERS_PER_DAY { continue; }
+        if candidate.score <= 60 || completed_ai_transfers >= max_ai_transfers { continue; }
         if execute_transfer(game, &candidate.player_id, &buyer_id, &candidate.owner_team_id, candidate.fee).is_ok() {
             moved_player_ids.insert(candidate.player_id);
             completed_ai_transfers += 1;
