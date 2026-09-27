@@ -288,19 +288,18 @@ pub(crate) fn create_incoming_user_loan_offer_if_any(
             );
             if score >= 45 {
                 default_loan_end_date(current_date, player)?;
-                let wage_contribution_pct = suggested_loan_wage_contribution_pct(score, player).min(
+                let preferred_share = suggested_loan_wage_contribution_pct(score, player).min(
                     crate::loan_strategy::strategic_loan_wage_cap(&strategy, player.wage),
                 );
-                if validate_loan_borrower_affordability(
-                    game,
-                    buyer_id,
-                    player,
-                    wage_contribution_pct,
-                )
-                .is_err()
-                {
-                    return None;
-                }
+                // A club that cannot carry the preferred share can still make
+                // a realistic offer with the parent club covering more wages.
+                let wage_contribution_pct = [100, 75, 50, 25]
+                    .into_iter()
+                    .find(|share| {
+                        *share <= preferred_share
+                            && validate_loan_borrower_affordability(game, buyer_id, player, *share)
+                                .is_ok()
+                    })?;
                 Some(LoanMarketCandidate {
                     player_id: player.id.clone(),
                     wage_contribution_pct,
