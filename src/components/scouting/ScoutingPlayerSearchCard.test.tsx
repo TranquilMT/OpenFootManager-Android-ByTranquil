@@ -126,6 +126,33 @@ function createPlayer(overrides: Partial<PlayerData> = {}): PlayerData {
 }
 
 describe("ScoutingPlayerSearchCard", () => {
+  it("lets phone users save a player to their shortlist", () => {
+    const onToggleShortlist = vi.fn();
+    render(
+      <ScoutingPlayerSearchCard
+        players={[createPlayer()]}
+        teams={[createTeam()]}
+        posFilter="All"
+        searchQuery=""
+        alreadyScoutingIds={new Set<string>()}
+        shortlistIds={new Set<string>()}
+        onToggleShortlist={onToggleShortlist}
+        availableScoutCount={0}
+        sendingPlayerId={null}
+        safePage={0}
+        totalPages={1}
+        totalPlayers={1}
+        pageSize={20}
+        onPositionFilterChange={vi.fn()}
+        onSearchQueryChange={vi.fn()}
+        onSendScout={vi.fn()}
+        onPreviousPage={vi.fn()}
+        onNextPage={vi.fn()}
+      />,
+    );
+    fireEvent.click(screen.getAllByRole("button", { name: /scouting.addShortlist: John Smith/ })[0]);
+    expect(onToggleShortlist).toHaveBeenCalledWith("player-1");
+  });
   it("renders players and delegates search, filter, selection, scout, and pagination actions", () => {
     const onPositionFilterChange = vi.fn();
     const onSearchQueryChange = vi.fn();

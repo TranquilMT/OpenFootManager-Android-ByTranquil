@@ -1822,6 +1822,10 @@
     "keyStats": "Estatísticas-Chave"
   },
   "scouting": {
+    "shortlist": "Lista de favoritos",
+    "shortlistEmpty": "Guarde jogadores aqui para os comparar mais tarde.",
+    "addShortlist": "Adicionar aos favoritos",
+    "removeShortlist": "Remover dos favoritos",
     "title": "Centro de Olheiros",
     "scouts": "Olheiros",
     "activeAssignments": "Atribuições Ativas",

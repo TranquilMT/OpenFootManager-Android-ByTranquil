@@ -1822,6 +1822,10 @@
     "keyStats": "Estadísticas Clave"
   },
   "scouting": {
+    "shortlist": "Lista de favoritos",
+    "shortlistEmpty": "Guarda jugadores aquí para compararlos más tarde.",
+    "addShortlist": "Añadir a favoritos",
+    "removeShortlist": "Quitar de favoritos",
     "title": "Centro de Ojeadores",
     "scouts": "Ojeadores",
     "activeAssignments": "Asignaciones Activas",

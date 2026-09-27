@@ -1822,6 +1822,10 @@
     "keyStats": "Key Stats"
   },
   "scouting": {
+    "shortlist": "Shortlist",
+    "shortlistEmpty": "Save players here to compare them later.",
+    "addShortlist": "Add to shortlist",
+    "removeShortlist": "Remove from shortlist",
     "title": "Scouting Centre",
     "scouts": "Scouts",
     "activeAssignments": "Active Assignments",

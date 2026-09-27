@@ -1822,6 +1822,10 @@
     "keyStats": "Öne Çıkan İstatistikler"
   },
   "scouting": {
+    "shortlist": "İzleme listesi",
+    "shortlistEmpty": "Oyuncuları daha sonra karşılaştırmak için buraya kaydedin.",
+    "addShortlist": "İzleme listesine ekle",
+    "removeShortlist": "İzleme listesinden çıkar",
     "title": "Scout Merkezi",
     "scouts": "Scoutlar",
     "activeAssignments": "Aktif Görevler",

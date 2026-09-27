@@ -1822,6 +1822,10 @@
     "keyStats": "关键数据"
   },
   "scouting": {
+    "shortlist": "候选名单",
+    "shortlistEmpty": "在此保存球员，以便稍后比较。",
+    "addShortlist": "加入候选名单",
+    "removeShortlist": "从候选名单移除",
     "title": "球探中心",
     "scouts": "球探",
     "activeAssignments": "进行中的任务",

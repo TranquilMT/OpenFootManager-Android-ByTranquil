@@ -1822,6 +1822,10 @@
     "keyStats": "Wichtige Stats"
   },
   "scouting": {
+    "shortlist": "Merkliste",
+    "shortlistEmpty": "Speichere Spieler hier, um sie später zu vergleichen.",
+    "addShortlist": "Zur Merkliste hinzufügen",
+    "removeShortlist": "Von Merkliste entfernen",
     "title": "Scoutingzentrum",
     "scouts": "Scouts",
     "activeAssignments": "Aktive Aufträge",

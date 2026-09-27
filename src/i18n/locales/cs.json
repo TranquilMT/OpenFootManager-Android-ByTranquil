@@ -1822,6 +1822,10 @@
     "keyStats": "Klíčové statistiky"
   },
   "scouting": {
+    "shortlist": "Seznam hráčů",
+    "shortlistEmpty": "Uložte si sem hráče pro pozdější porovnání.",
+    "addShortlist": "Přidat do seznamu",
+    "removeShortlist": "Odebrat ze seznamu",
     "title": "Skautské centrum",
     "scouts": "Skauti",
     "activeAssignments": "Aktivní úkoly",

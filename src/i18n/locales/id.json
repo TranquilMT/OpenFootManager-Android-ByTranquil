@@ -1822,6 +1822,10 @@
     "keyStats": "Statistik Kunci"
   },
   "scouting": {
+    "shortlist": "Daftar pilihan",
+    "shortlistEmpty": "Simpan pemain di sini untuk dibandingkan nanti.",
+    "addShortlist": "Tambah ke daftar pilihan",
+    "removeShortlist": "Hapus dari daftar pilihan",
     "title": "Pusat Scouting",
     "scouts": "Scout",
     "activeAssignments": "Penugasan Aktif",

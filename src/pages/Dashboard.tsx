@@ -334,6 +334,24 @@ export default function Dashboard(): JSX.Element {
     }).catch((err) => console.error("Failed to auto-save after advancing:", err));
   }, [activeSaveId, gameState?.clock.current_date, settingsLoaded, settings.auto_save, markClean]);
 
+  // Phones can suspend the WebView without a window-close event. Persist the
+  // current backend game before Android backgrounds the activity.
+  const backgroundSavePending = useRef(false);
+  useEffect(() => {
+    if (!settingsLoaded || !settings.auto_save || !activeSaveId || !isDirty) return;
+    const saveWhenHidden = () => {
+      if (document.visibilityState !== "hidden" || backgroundSavePending.current) return;
+      backgroundSavePending.current = true;
+      const stateAtSave = latestGameStateRef.current;
+      void invoke("save_game").then(() => {
+        if (latestGameStateRef.current === stateAtSave) markClean();
+      }).catch((err) => console.error("Failed to auto-save on background:", err))
+        .finally(() => { backgroundSavePending.current = false; });
+    };
+    document.addEventListener("visibilitychange", saveWhenHidden);
+    return () => document.removeEventListener("visibilitychange", saveWhenHidden);
+  }, [activeSaveId, isDirty, markClean, settings.auto_save, settingsLoaded]);
+
   // Intercept window close to warn about unsaved changes
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
   const isClosingRef = useRef(false);

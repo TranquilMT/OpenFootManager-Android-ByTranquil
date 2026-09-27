@@ -1822,6 +1822,10 @@
     "keyStats": "Stats Clés"
   },
   "scouting": {
+    "shortlist": "Liste de favoris",
+    "shortlistEmpty": "Enregistrez des joueurs ici pour les comparer plus tard.",
+    "addShortlist": "Ajouter aux favoris",
+    "removeShortlist": "Retirer des favoris",
     "title": "Centre de Recrutement",
     "scouts": "Recruteurs",
     "activeAssignments": "Missions Actives",

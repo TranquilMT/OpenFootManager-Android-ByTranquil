@@ -2520,6 +2520,10 @@
     "compare": "Comparar"
   },
   "scouting": {
+    "shortlist": "Lista de favoritos",
+    "shortlistEmpty": "Salve jogadores aqui para compará-los depois.",
+    "addShortlist": "Adicionar aos favoritos",
+    "removeShortlist": "Remover dos favoritos",
     "title": "Central de Observação",
     "scouts": "Olheiros",
     "activeAssignments": "Tarefas Ativas",

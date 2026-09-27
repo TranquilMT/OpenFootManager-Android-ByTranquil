@@ -1841,6 +1841,10 @@
     "keyStats": "Statistiche chiave"
   },
   "scouting": {
+    "shortlist": "Lista preferiti",
+    "shortlistEmpty": "Salva qui i giocatori per confrontarli più tardi.",
+    "addShortlist": "Aggiungi ai preferiti",
+    "removeShortlist": "Rimuovi dai preferiti",
     "title": "Centro osservazione",
     "scouts": "Osservatori",
     "activeAssignments": "Incarichi attivi",
