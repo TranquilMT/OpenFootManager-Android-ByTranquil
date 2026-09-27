@@ -24,7 +24,7 @@
     "openGithub": "Otevřít repozitář OFMtouch na GitHubu",
     "openOriginalGithub": "Otevřít původní repozitář OpenFootManager na GitHubu",
     "originalGame": "Původní hra",
-    "doNotShowWhatsNew": "Znovu nezobrazovat pro v0.3.1",
+    "doNotShowWhatsNew": "Znovu nezobrazovat pro v0.3.5",
     "continueToGame": "Pokračovat",
     "mainMenu": "Hlavní menu",
     "worldEditor": "Editor světa"
@@ -1771,7 +1771,7 @@
     "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
     "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
     "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
-    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.3.1",
+    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.3.5",
     "patchPortraits": "20 fiktivních výchozích tváří přináší pestřejší portréty hráčů.",
     "patchWorld": "Fotbalový svět zahrnuje 29 zemí a silnější kluby v Americe a Asii.",
     "patchTransfers": "Strategie klubů řídí hostování a přestupy včetně konkurenčních nabídek a kontroly rozpočtu.",

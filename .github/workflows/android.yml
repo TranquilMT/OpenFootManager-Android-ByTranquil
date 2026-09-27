@@ -59,6 +59,7 @@ jobs:
 
       - name: Frontend production build
         env:
+          OFM_CHANNEL: nightly
           VITE_APP_BUILD_NUMBER: ${{ github.run_number }}
         run: npm run build
 
@@ -71,8 +72,13 @@ jobs:
       - name: Build ARM64 debug APK
         env:
           NDK_HOME: ${{ env.ANDROID_NDK_HOME }}
+          OFM_CHANNEL: nightly
           VITE_APP_BUILD_NUMBER: ${{ github.run_number }}
-        run: npx tauri android build --debug --apk --target aarch64
+        run: |
+          # Keep every nightly installable over the previous v0.3.5 build.
+          export OFM_ANDROID_VERSION_CODE=$((3005000 + GITHUB_RUN_NUMBER))
+          node -e 'require("fs").writeFileSync("tauri.android.nightly.conf.json", JSON.stringify({bundle:{android:{versionCode:Number(process.env.OFM_ANDROID_VERSION_CODE)}}}))'
+          npx tauri android build --debug --apk --target aarch64 --config tauri.android.nightly.conf.json
 
       - name: Verify APK signature and ARM64 payload
         shell: bash
@@ -81,6 +87,12 @@ jobs:
           APK="$(find src-tauri/gen/android/app/build/outputs/apk -type f -name '*.apk' | head -n 1)"
           test -n "$APK"
           echo "APK: $APK"
+          AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -n 1)"
+          PACKAGE_LINE="$("$AAPT" dump badging "$APK" | sed -n '1p')"
+          echo "$PACKAGE_LINE"
+          [[ "$PACKAGE_LINE" == *"name='com.tranquilmt.openfootmanager'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionName='0.3.5'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionCode='$((3005000 + GITHUB_RUN_NUMBER))'"* ]]
           APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
           "$APKSIGNER" verify --verbose "$APK"
           unzip -l "$APK" | grep -E 'lib/arm64-v8a/.*\.so' >/dev/null

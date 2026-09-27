@@ -24,7 +24,7 @@
     "openGithub": "Apri il repository GitHub di OFMtouch",
     "openOriginalGithub": "Apri il repository GitHub originale di OpenFootManager",
     "originalGame": "Gioco originale",
-    "doNotShowWhatsNew": "Non mostrare più per la v0.3.1",
+    "doNotShowWhatsNew": "Non mostrare più per la v0.3.5",
     "continueToGame": "Continua",
     "mainMenu": "Menu principale",
     "worldEditor": "Editor Mondo"
@@ -1790,7 +1790,7 @@
     "patchPlayers": "Più giocatori di spicco, incluse rare stelle da 96 e squadre in lotta per la promozione.",
     "patchMatches": "Più reazioni, tiri sui legni e telecronaca vocale facoltativa.",
     "patchMobile": "Comandi mobili, posta, nazionali e inizio carriera migliorati.",
-    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.3.1",
+    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.3.5",
     "patchPortraits": "20 volti fittizi di partenza rendono più vari i ritratti dei giocatori generati.",
     "patchWorld": "Un mondo calcistico più ampio copre 29 nazioni, con club più forti nelle Americhe e in Asia.",
     "patchTransfers": "Le strategie dei club guidano prestiti e trasferimenti, con offerte concorrenti e controlli sul budget.",

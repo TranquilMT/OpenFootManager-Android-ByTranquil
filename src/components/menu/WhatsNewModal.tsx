@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { APP_VERSION } from "../../lib/appVersion";
 import { ReleaseNotes } from "../settings/ReleaseNotes";
 
-const VERSION = "v0.3.1";
+const VERSION = `v${APP_VERSION.replace(/-nightly$/, "")}`;
 export const WHATS_NEW_DISMISSED_KEY = `ofm-whats-new-dismissed-${VERSION}`;
 export const WHATS_NEW_SEEN_KEY = `ofm-whats-new-seen-${VERSION}`;
 

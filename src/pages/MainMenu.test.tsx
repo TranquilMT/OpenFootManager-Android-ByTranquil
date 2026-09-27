@@ -879,7 +879,7 @@ describe("MainMenu", () => {
     expect(openUrlMock).toHaveBeenCalledWith("https://github.com/openfootmanager/openfootmanager");
   });
 
-  it("shows the v0.3.1 notes on launch and honors the opt-out on later launches", async () => {
+  it("shows the v0.3.5 notes on launch and honors the opt-out on later launches", async () => {
     sessionStorage.removeItem(WHATS_NEW_SEEN_KEY);
     const { unmount } = render(<MainMenu />);
 

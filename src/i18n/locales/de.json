@@ -24,7 +24,7 @@
     "openGithub": "GitHub-Repository von OFMtouch öffnen",
     "openOriginalGithub": "Ursprüngliches GitHub-Repository von OpenFootManager öffnen",
     "originalGame": "Originalspiel",
-    "doNotShowWhatsNew": "Für v0.3.1 nicht erneut anzeigen",
+    "doNotShowWhatsNew": "Für v0.3.5 nicht erneut anzeigen",
     "continueToGame": "Weiter",
     "mainMenu": "Hauptmenü",
     "worldEditor": "Welt-Editor"
@@ -1771,7 +1771,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.3.1",
+    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.3.5",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",

@@ -24,7 +24,7 @@
     "openGithub": "OFMtouch GitHub deposunu aç",
     "openOriginalGithub": "Orijinal OpenFootManager GitHub deposunu aç",
     "originalGame": "Orijinal oyun",
-    "doNotShowWhatsNew": "v0.3.1 için bir daha gösterme",
+    "doNotShowWhatsNew": "v0.3.5 için bir daha gösterme",
     "continueToGame": "Devam et",
     "mainMenu": "Ana Menü",
     "worldEditor": "Dünya Editörü"
@@ -1771,7 +1771,7 @@
     "patchPlayers": "Nadir 96 puanlı yıldızlar dahil daha fazla öne çıkan oyuncu.",
     "patchMatches": "Daha fazla maç tepkisi, direğe çarpan şutlar ve isteğe bağlı sesli anlatım.",
     "patchMobile": "Mobil kontroller, gelen kutusu, millî takımlar ve kariyer başlangıcı iyileştirildi.",
-    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.3.1 yenilikleri",
+    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.3.5 yenilikleri",
     "patchPortraits": "20 kurgusal kaynak yüz, üretilen oyuncu portrelerini daha çeşitli kılıyor.",
     "patchWorld": "Futbol dünyası 29 ülkeyi kapsıyor; Amerika ve Asya kulüpleri güçlendirildi.",
     "patchTransfers": "Kulüp stratejileri kiralık ve bonservisli transferleri, rakip teklifleri ve bütçe kontrollerini yönlendiriyor.",
