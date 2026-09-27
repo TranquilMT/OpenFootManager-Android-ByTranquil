@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { isTauri } from "@tauri-apps/api/core";
 import { useSettingsStore } from "./store/settingsStore";
 import i18n, { changeAppLanguage } from "./i18n";
@@ -29,6 +29,47 @@ const SCALE_MAP: Record<string, string> = {
   xlarge: "20px",
 };
 
+function MobileRuntime() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!isTauri()) return;
+    document.documentElement.classList.add("native-mobile");
+    document.body.classList.add("native-mobile");
+    return () => {
+      document.documentElement.classList.remove("native-mobile");
+      document.body.classList.remove("native-mobile");
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isTauri()) return;
+    if (location.pathname === "/" && !window.history.state?.ofmRoot) {
+      window.history.replaceState({ ...(window.history.state ?? {}), ofmRoot: true }, "");
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isTauri()) return;
+    const onPopState = () => {
+      if (window.location.pathname === "/") {
+        window.history.pushState({ ofmRoot: true }, "", window.location.href);
+      }
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  useEffect(() => {
+    const viewport = document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    if (viewport) {
+      viewport.content = "width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1";
+    }
+  }, []);
+
+  return null;
+}
+
 function App() {
   const { settings, loaded, loadSettings } = useSettingsStore();
 
@@ -36,8 +77,6 @@ function App() {
     if (!loaded) loadSettings();
   }, [loaded, loadSettings]);
 
-  // The static title in tauri.conf.json cannot carry the channel/commit, so the
-  // real one is applied here from the build-time version constants.
   useEffect(() => {
     if (!isTauri()) return;
 
@@ -60,7 +99,6 @@ function App() {
     document.documentElement.classList.toggle("high-contrast", settings.high_contrast);
   }, [settings.high_contrast]);
 
-  // Apply saved language from settings once loaded (overrides OS detection)
   useEffect(() => {
     if (loaded && settings.language && settings.language !== i18n.language) {
       void changeAppLanguage(settings.language);
@@ -69,6 +107,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <MobileRuntime />
       <Suspense fallback={<LazyFallback />}>
         <Routes>
           <Route path="/" element={<MainMenu />} />
