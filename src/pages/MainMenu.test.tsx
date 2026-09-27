@@ -6,6 +6,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { countryName } from "../lib/countries";
 import { resetCountryResourcesCache } from "../components/menu/CreateManagerNationalityField";
 import type { ManagerProfile } from "../components/menu/types";
+import { WHATS_NEW_DISMISSED_KEY, WHATS_NEW_SEEN_KEY } from "../components/menu/WhatsNewModal";
 import MainMenu from "./MainMenu";
 
 const navigateMock = vi.fn();
@@ -278,6 +279,8 @@ describe("MainMenu", () => {
     openUrlMock.mockReset();
     dialogOpenResult = null;
     localStorage.clear();
+    sessionStorage.clear();
+    sessionStorage.setItem(WHATS_NEW_SEEN_KEY, "1");
     latestDatePickerOnChange = null;
     translationState.language = "en";
     mockedInvoke.mockReset();
@@ -856,16 +859,6 @@ describe("MainMenu", () => {
     expect(localStorage.getItem("ofm-generated-history-depth-years")).toBe("12");
   });
 
-  it("opens the Discord invite in the system browser when the Discord link is clicked", async () => {
-    render(<MainMenu />);
-
-    const discordButton = await screen.findByRole("button", { name: "menu.openDiscord" });
-    fireEvent.click(discordButton);
-
-    expect(openUrlMock).toHaveBeenCalledTimes(1);
-    expect(openUrlMock).toHaveBeenCalledWith("https://discord.gg/2CXaesaukT");
-  });
-
   it("opens the GitHub repository in the system browser when the GitHub link is clicked", async () => {
     render(<MainMenu />);
 
@@ -873,7 +866,45 @@ describe("MainMenu", () => {
     fireEvent.click(githubButton);
 
     expect(openUrlMock).toHaveBeenCalledTimes(1);
+    expect(openUrlMock).toHaveBeenCalledWith(
+      "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil",
+    );
+  });
+
+  it("opens the original game's repository separately", async () => {
+    render(<MainMenu />);
+
+    fireEvent.click(await screen.findByRole("button", { name: "menu.openOriginalGithub" }));
+
     expect(openUrlMock).toHaveBeenCalledWith("https://github.com/openfootmanager/openfootmanager");
+  });
+
+  it("shows the v0.3.1 notes on launch and honors the opt-out on later launches", async () => {
+    sessionStorage.removeItem(WHATS_NEW_SEEN_KEY);
+    const { unmount } = render(<MainMenu />);
+
+    expect(screen.getByRole("dialog", { name: "settings.patchWelcome" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("checkbox", { name: "menu.doNotShowWhatsNew" }));
+    fireEvent.click(screen.getByRole("button", { name: "menu.continueToGame" }));
+
+    expect(localStorage.getItem(WHATS_NEW_DISMISSED_KEY)).toBe("1");
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    unmount();
+    sessionStorage.clear();
+    render(<MainMenu />);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("shows the notes again on the next launch when opt-out is not selected", () => {
+    sessionStorage.removeItem(WHATS_NEW_SEEN_KEY);
+    const { unmount } = render(<MainMenu />);
+    fireEvent.click(screen.getByRole("button", { name: "menu.continueToGame" }));
+
+    expect(localStorage.getItem(WHATS_NEW_DISMISSED_KEY)).toBeNull();
+    unmount();
+    sessionStorage.clear();
+    render(<MainMenu />);
+    expect(screen.getByRole("dialog", { name: "settings.patchWelcome" })).toBeInTheDocument();
   });
 
   describe("profile confirm modal", () => {

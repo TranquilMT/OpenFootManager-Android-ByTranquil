@@ -7,7 +7,22 @@ OFMtouch is a free football management game built for Android. Take charge of a 
 > 🧪 **Current version: v0.3.1 NightlyPreRelease**  
 > NightlyPreRelease builds are playable test versions. New features and fixes arrive regularly, but some bugs and unfinished areas may remain.
 
-## 🌟 What's New in v0.3.1
+## 🌟 Welcome to OFMtouch! Here's what's new in v0.3.1
+
+- **More varied players:** 20 fictional portrait source faces, rare 96-rated stars, stronger second-tier standouts and wider squad age profiles.
+- **A bigger world:** 29 generation nations with stronger clubs across Europe, the Americas and Asia.
+- **A livelier market:** club strategies shape transfers and loans, with competing offers and better budget and wage checks.
+- **Player development and youth:** playing time affects young players' training growth, and youth scouting reports avoid repeated names.
+- **Better match days:** expanded goal and woodwork commentary, improved lineups and optional spoken commentary.
+- **Mobile improvements:** better Android navigation, safe areas, touch controls, scrolling and settings switches.
+- **Welcome screen:** a launch summary of this update with an option to hide it on future v0.3.1 launches; the notes remain available in Settings.
+- **Fixes:** readable injury names, improved inbox reliability, unique generated club names and corrected world-generation checks.
+
+Thank you for playing! Please help us improve future builds by [submitting issues on GitHub](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new).
+
+**Thanks, TranquilMT**
+
+The sections below describe the update in more detail.
 
 ### 📱 A better Android experience
 
@@ -41,7 +56,7 @@ Scouting is becoming a much more important part of building your club.
 ## 👤 More Player Variety
 
 - Expanded fictional player portrait variety to reduce repeated-looking players.
-- The portrait pool now contains 16 different fictional source faces.
+- The portrait pool now contains 20 different fictional source faces.
 - Generated players have a wider range of ability.
 - Elite players can now reach **96 OVR**.
 - 96-rated players remain rare and should feel genuinely special.
@@ -232,6 +247,8 @@ NightlyPreRelease versions are intended for players who want to test the newest 
 
 **Original game:** OpenFootManager and its original developers and contributors  
 **OFMtouch Android adaptation, mobile enhancements and additional gameplay:** TranquilMT
+
+[OFMtouch Android repository](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil) · [Original OpenFootManager repository](https://github.com/openfootmanager/openfootmanager)
 
 OFMtouch is an independent, fan-made open-source project and is not an official OpenFootManager Android release.
 
