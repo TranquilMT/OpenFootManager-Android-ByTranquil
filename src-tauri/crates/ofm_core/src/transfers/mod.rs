@@ -106,6 +106,9 @@ pub(crate) struct MarketTarget {
     is_user_owned: bool,
     score: i32,
     fee: u64,
+    age: u8,
+    overall: u8,
+    potential: u8,
     position_group_index: usize,
     owner_reputation: u32,
 }
