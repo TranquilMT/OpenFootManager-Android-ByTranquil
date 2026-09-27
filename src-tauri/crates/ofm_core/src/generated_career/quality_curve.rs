@@ -50,7 +50,8 @@ pub fn featured_slot(club_id: &str) -> usize {
 }
 
 /// One featured senior player is distributed across outfield positions. The
-/// club ID keeps the result stable when a saved world is loaded again.
+/// The caller supplies a stable club key, keeping the result reproducible in
+/// seeded worlds and stable when a saved world is loaded again.
 pub fn apply_for_club(base: u8, slot: usize, tier: LeagueTier, club_id: &str) -> u8 {
     let ordinary = apply_for_tier(base, slot, tier);
     if slot != featured_slot(club_id) {

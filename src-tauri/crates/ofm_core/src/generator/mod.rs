@@ -344,7 +344,11 @@ fn rebalance_generated_player_for_club(
     };
     let youth = is_youth_reserved_slot(slot);
     let base = club_strength_ovr(tier, reputation, financial_strength);
-    let slot_target = crate::generated_career::quality_curve::apply_for_club(base, slot, tier, &team.id);
+    // Procedural club IDs are UUIDs. Use the stable football identity so a
+    // seeded world produces the same featured players on every generation.
+    let club_key = format!("{}:{}", team.country, team.name);
+    let slot_target =
+        crate::generated_career::quality_curve::apply_for_club(base, slot, tier, &club_key);
     let generated_target = clamp_generated_ovr(
         tier,
         if youth { slot_target as i16 - 12 } else { slot_target as i16 },
