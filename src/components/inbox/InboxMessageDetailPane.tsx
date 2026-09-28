@@ -101,7 +101,7 @@ export default function InboxMessageDetailPane({
 
   return (
     <>
-      <div className="sticky top-0 z-10 shrink-0 border-b border-gray-100 bg-white p-3 dark:border-navy-600 dark:bg-navy-800 sm:p-5">
+      <div className="shrink-0 border-b border-gray-100 bg-white p-3 dark:border-navy-600 dark:bg-navy-800 sm:p-5 md:sticky md:top-0 md:z-10">
         <button
           type="button"
           onClick={onCloseSelectedMessage}
@@ -146,16 +146,6 @@ export default function InboxMessageDetailPane({
               </div>
             </div>
           </div>
-          <Button
-            type="button"
-            size="sm"
-            onClick={onRequestDelete}
-            icon={<Trash2 className="w-4 h-4" />}
-            className="min-h-11 w-full bg-red-500 hover:bg-red-600 active:bg-red-700 focus:ring-red-500 sm:min-h-0 sm:w-auto"
-            data-testid="inbox-delete-message"
-          >
-            {t("inbox.deleteMessage")}
-          </Button>
         </div>
       </div>
 
@@ -464,6 +454,16 @@ export default function InboxMessageDetailPane({
               })}
             </div>
           ) : null}
+          <Button
+            type="button"
+            size="sm"
+            onClick={onRequestDelete}
+            icon={<Trash2 className="w-4 h-4" />}
+            className="mt-6 min-h-11 w-full bg-red-500 hover:bg-red-600 active:bg-red-700 focus:ring-red-500 sm:w-auto"
+            data-testid="inbox-delete-message"
+          >
+            {t("inbox.deleteMessage")}
+          </Button>
         </div>
       </div>
       <SwitchClubConfirmModal
