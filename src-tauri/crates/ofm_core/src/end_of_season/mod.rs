@@ -1031,6 +1031,59 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
     convert_retired_players_to_candidates(game);
     crate::generator::replenish_manager_and_scout_market(game);
 
+    // Credit completed cups before synthesizing a current-club career spell.
+    // Its rollover date is later than completed finals and must not hide wins.
+    // The cabinet key also makes repeated rollover calls safe for the same season.
+    let cup_titles: Vec<_> = game
+        .competitions
+        .iter()
+        .filter(|competition| {
+            matches!(
+                &competition.kind,
+                CompetitionType::Cup
+                    | CompetitionType::ContinentalClub
+                    | CompetitionType::InternationalClub
+            )
+        })
+        .filter(|competition| competition.season == season)
+        .filter_map(|competition| {
+            let winner = crate::world_cup::world_cup_champion(competition)?;
+            let final_round = competition.knockout_rounds.last()?;
+            let final_date = competition
+                .fixtures
+                .iter()
+                .find(|fixture| final_round.fixture_ids.contains(&fixture.id))
+                .map(|fixture| fixture.date.as_str())?;
+            // Older saves without a spell only support the current club.
+            let managed = if winner == user_team_id {
+                managed_club_on_date(&game.manager, &winner, final_date)
+            } else {
+                game.manager.career_history.iter().any(|entry| {
+                    entry.team_id == winner
+                        && entry.start_date.as_str() <= final_date
+                        && entry.end_date.as_deref().is_none_or(|end| final_date <= end)
+                })
+            };
+            managed.then(|| (competition.id.clone(), competition.name.clone(), winner))
+        })
+        .collect();
+    for (competition_id, competition_name, winner) in cup_titles {
+        if game.manager.trophy_cabinet.iter().any(|trophy| {
+            trophy.competition_id == competition_id && trophy.season == season
+        }) {
+            continue;
+        }
+        game.manager.career_stats.trophies += 1;
+        game.manager.trophy_cabinet.push(ManagerTrophy {
+            competition_id,
+            competition_name,
+            team_id: winner.clone(),
+            team_name: game.teams.iter().find(|team| team.id == winner)
+                .map(|team| team.name.clone()).unwrap_or_default(),
+            season,
+        });
+    }
+
     // 6. Update manager career stats
     if let Some(standing) = &user_standing {
         // New saves credit each result immediately. Older midseason saves have
@@ -1146,58 +1199,6 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
         }
         game.manager.trophy_cabinet.push(ManagerTrophy {
             competition_id, competition_name, team_id: winner.clone(),
-            team_name: game.teams.iter().find(|team| team.id == winner)
-                .map(|team| team.name.clone()).unwrap_or_default(),
-            season,
-        });
-    }
-
-    // Credit completed cups before the competition fixtures are regenerated.
-    // The cabinet key also makes repeated rollover calls safe for the same season.
-    let cup_titles: Vec<_> = game
-        .competitions
-        .iter()
-        .filter(|competition| {
-            matches!(
-                &competition.kind,
-                CompetitionType::Cup
-                    | CompetitionType::ContinentalClub
-                    | CompetitionType::InternationalClub
-            )
-        })
-        .filter(|competition| competition.season == season)
-        .filter_map(|competition| {
-            let winner = crate::world_cup::world_cup_champion(competition)?;
-            let final_round = competition.knockout_rounds.last()?;
-            let final_date = competition
-                .fixtures
-                .iter()
-                .find(|fixture| final_round.fixture_ids.contains(&fixture.id))
-                .map(|fixture| fixture.date.as_str())?;
-            // Older saves without a spell only support the current club.
-            let managed = if winner == user_team_id {
-                managed_club_on_date(&game.manager, &winner, final_date)
-            } else {
-                game.manager.career_history.iter().any(|entry| {
-                    entry.team_id == winner
-                        && entry.start_date.as_str() <= final_date
-                        && entry.end_date.as_deref().is_none_or(|end| final_date <= end)
-                })
-            };
-            managed.then(|| (competition.id.clone(), competition.name.clone(), winner))
-        })
-        .collect();
-    for (competition_id, competition_name, winner) in cup_titles {
-        if game.manager.trophy_cabinet.iter().any(|trophy| {
-            trophy.competition_id == competition_id && trophy.season == season
-        }) {
-            continue;
-        }
-        game.manager.career_stats.trophies += 1;
-        game.manager.trophy_cabinet.push(ManagerTrophy {
-            competition_id,
-            competition_name,
-            team_id: winner.clone(),
             team_name: game.teams.iter().find(|team| team.id == winner)
                 .map(|team| team.name.clone()).unwrap_or_default(),
             season,
