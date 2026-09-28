@@ -17,6 +17,8 @@ vi.mock("react-i18next", () => ({
       if (key === "manager.losses") return "Losses";
       if (key === "manager.trophies") return "Trophies";
       if (key === "manager.winPercent") return "Win %";
+      if (key === "sacked.bestFinish") return "Best Finish";
+      if (key === "managersWorld.unemployed") return "Unemployed";
       if (key === "manager.boardStatus") return "Board Status";
       if (key === "manager.board") return "Board";
       if (key === "manager.fans") return "Fans";
@@ -132,8 +134,83 @@ describe("ManagerTab", () => {
     expect(screen.getByText("Jane Doe")).toBeInTheDocument();
     expect(screen.getByText("Manager of Alpha FC")).toBeInTheDocument();
     expect(screen.getByText("55%")).toBeInTheDocument();
+    expect(screen.getByText("#1")).toBeInTheDocument();
     expect(screen.getByText("Career History")).toBeInTheDocument();
     expect(screen.getByText("Old Town FC")).toBeInTheDocument();
+    expect(screen.getByText("50%")).toBeInTheDocument();
+    expect(screen.getByText("#3")).toBeInTheDocument();
+  });
+
+  it("shows named honours when a trophy cabinet is present", () => {
+    const gameState = createGameState(false);
+    gameState.manager.trophy_cabinet = [
+      {
+        competition_id: "league-1",
+        competition_name: "Premier Division",
+        team_id: "team-1",
+        team_name: "Alpha FC",
+        season: 2026,
+      },
+    ];
+    render(<ManagerTab gameState={gameState} />);
+    expect(screen.getByText("Premier Division · 2026")).toBeInTheDocument();
+    expect(screen.getByText("Alpha FC")).toBeInTheDocument();
+  });
+
+  it("opens the club from a named honour", () => {
+    const gameState = createGameState(false);
+    gameState.manager.trophy_cabinet = [
+      {
+        competition_id: "cup-1",
+        competition_name: "Cup",
+        team_id: "team-1",
+        team_name: "Alpha FC",
+        season: 2026,
+      },
+    ];
+    const onSelectTeam = vi.fn();
+    render(<ManagerTab gameState={gameState} onSelectTeam={onSelectTeam} />);
+    fireEvent.click(screen.getByRole("button", { name: "Alpha FC" }));
+    expect(onSelectTeam).toHaveBeenCalledWith("team-1");
+  });
+
+  it("shows unemployed status when there is no current club", () => {
+    const gameState = createGameState(false);
+    gameState.manager.team_id = null;
+    render(<ManagerTab gameState={gameState} />);
+    expect(screen.getByText("Unemployed")).toBeInTheDocument();
+  });
+
+  it("does not call a manager unemployed if the saved club is missing", () => {
+    const gameState = createGameState(false);
+    gameState.teams = [];
+    render(<ManagerTab gameState={gameState} />);
+    expect(screen.getByText("Manager of team-1")).toBeInTheDocument();
+    expect(screen.queryByText("Unemployed")).not.toBeInTheDocument();
+  });
+
+  it("shows the newest honours first even when saved out of order", () => {
+    const gameState = createGameState(false);
+    gameState.manager.trophy_cabinet = [
+      {
+        competition_id: "new",
+        competition_name: "New Cup",
+        team_id: "team-1",
+        team_name: "Alpha FC",
+        season: 2027,
+      },
+      {
+        competition_id: "old",
+        competition_name: "Old Cup",
+        team_id: "team-1",
+        team_name: "Alpha FC",
+        season: 2025,
+      },
+    ];
+    render(<ManagerTab gameState={gameState} />);
+    const honours = screen.getAllByRole("listitem");
+    expect(honours[0]).toHaveTextContent("New Cup · 2027");
+    expect(honours[1]).toHaveTextContent("Old Cup · 2025");
   });
 
   it("offers team navigation from the current club and career history", () => {
@@ -146,9 +223,11 @@ describe("ManagerTab", () => {
 
     expect(onSelectTeam).toHaveBeenCalledWith("team-1");
 
-    fireEvent.contextMenu(screen.getByTestId("manager-history-team-0"));
+    fireEvent.contextMenu(screen.getByRole("button", { name: "Old Town FC" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "View team" }));
 
+    expect(onSelectTeam).toHaveBeenCalledWith("team-0");
+    fireEvent.click(screen.getByRole("button", { name: "Old Town FC" }));
     expect(onSelectTeam).toHaveBeenCalledWith("team-0");
   });
 });

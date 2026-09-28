@@ -58,4 +58,45 @@ describe("useSpokenCommentary", () => {
     unmount();
     expect(cancel).toHaveBeenCalled();
   });
+
+  it("speaks the latest narratable event when a batch ends in a routine event", () => {
+    const speak = vi.fn();
+    vi.stubGlobal("speechSynthesis", { speak, cancel: vi.fn() });
+    vi.stubGlobal(
+      "SpeechSynthesisUtterance",
+      class {
+        lang = "";
+        rate = 1;
+        constructor(public text: string) {}
+      },
+    );
+    const t = i18n.t.bind(i18n);
+    const { rerender, unmount } = renderHook(
+      ({ events }) => useSpokenCommentary(events, snapshot, t, "en", true),
+      { initialProps: { events: [] as MatchEvent[] } },
+    );
+    rerender({ events: [kickoff, { ...kickoff, minute: 1, event_type: "PassCompleted" }] });
+    expect(speak).toHaveBeenCalledOnce();
+    expect(speak.mock.calls[0][0].text).toMatch(/underway|match is on/i);
+    unmount();
+  });
+
+  it("stops speaking immediately when narration is turned off", () => {
+    const cancel = vi.fn();
+    vi.stubGlobal("speechSynthesis", { speak: vi.fn(), cancel });
+    vi.stubGlobal(
+      "SpeechSynthesisUtterance",
+      class {
+        constructor(public text: string) {}
+      },
+    );
+    const t = i18n.t.bind(i18n);
+    const { rerender, unmount } = renderHook(
+      ({ enabled }) => useSpokenCommentary([kickoff], snapshot, t, "en", enabled),
+      { initialProps: { enabled: true } },
+    );
+    rerender({ enabled: false });
+    expect(cancel).toHaveBeenCalledOnce();
+    unmount();
+  });
 });

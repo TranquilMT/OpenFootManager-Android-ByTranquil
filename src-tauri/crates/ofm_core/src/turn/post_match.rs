@@ -184,7 +184,34 @@ pub fn apply_match_report_with_capture<F>(
         update_team_form(game, report, home_team_id, away_team_id);
     }
 
-    // Update board satisfaction based on match result
+    // Credit every managed fixture, including cups. Only league fixtures are
+    // reconciled against standings at the end of the season.
+    if let Some(team_id) = game.manager.team_id.as_deref()
+        && (team_id == home_team_id || team_id == away_team_id)
+    {
+        let team_name = game.teams.iter().find(|team| team.id == team_id)
+            .map(|team| team.name.clone()).unwrap_or_default();
+        let today = game.clock.current_date.format("%Y-%m-%d").to_string();
+        game.manager.ensure_current_spell(&team_name, &today);
+    }
+    if !counts_for_standings
+        && let Some(user_team_id) = &game.manager.team_id
+        && (*user_team_id == home_team_id || *user_team_id == away_team_id)
+    {
+        let user_goals = if *user_team_id == home_team_id {
+            report.home_goals
+        } else {
+            report.away_goals
+        };
+        let opp_goals = if *user_team_id == home_team_id {
+            report.away_goals
+        } else {
+            report.home_goals
+        };
+        game.manager.record_match_result(user_goals, opp_goals, false);
+    }
+
+    // Board and fan sentiment follow league standings results.
     if counts_for_standings
         && let Some(user_team_id) = &game.manager.team_id
         && (*user_team_id == home_team_id || *user_team_id == away_team_id)
@@ -199,8 +226,6 @@ pub fn apply_match_report_with_capture<F>(
         } else {
             report.home_goals
         };
-        // Record results while the manager is still at the club. Waiting until
-        // rollover loses the current spell when they leave during a season.
         game.manager.record_league_result(user_goals, opp_goals);
         let sat_delta: i8 = if user_goals > opp_goals {
             2
@@ -281,6 +306,7 @@ pub fn apply_match_report_with_capture<F>(
     if generates_match_news {
         super::news::generate_match_news(game, fixture_index, home_team_id, away_team_id, report);
     }
+    game.sync_user_manager_record();
 }
 
 fn apply_match_injuries(game: &mut Game, report: &engine::MatchReport, home: &str, away: &str) {

@@ -1,4 +1,4 @@
-name: OFMtouch Android Nightly 0.3.6
+name: OFMtouch Android Nightly 0.5.0 Career Update
 
 on:
   workflow_dispatch:
@@ -6,6 +6,7 @@ on:
     branches:
       - android/migration
       - major/world-simulation
+      - phase5-manager-career
 
 concurrency:
   group: android-nightly-${{ github.ref }}
@@ -53,6 +54,12 @@ jobs:
       - name: Frontend lint
         run: npm run lint
 
+      - name: Frontend formatting
+        run: npm run format:check
+
+      - name: Translation coverage
+        run: node scripts/audit-i18n.mjs --check
+
       - name: Rust workspace tests
         working-directory: src-tauri
         run: cargo test --workspace --all-targets --locked
@@ -69,14 +76,14 @@ jobs:
             npx tauri android init --ci
           fi
 
-      - name: Build ARM64 debug APK
+      - name: Build ARM64 APK for persistent signing
         env:
           NDK_HOME: ${{ env.ANDROID_NDK_HOME }}
           OFM_CHANNEL: nightly
           VITE_APP_BUILD_NUMBER: ${{ github.run_number }}
         run: |
-          # Keep every nightly installable over the previous v0.3.6 build.
-          export OFM_ANDROID_VERSION_CODE=$((3006000 + GITHUB_RUN_NUMBER))
+          # Keep every nightly installable over the previous v0.5.0 build.
+          export OFM_ANDROID_VERSION_CODE=$((5000000 + GITHUB_RUN_NUMBER))
           node -e 'require("fs").writeFileSync("tauri.android.nightly.conf.json", JSON.stringify({bundle:{android:{versionCode:Number(process.env.OFM_ANDROID_VERSION_CODE)}}}))'
           npx tauri android build --debug --apk --target aarch64 --config tauri.android.nightly.conf.json
 
@@ -91,22 +98,24 @@ jobs:
           PACKAGE_LINE="$("$AAPT" dump badging "$APK" | sed -n '1p')"
           echo "$PACKAGE_LINE"
           [[ "$PACKAGE_LINE" == *"name='com.tranquilmt.openfootmanager'"* ]]
-          [[ "$PACKAGE_LINE" == *"versionName='0.3.6'"* ]]
-          [[ "$PACKAGE_LINE" == *"versionCode='$((3006000 + GITHUB_RUN_NUMBER))'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionName='0.5.0'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionCode='$((5000000 + GITHUB_RUN_NUMBER))'"* ]]
           APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
           "$APKSIGNER" verify --verbose "$APK"
+          # A debug build is only an intermediate artifact. Final delivery is signed
+          # with the persistent release keystore and its certificate is checked.
           unzip -l "$APK" | grep -E 'lib/arm64-v8a/.*\.so' >/dev/null
           if unzip -l "$APK" | grep -E 'lib/(armeabi-v7a|x86|x86_64)/.*\.so'; then
             echo 'Unexpected non-ARM64 native libraries found'
             exit 1
           fi
           mkdir -p dist-apk
-          cp "$APK" "dist-apk/OFMtouch-0.3.6-Build${GITHUB_RUN_NUMBER}-NightlyPreRelease.apk"
-          sha256sum "dist-apk/OFMtouch-0.3.6-Build${GITHUB_RUN_NUMBER}-NightlyPreRelease.apk" | tee "dist-apk/OFMtouch-0.3.6-Build${GITHUB_RUN_NUMBER}-NightlyPreRelease.apk.sha256"
+          cp "$APK" "dist-apk/OFMtouch-0.5.0-Career-Update-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk"
+          sha256sum "dist-apk/OFMtouch-0.5.0-Career-Update-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk" | tee "dist-apk/OFMtouch-0.5.0-Career-Update-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk.sha256"
 
-      - name: Upload installable ARM64 APK
+      - name: Upload ARM64 APK for persistent signing
         uses: actions/upload-artifact@v4
         with:
-          name: OFMtouch-0.3.6-Build${{ github.run_number }}-NightlyPreRelease
+          name: OFMtouch-0.5.0-Career-Update-Build${{ github.run_number }}-CI-INTERMEDIATE
           path: dist-apk/*
           if-no-files-found: error

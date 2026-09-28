@@ -106,6 +106,16 @@ pub fn hire_manager(game: &mut Game, team_id: &str, date: &str) -> Result<String
 
     // Assign manager to team
     game.manager.hire(team_id.to_string());
+    // Results earned before this appointment belong to the club, not the
+    // incoming manager. Season rollover must only reconcile later fixtures.
+    if let Some((wins, draws, losses)) = crate::end_of_season::user_division(game, team_id)
+        .and_then(|division| division.standings.iter().find(|entry| entry.team_id == team_id))
+        .map(|entry| (entry.won, entry.drawn, entry.lost))
+    {
+        game.manager.career_stats.season_recorded_wins = wins;
+        game.manager.career_stats.season_recorded_draws = draws;
+        game.manager.career_stats.season_recorded_losses = losses;
+    }
     if let Some(team) = game.teams.iter_mut().find(|t| t.id == team_id) {
         team.manager_id = Some(manager_id.clone());
     }
@@ -118,6 +128,7 @@ pub fn hire_manager(game: &mut Game, team_id: &str, date: &str) -> Result<String
 
     // Reset satisfaction to neutral
     game.manager.satisfaction = 50;
+    game.manager.fan_approval = 50;
     game.sync_user_manager_record();
     game.vacant_team_days.remove(team_id);
     expire_outstanding_job_offers_for_team(game, team_id);
@@ -227,7 +238,7 @@ pub fn switch_manager_team(
         .manager
         .career_history
         .iter()
-        .any(|e| e.end_date.is_none());
+        .any(|e| e.end_date.is_none() && e.team_id == previous_team_id);
     if !has_open_entry {
         game.manager.career_history.push(ManagerCareerEntry::open(
             previous_team_id.clone(),
@@ -787,10 +798,37 @@ mod tests {
     }
 
     #[test]
+    fn midseason_hire_does_not_inherit_club_results() {
+        let mut game = make_game(10, false);
+        let mut division = domain::league::League::new(
+            "division".to_string(), "Division".to_string(), 2026,
+            &["team1".to_string(), "team2".to_string()],
+        );
+        let standing = division.standings.iter_mut().find(|entry| entry.team_id == "team2").unwrap();
+        standing.won = 4;
+        standing.drawn = 2;
+        standing.lost = 3;
+        game.competitions.push(division);
+        hire_manager(&mut game, "team2", "2026-11-01").unwrap();
+        assert_eq!(game.manager.career_stats.matches_managed, 0);
+        assert_eq!(game.manager.career_stats.season_recorded_wins, 4);
+        assert_eq!(game.manager.career_stats.season_recorded_draws, 2);
+        assert_eq!(game.manager.career_stats.season_recorded_losses, 3);
+    }
+
+    #[test]
     fn hire_manager_resets_satisfaction_to_50() {
         let mut game = make_game(10, false);
         hire_manager(&mut game, "team2", "2026-11-01").unwrap();
         assert_eq!(game.manager.satisfaction, 50);
+    }
+
+    #[test]
+    fn new_club_starts_with_neutral_fan_approval() {
+        let mut game = make_game(10, false);
+        game.manager.fan_approval = 12;
+        hire_manager(&mut game, "team2", "2026-11-01").unwrap();
+        assert_eq!(game.manager.fan_approval, 50);
     }
 
     #[test]
@@ -1237,6 +1275,18 @@ mod tests {
             Some("2026-11-01")
         );
         assert!(game.manager.career_history[1].end_date.is_none());
+    }
+
+    #[test]
+    fn switch_backfills_current_club_even_if_stale_other_spell_is_open() {
+        let mut game = make_game(50, true);
+        game.manager.career_history.push(ManagerCareerEntry::open(
+            "team3".to_string(), "Earlier FC".to_string(), "2025-01-01".to_string(),
+        ));
+        switch_manager_team(&mut game, "team3", "2026-11-01").unwrap();
+        assert!(game.manager.career_history.iter().any(|entry| {
+            entry.team_id == "team1" && entry.end_date.as_deref() == Some("2026-11-01")
+        }));
     }
 
     #[test]

@@ -1979,6 +1979,146 @@ fn manager_trophy_awarded_for_first_place() {
     let mut game = make_completed_season_game();
     process_end_of_season(&mut game);
     assert_eq!(game.manager.career_stats.trophies, 1);
+    assert_eq!(
+        game.managers.iter().find(|manager| manager.id == game.manager.id).unwrap()
+            .career_stats.trophies,
+        1,
+    );
+}
+
+#[test]
+fn manager_cup_title_is_recorded_once_at_rollover() {
+    let mut game = make_completed_season_game();
+    game.competitions.push(game.league.as_ref().unwrap().clone());
+    game.competitions.push(domestic_cup("career-cup", "ENG", "Europe", "team1", "team2"));
+    process_end_of_season(&mut game);
+    assert_eq!(game.manager.career_stats.trophies, 2);
+    assert!(game.manager.trophy_cabinet.iter().any(|trophy| {
+        trophy.competition_id == "career-cup" && trophy.team_id == "team1" && trophy.season == 1
+    }));
+    assert_eq!(game.manager.trophy_cabinet.iter().filter(|t| t.competition_id == "career-cup").count(), 1);
+}
+
+#[test]
+fn manager_does_not_receive_unfinished_or_other_clubs_cups() {
+    let mut game = make_completed_season_game();
+    game.competitions.push(game.league.as_ref().unwrap().clone());
+    game.competitions.push(domestic_cup("other-cup", "ENG", "Europe", "team2", "team1"));
+    let mut unfinished = domestic_cup("unfinished-cup", "ENG", "Europe", "team1", "team2");
+    unfinished.knockout_rounds[0].completed = false;
+    game.competitions.push(unfinished);
+    process_end_of_season(&mut game);
+    assert_eq!(game.manager.career_stats.trophies, 1);
+}
+
+#[test]
+fn manager_continental_club_title_appears_in_cabinet() {
+    let mut game = make_completed_season_game();
+    game.competitions.push(game.league.as_ref().unwrap().clone());
+    let mut continental = domestic_cup("continental-title", "ENG", "Europe", "team1", "team2");
+    continental.kind = CompetitionType::ContinentalClub;
+    continental.scope = CompetitionScope::Continental;
+    game.competitions.push(continental);
+    process_end_of_season(&mut game);
+    assert_eq!(game.manager.career_stats.trophies, 2);
+    assert!(game.manager.trophy_cabinet.iter().any(|t| t.competition_id == "continental-title"));
+}
+
+#[test]
+fn manager_claims_cup_decided_on_penalties() {
+    let mut game = make_completed_season_game();
+    game.competitions.push(game.league.as_ref().unwrap().clone());
+    let mut cup = domestic_cup("penalty-cup", "ENG", "Europe", "team1", "team2");
+    let result = cup.fixtures[0].result.as_mut().unwrap();
+    result.home_goals = 1;
+    result.away_goals = 1;
+    result.home_penalties = Some(5);
+    result.away_penalties = Some(4);
+    game.competitions.push(cup);
+    process_end_of_season(&mut game);
+    assert!(game.manager.trophy_cabinet.iter().any(|t| t.competition_id == "penalty-cup"));
+}
+
+#[test]
+fn manager_keeps_cup_won_before_switching_clubs() {
+    let mut game = make_completed_season_game();
+    game.competitions.push(game.league.as_ref().unwrap().clone());
+    game.competitions.push(domestic_cup("old-club-cup", "ENG", "Europe", "team1", "team2"));
+    game.manager.career_history.push(domain::manager::ManagerCareerEntry::open(
+        "team1".to_string(), "Test FC".to_string(), "2025-01-01".to_string(),
+    ));
+    game.manager.fire("2025-07-01");
+    game.manager.hire("team2".to_string());
+    game.manager.career_history.push(domain::manager::ManagerCareerEntry::open(
+        "team2".to_string(), "Rival FC".to_string(), "2025-07-01".to_string(),
+    ));
+    process_end_of_season(&mut game);
+    assert!(game.manager.trophy_cabinet.iter().any(|t| {
+        t.competition_id == "old-club-cup" && t.team_id == "team1"
+    }));
+}
+
+#[test]
+fn manager_keeps_league_title_won_before_switching_clubs() {
+    let mut game = make_completed_season_game();
+    game.competitions.push(game.league.as_ref().unwrap().clone());
+    game.manager.career_history.push(domain::manager::ManagerCareerEntry::open(
+        "team1".to_string(), "Test FC".to_string(), "2025-01-01".to_string(),
+    ));
+    game.manager.fire("2025-07-01");
+    game.manager.hire("team2".to_string());
+    game.manager.career_history.push(domain::manager::ManagerCareerEntry::open(
+        "team2".to_string(), "Rival FC".to_string(), "2025-07-01".to_string(),
+    ));
+    process_end_of_season(&mut game);
+    assert!(game.manager.trophy_cabinet.iter().any(|t| {
+        t.competition_id == "league1" && t.team_id == "team1"
+    }));
+    assert_eq!(game.manager.career_stats.best_finish, Some(1));
+}
+
+#[test]
+fn former_club_title_is_not_awarded_if_manager_left_before_its_final() {
+    let mut game = make_completed_season_game();
+    game.competitions.push(game.league.as_ref().unwrap().clone());
+    let mut former = domain::manager::ManagerCareerEntry::open(
+        "team1".to_string(), "Test FC".to_string(), "2025-01-01".to_string(),
+    );
+    former.end_date = Some("2025-05-31".to_string());
+    game.manager.career_history.push(former);
+    game.manager.hire("team2".to_string());
+    process_end_of_season(&mut game);
+    assert!(!game.manager.trophy_cabinet.iter().any(|t| t.competition_id == "league1"));
+}
+
+#[test]
+fn manager_does_not_claim_title_won_before_joining_club() {
+    let mut game = make_completed_season_game();
+    game.competitions.push(game.league.as_ref().unwrap().clone());
+    game.competitions.push(domestic_cup("prior-title", "ENG", "Europe", "team1", "team2"));
+    game.manager.career_history.push(domain::manager::ManagerCareerEntry::open(
+        "team1".to_string(), "Test FC".to_string(), "2025-07-01".to_string(),
+    ));
+    process_end_of_season(&mut game);
+    assert_eq!(game.manager.career_stats.trophies, 0);
+    assert!(!game.manager.trophy_cabinet.iter().any(|t| t.competition_id == "prior-title"));
+}
+
+#[test]
+fn manager_claims_title_won_during_an_earlier_spell_at_same_club() {
+    let mut game = make_completed_season_game();
+    game.competitions.push(game.league.as_ref().unwrap().clone());
+    game.competitions.push(domestic_cup("return-title", "ENG", "Europe", "team1", "team2"));
+    let mut former = domain::manager::ManagerCareerEntry::open(
+        "team1".to_string(), "Test FC".to_string(), "2025-01-01".to_string(),
+    );
+    former.end_date = Some("2025-06-30".to_string());
+    game.manager.career_history.push(former);
+    game.manager.career_history.push(domain::manager::ManagerCareerEntry::open(
+        "team1".to_string(), "Test FC".to_string(), "2025-07-01".to_string(),
+    ));
+    process_end_of_season(&mut game);
+    assert!(game.manager.trophy_cabinet.iter().any(|t| t.competition_id == "return-title"));
 }
 
 #[test]
@@ -1993,6 +2133,44 @@ fn manager_no_trophy_for_non_first() {
     }
     process_end_of_season(&mut game);
     assert_eq!(game.manager.career_stats.trophies, 0);
+}
+
+#[test]
+fn manager_joining_after_final_league_match_does_not_inherit_title() {
+    let mut game = make_completed_season_game();
+    let mut other_final = make_completed_fixture("late-final", "team3", "team4", 1, 0);
+    other_final.date = "2025-08-01".to_string();
+    game.league.as_mut().unwrap().fixtures.push(other_final);
+    game.manager.career_history.push(domain::manager::ManagerCareerEntry::open(
+        "team1".to_string(), "Test FC".to_string(), "2025-07-01".to_string(),
+    ));
+    process_end_of_season(&mut game);
+    assert_eq!(game.manager.career_stats.trophies, 0);
+    assert!(game.manager.trophy_cabinet.is_empty());
+    assert_eq!(game.manager.career_stats.best_finish, None);
+}
+
+#[test]
+fn manager_departing_before_final_league_match_does_not_inherit_title() {
+    let mut game = make_completed_season_game();
+    let mut spell = domain::manager::ManagerCareerEntry::open(
+        "team1".to_string(), "Test FC".to_string(), "2025-01-01".to_string(),
+    );
+    spell.end_date = Some("2025-05-31".to_string());
+    game.manager.career_history.push(spell);
+    process_end_of_season(&mut game);
+    assert_eq!(game.manager.career_stats.trophies, 0);
+}
+
+#[test]
+fn manager_cannot_win_league_without_a_completed_club_fixture() {
+    let mut game = make_completed_season_game();
+    game.league.as_mut().unwrap().fixtures = vec![
+        make_completed_fixture("other-final", "team3", "team4", 2, 0),
+    ];
+    process_end_of_season(&mut game);
+    assert_eq!(game.manager.career_stats.trophies, 0);
+    assert_eq!(game.manager.career_stats.best_finish, None);
 }
 
 #[test]
@@ -2013,6 +2191,9 @@ fn manager_career_history_entry_created() {
     assert_eq!(entry.matches, 2);
     assert_eq!(entry.wins, 2);
     assert_eq!(entry.best_league_position, Some(1));
+    assert_eq!(game.manager.trophy_cabinet.len(), 1);
+    assert_eq!(game.manager.trophy_cabinet[0].team_id, "team1");
+    assert_eq!(game.manager.trophy_cabinet[0].season, 1);
 }
 
 #[test]
@@ -2024,7 +2205,7 @@ fn manager_career_history_entry_updated_on_second_season() {
         .push(domain::manager::ManagerCareerEntry {
             team_id: "team1".to_string(),
             team_name: "Test FC".to_string(),
-            start_date: "2025-08-01".to_string(),
+            start_date: "2025-01-01".to_string(),
             end_date: None,
             matches: 10,
             wins: 5,

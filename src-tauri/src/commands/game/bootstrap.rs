@@ -70,7 +70,19 @@ pub(super) fn bootstrap_existing_world_takeover(
             }
         }
         ofm_core::job_offers::hire_manager(game, team_id, &takeover_date)?;
+    } else {
+        if game.manager.team_id.as_deref() != Some(team_id) {
+            game.manager.hire(team_id.to_string());
+        }
+        if !game.manager.career_history.iter().any(|entry| {
+            entry.team_id == team_id && entry.end_date.is_none()
+        }) {
+            game.manager.career_history.push(domain::manager::ManagerCareerEntry::open(
+                team_id.to_string(), team_name.clone(), takeover_date.clone(),
+            ));
+        }
     }
+    game.sync_user_manager_record();
 
     let staff_msg = ofm_core::messages::staff_advice_message(&team_name, team_id, &takeover_date);
     game.messages.push(staff_msg);
@@ -98,10 +110,20 @@ pub(super) fn bootstrap_season_start(game: &mut Game, team_id: &str) -> Result<S
     let team_name = team.name.clone();
 
     game.manager.hire(team_id.to_string());
+    if !game.manager.career_history.iter().any(|entry| {
+        entry.team_id == team_id && entry.end_date.is_none()
+    }) {
+        game.manager.career_history.push(domain::manager::ManagerCareerEntry::open(
+            team_id.to_string(),
+            team_name.clone(),
+            game.clock.current_date.format("%Y-%m-%d").to_string(),
+        ));
+    }
     if let Some(t) = game.teams.iter_mut().find(|t| t.id == team_id) {
         t.manager_id = Some(game.manager.id.clone());
     }
     game.manager_id = game.manager.id.clone();
+    game.sync_user_manager_record();
     ofm_core::ai_hiring::seed_ai_managers(game);
 
     let season_start = preseason_season_start(&game.clock);

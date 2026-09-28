@@ -4,9 +4,16 @@
 
 OFMtouch is a free football management game built for Android. Take charge of a club, build your squad, scout talent, shape your tactics, develop young players and compete across multiple seasons in a growing football world.
 
-> 🧪 **Current source version: v0.3.6 NightlyPreRelease**
+> 🧪 **Current source version: v0.5.0 Career Update NightlyPreRelease**
 > **Build:** generated automatically from the GitHub Actions build number
 > NightlyPreRelease builds are playable test versions. New features and fixes arrive regularly, but some bugs and unfinished areas may remain.
+
+## v0.5.0 Career Update
+
+- Manager career systems now connect club decisions, post-match updates, season transitions and progression.
+- The first menu alone shows repository links; they disappear on New Game and other menus.
+- Expanded career, localization, mobile UI and package verification gates protect the nightly build.
+- Build number and release channel appear in the in-game version label and APK filename.
 
 ## v0.3.6 mobile hotfix
 
@@ -70,7 +77,7 @@ v0.3.5 is not the introduction of Player Development V2.0 or Transfer Market V2.
 - [x] **v0.3.5 version/build pipeline** — app metadata and Android Nightly workflow upgraded to v0.3.5 with GitHub run-number builds.
 - [ ] **Final v0.3.5 regression gate** — complete the full automated regression suite against the release candidate.
 - [ ] **v0.3.5 Android APK verification** — verify the generated ARM64 NightlyPreRelease APK, signature, package/version and startup flows.
-- [ ] **Phase 5+ development** — continue the next major simulation/gameplay phases after the v0.3.5 checkpoint build.
+- [ ] **Phase 5 — Manager Career** — live match records, club spells, and named league/cup honours are implemented locally; validation and release integration remain outstanding.
 
 Thank you for playing! Please help us improve future builds by [submitting issues on GitHub](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new).
 

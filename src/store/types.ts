@@ -516,6 +516,13 @@ export interface ManagerData {
   warning_stage?: number;
   career_stats: ManagerCareerStats;
   career_history: ManagerCareerEntry[];
+  trophy_cabinet?: Array<{
+    competition_id: string;
+    competition_name: string;
+    team_id: string;
+    team_name: string;
+    season: number;
+  }>;
 }
 
 export interface FixtureData {

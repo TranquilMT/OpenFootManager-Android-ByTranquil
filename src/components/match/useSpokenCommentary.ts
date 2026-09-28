@@ -30,10 +30,14 @@ export function useSpokenCommentary(
       narratedCount.current = currentCount;
       return;
     }
+    const newEvents = events.slice(narratedCount.current);
     narratedCount.current = currentCount;
     if (!enabled || !spokenCommentaryAvailable()) return;
 
-    const commentary = getCommentary(events[currentCount - 1], snapshot, translate);
+    const commentary = newEvents
+      .reverse()
+      .map((event) => getCommentary(event, snapshot, translate))
+      .find((line) => line !== null);
     if (!commentary) return;
 
     cancelSpokenCommentary();
@@ -42,6 +46,10 @@ export function useSpokenCommentary(
     utterance.rate = 1.05;
     window.speechSynthesis.speak(utterance);
   }, [events, snapshot, translate, language, enabled]);
+
+  useEffect(() => {
+    if (!enabled) cancelSpokenCommentary();
+  }, [enabled]);
 
   useEffect(() => cancelSpokenCommentary, []);
 }
