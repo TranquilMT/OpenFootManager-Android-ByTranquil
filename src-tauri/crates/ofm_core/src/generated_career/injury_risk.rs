@@ -1,0 +1,6 @@
+pub fn risk_per_thousand(age: u8, fitness: u8, minutes_last_7: u16) -> u16 {
+    let age_risk = age.saturating_sub(29) as u16 * 2;
+    let fatigue = (100 - fitness.min(100)) as u16;
+    let overload = minutes_last_7.saturating_sub(180) / 10;
+    (8 + age_risk + fatigue / 3 + overload).min(180)
+}

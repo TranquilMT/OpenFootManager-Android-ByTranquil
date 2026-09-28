@@ -338,6 +338,7 @@ mod tests {
     use ofm_core::game::Game;
     use ofm_core::live_match_manager::{self, MatchMode};
     use ofm_core::state::StateManager;
+    use rand::{rngs::StdRng, SeedableRng};
     use std::collections::HashMap;
 
     fn default_attrs(position: Position) -> PlayerAttributes {
@@ -747,6 +748,69 @@ mod tests {
             user_fixture.result.is_some(),
             "user fixture result must be recorded",
         );
+    }
+
+    #[test]
+    fn finish_live_match_persists_engine_injury_and_medical_message() {
+        let game = make_game_with_round();
+        let mut injured_id = None;
+        let mut injured_session = None;
+        for seed in 0..500 {
+            let mut session =
+                live_match_manager::create_live_match(&game, 0, MatchMode::Instant, false)
+                    .expect("create live match");
+            session.user_side = None;
+            session.rng = StdRng::seed_from_u64(seed);
+            let steps = session.run_to_completion();
+            if let Some(id) = steps
+                .iter()
+                .flat_map(|step| &step.events)
+                .find(|event| {
+                    event.event_type == engine::EventType::Injury
+                        && event.side == engine::Side::Home
+                })
+                .and_then(|event| event.player_id.clone())
+            {
+                injured_id = Some(id);
+                injured_session = Some(session);
+                break;
+            }
+        }
+        let injured_id = injured_id.expect("seeded live match should generate a home injury");
+        let state = StateManager::new();
+        state.set_game(game);
+        state.set_live_match(injured_session.unwrap());
+        finish_live_match_internal(&state).expect("finish live match");
+        let persisted = state.get_game(|game| game.clone()).expect("persisted game");
+        let player = persisted
+            .players
+            .iter()
+            .find(|p| p.id == injured_id)
+            .expect("injured player");
+        assert!(player
+            .injury
+            .as_ref()
+            .is_some_and(|injury| injury.days_remaining > 0));
+        assert!(persisted
+            .messages
+            .iter()
+            .any(
+                |message| message.context.player_id.as_deref() == Some(injured_id.as_str())
+                    && message.category == domain::message::MessageCategory::Injury
+            ));
+        assert!(persisted.competitions[0].fixtures[0]
+            .result
+            .as_ref()
+            .unwrap()
+            .report
+            .as_ref()
+            .unwrap()
+            .events
+            .iter()
+            .any(
+                |event| event.player_id.as_deref() == Some(injured_id.as_str())
+                    && event.event_type == "Injury"
+            ));
     }
 
     #[test]

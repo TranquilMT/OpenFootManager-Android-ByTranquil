@@ -38,6 +38,7 @@ function gameState(players: PlayerData[]): GameStateData {
     manager: { team_id: "team-a" },
     players,
     league: {
+      standings: [],
       fixtures: [
         {
           id: "f-1",
@@ -51,7 +52,7 @@ function gameState(players: PlayerData[]): GameStateData {
         },
       ],
     },
-  } as GameStateData;
+  } as unknown as GameStateData;
 }
 
 describe("portraitService prewarm planning", () => {
@@ -98,6 +99,31 @@ describe("portraitService prewarm planning", () => {
     expect(selectBackgroundPortraitPlayers(state).map((p) => p.id)).toEqual(["b-1", "b-2", "c-1"]);
   });
 
+  it("prewarms the next cup opponent when the league mirror has a later fixture", () => {
+    const state = gameState([
+      player("a-1", "team-a"),
+      player("b-1", "team-b"),
+      player("c-1", "team-c"),
+    ]);
+    state.competitions = [
+      state.league!,
+      {
+        ...state.league!,
+        id: "cup",
+        fixtures: [
+          {
+            ...state.league!.fixtures[0],
+            id: "cup-1",
+            date: "2026-08-01",
+            away_team_id: "team-c",
+            competition: "Cup",
+          },
+        ],
+      },
+    ];
+    expect(selectBackgroundPortraitPlayers(state).map((p) => p.id)).toEqual(["c-1", "b-1"]);
+  });
+
   it("caps default background prewarm to a small relevant window", () => {
     const state = gameState([
       player("a-1", "team-a"),
@@ -107,11 +133,11 @@ describe("portraitService prewarm planning", () => {
 
     const selected = selectBackgroundPortraitPlayers(state);
 
-    expect(selected).toHaveLength(48);
+    expect(selected).toHaveLength(72);
     expect(selected.slice(0, 24).map((p) => p.id)).toEqual(
       Array.from({ length: 24 }, (_, index) => `b-${index + 1}`),
     );
-    expect(selected[selected.length - 1]?.id).toBe("c-24");
+    expect(selected[selected.length - 1]?.id).toBe("c-48");
   });
 
   it("keeps the background prewarm key stable across equivalent game state objects", () => {

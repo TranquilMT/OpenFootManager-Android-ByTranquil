@@ -23,8 +23,6 @@ interface PenaltyShootoutScreenProps {
   onFullTime: () => void;
 }
 
-// Only true shootout kicks: an in-match PenaltyAwarded from regulation/ET
-// lives in the same snapshot.events log and must not appear in this feed.
 const SHOOTOUT_EVENTS = new Set(["ShootoutGoal", "ShootoutMiss"]);
 
 export default function PenaltyShootoutScreen({
@@ -39,32 +37,20 @@ export default function PenaltyShootoutScreen({
   const [isRunning, setIsRunning] = useState(true);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const signaledRef = useRef(false);
-
   const homeFullTeam = gameState.teams.find((tm) => tm.id === snapshot.home_team.id);
   const awayFullTeam = gameState.teams.find((tm) => tm.id === snapshot.away_team.id);
-
   const ps = snapshot.penalty_shootout;
   const roundNumber = ps ? Math.max(ps.home_taken, ps.away_taken) : 0;
 
   const stepMatch = useCallback(async () => {
     try {
-      // Always one at a time, never batched like the live match: here a "minute" is a single
-      // penalty, and the whole point of the screen is watching each one.
-      const results = await invoke<MinuteResult[]>("step_live_match", {
-        minutes: 1,
-      });
+      const results = await invoke<MinuteResult[]>("step_live_match", { minutes: 1 });
       if (results.length > 0) {
-        for (const r of results) {
-          for (const evt of r.events) {
-            if (SHOOTOUT_EVENTS.has(evt.event_type)) {
-              onImportantEvent(evt);
-            }
-          }
-        }
-
+        for (const r of results)
+          for (const evt of r.events)
+            if (SHOOTOUT_EVENTS.has(evt.event_type)) onImportantEvent(evt);
         const snap = await invoke<MatchSnapshot>("get_match_snapshot");
         onSnapshotUpdate(snap);
-
         const lastResult = results[results.length - 1];
         if (lastResult.is_finished && !signaledRef.current) {
           signaledRef.current = true;
@@ -84,13 +70,10 @@ export default function PenaltyShootoutScreen({
       clearTimeout(timerRef.current);
       timerRef.current = null;
     }
-
-    if (isRunning && speed !== "paused") {
+    if (isRunning && speed !== "paused")
       timerRef.current = setTimeout(async () => {
         await stepMatch();
       }, SPEED_MS[speed]);
-    }
-
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
@@ -99,9 +82,14 @@ export default function PenaltyShootoutScreen({
   const shootoutEvents = snapshot.events.filter((e) => SHOOTOUT_EVENTS.has(e.event_type));
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-navy-900 flex flex-col items-center justify-center px-4 py-8 transition-colors duration-300">
-      {/* Header */}
-      <div className="w-full max-w-lg mb-6 text-center">
+    <div
+      className="min-h-[100dvh] bg-gray-100 dark:bg-navy-900 flex flex-col items-center justify-start sm:justify-center px-3 sm:px-4 py-4 sm:py-8 transition-colors duration-300 overflow-y-auto"
+      style={{
+        paddingTop: "max(1rem, env(safe-area-inset-top))",
+        paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
+      }}
+    >
+      <div className="w-full max-w-lg mb-3 sm:mb-6 text-center">
         <p className="text-xs font-heading uppercase tracking-widest text-accent-600 dark:text-accent-400 mb-1">
           {ps?.sudden_death
             ? t("match.shootout.suddenDeath")
@@ -109,43 +97,35 @@ export default function PenaltyShootoutScreen({
               ? t("match.shootout.round", { n: roundNumber })
               : t("match.penaltyShootout")}
         </p>
-        <h1 className="text-2xl font-heading font-bold text-gray-900 dark:text-white">
+        <h1 className="text-xl sm:text-2xl font-heading font-bold text-gray-900 dark:text-white">
           {t("match.penaltyShootout")}
         </h1>
       </div>
 
-      {/* Score card */}
-      <div className="w-full max-w-lg bg-white dark:bg-navy-800 rounded-2xl shadow-lg p-6 mb-4">
-        <div className="flex items-center justify-between gap-4">
-          {/* Home */}
-          <div className="flex flex-col items-center gap-2 flex-1">
+      <div className="w-full max-w-lg bg-white dark:bg-navy-800 rounded-2xl shadow-lg p-4 sm:p-6 mb-3 sm:mb-4">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:gap-4">
+          <div className="flex min-w-0 flex-col items-center gap-1.5 sm:gap-2">
             {homeFullTeam && <TeamLogo team={homeFullTeam} />}
-            <span className="font-heading font-semibold text-gray-900 dark:text-white text-sm text-center">
+            <span className="w-full truncate font-heading font-semibold text-gray-900 dark:text-white text-xs sm:text-sm text-center">
               {snapshot.home_team.name}
             </span>
-            <span className="text-3xl font-heading font-bold text-gray-900 dark:text-white tabular-nums">
+            <span className="text-3xl sm:text-4xl font-heading font-bold text-gray-900 dark:text-white tabular-nums">
               {ps?.home_scored ?? 0}
             </span>
           </div>
-
-          {/* vs */}
           <div className="text-gray-400 dark:text-gray-500 font-heading font-bold text-xl">–</div>
-
-          {/* Away */}
-          <div className="flex flex-col items-center gap-2 flex-1">
+          <div className="flex min-w-0 flex-col items-center gap-1.5 sm:gap-2">
             {awayFullTeam && <TeamLogo team={awayFullTeam} />}
-            <span className="font-heading font-semibold text-gray-900 dark:text-white text-sm text-center">
+            <span className="w-full truncate font-heading font-semibold text-gray-900 dark:text-white text-xs sm:text-sm text-center">
               {snapshot.away_team.name}
             </span>
-            <span className="text-3xl font-heading font-bold text-gray-900 dark:text-white tabular-nums">
+            <span className="text-3xl sm:text-4xl font-heading font-bold text-gray-900 dark:text-white tabular-nums">
               {ps?.away_scored ?? 0}
             </span>
           </div>
         </div>
-
-        {/* Kick grid */}
         {ps && (
-          <div className="mt-6 space-y-3">
+          <div className="mt-4 sm:mt-6 space-y-3">
             <KickRow
               label={snapshot.home_team.name}
               taken={ps.home_taken}
@@ -162,9 +142,8 @@ export default function PenaltyShootoutScreen({
         )}
       </div>
 
-      {/* Event feed */}
       {shootoutEvents.length > 0 && (
-        <div className="w-full max-w-lg bg-white dark:bg-navy-800 rounded-xl p-4 mb-4 space-y-1">
+        <div className="w-full max-w-lg max-h-44 overflow-y-auto bg-white dark:bg-navy-800 rounded-xl p-3 sm:p-4 mb-3 sm:mb-4 space-y-1">
           {shootoutEvents.slice(-8).map((evt, i) => (
             <div
               key={i}
@@ -182,14 +161,15 @@ export default function PenaltyShootoutScreen({
               >
                 {evt.event_type === "ShootoutGoal" ? "⚽" : "✗"}
               </span>
-              <span>{evt.side === "Home" ? snapshot.home_team.name : snapshot.away_team.name}</span>
+              <span className="truncate">
+                {evt.side === "Home" ? snapshot.home_team.name : snapshot.away_team.name}
+              </span>
             </div>
           ))}
         </div>
       )}
 
-      {/* Speed controls */}
-      <div className="flex items-center gap-2">
+      <div className="sticky bottom-0 flex w-full max-w-lg items-center justify-center gap-3 rounded-2xl bg-gray-100/95 p-2 backdrop-blur dark:bg-navy-900/95 sm:static sm:w-auto sm:bg-transparent sm:p-0 dark:sm:bg-transparent">
         <button
           type="button"
           onClick={() => {
@@ -197,7 +177,7 @@ export default function PenaltyShootoutScreen({
             if (!isRunning) setSpeed("normal");
             else setSpeed("paused");
           }}
-          className="p-2 rounded-full bg-white dark:bg-navy-700 shadow hover:shadow-md transition-all"
+          className="flex h-12 min-w-12 items-center justify-center rounded-xl bg-white dark:bg-navy-700 shadow active:scale-95 transition-all"
           aria-label={isRunning ? t("match.pause") : t("match.live")}
         >
           {isRunning ? (
@@ -212,18 +192,19 @@ export default function PenaltyShootoutScreen({
             setSpeed("fast");
             setIsRunning(true);
           }}
-          className="p-2 rounded-full bg-white dark:bg-navy-700 shadow hover:shadow-md transition-all"
+          className={`flex h-12 min-w-12 items-center justify-center rounded-xl shadow active:scale-95 transition-all ${speed === "fast" ? "bg-primary-500 text-white" : "bg-white dark:bg-navy-700"}`}
           aria-label={t("match.fast")}
         >
-          <FastForward className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+          <FastForward className="w-5 h-5" />
         </button>
         <button
           type="button"
           onClick={async () => {
             setIsRunning(false);
+            setSpeed("paused");
             await stepMatch();
           }}
-          className="p-2 rounded-full bg-white dark:bg-navy-700 shadow hover:shadow-md transition-all"
+          className="flex h-12 min-w-12 items-center justify-center rounded-xl bg-white dark:bg-navy-700 shadow active:scale-95 transition-all"
           aria-label={t("match.step1Min")}
         >
           <SkipForward className="w-5 h-5 text-gray-700 dark:text-gray-200" />
@@ -245,33 +226,25 @@ export function KickRow({
   maxRounds: number;
 }) {
   const cells = Math.max(maxRounds, taken);
-
   return (
-    <div className="flex items-center gap-3">
-      <span className="text-xs text-gray-500 dark:text-gray-400 w-20 truncate text-right">
-        {label}
-      </span>
+    <div className="grid grid-cols-[4.5rem_1fr] sm:grid-cols-[5rem_1fr] items-center gap-2 sm:gap-3">
+      <span className="truncate text-right text-xs text-gray-500 dark:text-gray-400">{label}</span>
       <div className="flex gap-1.5 flex-wrap">
         {Array.from({ length: cells }).map((_, i) => {
-          if (i >= taken) {
+          if (i >= taken)
             return (
               <span
                 key={i}
-                className="w-6 h-6 rounded-full border-2 border-gray-200 dark:border-gray-600 flex items-center justify-center text-xs text-gray-300"
+                className="w-7 h-7 sm:w-6 sm:h-6 rounded-full border-2 border-gray-200 dark:border-gray-600 flex items-center justify-center text-xs text-gray-300"
               >
                 ?
               </span>
             );
-          }
           const isGoal = i < scored;
           return (
             <span
               key={i}
-              className={`w-6 h-6 rounded-full flex items-center justify-center text-sm ${
-                isGoal
-                  ? "bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400"
-                  : "bg-red-100 dark:bg-red-900/40 text-red-500 dark:text-red-400"
-              }`}
+              className={`w-7 h-7 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-sm ${isGoal ? "bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400" : "bg-red-100 dark:bg-red-900/40 text-red-500 dark:text-red-400"}`}
             >
               {isGoal ? "⚽" : "✗"}
             </span>

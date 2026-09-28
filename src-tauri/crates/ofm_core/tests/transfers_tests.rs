@@ -1506,6 +1506,7 @@ fn incoming_loan_offer_is_generated_for_loan_listed_user_player() {
     assert_eq!(player.loan_offers.len(), 1);
     assert_eq!(player.loan_offers[0].status, LoanOfferStatus::Pending);
     assert_eq!(player.loan_offers[0].from_team_id, "team-2");
+    assert_eq!(player.loan_offers[0].wage_contribution_pct, 75);
     assert!(game.messages.iter().any(|message| {
         message.id.starts_with("loan_offer_")
             && message.context.player_id.as_deref() == Some("player-user-loan")

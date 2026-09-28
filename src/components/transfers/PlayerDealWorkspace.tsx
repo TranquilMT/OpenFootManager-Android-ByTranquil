@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { ArrowLeft, ArrowRightLeft, Gavel, UserPlus } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
 import type { PlayerData, TeamData } from "../../store/gameStore";
 import { countryName } from "../../lib/countries";
 import {
@@ -14,10 +13,8 @@ import {
 } from "../../lib/helpers";
 import { translatePositionAbbreviation } from "../squad/SquadTab.helpers";
 import { Badge, CountryFlag, PlayerAvatar } from "../ui";
-
 export type DealKind = "transfer" | "loan" | "contract";
-
-interface PlayerDealWorkspaceProps {
+interface Props {
   player: PlayerData;
   teams: TeamData[];
   myTeam: TeamData | null;
@@ -26,17 +23,11 @@ interface PlayerDealWorkspaceProps {
   transferWindowSummary: string;
   loanNoticeDetail: string | null;
   selectedKind: DealKind;
-  /**
-   * Live wage being offered in the active deal (same units as `player.wage`),
-   * or null when the route has no wage offer. Shown alongside the player's
-   * current wage so the two never read as one contradictory figure (#305).
-   */
   offeredWage?: number | null;
   onSelectKind: (kind: DealKind) => void;
   onClose: () => void;
   renderDealPanel: (kind: DealKind) => ReactNode;
 }
-
 interface DealOption {
   kind: DealKind;
   title: string;
@@ -45,74 +36,35 @@ interface DealOption {
   disabledReason: string | null;
   icon: ReactNode;
 }
-
-function routeButtonClass(isSelected: boolean, isDisabled: boolean): string {
-  if (isDisabled) {
-    return [
-      "min-h-[88px] w-full rounded-lg bg-gray-50 px-3 py-3 text-left",
-      "text-gray-500 opacity-80 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]",
-      "transition-[box-shadow,background-color,color] duration-150",
-      "dark:bg-navy-900/50 dark:text-gray-300 dark:shadow-[0_0_0_1px_rgba(255,255,255,0.08)]",
-    ].join(" ");
-  }
-
-  if (isSelected) {
-    return [
-      "min-h-[88px] w-full rounded-lg bg-primary-50 px-3 py-3 text-left",
-      "text-gray-900 shadow-[0_0_0_1px_rgba(16,185,129,0.35),0_2px_8px_rgba(16,185,129,0.12)]",
-      "transition-[box-shadow,background-color,color] duration-150",
-      "dark:bg-primary-900/50 dark:text-white dark:shadow-[0_0_0_1px_rgba(52,211,153,0.34)]",
-    ].join(" ");
-  }
-
-  return [
-    "min-h-[88px] w-full rounded-lg bg-white px-3 py-3 text-left",
-    "text-gray-700 shadow-[0_0_0_1px_rgba(0,0,0,0.06)]",
-    "transition-[box-shadow,background-color,color] duration-150 hover:bg-gray-50 hover:text-gray-950",
-    "hover:shadow-[0_0_0_1px_rgba(0,0,0,0.1),0_2px_8px_rgba(0,0,0,0.05)]",
-    "dark:bg-navy-800 dark:text-gray-300 dark:shadow-[0_0_0_1px_rgba(255,255,255,0.08)]",
-    "dark:hover:bg-navy-700 dark:hover:text-white dark:hover:shadow-[0_0_0_1px_rgba(255,255,255,0.14)]",
-  ].join(" ");
+function routeButtonClass(selected: boolean, disabled: boolean) {
+  const base =
+    "min-h-14 shrink-0 rounded-xl px-3 py-2.5 text-left transition-colors lg:min-h-[88px] lg:w-full lg:py-3";
+  if (disabled)
+    return `${base} bg-gray-50 text-gray-500 opacity-70 dark:bg-navy-900/50 dark:text-gray-300`;
+  if (selected)
+    return `${base} bg-primary-50 text-gray-900 ring-1 ring-primary-400/40 dark:bg-primary-900/50 dark:text-white`;
+  return `${base} bg-white text-gray-700 active:bg-gray-100 dark:bg-navy-800 dark:text-gray-300 dark:active:bg-navy-700`;
 }
-
-function factLabelClass(): string {
-  return "text-xs font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-300";
-}
-
-function factValueClass(): string {
-  return "mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100";
-}
-
-export default function PlayerDealWorkspace({
-  player,
-  teams,
-  myTeam,
-  annualSuffix,
-  transferWindowBlocksRegistration,
-  transferWindowSummary,
-  loanNoticeDetail,
-  selectedKind,
-  offeredWage,
-  onSelectKind,
-  onClose,
-  renderDealPanel,
-}: PlayerDealWorkspaceProps) {
-  const { t, i18n } = useTranslation();
-  const teamName = player.team_id ? getTeamName(teams, player.team_id) : t("common.freeAgent");
-  const age = calcAge(player.date_of_birth);
-  const ovr = getPlayerOvr(player);
+const label = () =>
+  "text-xs font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-300";
+const value = () => "mt-1 text-sm font-semibold text-gray-900 dark:text-gray-100";
+export default function PlayerDealWorkspace(p: Props) {
+  const { t, i18n } = useTranslation(),
+    age = calcAge(p.player.date_of_birth),
+    ovr = getPlayerOvr(p.player),
+    teamName = p.player.team_id ? getTeamName(p.teams, p.player.team_id) : t("common.freeAgent");
   const options: DealOption[] = [
     {
       kind: "transfer",
       title: t("transfers.makeBid"),
       description: t("transfers.dealTransferDescription"),
-      detail: player.transfer_listed
+      detail: p.player.transfer_listed
         ? t("transfers.dealAvailableTransfer")
         : t("transfers.dealUnavailableTransfer"),
-      disabledReason: !player.transfer_listed
+      disabledReason: !p.player.transfer_listed
         ? t("transfers.dealUnavailableTransfer")
-        : transferWindowBlocksRegistration
-          ? transferWindowSummary
+        : p.transferWindowBlocksRegistration
+          ? p.transferWindowSummary
           : null,
       icon: <Gavel className="h-4 w-4" />,
     },
@@ -120,13 +72,13 @@ export default function PlayerDealWorkspace({
       kind: "loan",
       title: t("transfers.makeLoanOffer"),
       description: t("transfers.dealLoanDescription"),
-      detail: player.loan_listed
-        ? (loanNoticeDetail ?? t("transfers.dealAvailableLoan"))
+      detail: p.player.loan_listed
+        ? (p.loanNoticeDetail ?? t("transfers.dealAvailableLoan"))
         : t("transfers.dealUnavailableLoan"),
-      disabledReason: !player.loan_listed
+      disabledReason: !p.player.loan_listed
         ? t("transfers.dealUnavailableLoan")
-        : transferWindowBlocksRegistration
-          ? transferWindowSummary
+        : p.transferWindowBlocksRegistration
+          ? p.transferWindowSummary
           : null,
       icon: <ArrowRightLeft className="h-4 w-4" />,
     },
@@ -135,15 +87,14 @@ export default function PlayerDealWorkspace({
       title: t("transfers.offerContract"),
       description: t("transfers.dealContractDescription"),
       detail:
-        player.team_id === null
+        p.player.team_id === null
           ? t("transfers.dealAvailableContract")
           : t("transfers.dealUnavailableContract"),
-      disabledReason: player.team_id === null ? null : t("transfers.dealUnavailableContract"),
+      disabledReason: p.player.team_id === null ? null : t("transfers.dealUnavailableContract"),
       icon: <UserPlus className="h-4 w-4" />,
     },
   ];
-  const selectedOption = options.find((option) => option.kind === selectedKind) ?? options[0];
-
+  const selected = options.find((o) => o.kind === p.selectedKind) ?? options[0];
   return (
     <div
       role="dialog"
@@ -151,13 +102,13 @@ export default function PlayerDealWorkspace({
       aria-labelledby="player-deal-workspace-title"
       className="fixed inset-0 z-50 bg-gray-100 text-gray-900 dark:bg-navy-900 dark:text-gray-100"
     >
-      <div className="flex h-full min-h-0 flex-col">
-        <header className="shrink-0 border-b border-gray-200 bg-white px-4 py-3 shadow-sm dark:border-navy-600 dark:bg-navy-800">
-          <div className="flex items-center gap-4">
+      <div className="flex h-[100dvh] min-h-0 flex-col">
+        <header className="shrink-0 border-b border-gray-200 bg-white px-3 pb-2 pt-[max(.75rem,env(safe-area-inset-top))] shadow-sm dark:border-navy-600 dark:bg-navy-800 sm:px-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <button
               type="button"
-              onClick={onClose}
-              className="-ml-2 flex shrink-0 items-center gap-2 rounded-lg px-2 py-2 text-sm text-gray-500 transition-colors duration-150 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-navy-700 dark:hover:text-white"
+              onClick={p.onClose}
+              className="-ml-1 flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-lg text-gray-500 active:bg-gray-100 dark:text-gray-300 dark:active:bg-navy-700"
               aria-label={t("common.back")}
             >
               <ArrowLeft className="h-5 w-5" />
@@ -165,158 +116,141 @@ export default function PlayerDealWorkspace({
                 {t("common.back")}
               </span>
             </button>
-            <div className="flex min-w-0 flex-1 items-center gap-4">
+            <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-4">
               <PlayerAvatar
-                player={player}
-                className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gray-100 text-sm font-heading font-bold text-gray-500 shadow-[0_0_0_1px_rgba(0,0,0,0.08)] dark:bg-navy-700 dark:text-gray-300 dark:shadow-[0_0_0_1px_rgba(255,255,255,0.1)]"
+                player={p.player}
+                className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gray-100 text-sm font-heading font-bold text-gray-500 dark:bg-navy-700 dark:text-gray-300 sm:h-16 sm:w-16"
                 imageClassName="h-full w-full object-cover object-top"
               />
               <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex min-w-0 items-center gap-2">
                   <h2
                     id="player-deal-workspace-title"
-                    className="truncate font-heading text-2xl font-bold uppercase tracking-wide text-gray-950 dark:text-white"
+                    className="truncate font-heading text-lg font-bold uppercase tracking-wide text-gray-950 dark:text-white sm:text-2xl"
                   >
-                    {player.full_name}
+                    {p.player.full_name}
                   </h2>
                   <Badge
-                    variant={positionBadgeVariant(player.natural_position || player.position)}
+                    variant={positionBadgeVariant(p.player.natural_position || p.player.position)}
                     size="sm"
                   >
-                    {translatePositionAbbreviation(t, player.natural_position || player.position)}
+                    {translatePositionAbbreviation(
+                      t,
+                      p.player.natural_position || p.player.position,
+                    )}
                   </Badge>
                 </div>
-                <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 dark:text-gray-300">
+                <div className="mt-0.5 flex items-center gap-2 overflow-hidden whitespace-nowrap text-[11px] text-gray-500 dark:text-gray-300 sm:flex-wrap sm:text-xs">
                   <span>{age}</span>
                   <span className="flex items-center gap-1">
                     <CountryFlag
-                      code={player.nationality}
+                      code={p.player.nationality}
                       locale={i18n.language}
                       className="text-sm leading-none"
                     />
-                    {countryName(player.nationality, i18n.language)}
+                    {countryName(p.player.nationality, i18n.language)}
                   </span>
-                  <span>{teamName}</span>
-                  <span>{transferWindowSummary}</span>
+                  <span className="truncate">{teamName}</span>
+                  <span className="hidden sm:inline">{p.transferWindowSummary}</span>
                 </div>
               </div>
             </div>
           </div>
         </header>
-
-        <div className="grid min-h-0 flex-1 gap-4 overflow-y-auto p-4 lg:grid-cols-[260px_minmax(0,1fr)_280px] lg:overflow-hidden">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-[max(1rem,env(safe-area-inset-bottom))] lg:grid lg:grid-cols-[260px_minmax(0,1fr)_280px] lg:gap-4 lg:overflow-hidden lg:p-4">
           <nav
             aria-label={t("transfers.dealType")}
-            className="space-y-3 lg:min-h-0 lg:overflow-y-auto"
+            className="touch-x sticky top-0 z-20 flex gap-2 border-b border-gray-200 bg-gray-100/95 p-2 backdrop-blur dark:border-navy-700 dark:bg-navy-900/95 lg:static lg:block lg:space-y-3 lg:border-0 lg:bg-transparent lg:p-0 lg:backdrop-blur-none"
           >
-            {options.map((option) => {
-              const disabled = Boolean(option.disabledReason);
-              const selected = option.kind === selectedKind;
-
+            {options.map((o) => {
+              const d = !!o.disabledReason,
+                s = o.kind === p.selectedKind;
               return (
                 <button
-                  key={option.kind}
+                  key={o.kind}
                   type="button"
-                  disabled={disabled}
-                  onClick={() => onSelectKind(option.kind)}
-                  className={routeButtonClass(selected, disabled)}
-                  aria-pressed={selected}
-                  aria-label={option.title}
+                  disabled={d}
+                  onClick={() => p.onSelectKind(o.kind)}
+                  className={routeButtonClass(s, d)}
+                  aria-pressed={s}
                 >
-                  <span className="flex items-start gap-3">
+                  <span className="flex items-center gap-2 lg:items-start lg:gap-3">
                     <span
-                      className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${
-                        disabled
-                          ? "bg-gray-200 text-gray-500 dark:bg-navy-700 dark:text-gray-300"
-                          : selected
-                            ? "bg-primary-700 text-white"
-                            : "bg-gray-100 text-gray-600 dark:bg-navy-700 dark:text-gray-300"
-                      }`}
+                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${d ? "bg-gray-200 dark:bg-navy-700" : s ? "bg-primary-700 text-white" : "bg-gray-100 dark:bg-navy-700"}`}
                     >
-                      {option.icon}
+                      {o.icon}
                     </span>
                     <span className="min-w-0">
-                      <span className="font-heading text-sm font-bold uppercase tracking-wider">
-                        {option.title}
+                      <span className="whitespace-nowrap font-heading text-xs font-bold uppercase tracking-wider lg:text-sm">
+                        {o.title}
                       </span>
-                      {/* Subtitle describes the route action, not availability, so a
-                          selected route never reads as a confirmed deal (#305). */}
-                      <span className="mt-1 block text-xs text-gray-500 dark:text-gray-300">
-                        {option.disabledReason ?? option.description}
+                      <span className="hidden lg:mt-1 lg:block lg:text-xs lg:text-gray-500">
+                        {o.disabledReason ?? o.description}
                       </span>
-                      {!disabled ? (
-                        <span className="mt-1 block text-[10px] font-medium uppercase tracking-wide text-gray-400 dark:text-gray-400">
-                          {option.detail}
-                        </span>
-                      ) : null}
                     </span>
                   </span>
                 </button>
               );
             })}
           </nav>
-
-          <section className="min-h-0 overflow-y-auto rounded-lg bg-white p-5 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_2px_8px_rgba(0,0,0,0.04)] dark:bg-navy-800 dark:shadow-[0_0_0_1px_rgba(255,255,255,0.08)]">
-            {selectedOption.disabledReason ? (
-              <div className="flex min-h-[280px] flex-col justify-center rounded-lg bg-gray-50 p-6 text-center dark:bg-navy-900/50">
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-gray-200 text-gray-500 dark:bg-navy-700 dark:text-gray-300">
-                  {selectedOption.icon}
+          <section className="min-h-0 bg-white p-4 dark:bg-navy-800 sm:p-5 lg:overflow-y-auto lg:rounded-lg">
+            <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">{selected.detail}</p>
+            {selected.disabledReason ? (
+              <div className="flex min-h-[220px] flex-col justify-center rounded-lg bg-gray-50 p-5 text-center dark:bg-navy-900/50">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-gray-200 text-gray-500 dark:bg-navy-700">
+                  {selected.icon}
                 </div>
-                <p className="font-heading text-lg font-bold uppercase tracking-wide text-gray-900 dark:text-white">
-                  {selectedOption.title}
-                </p>
+                <p className="font-heading text-lg font-bold uppercase">{selected.title}</p>
                 <p className="mx-auto mt-2 max-w-md text-sm text-gray-600 dark:text-gray-300">
-                  {selectedOption.description}
+                  {selected.description}
                 </p>
                 <p className="mx-auto mt-2 max-w-md text-sm font-semibold text-red-600 dark:text-red-300">
-                  {selectedOption.disabledReason}
+                  {selected.disabledReason}
                 </p>
               </div>
             ) : (
-              renderDealPanel(selectedKind)
+              p.renderDealPanel(p.selectedKind)
             )}
           </section>
-
-          <aside className="min-h-0 space-y-4 lg:overflow-y-auto">
-            <div className="rounded-lg bg-white p-4 shadow-[0_0_0_1px_rgba(0,0,0,0.06)] dark:bg-navy-800 dark:shadow-[0_0_0_1px_rgba(255,255,255,0.08)]">
-              <p className={factLabelClass()}>{t("common.ovr")}</p>
-              <p className="mt-1 font-heading text-3xl font-bold tabular-nums text-primary-500">
-                {ovr}
-              </p>
-              <div className="mt-4 grid grid-cols-2 gap-3">
+          <aside className="space-y-3 p-3 sm:p-4 lg:min-h-0 lg:overflow-y-auto lg:p-0">
+            <div className="rounded-lg bg-white p-4 dark:bg-navy-800">
+              <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <p className={factLabelClass()}>{t("common.value")}</p>
-                  <p className={`${factValueClass()} tabular-nums`}>
-                    {formatVal(player.market_value)}
+                  <p className={label()}>{t("common.ovr")}</p>
+                  <p className="mt-1 font-heading text-2xl font-bold tabular-nums text-primary-500">
+                    {ovr}
                   </p>
                 </div>
                 <div>
-                  <p className={factLabelClass()}>{t("common.currentWage")}</p>
-                  <p className={`${factValueClass()} tabular-nums`}>
-                    {formatAnnualAmount(formatVal(player.wage), annualSuffix)}
+                  <p className={label()}>{t("common.value")}</p>
+                  <p className={`${value()} tabular-nums`}>{formatVal(p.player.market_value)}</p>
+                </div>
+                <div>
+                  <p className={label()}>{t("common.currentWage")}</p>
+                  <p className={`${value()} tabular-nums`}>
+                    {formatAnnualAmount(formatVal(p.player.wage), p.annualSuffix)}
                   </p>
                 </div>
               </div>
-              {offeredWage != null && offeredWage > 0 ? (
+              {p.offeredWage != null && p.offeredWage > 0 ? (
                 <div className="mt-3 border-t border-gray-100 pt-3 dark:border-navy-700">
-                  <p className={factLabelClass()}>{t("playerProfile.renewalWage")}</p>
-                  <p className={`${factValueClass()} tabular-nums`}>
-                    {formatAnnualAmount(formatVal(offeredWage), annualSuffix)}
+                  <p className={label()}>{t("playerProfile.renewalWage")}</p>
+                  <p className={`${value()} tabular-nums`}>
+                    {formatAnnualAmount(formatVal(p.offeredWage), p.annualSuffix)}
                   </p>
                 </div>
               ) : null}
             </div>
-
-            {myTeam ? (
-              <div className="rounded-lg bg-white p-4 shadow-[0_0_0_1px_rgba(0,0,0,0.06)] dark:bg-navy-800 dark:shadow-[0_0_0_1px_rgba(255,255,255,0.08)]">
-                <p className={factLabelClass()}>{t("finances.transferBudget")}</p>
-                <p className={`${factValueClass()} tabular-nums`}>
-                  {formatVal(myTeam.transfer_budget)}
-                </p>
-                <div className="mt-4">
-                  <p className={factLabelClass()}>{t("finances.wageBudget")}</p>
-                  <p className={`${factValueClass()} tabular-nums`}>
-                    {formatAnnualAmount(formatVal(myTeam.wage_budget), annualSuffix)}
+            {p.myTeam ? (
+              <div className="grid grid-cols-2 gap-3 rounded-lg bg-white p-4 dark:bg-navy-800">
+                <div>
+                  <p className={label()}>{t("finances.transferBudget")}</p>
+                  <p className={`${value()} tabular-nums`}>{formatVal(p.myTeam.transfer_budget)}</p>
+                </div>
+                <div>
+                  <p className={label()}>{t("finances.wageBudget")}</p>
+                  <p className={`${value()} tabular-nums`}>
+                    {formatAnnualAmount(formatVal(p.myTeam.wage_budget), p.annualSuffix)}
                   </p>
                 </div>
               </div>

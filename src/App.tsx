@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { isTauri } from "@tauri-apps/api/core";
 import { useSettingsStore } from "./store/settingsStore";
 import i18n, { changeAppLanguage } from "./i18n";
@@ -29,18 +29,87 @@ const SCALE_MAP: Record<string, string> = {
   xlarge: "20px",
 };
 
+function MobileRuntime() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!isTauri()) return;
+    document.documentElement.classList.add("native-mobile");
+    document.body.classList.add("native-mobile");
+    const viewport = document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
+    if (viewport)
+      viewport.content =
+        "width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no";
+
+    const updateViewport = () => {
+      const vv = window.visualViewport;
+      const height = vv?.height ?? window.innerHeight;
+      const top = vv?.offsetTop ?? 0;
+      document.documentElement.style.setProperty("--app-height", `${Math.round(height)}px`);
+      document.documentElement.style.setProperty(
+        "--keyboard-offset",
+        `${Math.max(0, Math.round(window.innerHeight - height - top))}px`,
+      );
+      document.documentElement.classList.toggle("keyboard-open", window.innerHeight - height > 120);
+    };
+    updateViewport();
+    window.visualViewport?.addEventListener("resize", updateViewport);
+    window.visualViewport?.addEventListener("scroll", updateViewport);
+    window.addEventListener("resize", updateViewport);
+
+    return () => {
+      document.documentElement.classList.remove("native-mobile", "keyboard-open");
+      document.body.classList.remove("native-mobile");
+      window.visualViewport?.removeEventListener("resize", updateViewport);
+      window.visualViewport?.removeEventListener("scroll", updateViewport);
+      window.removeEventListener("resize", updateViewport);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isTauri()) return;
+    const current = window.history.state ?? {};
+    if (location.pathname === "/") {
+      window.history.replaceState({ ...current, ofmRoot: true }, "");
+    } else if (!current.ofmRoute) {
+      window.history.replaceState({ ...current, ofmRoute: location.pathname }, "");
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isTauri()) return;
+    const onPopState = () => {
+      if (window.location.pathname === "/") {
+        window.history.pushState({ ofmRoot: true }, "", window.location.href);
+      }
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  useEffect(() => {
+    const onFocusIn = (event: FocusEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (!target?.matches("input, textarea, select, [contenteditable='true']")) return;
+      window.setTimeout(
+        () => target.scrollIntoView({ block: "center", inline: "nearest", behavior: "smooth" }),
+        120,
+      );
+    };
+    document.addEventListener("focusin", onFocusIn);
+    return () => document.removeEventListener("focusin", onFocusIn);
+  }, []);
+
+  return null;
+}
+
 function App() {
   const { settings, loaded, loadSettings } = useSettingsStore();
-
   useEffect(() => {
     if (!loaded) loadSettings();
   }, [loaded, loadSettings]);
-
-  // The static title in tauri.conf.json cannot carry the channel/commit, so the
-  // real one is applied here from the build-time version constants.
   useEffect(() => {
     if (!isTauri()) return;
-
     void (async () => {
       try {
         const { getCurrentWindow } = await import("@tauri-apps/api/window");
@@ -50,25 +119,20 @@ function App() {
       }
     })();
   }, []);
-
   useEffect(() => {
-    const size = SCALE_MAP[settings.ui_scale] || "16px";
-    document.documentElement.style.fontSize = size;
+    document.documentElement.style.fontSize = SCALE_MAP[settings.ui_scale] || "16px";
   }, [settings.ui_scale]);
-
   useEffect(() => {
     document.documentElement.classList.toggle("high-contrast", settings.high_contrast);
   }, [settings.high_contrast]);
-
-  // Apply saved language from settings once loaded (overrides OS detection)
   useEffect(() => {
-    if (loaded && settings.language && settings.language !== i18n.language) {
+    if (loaded && settings.language && settings.language !== i18n.language)
       void changeAppLanguage(settings.language);
-    }
   }, [loaded, settings.language]);
 
   return (
     <BrowserRouter>
+      <MobileRuntime />
       <Suspense fallback={<LazyFallback />}>
         <Routes>
           <Route path="/" element={<MainMenu />} />

@@ -505,14 +505,14 @@ function MatchdayGroupCard({
               return (
                 <ContextMenu items={contextItems} key={fixture.id}>
                   <div
-                    className={`flex items-center px-5 py-3 transition-colors ${
+                    className={`grid grid-cols-[minmax(0,1fr)_3.5rem_minmax(0,1fr)] items-center gap-1 px-2 py-2 transition-colors sm:flex sm:gap-0 sm:px-5 sm:py-3 ${
                       isUserMatch ? "bg-primary-50/50 dark:bg-primary-500/5" : ""
                     }`}
                     data-testid={`schedule-fixture-${fixture.id}`}
                   >
                     <span
                       onClick={() => onSelectTeam(fixture.home_team_id)}
-                      className={`flex-1 cursor-pointer text-right text-sm font-semibold hover:underline ${
+                      className={`flex min-h-11 min-w-0 cursor-pointer items-center justify-end break-words text-right text-xs font-semibold active:underline sm:min-h-0 sm:flex-1 sm:text-sm sm:hover:underline ${
                         fixture.home_team_id === userTeamId
                           ? "text-primary-600 dark:text-primary-400"
                           : "text-gray-800 dark:text-gray-200"
@@ -520,7 +520,7 @@ function MatchdayGroupCard({
                     >
                       {fixture.home_team_name}
                     </span>
-                    <div className="mx-3 w-24 text-center">
+                    <div className="w-14 text-center sm:mx-3 sm:w-24">
                       {completed && fixture.result ? (
                         <span className="font-heading text-lg font-bold text-gray-800 dark:text-gray-100">
                           {fixture.result.home_goals} - {fixture.result.away_goals}
@@ -533,7 +533,7 @@ function MatchdayGroupCard({
                     </div>
                     <span
                       onClick={() => onSelectTeam(fixture.away_team_id)}
-                      className={`flex-1 cursor-pointer text-left text-sm font-semibold hover:underline ${
+                      className={`flex min-h-11 min-w-0 cursor-pointer items-center break-words text-left text-xs font-semibold active:underline sm:min-h-0 sm:flex-1 sm:text-sm sm:hover:underline ${
                         fixture.away_team_id === userTeamId
                           ? "text-primary-600 dark:text-primary-400"
                           : "text-gray-800 dark:text-gray-200"
@@ -710,130 +710,177 @@ function StandingsView({
           </p>
         </CardBody>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-left">
-            <thead>
-              <tr className="border-b border-gray-200 bg-gray-50 text-xs dark:border-navy-600 dark:bg-navy-800">
-                {[
-                  "#",
-                  t("common.team"),
-                  t("common.played"),
-                  t("common.won"),
-                  t("common.drawn"),
-                  t("common.lost"),
-                  t("common.gf"),
-                  t("common.ga"),
-                  t("common.gd"),
-                  t("common.pts"),
-                ].map((header, idx) => (
-                  <th
-                    key={idx}
-                    className={`px-4 py-3 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 ${idx === 0 ? "w-8" : ""} ${idx >= 2 ? "text-center" : ""}`}
+        <>
+          <div className="divide-y divide-gray-100 dark:divide-navy-600 md:hidden">
+            {standings.map((entry, index) => {
+              const isUser = entry.team_id === userTeamId;
+              const gd = entry.goals_for - entry.goals_against;
+              const inPromotionZone = index < zones.promotionSlots;
+              const inRelegationZone =
+                zones.relegationSlots > 0 && index >= standings.length - zones.relegationSlots;
+              const contextItems = [buildTeamMenuItem(t("common.viewTeam"), entry.team_id)];
+              return (
+                <ContextMenu items={contextItems} key={entry.team_id}>
+                  <button
+                    type="button"
+                    onClick={() => onSelectTeam(entry.team_id)}
+                    className={`grid min-h-14 w-full grid-cols-[2.25rem_minmax(0,1fr)_3rem] items-center gap-2 px-2 py-2 text-left active:bg-gray-50 dark:active:bg-navy-700/50 ${isUser ? "bg-primary-50 dark:bg-primary-500/10" : ""}`}
+                    data-testid={`schedule-standings-mobile-${entry.team_id}`}
                   >
-                    {header}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-navy-600">
-              {standings.map((entry, index) => {
-                const isUser = entry.team_id === userTeamId;
-                const gd = entry.goals_for - entry.goals_against;
-                const inPromotionZone = index < zones.promotionSlots;
-                const inRelegationZone =
-                  zones.relegationSlots > 0 && index >= standings.length - zones.relegationSlots;
-                const contextItems = [buildTeamMenuItem(t("common.viewTeam"), entry.team_id)];
-
-                return (
-                  <ContextMenu items={contextItems} key={entry.team_id}>
-                    <tr
-                      className={`transition-colors ${
-                        isUser
-                          ? "bg-primary-50 dark:bg-primary-500/10"
-                          : "hover:bg-gray-50 dark:hover:bg-navy-700/50"
-                      }`}
-                      data-testid={`schedule-standings-row-${entry.team_id}`}
+                    <span
+                      className={`flex h-full items-center justify-center border-l-2 font-heading text-sm font-bold ${inPromotionZone ? "border-primary-500 text-primary-500" : inRelegationZone ? "border-red-500 text-red-500" : "border-transparent text-gray-400"}`}
                     >
-                      <td
-                        className={`px-4 py-3 font-heading text-sm font-bold ${
-                          inPromotionZone
-                            ? "border-l-2 border-primary-500 text-primary-500"
-                            : inRelegationZone
-                              ? "border-l-2 border-red-500 text-red-500"
-                              : "text-gray-400 dark:text-gray-500"
-                        }`}
-                        data-testid={
-                          inPromotionZone
-                            ? `standings-promotion-${entry.team_id}`
-                            : inRelegationZone
-                              ? `standings-relegation-${entry.team_id}`
-                              : undefined
-                        }
-                      >
-                        {index + 1}
-                      </td>
-                      <td
-                        onClick={() => onSelectTeam(entry.team_id)}
-                        className={`cursor-pointer px-4 py-3 text-sm font-semibold hover:underline ${
-                          isUser
-                            ? "text-primary-600 dark:text-primary-400"
-                            : "text-gray-800 dark:text-gray-200"
-                        }`}
+                      {index + 1}
+                    </span>
+                    <span className="min-w-0">
+                      <span
+                        className={`block truncate text-sm font-semibold ${isUser ? "text-primary-600 dark:text-primary-400" : "text-gray-800 dark:text-gray-200"}`}
                       >
                         {getTeamName(gameState.teams, entry.team_id)}
-                      </td>
-                      {[
-                        entry.played,
-                        entry.won,
-                        entry.drawn,
-                        entry.lost,
-                        entry.goals_for,
-                        entry.goals_against,
-                      ].map((val, i) => (
-                        <td
-                          key={i}
-                          className="px-4 py-3 text-center text-sm tabular-nums text-gray-600 dark:text-gray-400"
-                        >
-                          {val}
-                        </td>
-                      ))}
-                      <td
-                        className={`px-4 py-3 text-center text-sm font-semibold tabular-nums ${
-                          gd > 0
-                            ? "text-primary-500"
-                            : gd < 0
-                              ? "text-red-500"
-                              : "text-gray-500 dark:text-gray-400"
-                        }`}
-                      >
-                        {gd > 0 ? `+${gd}` : gd}
-                      </td>
-                      <td className="px-4 py-3 text-center font-heading text-sm font-bold tabular-nums text-gray-800 dark:text-gray-100">
+                      </span>
+                      <span className="mt-0.5 block text-[11px] tabular-nums text-gray-500 dark:text-gray-400">
+                        {t("common.played")} {entry.played} · {entry.won}-{entry.drawn}-{entry.lost}{" "}
+                        · {t("common.gd")} {gd > 0 ? `+${gd}` : gd}
+                      </span>
+                    </span>
+                    <span className="text-right">
+                      <span className="block font-heading text-base font-bold tabular-nums text-gray-900 dark:text-gray-100">
                         {entry.points}
-                      </td>
-                    </tr>
-                  </ContextMenu>
-                );
-              })}
-            </tbody>
-          </table>
-          {(zones.promotionSlots > 0 || zones.relegationSlots > 0) && (
-            <div className="flex gap-5 border-t border-gray-100 px-4 py-2.5 text-xs text-gray-500 dark:border-navy-600 dark:text-gray-400">
-              {zones.promotionSlots > 0 && (
-                <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-primary-500" />
-                  {t("schedule.promotionZone")}
-                </span>
-              )}
-              {zones.relegationSlots > 0 && (
-                <span className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full bg-red-500" />
-                  {t("schedule.relegationZone")}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
+                      </span>
+                      <span className="block text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                        {t("common.pts")}
+                      </span>
+                    </span>
+                  </button>
+                </ContextMenu>
+              );
+            })}
+          </div>
+          <div className="hidden overflow-x-auto md:block">
+            <table className="w-full border-collapse text-left">
+              <thead>
+                <tr className="border-b border-gray-200 bg-gray-50 text-xs dark:border-navy-600 dark:bg-navy-800">
+                  {[
+                    "#",
+                    t("common.team"),
+                    t("common.played"),
+                    t("common.won"),
+                    t("common.drawn"),
+                    t("common.lost"),
+                    t("common.gf"),
+                    t("common.ga"),
+                    t("common.gd"),
+                    t("common.pts"),
+                  ].map((header, idx) => (
+                    <th
+                      key={idx}
+                      className={`px-4 py-3 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 ${idx === 0 ? "w-8" : ""} ${idx >= 2 ? "text-center" : ""}`}
+                    >
+                      {header}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-navy-600">
+                {standings.map((entry, index) => {
+                  const isUser = entry.team_id === userTeamId;
+                  const gd = entry.goals_for - entry.goals_against;
+                  const inPromotionZone = index < zones.promotionSlots;
+                  const inRelegationZone =
+                    zones.relegationSlots > 0 && index >= standings.length - zones.relegationSlots;
+                  const contextItems = [buildTeamMenuItem(t("common.viewTeam"), entry.team_id)];
+
+                  return (
+                    <ContextMenu items={contextItems} key={entry.team_id}>
+                      <tr
+                        className={`transition-colors ${
+                          isUser
+                            ? "bg-primary-50 dark:bg-primary-500/10"
+                            : "hover:bg-gray-50 dark:hover:bg-navy-700/50"
+                        }`}
+                        data-testid={`schedule-standings-row-${entry.team_id}`}
+                      >
+                        <td
+                          className={`px-4 py-3 font-heading text-sm font-bold ${
+                            inPromotionZone
+                              ? "border-l-2 border-primary-500 text-primary-500"
+                              : inRelegationZone
+                                ? "border-l-2 border-red-500 text-red-500"
+                                : "text-gray-400 dark:text-gray-500"
+                          }`}
+                          data-testid={
+                            inPromotionZone
+                              ? `standings-promotion-${entry.team_id}`
+                              : inRelegationZone
+                                ? `standings-relegation-${entry.team_id}`
+                                : undefined
+                          }
+                        >
+                          {index + 1}
+                        </td>
+                        <td
+                          onClick={() => onSelectTeam(entry.team_id)}
+                          className={`cursor-pointer px-4 py-3 text-sm font-semibold hover:underline ${
+                            isUser
+                              ? "text-primary-600 dark:text-primary-400"
+                              : "text-gray-800 dark:text-gray-200"
+                          }`}
+                        >
+                          {getTeamName(gameState.teams, entry.team_id)}
+                        </td>
+                        {[
+                          entry.played,
+                          entry.won,
+                          entry.drawn,
+                          entry.lost,
+                          entry.goals_for,
+                          entry.goals_against,
+                        ].map((val, i) => (
+                          <td
+                            key={i}
+                            className="px-4 py-3 text-center text-sm tabular-nums text-gray-600 dark:text-gray-400"
+                          >
+                            {val}
+                          </td>
+                        ))}
+                        <td
+                          className={`px-4 py-3 text-center text-sm font-semibold tabular-nums ${
+                            gd > 0
+                              ? "text-primary-500"
+                              : gd < 0
+                                ? "text-red-500"
+                                : "text-gray-500 dark:text-gray-400"
+                          }`}
+                        >
+                          {gd > 0 ? `+${gd}` : gd}
+                        </td>
+                        <td className="px-4 py-3 text-center font-heading text-sm font-bold tabular-nums text-gray-800 dark:text-gray-100">
+                          {entry.points}
+                        </td>
+                      </tr>
+                    </ContextMenu>
+                  );
+                })}
+              </tbody>
+            </table>
+            {(zones.promotionSlots > 0 || zones.relegationSlots > 0) && (
+              <div className="flex flex-wrap gap-x-5 gap-y-1 border-t border-gray-100 px-4 py-2.5 text-xs text-gray-500 dark:border-navy-600 dark:text-gray-400">
+                {zones.promotionSlots > 0 && (
+                  <span className="flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-primary-500" />
+                    {t("schedule.promotionZone")}
+                  </span>
+                )}
+                {zones.relegationSlots > 0 && (
+                  <span className="flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-red-500" />
+                    {t("schedule.relegationZone")}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        </>
       )}
     </Card>
   );

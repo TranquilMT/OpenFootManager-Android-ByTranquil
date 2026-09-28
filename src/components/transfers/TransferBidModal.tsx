@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { AlertTriangle } from "lucide-react";
-
 import type { PlayerData, TeamData, TransferOfferData } from "../../store/gameStore";
 import { formatExactMoney, formatVal, getTeamName, positionBadgeVariant } from "../../lib/helpers";
 import type {
@@ -14,7 +13,6 @@ import { Badge } from "../ui";
 import { translatePositionAbbreviation } from "../squad/SquadTab.helpers";
 import TransferNegotiationHistory from "./TransferNegotiationHistory";
 import { playerHasPendingRegistration } from "./TransfersTab.model";
-
 export interface TransferBidFormProps {
   bidTarget: PlayerData;
   teams: TeamData[];
@@ -27,7 +25,6 @@ export interface TransferBidFormProps {
   activeBidOffer: TransferOfferData | null;
   hasExistingOffer: boolean;
   bidResult: TransferNegotiationResponseData["decision"] | "error" | null;
-  /** The translated reason a bid failed. Rendered in place of the bare word "error". */
   bidError?: string | null;
   bidLoading: boolean;
   bidSubmitDisabled: boolean;
@@ -37,9 +34,7 @@ export interface TransferBidFormProps {
   onSubmit: () => void;
   onClose: () => void;
 }
-
 type TransferBidModalProps = TransferBidFormProps;
-
 export function TransferBidForm({
   bidTarget,
   teams,
@@ -63,34 +58,27 @@ export function TransferBidForm({
 }: TransferBidFormProps) {
   const { t } = useTranslation();
   const titleId = `transfer-bid-modal-title-${bidTarget.id}`;
-  // A player with an agreed deal awaiting registration is off the market — the
-  // engine refuses a new bid. Surface it here so reaching this form from a
-  // profile / squad / scouting action explains itself instead of dead-ending.
   const pendingRegistration = playerHasPendingRegistration(bidTarget);
-
   return (
     <>
       <h3
         id={titleId}
-        className="text-sm font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3"
+        className="mb-3 text-sm font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400"
       >
         {t("transfers.makeBid")}
       </h3>
-
       {showPlayerSummary ? (
-        <div className="flex items-center gap-3 mb-4">
+        <div className="mb-4 flex min-w-0 items-center gap-3">
           <Badge variant={positionBadgeVariant(bidTarget.position)} size="sm">
             {translatePositionAbbreviation(t, bidTarget.position)}
           </Badge>
-          <div>
-            <p className="font-semibold text-sm text-gray-800 dark:text-gray-200">
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-gray-800 dark:text-gray-200">
               {bidTarget.full_name}
             </p>
-            <p className="text-xs text-gray-400">
+            <p className="truncate text-xs text-gray-400">
               {getTeamName(teams, bidTarget.team_id)} •{" "}
-              {t("transfers.playerValue", {
-                value: formatVal(bidTarget.market_value),
-              })}
+              {t("transfers.playerValue", { value: formatVal(bidTarget.market_value) })}
             </p>
           </div>
         </div>
@@ -117,27 +105,28 @@ export function TransferBidForm({
         </div>
       ) : null}
       {hasExistingOffer ? (
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+        <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">
           {t("transfers.resumeNegotiationHint")}
         </p>
       ) : null}
       <label
         htmlFor="bid-amount"
-        className="text-xs font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1 block"
+        className="mb-1 block text-xs font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400"
       >
         {t("transfers.bidAmount")}
       </label>
       <input
         id="bid-amount"
+        inputMode="decimal"
         type="number"
         step="0.1"
         min="0"
         value={bidAmount}
-        onChange={(event) => onBidAmountChange(event.target.value)}
-        className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-navy-700 border border-gray-200 dark:border-navy-600 text-sm text-gray-800 dark:text-gray-200 mb-3 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+        onChange={(e) => onBidAmountChange(e.target.value)}
+        className="mb-3 min-h-12 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-base text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500/50 dark:border-navy-600 dark:bg-navy-700 dark:text-gray-200 sm:min-h-0 sm:text-sm"
       />
       {myTeam && bidFee !== null && bidProjection ? (
-        <div className="rounded-lg border border-gray-200 dark:border-navy-700 bg-white/70 dark:bg-navy-900/40 p-3 mb-3 space-y-2">
+        <div className="mb-3 space-y-2 rounded-lg border border-gray-200 bg-white/70 p-3 dark:border-navy-700 dark:bg-navy-900/40">
           <p className="text-[11px] font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
             {t("transfers.bidImpactTitle")}
           </p>
@@ -209,7 +198,7 @@ export function TransferBidForm({
       <TransferNegotiationHistory offer={activeBidOffer} mode="outgoing" />
       {bidResult ? (
         <div
-          className={`text-xs font-heading font-bold uppercase tracking-wider mb-3 ${bidResult === "accepted" ? "text-green-500" : bidResult === "rejected" ? "text-red-600 dark:text-red-300" : "text-amber-500"}`}
+          className={`mb-3 text-xs font-heading font-bold uppercase tracking-wider ${bidResult === "accepted" ? "text-green-500" : bidResult === "rejected" ? "text-red-600 dark:text-red-300" : "text-amber-500"}`}
         >
           {bidResult === "accepted"
             ? t("transfers.bidAccepted")
@@ -220,42 +209,40 @@ export function TransferBidForm({
                 : bidError}
         </div>
       ) : null}
-      <div className="flex gap-2">
+      <div className="sticky bottom-0 -mx-1 flex flex-col-reverse gap-2 bg-white/95 px-1 pb-[max(.25rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur dark:bg-navy-800/95 sm:static sm:flex-row sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
+        <button
+          type="button"
+          onClick={onClose}
+          className="min-h-12 rounded-lg bg-gray-200 px-4 py-2 text-sm font-heading font-bold uppercase tracking-wider text-gray-600 active:bg-gray-300 dark:bg-navy-700 dark:text-gray-300 dark:active:bg-navy-600 sm:min-h-0"
+        >
+          {t("transfers.close")}
+        </button>
         <button
           type="button"
           onClick={onSubmit}
           disabled={bidSubmitDisabled || pendingRegistration}
-          className="flex-1 py-2 bg-primary-700 hover:bg-primary-800 text-white rounded-lg font-heading font-bold text-sm uppercase tracking-wider transition-colors disabled:opacity-50"
+          className="min-h-12 flex-1 rounded-lg bg-primary-700 py-2 text-sm font-heading font-bold uppercase tracking-wider text-white active:bg-primary-800 disabled:opacity-50 sm:min-h-0"
         >
           {bidLoading ? t("transfers.submitting") : t("transfers.submitBid")}
-        </button>
-        <button
-          type="button"
-          onClick={onClose}
-          className="px-4 py-2 bg-gray-200 dark:bg-navy-700 text-gray-600 dark:text-gray-300 rounded-lg font-heading font-bold text-sm uppercase tracking-wider hover:bg-gray-300 dark:hover:bg-navy-600 transition-colors"
-        >
-          {t("transfers.close")}
         </button>
       </div>
     </>
   );
 }
-
 export default function TransferBidModal(props: TransferBidModalProps) {
   const titleId = `transfer-bid-modal-title-${props.bidTarget.id}`;
-
   return (
     <div
       role="presentation"
-      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center sm:p-4"
       onClick={props.onClose}
     >
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="bg-white dark:bg-navy-800 rounded-xl shadow-2xl border border-gray-200 dark:border-navy-600 p-6 w-full max-w-sm"
-        onClick={(event) => event.stopPropagation()}
+        className="max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-2xl border border-gray-200 bg-white p-4 shadow-2xl dark:border-navy-600 dark:bg-navy-800 sm:max-w-sm sm:rounded-xl sm:p-6"
+        onClick={(e) => e.stopPropagation()}
       >
         <TransferBidForm {...props} />
       </div>

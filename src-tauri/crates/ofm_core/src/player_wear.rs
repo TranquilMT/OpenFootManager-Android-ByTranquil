@@ -28,7 +28,10 @@ pub fn apply_match_wear(player: &mut Player, minutes: u8, rng: &mut impl Rng) {
 
     let minutes_factor = minutes as f64 / 90.0;
     let stamina_factor = player.attributes.stamina as f64 / 100.0;
-    let base_depletion = 40.0 * (1.0 - stamina_factor * 0.4);
+    // A full 90 should normally cost roughly 15–22 condition, not 25–40.
+    // This leaves room for training/recovery and prevents one match from creating
+    // a multi-week fatigue spiral.
+    let base_depletion = 24.0 * (1.0 - stamina_factor * 0.35);
     let depletion = (base_depletion * minutes_factor) as u8;
     player.condition = player.condition.saturating_sub(depletion);
 
@@ -129,7 +132,7 @@ mod tests {
 
         apply_match_wear(&mut player, 90, &mut rng);
 
-        assert_eq!(player.condition, 76);
+        assert_eq!(player.condition, 85);
     }
 
     #[test]

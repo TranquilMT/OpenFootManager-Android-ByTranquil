@@ -1,0 +1,10 @@
+pub fn recruitment_boost(promoted: bool, financial_strength: u8) -> u8 {
+    if promoted {
+        4 + financial_strength.min(100) / 25
+    } else {
+        0
+    }
+}
+pub fn avoid_instant_elite(current: u8, boost: u8) -> u8 {
+    current.saturating_add(boost).min(78)
+}

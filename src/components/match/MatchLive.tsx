@@ -16,6 +16,11 @@ import { getEventDisplay, getPlayerName, makeTeamFallback, phaseLabel } from "./
 import { Badge, TeamLogo } from "../ui";
 import { useSettingsStore } from "../../store/settingsStore";
 import { EventFeed, MatchStats, Lineups } from "./MatchPanels";
+import {
+  cancelSpokenCommentary,
+  spokenCommentaryAvailable,
+  useSpokenCommentary,
+} from "./useSpokenCommentary";
 import MatchScreenLayout from "./MatchScreenLayout";
 import { SubPanel } from "./SubPanel";
 import {
@@ -34,6 +39,8 @@ import {
   Crosshair,
   Target,
   Flag,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 
 type ActivePanel = "events" | "stats" | "lineups";
@@ -67,8 +74,8 @@ export default function MatchLive({
   onFullTime,
   onPenaltyShootout,
 }: MatchLiveProps) {
-  const { t } = useTranslation();
-  const { settings } = useSettingsStore();
+  const { t, i18n } = useTranslation();
+  const { settings, updateSettings } = useSettingsStore();
   const initialSpeed: SimSpeed =
     preferredSpeed ??
     (settings.match_speed === "slow" || settings.match_speed === "fast"
@@ -78,7 +85,9 @@ export default function MatchLive({
   const [activePanel, setActivePanel] = useState<ActivePanel>("events");
   const [isRunning, setIsRunning] = useState(true);
   const [showSubPanel, setShowSubPanel] = useState(false);
+  const [voiceEnabled, setVoiceEnabled] = useState(settings.spoken_match_commentary);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const stepInFlightRef = useRef(false);
   const eventFeedRef = useRef<HTMLDivElement>(null);
   // Track phases we've already signaled to avoid double-firing
   const signaledRef = useRef<Set<string>>(new Set());
@@ -104,6 +113,8 @@ export default function MatchLive({
   // ofm_core/live_match_manager.rs; MINUTES_PER_TICK on this side is what makes batches possible.
   const stepMatch = useCallback(
     async (minutes: number) => {
+      if (stepInFlightRef.current) return;
+      stepInFlightRef.current = true;
       try {
         const results = await invoke<MinuteResult[]>("step_live_match", { minutes });
         if (results.length > 0) {
@@ -161,6 +172,8 @@ export default function MatchLive({
       } catch (err) {
         console.error("Failed to step match:", err);
         setIsRunning(false);
+      } finally {
+        stepInFlightRef.current = false;
       }
     },
     [onSnapshotUpdate, onImportantEvent, onHalfTime, onFullTime, onPenaltyShootout],
@@ -198,6 +211,14 @@ export default function MatchLive({
       eventFeedRef.current.scrollTop = eventFeedRef.current.scrollHeight;
     }
   }, [importantEvents.length]);
+
+  useSpokenCommentary(
+    importantEvents,
+    snapshot,
+    t,
+    i18n.language,
+    voiceEnabled && settings.show_match_commentary,
+  );
 
   // Apply substitution
   const handleSubstitution = async (playerOffId: string, playerOnId: string) => {
@@ -355,10 +376,10 @@ export default function MatchLive({
       }
     >
       {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
         {/* Left Panel: Event Feed + Stats */}
         <div className="flex-1 flex flex-col">
-          <div className="flex bg-white dark:bg-navy-800 border-b border-gray-200 dark:border-navy-700 transition-colors duration-300">
+          <div className="touch-x flex overflow-x-auto bg-white dark:bg-navy-800 border-b border-gray-200 dark:border-navy-700 transition-colors duration-300">
             {[
               {
                 id: "events" as ActivePanel,
@@ -380,7 +401,7 @@ export default function MatchLive({
                 type="button"
                 key={tab.id}
                 onClick={() => setActivePanel(tab.id)}
-                className={`flex items-center gap-2 px-5 py-3 font-heading font-bold text-xs uppercase tracking-wider transition-colors border-b-2 ${
+                className={`flex min-h-11 shrink-0 items-center gap-2 px-4 py-3 sm:px-5 font-heading font-bold text-xs uppercase tracking-wider transition-colors border-b-2 ${
                   activePanel === tab.id
                     ? "text-primary-500 dark:text-primary-400 border-primary-500 bg-primary-50 dark:bg-navy-700/50"
                     : "text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300"
@@ -390,15 +411,31 @@ export default function MatchLive({
                 {tab.label}
               </button>
             ))}
+            {spokenCommentaryAvailable() && (
+              <button
+                type="button"
+                aria-label={t(voiceEnabled ? "match.voiceOff" : "match.voiceOn")}
+                aria-pressed={voiceEnabled}
+                onClick={() => {
+                  setVoiceEnabled((enabled) => !enabled);
+                  void updateSettings({ spoken_match_commentary: !voiceEnabled });
+                  if (voiceEnabled) cancelSpokenCommentary();
+                }}
+                className="ml-auto flex min-h-11 min-w-11 shrink-0 items-center justify-center text-gray-500 dark:text-gray-300"
+              >
+                {voiceEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+              </button>
+            )}
           </div>
 
-          <div className="flex-1 overflow-auto p-4">
+          <div className="touch-scroll min-h-0 flex-1 overflow-auto p-3 sm:p-4">
             {activePanel === "events" && (
               <EventFeed
                 events={importantEvents}
                 snapshot={snapshot}
                 feedRef={eventFeedRef}
                 playerJerseyMap={playerJerseyMap}
+                showCommentary={settings.show_match_commentary}
               />
             )}
             {activePanel === "stats" && <MatchStats snapshot={snapshot} />}
@@ -407,7 +444,7 @@ export default function MatchLive({
         </div>
 
         {/* Right Panel: Controls */}
-        <aside className="w-72 bg-white dark:bg-navy-800 border-l border-gray-200 dark:border-navy-700 flex flex-col transition-colors duration-300">
+        <aside className="w-full shrink-0 bg-white dark:bg-navy-800 border-t lg:w-72 lg:border-l lg:border-t-0 border-gray-200 dark:border-navy-700 flex flex-col transition-colors duration-300">
           {/* Speed Controls */}
           <div className="p-4 border-b border-gray-200 dark:border-navy-700">
             <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-3">
@@ -451,7 +488,7 @@ export default function MatchLive({
                       onPreferredSpeedChange?.(s.id);
                     }
                   }}
-                  className={`flex-1 flex flex-col items-center gap-1 py-2 rounded-lg text-xs font-heading uppercase tracking-wider transition-all ${
+                  className={`flex min-h-11 flex-1 flex-col items-center justify-center gap-1 rounded-lg py-2 text-xs font-heading uppercase tracking-wider transition-all ${
                     speed === s.id
                       ? "bg-primary-500/20 text-primary-500 dark:text-primary-400 ring-1 ring-primary-500/50"
                       : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-navy-700"
@@ -466,7 +503,7 @@ export default function MatchLive({
               <button
                 type="button"
                 onClick={() => stepMatch(1)}
-                className="w-full mt-2 flex items-center justify-center gap-2 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-navy-700 dark:hover:bg-navy-600 rounded-lg text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 transition-colors"
+                className="mt-2 flex min-h-11 w-full items-center justify-center gap-2 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-navy-700 dark:hover:bg-navy-600 rounded-lg text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 transition-colors"
               >
                 <ChevronRight className="w-4 h-4" />
                 {t("match.step1Min")}
@@ -483,7 +520,7 @@ export default function MatchLive({
               <button
                 type="button"
                 onClick={() => setShowSubPanel(!showSubPanel)}
-                className="flex items-center gap-2 px-3 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-navy-700 dark:hover:bg-navy-600 rounded-lg text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 transition-colors"
+                className="flex min-h-11 items-center gap-2 px-3 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-navy-700 dark:hover:bg-navy-600 rounded-lg text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 transition-colors"
               >
                 <RefreshCw className="w-4 h-4" />
                 {t("match.subs")} (
@@ -505,7 +542,7 @@ export default function MatchLive({
                         type="button"
                         key={f}
                         onClick={() => handleFormationChange(f)}
-                        className={`px-2 py-1 rounded text-xs font-heading transition-colors ${cur === f ? "bg-primary-500/20 text-primary-500 dark:text-primary-400 ring-1 ring-primary-500/50" : "bg-gray-100 text-gray-600 hover:text-gray-900 dark:bg-navy-700 dark:text-gray-400 dark:hover:text-gray-300"}`}
+                        className={`min-h-11 rounded px-2 py-1 text-xs font-heading transition-colors ${cur === f ? "bg-primary-500/20 text-primary-500 dark:text-primary-400 ring-1 ring-primary-500/50" : "bg-gray-100 text-gray-600 hover:text-gray-900 dark:bg-navy-700 dark:text-gray-400 dark:hover:text-gray-300"}`}
                       >
                         {f}
                       </button>
@@ -535,7 +572,7 @@ export default function MatchLive({
                         type="button"
                         key={s.id}
                         onClick={() => handlePlayStyleChange(s.id)}
-                        className={`flex items-center gap-1 px-2 py-1 rounded text-xs font-heading transition-colors ${cur === s.id ? "bg-primary-500/20 text-primary-500 dark:text-primary-400 ring-1 ring-primary-500/50" : "bg-gray-100 text-gray-600 hover:text-gray-900 dark:bg-navy-700 dark:text-gray-400 dark:hover:text-gray-300"}`}
+                        className={`flex min-h-11 items-center gap-1 rounded px-2 py-1 text-xs font-heading transition-colors ${cur === s.id ? "bg-primary-500/20 text-primary-500 dark:text-primary-400 ring-1 ring-primary-500/50" : "bg-gray-100 text-gray-600 hover:text-gray-900 dark:bg-navy-700 dark:text-gray-400 dark:hover:text-gray-300"}`}
                       >
                         {s.icon}
                         {t(`common.playStyles.${s.id}`, s.id)}

@@ -170,7 +170,13 @@ function CompareAttributes({
         <p className="text-sm text-gray-600 dark:text-gray-300">
           {t("tactics.compareSelectionHint")}
         </p>
-        <Button type="button" size="sm" onClick={onConfirmSwap} disabled={!canConfirmSwap}>
+        <Button
+          type="button"
+          size="sm"
+          className="min-h-11 w-full sm:min-h-0 sm:w-auto"
+          onClick={onConfirmSwap}
+          disabled={!canConfirmSwap}
+        >
           {t("tactics.confirmSwap")}
         </Button>
       </div>

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { invoke, isTauri } from "@tauri-apps/api/core";
 import type { InvokeArgs } from "@tauri-apps/api/core";
@@ -479,7 +479,7 @@ describe("TransfersTab", (): void => {
 
     fireEvent.click(screen.getByRole("button", { name: /my transfer list/i }));
 
-    expect(screen.getAllByText("Dual Listed")).toHaveLength(1);
+    expect(within(screen.getByRole("table")).getAllByText("Dual Listed")).toHaveLength(1);
     expect(screen.getByText("TRANSFER")).toBeInTheDocument();
     expect(screen.getByText("LOAN")).toBeInTheDocument();
     expect(screen.getByText(/My Transfer List \(1\)/)).toBeInTheDocument();
@@ -506,15 +506,17 @@ describe("TransfersTab", (): void => {
       />,
     );
 
-    expect(screen.getAllByText(/^Market Player \d+$/)).toHaveLength(30);
-    expect(screen.getByText("Market Player 30")).toBeInTheDocument();
-    expect(screen.queryByText("Market Player 31")).not.toBeInTheDocument();
+    expect(within(screen.getByRole("table")).getAllByText(/^Market Player \d+$/)).toHaveLength(30);
+    expect(within(screen.getByRole("table")).getByText("Market Player 30")).toBeInTheDocument();
+    expect(
+      within(screen.getByRole("table")).queryByText("Market Player 31"),
+    ).not.toBeInTheDocument();
     expect(screen.getByText("Showing 1-30 of 65")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Next page" }));
 
     expect(screen.queryByText("Market Player 1")).not.toBeInTheDocument();
-    expect(screen.getByText("Market Player 31")).toBeInTheDocument();
+    expect(within(screen.getByRole("table")).getByText("Market Player 31")).toBeInTheDocument();
     expect(screen.getByText("Showing 31-60 of 65")).toBeInTheDocument();
   });
 
@@ -659,7 +661,7 @@ describe("TransfersTab", (): void => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /^bid$/i }));
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /^bid$/i }));
 
     await waitFor(() => {
       expect(mockedInvoke).toHaveBeenCalledWith("preview_transfer_bid_financial_impact", {
@@ -704,7 +706,7 @@ describe("TransfersTab", (): void => {
         />,
       );
 
-      const playerRow = screen.getByText("John Smith").closest("tr");
+      const playerRow = within(screen.getByRole("table")).getByText("John Smith").closest("tr");
       expect(playerRow).not.toBeNull();
 
       fireEvent.contextMenu(playerRow as HTMLTableRowElement);
@@ -816,7 +818,7 @@ describe("TransfersTab", (): void => {
 
     fireEvent.click(screen.getByRole("button", { name: /offers/i }));
 
-    expect(screen.getByText(/Talks cooled off/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Talks cooled off/i)[0]).toBeInTheDocument();
   });
 
   it("shows bid impact preview and blocks impossible bids", async (): Promise<void> => {
@@ -832,7 +834,7 @@ describe("TransfersTab", (): void => {
 
     render(<TransfersTab gameState={state} onSelectPlayer={vi.fn()} onSelectTeam={vi.fn()} />);
 
-    fireEvent.click(screen.getByRole("button", { name: /^bid$/i }));
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /^bid$/i }));
     fireEvent.change(screen.getByLabelText(/bid amount/i), {
       target: { value: "9.0" },
     });
@@ -914,7 +916,7 @@ describe("TransfersTab", (): void => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /^bid$/i }));
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /^bid$/i }));
     expect(screen.getByRole("dialog", { name: /john smith/i })).toBeInTheDocument();
 
     await waitFor((): void => {
@@ -965,10 +967,12 @@ describe("TransfersTab", (): void => {
 
     fireEvent.click(screen.getByRole("button", { name: /free agent \(1\)/i }));
 
-    expect(screen.getByText("John Smith")).toBeInTheDocument();
+    expect(within(screen.getByRole("table")).getByText("John Smith")).toBeInTheDocument();
     expect(screen.getAllByText("Free Agent").length).toBeGreaterThan(0);
 
-    fireEvent.click(screen.getByRole("button", { name: /offer contract/i }));
+    fireEvent.click(
+      within(screen.getByRole("table")).getByRole("button", { name: /offer contract/i }),
+    );
 
     await waitFor((): void => {
       expect(screen.getByText("Projected financial impact")).toBeInTheDocument();
@@ -1018,7 +1022,7 @@ describe("TransfersTab", (): void => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: /loan \(1\)/i }));
-    fireEvent.click(screen.getByRole("button", { name: /loan offer/i }));
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /loan offer/i }));
     expect(screen.getByLabelText(/loan length/i)).toHaveValue("january_window");
     fireEvent.change(screen.getByLabelText(/wage contribution/i), {
       target: { value: "75" },
@@ -1087,7 +1091,7 @@ describe("TransfersTab", (): void => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /make offer/i }));
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /make offer/i }));
     expect(screen.getByRole("button", { name: /make transfer bid/i })).toBeEnabled();
     fireEvent.click(screen.getByRole("button", { name: /make loan offer/i }));
 
@@ -1107,7 +1111,7 @@ describe("TransfersTab", (): void => {
     });
 
     fireEvent.click(screen.getByRole("button", { name: /close/i }));
-    fireEvent.click(screen.getByRole("button", { name: /make offer/i }));
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /make offer/i }));
   });
 
   it("allows closed-window transfer bid submission when the next opening date is scheduled", async (): Promise<void> => {
@@ -1195,7 +1199,7 @@ describe("TransfersTab", (): void => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /make offer/i }));
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /make offer/i }));
     fireEvent.click(screen.getByRole("button", { name: /make transfer bid/i }));
 
     await waitFor(() => {
@@ -1239,7 +1243,7 @@ describe("TransfersTab", (): void => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /make offer/i }));
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /make offer/i }));
 
     expect(screen.getByRole("button", { name: /make transfer bid/i })).toBeDisabled();
     expect(screen.getByRole("button", { name: /make loan offer/i })).toBeDisabled();
@@ -1290,7 +1294,7 @@ describe("TransfersTab", (): void => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: /loan \(1\)/i }));
-    fireEvent.click(screen.getByRole("button", { name: /loan offer/i }));
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /loan offer/i }));
     fireEvent.change(screen.getByLabelText(/loan length/i), {
       target: { value: "end_of_season" },
     });
@@ -1512,7 +1516,7 @@ describe("TransfersTab", (): void => {
 
     fireEvent.click(screen.getByRole("button", { name: /my transfer list/i }));
 
-    const playerRow = screen.getByText("John Smith").closest("tr");
+    const playerRow = within(screen.getByRole("table")).getByText("John Smith").closest("tr");
     expect(playerRow).not.toBeNull();
 
     fireEvent.contextMenu(playerRow as HTMLTableRowElement);
@@ -1545,7 +1549,7 @@ describe("TransfersTab", (): void => {
 
     fireEvent.click(screen.getByRole("button", { name: /my transfer list/i }));
 
-    const playerRow = screen.getByText("John Smith").closest("tr");
+    const playerRow = within(screen.getByRole("table")).getByText("John Smith").closest("tr");
     expect(playerRow).not.toBeNull();
 
     fireEvent.contextMenu(playerRow as HTMLTableRowElement);
@@ -1597,6 +1601,6 @@ describe("TransfersTab", (): void => {
 
     expect(screen.getByRole("button", { name: /my transfer list \(1\)/i })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /my transfer list/i }));
-    expect(screen.getAllByText("John Smith")).toHaveLength(1);
+    expect(within(screen.getByRole("table")).getAllByText("John Smith")).toHaveLength(1);
   });
 });

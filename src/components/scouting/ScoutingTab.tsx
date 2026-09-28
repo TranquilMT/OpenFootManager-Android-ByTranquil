@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { loadShortlist, saveShortlist } from "./shortlist";
 import { useTranslation } from "react-i18next";
+import { calcAge, formatVal, getPlayerOvr, getTeamName } from "../../lib/helpers";
 import type { GameStateData } from "../../store/gameStore";
 import { getErrorMessage, resolveTranslatedErrorMessage } from "../../utils/errorMessage";
 import { Card, CardBody } from "../ui";
@@ -53,6 +55,20 @@ export default function ScoutingTab({
   const [youthTargetPosition, setYouthTargetPosition] = useState("");
   const [youthSearchError, setYouthSearchError] = useState<string | null>(null);
   const [page, setPage] = useState(0);
+  const careerId = gameState.manager.id;
+  const [shortlist, setShortlist] = useState<string[]>(() => loadShortlist(careerId));
+  useEffect(() => {
+    setShortlist(loadShortlist(careerId));
+  }, [careerId]);
+  const toggleShortlist = (playerId: string) => {
+    setShortlist((current) => {
+      const next = current.includes(playerId)
+        ? current.filter((id) => id !== playerId)
+        : [...current, playerId];
+      saveShortlist(careerId, next);
+      return next;
+    });
+  };
   const {
     bidTarget,
     bidAmount,
@@ -214,6 +230,55 @@ export default function ScoutingTab({
         }}
       />
 
+      <Card>
+        <CardBody>
+          <h3 className="mb-2 font-heading font-bold uppercase">{t("scouting.shortlist")}</h3>
+          {shortlist.length === 0 ? (
+            <p className="text-sm text-gray-500">{t("scouting.shortlistEmpty")}</p>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {shortlist.map((id) => {
+                const player = gameState.players.find((item) => item.id === id && !item.retired);
+                if (!player) return null;
+                return (
+                  <div
+                    key={id}
+                    className="flex min-h-11 flex-wrap items-center gap-2 rounded-lg bg-gray-50 px-3 dark:bg-navy-800"
+                  >
+                    <button
+                      type="button"
+                      className="min-h-11 min-w-0 flex-1 truncate text-left text-sm font-semibold"
+                      onClick={() => onSelectPlayer?.(id)}
+                    >
+                      {player.full_name}
+                    </button>
+                    <span className="text-xs text-gray-500">
+                      {player.team_id
+                        ? getTeamName(gameState.teams, player.team_id)
+                        : t("common.freeAgent")}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {player.position} · {t("scouting.age")} {calcAge(player.date_of_birth)}
+                    </span>
+                    <span className="text-xs font-bold text-primary-500">
+                      OVR {getPlayerOvr(player)} · {formatVal(player.market_value)}
+                    </span>
+                    <button
+                      type="button"
+                      aria-label={`${t("scouting.removeShortlist")}: ${player.full_name}`}
+                      onClick={() => toggleShortlist(id)}
+                      className="min-h-11 rounded-lg px-3 text-xs font-bold text-primary-500"
+                    >
+                      {t("scouting.removeShortlist")}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </CardBody>
+      </Card>
+
       <ScoutingAssignmentsList
         assignments={assignments}
         scouts={scouts}
@@ -274,6 +339,8 @@ export default function ScoutingTab({
       {scouts.length > 0 && (
         <ScoutingPlayerSearchCard
           players={scoutablePlayers}
+          shortlistIds={new Set(shortlist)}
+          onToggleShortlist={toggleShortlist}
           teams={gameState.teams}
           posFilter={posFilter}
           searchQuery={searchQuery}

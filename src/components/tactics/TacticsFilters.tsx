@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+import { Search, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { CORE_POSITIONS, translatePositionAbbreviation } from "../squad/SquadTab.helpers";
@@ -10,14 +11,6 @@ interface TacticsFiltersProps {
   onPositionFilterChange: (value: string) => void;
   playerSearch: string;
   positionFilter: string;
-}
-
-function getClearButtonClassName(isEnabled: boolean): string {
-  if (isEnabled) {
-    return "rounded-lg bg-gray-100 px-3 py-2 text-xs font-heading font-bold uppercase tracking-wider text-gray-600 transition-all hover:bg-gray-200 dark:bg-navy-700 dark:text-gray-300 dark:hover:bg-navy-600";
-  }
-
-  return "cursor-not-allowed rounded-lg bg-gray-100 px-3 py-2 text-xs font-heading font-bold uppercase tracking-wider text-gray-400 transition-all dark:bg-navy-700";
 }
 
 export default function TacticsFilters({
@@ -32,19 +25,25 @@ export default function TacticsFilters({
 
   return (
     <Card>
-      <div className="flex flex-col gap-2 p-3">
-        <input
-          type="text"
-          value={playerSearch}
-          onChange={(event) => onPlayerSearchChange(event.target.value)}
-          placeholder={t("squad.filterPlayers")}
-          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/30 dark:border-navy-600 dark:bg-navy-800 dark:text-gray-200"
-        />
-        <div className="flex gap-2">
+      <div className="flex flex-col gap-2 p-2.5 sm:p-3">
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <input
+            type="search"
+            inputMode="search"
+            value={playerSearch}
+            onChange={(event) => onPlayerSearchChange(event.target.value)}
+            placeholder={t("squad.filterPlayers")}
+            aria-label={t("squad.filterPlayers")}
+            className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-10 pr-3 text-base text-gray-700 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/30 dark:border-navy-600 dark:bg-navy-800 dark:text-gray-200 sm:py-2 sm:text-sm"
+          />
+        </div>
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-2">
           <Select
             value={positionFilter}
             onChange={(event) => onPositionFilterChange(event.target.value)}
             fullWidth
+            aria-label={t("squad.pos")}
           >
             <option value="All">{t("common.all")}</option>
             {CORE_POSITIONS.map((position) => (
@@ -57,9 +56,11 @@ export default function TacticsFilters({
             type="button"
             onClick={onClear}
             disabled={!canClear}
-            className={getClearButtonClassName(canClear)}
+            aria-label={t("common.clear")}
+            className={`flex min-h-11 min-w-11 items-center justify-center rounded-xl px-3 text-xs font-heading font-bold uppercase tracking-wider transition active:scale-95 ${canClear ? "bg-gray-100 text-gray-600 dark:bg-navy-700 dark:text-gray-300" : "cursor-not-allowed bg-gray-100 text-gray-400 opacity-60 dark:bg-navy-700"}`}
           >
-            {t("common.clear")}
+            <X className="h-4 w-4 sm:hidden" />
+            <span className="hidden sm:inline">{t("common.clear")}</span>
           </button>
         </div>
       </div>

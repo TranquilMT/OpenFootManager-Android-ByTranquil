@@ -21,8 +21,11 @@
     "loadGameFailed": "无法加载存档：{{error}}",
     "invalidWorldDb": "无效的世界数据库文件：{{error}}",
     "failedStartGame": "启动游戏失败：{{error}}",
-    "openDiscord": "打开 Discord 社区",
-    "openGithub": "打开 GitHub 仓库",
+    "openGithub": "打开 OFMtouch 的 GitHub 仓库",
+    "openOriginalGithub": "打开原版 OpenFootManager 的 GitHub 仓库",
+    "originalGame": "原版游戏",
+    "doNotShowWhatsNew": "不再显示 v0.3.5 更新提示",
+    "continueToGame": "继续",
     "mainMenu": "主菜单",
     "worldEditor": "世界编辑器"
   },
@@ -1748,6 +1751,7 @@
     "matchCommentaryDesc": "在实时比赛中显示事件解说",
     "confirmAdvance": "推进前确认",
     "confirmAdvanceDesc": "推进一天前请求确认",
+    "confirmAdvancePrompt": "前进到下一天？",
     "continueToNextEvent": "继续将跳至下一个事件",
     "continueToNextEventDesc": "继续会推进到你的下一场比赛、需要处理的事项、转会截止日或重要新闻",
     "savesData": "存档与数据",
@@ -1761,6 +1765,21 @@
     "clearSavesDesc": "永久删除所有已保存的游戏",
     "clear": "清除",
     "savesCleared": "存档已清除！",
+    "spokenCommentary": "语音解说",
+    "spokenCommentaryDesc": "设备支持时朗读比赛中的关键时刻",
+    "whatsNew": "更新内容",
+    "patchPlayers": "新增更多优秀球员，包括稀有的96分球星和升级热门球队。",
+    "patchMatches": "比赛解说更加丰富，加入门框射门和可选语音解说。",
+    "patchMobile": "改进移动端操作、收件箱、国家队与生涯创建。",
+    "patchWelcome": "欢迎来到 OFMtouch！v0.3.5 更新内容",
+    "patchPortraits": "20 张虚构原始人脸让生成球员的肖像更加多样。",
+    "patchWorld": "足球世界扩展至 29 个国家，美洲和亚洲的俱乐部实力也得到提升。",
+    "patchTransfers": "俱乐部策略会影响租借和转会，包括竞争报价与预算检查。",
+    "patchDevelopment": "比赛时间有助于年轻球员成长；青训球探报告会避免重复姓名。",
+    "patchFixes": "修复了原始伤病代码、重复俱乐部名称及世界生成问题。",
+    "patchThanks": "感谢游玩！欢迎在 GitHub 上提交问题，帮助我们改进游戏。",
+    "patchSignature": "感谢游玩，TranquilMT",
+    "patchReportIssue": "在 GitHub 上提交问题",
     "about": "关于",
     "matchModes": {
       "live": "亲临赛场",
@@ -1815,6 +1834,10 @@
     "keyStats": "关键数据"
   },
   "scouting": {
+    "shortlist": "候选名单",
+    "shortlistEmpty": "在此保存球员，以便稍后比较。",
+    "addShortlist": "加入候选名单",
+    "removeShortlist": "从候选名单移除",
     "title": "球探中心",
     "scouts": "球探",
     "activeAssignments": "进行中的任务",
@@ -1875,6 +1898,8 @@
     "live": "直播中",
     "paused": "已暂停",
     "events": "事件",
+    "voiceOn": "开启语音解说",
+    "voiceOff": "关闭语音解说",
     "stats": "数据",
     "lineups": "首发名单",
     "simSpeed": "模拟速度",
@@ -2231,12 +2256,15 @@
       "PenaltyAwarded": "判罚点球"
     },
     "commentary": {
+      "Corner": {"headline": "获得角球", "lines": {"0": "{{team}}获得角球。", "1": "{{team}}准备开出角球。", "2": "{{team}}获得角球传中的机会。"}},
+      "FreeKick": {"headline": "获得任意球", "lines": {"0": "{{team}}获得任意球。", "1": "{{team}}准备主罚任意球。", "2": "任意球给了{{team}}组织进攻的机会。"}},
       "Goal": {
         "headline": "进球啦！",
         "lines": {
           "0": "{{player}} 为{{team}}攻破球门！",
           "1": "{{player}} 破门！多么精彩的射门！",
-          "2": "{{player}} 为{{team}}打进一球！"
+          "2": "{{player}} 为{{team}}打进一球！",
+          "3": "{{player}}为{{team}}完成这次进攻并破门！"
         },
         "opener": {
           "headline": "进球啦！",
@@ -2285,28 +2313,32 @@
         "headline": "点球——进球！",
         "lines": {
           "0": "{{player}} 点球骗过门将！{{team}}从十二码处得分。",
-          "1": "{{player}}冷静罚入点球——{{team}}十二码建功！"
+          "1": "{{player}}冷静罚入点球——{{team}}十二码建功！",
+          "2": "{{player}}为{{team}}罚进点球！"
         }
       },
       "PenaltyMiss": {
         "headline": "点球未进！",
         "lines": {
           "0": "{{player}} 点球没踢进！{{opponent}}如释重负！",
-          "1": "被扑出！{{player}}今晚将梦见这粒点球。"
+          "1": "被扑出！{{player}}今晚将梦见这粒点球。",
+          "2": "{{player}}未能在点球点破门。"
         }
       },
       "PenaltyAwarded": {
         "headline": "点球！",
         "lines": {
           "0": "裁判指向点球点——{{team}}获得点球！",
-          "1": "{{team}}获得点球！关键时刻。"
+          "1": "{{team}}获得点球！关键时刻。",
+          "2": "裁判判给{{team}}一个点球。"
         }
       },
       "ShotSaved": {
         "headline": "精彩扑救！",
         "lines": {
           "0": "{{player}}逼迫门将做出一次扑救。",
-          "1": "门将拒绝了{{player}}的射门！"
+          "1": "门将拒绝了{{player}}的射门！",
+          "2": "门将扑出了{{player}}的射门。"
         },
         "routine": {
           "headline": "被扑出",
@@ -2334,7 +2366,8 @@
         "headline": "差一点点！",
         "lines": {
           "0": "{{player}}的射门为{{team}}稍稍偏出。",
-          "1": "太接近了！{{player}}未能找到目标。"
+          "1": "太接近了！{{player}}未能找到目标。",
+          "2": "{{player}}的射门偏出了球门。"
         },
         "speculative": {
           "headline": "偏出",
@@ -2356,13 +2389,21 @@
             "0": "{{player}}在那里必须得分——令人痛苦地偏出！",
             "1": "{{team}}浪费了一次绝好机会！{{player}}难以置信。"
           }
+        },
+        "woodwork": {
+          "headline": "击中门框！",
+          "lines": {
+            "0": "哎呀！{{player}}为{{team}}射中横梁！",
+            "1": "太可惜了！{{player}}击中门柱！"
+          }
         }
       },
       "ShotBlocked": {
         "headline": "被封堵！",
         "lines": {
           "0": "{{player}}的射门被一位勇敢的后卫封堵。",
-          "1": "身体挡在射线上！{{player}}被阻截。"
+          "1": "身体挡在射线上！{{player}}被阻截。",
+          "2": "防守球员挡住了{{player}}的射门。"
         },
         "bigChance": {
           "headline": "精彩封堵！",
@@ -2376,7 +2417,8 @@
         "headline": "犯规",
         "lines": {
           "0": "{{player}}对{{victim}}犯规。{{opponent}}获得任意球。",
-          "1": "{{player}}在{{victim}}身上送出一个任意球。"
+          "1": "{{player}}在{{victim}}身上送出一个任意球。",
+          "2": "裁判吹罚{{team}}犯规。"
         },
         "hard": {
           "headline": "这是犯规",
@@ -2397,35 +2439,40 @@
         "headline": "黄牌",
         "lines": {
           "0": "{{player}}代表{{team}}吃到一张黄牌。",
-          "1": "{{player}}被出示黄牌。"
+          "1": "{{player}}被出示黄牌。",
+          "2": "裁判向{{player}}出示黄牌。"
         }
       },
       "RedCard": {
         "headline": "红牌！",
         "lines": {
           "0": "{{player}}被罚下场！{{team}}少打一人！",
-          "1": "{{player}}直接红牌！{{team}}遭受重创。"
+          "1": "{{player}}直接红牌！{{team}}遭受重创。",
+          "2": "{{player}}被罚下，{{team}}只能以十人应战。"
         }
       },
       "SecondYellow": {
         "headline": "第二张黄牌——出场！",
         "lines": {
           "0": "{{player}}领到第二张黄牌被罚出场！",
-          "1": "两张黄牌离场——{{player}}让{{team}}少了一人。"
+          "1": "两张黄牌离场——{{player}}让{{team}}少了一人。",
+          "2": "第二张黄牌让{{player}}提前离场。"
         }
       },
       "Injury": {
         "headline": "受伤",
         "lines": {
           "0": "{{player}}倒在地上，需要医疗救治。",
-          "1": "{{team}}令人担忧：{{player}}带伤倒地。"
+          "1": "{{team}}令人担忧：{{player}}带伤倒地。",
+          "2": "比赛暂停，{{player}}正在接受治疗。"
         }
       },
       "Substitution": {
         "headline": "换人",
         "lines": {
           "0": "{{team}}换人：{{player}}上场，{{victim}}下场。",
-          "1": "{{player}}替换{{team}}的{{victim}}。"
+          "1": "{{player}}替换{{team}}的{{victim}}。",
+          "2": "{{team}}换人：{{player}}替下{{victim}}。"
         }
       },
       "KickOff": {
@@ -2453,7 +2500,8 @@
         "headline": "全场结束",
         "lines": {
           "0": "就是这样——全场结束！",
-          "1": "裁判吹响终场哨声。"
+          "1": "裁判吹响终场哨声。",
+          "2": "终场哨响，比赛结果尘埃落定。"
         }
       }
     },
@@ -2723,7 +2771,7 @@
         "nameMaxLength": "名字和姓氏都不能超过 30 个字符。",
         "nationalityRequired": "国籍为必填项。",
         "invalidDobFormat": "出生日期无效。请使用 YYYY-MM-DD 格式。",
-        "minAge": "经理年龄必须至少为 30 岁。",
+        "minAge": "经理年龄必须至少为 18 岁。",
         "invalidDob": "出生日期无效。",
         "startYearMin": "开始年份必须为 1900 或之后。",
         "invalidStartYear": "所选开始年份无效。",

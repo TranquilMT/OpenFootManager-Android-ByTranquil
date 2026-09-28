@@ -21,8 +21,11 @@
     "loadGameFailed": "Impossible de charger la sauvegarde : {{error}}",
     "invalidWorldDb": "Fichier de base de données de monde invalide : {{error}}",
     "failedStartGame": "Échec du démarrage du jeu : {{error}}",
-    "openDiscord": "Ouvrir la communauté Discord",
-    "openGithub": "Ouvrir le dépôt GitHub",
+    "openGithub": "Ouvrir le dépôt GitHub d’OFMtouch",
+    "openOriginalGithub": "Ouvrir le dépôt GitHub original d’OpenFootManager",
+    "originalGame": "Jeu original",
+    "doNotShowWhatsNew": "Ne plus afficher pour la v0.3.5",
+    "continueToGame": "Continuer",
     "mainMenu": "Menu principal",
     "worldEditor": "Éditeur de Monde"
   },
@@ -1748,6 +1751,7 @@
     "matchCommentaryDesc": "Afficher les commentaires d'événements pendant les matchs",
     "confirmAdvance": "Confirmer Avant d'Avancer",
     "confirmAdvanceDesc": "Demander confirmation avant d'avancer d'un jour",
+    "confirmAdvancePrompt": "Passer au jour suivant ?",
     "continueToNextEvent": "Continuer passe à l’événement suivant",
     "continueToNextEventDesc": "Continuer avance jusqu’à votre prochain match, un blocage, une date limite de transfert ou une actualité importante",
     "savesData": "Sauvegardes et Données",
@@ -1761,6 +1765,21 @@
     "clearSavesDesc": "Supprimer définitivement toutes les parties sauvegardées",
     "clear": "Supprimer",
     "savesCleared": "Sauvegardes supprimées !",
+    "spokenCommentary": "Commentaire vocal",
+    "spokenCommentaryDesc": "Lire les moments forts à voix haute si votre appareil le permet",
+    "whatsNew": "Nouveautés",
+    "patchPlayers": "Plus de talents, dont de rares stars notées 96 et de solides candidats à la montée.",
+    "patchMatches": "Plus de réactions, des frappes sur les montants et un commentaire vocal facultatif.",
+    "patchMobile": "Commandes mobiles, boîte de réception, sélections nationales et carrière améliorées.",
+    "patchWelcome": "Bienvenue dans OFMtouch ! Nouveautés de la v0.3.5",
+    "patchPortraits": "20 visages fictifs de référence diversifient les portraits des joueurs générés.",
+    "patchWorld": "Un monde du football plus vaste couvre 29 nations, avec des clubs renforcés en Amérique et en Asie.",
+    "patchTransfers": "La stratégie des clubs guide prêts et transferts, avec offres concurrentes et contrôle du budget.",
+    "patchDevelopment": "Le temps de jeu aide les jeunes à progresser ; les rapports de recrutement évitent les noms répétés.",
+    "patchFixes": "Correction des noms de blessures bruts, des clubs en double et de la génération du monde.",
+    "patchThanks": "Merci de jouer ! Aidez-nous à améliorer le jeu en signalant les problèmes sur GitHub.",
+    "patchSignature": "Merci, TranquilMT",
+    "patchReportIssue": "Signaler un problème sur GitHub",
     "about": "À propos",
     "matchModes": {
       "live": "Aller sur le Terrain",
@@ -1815,6 +1834,10 @@
     "keyStats": "Stats Clés"
   },
   "scouting": {
+    "shortlist": "Liste de favoris",
+    "shortlistEmpty": "Enregistrez des joueurs ici pour les comparer plus tard.",
+    "addShortlist": "Ajouter aux favoris",
+    "removeShortlist": "Retirer des favoris",
     "title": "Centre de Recrutement",
     "scouts": "Recruteurs",
     "activeAssignments": "Missions Actives",
@@ -1875,6 +1898,8 @@
     "live": "En Direct",
     "paused": "En Pause",
     "events": "Événements",
+    "voiceOn": "Activer les commentaires vocaux",
+    "voiceOff": "Désactiver les commentaires vocaux",
     "stats": "Statistiques",
     "lineups": "Compositions",
     "simSpeed": "Vitesse de Simulation",
@@ -2231,12 +2256,15 @@
       "PenaltyAwarded": "Penalty accordé"
     },
     "commentary": {
+      "Corner": {"headline": "Corner pour", "lines": {"0": "Corner pour {{team}}.", "1": "{{team}} se prépare à tirer le corner.", "2": "{{team}} peut centrer depuis le corner."}},
+      "FreeKick": {"headline": "Coup franc pour", "lines": {"0": "Coup franc pour {{team}}.", "1": "{{team}} se prépare à tirer le coup franc.", "2": "Le coup franc offre à {{team}} une occasion de construire une attaque."}},
       "Goal": {
         "headline": "BUUUT !",
         "lines": {
           "0": "{{player}} trouve le fond des filets pour {{team}} !",
           "1": "{{player}} l'envoie ! Quelle finition !",
-          "2": "{{player}} marque pour {{team}} !"
+          "2": "{{player}} marque pour {{team}} !",
+          "3": "{{player}} conclut l'action pour {{team}} !"
         },
         "opener": {
           "headline": "BUUUT !",
@@ -2285,28 +2313,32 @@
         "headline": "PENALTY — BUT !",
         "lines": {
           "0": "{{player}} trompe le gardien sur penalty ! {{team}} marque.",
-          "1": "Sang-froid absolu de {{player}} — penalty transformé pour {{team}} !"
+          "1": "Sang-froid absolu de {{player}} — penalty transformé pour {{team}} !",
+          "2": "{{player}} transforme le penalty pour {{team}} !"
         }
       },
       "PenaltyMiss": {
         "headline": "PENALTY MANQUÉ !",
         "lines": {
           "0": "{{player}} loupe le penalty ! Quel soulagement pour {{opponent}} !",
-          "1": "Arrêté ! {{player}} va faire des cauchemars avec ce penalty."
+          "1": "Arrêté ! {{player}} va faire des cauchemars avec ce penalty.",
+          "2": "{{player}} ne trouve pas le cadre sur penalty."
         }
       },
       "PenaltyAwarded": {
         "headline": "PENALTY !",
         "lines": {
           "0": "L'arbitre pointe le point de penalty — penalty pour {{team}} !",
-          "1": "C'est un penalty pour {{team}} ! Moment capital."
+          "1": "C'est un penalty pour {{team}} ! Moment capital.",
+          "2": "L'arbitre accorde un penalty à {{team}}."
         }
       },
       "ShotSaved": {
         "headline": "QUEL ARRÊT !",
         "lines": {
           "0": "{{player}} contraint le gardien à une belle parade.",
-          "1": "Le gardien refuse le but à {{player}} !"
+          "1": "Le gardien refuse le but à {{player}} !",
+          "2": "Le gardien repousse la frappe de {{player}}."
         },
         "routine": {
           "headline": "ARRÊT",
@@ -2334,7 +2366,8 @@
         "headline": "TOUT PRÈS !",
         "lines": {
           "0": "{{player}} envoie ça à côté de peu pour {{team}}.",
-          "1": "Si proche ! {{player}} ne parvient pas à cadrer."
+          "1": "Si proche ! {{player}} ne parvient pas à cadrer.",
+          "2": "{{player}} envoie sa frappe à côté du but."
         },
         "speculative": {
           "headline": "HORS CADRE",
@@ -2356,13 +2389,21 @@
             "0": "{{player}} devait marquer là — ça passe à côté de façon agoniante !",
             "1": "Une occasion en or gâchée par {{team}} ! {{player}} n'en revient pas."
           }
+        },
+        "woodwork": {
+          "headline": "SUR LA BARRE !",
+          "lines": {
+            "0": "Aïe ! {{player}} frappe la barre pour {{team}} !",
+            "1": "Si près du but ! {{player}} trouve le poteau !"
+          }
         }
       },
       "ShotBlocked": {
         "headline": "BLOQUÉ !",
         "lines": {
           "0": "Le tir de {{player}} est contré par un défenseur courageux.",
-          "1": "Des corps sur la trajectoire ! {{player}} est stoppé."
+          "1": "Des corps sur la trajectoire ! {{player}} est stoppé.",
+          "2": "La défense bloque la tentative de {{player}}."
         },
         "bigChance": {
           "headline": "QUEL BLOCAGE !",
@@ -2376,7 +2417,8 @@
         "headline": "FAUTE",
         "lines": {
           "0": "{{player}} fait faute sur {{victim}}. Coup franc pour {{opponent}}.",
-          "1": "{{player}} concède un coup franc contre {{victim}}."
+          "1": "{{player}} concède un coup franc contre {{victim}}.",
+          "2": "L'arbitre siffle une faute de {{team}}."
         },
         "hard": {
           "headline": "C'EST UNE FAUTE",
@@ -2397,35 +2439,40 @@
         "headline": "CARTON JAUNE",
         "lines": {
           "0": "{{player}} prend un carton jaune avec {{team}}.",
-          "1": "Carton jaune pour {{player}}."
+          "1": "Carton jaune pour {{player}}.",
+          "2": "L'arbitre avertit {{player}}."
         }
       },
       "RedCard": {
         "headline": "CARTON ROUGE !",
         "lines": {
           "0": "{{player}} est expulsé ! {{team}} se retrouve à dix !",
-          "1": "Carton rouge direct pour {{player}} ! Catastrophe pour {{team}}."
+          "1": "Carton rouge direct pour {{player}} ! Catastrophe pour {{team}}.",
+          "2": "{{player}} est expulsé ; {{team}} jouera à dix."
         }
       },
       "SecondYellow": {
         "headline": "DEUXIÈME JAUNE — EXPULSÉ !",
         "lines": {
           "0": "{{player}} prend un deuxième jaune et est expulsé !",
-          "1": "Deux jaunes et dehors — {{player}} laisse {{team}} à dix."
+          "1": "Deux jaunes et dehors — {{player}} laisse {{team}} à dix.",
+          "2": "Un deuxième avertissement met fin au match de {{player}}."
         }
       },
       "Injury": {
         "headline": "BLESSURE",
         "lines": {
           "0": "{{player}} est à terre et nécessite des soins.",
-          "1": "Inquiétude dans {{team}} : {{player}} s'effondre blessé."
+          "1": "Inquiétude dans {{team}} : {{player}} s'effondre blessé.",
+          "2": "Le jeu s'arrête pendant que {{player}} reçoit des soins."
         }
       },
       "Substitution": {
         "headline": "REMPLACEMENT",
         "lines": {
           "0": "{{team}} effectue un changement : {{player}} entre, {{victim}} sort.",
-          "1": "{{player}} remplace {{victim}} dans {{team}}."
+          "1": "{{player}} remplace {{victim}} dans {{team}}.",
+          "2": "{{team}} remplace {{victim}} par {{player}}."
         }
       },
       "KickOff": {
@@ -2453,7 +2500,8 @@
         "headline": "COUP DE SIFFLET FINAL",
         "lines": {
           "0": "Et voilà — c'est terminé !",
-          "1": "L'arbitre siffle la fin du match."
+          "1": "L'arbitre siffle la fin du match.",
+          "2": "Le coup de sifflet final confirme le résultat."
         }
       }
     },
@@ -2723,7 +2771,7 @@
         "nameMaxLength": "Le prénom et le nom ne doivent pas dépasser 30 caractères.",
         "nationalityRequired": "La nationalité est requise.",
         "invalidDobFormat": "Date de naissance invalide. Utilisez le format AAAA-MM-JJ.",
-        "minAge": "L'entraîneur doit avoir au moins 30 ans.",
+        "minAge": "L'entraîneur doit avoir au moins 18 ans.",
         "invalidDob": "Date de naissance invalide.",
         "startYearMin": "L'année de départ doit être 1900 ou ultérieure.",
         "invalidStartYear": "L'année de départ sélectionnée n'est pas valide.",

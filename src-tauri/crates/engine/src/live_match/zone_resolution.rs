@@ -350,6 +350,11 @@ impl LiveMatchState {
                 self.ball_zone = Zone::Midfield;
                 self.possession = def_side;
             } else {
+                let detail = if rng.random_range(0.0..1.0f64) < 0.12 {
+                    EventDetail::Woodwork
+                } else {
+                    detail
+                };
                 let evt = MatchEvent::new(minute, EventType::ShotOffTarget, att_side, zone)
                     .with_player(&shooter.id)
                     .with_detail(detail);

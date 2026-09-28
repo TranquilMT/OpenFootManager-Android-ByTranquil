@@ -11,8 +11,11 @@ use domain::player::{
 };
 use domain::staff::{Staff, StaffAttributes, StaffRole};
 use domain::team::Team;
+use engine::EventType;
+use engine::MatchEvent;
 use engine::Side;
 use engine::report::{GoalDetail, MatchReport, PlayerMatchStats, TeamStats};
+use engine::types::Zone;
 use ofm_core::clock::GameClock;
 use ofm_core::game::Game;
 use ofm_core::turn;
@@ -868,6 +871,73 @@ fn apply_match_report_updates_player_stats() {
     assert_eq!(scorer.stats.interceptions, 1);
     assert_eq!(scorer.stats.fouls_committed, 1);
     assert!(scorer.stats.avg_rating > 0.0);
+}
+
+#[test]
+fn match_injury_persists_and_does_not_shorten_existing_injury() {
+    let mut game = make_game_with_match();
+    let mut report = report_with_scorer(0, 0, "t1_fwd0", Side::Home);
+    report.events.push(
+        MatchEvent::new(30, EventType::Injury, Side::Home, Zone::Midfield).with_player("t1_fwd0"),
+    );
+    turn::apply_match_report(&mut game, 0, "team1", "team2", &report);
+    let injured = game.players.iter().find(|p| p.id == "t1_fwd0").unwrap();
+    assert_eq!(injured.injury.as_ref().unwrap().name, "Muscle strain");
+    assert!(
+        game.messages
+            .iter()
+            .any(|m| m.category == domain::message::MessageCategory::Injury
+                && m.context.player_id.as_deref() == Some("t1_fwd0")
+                && m.body.contains("muscle strain"))
+    );
+    assert!(injured.injury.as_ref().unwrap().days_remaining >= 3);
+    let saved = serde_json::to_string(&game).unwrap();
+    let mut restored: Game = serde_json::from_str(&saved).unwrap();
+    restored.manager.team_id = None;
+    let before = restored
+        .players
+        .iter()
+        .find(|p| p.id == "t1_fwd0")
+        .unwrap()
+        .injury
+        .as_ref()
+        .unwrap()
+        .days_remaining;
+    turn::process_day(&mut restored);
+    let after = restored
+        .players
+        .iter()
+        .find(|p| p.id == "t1_fwd0")
+        .unwrap()
+        .injury
+        .as_ref()
+        .unwrap()
+        .days_remaining;
+    assert_eq!(after, before - 1);
+
+    let mut another = make_game_with_match();
+    another
+        .players
+        .iter_mut()
+        .find(|p| p.id == "t1_fwd0")
+        .unwrap()
+        .injury = Some(Injury {
+        name: "Broken ankle".into(),
+        days_remaining: 40,
+    });
+    turn::apply_match_report(&mut another, 0, "team1", "team2", &report);
+    assert_eq!(
+        another
+            .players
+            .iter()
+            .find(|p| p.id == "t1_fwd0")
+            .unwrap()
+            .injury
+            .as_ref()
+            .unwrap()
+            .days_remaining,
+        40
+    );
 }
 
 #[test]

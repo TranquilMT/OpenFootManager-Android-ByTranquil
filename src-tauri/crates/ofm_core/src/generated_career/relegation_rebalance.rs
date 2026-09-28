@@ -1,0 +1,11 @@
+pub fn wage_budget_pct(relegated: bool) -> u8 {
+    if relegated { 72 } else { 100 }
+}
+pub fn sale_pressure(relegated: bool, high_earner: bool) -> u8 {
+    match (relegated, high_earner) {
+        (true, true) => 80,
+        (true, false) => 45,
+        (false, true) => 20,
+        _ => 5,
+    }
+}

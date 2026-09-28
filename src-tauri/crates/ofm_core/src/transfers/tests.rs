@@ -3,7 +3,7 @@ use crate::clock::GameClock;
 use crate::game::Game;
 use chrono::{TimeZone, Utc};
 use domain::manager::Manager;
-use domain::player::{Player, PlayerAttributes, Position, TransferOfferStatus};
+use domain::player::{LoanOfferStatus, Player, PlayerAttributes, Position, TransferOfferStatus};
 use domain::season::TransferWindowStatus;
 use domain::team::Team;
 
@@ -164,4 +164,54 @@ fn dormant_clubs_outside_the_active_scope_skip_the_market() {
             .any(|offer| offer.from_team_id == "team2"),
         "a dormant club outside the active simulation scope must not shop the market"
     );
+}
+
+#[test]
+fn competing_clubs_approach_same_player_on_separate_days() {
+    let mut game = make_game();
+    game.teams.push(make_team("team3", "Gamma FC", 700));
+
+    evaluate_transfer_market(&mut game);
+    let player = &game.players[0];
+    assert_eq!(
+        player
+            .transfer_offers
+            .iter()
+            .filter(|offer| offer.status == TransferOfferStatus::Pending)
+            .count(),
+        1
+    );
+
+    game.clock.advance_days(1);
+    evaluate_transfer_market(&mut game);
+    let player = &game.players[0];
+    let clubs: std::collections::HashSet<_> = player
+        .transfer_offers
+        .iter()
+        .filter(|offer| offer.status == TransferOfferStatus::Pending)
+        .map(|offer| offer.from_team_id.as_str())
+        .collect();
+    assert_eq!(clubs, ["team2", "team3"].into_iter().collect());
+}
+
+#[test]
+fn loan_and_transfer_interest_share_the_daily_player_limit() {
+    let mut game = make_game();
+    game.teams.push(make_team("team3", "Gamma FC", 700));
+    game.players[0].loan_listed = true;
+
+    evaluate_transfer_market(&mut game);
+
+    let player = &game.players[0];
+    let loans = player
+        .loan_offers
+        .iter()
+        .filter(|offer| offer.status == LoanOfferStatus::Pending)
+        .count();
+    let transfers = player
+        .transfer_offers
+        .iter()
+        .filter(|offer| offer.status == TransferOfferStatus::Pending)
+        .count();
+    assert_eq!(loans + transfers, 1);
 }

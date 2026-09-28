@@ -142,4 +142,38 @@ describe("getCommentary", () => {
     expect(result!.line.length).toBeGreaterThan(0);
     expect(result!.line).not.toMatch(/\{\{.*?\}\}/);
   });
+
+  it("narrates set pieces with the correct attacking team", () => {
+    for (const event_type of ["Corner", "FreeKick"]) {
+      const evt: MatchEvent = {
+        minute: 42,
+        event_type,
+        side: "Away",
+        zone: "HomeBox",
+        player_id: null,
+        secondary_player_id: null,
+        detail: null,
+      };
+      const result = getCommentary(evt, snapshot([evt]), i18n.t.bind(i18n));
+      expect(result?.line).toContain("Away");
+    }
+  });
+
+  it("calls the crossbar only for an engine-confirmed woodwork shot", () => {
+    const evt: MatchEvent = {
+      minute: 56,
+      event_type: "ShotOffTarget",
+      side: "Home",
+      zone: "AwayBox",
+      player_id: "p1",
+      secondary_player_id: null,
+      detail: "Woodwork",
+    };
+    const reaction = getCommentary(evt, snapshot([evt]), i18n.t.bind(i18n));
+    expect(reaction?.headline).toBe("OFF THE WOODWORK!");
+    expect(reaction?.line).toMatch(/crossbar|post/);
+    const ordinaryMiss = { ...evt, detail: { Shot: { danger: "Decent" as const } } };
+    const missReaction = getCommentary(ordinaryMiss, snapshot([ordinaryMiss]), i18n.t.bind(i18n));
+    expect(missReaction?.headline).not.toBe("OFF THE WOODWORK!");
+  });
 });

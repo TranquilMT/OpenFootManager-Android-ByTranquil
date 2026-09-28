@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { Briefcase, Star, Trophy } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
 import type {
   GameStateData,
   NewsArticle,
@@ -10,7 +9,6 @@ import type {
   SeasonManagerAwardEntryData,
 } from "../../store/gameStore";
 import { Badge, Card, CardBody } from "../ui";
-
 interface AwardsCeremonyScreenProps {
   season: number;
   leagueName: string;
@@ -22,7 +20,6 @@ interface AwardsCeremonyScreenProps {
   onSelectPlayer?: (id: string) => void;
   onSelectTeam?: (id: string) => void;
 }
-
 interface ResolvedPlayerWinner {
   entry: SeasonAwardEntryData | null;
   playerName: string;
@@ -31,7 +28,6 @@ interface ResolvedPlayerWinner {
   playerId: string | null;
   teamId: string | null;
 }
-
 interface ResolvedManagerWinner {
   entry: SeasonManagerAwardEntryData | null;
   managerName: string;
@@ -39,7 +35,6 @@ interface ResolvedManagerWinner {
   winRate: string;
   teamId: string | null;
 }
-
 export default function AwardsCeremonyScreen({
   season,
   leagueName,
@@ -51,52 +46,52 @@ export default function AwardsCeremonyScreen({
   onSelectPlayer,
   onSelectTeam,
 }: AwardsCeremonyScreenProps) {
-  const { t } = useTranslation();
-  const goldenBoot = resolvePlayerWinner(
-    awards?.golden_boot[0] ?? null,
-    article,
-    gameState,
-    "goldenBoot",
-  );
-  const playerOfYear = resolvePlayerWinner(
-    awards?.player_of_year[0] ?? null,
-    article,
-    gameState,
-    "poty",
-  );
-  const managerOfSeason = resolveManagerWinner(
-    awards?.manager_of_season[0] ?? null,
-    article,
-    gameState,
-  );
-
+  const { t } = useTranslation(),
+    goldenBoot = resolvePlayerWinner(
+      awards?.golden_boot[0] ?? null,
+      article,
+      gameState,
+      "goldenBoot",
+    ),
+    playerOfYear = resolvePlayerWinner(
+      awards?.player_of_year[0] ?? null,
+      article,
+      gameState,
+      "poty",
+    ),
+    managerOfSeason = resolveManagerWinner(
+      awards?.manager_of_season[0] ?? null,
+      article,
+      gameState,
+    );
   return (
-    <div className="mx-auto max-w-5xl space-y-5 py-6">
+    <div className="mx-auto w-full max-w-5xl space-y-4 overflow-x-hidden py-3 sm:space-y-5 sm:py-6">
       <Card accent="accent">
-        <CardBody className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-xs font-heading font-bold uppercase tracking-[0.25em] text-accent-500">
+        <CardBody className="flex flex-col gap-3 sm:gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="min-w-0">
+            <p className="text-[11px] font-heading font-bold uppercase tracking-[.2em] text-accent-500 sm:text-xs sm:tracking-[.25em]">
               {t("awardsCeremony.title")}
             </p>
-            <h2 className="text-2xl font-heading font-bold uppercase tracking-wide text-gray-900 dark:text-gray-100">
+            <h2 className="mt-1 break-words font-heading text-xl font-bold uppercase tracking-wide text-gray-900 dark:text-gray-100 sm:text-2xl">
               {t("awardsCeremony.subtitle", { season, league: leagueName })}
             </h2>
           </div>
-          <div className="flex flex-wrap gap-2 text-xs">
-            <Badge variant="accent" size="md">
-              {t("awardsCeremony.managerOfSeason")}
-            </Badge>
-            <Badge variant="primary" size="md">
-              {t("awardsCeremony.goldenBoot")}
-            </Badge>
-            <Badge variant="neutral" size="md">
-              {t("awardsCeremony.playerOfYear")}
-            </Badge>
+          <div className="touch-x -mx-1 flex gap-2 px-1 pb-1 text-xs md:mx-0 md:flex-wrap md:px-0">
+            {[
+              ["accent", t("awardsCeremony.managerOfSeason")],
+              ["primary", t("awardsCeremony.goldenBoot")],
+              ["neutral", t("awardsCeremony.playerOfYear")],
+            ].map(([variant, label]) => (
+              <span className="shrink-0" key={label}>
+                <Badge variant={variant as "accent" | "primary" | "neutral"} size="md">
+                  {label}
+                </Badge>
+              </span>
+            ))}
           </div>
         </CardBody>
       </Card>
-
-      <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:gap-5 xl:grid-cols-3">
         <WinnerCard
           icon={<Briefcase className="h-6 w-6" />}
           accent="accent"
@@ -148,40 +143,38 @@ export default function AwardsCeremonyScreen({
           }
         />
       </div>
-
       {(onBack || onContinue) && (
-        <div className="flex flex-wrap justify-end gap-3">
-          {onBack ? (
+        <div className="grid grid-cols-1 gap-2 pt-1 sm:flex sm:justify-end sm:gap-3">
+          {onBack && (
             <button
               type="button"
               onClick={onBack}
-              className="rounded-xl border border-gray-200 px-4 py-2 font-heading font-bold uppercase tracking-wider text-gray-600 transition-colors hover:border-gray-300 hover:text-gray-900 dark:border-navy-600 dark:text-gray-300 dark:hover:border-navy-500 dark:hover:text-white"
+              className="min-h-12 w-full rounded-xl border border-gray-200 px-4 py-2 font-heading font-bold uppercase tracking-wider text-gray-600 active:bg-gray-50 dark:border-navy-600 dark:text-gray-300 dark:active:bg-navy-700 sm:min-h-0 sm:w-auto"
             >
               {t("awardsCeremony.back")}
             </button>
-          ) : null}
-          {onContinue ? (
+          )}
+          {onContinue && (
             <button
               type="button"
               onClick={onContinue}
-              className="rounded-xl bg-primary-500 px-4 py-2 font-heading font-bold uppercase tracking-wider text-white transition-colors hover:bg-primary-600"
+              className="min-h-12 w-full rounded-xl bg-primary-500 px-4 py-2 font-heading font-bold uppercase tracking-wider text-white active:bg-primary-600 sm:min-h-0 sm:w-auto"
             >
               {t("awardsCeremony.continue")}
             </button>
-          ) : null}
+          )}
         </div>
       )}
     </div>
   );
 }
-
 function resolvePlayerWinner(
   entry: SeasonAwardEntryData | null,
   article: NewsArticle | undefined,
   gameState: GameStateData,
   prefix: "goldenBoot" | "poty",
 ): ResolvedPlayerWinner {
-  if (entry) {
+  if (entry)
     return {
       entry,
       playerName: entry.player_name,
@@ -190,35 +183,22 @@ function resolvePlayerWinner(
       playerId: entry.player_id || null,
       teamId: entry.team_id || null,
     };
-  }
-
-  const params = article?.i18n_params ?? {};
-  const playerName = params[`${prefix}Winner`] ?? "-";
-  const teamName = params[`${prefix}Team`] ?? "-";
-  const playerId =
-    gameState.players.find((player) => {
-      return player.full_name === playerName || player.match_name === playerName;
-    })?.id ?? null;
-  const teamId = gameState.teams.find((team) => team.name === teamName)?.id ?? null;
-  const value =
-    prefix === "goldenBoot" ? (params.goldenBootGoals ?? "-") : (params.potyRating ?? "-");
-
-  return {
-    entry: null,
-    playerName,
-    teamName,
-    value,
-    playerId,
-    teamId,
-  };
+  const params = article?.i18n_params ?? {},
+    playerName = params[`${prefix}Winner`] ?? "-",
+    teamName = params[`${prefix}Team`] ?? "-",
+    playerId =
+      gameState.players.find((p) => p.full_name === playerName || p.match_name === playerName)
+        ?.id ?? null,
+    teamId = gameState.teams.find((t) => t.name === teamName)?.id ?? null,
+    value = prefix === "goldenBoot" ? (params.goldenBootGoals ?? "-") : (params.potyRating ?? "-");
+  return { entry: null, playerName, teamName, value, playerId, teamId };
 }
-
 function resolveManagerWinner(
   entry: SeasonManagerAwardEntryData | null,
   article: NewsArticle | undefined,
   gameState: GameStateData,
 ): ResolvedManagerWinner {
-  if (entry) {
+  if (entry)
     return {
       entry,
       managerName: entry.manager_name,
@@ -226,20 +206,16 @@ function resolveManagerWinner(
       winRate: `${Math.round(entry.win_rate)}%`,
       teamId: entry.team_id || null,
     };
-  }
-
-  const params = article?.i18n_params ?? {};
-  const teamName = params.managerTeam ?? "-";
-
+  const params = article?.i18n_params ?? {},
+    teamName = params.managerTeam ?? "-";
   return {
     entry: null,
     managerName: params.managerWinner ?? "-",
     teamName,
     winRate: params.managerWinRate ? `${params.managerWinRate}%` : "-",
-    teamId: gameState.teams.find((team) => team.name === teamName)?.id ?? null,
+    teamId: gameState.teams.find((t) => t.name === teamName)?.id ?? null,
   };
 }
-
 interface WinnerCardProps {
   icon: ReactNode;
   accent: "none" | "primary" | "accent";
@@ -251,7 +227,6 @@ interface WinnerCardProps {
   onSelectName?: () => void;
   onSelectTeam?: () => void;
 }
-
 function WinnerCard({
   icon,
   accent,
@@ -265,50 +240,49 @@ function WinnerCard({
 }: WinnerCardProps) {
   return (
     <Card accent={accent}>
-      <CardBody className="space-y-4">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="text-xs font-heading font-bold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500">
+      <CardBody className="space-y-3 sm:space-y-4">
+        <div className="flex min-w-0 items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-heading font-bold uppercase tracking-[.18em] text-gray-400 dark:text-gray-500 sm:text-xs sm:tracking-[.2em]">
               {title}
             </p>
             {onSelectName ? (
               <button
                 type="button"
                 onClick={onSelectName}
-                className="mt-1 text-left text-2xl font-heading font-bold uppercase tracking-wide text-gray-900 transition-colors hover:text-primary-500 dark:text-gray-100 dark:hover:text-primary-400"
+                className="mt-1 min-h-11 max-w-full break-words text-left font-heading text-xl font-bold uppercase leading-tight tracking-wide text-gray-900 active:text-primary-500 dark:text-gray-100 sm:min-h-0 sm:text-2xl"
               >
                 {name}
               </button>
             ) : (
-              <p className="mt-1 text-2xl font-heading font-bold uppercase tracking-wide text-gray-900 dark:text-gray-100">
+              <p className="mt-1 break-words font-heading text-xl font-bold uppercase leading-tight tracking-wide text-gray-900 dark:text-gray-100 sm:text-2xl">
                 {name}
               </p>
             )}
           </div>
-          <div className="rounded-xl bg-gray-100 p-3 text-gray-700 dark:bg-navy-700 dark:text-gray-200">
+          <div className="shrink-0 rounded-xl bg-gray-100 p-2.5 text-gray-700 dark:bg-navy-700 dark:text-gray-200 sm:p-3">
             {icon}
           </div>
         </div>
-
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           {onSelectTeam ? (
             <button
               type="button"
               onClick={onSelectTeam}
-              className="text-left text-sm font-heading font-bold uppercase tracking-wider text-accent-500 transition-colors hover:text-accent-400"
+              className="min-h-11 max-w-full break-words text-left text-sm font-heading font-bold uppercase tracking-wider text-accent-500 active:text-accent-400 sm:min-h-0"
             >
               {teamName}
             </button>
           ) : (
-            <p className="text-sm font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+            <p className="break-words text-sm font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
               {teamName}
             </p>
           )}
           <div className="rounded-lg bg-gray-50 p-3 dark:bg-navy-800/70">
-            <p className="text-[11px] font-heading font-bold uppercase tracking-[0.18em] text-gray-400 dark:text-gray-500">
+            <p className="text-[10px] font-heading font-bold uppercase tracking-[.16em] text-gray-400 dark:text-gray-500 sm:text-[11px] sm:tracking-[.18em]">
               {valueLabel}
             </p>
-            <p className="mt-2 text-lg font-heading font-bold text-gray-800 dark:text-gray-100">
+            <p className="mt-1 font-heading text-lg font-bold text-gray-800 dark:text-gray-100 sm:mt-2">
               {value}
             </p>
           </div>

@@ -13,7 +13,7 @@ import {
   markMessageRead,
   resolveMessageAction,
 } from "../../services/inboxService";
-import { resolveBackendText, resolveMessage } from "../../utils/backendI18n";
+import { resolveBackendError, resolveBackendText, resolveMessage } from "../../utils/backendI18n";
 import InboxDeleteConfirmModal from "./InboxDeleteConfirmModal";
 import InboxMessageDetailPane from "./InboxMessageDetailPane";
 import InboxMessageListPane from "./InboxMessageListPane";
@@ -45,6 +45,7 @@ export default function InboxTab({
   const { i18n } = useTranslation();
   const { sessionState } = useGameStore();
   const [fetchedMessages, setFetchedMessages] = useState<MessageData[] | null>(null);
+  const inboxSeqRef = useRef(0);
 
   // Prefer live sessionState clock; fall back to prop snapshot while sessionState loads.
   const clockDate = sessionState?.clock.current_date ?? gameState?.clock.current_date ?? null;
@@ -53,9 +54,11 @@ export default function InboxTab({
 
   useEffect(() => {
     let cancelled = false;
+    const seq = ++inboxSeqRef.current;
     fetchMessages()
       .then((msgs) => {
-        if (!cancelled && Array.isArray(msgs)) setFetchedMessages(msgs);
+        if (!cancelled && seq === inboxSeqRef.current && Array.isArray(msgs))
+          setFetchedMessages(msgs);
       })
       .catch(() => {});
     return () => {
@@ -74,8 +77,8 @@ export default function InboxTab({
   const [selectedMessageIds, setSelectedMessageIds] = useState<string[]>([]);
   const [deleteModalState, setDeleteModalState] = useState<DeleteModalState>(null);
   const [effectFeedback, setEffectFeedback] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const inboxSeqRef = useRef(0);
 
   const categoryCounts = useMemo(() => {
     const counts = new Map<string, number>();
@@ -143,6 +146,7 @@ export default function InboxTab({
     actionId: string,
     optionId?: string,
   ): Promise<void> {
+    setActionError(null);
     const message = allMessages.find((currentMessage) => currentMessage.id === messageId);
     const action = message?.actions.find((currentAction) => currentAction.id === actionId);
 
@@ -155,8 +159,10 @@ export default function InboxTab({
       }
     }
 
+    const seq = ++inboxSeqRef.current;
     try {
       const result = await resolveMessageAction(messageId, actionId, optionId);
+      if (seq !== inboxSeqRef.current) return;
 
       setFetchedMessages(result.game.messages);
       onGameUpdate(result.game);
@@ -174,7 +180,9 @@ export default function InboxTab({
         );
         setEffectFeedback(resolvedEffect);
       }
-    } catch {}
+    } catch (error) {
+      if (seq === inboxSeqRef.current) setActionError(resolveBackendError(error));
+    }
   }
 
   async function handleMarkAllRead(): Promise<void> {
@@ -327,7 +335,7 @@ export default function InboxTab({
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full min-h-0 flex-col overflow-hidden">
       <InboxToolbar
         allMessagesCount={allMessages.length}
         bulkSelectionEnabled={bulkSelectionEnabled}
@@ -351,7 +359,7 @@ export default function InboxTab({
         onToggleCategory={handleToggleCategory}
       />
 
-      <div className="flex-1 flex gap-0 rounded-xl overflow-hidden border border-gray-200 dark:border-navy-600 bg-white dark:bg-navy-800 min-h-0">
+      <div className="flex min-h-0 flex-1 gap-0 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-navy-600 dark:bg-navy-800">
         <InboxMessageListPane
           bulkSelectionEnabled={bulkSelectionEnabled}
           filteredMessages={filteredMessages}
@@ -371,7 +379,15 @@ export default function InboxTab({
           onToggleMessageSelection={handleToggleMessageSelection}
         />
 
-        <div className="flex-1 flex flex-col min-w-0">
+        <div
+          data-testid="inbox-reading-pane"
+          className={`${selectedMessage ? "flex" : "hidden md:flex"} min-h-0 min-w-0 flex-1 flex-col overflow-y-auto overscroll-contain`}
+        >
+          {actionError && (
+            <p role="alert" className="px-4 py-2 text-sm text-red-500">
+              {actionError}
+            </p>
+          )}
           <InboxMessageDetailPane
             effectFeedback={effectFeedback}
             currentTeamId={currentTeamId}

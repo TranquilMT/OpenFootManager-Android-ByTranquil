@@ -21,8 +21,11 @@
     "loadGameFailed": "Tidak dapat memuat simpanan: {{error}}",
     "invalidWorldDb": "File database dunia tidak valid: {{error}}",
     "failedStartGame": "Gagal memulai permainan: {{error}}",
-    "openDiscord": "Buka komunitas Discord",
-    "openGithub": "Buka repositori GitHub",
+    "openGithub": "Buka repositori GitHub OFMtouch",
+    "openOriginalGithub": "Buka repositori GitHub asli OpenFootManager",
+    "originalGame": "Game asli",
+    "doNotShowWhatsNew": "Jangan tampilkan lagi untuk v0.3.5",
+    "continueToGame": "Lanjutkan",
     "mainMenu": "Menu Utama",
     "worldEditor": "Editor Dunia"
   },
@@ -1748,6 +1751,7 @@
     "matchCommentaryDesc": "Tampilkan komentar peristiwa selama pertandingan langsung",
     "confirmAdvance": "Konfirmasi Sebelum Melanjutkan",
     "confirmAdvanceDesc": "Minta konfirmasi sebelum melanjutkan satu hari",
+    "confirmAdvancePrompt": "Lanjut ke hari berikutnya?",
     "continueToNextEvent": "Lanjut Melompat ke Peristiwa Berikutnya",
     "continueToNextEventDesc": "Lanjut berjalan maju hingga pertandingan berikutnya, hambatan, batas tenggat transfer, atau berita penting",
     "savesData": "Simpanan & Data",
@@ -1761,6 +1765,21 @@
     "clearSavesDesc": "Hapus permanen semua permainan tersimpan",
     "clear": "Hapus",
     "savesCleared": "Simpanan dihapus!",
+    "spokenCommentary": "Komentar suara",
+    "spokenCommentaryDesc": "Bacakan momen penting pertandingan jika perangkat mendukung",
+    "whatsNew": "Yang baru",
+    "patchPlayers": "Lebih banyak pemain unggulan, termasuk bintang langka berperingkat 96.",
+    "patchMatches": "Lebih banyak reaksi, tembakan membentur tiang, dan komentar suara opsional.",
+    "patchMobile": "Kontrol seluler, kotak masuk, tim nasional, dan awal karier ditingkatkan.",
+    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.3.5",
+    "patchPortraits": "20 wajah fiktif sumber membuat potret pemain hasil generasi lebih beragam.",
+    "patchWorld": "Dunia sepak bola yang lebih luas mencakup 29 negara, dengan klub lebih kuat di Amerika dan Asia.",
+    "patchTransfers": "Strategi klub memandu pinjaman dan transfer, dengan tawaran bersaing serta pemeriksaan anggaran.",
+    "patchDevelopment": "Menit bermain membantu pemain muda berkembang; laporan pencarian bakat menghindari nama berulang.",
+    "patchFixes": "Memperbaiki nama cedera mentah, nama klub ganda, dan masalah pembuatan dunia.",
+    "patchThanks": "Terima kasih sudah bermain! Bantu kami memperbaiki game dengan melaporkan masalah di GitHub.",
+    "patchSignature": "Terima kasih, TranquilMT",
+    "patchReportIssue": "Laporkan masalah di GitHub",
     "about": "Tentang",
     "matchModes": {
       "live": "Ke Lapangan",
@@ -1815,6 +1834,10 @@
     "keyStats": "Statistik Kunci"
   },
   "scouting": {
+    "shortlist": "Daftar pilihan",
+    "shortlistEmpty": "Simpan pemain di sini untuk dibandingkan nanti.",
+    "addShortlist": "Tambah ke daftar pilihan",
+    "removeShortlist": "Hapus dari daftar pilihan",
     "title": "Pusat Scouting",
     "scouts": "Scout",
     "activeAssignments": "Penugasan Aktif",
@@ -1875,6 +1898,8 @@
     "live": "Langsung",
     "paused": "Dijeda",
     "events": "Peristiwa",
+    "voiceOn": "Aktifkan komentar suara",
+    "voiceOff": "Matikan komentar suara",
     "stats": "Statistik",
     "lineups": "Susunan Pemain",
     "simSpeed": "Kecepatan Simulasi",
@@ -2265,12 +2290,15 @@
       "PenaltyAwarded": "Penalti Diberikan"
     },
     "commentary": {
+      "Corner": {"headline": "Sepak pojok untuk", "lines": {"0": "Sepak pojok untuk {{team}}.", "1": "{{team}} bersiap mengambil sepak pojok.", "2": "{{team}} punya kesempatan mengirim bola dari sepak pojok."}},
+      "FreeKick": {"headline": "Tendangan bebas untuk", "lines": {"0": "Tendangan bebas untuk {{team}}.", "1": "{{team}} bersiap mengambil tendangan bebas.", "2": "Tendangan bebas memberi {{team}} peluang membangun serangan."}},
       "Goal": {
         "headline": "GOL!",
         "lines": {
           "0": "{{player}} menjebol gawang {{team}}!",
           "1": "{{player}} melepaskan tembakan! Finishing yang luar biasa!",
-          "2": "{{player}} mencetak gol untuk {{team}}!"
+          "2": "{{player}} mencetak gol untuk {{team}}!",
+          "3": "{{player}} menuntaskan serangan untuk {{team}}!"
         },
         "opener": {
           "headline": "GOL!",
@@ -2319,28 +2347,32 @@
         "headline": "PENALTI — GOL!",
         "lines": {
           "0": "{{player}} mengecoh penjaga gawang! {{team}} mencetak gol dari titik putih.",
-          "1": "Dingin dari {{player}} — penalti berhasil dikonversi untuk {{team}}!"
+          "1": "Dingin dari {{player}} — penalti berhasil dikonversi untuk {{team}}!",
+          "2": "{{player}} mencetak gol penalti untuk {{team}}!"
         }
       },
       "PenaltyMiss": {
         "headline": "PENALTI GAGAL!",
         "lines": {
           "0": "{{player}} gagal dari titik putih! Kelegaan besar bagi {{opponent}}!",
-          "1": "Diselamatkan! {{player}} akan mimpi buruk dengan penalti itu."
+          "1": "Diselamatkan! {{player}} akan mimpi buruk dengan penalti itu.",
+          "2": "{{player}} gagal mencetak gol dari titik penalti."
         }
       },
       "PenaltyAwarded": {
         "headline": "PENALTI!",
         "lines": {
           "0": "Wasit menunjuk titik putih — penalti untuk {{team}}!",
-          "1": "Penalti untuk {{team}}! Momen besar."
+          "1": "Penalti untuk {{team}}! Momen besar.",
+          "2": "Wasit memberikan penalti untuk {{team}}."
         }
       },
       "ShotSaved": {
         "headline": "PENYELAMATAN GEMILANG!",
         "lines": {
           "0": "{{player}} memaksa penjaga gawang melakukan penyelamatan.",
-          "1": "Penjaga gawang menggagalkan {{player}}!"
+          "1": "Penjaga gawang menggagalkan {{player}}!",
+          "2": "Kiper menggagalkan tembakan {{player}}."
         },
         "routine": {
           "headline": "DITEPIS",
@@ -2368,7 +2400,8 @@
         "headline": "NYARIS!",
         "lines": {
           "0": "Tembakan {{player}} melenceng tipis untuk {{team}}.",
-          "1": "Begitu dekat! {{player}} belum berhasil menemukan sasaran."
+          "1": "Begitu dekat! {{player}} belum berhasil menemukan sasaran.",
+          "2": "Tembakan {{player}} melebar dari gawang."
         },
         "speculative": {
           "headline": "MELENCENG",
@@ -2390,13 +2423,21 @@
             "0": "{{player}} seharusnya mencetak gol di situ — meleset dengan menyakitkan!",
             "1": "Peluang emas terbuang sia-sia bagi {{team}}! {{player}} pasti menyesal."
           }
+        },
+        "woodwork": {
+          "headline": "MEMBENTUR MISTAR!",
+          "lines": {
+            "0": "Aduh! Tembakan {{player}} membentur mistar untuk {{team}}!",
+            "1": "Nyaris! Tembakan {{player}} mengenai tiang!"
+          }
         }
       },
       "ShotBlocked": {
         "headline": "DIBLOK!",
         "lines": {
           "0": "Tembakan {{player}} diblok oleh bek yang berani.",
-          "1": "Badan-badan menghadang! {{player}} dihalau."
+          "1": "Badan-badan menghadang! {{player}} dihalau.",
+          "2": "Bek memblok tembakan {{player}}."
         },
         "bigChance": {
           "headline": "BLOK HEBAT!",
@@ -2410,7 +2451,8 @@
         "headline": "PELANGGARAN",
         "lines": {
           "0": "{{player}} melanggar {{victim}}. Tendangan bebas untuk {{opponent}}.",
-          "1": "{{player}} melakukan pelanggaran terhadap {{victim}}."
+          "1": "{{player}} melakukan pelanggaran terhadap {{victim}}.",
+          "2": "Peluit berbunyi untuk pelanggaran oleh {{team}}."
         },
         "hard": {
           "headline": "ITU PELANGGARAN",
@@ -2431,35 +2473,40 @@
         "headline": "KARTU KUNING",
         "lines": {
           "0": "{{player}} tercatat di buku wasit untuk {{team}}.",
-          "1": "Kartu kuning untuk {{player}}."
+          "1": "Kartu kuning untuk {{player}}.",
+          "2": "Wasit memberi {{player}} kartu kuning."
         }
       },
       "RedCard": {
         "headline": "KARTU MERAH!",
         "lines": {
           "0": "{{player}} dikeluarkan! {{team}} bermain dengan sepuluh pemain!",
-          "1": "Kartu merah langsung untuk {{player}}! Bencana bagi {{team}}."
+          "1": "Kartu merah langsung untuk {{player}}! Bencana bagi {{team}}.",
+          "2": "{{player}} diusir; {{team}} harus bermain dengan sepuluh pemain."
         }
       },
       "SecondYellow": {
         "headline": "KARTU KUNING KEDUA — KELUAR!",
         "lines": {
           "0": "{{player}} mendapat kartu kuning kedua dan dikeluarkan!",
-          "1": "Dua kartu kuning dan keluar — {{player}} membuat {{team}} bermain dengan sepuluh pemain."
+          "1": "Dua kartu kuning dan keluar — {{player}} membuat {{team}} bermain dengan sepuluh pemain.",
+          "2": "Kartu kuning kedua mengakhiri laga {{player}}."
         }
       },
       "Injury": {
         "headline": "CEDERA",
         "lines": {
           "0": "{{player}} terjatuh dan membutuhkan perawatan.",
-          "1": "Kekhawatiran bagi {{team}} — {{player}} terjatuh cedera."
+          "1": "Kekhawatiran bagi {{team}} — {{player}} terjatuh cedera.",
+          "2": "Permainan berhenti saat {{player}} mendapat perawatan."
         }
       },
       "Substitution": {
         "headline": "PERGANTIAN PEMAIN",
         "lines": {
           "0": "{{team}} melakukan pergantian: {{player}} masuk, {{victim}} keluar.",
-          "1": "{{player}} menggantikan {{victim}} untuk {{team}}."
+          "1": "{{player}} menggantikan {{victim}} untuk {{team}}.",
+          "2": "{{team}} memasukkan {{player}} menggantikan {{victim}}."
         }
       },
       "KickOff": {
@@ -2487,7 +2534,8 @@
         "headline": "WAKTU PENUH",
         "lines": {
           "0": "Selesai — waktu penuh!",
-          "1": "Wasit mengakhiri pertandingan."
+          "1": "Wasit mengakhiri pertandingan.",
+          "2": "Peluit akhir memastikan hasil pertandingan."
         }
       }
     },
@@ -2731,7 +2779,7 @@
         "nameMaxLength": "Nama depan dan nama belakang tidak boleh melebihi 30 karakter.",
         "nationalityRequired": "Kewarganegaraan wajib diisi.",
         "invalidDobFormat": "Tanggal lahir tidak valid. Gunakan format YYYY-MM-DD.",
-        "minAge": "Manajer harus berusia setidaknya 30 tahun.",
+        "minAge": "Manajer harus berusia setidaknya 18 tahun.",
         "invalidDob": "Tanggal lahir tidak valid.",
         "startYearMin": "Tahun mulai harus 1900 atau lebih baru.",
         "invalidStartYear": "Tahun mulai yang dipilih tidak valid.",

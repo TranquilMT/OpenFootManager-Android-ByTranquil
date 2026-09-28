@@ -18,7 +18,7 @@ export function getNationalTeamFixtures(
 type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
 
 /**
- * Localised name for a national team, given the key and name the backend stored.
+ * Localised country name for a national team, given the key and name the backend stored.
  *
  * The backend stamps `name_key` on every World Cup field member, but the
  * `nations.*` locale block only covers the catalogued nations — a world with
@@ -26,18 +26,17 @@ type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
  * Resolving that unguarded printed the key verbatim: "nations.al National Team".
  *
  * So the key is only trusted once it resolves; otherwise the stored `name` wins,
- * which the backend already fills with a readable label. Every caller must go
- * through here — the three that hand-rolled this all had the same bug.
+ * which the backend already fills with a readable label. Older saves may have
+ * an English "National Team" suffix; remove it for fixture and squad labels.
  */
 export function nationalTeamDisplayName(
   nameKey: string | null | undefined,
   storedName: string,
   t?: TranslateFn,
 ): string {
-  if (!t || !nameKey) return storedName;
-  const nation = t(nameKey, { defaultValue: "" });
-  if (!nation) return storedName;
-  return t("nations.nationalTeamTemplate", { name: nation });
+  const fallback = storedName.replace(/ National Team$/, "");
+  if (!t || !nameKey) return fallback;
+  return t(nameKey, { defaultValue: "" }) || fallback;
 }
 
 /** Display name for a national team, falling back to its id when unknown. */

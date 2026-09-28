@@ -1,0 +1,11 @@
+pub fn annual_decline(age: u8, goalkeeper: bool) -> i8 {
+    let threshold = if goalkeeper { 34 } else { 31 };
+    if age < threshold {
+        0
+    } else {
+        -(1 + ((age - threshold) / 2) as i8)
+    }
+}
+pub fn pace_decline(age: u8) -> u8 {
+    age.saturating_sub(29).min(8)
+}

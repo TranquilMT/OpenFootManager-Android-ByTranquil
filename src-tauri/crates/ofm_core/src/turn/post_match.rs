@@ -5,7 +5,7 @@ use domain::league::{
     MatchResult,
 };
 use domain::player::{
-    PlayerIssue, PlayerIssueCategory, PlayerPromiseKind, Position as DomainPosition,
+    Injury, PlayerIssue, PlayerIssueCategory, PlayerPromiseKind, Position as DomainPosition,
 };
 use domain::stats::{PlayerMatchStatsRecord, StatsState, TeamMatchStatsRecord};
 
@@ -159,6 +159,7 @@ pub fn apply_match_report_with_capture<F>(
 
     // Update player season stats from the engine report
     apply_player_stats(game, report, home_team_id, away_team_id);
+    apply_match_injuries(game, report, home_team_id, away_team_id);
     resolve_post_match_promises(game, report, home_team_id, away_team_id);
 
     // Deplete stamina for players who played, scaled by minutes on pitch
@@ -266,6 +267,53 @@ pub fn apply_match_report_with_capture<F>(
     // Generate match report news article
     if generates_match_news {
         super::news::generate_match_news(game, fixture_index, home_team_id, away_team_id, report);
+    }
+}
+
+fn apply_match_injuries(game: &mut Game, report: &engine::MatchReport, home: &str, away: &str) {
+    for event in &report.events {
+        if event.event_type != engine::EventType::Injury {
+            continue;
+        }
+        let expected_team = match event.side {
+            engine::Side::Home => home,
+            engine::Side::Away => away,
+        };
+        let Some(player) = game.players.iter_mut().find(|player| {
+            event.player_id.as_deref() == Some(player.id.as_str())
+                && player.team_id.as_deref() == Some(expected_team)
+        }) else {
+            continue;
+        };
+        let days = 3 + u32::from(event.minute % 12);
+        if player
+            .injury
+            .as_ref()
+            .is_none_or(|current| current.days_remaining < days)
+        {
+            player.injury = Some(Injury {
+                name: "Muscle strain".to_string(),
+                days_remaining: days,
+            });
+            if game.manager.team_id.as_deref() == Some(expected_team) {
+                game.messages.push(
+                    domain::message::InboxMessage::new(
+                        format!("match_injury_{}_{}_{}", player.id, game.clock.current_date, event.minute),
+                        format!("Injury — {}", player.match_name),
+                        format!("{} sustained a muscle strain during the match. The medical team expects approximately {} days of recovery.", player.match_name, days),
+                        "Head physio".to_string(),
+                        game.clock.current_date.to_rfc3339(),
+                    )
+                    .with_category(domain::message::MessageCategory::Injury)
+                    .with_priority(domain::message::MessagePriority::High)
+                    .with_context(domain::message::MessageContext {
+                        player_id: Some(player.id.clone()),
+                        team_id: Some(expected_team.to_string()),
+                        ..Default::default()
+                    }),
+                );
+            }
+        }
     }
 }
 

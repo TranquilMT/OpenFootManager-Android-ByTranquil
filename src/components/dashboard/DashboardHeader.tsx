@@ -328,20 +328,20 @@ export default function DashboardHeader({
   }
 
   return (
-    <header className="z-10 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-3 shadow-sm transition-colors duration-300 dark:border-navy-700 dark:bg-navy-800">
+    <header className="z-10 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-gray-200 bg-white px-3 py-2 sm:px-6 sm:py-3 lg:flex lg:justify-between shadow-sm transition-colors duration-300 dark:border-navy-700 dark:bg-navy-800">
       <div className="flex items-center gap-3">
         {hasProfileHistory && (
           <button
             type="button"
             onClick={onBack}
-            className="-ml-2 rounded-lg p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-navy-700 dark:hover:text-white"
+            className="-ml-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg sm:-ml-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-navy-700 dark:hover:text-white"
             title={t("common.back")}
           >
             <ArrowLeft className="h-5 w-5" />
           </button>
         )}
         <div>
-          <h2 className="text-xl font-heading font-bold uppercase tracking-wide text-gray-800 dark:text-gray-100">
+          <h2 className="truncate text-base sm:text-xl font-heading font-bold uppercase tracking-wide text-gray-800 dark:text-gray-100">
             {activeTabLabel}
           </h2>
           <p className="mt-0.5 flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
@@ -351,8 +351,8 @@ export default function DashboardHeader({
         </div>
       </div>
 
-      <div className="relative mx-auto flex-1 px-10">
-        <Search className="absolute left-13 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
+      <div className="relative col-span-2 row-start-2 w-full lg:col-auto lg:row-auto lg:mx-auto lg:flex-1 lg:px-10">
+        <Search className="absolute left-3 top-1/2 lg:left-13 h-4 w-4 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
         <input
           type="text"
           placeholder={t("dashboard.searchPlaceholder")}
@@ -360,7 +360,7 @@ export default function DashboardHeader({
           onChange={(event) => onSearchQueryChange(event.target.value)}
           onFocus={onSearchFocus}
           onBlur={onSearchBlur}
-          className="w-full rounded-lg border border-gray-200 bg-gray-100 py-2 pl-9 pr-3 text-sm text-gray-800 transition-all placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50 dark:border-navy-600 dark:bg-navy-700 dark:text-gray-200 dark:placeholder-gray-500"
+          className="min-h-11 w-full rounded-lg border border-gray-200 bg-gray-100 py-2 pl-9 pr-3 text-sm text-gray-800 transition-all placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/50 dark:border-navy-600 dark:bg-navy-700 dark:text-gray-200 dark:placeholder-gray-500"
         />
         {showSearchResults && (
           <div className="absolute left-0 right-0 top-full z-30 mt-1 max-h-80 overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-xl dark:border-navy-600 dark:bg-navy-700">

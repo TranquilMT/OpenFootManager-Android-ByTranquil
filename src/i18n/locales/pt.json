@@ -21,8 +21,11 @@
     "loadGameFailed": "Não foi possível carregar a gravação: {{error}}",
     "invalidWorldDb": "Ficheiro de base de dados de mundo inválido: {{error}}",
     "failedStartGame": "Falha ao iniciar o jogo: {{error}}",
-    "openDiscord": "Abrir comunidade Discord",
-    "openGithub": "Abrir repositório GitHub",
+    "openGithub": "Abrir repositório GitHub do OFMtouch",
+    "openOriginalGithub": "Abrir repositório GitHub original do OpenFootManager",
+    "originalGame": "Jogo original",
+    "doNotShowWhatsNew": "Não voltar a mostrar na v0.3.5",
+    "continueToGame": "Continuar",
     "mainMenu": "Menu principal",
     "worldEditor": "Editor de Mundo"
   },
@@ -1748,6 +1751,7 @@
     "matchCommentaryDesc": "Mostrar comentários de eventos durante jogos ao vivo",
     "confirmAdvance": "Confirmar Antes de Avançar",
     "confirmAdvanceDesc": "Pedir confirmação antes de avançar um dia",
+    "confirmAdvancePrompt": "Avançar para o dia seguinte?",
     "continueToNextEvent": "Continuar avança até ao próximo evento",
     "continueToNextEventDesc": "Continuar avança até ao próximo jogo, um bloqueio, um prazo de transferências ou uma notícia importante",
     "savesData": "Saves e Dados",
@@ -1761,6 +1765,21 @@
     "clearSavesDesc": "Eliminar permanentemente todos os jogos guardados",
     "clear": "Apagar",
     "savesCleared": "Saves apagados!",
+    "spokenCommentary": "Comentário por voz",
+    "spokenCommentaryDesc": "Ler os momentos importantes em voz alta quando o dispositivo permitir",
+    "whatsNew": "Novidades",
+    "patchPlayers": "Mais jogadores de destaque, incluindo raras estrelas de nível 96.",
+    "patchMatches": "Mais reações, remates à trave e comentário por voz opcional.",
+    "patchMobile": "Controlos móveis, caixa de entrada, seleções e início de carreira melhorados.",
+    "patchWelcome": "Bem-vindo ao OFMtouch! Novidades da v0.3.5",
+    "patchPortraits": "20 rostos fictícios de origem tornam os retratos dos jogadores mais variados.",
+    "patchWorld": "Um mundo de futebol maior abrange 29 nações, com clubes mais fortes nas Américas e na Ásia.",
+    "patchTransfers": "As estratégias dos clubes orientam empréstimos e transferências, com ofertas concorrentes e controlo do orçamento.",
+    "patchDevelopment": "O tempo de jogo ajuda os jovens a evoluir; os relatórios de formação evitam nomes repetidos.",
+    "patchFixes": "Corrigidos nomes de lesões ilegíveis, clubes duplicados e falhas na geração do mundo.",
+    "patchThanks": "Obrigado por jogar! Ajuda-nos a melhorar o jogo comunicando problemas no GitHub.",
+    "patchSignature": "Obrigado, TranquilMT",
+    "patchReportIssue": "Comunicar um problema no GitHub",
     "about": "Sobre",
     "matchModes": {
       "live": "Ir para o Campo",
@@ -1815,6 +1834,10 @@
     "keyStats": "Estatísticas-Chave"
   },
   "scouting": {
+    "shortlist": "Lista de favoritos",
+    "shortlistEmpty": "Guarde jogadores aqui para os comparar mais tarde.",
+    "addShortlist": "Adicionar aos favoritos",
+    "removeShortlist": "Remover dos favoritos",
     "title": "Centro de Olheiros",
     "scouts": "Olheiros",
     "activeAssignments": "Atribuições Ativas",
@@ -1875,6 +1898,8 @@
     "live": "Ao Vivo",
     "paused": "Pausado",
     "events": "Eventos",
+    "voiceOn": "Ativar comentário de voz",
+    "voiceOff": "Desativar comentário de voz",
     "stats": "Estatísticas",
     "lineups": "Equipas",
     "simSpeed": "Velocidade de Simulação",
@@ -2231,12 +2256,15 @@
       "PenaltyAwarded": "Penálti Assinalado"
     },
     "commentary": {
+      "Corner": {"headline": "Canto para", "lines": {"0": "Canto para {{team}}.", "1": "{{team}} prepara-se para marcar o canto.", "2": "{{team}} tem a oportunidade de cruzar no canto."}},
+      "FreeKick": {"headline": "Livre para", "lines": {"0": "Livre para {{team}}.", "1": "{{team}} prepara-se para marcar o livre.", "2": "O livre dá a {{team}} uma nova oportunidade de atacar."}},
       "Goal": {
         "headline": "GOOOL!",
         "lines": {
           "0": "{{player}} faz golo para o {{team}}!",
           "1": "{{player}} marca! Que finalização!",
-          "2": "{{player}} marca para o {{team}}!"
+          "2": "{{player}} marca para o {{team}}!",
+          "3": "{{player}} conclui a jogada para {{team}}!"
         },
         "opener": {
           "headline": "GOOOL!",
@@ -2285,28 +2313,32 @@
         "headline": "GRANDE PENALIDADE — GOLO!",
         "lines": {
           "0": "{{player}} bate o guarda-redes da marca dos onze metros! O {{team}} marca.",
-          "1": "Sangue frio de {{player}} — grande penalidade convertida para o {{team}}!"
+          "1": "Sangue frio de {{player}} — grande penalidade convertida para o {{team}}!",
+          "2": "{{player}} converte o penálti para {{team}}!"
         }
       },
       "PenaltyMiss": {
         "headline": "GRANDE PENALIDADE FALHADA!",
         "lines": {
           "0": "{{player}} falha da marca dos onze metros! Que alívio para o {{opponent}}!",
-          "1": "Defendida! {{player}} vai ter pesadelos com este penálti."
+          "1": "Defendida! {{player}} vai ter pesadelos com este penálti.",
+          "2": "{{player}} falha a finalização da marca de penálti."
         }
       },
       "PenaltyAwarded": {
         "headline": "PENÁLTI!",
         "lines": {
           "0": "O árbitro aponta para a marca dos onze metros — penálti para o {{team}}!",
-          "1": "É penálti para o {{team}}! Momento decisivo."
+          "1": "É penálti para o {{team}}! Momento decisivo.",
+          "2": "O árbitro assinala penálti para {{team}}."
         }
       },
       "ShotSaved": {
         "headline": "GRANDE DEFESA!",
         "lines": {
           "0": "{{player}} obriga o guarda-redes a uma defesa.",
-          "1": "O guarda-redes nega o golo a {{player}}!"
+          "1": "O guarda-redes nega o golo a {{player}}!",
+          "2": "O guarda-redes defende o remate de {{player}}."
         },
         "routine": {
           "headline": "DEFESA",
@@ -2334,7 +2366,8 @@
         "headline": "QUE PERTO!",
         "lines": {
           "0": "{{player}} manda ao lado por pouco para o {{team}}.",
-          "1": "Tão perto! {{player}} não consegue acertar na baliza."
+          "1": "Tão perto! {{player}} não consegue acertar na baliza.",
+          "2": "{{player}} remata ao lado da baliza."
         },
         "speculative": {
           "headline": "FORA",
@@ -2356,13 +2389,21 @@
             "0": "{{player}} tinha mesmo de marcar ali — saiu ao lado de forma agónica!",
             "1": "Uma oportunidade enorme desperdiçada pelo {{team}}! {{player}} não vai acreditar."
           }
+        },
+        "woodwork": {
+          "headline": "NA TRAVE!",
+          "lines": {
+            "0": "Ui! {{player}} acerta na barra por {{team}}!",
+            "1": "Por pouco! {{player}} acerta no poste!"
+          }
         }
       },
       "ShotBlocked": {
         "headline": "BLOQUEADO!",
         "lines": {
           "0": "O remate de {{player}} é bloqueado por um defesa corajoso.",
-          "1": "Corpos no caminho! {{player}} é travado."
+          "1": "Corpos no caminho! {{player}} é travado.",
+          "2": "A defesa bloqueia o remate de {{player}}."
         },
         "bigChance": {
           "headline": "GRANDE BLOQUEIO!",
@@ -2376,7 +2417,8 @@
         "headline": "FALTA",
         "lines": {
           "0": "{{player}} faz falta sobre {{victim}}. Livre para o {{opponent}}.",
-          "1": "{{player}} oferece um livre direto contra {{victim}}."
+          "1": "{{player}} oferece um livre direto contra {{victim}}.",
+          "2": "O árbitro assinala falta de {{team}}."
         },
         "hard": {
           "headline": "É FALTA",
@@ -2397,35 +2439,40 @@
         "headline": "CARTÃO AMARELO",
         "lines": {
           "0": "{{player}} vê o amarelo pelo {{team}}.",
-          "1": "Cartão amarelo para {{player}}."
+          "1": "Cartão amarelo para {{player}}.",
+          "2": "O árbitro mostra o cartão amarelo a {{player}}."
         }
       },
       "RedCard": {
         "headline": "CARTÃO VERMELHO!",
         "lines": {
           "0": "{{player}} é expulso! O {{team}} fica com dez!",
-          "1": "Vermelho direto para {{player}}! Desastre para o {{team}}."
+          "1": "Vermelho direto para {{player}}! Desastre para o {{team}}.",
+          "2": "{{player}} é expulso; {{team}} fica reduzido a dez."
         }
       },
       "SecondYellow": {
         "headline": "SEGUNDO AMARELO — EXPULSO!",
         "lines": {
           "0": "{{player}} vê o segundo amarelo e é expulso!",
-          "1": "Dois amarelos e fora — {{player}} deixa o {{team}} reduzido."
+          "1": "Dois amarelos e fora — {{player}} deixa o {{team}} reduzido.",
+          "2": "O segundo amarelo termina o jogo de {{player}}."
         }
       },
       "Injury": {
         "headline": "LESÃO",
         "lines": {
           "0": "{{player}} está no chão e precisa de assistência.",
-          "1": "Preocupação no {{team}}: {{player}} cai lesionado."
+          "1": "Preocupação no {{team}}: {{player}} cai lesionado.",
+          "2": "O jogo para enquanto {{player}} recebe assistência."
         }
       },
       "Substitution": {
         "headline": "SUBSTITUIÇÃO",
         "lines": {
           "0": "O {{team}} faz uma substituição: {{player}} entra, {{victim}} sai.",
-          "1": "{{player}} substitui {{victim}} no {{team}}."
+          "1": "{{player}} substitui {{victim}} no {{team}}.",
+          "2": "{{team}} lança {{player}} para o lugar de {{victim}}."
         }
       },
       "KickOff": {
@@ -2453,7 +2500,8 @@
         "headline": "TEMPO FINAL",
         "lines": {
           "0": "É isso — tempo final!",
-          "1": "O árbitro encerra o encontro."
+          "1": "O árbitro encerra o encontro.",
+          "2": "O apito final confirma o resultado."
         }
       }
     },
@@ -2723,7 +2771,7 @@
         "nameMaxLength": "O primeiro nome e o apelido não podem exceder 30 caracteres.",
         "nationalityRequired": "A nacionalidade é obrigatória.",
         "invalidDobFormat": "Data de nascimento inválida. Usa o formato AAAA-MM-DD.",
-        "minAge": "O treinador tem de ter pelo menos 30 anos.",
+        "minAge": "O treinador tem de ter pelo menos 18 anos.",
         "invalidDob": "Data de nascimento inválida.",
         "startYearMin": "O ano de início deve ser 1900 ou posterior.",
         "invalidStartYear": "O ano de início selecionado não é válido.",

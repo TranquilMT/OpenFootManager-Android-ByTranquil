@@ -1,0 +1,9 @@
+pub fn intake_size(academy: u8) -> u8 {
+    3 + academy.min(100) / 20
+}
+pub fn minimum_potential_bonus(academy: u8) -> u8 {
+    academy.min(100) / 12
+}
+pub fn exceptional_chance_per_thousand(academy: u8) -> u16 {
+    5 + academy.min(100) as u16 / 2
+}

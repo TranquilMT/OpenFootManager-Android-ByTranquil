@@ -21,8 +21,11 @@
     "loadGameFailed": "Kayıt yüklenemedi: {{error}}",
     "invalidWorldDb": "Geçersiz dünya veritabanı dosyası: {{error}}",
     "failedStartGame": "Oyun başlatılamadı: {{error}}",
-    "openDiscord": "Discord topluluğunu aç",
-    "openGithub": "GitHub deposunu aç",
+    "openGithub": "OFMtouch GitHub deposunu aç",
+    "openOriginalGithub": "Orijinal OpenFootManager GitHub deposunu aç",
+    "originalGame": "Orijinal oyun",
+    "doNotShowWhatsNew": "v0.3.5 için bir daha gösterme",
+    "continueToGame": "Devam et",
     "mainMenu": "Ana Menü",
     "worldEditor": "Dünya Editörü"
   },
@@ -1748,6 +1751,7 @@
     "matchCommentaryDesc": "Canlı maçlarda olay anlatımını göster",
     "confirmAdvance": "İlerlemeden Önce Onayla",
     "confirmAdvanceDesc": "Bir günü ilerletmeden önce onay iste",
+    "confirmAdvancePrompt": "Sonraki güne geçilsin mi?",
     "continueToNextEvent": "Devam Et Bir Sonraki Olaya Atlar",
     "continueToNextEventDesc": "Devam Et; bir sonraki maçınıza, bir engele, transfer son gününe veya önemli bir habere kadar ilerler",
     "savesData": "Kayıtlar ve Veriler",
@@ -1761,6 +1765,21 @@
     "clearSavesDesc": "Tüm kayıtlı oyunları kalıcı olarak sil",
     "clear": "Temizle",
     "savesCleared": "Kayıtlar silindi!",
+    "spokenCommentary": "Sesli anlatım",
+    "spokenCommentaryDesc": "Cihaz destekliyorsa önemli maç anlarını sesli oku",
+    "whatsNew": "Yenilikler",
+    "patchPlayers": "Nadir 96 puanlı yıldızlar dahil daha fazla öne çıkan oyuncu.",
+    "patchMatches": "Daha fazla maç tepkisi, direğe çarpan şutlar ve isteğe bağlı sesli anlatım.",
+    "patchMobile": "Mobil kontroller, gelen kutusu, millî takımlar ve kariyer başlangıcı iyileştirildi.",
+    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.3.5 yenilikleri",
+    "patchPortraits": "20 kurgusal kaynak yüz, üretilen oyuncu portrelerini daha çeşitli kılıyor.",
+    "patchWorld": "Futbol dünyası 29 ülkeyi kapsıyor; Amerika ve Asya kulüpleri güçlendirildi.",
+    "patchTransfers": "Kulüp stratejileri kiralık ve bonservisli transferleri, rakip teklifleri ve bütçe kontrollerini yönlendiriyor.",
+    "patchDevelopment": "Oynama süresi gençlerin gelişmesine yardım ediyor; altyapı gözlem raporlarında yinelenen adlar azaltıldı.",
+    "patchFixes": "Ham sakatlık adları, yinelenen kulüp adları ve dünya oluşturma hataları düzeltildi.",
+    "patchThanks": "Oynadığınız için teşekkürler! Sorunları GitHub’da bildirerek oyunu geliştirmemize yardımcı olun.",
+    "patchSignature": "Teşekkürler, TranquilMT",
+    "patchReportIssue": "GitHub’da sorun bildir",
     "about": "Hakkında",
     "matchModes": {
       "live": "Sahaya Çık",
@@ -1815,6 +1834,10 @@
     "keyStats": "Öne Çıkan İstatistikler"
   },
   "scouting": {
+    "shortlist": "İzleme listesi",
+    "shortlistEmpty": "Oyuncuları daha sonra karşılaştırmak için buraya kaydedin.",
+    "addShortlist": "İzleme listesine ekle",
+    "removeShortlist": "İzleme listesinden çıkar",
     "title": "Scout Merkezi",
     "scouts": "Scoutlar",
     "activeAssignments": "Aktif Görevler",
@@ -1875,6 +1898,8 @@
     "live": "Canlı",
     "paused": "Duraklatıldı",
     "events": "Olaylar",
+    "voiceOn": "Sesli anlatımı aç",
+    "voiceOff": "Sesli anlatımı kapat",
     "stats": "İstatistikler",
     "lineups": "Dizilişler",
     "simSpeed": "Simülasyon Hızı",
@@ -2265,12 +2290,15 @@
       "PenaltyAwarded": "Penaltı Kazanıldı"
     },
     "commentary": {
+      "Corner": {"headline": "için korner", "lines": {"0": "{{team}} için korner.", "1": "{{team}} korneri kullanmaya hazırlanıyor.", "2": "{{team}} kornerden orta yapma şansı buluyor."}},
+      "FreeKick": {"headline": "için serbest vuruş", "lines": {"0": "{{team}} için serbest vuruş.", "1": "{{team}} serbest vuruşa hazırlanıyor.", "2": "Serbest vuruş {{team}} için yeni bir hücum fırsatı."}},
       "Goal": {
         "headline": "GOOOL!",
         "lines": {
           "0": "{{player}} topu ağlarla buluşturuyor, {{team}} golü buldu!",
           "1": "{{player}} bitiriyor! Ne müthiş bir vuruş!",
-          "2": "{{player}}, {{team}} adına skoru değiştiriyor!"
+          "2": "{{player}}, {{team}} adına skoru değiştiriyor!",
+          "3": "{{player}}, {{team}} adına atağı golle tamamlıyor!"
         },
         "opener": {
           "headline": "GOOOL!",
@@ -2319,28 +2347,32 @@
         "headline": "PENALTI — GOL!",
         "lines": {
           "0": "{{player}} kaleciyi ters köşeye yatırıyor! {{team}} penaltıdan skoru değiştiriyor.",
-          "1": "{{player}} buz gibi soğukkanlı — penaltı gole dönüşüyor, {{team}} yükseliyor!"
+          "1": "{{player}} buz gibi soğukkanlı — penaltı gole dönüşüyor, {{team}} yükseliyor!",
+          "2": "{{player}}, {{team}} için penaltıyı gole çeviriyor!"
         }
       },
       "PenaltyMiss": {
         "headline": "PENALTI KAÇTI!",
         "lines": {
           "0": "{{player}} penaltı noktasından harcıyor! {{opponent}} için ne büyük şans!",
-          "1": "Kurtardı! {{player}} bu penaltıyı kabuslarında görecek."
+          "1": "Kurtardı! {{player}} bu penaltıyı kabuslarında görecek.",
+          "2": "{{player}} penaltı noktasından golü bulamıyor."
         }
       },
       "PenaltyAwarded": {
         "headline": "PENALTI!",
         "lines": {
           "0": "Hakem noktayı gösteriyor — penaltı {{team}} lehine!",
-          "1": "{{team}} penaltı kazandı! Çok kritik bir an."
+          "1": "{{team}} penaltı kazandı! Çok kritik bir an.",
+          "2": "Hakem {{team}} lehine penaltı veriyor."
         }
       },
       "ShotSaved": {
         "headline": "MÜTHİŞ KURTARIŞ!",
         "lines": {
           "0": "{{player}} kaleciye kurtarış yaptırıyor.",
-          "1": "Kaleci {{player}}'a geçit vermiyor!"
+          "1": "Kaleci {{player}}'a geçit vermiyor!",
+          "2": "Kaleci {{player}} oyuncusunun şutunu kurtarıyor."
         },
         "routine": {
           "headline": "KURTARIŞ",
@@ -2368,7 +2400,8 @@
         "headline": "ÇOK YAKINDI!",
         "lines": {
           "0": "{{player}}'ın vuruşu {{team}} adına az farkla dışarı gidiyor.",
-          "1": "Çok yakın! {{player}} hedefi bir türlü bulamıyor."
+          "1": "Çok yakın! {{player}} hedefi bir türlü bulamıyor.",
+          "2": "{{player}} şutu kalenin dışına gönderiyor."
         },
         "speculative": {
           "headline": "İSABETSİZ",
@@ -2390,13 +2423,21 @@
             "0": "{{player}} orada golü bulmalıydı — acı verecek kadar az farkla dışarı!",
             "1": "{{team}} adına altın değerinde bir fırsat harcanıyor! {{player}} kendine kızacak."
           }
+        },
+        "woodwork": {
+          "headline": "DİREKTEN DÖNDÜ!",
+          "lines": {
+            "0": "Ah! {{player}} {{team}} için üst direğe vurdu!",
+            "1": "Çok yakındı! {{player}} direğe takıldı!"
+          }
         }
       },
       "ShotBlocked": {
         "headline": "BLOKE EDİLDİ!",
         "lines": {
           "0": "{{player}}'ın şutu cesur bir savunmacıya çarpıyor.",
-          "1": "Araya giren vücutlar! {{player}}'a izin yok."
+          "1": "Araya giren vücutlar! {{player}}'a izin yok.",
+          "2": "Savunma {{player}} oyuncusunun şutunu engelliyor."
         },
         "bigChance": {
           "headline": "MÜTHİŞ BLOK!",
@@ -2410,7 +2451,8 @@
         "headline": "FAUL",
         "lines": {
           "0": "{{player}}, {{victim}}'a faul yapıyor. Serbest vuruş {{opponent}} lehine.",
-          "1": "{{player}}, {{victim}}'a yaptığı faulle serbest vuruş veriyor."
+          "1": "{{player}}, {{victim}}'a yaptığı faulle serbest vuruş veriyor.",
+          "2": "Hakem {{team}} aleyhine faul düdüğü çalıyor."
         },
         "hard": {
           "headline": "FAUL VAR",
@@ -2431,35 +2473,40 @@
         "headline": "SARI KART",
         "lines": {
           "0": "{{team}} oyuncusu {{player}} deftere yazılıyor.",
-          "1": "{{player}} sarı kart görüyor."
+          "1": "{{player}} sarı kart görüyor.",
+          "2": "Hakem {{player}} oyuncusuna sarı kart gösteriyor."
         }
       },
       "RedCard": {
         "headline": "KIRMIZI KART!",
         "lines": {
           "0": "{{player}} oyun dışı kalıyor! {{team}} 10 kişi!",
-          "1": "{{player}} direkt kırmızı görüyor! {{team}} için felaket."
+          "1": "{{player}} direkt kırmızı görüyor! {{team}} için felaket.",
+          "2": "{{player}} atılıyor; {{team}} on kişiyle devam edecek."
         }
       },
       "SecondYellow": {
         "headline": "İKİNCİ SARIDAN KIRMIZI!",
         "lines": {
           "0": "{{player}} ikinci sarı kartını görüyor ve oyun dışı kalıyor!",
-          "1": "İki sarı ve dışarı — {{player}}, {{team}} takımını eksik bırakıyor."
+          "1": "İki sarı ve dışarı — {{player}}, {{team}} takımını eksik bırakıyor.",
+          "2": "İkinci sarı kart {{player}} için maçı bitiriyor."
         }
       },
       "Injury": {
         "headline": "SAKATLIK",
         "lines": {
           "0": "{{player}} yerde ve tedaviye ihtiyacı var.",
-          "1": "{{player}} sakatlanarak yerde kalıyor; {{team}} cephesinde endişe var."
+          "1": "{{player}} sakatlanarak yerde kalıyor; {{team}} cephesinde endişe var.",
+          "2": "{{player}} tedavi görürken oyun duruyor."
         }
       },
       "Substitution": {
         "headline": "OYUNCU DEĞİŞİKLİĞİ",
         "lines": {
           "0": "{{team}} değişikliğe gidiyor: {{player}} oyunda, {{victim}} kenarda.",
-          "1": "{{team}} takımında {{player}}, {{victim}}'ın yerine oyuna giriyor."
+          "1": "{{team}} takımında {{player}}, {{victim}}'ın yerine oyuna giriyor.",
+          "2": "{{team}}, {{victim}} yerine {{player}} oyuncusunu oyuna alıyor."
         }
       },
       "KickOff": {
@@ -2487,7 +2534,8 @@
         "headline": "MAÇ SONU",
         "lines": {
           "0": "İşte bu kadar — maç bitti!",
-          "1": "Hakem maçı sona erdiriyor."
+          "1": "Hakem maçı sona erdiriyor.",
+          "2": "Son düdükle sonuç kesinleşiyor."
         }
       }
     },
@@ -2731,7 +2779,7 @@
         "nameMaxLength": "Ad ve soyad 30 karakteri aşmamalıdır.",
         "nationalityRequired": "Uyruk zorunludur.",
         "invalidDobFormat": "Geçersiz doğum tarihi. YYYY-AA-GG biçimini kullanın.",
-        "minAge": "Menajer en az 30 yaşında olmalıdır.",
+        "minAge": "Menajer en az 18 yaşında olmalıdır.",
         "invalidDob": "Geçersiz doğum tarihi.",
         "startYearMin": "Başlangıç yılı 1900 veya sonrası olmalıdır.",
         "invalidStartYear": "Geçersiz başlangıç yılı seçildi.",

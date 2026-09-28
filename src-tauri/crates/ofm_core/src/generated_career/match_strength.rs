@@ -1,0 +1,10 @@
+pub fn team_strength(starting_ovr: u8, fitness: u8, morale: u8, tactical_fit: u8) -> u8 {
+    let score = starting_ovr as u16 * 65 / 100
+        + fitness as u16 * 10 / 100
+        + morale as u16 * 10 / 100
+        + tactical_fit as u16 * 15 / 100;
+    score.min(96) as u8
+}
+pub fn gap(a: u8, b: u8) -> i8 {
+    (a as i16 - b as i16).clamp(-25, 25) as i8
+}

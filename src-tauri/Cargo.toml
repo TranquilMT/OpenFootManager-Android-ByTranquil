@@ -1,7 +1,7 @@
 [package]
 name = "openfootmanager"
-version = "0.1.0"
-description = "Openfoot Manager Android Alpha"
+version = "0.3.0"
+description = "OFMtouch Android Nightly"
 authors = ["Sturdy Robot (admin@esportsmanager.net)"]
 edition = "2021"
 publish = false

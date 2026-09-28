@@ -82,6 +82,16 @@ export default function InboxMessageListPane({
               <ContextMenu items={contextItems} key={message.id}>
                 <div
                   onClick={() => onSelectMessage(message.id)}
+                  onKeyDown={(event) => {
+                    if (event.target !== event.currentTarget) return;
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      onSelectMessage(message.id);
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${t("inbox.openMessage")}: ${message.subject}`}
                   className={getMessageRowClassName(isSelected, message.read)}
                   data-testid={`inbox-row-${message.id}`}
                 >

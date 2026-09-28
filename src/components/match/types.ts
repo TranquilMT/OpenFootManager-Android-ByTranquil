@@ -10,6 +10,7 @@ export type GoalContext = "Opener" | "Equaliser" | "Extends" | "Consolation";
 // Serde externally-tagged representation of the Rust EventDetail enum.
 export type EventDetail =
   | { Shot: { danger: DangerBand } }
+  | "Woodwork"
   | { Save: { quality: SaveQuality } }
   | { Foul: { severity: FoulSeverity } }
   | { Goal: { context: GoalContext } };

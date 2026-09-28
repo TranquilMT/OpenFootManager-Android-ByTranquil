@@ -1,105 +1,93 @@
 import { useTranslation } from "react-i18next";
-
 import type { PlayerData, ScoutingAssignment, StaffData } from "../../store/gameStore";
 import { countryName } from "../../lib/countries";
 import { Badge, Card, CardBody, CardHeader, CountryFlag, ProgressBar } from "../ui";
-import { Eye } from "lucide-react";
+import { Eye, Clock3 } from "lucide-react";
 import { scoutAssignmentCount, scoutMaxSlots } from "./ScoutingTab.helpers";
-
-interface ScoutingScoutDetailsCardProps {
+interface Props {
   scouts: StaffData[];
   assignments: ScoutingAssignment[];
   players: PlayerData[];
 }
-
-export default function ScoutingScoutDetailsCard({
-  scouts,
-  assignments,
-  players,
-}: ScoutingScoutDetailsCardProps) {
+export default function ScoutingScoutDetailsCard({ scouts, assignments, players }: Props) {
   const { t, i18n } = useTranslation();
-
-  if (scouts.length === 0) {
-    return null;
-  }
-
+  if (scouts.length === 0) return null;
   return (
     <Card>
       <CardHeader>{t("scouting.yourScouts")}</CardHeader>
       <CardBody>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {scouts.map((scout) => {
-            const count = scoutAssignmentCount(assignments, scout.id);
-            const maxSlots = scoutMaxSlots(scout.attributes.judgingAbility);
-            const isFull = count >= maxSlots;
-            const scoutAssignments = assignments.filter(
-              (assignment) => assignment.scout_id === scout.id,
-            );
-
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          {scouts.map((s) => {
+            const count = scoutAssignmentCount(assignments, s.id),
+              max = scoutMaxSlots(s.attributes.judgingAbility),
+              full = count >= max,
+              active = assignments.filter((a) => a.scout_id === s.id);
             return (
-              <div
-                key={scout.id}
-                className="p-3 rounded-lg border border-gray-200 dark:border-navy-600"
+              <article
+                key={s.id}
+                className="rounded-xl border border-gray-200 p-3 dark:border-navy-600"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-accent-500/10 flex items-center justify-center">
-                    <Eye className="w-4 h-4 text-accent-500" />
+                <div className="flex min-w-0 items-center gap-3">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent-500/10 sm:h-9 sm:w-9 sm:rounded-lg">
+                    <Eye className="h-5 w-5 text-accent-500 sm:h-4 sm:w-4" />
                   </div>
-                  <div className="flex-1">
-                    <p className="font-heading font-bold text-sm text-gray-800 dark:text-gray-100">
-                      {scout.first_name} {scout.last_name}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-heading font-bold text-gray-800 dark:text-gray-100">
+                      {s.first_name} {s.last_name}
                     </p>
-                    <div className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5 flex items-center gap-1">
+                    <div className="mt-0.5 flex min-w-0 items-center gap-1 text-[11px] text-gray-400 dark:text-gray-500">
                       <CountryFlag
-                        code={scout.nationality}
+                        code={s.nationality}
                         locale={i18n.language}
                         className="text-xs leading-none"
                       />
-                      <span>{countryName(scout.nationality, i18n.language)}</span>
+                      <span className="truncate">{countryName(s.nationality, i18n.language)}</span>
                     </div>
                   </div>
-                  <Badge variant={isFull ? "accent" : "success"} size="sm">
-                    {count}/{maxSlots} {t("scouting.slots")}
+                  <Badge variant={full ? "accent" : "success"} size="sm">
+                    {count}/{max} {t("scouting.slots")}
                   </Badge>
                 </div>
-                <div className="mt-2 grid grid-cols-2 gap-2">
+                <div className="mt-3 grid grid-cols-2 gap-3">
                   <div>
-                    <p className="text-[10px] text-gray-400 dark:text-gray-500 font-heading uppercase">
+                    <p className="mb-1 text-[10px] font-heading uppercase text-gray-400 dark:text-gray-500">
                       {t("scouting.judgingAbility")}
                     </p>
-                    <ProgressBar value={scout.attributes.judgingAbility} variant="auto" size="sm" />
+                    <ProgressBar value={s.attributes.judgingAbility} variant="auto" size="sm" />
                   </div>
                   <div>
-                    <p className="text-[10px] text-gray-400 dark:text-gray-500 font-heading uppercase">
+                    <p className="mb-1 text-[10px] font-heading uppercase text-gray-400 dark:text-gray-500">
                       {t("scouting.judgingPotential")}
                     </p>
-                    <ProgressBar
-                      value={scout.attributes.judgingPotential}
-                      variant="auto"
-                      size="sm"
-                    />
+                    <ProgressBar value={s.attributes.judgingPotential} variant="auto" size="sm" />
                   </div>
                 </div>
-                {scoutAssignments.length > 0 && (
-                  <div className="mt-2 flex flex-col gap-1">
-                    {scoutAssignments.map((assignment) => {
-                      const player = players.find(
-                        (currentPlayer) => currentPlayer.id === assignment.player_id,
-                      );
-
+                {active.length > 0 ? (
+                  <div className="mt-3 space-y-1.5 border-t border-gray-100 pt-2 dark:border-navy-700">
+                    {active.map((a) => {
+                      const player = players.find((p) => p.id === a.player_id);
                       return player ? (
-                        <p key={assignment.id} className="text-xs text-gray-500 dark:text-gray-400">
-                          {t("scouting.scoutLabel", { name: "" })}
-                          <span className="font-heading font-bold text-gray-700 dark:text-gray-300">
+                        <div
+                          key={a.id}
+                          className="flex min-w-0 items-center gap-2 rounded-lg bg-gray-50 px-2.5 py-2 dark:bg-navy-700/40"
+                        >
+                          <span className="min-w-0 flex-1 truncate text-xs font-heading font-bold text-gray-700 dark:text-gray-300">
                             {player.full_name}
-                          </span>{" "}
-                          - {assignment.days_remaining}d
-                        </p>
+                          </span>
+                          <span className="flex shrink-0 items-center gap-1 text-[11px] font-bold text-accent-500">
+                            <Clock3 className="h-3.5 w-3.5" />
+                            {a.days_remaining}d
+                          </span>
+                        </div>
                       ) : null;
                     })}
                   </div>
+                ) : (
+                  <p className="mt-3 border-t border-gray-100 pt-2 text-[11px] text-gray-400 dark:border-navy-700">
+                    {full ? t("scouting.noScoutsFree") : t("scouting.slots")}: {max - count}
+                  </p>
                 )}
-              </div>
+              </article>
             );
           })}
         </div>

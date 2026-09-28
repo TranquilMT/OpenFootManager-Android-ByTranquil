@@ -170,7 +170,7 @@ pub(super) fn build_national_teams(game: &Game) -> Vec<NationalTeam> {
             let nation_label = ofm_core::nations::nation_display_name(&nation);
             let mut national_team = NationalTeam::new(
                 format!("nt-{}", nation.to_lowercase()),
-                format!("{} National Team", nation_label),
+                nation_label,
                 nation.clone(),
                 Some(game.region_for_country(&nation)),
             );
@@ -179,6 +179,7 @@ pub(super) fn build_national_teams(game: &Game) -> Vec<NationalTeam> {
                 .take(23)
                 .map(|player| player.id.clone())
                 .collect();
+            national_team.name_key = Some(format!("nations.{}", nation.to_lowercase()));
             national_team
         })
         .collect()

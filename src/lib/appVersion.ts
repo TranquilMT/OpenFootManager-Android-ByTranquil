@@ -7,7 +7,7 @@ export const APP_BUILD_DATE = __APP_BUILD_DATE__;
 export const IS_STABLE_BUILD = APP_CHANNEL === "stable";
 
 /**
- * CI exposes the GitHub Actions run number to Vite where available.  During
+ * CI exposes the GitHub Actions run number to Vite where available. During
  * local development we deliberately fall back to the app version rather than
  * hiding the identity completely.
  */
@@ -15,7 +15,8 @@ declare const __APP_BUILD_NUMBER__: string | undefined;
 
 function buildNumber(): string | null {
   try {
-    const value = typeof __APP_BUILD_NUMBER__ === "undefined" ? "" : String(__APP_BUILD_NUMBER__).trim();
+    const value =
+      typeof __APP_BUILD_NUMBER__ === "undefined" ? "" : String(__APP_BUILD_NUMBER__).trim();
     return /^\d+$/.test(value) ? value : null;
   } catch {
     return null;
@@ -27,8 +28,9 @@ export function formatAppVersion(): string {
   if (IS_STABLE_BUILD) return `v${APP_VERSION}`;
 
   const number = buildNumber();
-  if (number) return `Build #${number} • Nightly`;
+  const releaseVersion = APP_VERSION.replace(/-nightly$/, "");
+  if (number) return `Build #${number} - v${releaseVersion} - NightlyPreRelease`;
 
-  const commit = APP_COMMIT === "unknown" ? "" : ` • ${APP_COMMIT}`;
-  return `${APP_CHANNEL === "nightly" ? "Nightly" : APP_CHANNEL}${commit}`;
+  const commit = APP_COMMIT === "unknown" ? "" : ` - ${APP_COMMIT}`;
+  return `v${releaseVersion} - NightlyPreRelease${commit}`;
 }

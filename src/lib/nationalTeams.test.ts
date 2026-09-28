@@ -117,21 +117,21 @@ describe("getNationalTeamName", () => {
       national_teams: [nationalTeam({ id: "nt-eng", name: "ENG National Team" })],
     });
 
-    expect(getNationalTeamName(state, "nt-eng")).toBe("ENG National Team");
+    expect(getNationalTeamName(state, "nt-eng")).toBe("ENG");
   });
 
   it("falls back to the id when the nation is unknown", () => {
     expect(getNationalTeamName(gameState(), "nt-xyz")).toBe("nt-xyz");
   });
 
-  it("localises the name through the template when the nation has a key", () => {
+  it("localises the nation name without a national-team suffix", () => {
     const state = gameState({
       national_teams: [
         nationalTeam({ id: "nt-bra", name: "Brazil National Team", name_key: "nations.br" }),
       ],
     });
 
-    expect(getNationalTeamName(state, "nt-bra", t)).toBe("Brazil National Team");
+    expect(getNationalTeamName(state, "nt-bra", t)).toBe("Brazil");
   });
 
   it("does not print the raw key when no locale defines it", () => {
@@ -144,7 +144,7 @@ describe("getNationalTeamName", () => {
       ],
     });
 
-    expect(getNationalTeamName(state, "nt-al", t)).toBe("Albania National Team");
+    expect(getNationalTeamName(state, "nt-al", t)).toBe("Albania");
   });
 });
 

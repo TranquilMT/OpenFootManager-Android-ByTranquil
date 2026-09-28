@@ -8,7 +8,6 @@ import DashboardTabContent from "./DashboardTabContent";
 import type { DashboardTabContentModel } from "./dashboardTabContentModel";
 import { ShieldX } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
 interface DashboardWorkspaceContentProps {
   dashboardAlerts: DashboardAlert[];
   gameState: GameStateData;
@@ -21,7 +20,6 @@ interface DashboardWorkspaceContentProps {
   onGameUpdate: (state: GameStateData) => void;
   isUnemployed: boolean;
 }
-
 export default function DashboardWorkspaceContent({
   dashboardAlerts,
   gameState,
@@ -36,27 +34,24 @@ export default function DashboardWorkspaceContent({
 }: DashboardWorkspaceContentProps) {
   const { t } = useTranslation();
   const selectedPlayer = profileNavigation.selectedPlayerId
-    ? (gameState.players.find((player) => player.id === profileNavigation.selectedPlayerId) ?? null)
+    ? (gameState.players.find((p) => p.id === profileNavigation.selectedPlayerId) ?? null)
     : null;
   const selectedTeam = profileNavigation.selectedTeamId
     ? (gameState.teams.find((team) => team.id === profileNavigation.selectedTeamId) ?? null)
     : null;
-
   return (
-    <div className="flex-1 overflow-auto p-6 bg-gray-100 dark:bg-navy-900">
+    <div className="touch-scroll min-h-0 min-w-0 flex-1 overflow-y-auto overscroll-contain bg-gray-100 px-3 pt-3 pb-[calc(5rem+env(safe-area-inset-bottom))] dark:bg-navy-900 sm:p-6 md:pb-6">
       {isUnemployed && (
-        <div className="mx-6 mt-4 flex items-center gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-900/50 dark:bg-amber-950/30">
-          <ShieldX className="h-5 w-5 shrink-0 text-amber-600 dark:text-amber-500" />
+        <div className="mb-3 flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-3 dark:border-amber-900/50 dark:bg-amber-950/30 sm:px-4">
+          <ShieldX className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-500" />
           <p className="text-sm text-amber-800 dark:text-amber-300">
             {t("dashboard.unemployedBanner")}
           </p>
         </div>
       )}
-
       {!selectedPlayer && !selectedTeam ? (
         <DashboardAlerts alerts={dashboardAlerts} onNavigate={onNavigate} />
       ) : null}
-
       {selectedPlayer && !selectedTeam ? (
         <PlayerProfile
           player={selectedPlayer}
@@ -71,7 +66,6 @@ export default function DashboardWorkspaceContent({
           onGameUpdate={onGameUpdate}
         />
       ) : null}
-
       {selectedTeam ? (
         <TeamProfile
           team={selectedTeam}
@@ -81,7 +75,6 @@ export default function DashboardWorkspaceContent({
           onSelectPlayer={onSelectPlayer}
         />
       ) : null}
-
       {!selectedPlayer && !selectedTeam ? (
         <DashboardTabContent viewModel={dashboardTabContentModel} />
       ) : null}

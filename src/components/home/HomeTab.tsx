@@ -2,6 +2,7 @@ import type { GameStateData } from "../../store/gameStore";
 import { Card, CardHeader, CardBody, Badge } from "../ui";
 import { formatDateShort, getUserCompetition } from "../../lib/helpers";
 import { isSeniorSquadPlayer } from "../../lib/playerSquad";
+import { resolveInjuryName as resolveLocalizedInjuryName } from "../../lib/injury";
 import { resolveSeasonContext } from "../../lib/seasonContext";
 import NextMatchDisplay from "../NextMatchDisplay";
 import { resolveBoardObjective, resolveMessage, resolveNewsArticle } from "../../utils/backendI18n";
@@ -72,13 +73,8 @@ export default function HomeTab({
     : [];
   const { avgCondition, avgOvr, coldPlayers, exhaustedCount, hotPlayers, unavailablePlayers } =
     getHomeRosterOverview(roster);
-  const resolveInjuryName = (injuryName: string): string => {
-    if (injuryName.includes(".")) {
-      return t(injuryName, { defaultValue: injuryName });
-    }
-
-    return t(`common.injuries.${injuryName}`, { defaultValue: injuryName });
-  };
+  const resolveInjuryName = (injuryName: string): string =>
+    resolveLocalizedInjuryName(injuryName, t);
 
   // Current date / season context
   const lang = i18n.language;

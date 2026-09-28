@@ -21,8 +21,11 @@
     "loadGameFailed": "Speicherstand konnte nicht geladen werden: {{error}}",
     "invalidWorldDb": "Ungültige Welt-Datenbankdatei: {{error}}",
     "failedStartGame": "Spiel konnte nicht gestartet werden: {{error}}",
-    "openDiscord": "Discord-Community öffnen",
-    "openGithub": "GitHub-Repository öffnen",
+    "openGithub": "GitHub-Repository von OFMtouch öffnen",
+    "openOriginalGithub": "Ursprüngliches GitHub-Repository von OpenFootManager öffnen",
+    "originalGame": "Originalspiel",
+    "doNotShowWhatsNew": "Für v0.3.5 nicht erneut anzeigen",
+    "continueToGame": "Weiter",
     "mainMenu": "Hauptmenü",
     "worldEditor": "Welt-Editor"
   },
@@ -1748,6 +1751,7 @@
     "matchCommentaryDesc": "Ereigniskommentare während Live-Spielen anzeigen",
     "confirmAdvance": "Vor dem Fortfahren bestätigen",
     "confirmAdvanceDesc": "Bestätigung anfordern, bevor ein Tag vorrückt",
+    "confirmAdvancePrompt": "Zum nächsten Tag fortfahren?",
     "continueToNextEvent": "Fortfahren springt zum nächsten Ereignis",
     "continueToNextEventDesc": "Fortfahren spult bis zum nächsten Spiel, einer nötigen Aktion, einer Transferfrist oder wichtigen Neuigkeiten vor",
     "savesData": "Speicherstände & Daten",
@@ -1761,6 +1765,21 @@
     "clearSavesDesc": "Alle gespeicherten Spiele dauerhaft löschen",
     "clear": "Löschen",
     "savesCleared": "Speicherstände gelöscht!",
+    "spokenCommentary": "Gesprochener Kommentar",
+    "spokenCommentaryDesc": "Wichtige Spielszenen vorlesen, wenn das Gerät dies unterstützt",
+    "whatsNew": "Was ist neu?",
+    "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
+    "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
+    "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
+    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.3.5",
+    "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
+    "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
+    "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
+    "patchDevelopment": "Spielzeit fördert junge Spieler; Jugend-Scoutberichte vermeiden doppelte Namen.",
+    "patchFixes": "Rohe Verletzungsnamen, doppelte Vereinsnamen und Fehler bei der Welterstellung behoben.",
+    "patchThanks": "Danke fürs Spielen! Hilf uns mit Fehlermeldungen auf GitHub, das Spiel zu verbessern.",
+    "patchSignature": "Danke, TranquilMT",
+    "patchReportIssue": "Problem auf GitHub melden",
     "about": "Über",
     "matchModes": {
       "live": "Aufs Spielfeld",
@@ -1815,6 +1834,10 @@
     "keyStats": "Wichtige Stats"
   },
   "scouting": {
+    "shortlist": "Merkliste",
+    "shortlistEmpty": "Speichere Spieler hier, um sie später zu vergleichen.",
+    "addShortlist": "Zur Merkliste hinzufügen",
+    "removeShortlist": "Von Merkliste entfernen",
     "title": "Scoutingzentrum",
     "scouts": "Scouts",
     "activeAssignments": "Aktive Aufträge",
@@ -1875,6 +1898,8 @@
     "live": "Live",
     "paused": "Pausiert",
     "events": "Ereignisse",
+    "voiceOn": "Gesprochenen Kommentar einschalten",
+    "voiceOff": "Gesprochenen Kommentar ausschalten",
     "stats": "Statistiken",
     "lineups": "Aufstellungen",
     "simSpeed": "Simulationsgeschwindigkeit",
@@ -2231,12 +2256,15 @@
       "PenaltyAwarded": "Elfmeter gegeben"
     },
     "commentary": {
+      "Corner": {"headline": "Eckball für", "lines": {"0": "Eckball für {{team}}.", "1": "{{team}} bere Maß für die Ecke.", "2": "{{team}} kann den Ball von der Ecke hereinbringen."}},
+      "FreeKick": {"headline": "Freistoß für", "lines": {"0": "Freistoß für {{team}}.", "1": "{{team}} bere Maß für den Freistoß.", "2": "Der Freistoß eröffnet {{team}} eine neue Angriffschance."}},
       "Goal": {
         "headline": "TOOOR!",
         "lines": {
           "0": "{{player}} trifft für {{team}}!",
           "1": "{{player}} versenkt den Ball! Was für ein Abschluss!",
-          "2": "{{player}} erzielt das Tor für {{team}}!"
+          "2": "{{player}} erzielt das Tor für {{team}}!",
+          "3": "{{player}} vollendet den Angriff für {{team}}!"
         },
         "opener": {
           "headline": "TOOOR!",
@@ -2285,28 +2313,32 @@
         "headline": "ELFMETER — TOR!",
         "lines": {
           "0": "{{player}} lässt dem Keeper keine Chance! {{team}} trifft vom Punkt.",
-          "1": "Eiskalt von {{player}} — Elfmeter verwandelt für {{team}}!"
+          "1": "Eiskalt von {{player}} — Elfmeter verwandelt für {{team}}!",
+          "2": "{{player}} verwandelt den Elfmeter für {{team}}!"
         }
       },
       "PenaltyMiss": {
         "headline": "ELFMETER VERSCHOSSEN!",
         "lines": {
           "0": "{{player}} scheitert vom Punkt! Was für eine Erleichterung für {{opponent}}!",
-          "1": "Gehalten! {{player}} wird von diesem Elfmeter noch träumen."
+          "1": "Gehalten! {{player}} wird von diesem Elfmeter noch träumen.",
+          "2": "{{player}} verfehlt vom Punkt das Tor."
         }
       },
       "PenaltyAwarded": {
         "headline": "ELFMETER!",
         "lines": {
           "0": "Der Schiedsrichter zeigt auf den Punkt — Elfmeter für {{team}}!",
-          "1": "Es gibt Elfmeter für {{team}}! Entscheidender Moment."
+          "1": "Es gibt Elfmeter für {{team}}! Entscheidender Moment.",
+          "2": "Der Schiedsrichter gibt Elfmeter für {{team}}."
         }
       },
       "ShotSaved": {
         "headline": "TOLLE PARADE!",
         "lines": {
           "0": "{{player}} zwingt den Keeper zu einer Parade.",
-          "1": "Der Keeper verweigert {{player}} den Treffer!"
+          "1": "Der Keeper verweigert {{player}} den Treffer!",
+          "2": "Der Torhüter pariert den Schuss von {{player}}."
         },
         "routine": {
           "headline": "GEHALTEN",
@@ -2334,7 +2366,8 @@
         "headline": "KNAPP DANEBEN!",
         "lines": {
           "0": "{{player}} zieht den Ball knapp am Tor vorbei für {{team}}.",
-          "1": "So nah! {{player}} findet das Tor nicht."
+          "1": "So nah! {{player}} findet das Tor nicht.",
+          "2": "{{player}} schießt am Tor vorbei."
         },
         "speculative": {
           "headline": "AM TOR VORBEI",
@@ -2356,13 +2389,21 @@
             "0": "{{player}} hätte das wirklich treffen müssen — qualvoll knapp vorbei!",
             "1": "Eine große Chance ungenutzt für {{team}}! {{player}} kann es nicht fassen."
           }
+        },
+        "woodwork": {
+          "headline": "ALUMINIUM!",
+          "lines": {
+            "0": "Autsch! {{player}} trifft für {{team}} die Latte!",
+            "1": "So knapp! {{player}} trifft den Pfosten!"
+          }
         }
       },
       "ShotBlocked": {
         "headline": "GEBLOCKT!",
         "lines": {
           "0": "Der Schuss von {{player}} wird von einem mutigen Verteidiger geblockt.",
-          "1": "Körper im Weg! {{player}} wird abgeblockt."
+          "1": "Körper im Weg! {{player}} wird abgeblockt.",
+          "2": "Die Abwehr blockt den Schuss von {{player}}."
         },
         "bigChance": {
           "headline": "TOLLE GRÄTSCHE!",
@@ -2376,7 +2417,8 @@
         "headline": "FOUL",
         "lines": {
           "0": "{{player}} foult {{victim}}. Freistoß für {{opponent}}.",
-          "1": "{{player}} verschuldet einen Freistoß gegen {{victim}}."
+          "1": "{{player}} verschuldet einen Freistoß gegen {{victim}}.",
+          "2": "Pfiff wegen eines Fouls von {{team}}."
         },
         "hard": {
           "headline": "DAS IST EIN FOUL",
@@ -2397,35 +2439,40 @@
         "headline": "GELBE KARTE",
         "lines": {
           "0": "{{player}} sieht Gelb für {{team}}.",
-          "1": "Gelbe Karte für {{player}}."
+          "1": "Gelbe Karte für {{player}}.",
+          "2": "Der Schiedsrichter zeigt {{player}} Gelb."
         }
       },
       "RedCard": {
         "headline": "ROTE KARTE!",
         "lines": {
           "0": "{{player}} fliegt vom Platz! {{team}} ist nur noch zu zehnt!",
-          "1": "Direkter Platzverweis für {{player}}! Eine Katastrophe für {{team}}."
+          "1": "Direkter Platzverweis für {{player}}! Eine Katastrophe für {{team}}.",
+          "2": "{{player}} sieht Rot; {{team}} spielt mit zehn weiter."
         }
       },
       "SecondYellow": {
         "headline": "ZWEITE GELBE — VOM PLATZ!",
         "lines": {
           "0": "{{player}} sieht die zweite Gelbe und wird des Feldes verwiesen!",
-          "1": "Zwei Gelbe und weg — {{player}} lässt {{team}} in Unterzahl."
+          "1": "Zwei Gelbe und weg — {{player}} lässt {{team}} in Unterzahl.",
+          "2": "Die zweite Gelbe beendet das Spiel für {{player}}."
         }
       },
       "Injury": {
         "headline": "VERLETZUNG",
         "lines": {
           "0": "{{player}} liegt am Boden und braucht Behandlung.",
-          "1": "Sorge bei {{team}}: {{player}} geht verletzt zu Boden."
+          "1": "Sorge bei {{team}}: {{player}} geht verletzt zu Boden.",
+          "2": "Das Spiel ruht, während {{player}} behandelt wird."
         }
       },
       "Substitution": {
         "headline": "AUSWECHSLUNG",
         "lines": {
           "0": "{{team}} wechselt: {{player}} kommt, {{victim}} geht.",
-          "1": "{{player}} ersetzt {{victim}} bei {{team}}."
+          "1": "{{player}} ersetzt {{victim}} bei {{team}}.",
+          "2": "{{team}} wechselt: {{player}} kommt für {{victim}}."
         }
       },
       "KickOff": {
@@ -2453,7 +2500,8 @@
         "headline": "ABPFIFF",
         "lines": {
           "0": "Das war's — Abpfiff!",
-          "1": "Der Schiedsrichter beendet das Spiel."
+          "1": "Der Schiedsrichter beendet das Spiel.",
+          "2": "Der Schlusspfiff besiegelt das Ergebnis."
         }
       }
     },
@@ -2723,7 +2771,7 @@
         "nameMaxLength": "Vorname und Nachname dürfen jeweils höchstens 30 Zeichen lang sein.",
         "nationalityRequired": "Nationalität ist erforderlich.",
         "invalidDobFormat": "Ungültiges Geburtsdatum. Verwende das Format JJJJ-MM-TT.",
-        "minAge": "Der Manager muss mindestens 30 Jahre alt sein.",
+        "minAge": "Der Manager muss mindestens 18 Jahre alt sein.",
         "invalidDob": "Ungültiges Geburtsdatum.",
         "startYearMin": "Das Startjahr muss 1900 oder später sein.",
         "invalidStartYear": "Ungültiges Startjahr ausgewählt.",

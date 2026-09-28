@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { AlertTriangle } from "lucide-react";
-
 import type { PlayerData, TeamData, TransferOfferData } from "../../store/gameStore";
 import { formatExactMoney, formatVal, getTeamName, positionBadgeVariant } from "../../lib/helpers";
 import type { TransferNegotiationResponseData } from "../../services/transfersService";
@@ -11,14 +10,12 @@ import { Badge } from "../ui";
 import { translatePositionAbbreviation } from "../squad/SquadTab.helpers";
 import TransferNegotiationHistory from "./TransferNegotiationHistory";
 import { parseTransferFeeInput } from "./TransfersTab.helpers";
-
 interface TransferCounterTarget {
   player: PlayerData;
   offerId: string;
   fromTeamId: string;
   fee: number;
 }
-
 interface TransferCounterOfferModalProps {
   counterTarget: TransferCounterTarget;
   teams: TeamData[];
@@ -35,74 +32,62 @@ interface TransferCounterOfferModalProps {
   onSubmit: () => void;
   onClose: () => void;
 }
-
-export default function TransferCounterOfferModal({
-  counterTarget,
-  teams,
-  counterAmount,
-  onCounterAmountChange,
-  counterFeedback,
-  activeCounterOffer,
-  counterResult,
-  counterError,
-  counterLoading,
-  submitDisabled = false,
-  blockingTitle = null,
-  blockingDetail = null,
-  onSubmit,
-  onClose,
-}: TransferCounterOfferModalProps) {
+export default function TransferCounterOfferModal(p: TransferCounterOfferModalProps) {
   const { t } = useTranslation();
-  const parsedCounterAmount = parseTransferFeeInput(counterAmount);
-
+  const parsed = parseTransferFeeInput(p.counterAmount);
   return (
     <div
-      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-      onClick={onClose}
+      role="presentation"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center sm:p-4"
+      onClick={p.onClose}
     >
       <div
-        className="bg-white dark:bg-navy-800 rounded-xl shadow-2xl border border-gray-200 dark:border-navy-600 p-6 w-full max-w-sm"
-        onClick={(event) => event.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="counter-offer-title"
+        className="max-h-[92dvh] w-full overflow-y-auto overscroll-contain rounded-t-2xl border border-gray-200 bg-white p-4 shadow-2xl dark:border-navy-600 dark:bg-navy-800 sm:max-w-sm sm:rounded-xl sm:p-6"
+        onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-sm font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3">
+        <h3
+          id="counter-offer-title"
+          className="mb-3 text-sm font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400"
+        >
           {t("transfers.counterOffer")}
         </h3>
-        <div className="flex items-center gap-3 mb-4">
-          <Badge variant={positionBadgeVariant(counterTarget.player.position)} size="sm">
-            {translatePositionAbbreviation(t, counterTarget.player.position)}
+        <div className="mb-4 flex min-w-0 items-center gap-3">
+          <Badge variant={positionBadgeVariant(p.counterTarget.player.position)} size="sm">
+            {translatePositionAbbreviation(t, p.counterTarget.player.position)}
           </Badge>
-          <div>
-            <p className="font-semibold text-sm text-gray-800 dark:text-gray-200">
-              {counterTarget.player.full_name}
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-gray-800 dark:text-gray-200">
+              {p.counterTarget.player.full_name}
             </p>
-            <p className="text-xs text-gray-400">
-              {getTeamName(teams, counterTarget.fromTeamId)} •
-              {t("transfers.currentOffer", {
-                fee: formatVal(counterTarget.fee),
-              })}
+            <p className="truncate text-xs text-gray-400">
+              {getTeamName(p.teams, p.counterTarget.fromTeamId)} •{" "}
+              {t("transfers.currentOffer", { fee: formatVal(p.counterTarget.fee) })}
             </p>
           </div>
         </div>
-        {blockingTitle ? (
+        {p.blockingTitle ? (
           <div
             role="alert"
             className="mb-4 flex gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-200"
           >
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
             <div className="text-xs">
-              <p className="font-heading font-bold uppercase tracking-wider">{blockingTitle}</p>
-              {blockingDetail ? <p className="mt-1">{blockingDetail}</p> : null}
+              <p className="font-heading font-bold uppercase tracking-wider">{p.blockingTitle}</p>
+              {p.blockingDetail ? <p className="mt-1">{p.blockingDetail}</p> : null}
             </div>
           </div>
         ) : null}
-        {counterFeedback ? (
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+        {p.counterFeedback ? (
+          <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">
             {t("transfers.resumeNegotiationHint")}
           </p>
         ) : null}
         <label
           htmlFor="counter-offer-amount"
-          className="text-xs font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1 block"
+          className="mb-1 block text-xs font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400"
         >
           {t("transfers.counterAmount")}
         </label>
@@ -111,55 +96,55 @@ export default function TransferCounterOfferModal({
           type="text"
           inputMode="numeric"
           pattern="[0-9]*"
-          value={counterAmount}
-          onChange={(event) => onCounterAmountChange(event.target.value)}
-          className="w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-navy-700 border border-gray-200 dark:border-navy-600 text-sm text-gray-800 dark:text-gray-200 mb-3 focus:outline-none focus:ring-2 focus:ring-primary-500/50"
+          value={p.counterAmount}
+          onChange={(e) => p.onCounterAmountChange(e.target.value)}
+          className="mb-3 min-h-12 w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-base text-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500/50 dark:border-navy-600 dark:bg-navy-700 dark:text-gray-200 sm:min-h-0 sm:text-sm"
         />
-        {parsedCounterAmount !== null ? (
-          <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-            {formatExactMoney(parsedCounterAmount)}
+        {parsed !== null ? (
+          <p className="mb-3 text-xs text-gray-500 dark:text-gray-400">
+            {formatExactMoney(parsed)}
           </p>
         ) : null}
         <NegotiationFeedbackPanel
-          feedback={counterFeedback}
+          feedback={p.counterFeedback}
           titleKey="transfers.negotiationPulse"
           roundKey="transfers.negotiationRound"
           patienceKey="transfers.negotiationPatience"
           tensionKey="transfers.negotiationTension"
           className="mb-3"
         />
-        <TransferNegotiationHistory offer={activeCounterOffer} mode="incoming" />
-        {counterResult ? (
+        <TransferNegotiationHistory offer={p.activeCounterOffer} mode="incoming" />
+        {p.counterResult ? (
           <div
-            className={`text-xs font-heading font-bold uppercase tracking-wider mb-3 ${counterResult === "accepted" ? "text-green-500" : counterResult === "rejected" ? "text-red-500" : "text-amber-500"}`}
+            className={`mb-3 text-xs font-heading font-bold uppercase tracking-wider ${p.counterResult === "accepted" ? "text-green-500" : p.counterResult === "rejected" ? "text-red-500" : "text-amber-500"}`}
           >
-            {counterResult === "accepted"
+            {p.counterResult === "accepted"
               ? t("transfers.counterAccepted")
-              : counterResult === "rejected"
+              : p.counterResult === "rejected"
                 ? t("transfers.counterRejected")
                 : t("transfers.counterCountered")}
           </div>
         ) : null}
-        {counterError ? (
-          <div className="text-xs font-heading font-bold uppercase tracking-wider mb-3 text-red-500">
-            {counterError}
+        {p.counterError ? (
+          <div className="mb-3 text-xs font-heading font-bold uppercase tracking-wider text-red-500">
+            {p.counterError}
           </div>
         ) : null}
-        <div className="flex gap-2">
+        <div className="sticky bottom-0 -mx-1 flex flex-col-reverse gap-2 bg-white/95 px-1 pb-[max(.25rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur dark:bg-navy-800/95 sm:static sm:flex-row sm:bg-transparent sm:p-0">
           <button
             type="button"
-            onClick={onSubmit}
-            disabled={submitDisabled || counterLoading || counterResult === "accepted"}
-            className="flex-1 py-2 bg-primary-700 hover:bg-primary-800 text-white rounded-lg font-heading font-bold text-sm uppercase tracking-wider transition-colors disabled:opacity-50"
+            onClick={p.onClose}
+            className="min-h-12 rounded-lg bg-gray-200 px-4 py-2 text-sm font-heading font-bold uppercase tracking-wider text-gray-600 active:bg-gray-300 dark:bg-navy-700 dark:text-gray-300 sm:min-h-0"
           >
-            {counterLoading ? t("transfers.submitting") : t("transfers.submitCounter")}
+            {t("transfers.close")}
           </button>
           <button
             type="button"
-            onClick={onClose}
-            className="px-4 py-2 bg-gray-200 dark:bg-navy-700 text-gray-600 dark:text-gray-300 rounded-lg font-heading font-bold text-sm uppercase tracking-wider hover:bg-gray-300 dark:hover:bg-navy-600 transition-colors"
+            onClick={p.onSubmit}
+            disabled={p.submitDisabled || p.counterLoading || p.counterResult === "accepted"}
+            className="min-h-12 flex-1 rounded-lg bg-primary-700 py-2 text-sm font-heading font-bold uppercase tracking-wider text-white active:bg-primary-800 disabled:opacity-50 sm:min-h-0"
           >
-            {t("transfers.close")}
+            {p.counterLoading ? t("transfers.submitting") : t("transfers.submitCounter")}
           </button>
         </div>
       </div>

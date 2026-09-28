@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import type { PlayerData, TeamData } from "../../store/gameStore";
@@ -126,6 +126,35 @@ function createPlayer(overrides: Partial<PlayerData> = {}): PlayerData {
 }
 
 describe("ScoutingPlayerSearchCard", () => {
+  it("lets phone users save a player to their shortlist", () => {
+    const onToggleShortlist = vi.fn();
+    render(
+      <ScoutingPlayerSearchCard
+        players={[createPlayer()]}
+        teams={[createTeam()]}
+        posFilter="All"
+        searchQuery=""
+        alreadyScoutingIds={new Set<string>()}
+        shortlistIds={new Set<string>()}
+        onToggleShortlist={onToggleShortlist}
+        availableScoutCount={0}
+        sendingPlayerId={null}
+        safePage={0}
+        totalPages={1}
+        totalPlayers={1}
+        pageSize={20}
+        onPositionFilterChange={vi.fn()}
+        onSearchQueryChange={vi.fn()}
+        onSendScout={vi.fn()}
+        onPreviousPage={vi.fn()}
+        onNextPage={vi.fn()}
+      />,
+    );
+    fireEvent.click(
+      screen.getAllByRole("button", { name: /scouting.addShortlist: John Smith/ })[0],
+    );
+    expect(onToggleShortlist).toHaveBeenCalledWith("player-1");
+  });
   it("renders players and delegates search, filter, selection, scout, and pagination actions", () => {
     const onPositionFilterChange = vi.fn();
     const onSearchQueryChange = vi.fn();
@@ -162,7 +191,7 @@ describe("ScoutingPlayerSearchCard", () => {
     );
 
     expect(screen.getByText("Find Players")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "John Smith" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /John Smith/ })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Def" }));
     expect(onPositionFilterChange).toHaveBeenCalledWith("Defender");
@@ -172,16 +201,16 @@ describe("ScoutingPlayerSearchCard", () => {
     });
     expect(onSearchQueryChange).toHaveBeenCalledWith("john");
 
-    fireEvent.click(screen.getByRole("button", { name: "John Smith" }));
+    fireEvent.click(screen.getByRole("button", { name: /John Smith/ }));
     expect(onSelectPlayer).toHaveBeenCalledWith("player-1");
 
-    fireEvent.click(screen.getByRole("button", { name: /^Scout$/i }));
+    fireEvent.click(within(screen.getByRole("table")).getByRole("button", { name: /^Scout$/i }));
     expect(onSendScout).toHaveBeenCalledWith("player-1");
 
     fireEvent.click(screen.getByRole("button", { name: "Next page" }));
     expect(onNextPage).toHaveBeenCalledOnce();
 
-    const playerRow = screen.getByText("John Smith").closest("tr");
+    const playerRow = within(screen.getByRole("table")).getByText("John Smith").closest("tr");
     expect(playerRow).not.toBeNull();
 
     fireEvent.contextMenu(playerRow as HTMLTableRowElement);

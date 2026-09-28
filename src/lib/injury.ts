@@ -39,11 +39,19 @@ export function getInjuryBadgeClassName(daysRemaining: number): string {
 }
 
 export function resolveInjuryName(injuryName: string, translate: TranslateFn): string {
-  if (injuryName.includes(".")) {
-    return translate(injuryName, { defaultValue: injuryName });
+  const normalized = normalizeLegacyInjuryKey(injuryName);
+  if (normalized.includes(".")) {
+    return translate(normalized, { defaultValue: injuryName });
   }
 
-  return translate(`common.injuries.${injuryName}`, {
+  return translate(`common.injuries.${normalized}`, {
     defaultValue: injuryName,
   });
+}
+
+export function normalizeLegacyInjuryKey(value: string): string {
+  if (/^(?:common\.injuries\.)?\.?calf[\s_-]?injury$/i.test(value.trim())) {
+    return "common.injuries.calfStrain";
+  }
+  return value;
 }

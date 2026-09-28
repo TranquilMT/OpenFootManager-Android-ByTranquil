@@ -21,8 +21,11 @@
     "loadGameFailed": "Couldn't load the save: {{error}}",
     "invalidWorldDb": "Invalid world database file: {{error}}",
     "failedStartGame": "Failed to start game: {{error}}",
-    "openDiscord": "Open Discord community",
-    "openGithub": "Open GitHub repository",
+    "openGithub": "Open OFMtouch GitHub repository",
+    "openOriginalGithub": "Open original OpenFootManager GitHub repository",
+    "originalGame": "Original game",
+    "doNotShowWhatsNew": "Don’t show this again for v0.3.5",
+    "continueToGame": "Continue",
     "mainMenu": "Main Menu",
     "worldEditor": "World Editor"
   },
@@ -1748,6 +1751,7 @@
     "matchCommentaryDesc": "Show event commentary during live matches",
     "confirmAdvance": "Confirm Before Advancing",
     "confirmAdvanceDesc": "Ask for confirmation before advancing a day",
+    "confirmAdvancePrompt": "Advance to the next day?",
     "continueToNextEvent": "Continue Skips to Next Event",
     "continueToNextEventDesc": "Continue rolls forward until your next match, a blocker, a transfer deadline, or important news",
     "savesData": "Saves & Data",
@@ -1761,6 +1765,21 @@
     "clearSavesDesc": "Permanently delete all saved games",
     "clear": "Clear",
     "savesCleared": "Saves cleared!",
+    "spokenCommentary": "Spoken commentary",
+    "spokenCommentaryDesc": "Read key match moments aloud when supported by your device",
+    "whatsNew": "What’s new",
+    "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
+    "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
+    "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
+    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.3.5",
+    "patchPortraits": "20 fictional source faces bring more variety to generated player portraits.",
+    "patchWorld": "A larger football world spans 29 nations, with stronger clubs across the Americas and Asia.",
+    "patchTransfers": "Club strategies guide loans and transfer approaches, with competing offers and budget checks.",
+    "patchDevelopment": "Playing time helps young players develop, and youth scouting reports avoid repeated names.",
+    "patchFixes": "Fixed raw injury names, duplicate club names and world-generation regressions.",
+    "patchThanks": "Thank you for playing! Please help us build a better game by reporting issues on GitHub.",
+    "patchSignature": "Thanks, TranquilMT",
+    "patchReportIssue": "Submit an issue on GitHub",
     "about": "About",
     "matchModes": {
       "live": "Go to the Field",
@@ -1815,6 +1834,10 @@
     "keyStats": "Key Stats"
   },
   "scouting": {
+    "shortlist": "Shortlist",
+    "shortlistEmpty": "Save players here to compare them later.",
+    "addShortlist": "Add to shortlist",
+    "removeShortlist": "Remove from shortlist",
     "title": "Scouting Centre",
     "scouts": "Scouts",
     "activeAssignments": "Active Assignments",
@@ -1875,6 +1898,8 @@
     "live": "Live",
     "paused": "Paused",
     "events": "Events",
+    "voiceOn": "Turn on spoken commentary",
+    "voiceOff": "Turn off spoken commentary",
     "stats": "Stats",
     "lineups": "Lineups",
     "simSpeed": "Simulation Speed",
@@ -2265,17 +2290,20 @@
       "PenaltyAwarded": "Penalty Awarded"
     },
     "commentary": {
+      "Corner": {"headline": "CORNER", "lines": {"0": "Corner kick for {{team}}.", "1": "{{team}} prepare to deliver from the corner.", "2": "{{team}} have a chance to deliver from the corner."}},
+      "FreeKick": {"headline": "FREE KICK", "lines": {"0": "Free kick for {{team}}.", "1": "{{team}} line up the free kick.", "2": "The free kick gives {{team}} a chance to build an attack."}},
       "Goal": {
         "headline": "GOOAL!",
         "lines": {
           "0": "{{player}} finds the net for {{team}}!",
           "1": "{{player}} buries it! What a finish!",
-          "2": "{{player}} scores for {{team}}!"
+          "2": "{{player}} scores for {{team}}!",
+          "3": "{{player}} finishes the move for {{team}}!"
         },
         "opener": {
           "headline": "GOOAL!",
           "lines": {
-            "0": "{{player}} breaks the deadlock for {{team}}!",
+            "0": "What a goal! {{player}} fires {{team}} in front!",
             "1": "First blood to {{team}} — {{player}} strikes!"
           }
         },
@@ -2319,28 +2347,32 @@
         "headline": "PENALTY — GOAL!",
         "lines": {
           "0": "{{player}} sends the keeper the wrong way! {{team}} score from the spot.",
-          "1": "Ice cold from {{player}} — penalty converted for {{team}}!"
+          "1": "Ice cold from {{player}} — penalty converted for {{team}}!",
+          "2": "{{player}} converts the penalty for {{team}}!"
         }
       },
       "PenaltyMiss": {
         "headline": "PENALTY MISSED!",
         "lines": {
           "0": "{{player}} fluffs it from the spot! What a let-off for {{opponent}}!",
-          "1": "Saved! {{player}} will be having nightmares about that penalty."
+          "1": "Saved! {{player}} will be having nightmares about that penalty.",
+          "2": "{{player}} fails to find the net from the spot."
         }
       },
       "PenaltyAwarded": {
         "headline": "PENALTY!",
         "lines": {
           "0": "The referee points to the spot — penalty to {{team}}!",
-          "1": "It's a penalty for {{team}}! Huge moment."
+          "1": "It's a penalty for {{team}}! Huge moment.",
+          "2": "The official awards {{team}} a penalty."
         }
       },
       "ShotSaved": {
         "headline": "GREAT SAVE!",
         "lines": {
           "0": "{{player}} forces a save out of the keeper.",
-          "1": "The keeper denies {{player}}!"
+          "1": "The keeper denies {{player}}!",
+          "2": "The goalkeeper stands firm against {{player}}."
         },
         "routine": {
           "headline": "SAVED",
@@ -2368,7 +2400,8 @@
         "headline": "THAT WAS CLOSE!",
         "lines": {
           "0": "{{player}} drags it just wide for {{team}}.",
-          "1": "So close! {{player}} can't quite find the target."
+          "1": "So close! {{player}} can't quite find the target.",
+          "2": "{{player}} sends the attempt wide of the target."
         },
         "speculative": {
           "headline": "OFF TARGET",
@@ -2390,13 +2423,21 @@
             "0": "{{player}} really should have scored there — agonisingly wide!",
             "1": "A glorious chance goes begging for {{team}}! {{player}} will be kicking himself."
           }
+        },
+        "woodwork": {
+          "headline": "OFF THE WOODWORK!",
+          "lines": {
+            "0": "Ouch! {{player}} rattles the crossbar for {{team}}!",
+            "1": "So close! {{player}} crashes it against the post!"
+          }
         }
       },
       "ShotBlocked": {
         "headline": "BLOCKED!",
         "lines": {
           "0": "{{player}}'s shot is blocked by a brave defender.",
-          "1": "Bodies in the way! {{player}} is denied."
+          "1": "Bodies in the way! {{player}} is denied.",
+          "2": "The defender gets in the way of {{player}}'s shot."
         },
         "bigChance": {
           "headline": "GREAT BLOCK!",
@@ -2410,7 +2451,8 @@
         "headline": "FOUL",
         "lines": {
           "0": "{{player}} fouls {{victim}}. Free kick to {{opponent}}.",
-          "1": "{{player}} gives away a free kick against {{victim}}."
+          "1": "{{player}} gives away a free kick against {{victim}}.",
+          "2": "The whistle goes for a foul by {{team}}."
         },
         "hard": {
           "headline": "IT'S A FOUL",
@@ -2431,35 +2473,40 @@
         "headline": "YELLOW CARD",
         "lines": {
           "0": "{{player}} goes into the book for {{team}}.",
-          "1": "A yellow card for {{player}}."
+          "1": "A yellow card for {{player}}.",
+          "2": "The referee books {{player}}."
         }
       },
       "RedCard": {
         "headline": "RED CARD!",
         "lines": {
           "0": "{{player}} is sent off! {{team}} down to ten!",
-          "1": "Straight red for {{player}}! Disaster for {{team}}."
+          "1": "Straight red for {{player}}! Disaster for {{team}}.",
+          "2": "{{player}} is sent off; {{team}} must play on with ten."
         }
       },
       "SecondYellow": {
         "headline": "SECOND YELLOW — OFF!",
         "lines": {
           "0": "{{player}} picks up a second yellow and is sent off!",
-          "1": "Two yellows and gone — {{player}} leaves {{team}} a man short."
+          "1": "Two yellows and gone — {{player}} leaves {{team}} a man short.",
+          "2": "A second booking ends {{player}}'s match early."
         }
       },
       "Injury": {
         "headline": "INJURY",
         "lines": {
           "0": "{{player}} is down and needs treatment.",
-          "1": "Concern for {{team}} as {{player}} goes down injured."
+          "1": "Concern for {{team}} as {{player}} goes down injured.",
+          "2": "Play stops while {{player}} receives medical attention."
         }
       },
       "Substitution": {
         "headline": "SUBSTITUTION",
         "lines": {
           "0": "{{team}} make a change: {{player}} on, {{victim}} off.",
-          "1": "{{player}} replaces {{victim}} for {{team}}."
+          "1": "{{player}} replaces {{victim}} for {{team}}.",
+          "2": "{{team}} send on {{player}} in place of {{victim}}."
         }
       },
       "KickOff": {
@@ -2487,7 +2534,8 @@
         "headline": "FULL TIME",
         "lines": {
           "0": "That's it — full time!",
-          "1": "The referee brings the match to an end."
+          "1": "The referee brings the match to an end.",
+          "2": "The final whistle sounds; the result is settled."
         }
       }
     },
@@ -2731,7 +2779,7 @@
         "nameMaxLength": "First name and last name must not exceed 30 characters.",
         "nationalityRequired": "Nationality is required.",
         "invalidDobFormat": "Invalid date of birth. Use YYYY-MM-DD format.",
-        "minAge": "Manager must be at least 30 years old.",
+        "minAge": "Manager must be at least 18 years old.",
         "invalidDob": "Invalid date of birth.",
         "startYearMin": "Start year must be 1900 or later.",
         "invalidStartYear": "Invalid start year selected.",

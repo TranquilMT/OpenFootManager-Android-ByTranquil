@@ -3,7 +3,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { useTranslation } from "react-i18next";
 
 import type { GameStateData, LeagueData, PlayerData, TeamData } from "../store/gameStore";
-import { getActiveCompetitions, getPlayerOvr } from "../lib/helpers";
+import { getPlayerOvr } from "../lib/helpers";
 import { buildRegionLabel, inferRegionId } from "../lib/teamRegions";
 import { competitionDisplayName } from "../lib/competitionName";
 import { resolveBackendError } from "../utils/backendI18n";
@@ -50,7 +50,16 @@ export function useTeamSelection({
   const [isConfirming, setIsConfirming] = useState(false);
 
   const competitions = useMemo(
-    () => (gameState ? sortCompetitions(getActiveCompetitions(gameState)) : []),
+    () =>
+      gameState
+        ? sortCompetitions(
+            gameState.competitions?.length
+              ? gameState.competitions
+              : gameState.league
+                ? [gameState.league]
+                : [],
+          )
+        : [],
     [gameState],
   );
 
@@ -119,36 +128,24 @@ export function useTeamSelection({
 
     setCompetitionSelection((current) =>
       Object.fromEntries(
-        competitions.map((competition) => [competition.id, current[competition.id] ?? true]),
+        competitions.map((competition) => [
+          competition.id,
+          current[competition.id] ??
+            (!gameState?.active_competition_ids?.length ||
+              gameState.active_competition_ids.includes(competition.id)),
+        ]),
       ),
     );
-  }, [competitions]);
+  }, [competitions, gameState]);
 
   const activeRegionIds = regions
     .filter((region) => region.id === selectedHomeRegionId || Boolean(regionSelection[region.id]))
     .map((region) => region.id);
 
-  const homeRegionTeamIds = new Set(
-    (gameState?.teams ?? [])
-      .filter((team) => regionCountries.includes(team.country))
-      .map((team) => team.id),
-  );
-
-  const availableCompetitions = competitions.filter((competition) => {
-    if (!selectedHomeRegionId) {
-      return true;
-    }
-
-    const requiredRegions = competitionRequiredRegions(competition);
-    return (
-      requiredRegions.includes(selectedHomeRegionId) ||
-      competition.region_id === selectedHomeRegionId ||
-      (competition.country_id ? regionCountries.includes(competition.country_id) : false) ||
-      competition.participant_ids?.some((teamId) => homeRegionTeamIds.has(teamId)) ||
-      competition.scope === "Continental" ||
-      competition.scope === "International"
-    );
-  });
+  // The home country filters the club picker, not the simulation scope.
+  // Players managing an English club must still be able to enable Brazil,
+  // the United States or Asian domestic leagues before the career starts.
+  const availableCompetitions = competitions;
 
   const teams = (gameState?.teams ?? []).filter((team) => {
     if (selectedCountryCode) {

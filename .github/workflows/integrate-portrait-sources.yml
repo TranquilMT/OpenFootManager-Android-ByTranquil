@@ -1,0 +1,89 @@
+name: Integrate Portrait Sources
+
+on:
+  push:
+    branches: [android/migration]
+    paths:
+      - '.github/workflows/integrate-portrait-sources.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: android/migration
+          fetch-depth: 0
+
+      - name: Prepare 20-source portrait pool
+        shell: bash
+        run: |
+          python -m pip install --quiet pillow
+          python <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageOps
+
+          root = Path('src-tauri/assets/portrait-sources')
+          mapping = {
+              'file_0000000041748210a8dc20f02eea04c6.png': 'chroma-18-american.webp',
+              'file_00000000c2ac82468b68279953cc551a.png': 'chroma-19-australian.webp',
+              'file_00000000d2c081f4a81874b6e0703e97.png': 'chroma-20-french.webp',
+              'file_00000000ee008210ba9eb6db3416eda1.png': 'chroma-21-german.webp',
+          }
+          for source_name, target_name in mapping.items():
+              source = root / source_name
+              if not source.exists():
+                  raise SystemExit(f'Missing uploaded portrait: {source}')
+              with Image.open(source) as image:
+                  image = ImageOps.exif_transpose(image).convert('RGB')
+                  image = ImageOps.fit(image, (384, 384), method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
+                  image.save(root / target_name, 'WEBP', quality=90, method=6)
+              source.unlink()
+
+          portraits = Path('src-tauri/src/commands/portraits.rs')
+          text = portraits.read_text()
+          if 'chroma-18-american' not in text:
+              marker = '];\n\n#[tauri::command]\npub async fn generate_player_portrait'
+              additions = '''    (\n        "chroma-18-american",\n        include_bytes!("../../assets/portrait-sources/chroma-18-american.webp"),\n    ),\n    (\n        "chroma-19-australian",\n        include_bytes!("../../assets/portrait-sources/chroma-19-australian.webp"),\n    ),\n    (\n        "chroma-20-french",\n        include_bytes!("../../assets/portrait-sources/chroma-20-french.webp"),\n    ),\n    (\n        "chroma-21-german",\n        include_bytes!("../../assets/portrait-sources/chroma-21-german.webp"),\n    ),\n'''
+              if marker not in text:
+                  raise SystemExit('Could not find SOURCE_BYTES closing marker')
+              text = text.replace(marker, additions + marker, 1)
+              portraits.write_text(text)
+          PY
+
+      - name: Raise portrait diversity floor
+        shell: bash
+        run: |
+          python <<'PY'
+          from pathlib import Path
+          p = Path('scripts/check-portrait-diversity.mjs')
+          text = p.read_text()
+          text = text.replace('files.length < 16', 'files.length < 20')
+          text = text.replace('expected at least 16 source faces', 'expected at least 20 source faces')
+          p.write_text(text)
+          PY
+
+      - name: Verify portrait integration
+        run: |
+          node scripts/check-portrait-diversity.mjs
+          grep -q 'chroma-18-american' src-tauri/src/commands/portraits.rs
+          grep -q 'chroma-19-australian' src-tauri/src/commands/portraits.rs
+          grep -q 'chroma-20-french' src-tauri/src/commands/portraits.rs
+          grep -q 'chroma-21-german' src-tauri/src/commands/portraits.rs
+          test "$(find src-tauri/assets/portrait-sources -maxdepth 1 -name 'chroma-*.webp' | wc -l)" -ge 20
+
+      - name: Commit integrated portraits
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src-tauri/assets/portrait-sources src-tauri/src/commands/portraits.rs scripts/check-portrait-diversity.mjs
+          if git diff --cached --quiet; then
+            echo 'Portraits already integrated.'
+            exit 0
+          fi
+          git commit -m 'feat(portraits): expand source pool to 20 faces'
+          git push origin HEAD:android/migration

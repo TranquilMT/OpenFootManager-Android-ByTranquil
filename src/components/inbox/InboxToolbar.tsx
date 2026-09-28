@@ -48,49 +48,53 @@ export default function InboxToolbar({
   onToggleCategory,
 }: InboxToolbarProps): JSX.Element {
   const { t } = useTranslation();
-
   return (
-    <div className="flex gap-2 mb-4 flex-wrap shrink-0">
-      <button
-        type="button"
-        onClick={onShowAll}
-        className={getFilterButtonClassName(!categoryFilter)}
-      >
-        {t("common.all")} ({allMessagesCount})
-      </button>
-      {unreadCount > 0 ? (
-        <button
-          type="button"
-          onClick={onShowUnread}
-          className={getFilterButtonClassName(categoryFilter === UNREAD_FILTER)}
-        >
-          {t("inbox.unread", { count: unreadCount })}
-        </button>
-      ) : null}
-      {categories.map((category) => {
-        const categoryIcon = getCategoryIcon(category);
-        const count = categoryCounts.get(category) ?? 0;
-
-        return (
+    <div className="mb-2 flex shrink-0 flex-col gap-2 sm:mb-4">
+      <div className="-mx-2 overflow-x-auto overscroll-x-contain px-2 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex min-w-max items-center gap-2">
           <button
             type="button"
-            key={category}
-            onClick={() => onToggleCategory(category)}
+            onClick={onShowAll}
             className={getFilterButtonClassName(
-              categoryFilter === category,
-              "flex items-center gap-1.5",
+              !categoryFilter,
+              "min-h-9 shrink-0 whitespace-nowrap rounded-full px-3 sm:min-h-0",
             )}
           >
-            {categoryIcon} {t(`inbox.categories.${category}`)} ({count})
+            {t("common.all")} ({allMessagesCount})
           </button>
-        );
-      })}
-
-      <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
-        <div className="flex items-center gap-2">
+          {unreadCount > 0 ? (
+            <button
+              type="button"
+              onClick={onShowUnread}
+              className={getFilterButtonClassName(
+                categoryFilter === UNREAD_FILTER,
+                "min-h-9 shrink-0 whitespace-nowrap rounded-full px-3 sm:min-h-0",
+              )}
+            >
+              {t("inbox.unread", { count: unreadCount })}
+            </button>
+          ) : null}
+          {categories.map((category) => (
+            <button
+              type="button"
+              key={category}
+              onClick={() => onToggleCategory(category)}
+              className={getFilterButtonClassName(
+                categoryFilter === category,
+                "flex min-h-9 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3 sm:min-h-0",
+              )}
+            >
+              {getCategoryIcon(category)} {t(`inbox.categories.${category}`)} (
+              {categoryCounts.get(category) ?? 0})
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center sm:justify-end">
+        <div className="col-span-2 flex min-w-0 items-center gap-2 sm:col-span-1 sm:mr-auto">
           <label
             htmlFor="inbox-sort-order"
-            className="text-xs font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400"
+            className="shrink-0 text-[11px] font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400"
           >
             {t("inbox.sortLabel")}
           </label>
@@ -99,7 +103,8 @@ export default function InboxToolbar({
             value={sortOrder}
             onChange={(event) => onSortOrderChange(event.target.value as MessageSortOrder)}
             selectSize="sm"
-            wrapperClassName="min-w-[170px]"
+            wrapperClassName="min-w-0 flex-1 sm:min-w-[170px] sm:flex-none"
+            className="min-h-10 sm:min-h-0"
             aria-label={t("inbox.sortByDate")}
           >
             <option value="newest">{t("inbox.sortNewest")}</option>
@@ -111,6 +116,7 @@ export default function InboxToolbar({
           variant={bulkSelectionEnabled ? "primary" : "outline"}
           size="sm"
           onClick={onToggleBulkSelectionMode}
+          className="min-h-10 w-full sm:min-h-0 sm:w-auto"
           data-testid="inbox-toggle-selection-mode"
         >
           {bulkSelectionEnabled ? t("inbox.cancelSelection") : t("inbox.selectMessages")}
@@ -118,9 +124,7 @@ export default function InboxToolbar({
         {bulkSelectionEnabled ? (
           <>
             <Badge variant="neutral" size="sm">
-              {t("inbox.selectedCount", {
-                count: selectedMessageCount,
-              })}
+              {t("inbox.selectedCount", { count: selectedMessageCount })}
             </Badge>
             <Button
               type="button"
@@ -128,7 +132,7 @@ export default function InboxToolbar({
               onClick={onDeleteSelected}
               disabled={selectedMessageCount === 0}
               icon={<Trash2 className="w-4 h-4" />}
-              className="bg-red-500 hover:bg-red-600 active:bg-red-700 focus:ring-red-500"
+              className="min-h-10 w-full bg-red-500 hover:bg-red-600 active:bg-red-700 focus:ring-red-500 sm:min-h-0 sm:w-auto"
               data-testid="inbox-delete-selected"
             >
               {t("inbox.deleteSelected")}
@@ -139,18 +143,18 @@ export default function InboxToolbar({
           <button
             type="button"
             onClick={onMarkAllRead}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-heading font-bold uppercase tracking-wider bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600 hover:text-primary-500 hover:border-primary-300 transition-all"
+            className="flex min-h-10 w-full items-center justify-center gap-1.5 rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-[11px] font-heading font-bold uppercase tracking-wide text-gray-500 transition-all active:text-primary-500 dark:border-navy-600 dark:bg-navy-800 dark:text-gray-400 sm:min-h-0 sm:w-auto sm:px-3"
           >
-            <CheckCheck className="w-3.5 h-3.5" />
+            <CheckCheck className="h-3.5 w-3.5" />
             {t("inbox.markAllRead")}
           </button>
         ) : null}
         <button
           type="button"
           onClick={onClearOld}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-heading font-bold uppercase tracking-wider bg-white dark:bg-navy-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-navy-600 hover:text-red-500 hover:border-red-300 transition-all"
+          className="flex min-h-10 w-full items-center justify-center gap-1.5 rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-[11px] font-heading font-bold uppercase tracking-wide text-gray-500 transition-all active:text-red-500 dark:border-navy-600 dark:bg-navy-800 dark:text-gray-400 sm:min-h-0 sm:w-auto sm:px-3"
         >
-          <Trash2 className="w-3.5 h-3.5" />
+          <Trash2 className="h-3.5 w-3.5" />
           {t("inbox.clearOld")}
         </button>
       </div>

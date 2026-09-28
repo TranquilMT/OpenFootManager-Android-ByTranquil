@@ -101,15 +101,15 @@ export default function InboxMessageDetailPane({
 
   return (
     <>
-      <div className="shrink-0 border-b border-gray-100 p-5 dark:border-navy-600">
+      <div className="sticky top-0 z-10 shrink-0 border-b border-gray-100 bg-white p-3 dark:border-navy-600 dark:bg-navy-800 sm:p-5">
         <button
           type="button"
           onClick={onCloseSelectedMessage}
-          className="md:hidden flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 mb-3"
+          className="md:hidden flex min-h-11 items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 mb-3"
         >
           <ArrowLeft className="w-3.5 h-3.5" /> {t("inbox.backToInbox")}
         </button>
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-start gap-3 min-w-0 flex-1">
             <div
               className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${getCategoryColor(selectedMessage.category)} bg-primary-500/10 dark:bg-primary-500/20`}
@@ -120,7 +120,7 @@ export default function InboxMessageDetailPane({
               <h3 className="font-heading font-bold text-lg text-gray-900 dark:text-gray-100">
                 {selectedMessage.subject}
               </h3>
-              <div className="flex items-center gap-3 mt-1">
+              <div className="mt-1 flex flex-col items-start gap-0.5 sm:flex-row sm:items-center sm:gap-3">
                 <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
                   {selectedMessage.sender}
                   {selectedMessage.sender_role ? ` — ${selectedMessage.sender_role}` : ""}
@@ -151,7 +151,7 @@ export default function InboxMessageDetailPane({
             size="sm"
             onClick={onRequestDelete}
             icon={<Trash2 className="w-4 h-4" />}
-            className="bg-red-500 hover:bg-red-600 active:bg-red-700 focus:ring-red-500"
+            className="min-h-11 w-full bg-red-500 hover:bg-red-600 active:bg-red-700 focus:ring-red-500 sm:min-h-0 sm:w-auto"
             data-testid="inbox-delete-message"
           >
             {t("inbox.deleteMessage")}
@@ -159,8 +159,8 @@ export default function InboxMessageDetailPane({
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-6">
-        <div className="max-w-2xl">
+      <div className="p-3 pb-[calc(6rem+env(safe-area-inset-bottom))] sm:p-6">
+        <div className="min-w-0 max-w-2xl break-words">
           {selectedMessage.body
             .split("\n")
             .map((line, index) => renderMessageBodyLine(line, index))}
@@ -376,8 +376,8 @@ export default function InboxMessageDetailPane({
           ) : null}
 
           {selectedMessage.context?.match_result ? (
-            <div className="mt-6 p-4 bg-gray-50 dark:bg-navy-700 rounded-xl flex items-center justify-center gap-8 border border-gray-100 dark:border-navy-600">
-              <span className="font-heading font-bold text-sm text-gray-700 dark:text-gray-200">
+            <div className="mt-6 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 rounded-xl border border-gray-100 bg-gray-50 p-3 text-center dark:border-navy-600 dark:bg-navy-700 sm:gap-8 sm:p-4">
+              <span className="break-words font-heading font-bold text-xs text-gray-700 dark:text-gray-200 sm:text-sm">
                 {selectedMessage.context.match_result.home_team_name ||
                   selectedMessage.context.match_result.home_team_id}
               </span>
@@ -385,7 +385,7 @@ export default function InboxMessageDetailPane({
                 {selectedMessage.context.match_result.home_goals} -{" "}
                 {selectedMessage.context.match_result.away_goals}
               </span>
-              <span className="font-heading font-bold text-sm text-gray-700 dark:text-gray-200">
+              <span className="break-words font-heading font-bold text-xs text-gray-700 dark:text-gray-200 sm:text-sm">
                 {selectedMessage.context.match_result.away_team_name ||
                   selectedMessage.context.match_result.away_team_id}
               </span>
@@ -436,7 +436,7 @@ export default function InboxMessageDetailPane({
                           onClick={() =>
                             handleOptionClick(selectedMessage.id, action.id, option.id)
                           }
-                          className="w-full text-left p-4 rounded-xl border border-gray-200 dark:border-navy-600 hover:border-primary-400 dark:hover:border-primary-500 hover:bg-primary-50/50 dark:hover:bg-primary-500/5 transition-all group"
+                          className="min-h-12 w-full rounded-xl border p-3 text-left sm:p-4 border-gray-200 dark:border-navy-600 hover:border-primary-400 dark:hover:border-primary-500 hover:bg-primary-50/50 dark:hover:bg-primary-500/5 transition-all group"
                         >
                           <p className="text-sm font-heading font-bold text-gray-800 dark:text-gray-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                             {option.label}

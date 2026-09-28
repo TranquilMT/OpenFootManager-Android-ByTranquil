@@ -8,166 +8,142 @@ import TeamSelectionScopePanel from "./TeamSelectionScopePanel";
 import TeamSelectionGrid from "./TeamSelectionGrid";
 import TeamSelectionSidebar from "./TeamSelectionSidebar";
 import { useTeamSelection } from "./useTeamSelection";
-
 export default function TeamSelection() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { gameState, setGameState, setGameActive } = useGameStore();
-
-  const {
-    clubSearch,
-    setClubSearch,
-    scopeExpanded,
-    setScopeExpanded,
-    selectedHomeRegionId,
-    setSelectedHomeRegionId,
-    selectedCountryCode,
-    setSelectedCountryCode,
-    regionSelection,
-    setSelectedTeamId,
-    scopeMessage,
-    setScopeMessage,
-    isConfirming,
-    regions,
-    regionCountries,
-    activeRegionIds,
-    availableCompetitions,
-    filteredTeams,
-    teamGroups,
-    getTeamPlayers,
-    getTeamAvgOvr,
-    selectedTeam,
-    selectedTeamXi,
-    selectedTeamCompetitions,
-    mandatoryCompetitionIds,
-    competitionSelection,
-    enabledCompetitionIds,
-    handleRegionToggle,
-    handleCompetitionToggle,
-    handleConfirm,
-  } = useTeamSelection({ gameState, setGameState, setGameActive, navigate });
-
+  const s = useTeamSelection({ gameState, setGameState, setGameActive, navigate });
   if (!gameState) {
     navigate("/");
     return null;
   }
-
+  const confirmLabel = s.isConfirming
+    ? t("teamSelect.confirming")
+    : s.selectedTeam
+      ? t("teamSelect.manage", { name: s.selectedTeam.short_name })
+      : "";
+  const renderConfirmButton = (mobile = false) =>
+    !s.selectedTeam ? null : (
+      <button
+        type="button"
+        onClick={s.handleConfirm}
+        disabled={s.isConfirming}
+        className={`flex min-h-12 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 px-5 py-3 font-heading text-sm font-bold uppercase tracking-wider text-white shadow-lg active:scale-[.98] disabled:opacity-70 ${mobile ? "w-full" : ""}`}
+      >
+        <span className="truncate">{confirmLabel}</span>
+        {s.isConfirming ? (
+          <Loader2 className="h-4 w-4 shrink-0 animate-spin" />
+        ) : (
+          <ChevronRight className="h-4 w-4 shrink-0" />
+        )}
+      </button>
+    );
   return (
-    <div className="min-h-screen bg-gray-100 transition-colors duration-300 dark:bg-navy-900">
-      <header className="flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4 shadow-sm dark:border-navy-700 dark:bg-navy-800">
-        <div className="flex items-center gap-4">
+    <div
+      className="mobile-page-shell bg-gray-100 transition-colors dark:bg-navy-900"
+      style={{ paddingTop: "env(safe-area-inset-top,0px)" }}
+    >
+      <header className="z-30 shrink-0 flex items-center justify-between gap-2 border-b border-gray-200 bg-white/95 px-3 py-2.5 shadow-sm backdrop-blur dark:border-navy-700 dark:bg-navy-800/95 sm:px-6 sm:py-4">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-4">
           <button
             type="button"
+            aria-label="Back"
             onClick={() => navigate("/")}
-            className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-navy-700 dark:hover:text-gray-200"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-gray-500 active:bg-gray-100 dark:text-gray-300"
           >
             <ArrowLeft className="h-5 w-5" />
           </button>
-          <div>
-            <h1 className="font-heading text-xl font-bold uppercase tracking-wide text-gray-800 dark:text-gray-100">
+          <div className="min-w-0">
+            <h1 className="truncate font-heading text-lg font-bold uppercase tracking-wide text-gray-800 dark:text-gray-100 sm:text-xl">
               {t("teamSelect.title")}
             </h1>
-            <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">
+            <p className="hidden text-xs text-gray-500 dark:text-gray-400 sm:block">
               {t("teamSelect.subtitle")}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2">
           <ThemeToggle />
-          {selectedTeam && (
-            <button
-              type="button"
-              onClick={handleConfirm}
-              disabled={isConfirming}
-              className={`flex items-center gap-2 rounded-lg bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-2.5 font-heading text-sm font-bold uppercase tracking-wider text-white shadow-md transition-all hover:from-primary-600 hover:to-primary-700 hover:shadow-lg hover:shadow-primary-500/20 ${
-                isConfirming ? "cursor-wait opacity-70" : ""
-              }`}
-            >
-              <span>
-                {isConfirming
-                  ? t("teamSelect.confirming")
-                  : t("teamSelect.manage", { name: selectedTeam.short_name })}
-              </span>
-              {isConfirming ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <ChevronRight className="h-4 w-4" />
-              )}
-            </button>
-          )}
+          <div className="hidden sm:block">{renderConfirmButton()}</div>
         </div>
       </header>
-
-      <div className="space-y-5 p-6">
-        {scopeMessage && (
-          <Card accent="accent">
-            <CardBody className="py-3">
-              <p className="text-sm text-gray-700 dark:text-gray-200">
-                {t(scopeMessage.key, scopeMessage.values)}
-              </p>
+      <main className="mobile-page-scroll w-full">
+        <div className="mx-auto w-full max-w-[1600px] space-y-3 p-3 pb-28 sm:space-y-5 sm:p-6">
+          <div className="rounded-xl border border-primary-200 bg-primary-50 px-3 py-2 text-sm text-primary-900 dark:border-primary-800 dark:bg-primary-900/20 dark:text-primary-100 sm:hidden">
+            Choose a club below. Tap a club to view its squad and details, then use the button at
+            the bottom to begin your career.
+          </div>
+          {s.scopeMessage && (
+            <Card accent="accent">
+              <CardBody className="py-3">
+                <p className="text-sm text-gray-700 dark:text-gray-200">
+                  {t(s.scopeMessage.key, s.scopeMessage.values)}
+                </p>
+              </CardBody>
+            </Card>
+          )}
+          <TeamSelectionScopePanel
+            scopeExpanded={s.scopeExpanded}
+            onToggleScopeExpanded={() => s.setScopeExpanded((v) => !v)}
+            regions={s.regions}
+            selectedHomeRegionId={s.selectedHomeRegionId}
+            onSelectHomeRegion={(id) => {
+              s.setSelectedHomeRegionId(id);
+              s.setScopeMessage(null);
+            }}
+            selectedCountryCode={s.selectedCountryCode}
+            onSelectCountry={s.setSelectedCountryCode}
+            regionCountries={s.regionCountries}
+            regionSelection={s.regionSelection}
+            onRegionToggle={s.handleRegionToggle}
+            availableCompetitions={s.availableCompetitions}
+            competitionSelection={s.competitionSelection}
+            mandatoryCompetitionIds={s.mandatoryCompetitionIds}
+            activeRegionIds={s.activeRegionIds}
+            onCompetitionToggle={s.handleCompetitionToggle}
+          />
+          <div className="grid gap-3 sm:gap-5 xl:grid-cols-[minmax(0,1.2fr)_minmax(340px,0.8fr)]">
+            <TeamSelectionGrid
+              clubSearch={s.clubSearch}
+              onClubSearchChange={s.setClubSearch}
+              filteredTeamsCount={s.filteredTeams.length}
+              teamGroups={s.teamGroups}
+              selectedTeamId={s.selectedTeam?.id ?? null}
+              onSelectTeam={s.setSelectedTeamId}
+              getTeamAvgOvr={s.getTeamAvgOvr}
+              getTeamPlayerCount={(id) => s.getTeamPlayers(id).length}
+            />
+            <TeamSelectionSidebar
+              selectedTeam={s.selectedTeam}
+              selectedTeamXi={s.selectedTeamXi}
+              selectedTeamCompetitions={s.selectedTeamCompetitions}
+              getTeamAvgOvr={s.getTeamAvgOvr}
+            />
+          </div>
+          <Card>
+            <CardBody className="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="text-sm text-gray-600 dark:text-gray-300">
+                {t("teamSelect.scopeSummary", {
+                  regionsCount: s.activeRegionIds.length,
+                  competitionsCount: s.enabledCompetitionIds.length,
+                })}
+              </div>
+              <div className="flex gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0">
+                {s.activeRegionIds.map((id) => (
+                  <Badge key={id} variant="neutral">
+                    <span className="whitespace-nowrap">{buildRegionLabel(t, id)}</span>
+                  </Badge>
+                ))}
+              </div>
             </CardBody>
           </Card>
-        )}
-
-        <TeamSelectionScopePanel
-          scopeExpanded={scopeExpanded}
-          onToggleScopeExpanded={() => setScopeExpanded((value) => !value)}
-          regions={regions}
-          selectedHomeRegionId={selectedHomeRegionId}
-          onSelectHomeRegion={(regionId) => {
-            setSelectedHomeRegionId(regionId);
-            setScopeMessage(null);
-          }}
-          selectedCountryCode={selectedCountryCode}
-          onSelectCountry={setSelectedCountryCode}
-          regionCountries={regionCountries}
-          regionSelection={regionSelection}
-          onRegionToggle={handleRegionToggle}
-          availableCompetitions={availableCompetitions}
-          competitionSelection={competitionSelection}
-          mandatoryCompetitionIds={mandatoryCompetitionIds}
-          activeRegionIds={activeRegionIds}
-          onCompetitionToggle={handleCompetitionToggle}
-        />
-
-        <div className="grid gap-5 xl:grid-cols-[minmax(0,1.2fr)_minmax(340px,0.8fr)]">
-          <TeamSelectionGrid
-            clubSearch={clubSearch}
-            onClubSearchChange={setClubSearch}
-            filteredTeamsCount={filteredTeams.length}
-            teamGroups={teamGroups}
-            selectedTeamId={selectedTeam?.id ?? null}
-            onSelectTeam={setSelectedTeamId}
-            getTeamAvgOvr={getTeamAvgOvr}
-            getTeamPlayerCount={(teamId) => getTeamPlayers(teamId).length}
-          />
-
-          <TeamSelectionSidebar
-            selectedTeam={selectedTeam}
-            selectedTeamXi={selectedTeamXi}
-            selectedTeamCompetitions={selectedTeamCompetitions}
-            getTeamAvgOvr={getTeamAvgOvr}
-          />
         </div>
-
-        <Card>
-          <CardBody className="flex flex-wrap items-center justify-between gap-3 py-3">
-            <div className="text-sm text-gray-600 dark:text-gray-300">
-              {t("teamSelect.scopeSummary", {
-                regionsCount: activeRegionIds.length,
-                competitionsCount: enabledCompetitionIds.length,
-              })}
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {activeRegionIds.map((regionId) => (
-                <Badge key={regionId} variant="neutral">
-                  {buildRegionLabel(t, regionId)}
-                </Badge>
-              ))}
-            </div>
-          </CardBody>
-        </Card>
-      </div>
+      </main>
+      {s.selectedTeam && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-white/95 p-3 pb-[max(.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_30px_rgba(0,0,0,.12)] backdrop-blur dark:border-navy-700 dark:bg-navy-800/95 sm:hidden">
+          <div className="mx-auto max-w-xl">{renderConfirmButton(true)}</div>
+        </div>
+      )}
     </div>
   );
 }

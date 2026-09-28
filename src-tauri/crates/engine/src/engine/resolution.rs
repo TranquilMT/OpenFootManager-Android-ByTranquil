@@ -1,6 +1,6 @@
 use rand::{Rng, RngExt};
 
-use crate::event::{EventType, MatchEvent};
+use crate::event::{EventDetail, EventType, MatchEvent};
 use crate::shared::{
     PlayStylePhase, TraitContext, home_mod, play_style_modifier, role_attribute_modifier,
     tactics_buildup_mod, tactics_cross_probability, tactics_defensive_conversion_mod,
@@ -339,10 +339,14 @@ fn resolve_shot<R: Rng>(ctx: &mut MatchContext, minute: u8, att_side: Side, rng:
             ctx.possession = def_side;
             ctx.ball_zone = Zone::Midfield;
         } else {
-            ctx.emit(
-                MatchEvent::new(minute, EventType::ShotOffTarget, att_side, zone)
-                    .with_player(&shooter.id),
-            );
+            let shot = MatchEvent::new(minute, EventType::ShotOffTarget, att_side, zone)
+                .with_player(&shooter.id);
+            let shot = if rng.random_range(0.0..1.0f64) < 0.12 {
+                shot.with_detail(EventDetail::Woodwork)
+            } else {
+                shot
+            };
+            ctx.emit(shot);
             ctx.emit(MatchEvent::new(minute, EventType::GoalKick, def_side, zone));
             ctx.possession = def_side;
             ctx.ball_zone = Zone::defensive_third(def_side);

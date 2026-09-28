@@ -92,6 +92,68 @@ describe("useTeamSelection scope toggles", () => {
     vi.clearAllMocks();
   });
 
+  it("offers dormant leagues for reactivation when a world already has an active scope", () => {
+    const gameState = buildGameState();
+    gameState.active_competition_ids = ["epl"];
+    const { result } = renderHook(() =>
+      useTeamSelection({
+        gameState,
+        setGameState: vi.fn(),
+        setGameActive: vi.fn(),
+        navigate: vi.fn(),
+      }),
+    );
+
+    expect(result.current.competitions.map((competition) => competition.id)).toContain("asia_cup");
+    expect(result.current.competitionSelection.asia_cup).toBe(false);
+    act(() =>
+      result.current.handleCompetitionToggle(
+        result.current.competitions.find((c) => c.id === "asia_cup")!,
+      ),
+    );
+    expect(result.current.competitionSelection.asia_cup).toBe(true);
+  });
+
+  it("shows domestic leagues outside the selected home region", () => {
+    const gameState = buildGameState();
+    gameState.competitions = [
+      ...(gameState.competitions ?? []),
+      league({
+        id: "brazil",
+        scope: "Domestic",
+        kind: "League",
+        region_id: "south_america",
+        country_id: "BR",
+      }),
+      league({
+        id: "usa",
+        scope: "Domestic",
+        kind: "League",
+        region_id: "north-america",
+        country_id: "US",
+      }),
+      league({
+        id: "japan",
+        scope: "Domestic",
+        kind: "League",
+        region_id: "asia",
+        country_id: "JP",
+      }),
+    ];
+    const { result } = renderHook(() =>
+      useTeamSelection({
+        gameState,
+        setGameState: vi.fn(),
+        setGameActive: vi.fn(),
+        navigate: vi.fn(),
+      }),
+    );
+    expect(result.current.selectedHomeRegionId).toBe("europe");
+    expect(result.current.availableCompetitions.map((competition) => competition.id)).toEqual(
+      expect.arrayContaining(["brazil", "usa", "japan"]),
+    );
+  });
+
   it("initializes the home region, region selection, and competition selection", () => {
     const { result } = renderController();
 

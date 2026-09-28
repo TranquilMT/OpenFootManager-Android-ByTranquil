@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import type { GameStateData } from "../store/gameStore";
 import { useGameStore } from "../store/gameStore";
 import type { BlockerModal } from "./useAdvanceTime.helpers";
@@ -49,8 +50,10 @@ export function useAdvanceTime(
   settingsLoaded: boolean,
   isUnemployed: boolean,
   continueToNextEvent: boolean = false,
+  confirmAdvance: boolean = false,
 ): AdvanceTimeState {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const setShowFiredModal = useGameStore((s) => s.setShowFiredModal);
   const [isAdvancing, setIsAdvancing] = useState(false);
   const [showContinueMenu, setShowContinueMenu] = useState(false);
@@ -177,6 +180,9 @@ export function useAdvanceTime(
       return;
     }
     if (isAdvancing) return;
+    if (confirmAdvance && !hasMatchToday && !window.confirm(t("settings.confirmAdvancePrompt"))) {
+      return;
+    }
     // With the opt-in setting, Continue runs the day-by-day digest loop (which
     // pauses on attention events) instead of the single-day advance.
     const runContinue = continueToNextEvent

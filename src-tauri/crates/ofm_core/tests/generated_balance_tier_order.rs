@@ -1,0 +1,15 @@
+use ofm_core::generated_balance::{LeagueTier, rating_band};
+#[test]
+fn league_quality_rises_with_tier() {
+    let g = rating_band(LeagueTier::Grassroots);
+    let l = rating_band(LeagueTier::Lower);
+    let p = rating_band(LeagueTier::Professional);
+    let t = rating_band(LeagueTier::Top);
+    let e = rating_band(LeagueTier::Elite);
+    assert!(
+        g.core_high < l.core_high
+            && l.core_high < p.core_high
+            && p.core_high < t.core_high
+            && t.core_high < e.core_high
+    );
+}

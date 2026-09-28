@@ -287,6 +287,7 @@ pub fn generate_youth_academy_recruit_with_nationality(
         &names_def,
         &mut rng,
     );
+    rebalance_generated_player_for_club(&mut player, team, slot_index, current_year, &mut rng);
     player.squad_role = SquadRole::Youth;
     player.transfer_listed = false;
     player.loan_listed = false;
@@ -321,6 +322,70 @@ pub fn generate_national_team_player(
     player.transfer_listed = false;
     player.loan_listed = false;
     player
+}
+
+fn rebalance_generated_player_for_club(
+    player: &mut Player,
+    team: &Team,
+    slot: usize,
+    opening_year: u32,
+    rng: &mut impl rand::Rng,
+) {
+    use crate::generated_balance::{
+        LeagueTier, clamp_generated_ovr, club_strength_ovr, market_value_eur, weekly_wage_eur,
+    };
+
+    let reputation = (team.reputation / 10).min(100) as u8;
+    let financial_strength = ((team.finance.max(0) as u64 / 1_000_000).min(100)) as u8;
+    let tier = match team.reputation {
+        800.. => LeagueTier::Elite,
+        650..=799 => LeagueTier::Top,
+        450..=649 => LeagueTier::Professional,
+        250..=449 => LeagueTier::Lower,
+        _ => LeagueTier::Grassroots,
+    };
+    let youth = is_youth_reserved_slot(slot);
+    let base = club_strength_ovr(tier, reputation, financial_strength);
+    // Procedural club IDs are UUIDs. Use the stable football identity so a
+    // seeded world produces the same featured players on every generation.
+    let club_key = format!("{}:{}", team.country, team.name);
+    let slot_target =
+        crate::generated_career::quality_curve::apply_for_club(base, slot, tier, &club_key);
+    let generated_target = clamp_generated_ovr(
+        tier,
+        if youth {
+            slot_target as i16 - 12
+        } else {
+            slot_target as i16
+        },
+        youth,
+    );
+    // Factual club membership and game-designed ability are separate inputs.
+    // Stronger named clubs need genuinely stronger player attributes, not a
+    // cosmetic number on the team-selection card. Youth still starts lower.
+    let target = if let Some(club_average) = clubs::curated_squad_target(&team.name) {
+        const SLOT_OFFSETS: [i16; SQUAD_SLOTS] = [
+            8, 6, 6, 5, 4, 4, 3, 3, 2, 2, 1, 0, -1, -2, -3, -3, -4, -5, -6, -6, -14, -14,
+        ];
+        (club_average as i16 + 2 + SLOT_OFFSETS[slot.min(SQUAD_SLOTS - 1)]).clamp(45, 96) as u8
+    } else {
+        generated_target
+    };
+    player.attributes = attributes_for_overall(target, &player.position, rng);
+    let age = player
+        .date_of_birth
+        .get(0..4)
+        .and_then(|year| year.parse::<u32>().ok())
+        .map(|year| opening_year.saturating_sub(year))
+        .unwrap_or(24) as u8;
+    let current = crate::player_rating::natural_ovr(player)
+        .round()
+        .clamp(1.0, 99.0) as u8;
+    player.potential =
+        crate::generated_career::potential_curve::potential(current, age, reputation);
+    player.market_value = market_value_eur(current, player.potential, age).max(0) as u64;
+    player.wage = weekly_wage_eur(current, reputation).clamp(100, u32::MAX as i64) as u32;
+    crate::player_rating::refresh_player_derived(player, opening_year);
 }
 
 fn normalize_generated_team(team: &mut Team, players: &mut [Player], opening_year: i32) {
@@ -723,6 +788,15 @@ fn build_club(
     rng: &mut impl rand::Rng,
 ) -> (domain::team::Team, Vec<Player>, Vec<Staff>) {
     let mut team = build_team(tdef, rng);
+    if tdef.country == "ENG"
+        && matches!(
+            tdef.name.as_str(),
+            "Cardiff City" | "Swansea City" | "Wrexham"
+        )
+    {
+        team.country = "WAL".to_string();
+        team.football_nation = "ENG".to_string();
+    }
     let team_id = team.id.clone();
 
     let mut team_players = Vec::with_capacity(SQUAD_SLOTS);
@@ -736,6 +810,7 @@ fn build_club(
             names_def,
             rng,
         );
+        rebalance_generated_player_for_club(&mut player, &team, slot, opening_year, rng);
         if rng.random_range(0..100) < 12 {
             player.transfer_listed = true;
         } else if rng.random_range(0..100) < 8 {
@@ -1349,6 +1424,42 @@ fn generate_world_with_rng(
         teams_out.push(team);
     }
 
+    // Give every club's local market a senior free agent to discover. Spread
+    // positions evenly and keep wages off the books until someone signs them.
+    const MARKET_SLOTS: [usize; 4] = [0, 2, 9, 16];
+    for (index, team) in teams_out.iter().enumerate() {
+        let slot = MARKET_SLOTS[index % MARKET_SLOTS.len()];
+        let mut player = generate_random_player_from_def(
+            "free-agent-market",
+            slot,
+            &team.country,
+            opening_year,
+            &names_def,
+            &mut rng,
+        );
+        let target_ovr = rng.random_range(50..=78);
+        player.attributes = attributes_for_overall(target_ovr, &player.position, &mut rng);
+        let current = crate::player_rating::natural_ovr(&player)
+            .round()
+            .clamp(1.0, 96.0) as u8;
+        let age = player
+            .date_of_birth
+            .get(0..4)
+            .and_then(|year| year.parse::<u32>().ok())
+            .map(|year| opening_year.saturating_sub(year))
+            .unwrap_or(24) as u8;
+        player.potential = crate::generated_career::potential_curve::potential(current, age, 40);
+        player.market_value =
+            crate::generated_balance::market_value_eur(current, player.potential, age).max(0)
+                as u64;
+        player.team_id = None;
+        player.contract_end = None;
+        player.wage = 0;
+        player.transfer_listed = false;
+        player.loan_listed = false;
+        players.push(player);
+    }
+
     // Generate free-agent staff
     for role in standard_available_staff_roles() {
         let nat = &country_codes[rng.random_range(0..country_codes.len())];
@@ -1931,8 +2042,40 @@ mod tests {
         let (teams, players, staff) =
             generate_world_with(&config, &definitions::DefinitionSources::embedded_only());
         assert_eq!(teams.len(), expected);
-        assert_eq!(players.len(), expected * 22);
+        assert_eq!(players.len(), expected * (SQUAD_SLOTS + 1));
+        assert_eq!(
+            players
+                .iter()
+                .filter(|player| player.team_id.is_none())
+                .count(),
+            expected
+        );
         assert_eq!(staff.len(), expected * 4 + 12);
+    }
+
+    #[test]
+    fn leading_english_clubs_have_stronger_generated_squads() {
+        let mut config = WorldGenConfig::standard();
+        config.nations.retain(|nation| nation.code == "ENG");
+        let (teams, players, _) = generate_world_with_rng(
+            StdRng::seed_from_u64(7),
+            &config,
+            &definitions::DefinitionSources::embedded_only(),
+        );
+        let average = |name: &str| {
+            let team = teams.iter().find(|team| team.name == name).unwrap();
+            let squad: Vec<_> = players
+                .iter()
+                .filter(|player| player.team_id.as_deref() == Some(team.id.as_str()))
+                .collect();
+            assert_eq!(squad.len(), SQUAD_SLOTS);
+            squad.iter().map(|player| player.ovr as u32).sum::<u32>() / squad.len() as u32
+        };
+        assert!(average("Manchester United") >= 86);
+        assert!(average("Arsenal") >= 86);
+        assert!(average("Chelsea") >= 86);
+        assert!(average("Liverpool") >= 86);
+        assert!(average("Birmingham City") < average("Manchester United"));
     }
 
     #[test]
@@ -1965,11 +2108,15 @@ mod tests {
         );
         let team_ids: Vec<&str> = teams.iter().map(|t| t.id.as_str()).collect();
         for p in &players {
-            assert!(p.team_id.is_some(), "Player {} has no team", p.full_name);
-            assert!(
-                team_ids.contains(&p.team_id.as_deref().unwrap()),
-                "Player has unknown team"
-            );
+            if let Some(team_id) = p.team_id.as_deref() {
+                assert!(team_ids.contains(&team_id), "Player has unknown team");
+            } else {
+                assert_eq!(p.wage, 0, "Free agents must not charge a club wages");
+                assert!(
+                    p.contract_end.is_none(),
+                    "Free agents must not have club contracts"
+                );
+            }
         }
     }
 
@@ -2480,7 +2627,7 @@ mod tests {
             "every club should come from the overridden nation: {:?}",
             teams.iter().map(|t| &t.country).collect::<Vec<_>>()
         );
-        assert_eq!(players.len(), 4 * 22);
+        assert_eq!(players.len(), 4 * (SQUAD_SLOTS + 1));
 
         std::fs::remove_dir_all(&dir).ok();
     }

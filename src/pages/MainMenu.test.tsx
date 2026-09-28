@@ -6,6 +6,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { countryName } from "../lib/countries";
 import { resetCountryResourcesCache } from "../components/menu/CreateManagerNationalityField";
 import type { ManagerProfile } from "../components/menu/types";
+import { WHATS_NEW_DISMISSED_KEY, WHATS_NEW_SEEN_KEY } from "../components/menu/WhatsNewModal";
 import MainMenu from "./MainMenu";
 
 const navigateMock = vi.fn();
@@ -101,14 +102,17 @@ vi.mock("../components/ui", () => ({
     value,
     onChange,
     children,
+    id,
     "aria-label": ariaLabel,
   }: {
     value?: string | number | readonly string[];
     onChange?: (event: { target: { value: string } }) => void;
     children?: ReactNode;
+    id?: string;
     "aria-label"?: string;
   }) => (
     <select
+      id={id}
       aria-label={ariaLabel}
       value={value}
       onChange={(event) => onChange?.({ target: { value: event.target.value } })}
@@ -275,6 +279,8 @@ describe("MainMenu", () => {
     openUrlMock.mockReset();
     dialogOpenResult = null;
     localStorage.clear();
+    sessionStorage.clear();
+    sessionStorage.setItem(WHATS_NEW_SEEN_KEY, "1");
     latestDatePickerOnChange = null;
     translationState.language = "en";
     mockedInvoke.mockReset();
@@ -523,7 +529,7 @@ describe("MainMenu", () => {
     expect(screen.queryByTestId("world-select")).not.toBeInTheDocument();
   });
 
-  it("allows a manager who is 30 by the selected start year to continue", async () => {
+  it("allows a manager who is 18 by the selected start year to continue", async () => {
     render(<MainMenu />);
 
     await openCreateManagerForm();
@@ -534,7 +540,7 @@ describe("MainMenu", () => {
       target: { value: "Lovelace" },
     });
     fireEvent.change(screen.getByLabelText("manager-date-of-birth"), {
-      target: { value: "2008-01-01" },
+      target: { value: "2020-01-01" },
     });
     fillCareerStartDetails("2038", "seasonStart");
     await selectNationality("en", "ES");
@@ -558,7 +564,7 @@ describe("MainMenu", () => {
       target: { value: "Lovelace" },
     });
     fireEvent.change(screen.getByLabelText("manager-date-of-birth"), {
-      target: { value: "2008-08-01" },
+      target: { value: "2020-08-01" },
     });
     fillCareerStartDetails("2038", "seasonStart");
 
@@ -853,16 +859,6 @@ describe("MainMenu", () => {
     expect(localStorage.getItem("ofm-generated-history-depth-years")).toBe("12");
   });
 
-  it("opens the Discord invite in the system browser when the Discord link is clicked", async () => {
-    render(<MainMenu />);
-
-    const discordButton = await screen.findByRole("button", { name: "menu.openDiscord" });
-    fireEvent.click(discordButton);
-
-    expect(openUrlMock).toHaveBeenCalledTimes(1);
-    expect(openUrlMock).toHaveBeenCalledWith("https://discord.gg/2CXaesaukT");
-  });
-
   it("opens the GitHub repository in the system browser when the GitHub link is clicked", async () => {
     render(<MainMenu />);
 
@@ -870,7 +866,45 @@ describe("MainMenu", () => {
     fireEvent.click(githubButton);
 
     expect(openUrlMock).toHaveBeenCalledTimes(1);
+    expect(openUrlMock).toHaveBeenCalledWith(
+      "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil",
+    );
+  });
+
+  it("opens the original game's repository separately", async () => {
+    render(<MainMenu />);
+
+    fireEvent.click(await screen.findByRole("button", { name: "menu.openOriginalGithub" }));
+
     expect(openUrlMock).toHaveBeenCalledWith("https://github.com/openfootmanager/openfootmanager");
+  });
+
+  it("shows the v0.3.5 notes on launch and honors the opt-out on later launches", async () => {
+    sessionStorage.removeItem(WHATS_NEW_SEEN_KEY);
+    const { unmount } = render(<MainMenu />);
+
+    expect(screen.getByRole("dialog", { name: "settings.patchWelcome" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("checkbox", { name: "menu.doNotShowWhatsNew" }));
+    fireEvent.click(screen.getByRole("button", { name: "menu.continueToGame" }));
+
+    expect(localStorage.getItem(WHATS_NEW_DISMISSED_KEY)).toBe("1");
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    unmount();
+    sessionStorage.clear();
+    render(<MainMenu />);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("shows the notes again on the next launch when opt-out is not selected", () => {
+    sessionStorage.removeItem(WHATS_NEW_SEEN_KEY);
+    const { unmount } = render(<MainMenu />);
+    fireEvent.click(screen.getByRole("button", { name: "menu.continueToGame" }));
+
+    expect(localStorage.getItem(WHATS_NEW_DISMISSED_KEY)).toBeNull();
+    unmount();
+    sessionStorage.clear();
+    render(<MainMenu />);
+    expect(screen.getByRole("dialog", { name: "settings.patchWelcome" })).toBeInTheDocument();
   });
 
   describe("profile confirm modal", () => {

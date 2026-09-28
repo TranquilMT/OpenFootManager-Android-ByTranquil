@@ -81,7 +81,7 @@ export default function TacticsRightPanel({
               setRolesOpen((o) => !o);
             }}
             aria-expanded={rolesOpen}
-            className="flex items-center gap-1.5 text-[11px] font-heading font-bold uppercase tracking-[0.22em] text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+            className="flex min-h-11 w-full items-center gap-2 text-left text-[11px] font-heading font-bold uppercase tracking-[0.22em] text-gray-500 active:text-gray-700 dark:text-gray-400 dark:active:text-gray-300 sm:min-h-0 sm:w-auto sm:hover:text-gray-700 dark:sm:hover:text-gray-300"
           >
             <ChevronDown
               className={`h-3 w-3 transition-transform duration-150 ${rolesOpen ? "" : "-rotate-90"}`}
@@ -102,7 +102,7 @@ export default function TacticsRightPanel({
                   onClick={() => {
                     void handleAutoSelectAssignments();
                   }}
-                  className="mb-2 w-full rounded-lg border border-primary-200 py-1.5 text-[10px] font-heading font-bold uppercase tracking-[0.18em] text-primary-500 transition-colors hover:bg-primary-50 dark:border-primary-500/30 dark:text-primary-400 dark:hover:bg-primary-500/10"
+                  className="mb-2 min-h-11 w-full rounded-lg border border-primary-200 px-3 py-2 text-[10px] font-heading font-bold uppercase tracking-[0.18em] text-primary-500 transition-colors hover:bg-primary-50 dark:border-primary-500/30 dark:text-primary-400 dark:hover:bg-primary-500/10"
                 >
                   {t("tactics.autoSelectAssignments")}
                 </button>
@@ -176,7 +176,7 @@ export default function TacticsRightPanel({
               setBlueprintOpen((o) => !o);
             }}
             aria-expanded={blueprintOpen}
-            className="flex items-center gap-1.5 text-[11px] font-heading font-bold uppercase tracking-[0.22em] text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+            className="flex min-h-11 w-full items-center gap-2 text-left text-[11px] font-heading font-bold uppercase tracking-[0.22em] text-gray-500 active:text-gray-700 dark:text-gray-400 dark:active:text-gray-300 sm:min-h-0 sm:w-auto sm:hover:text-gray-700 dark:sm:hover:text-gray-300"
           >
             <ChevronDown
               className={`h-3 w-3 transition-transform duration-150 ${blueprintOpen ? "" : "-rotate-90"}`}

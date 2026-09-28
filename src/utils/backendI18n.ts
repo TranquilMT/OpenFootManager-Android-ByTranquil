@@ -2,6 +2,7 @@ import i18n from "../i18n";
 import { formatExactMoney, formatVal } from "../lib/helpers";
 import { formatDate } from "../lib/dateFormatting";
 import { countryName } from "../lib/countries";
+import { normalizeLegacyInjuryKey } from "../lib/injury";
 import { useSettingsStore } from "../store/settingsStore";
 import type {
   MessageActionOption,
@@ -233,9 +234,10 @@ function resolveParamValues(params?: Record<string, string>): Record<string, str
   if (!params) return params;
   const resolved = { ...params };
   for (const [key, value] of Object.entries(resolved)) {
-    if (value.includes(".")) {
-      const attempted = i18n.t(value);
-      if (attempted !== value) {
+    const normalizedValue = key === "injury" ? normalizeLegacyInjuryKey(value) : value;
+    if (normalizedValue.includes(".")) {
+      const attempted = i18n.t(normalizedValue);
+      if (attempted !== normalizedValue) {
         resolved[key] = attempted;
         continue;
       }
@@ -243,7 +245,7 @@ function resolveParamValues(params?: Record<string, string>): Record<string, str
 
     resolved[key] = resolveDateParamValue(
       key,
-      resolveCountryParamValue(key, resolveMoneyParamValue(key, resolved[key])),
+      resolveCountryParamValue(key, resolveMoneyParamValue(key, normalizedValue)),
     );
   }
   return resolved;
