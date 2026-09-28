@@ -5,8 +5,8 @@
 OFMtouch is a free football management game built for Android. Take charge of a club, build your squad, scout talent, shape your tactics, develop young players and compete across multiple seasons in a growing football world.
 
 > 🧪 **Current version: v0.3.5 NightlyPreRelease**
-> **Latest Android APK and checksum:** [Build 314 artifact](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/actions/runs/36365617607/artifacts/10948075994). Build 313 has a known mobile message-reading layout issue; use build 314. The updated Inbox layout still needs confirmation on a physical phone.
-> **Matching source ZIP:** [download build 314 source](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/archive/7159d091721a99b88219971099c21530addba92e.zip)
+> **Full Android APK (352 MB):** [Download build 314](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.5-build314/OFMtouch-0.3.5-Build314-NightlyPreRelease.apk)  \n> **Complete ZIP (359 MB):** [APK + source + checksums](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.5-build314/OFMtouch-Build314-complete.zip)  \n> **SHA-256 checksums:** [Download checksums](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.5-build314/OFMtouch-Build314-SHA256.txt)  \n> Build 313 has a known mobile message-reading layout issue; use build 314. The updated Inbox layout still needs confirmation on a physical phone.
+> **Source-only ZIP:** [download build 314 source](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.5-build314/OFMtouch-Build314-source.zip) (small because it contains source files, not the built APK)
 > **Source revision:** `7159d091721a99b88219971099c21530addba92e` (ARM64, Android only)
 > NightlyPreRelease builds are playable test versions. New features and fixes arrive regularly, but some bugs and unfinished areas may remain. GitHub Actions runs the frontend and Rust tests, checks package/version/signature and ARM64 payload, and publishes the APK plus its SHA-256 file.
 
