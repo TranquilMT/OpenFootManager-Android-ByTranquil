@@ -362,15 +362,23 @@ describe("InboxTab", (): void => {
     });
 
     const readingPane = screen.getByTestId("inbox-reading-pane");
+    const toolbar = screen.getByTestId("inbox-toolbar");
     expect(readingPane).toHaveClass("overflow-y-auto", "hidden");
+    expect(toolbar).toHaveClass("block");
     fireEvent.click(screen.getByTestId("inbox-row-m1"));
     expect(readingPane).toHaveClass("overflow-y-auto", "flex");
+    expect(toolbar).toHaveClass("hidden", "md:block");
     expect(screen.getByText("Medical update details")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "inbox.backToInbox" })).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "inbox.backToInbox" }).closest(".sticky"),
-    ).toBeInTheDocument();
+      screen
+        .getByText("Medical update details")
+        .compareDocumentPosition(screen.getByTestId("inbox-delete-message")) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "inbox.backToInbox" }));
     expect(readingPane).toHaveClass("hidden");
+    expect(toolbar).toHaveClass("block");
   });
 
   it("opens an inbox message using the keyboard", async (): Promise<void> => {

@@ -336,28 +336,30 @@ export default function InboxTab({
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden">
-      <InboxToolbar
-        allMessagesCount={allMessages.length}
-        bulkSelectionEnabled={bulkSelectionEnabled}
-        categories={categories}
-        categoryCounts={categoryCounts}
-        categoryFilter={categoryFilter}
-        selectedMessageCount={selectedMessageIds.length}
-        sortOrder={sortOrder}
-        unreadCount={unreadCount}
-        onClearOld={() => {
-          void handleClearOld();
-        }}
-        onDeleteSelected={handleRequestBulkDelete}
-        onMarkAllRead={() => {
-          void handleMarkAllRead();
-        }}
-        onShowAll={handleShowAll}
-        onShowUnread={handleShowUnread}
-        onSortOrderChange={handleSortOrderChange}
-        onToggleBulkSelectionMode={handleToggleBulkSelectionMode}
-        onToggleCategory={handleToggleCategory}
-      />
+      <div data-testid="inbox-toolbar" className={selectedMessage ? "hidden md:block" : "block"}>
+        <InboxToolbar
+          allMessagesCount={allMessages.length}
+          bulkSelectionEnabled={bulkSelectionEnabled}
+          categories={categories}
+          categoryCounts={categoryCounts}
+          categoryFilter={categoryFilter}
+          selectedMessageCount={selectedMessageIds.length}
+          sortOrder={sortOrder}
+          unreadCount={unreadCount}
+          onClearOld={() => {
+            void handleClearOld();
+          }}
+          onDeleteSelected={handleRequestBulkDelete}
+          onMarkAllRead={() => {
+            void handleMarkAllRead();
+          }}
+          onShowAll={handleShowAll}
+          onShowUnread={handleShowUnread}
+          onSortOrderChange={handleSortOrderChange}
+          onToggleBulkSelectionMode={handleToggleBulkSelectionMode}
+          onToggleCategory={handleToggleCategory}
+        />
+      </div>
 
       <div className="flex min-h-0 flex-1 gap-0 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-navy-600 dark:bg-navy-800">
         <InboxMessageListPane
