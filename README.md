@@ -4,13 +4,26 @@
 
 OFMtouch is a free football management game built for Android. Take charge of a club, build your squad, scout talent, shape your tactics, develop young players and compete across multiple seasons in a growing football world.
 
-> 🧪 **Current version: v0.3.5 NightlyPreRelease**
-> **Full Android APK (352 MB):** [Download build 314](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.5-build314/OFMtouch-0.3.5-Build314-NightlyPreRelease.apk)  \n> **Complete ZIP (359 MB):** [APK + source + checksums](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.5-build314/OFMtouch-Build314-complete.zip)  \n> **SHA-256 checksums:** [Download checksums](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.5-build314/OFMtouch-Build314-SHA256.txt)  \n> Build 313 has a known mobile message-reading layout issue; use build 314. The updated Inbox layout still needs confirmation on a physical phone.
-> **Source-only ZIP:** [download build 314 source](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.5-build314/OFMtouch-Build314-source.zip) (small because it contains source files, not the built APK)
-> **Source revision:** `7159d091721a99b88219971099c21530addba92e` (ARM64, Android only)
-> NightlyPreRelease builds are playable test versions. New features and fixes arrive regularly, but some bugs and unfinished areas may remain. GitHub Actions runs the frontend and Rust tests, checks package/version/signature and ARM64 payload, and publishes the APK plus its SHA-256 file.
+> 🧪 **Current version: v0.3.6 NightlyPreRelease (build 315)**
+> **Full Android APK (352 MB):** [Download the installable ARM64 APK](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.6-build315/OFMtouch-0.3.6-Build315-NightlyPreRelease.apk)  
+> **Complete ZIP (359 MB):** [APK + all tracked game source + checksums](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.6-build315/OFMtouch-Build315-complete.zip)  
+> **Checksums:** [SHA-256 file](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.6-build315/OFMtouch-Build315-SHA256.txt)  
+> **Source revision:** `63e5bd4474af7de43caa73381c1c9c061955a4af` — Android only. The [source-only ZIP](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.6-build315/OFMtouch-Build315-source.zip) is smaller because it excludes the APK.
+> Automated frontend, Rust, package metadata, signature and ARM64 checks passed. Inbox reading and the action flow still need confirmation on a physical phone.
 
-## 🌟 Welcome to OFMtouch! Here's what's new in v0.3.5
+## What's new in v0.3.6
+
+- Inbox messages show their full contents on narrow phone screens; acknowledge actions avoid copying the whole game state.
+- Save moved into **Settings → Saves & Data**, freeing space for the game date on phones.
+- Inbox actions block repeated taps while a response is pending and report failures clearly.
+- Compact in-game What's New notes and focused regression coverage for Inbox, Save and mobile layout.
+
+## Previous Android build — v0.3.5 build 314
+
+- [Full APK](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.5-build314/OFMtouch-0.3.5-Build314-NightlyPreRelease.apk)
+- [Complete ZIP](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.5-build314/OFMtouch-Build314-complete.zip)
+
+## 📜 Previous Update — v0.3.5
 
 v0.3.5 is not the introduction of Player Development V2.0 or Transfer Market V2.0 — both systems began in the previous update. This release **substantially expands and connects them to the wider career simulation**, turning them from individual features into systems that increasingly influence club strategy, recruitment, loans, squad building and long-term player careers.
 
