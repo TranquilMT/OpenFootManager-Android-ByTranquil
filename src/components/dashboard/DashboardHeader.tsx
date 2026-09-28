@@ -3,8 +3,6 @@ import {
   Calendar as CalendarIcon,
   ChevronDown,
   ChevronRight,
-  Loader2,
-  Save,
   Search,
 } from "lucide-react";
 import type { JSX, ReactNode } from "react";
@@ -36,14 +34,12 @@ interface DashboardHeaderProps {
   hasMatchToday: boolean;
   isAdvancing: boolean;
   isUnemployed: boolean;
-  isSaving: boolean;
   matchMode: MatchModeType;
   matchedPlayers: PlayerData[];
   matchedTeams: TeamData[];
   modeMeta: Record<MatchModeType, DashboardMatchModeMeta>;
   onBack: () => void;
   onContinue: () => void;
-  onSave: () => void;
   onSearchBlur: () => void;
   onSearchFocus: () => void;
   onSearchQueryChange: (query: string) => void;
@@ -52,53 +48,11 @@ interface DashboardHeaderProps {
   onSelectSearchTeam: (teamId: string) => void;
   onSkipToMatchDay: () => void;
   onToggleContinueMenu: () => void;
-  saveFlash: boolean;
   searchOpen: boolean;
   searchQuery: string;
   seasonComplete: boolean;
   showContinueMenu: boolean;
   teams: TeamData[];
-}
-
-function getSaveButtonClassName(saveFlash: boolean, isSaving: boolean): string {
-  let className =
-    "flex items-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-heading font-bold uppercase tracking-wider transition-all hover:cursor-pointer";
-
-  if (saveFlash) {
-    className = `${className} bg-green-500 text-white`;
-  } else {
-    className = `${className} bg-gray-200 text-gray-600 hover:bg-gray-300 dark:bg-navy-700 dark:text-gray-300 dark:hover:bg-navy-600`;
-  }
-
-  if (isSaving) {
-    className = `${className} cursor-wait opacity-70`;
-  }
-
-  return className;
-}
-
-function getSaveButtonLabel(
-  t: (key: string) => string,
-  saveFlash: boolean,
-  isSaving: boolean,
-): string {
-  if (saveFlash) {
-    return t("dashboard.saved");
-  }
-
-  if (isSaving) {
-    return t("dashboard.saving");
-  }
-
-  return t("common.save");
-}
-
-function renderSaveButtonIcon(isSaving: boolean): JSX.Element {
-  if (isSaving) {
-    return <Loader2 className="h-4 w-4 animate-spin" />;
-  }
-
-  return <Save className="h-4 w-4" />;
 }
 
 function getContinueButtonClassName(
@@ -267,14 +221,12 @@ export default function DashboardHeader({
   hasMatchToday,
   isAdvancing,
   isUnemployed,
-  isSaving,
   matchMode,
   matchedPlayers,
   matchedTeams,
   modeMeta,
   onBack,
   onContinue,
-  onSave,
   onSearchBlur,
   onSearchFocus,
   onSearchQueryChange,
@@ -283,7 +235,6 @@ export default function DashboardHeader({
   onSelectSearchTeam,
   onSkipToMatchDay,
   onToggleContinueMenu,
-  saveFlash,
   searchOpen,
   searchQuery,
   seasonComplete,
@@ -329,7 +280,7 @@ export default function DashboardHeader({
 
   return (
     <header className="z-10 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-gray-200 bg-white px-3 py-2 sm:px-6 sm:py-3 lg:flex lg:justify-between shadow-sm transition-colors duration-300 dark:border-navy-700 dark:bg-navy-800">
-      <div className="flex items-center gap-3">
+      <div className="flex min-w-0 items-center gap-3">
         {hasProfileHistory && (
           <button
             type="button"
@@ -340,11 +291,11 @@ export default function DashboardHeader({
             <ArrowLeft className="h-5 w-5" />
           </button>
         )}
-        <div>
+        <div className="min-w-0">
           <h2 className="truncate text-base sm:text-xl font-heading font-bold uppercase tracking-wide text-gray-800 dark:text-gray-100">
             {activeTabLabel}
           </h2>
-          <p className="mt-0.5 flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+          <p className="mt-0.5 flex items-center gap-1.5 whitespace-nowrap text-xs text-gray-500 dark:text-gray-400">
             <CalendarIcon className="h-3.5 w-3.5" />
             <span className="font-medium">{currentDate}</span>
           </p>
@@ -378,16 +329,6 @@ export default function DashboardHeader({
 
       <div className="flex items-center gap-3">
         <ThemeToggle />
-        <button
-          type="button"
-          onClick={onSave}
-          disabled={isSaving}
-          className={getSaveButtonClassName(saveFlash, isSaving)}
-          title={t("dashboard.saveGame")}
-        >
-          {renderSaveButtonIcon(isSaving)}
-          {getSaveButtonLabel(t, saveFlash, isSaving)}
-        </button>
         {isUnemployed ? (
           <button
             type="button"

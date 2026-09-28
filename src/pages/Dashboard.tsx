@@ -111,8 +111,6 @@ export default function Dashboard(): JSX.Element {
   useEffect(() => {
     if (!settingsLoaded) loadSettings();
   }, [settingsLoaded, loadSettings]);
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveFlash, setSaveFlash] = useState(false);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [profileNavigation, setProfileNavigation] = useState(() =>
     createDashboardProfileNavigationState("Home"),
@@ -304,20 +302,6 @@ export default function Dashboard(): JSX.Element {
     settings.continue_to_next_event,
     settings.confirm_advance,
   );
-
-  const handleSave = useCallback(async () => {
-    setIsSaving(true);
-    try {
-      await invoke("save_game");
-      markClean();
-      setSaveFlash(true);
-      setTimeout(() => setSaveFlash(false), 2000);
-    } catch (err) {
-      console.error("Failed to save:", err);
-    } finally {
-      setIsSaving(false);
-    }
-  }, [markClean]);
 
   const previousAutoSaveDate = useRef<{ saveId: string | null; date: string | null }>({
     saveId: null,
@@ -595,14 +579,12 @@ export default function Dashboard(): JSX.Element {
           hasProfileHistory={hasProfileHistory}
           hasMatchToday={hasMatchToday}
           isAdvancing={isAdvancing}
-          isSaving={isSaving}
           matchMode={matchMode}
           matchedPlayers={searchResults.matchedPlayers}
           matchedTeams={searchResults.matchedTeams}
           modeMeta={MODE_META}
           onBack={handleBack}
           onContinue={handleContinue}
-          onSave={handleSave}
           onSearchBlur={handleSearchBlur}
           onSearchFocus={handleSearchFocus}
           onSearchQueryChange={handleSearchQueryChange}
@@ -611,7 +593,6 @@ export default function Dashboard(): JSX.Element {
           onSelectSearchTeam={handleSelectSearchTeam}
           onSkipToMatchDay={handleSkipToMatchDay}
           onToggleContinueMenu={handleToggleContinueMenu}
-          saveFlash={saveFlash}
           searchOpen={searchOpen}
           searchQuery={searchQuery}
           seasonComplete={seasonComplete}

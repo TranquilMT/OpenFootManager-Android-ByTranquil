@@ -163,7 +163,7 @@ pub fn resolve_message_action_internal(
     );
     // Mutate under the game lock (update_game) so a concurrent GUI/MCP write
     // between read and write-back is not silently discarded.
-    let (game, effect, effect_i18n_key, effect_i18n_params) = state
+    let (game, messages, effect, effect_i18n_key, effect_i18n_params) = state
         .update_game(|game| {
             // A message the player cannot see yet cannot be acted on. The inbox
             // list already hides future-dated mail, but this takes an id from the
@@ -235,12 +235,23 @@ pub fn resolve_message_action_internal(
                 }
                 (None, None, None)
             };
-            (game.clone(), effect, effect_i18n_key, effect_i18n_params)
+            // Plain acknowledgements only alter inbox state. Sending the entire
+            // generated world back to Android for an "Understood" tap can
+            // allocate hundreds of MB and kill the WebView on mobile.
+            let changed_world = visible && option_id.is_some();
+            (
+                changed_world.then(|| game.clone()),
+                game.messages.clone(),
+                effect,
+                effect_i18n_key,
+                effect_i18n_params,
+            )
         })
         .ok_or("be.error.noActiveGameSession".to_string())?;
 
     Ok(serde_json::json!({
         "game": game,
+        "messages": messages,
         "effect": effect,
         "effect_i18n_key": effect_i18n_key,
         "effect_i18n_params": effect_i18n_params
@@ -499,10 +510,11 @@ mod tests {
             .expect("response");
 
         assert!(response["effect"].is_null());
+        assert!(response["game"].is_null(), "acknowledging mail must not copy the world");
         assert!(response["effect_i18n_key"].is_null());
         assert!(response["effect_i18n_params"].is_null());
         assert_eq!(
-            response["game"]["messages"][0]["actions"][0]["resolved"].as_bool(),
+            response["messages"][0]["actions"][0]["resolved"].as_bool(),
             Some(true)
         );
 

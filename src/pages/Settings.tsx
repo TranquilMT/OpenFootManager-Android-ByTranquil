@@ -7,6 +7,7 @@ import { useTheme } from "../context/ThemeContext";
 import { ThemeToggle, Select } from "../components/ui";
 import { SUPPORTED_LANGUAGES, changeAppLanguage } from "../i18n";
 import { formatAppVersion } from "../lib/appVersion";
+import { useGameStore } from "../store/gameStore";
 import { ReleaseNotes } from "../components/settings/ReleaseNotes";
 import {
   ArrowLeft,
@@ -36,10 +37,12 @@ export default function Settings() {
   const location = useLocation();
   const { t, i18n } = useTranslation();
   const { settings, loaded, loadSettings, updateSettings } = useSettingsStore();
+  const { hasActiveGame, markClean } = useGameStore();
   const { theme, toggleTheme } = useTheme();
   const [confirmClear, setConfirmClear] = useState(false);
   const [clearSuccess, setClearSuccess] = useState(false);
   const [exportPath, setExportPath] = useState<string | null>(null);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const returnTo = (location.state as { from?: string })?.from || "/";
   useEffect(() => {
     if (!loaded) loadSettings();
@@ -69,6 +72,18 @@ export default function Settings() {
       setTimeout(() => setClearSuccess(false), 3000);
     } catch (err) {
       console.error("Failed to clear saves:", err);
+    }
+  };
+  const handleSaveGame = async () => {
+    if (saveStatus === "saving") return;
+    setSaveStatus("saving");
+    try {
+      await invoke("save_game");
+      markClean();
+      setSaveStatus("saved");
+    } catch (error) {
+      console.error("Failed to save game:", error);
+      setSaveStatus("error");
     }
   };
   const handleExportWorld = async () => {
@@ -259,6 +274,29 @@ export default function Settings() {
           </SettingRow>
         </Section>
         <Section title={t("settings.savesData")} icon={<Save className="w-5 h-5" />}>
+          {hasActiveGame ? (
+            <SettingRow label={t("dashboard.saveGame")} description={t("settings.autoSaveDesc")}>
+              <div className="flex flex-col items-start gap-2">
+                <button
+                  type="button"
+                  onClick={() => void handleSaveGame()}
+                  disabled={saveStatus === "saving"}
+                  className="min-h-11 rounded-lg bg-primary-500 px-4 py-2 font-heading font-bold uppercase text-white disabled:opacity-60"
+                >
+                  {saveStatus === "saving"
+                    ? t("dashboard.saving")
+                    : saveStatus === "saved"
+                      ? t("dashboard.saved")
+                      : t("common.save")}
+                </button>
+                {saveStatus === "error" ? (
+                  <span role="alert" className="text-sm text-red-500">
+                    {t("settings.saveFailed")}
+                  </span>
+                ) : null}
+              </div>
+            </SettingRow>
+          ) : null}
           <SettingRow label={t("settings.autoSave")} description={t("settings.autoSaveDesc")}>
             <Toggle
               label={t("settings.autoSave")}

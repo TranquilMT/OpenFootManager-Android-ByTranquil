@@ -588,6 +588,56 @@ describe("InboxTab", (): void => {
     expect(onGameUpdate).toHaveBeenCalledWith(resolvedGameState);
   });
 
+  it("acknowledges a message without replacing the generated world", async (): Promise<void> => {
+    const onGameUpdate = vi.fn();
+    const action: MessageAction = {
+      id: "ack",
+      label: "Understood",
+      action_type: "Acknowledge",
+      resolved: false,
+    };
+    const updated = createMessage({
+      id: "m1",
+      read: true,
+      actions: [{ ...action, resolved: true }],
+    });
+    mockedInvoke.mockResolvedValue({ game: null, messages: [updated], effect: null });
+    await renderInboxTab({
+      gameState: createGameState([createMessage({ id: "m1", read: true, actions: [action] })]),
+      initialMessageId: "m1",
+      onGameUpdate,
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: "Understood" }));
+    await waitFor(() => expect(screen.getByRole("button", { name: /Understood/ })).toBeDisabled());
+    expect(onGameUpdate).not.toHaveBeenCalled();
+  });
+
+  it("does not submit the same Inbox action twice while it is pending", async (): Promise<void> => {
+    let complete!: (value: unknown) => void;
+    const pending = new Promise((resolve) => {
+      complete = resolve;
+    });
+    const action: MessageAction = {
+      id: "ack",
+      label: "Understood",
+      action_type: "Acknowledge",
+      resolved: false,
+    };
+    mockedInvoke.mockReturnValue(pending);
+    await renderInboxTab({
+      gameState: createGameState([createMessage({ id: "m1", read: true, actions: [action] })]),
+      initialMessageId: "m1",
+    });
+    const button = screen.getByRole("button", { name: "Understood" });
+    fireEvent.click(button);
+    fireEvent.click(button);
+    expect(
+      mockedInvoke.mock.calls.filter(([name]) => name === "resolve_message_action"),
+    ).toHaveLength(1);
+    complete({ game: null, messages: [createMessage({ id: "m1", read: true })], effect: null });
+  });
+
   it("shows a failed reply so the manager can retry it", async (): Promise<void> => {
     const action: MessageAction = {
       id: "respond",
