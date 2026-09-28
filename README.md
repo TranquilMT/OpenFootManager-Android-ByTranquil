@@ -4,9 +4,18 @@
 
 OFMtouch is a free football management game built for Android. Take charge of a club, build your squad, scout talent, shape your tactics, develop young players and compete across multiple seasons in a growing football world.
 
-> 🧪 **Current version: v0.3.5 NightlyPreRelease**  
-> **Build:** generated automatically from the GitHub Actions build number  
+> 🧪 **Current source version: v0.3.6 NightlyPreRelease**
+> **Build:** generated automatically from the GitHub Actions build number
 > NightlyPreRelease builds are playable test versions. New features and fixes arrive regularly, but some bugs and unfinished areas may remain.
+
+## v0.3.6 mobile hotfix
+
+- **Inbox:** opened messages get the available phone screen; acknowledgement returns only the updated mail instead of copying the entire game world to Android.
+- **Save:** manual Save is in Settings → Saves & Data. The home header gives the game date more space.
+- **Matches:** injuries persist after the match and appear in a medical Inbox update.
+- **Reliability:** message-action, localization, mobile layout, save and career regression checks are included in the build gate.
+
+The previous v0.3.5 notes remain below as the larger gameplay update. The Android v0.3.6 APK will be linked after its CI gate passes.
 
 ## 🌟 Welcome to OFMtouch! Here's what's new in v0.3.5
 
@@ -320,16 +329,16 @@ The next milestones after the v0.3.5 checkpoint focus on validation and deeper c
 
 ## 📦 Version
 
-**OFMtouch v0.3.5 — NightlyPreRelease**  
-**Build:** GitHub Actions run number  
-**Platform:** Android  
+**OFMtouch v0.3.5 — NightlyPreRelease**
+**Build:** GitHub Actions run number
+**Platform:** Android
 **Primary build:** ARM64
 
 NightlyPreRelease versions are intended for players who want to test the newest features and improvements before a stable release. Save important careers regularly while the game remains in active pre-release development.
 
 ## ❤️ Credits
 
-**Original game:** OpenFootManager and its original developers and contributors  
+**Original game:** OpenFootManager and its original developers and contributors
 **OFMtouch Android adaptation, mobile enhancements and additional gameplay:** TranquilMT
 
 [OFMtouch Android repository](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil) · [Original OpenFootManager repository](https://github.com/openfootmanager/openfootmanager)

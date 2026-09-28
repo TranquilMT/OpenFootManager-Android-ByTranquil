@@ -46,6 +46,7 @@ export default function InboxTab({
   const { sessionState } = useGameStore();
   const [fetchedMessages, setFetchedMessages] = useState<MessageData[] | null>(null);
   const inboxSeqRef = useRef(0);
+  const pendingActionsRef = useRef(new Set<string>());
 
   // Prefer live sessionState clock; fall back to prop snapshot while sessionState loads.
   const clockDate = sessionState?.clock.current_date ?? gameState?.clock.current_date ?? null;
@@ -146,6 +147,8 @@ export default function InboxTab({
     actionId: string,
     optionId?: string,
   ): Promise<void> {
+    const pendingKey = `${messageId}:${actionId}`;
+    if (pendingActionsRef.current.has(pendingKey)) return;
     setActionError(null);
     const message = allMessages.find((currentMessage) => currentMessage.id === messageId);
     const action = message?.actions.find((currentAction) => currentAction.id === actionId);
@@ -160,12 +163,19 @@ export default function InboxTab({
     }
 
     const seq = ++inboxSeqRef.current;
+    pendingActionsRef.current.add(pendingKey);
     try {
       const result = await resolveMessageAction(messageId, actionId, optionId);
       if (seq !== inboxSeqRef.current) return;
 
-      setFetchedMessages(result.game.messages);
-      onGameUpdate(result.game);
+      const updatedMessages = result.messages ?? result.game?.messages;
+      if (!updatedMessages) throw new Error("Inbox action returned no messages");
+      setFetchedMessages(updatedMessages);
+      if (result.game) {
+        onGameUpdate(result.game);
+      } else {
+        useGameStore.getState().setMessages(updatedMessages);
+      }
 
       if (result.effect || result.effect_i18n_key) {
         const effectParams = result.effect_i18n_params
@@ -182,6 +192,8 @@ export default function InboxTab({
       }
     } catch (error) {
       if (seq === inboxSeqRef.current) setActionError(resolveBackendError(error));
+    } finally {
+      pendingActionsRef.current.delete(pendingKey);
     }
   }
 

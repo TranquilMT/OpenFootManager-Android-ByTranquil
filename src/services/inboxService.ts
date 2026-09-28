@@ -7,7 +7,8 @@ export async function fetchMessages(): Promise<MessageData[]> {
 }
 
 export interface ResolveMessageActionResult {
-  game: GameStateData;
+  game: GameStateData | null;
+  messages: MessageData[];
   effect: string | null;
   effect_i18n_key?: string | null;
   effect_i18n_params?: Record<string, string | number> | null;
