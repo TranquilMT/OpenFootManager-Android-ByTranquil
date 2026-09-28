@@ -446,6 +446,7 @@ mod tests {
             losses: 5,
             trophies: 1,
             best_finish: Some(1),
+            ..ManagerCareerStats::default()
         };
         manager
     }
@@ -820,6 +821,7 @@ mod tests {
             losses: 15,
             trophies: 3,
             best_finish: Some(1),
+            ..ManagerCareerStats::default()
         };
         game.managers = vec![manager.clone()];
         game.manager = manager;

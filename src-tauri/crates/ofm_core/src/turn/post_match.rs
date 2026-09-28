@@ -88,6 +88,16 @@ pub fn apply_match_report_with_capture<F>(
 ) where
     F: FnMut(StatsState),
 {
+    // Live-match callbacks may be retried after persistence. A finished fixture
+    // must never credit standings, career stats, finances or player stats twice.
+    if game
+        .league
+        .as_ref()
+        .and_then(|league| league.fixtures.get(fixture_index))
+        .is_some_and(|fixture| fixture.status == FixtureStatus::Completed)
+    {
+        return;
+    }
     // Convert engine GoalDetails → domain GoalEvents
     let home_scorers: Vec<GoalEvent> = report
         .goals
@@ -189,6 +199,9 @@ pub fn apply_match_report_with_capture<F>(
         } else {
             report.home_goals
         };
+        // Record results while the manager is still at the club. Waiting until
+        // rollover loses the current spell when they leave during a season.
+        game.manager.record_league_result(user_goals, opp_goals);
         let sat_delta: i8 = if user_goals > opp_goals {
             2
         }

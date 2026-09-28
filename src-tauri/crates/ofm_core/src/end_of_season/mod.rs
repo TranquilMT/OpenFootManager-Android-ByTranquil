@@ -1014,11 +1014,20 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
 
     // 6. Update manager career stats
     if let Some(standing) = &user_standing {
-        let total_matches = standing.won + standing.drawn + standing.lost;
-        game.manager.career_stats.matches_managed += total_matches;
-        game.manager.career_stats.wins += standing.won;
-        game.manager.career_stats.draws += standing.drawn;
-        game.manager.career_stats.losses += standing.lost;
+        // New saves credit each result immediately. Older midseason saves have
+        // no live credits; backfill only the outstanding league results.
+        let career = &mut game.manager.career_stats;
+        let unrecorded_wins = standing.won.saturating_sub(career.season_recorded_wins);
+        let unrecorded_draws = standing.drawn.saturating_sub(career.season_recorded_draws);
+        let unrecorded_losses = standing.lost.saturating_sub(career.season_recorded_losses);
+        let unrecorded_matches = unrecorded_wins + unrecorded_draws + unrecorded_losses;
+        career.matches_managed += unrecorded_matches;
+        career.wins += unrecorded_wins;
+        career.draws += unrecorded_draws;
+        career.losses += unrecorded_losses;
+        career.season_recorded_wins = 0;
+        career.season_recorded_draws = 0;
+        career.season_recorded_losses = 0;
         if user_position == 1 {
             game.manager.career_stats.trophies += 1;
         }
@@ -1041,10 +1050,10 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
             .iter_mut()
             .find(|e| e.team_id == user_team_id && e.end_date.is_none());
         if let Some(entry) = existing {
-            entry.matches += total_matches;
-            entry.wins += standing.won;
-            entry.draws += standing.drawn;
-            entry.losses += standing.lost;
+            entry.matches += unrecorded_matches;
+            entry.wins += unrecorded_wins;
+            entry.draws += unrecorded_draws;
+            entry.losses += unrecorded_losses;
             let prev_best = entry.best_league_position;
             if prev_best.is_none() || prev_best.unwrap() > user_position {
                 entry.best_league_position = Some(user_position);
@@ -1057,10 +1066,10 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
                     team_name,
                     start_date: today_str,
                     end_date: None,
-                    matches: total_matches,
-                    wins: standing.won,
-                    draws: standing.drawn,
-                    losses: standing.lost,
+                    matches: unrecorded_matches,
+                    wins: unrecorded_wins,
+                    draws: unrecorded_draws,
+                    losses: unrecorded_losses,
                     best_league_position: Some(user_position),
                 });
         }

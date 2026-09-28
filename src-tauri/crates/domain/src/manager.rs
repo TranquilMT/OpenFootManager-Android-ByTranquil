@@ -41,6 +41,14 @@ pub struct ManagerCareerStats {
     pub losses: u32,
     pub trophies: u32,
     pub best_finish: Option<u32>,
+    /// League results already credited during the current season. Defaults to zero
+    /// for older saves so season rollover can credit their unrecorded fixtures.
+    #[serde(default)]
+    pub season_recorded_wins: u32,
+    #[serde(default)]
+    pub season_recorded_draws: u32,
+    #[serde(default)]
+    pub season_recorded_losses: u32,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -73,6 +81,41 @@ impl ManagerCareerEntry {
 }
 
 impl Manager {
+    /// Credit a league result immediately to the current club spell.
+    pub fn record_league_result(&mut self, goals_for: u8, goals_against: u8) {
+        let Some(team_id) = self.team_id.as_deref() else {
+            return;
+        };
+        let entry = self
+            .career_history
+            .iter_mut()
+            .find(|entry| entry.team_id == team_id && entry.end_date.is_none());
+        self.career_stats.matches_managed += 1;
+        let mut entry = entry;
+        if let Some(entry) = entry.as_mut() {
+            entry.matches += 1;
+        }
+        if goals_for > goals_against {
+            self.career_stats.wins += 1;
+            self.career_stats.season_recorded_wins += 1;
+            if let Some(entry) = entry.as_mut() {
+                entry.wins += 1;
+            }
+        } else if goals_for == goals_against {
+            self.career_stats.draws += 1;
+            self.career_stats.season_recorded_draws += 1;
+            if let Some(entry) = entry.as_mut() {
+                entry.draws += 1;
+            }
+        } else {
+            self.career_stats.losses += 1;
+            self.career_stats.season_recorded_losses += 1;
+            if let Some(entry) = entry.as_mut() {
+                entry.losses += 1;
+            }
+        }
+    }
+
     pub fn new(
         id: String,
         first_name: String,
@@ -163,6 +206,32 @@ mod tests {
             "1980-01-01".to_string(),
             "GB".to_string(),
         )
+    }
+
+    #[test]
+    fn results_survive_midseason_firing_and_old_saves_default_counters() {
+        let mut m = manager();
+        m.hire("team1".to_string());
+        m.career_history.push(ManagerCareerEntry::open(
+            "team1".to_string(), "Test FC".to_string(), "2026-06-01".to_string(),
+        ));
+        m.record_league_result(2, 0);
+        m.record_league_result(1, 1);
+        m.fire("2026-09-01");
+        m.record_league_result(0, 3);
+        assert_eq!(m.career_stats.matches_managed, 2);
+        assert_eq!(m.career_stats.wins, 1);
+        assert_eq!(m.career_history[0].matches, 2);
+        assert_eq!(m.career_history[0].draws, 1);
+        assert_eq!(m.career_history[0].end_date.as_deref(), Some("2026-09-01"));
+
+        let mut old_save = serde_json::to_value(&m).unwrap();
+        let stats = old_save["career_stats"].as_object_mut().unwrap();
+        stats.remove("season_recorded_wins");
+        stats.remove("season_recorded_draws");
+        stats.remove("season_recorded_losses");
+        let restored: Manager = serde_json::from_value(old_save).unwrap();
+        assert_eq!(restored.career_stats.season_recorded_wins, 0);
     }
 
     #[test]
