@@ -1193,6 +1193,17 @@ mod tests {
             make_opening_repair_player("senior", Position::Defender, "2000-01-01"),
             make_opening_repair_player("senior-mid", Position::Midfielder, "2000-01-01"),
             make_opening_repair_player("senior-fwd", Position::Forward, "2000-01-01"),
+            make_opening_repair_player("senior-def-2", Position::Defender, "1999-01-01"),
+            make_opening_repair_player("senior-def-3", Position::Defender, "1998-01-01"),
+            make_opening_repair_player("senior-def-4", Position::Defender, "1997-01-01"),
+            make_opening_repair_player("senior-mid-2", Position::Midfielder, "1999-01-01"),
+            make_opening_repair_player("senior-mid-3", Position::Midfielder, "1998-01-01"),
+            make_opening_repair_player("senior-mid-4", Position::Midfielder, "1997-01-01"),
+            make_opening_repair_player("senior-fwd-2", Position::Forward, "1999-01-01"),
+            make_opening_repair_player("senior-fwd-3", Position::Forward, "1998-01-01"),
+            make_opening_repair_player("senior-fwd-4", Position::Forward, "1997-01-01"),
+            make_opening_repair_player("senior-gk-2", Position::Goalkeeper, "1998-01-01"),
+            make_opening_repair_player("senior-def-5", Position::Defender, "1996-01-01"),
         ];
 
         Game::new(clock, manager, vec![team], players, vec![], vec![])
