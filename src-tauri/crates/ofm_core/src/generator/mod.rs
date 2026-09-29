@@ -355,6 +355,16 @@ fn rebalance_generated_player_for_club(
         _ => LeagueTier::Grassroots,
     };
     let youth = is_youth_reserved_slot(slot);
+    let curated_average = clubs::curated_squad_target(&team.name);
+    let academy_reputation = curated_average.unwrap_or(reputation).max(reputation);
+    let academy_quality = academy_reputation.saturating_add(financial_strength / 5).min(100);
+    let academy_tier = match academy_reputation {
+        80.. => LeagueTier::Elite,
+        65..=79 => LeagueTier::Top,
+        45..=64 => LeagueTier::Professional,
+        25..=44 => LeagueTier::Lower,
+        _ => LeagueTier::Grassroots,
+    };
     let base = club_strength_ovr(tier, reputation, financial_strength);
     // Procedural club IDs are UUIDs. Use the stable football identity so a
     // seeded world produces the same featured players on every generation.
@@ -373,7 +383,20 @@ fn rebalance_generated_player_for_club(
     // Factual club membership and game-designed ability are separate inputs.
     // Stronger named clubs need genuinely stronger player attributes, not a
     // cosmetic number on the team-selection card. Youth still starts lower.
-    let target = if let Some(club_average) = clubs::curated_squad_target(&team.name) {
+    let target = if youth {
+        let age = player
+            .date_of_birth
+            .get(0..4)
+            .and_then(|year| year.parse::<u32>().ok())
+            .map(|year| opening_year.saturating_sub(year))
+            .unwrap_or(18) as u8;
+        crate::generated_balance::academy_current_ovr(
+            academy_tier,
+            academy_reputation,
+            academy_quality,
+            age,
+        )
+    } else if let Some(club_average) = curated_average {
         const SLOT_OFFSETS: [i16; SQUAD_SLOTS] = [
             8, 6, 6, 5, 4, 4, 3, 3, 2, 2, 1, 0, -1, -2, -3, -3, -4, -5, -6, -6, -14, -14,
         ];
@@ -391,8 +414,16 @@ fn rebalance_generated_player_for_club(
     let current = crate::player_rating::natural_ovr(player)
         .round()
         .clamp(1.0, 99.0) as u8;
-    player.potential =
-        crate::generated_career::potential_curve::potential(current, age, reputation);
+    player.potential = if youth {
+        crate::generated_balance::academy_potential(
+            academy_tier,
+            academy_reputation,
+            academy_quality,
+            current,
+        )
+    } else {
+        crate::generated_career::potential_curve::potential(current, age, reputation)
+    };
     player.market_value = market_value_eur(current, player.potential, age).max(0) as u64;
     player.wage = weekly_wage_eur(current, reputation).clamp(100, u32::MAX as i64) as u32;
     crate::player_rating::refresh_player_derived(player, opening_year);
@@ -409,6 +440,36 @@ fn normalize_generated_team(team: &mut Team, players: &mut [Player], opening_yea
     team.finance = team
         .finance
         .max(weekly_wage_spend.saturating_mul(MIN_OPENING_RUNWAY_WEEKS));
+}
+
+fn seed_starting_xi(team: &mut Team, players: &[Player]) {
+    use domain::player::SquadRole;
+
+    let mut chosen = Vec::with_capacity(11);
+    for role in crate::player_rating::formation_slots(&team.formation) {
+        let candidate = players
+            .iter()
+            .filter(|player| player.squad_role == SquadRole::Senior && player.injury.is_none())
+            .filter(|player| !chosen.contains(&player.id))
+            .filter(|player| player.natural_position == role)
+            .max_by_key(|player| player.ovr)
+            .or_else(|| {
+                players
+                    .iter()
+                    .filter(|player| {
+                        player.squad_role == SquadRole::Senior && player.injury.is_none()
+                    })
+                    .filter(|player| !chosen.contains(&player.id))
+                    .filter(|player| {
+                        player.position.to_group_position() == role.to_group_position()
+                    })
+                    .max_by_key(|player| player.ovr)
+            });
+        if let Some(player) = candidate {
+            chosen.push(player.id.clone());
+        }
+    }
+    team.starting_xi_ids = chosen;
 }
 
 /// The country a club's *people* should be drawn from.
@@ -865,6 +926,7 @@ fn build_club(
     }
 
     normalize_generated_team(&mut team, &mut team_players, opening_year as i32);
+    seed_starting_xi(&mut team, &team_players);
     (team, team_players, team_staff)
 }
 
@@ -1011,6 +1073,7 @@ fn build_package_club(
     // Authored wages may differ from the players they replaced, so re-normalise
     // the opening wage budget to the final squad.
     normalize_generated_team(&mut team, &mut players, opening_year as i32);
+    seed_starting_xi(&mut team, &players);
     (team, players, staff)
 }
 
@@ -2113,6 +2176,17 @@ mod tests {
         assert!(average("Chelsea") >= 86);
         assert!(average("Liverpool") >= 86);
         assert!(average("Birmingham City") < average("Manchester United"));
+        let youth_potential = |name: &str| {
+            let team = teams.iter().find(|team| team.name == name).unwrap();
+            let youth: Vec<_> = players
+                .iter()
+                .filter(|player| player.team_id.as_deref() == Some(team.id.as_str()))
+                .filter(|player| player.squad_role == domain::player::SquadRole::Youth)
+                .collect();
+            assert_eq!(youth.len(), 3);
+            youth.iter().map(|player| player.potential as u32).sum::<u32>() / youth.len() as u32
+        };
+        assert!(youth_potential("Manchester United") > youth_potential("Birmingham City"));
     }
 
     #[test]
@@ -2172,6 +2246,13 @@ mod tests {
                 .filter(|p| p.team_id.as_deref() == Some(&team.id))
                 .collect();
             assert!((22..=26).contains(&team_players.len()));
+            let slots = crate::player_rating::formation_slots(&team.formation);
+            assert_eq!(team.starting_xi_ids.len(), 11, "{} needs a full XI", team.name);
+            for (id, role) in team.starting_xi_ids.iter().zip(slots) {
+                let starter = team_players.iter().find(|player| &player.id == id).unwrap();
+                assert_eq!(starter.natural_position, role, "{} has an unnatural starter", team.name);
+                assert_eq!(starter.squad_role, domain::player::SquadRole::Senior);
+            }
             for (position, minimum) in [
                 (Position::Goalkeeper, 2),
                 (Position::Defender, 8),
