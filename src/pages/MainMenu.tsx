@@ -16,7 +16,16 @@ import { formatAppVersion } from "../lib/appVersion";
 import { resolveBackendError } from "../utils/backendI18n";
 import { prewarmManagerSquadPortraits } from "../services/portraitService";
 import { WhatsNewModal } from "../components/menu/WhatsNewModal";
-import { FolderOpen, Settings, PlusCircle, ChevronRight, Power, Package } from "lucide-react";
+import { PatchHistoryModal } from "../components/menu/PatchHistoryModal";
+import {
+  FolderOpen,
+  Settings,
+  PlusCircle,
+  ChevronRight,
+  Power,
+  Package,
+  ScrollText,
+} from "lucide-react";
 
 const GITHUB_REPO_URL = "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil";
 const ORIGINAL_GITHUB_REPO_URL = "https://github.com/openfootmanager/openfootmanager";
@@ -258,6 +267,7 @@ export default function MainMenu() {
     "main" | "create" | "packages" | "generation" | "load"
   >("main");
   const [showProfileConfirm, setShowProfileConfirm] = useState(false);
+  const [showPatchHistory, setShowPatchHistory] = useState(false);
   const [saves, setSaves] = useState<SaveEntry[]>([]);
   const [isLoadingSaves, setIsLoadingSaves] = useState(false);
   const [loadingSaveId, setLoadingSaveId] = useState<string | null>(null);
@@ -743,6 +753,17 @@ export default function MainMenu() {
 
               <button
                 type="button"
+                onClick={() => setShowPatchHistory(true)}
+                className="group flex min-h-11 items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 text-gray-800 transition-colors hover:border-primary-500 dark:border-navy-600 dark:bg-navy-700 dark:text-gray-200"
+              >
+                <ScrollText className="h-6 w-6 text-primary-500" />
+                <span className="font-heading text-lg font-bold uppercase tracking-wide">
+                  {t("settings.patchHistory")}
+                </span>
+              </button>
+
+              <button
+                type="button"
                 onClick={() => {
                   void handleExitApp();
                 }}
@@ -888,6 +909,7 @@ export default function MainMenu() {
         {formatAppVersion()}
       </div>
       <WhatsNewModal />
+      {showPatchHistory && <PatchHistoryModal onClose={() => setShowPatchHistory(false)} />}
     </div>
   );
 }

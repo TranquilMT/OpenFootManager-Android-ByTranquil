@@ -85,7 +85,11 @@ export function getDashboardAlerts(
 ): DashboardAlert[] {
   const alerts: DashboardAlert[] = [];
   const myTeam = gameState.teams.find((team) => team.id === gameState.manager.team_id);
-  const roster = myTeam ? gameState.players.filter((player) => player.team_id === myTeam.id) : [];
+  const roster = myTeam
+    ? gameState.players.filter(
+        (player) => player.team_id === myTeam.id && player.squad_role !== "Youth",
+      )
+    : [];
   const teamStaff = myTeam
     ? gameState.staff.filter((staffMember) => staffMember.team_id === myTeam.id)
     : [];

@@ -24,7 +24,7 @@
     "openGithub": "打开 OFMtouch 的 GitHub 仓库",
     "openOriginalGithub": "打开原版 OpenFootManager 的 GitHub 仓库",
     "originalGame": "原版游戏",
-    "doNotShowWhatsNew": "不再显示 v0.5.0 更新提示",
+    "doNotShowWhatsNew": "不再显示 v0.5.1 更新提示",
     "continueToGame": "继续",
     "mainMenu": "主菜单",
     "worldEditor": "世界编辑器"
@@ -1772,21 +1772,30 @@
     "patchPlayers": "新增更多优秀球员，包括稀有的96分球星和升级热门球队。",
     "patchMatches": "比赛解说更加丰富，加入门框射门和可选语音解说。",
     "patchMobile": "改进移动端操作、收件箱、国家队与生涯创建。",
-    "patchWelcome": "欢迎来到 OFMtouch！v0.5.0 更新内容",
+    "patchWelcome": "欢迎来到 OFMtouch！v0.5.1 更新内容",
     "patchPortraits": "20 张虚构原始人脸让生成球员的肖像更加多样。",
     "patchWorld": "足球世界扩展至 29 个国家，美洲和亚洲的俱乐部实力也得到提升。",
     "patchTransfers": "俱乐部策略会影响租借和转会，包括竞争报价与预算检查。",
     "patchDevelopment": "比赛时间有助于年轻球员成长；青训球探报告会避免重复姓名。",
-    "careerHighlights": "全新经理生涯带来更深入的俱乐部决策和赛季体验。",
-    "careerInbox": "职业新闻与决策在收件箱中更容易查看。",
-    "careerSeason": "赛季更替和比赛结果会延续到职业生涯中。",
-    "careerReliability": "新增测试覆盖职业生涯、存档和移动菜单。",
+    "careerHighlights": "新开档现在可以可靠保存包含额外球员的球队。",
+    "careerInbox": "首发阵容保留预设职责，位置覆盖会反映球员的惯用位置。",
+    "careerSeason": "手机上的阵容列表更紧凑，号码和位置更清晰。",
+    "careerReliability": "保存失败时会清理残留文件；新增测试检查球衣号码和位置迁移。",
+    "careerYouth": "青训营独立于22–26人的一线队，提供教练月报、提拔决定，最多容纳12名新秀。",
+    "careerYouthScouting": "一线队和青训球探分开；青训比赛需要12名新秀和两名符合年龄要求的一线队U21球员。",
+    "nextPreview": "前瞻：我们正在探索更深入的阵容规划和球员交流。",
+    "history0504": "新增测试覆盖职业生涯、存档和移动菜单。",
+    "history0503": "赛季更替和比赛结果会延续到职业生涯中。",
+    "history0502": "职业新闻与决策在收件箱中更容易查看。",
+    "history0501": "全新经理生涯带来更深入的俱乐部决策和赛季体验。",
     "hotfixInbox": "收件箱消息在手机上更易阅读；确认消息占用更少内存。",
     "hotfixSave": "保存游戏移至设置，为日期和继续按钮留出空间。",
     "hotfixMatch": "比赛伤病会延续到生涯中，并发送医疗消息。",
     "hotfixStability": "增加消息操作、存档、安卓构建和生涯模拟检查。",
     "patchFixes": "修复了原始伤病代码、重复俱乐部名称及世界生成问题。",
-    "patchThanks": "感谢游玩！欢迎在 GitHub 上提交问题，帮助我们改进游戏。",
+    "patchThanks": "感谢每一位花时间测试新版本、分享截图和反馈问题的玩家。你们的耐心与建议推动着每次更新。欢迎继续在 GitHub 上反馈。",
+    "patchHistory": "更新历史",
+    "patchHistoryClose": "关闭",
     "patchSignature": "感谢游玩，TranquilMT",
     "patchReportIssue": "在 GitHub 上提交问题",
     "about": "关于",
@@ -1842,7 +1851,7 @@
     "fit": "契合",
     "keyStats": "关键数据"
   },
-  "scouting": {
+"scouting": {
     "shortlist": "候选名单",
     "shortlistEmpty": "在此保存球员，以便稍后比较。",
     "addShortlist": "加入候选名单",
@@ -2635,6 +2644,7 @@
         "noLeague": "该比赛暂无联赛数据。",
         "fixtureNotFound": "未找到所选比赛。",
         "emptySquad": "其中一支球队没有可用球员，因此无法进行比赛。",
+        "insufficientMatchdayPlayers": "比赛至少需要14名可用的一线队球员（11名首发和3名替补）。",
         "maxSubstitutionsReached": "已达到最大换人次数",
         "preMatchSwapTooLate": "赛前对调只能在开球前进行",
         "cannotSubstituteSentOffPlayer": "不能换下被罚下的球员",
@@ -2824,6 +2834,9 @@
         "staffMemberNotScout": "该工作人员不是球探",
         "scoutNotInTeam": "该球探不属于你的球队",
         "cannotScoutOwnPlayer": "你不能考察自己的球员",
+        "youthRequiresPromotion": "青训球员需要先升入一线队，才能参与一线队球探或转会。寻找新秀请使用青训招募。",
+        "academyFull": "青训营已满（12人）。请先提拔或解约一名新秀。",
+        "seniorSquadFull": "一线队已满（26人）。提拔前请先腾出名额。",
         "scoutAssignmentFull": "该球探已经被分配到另一项考察任务（{{currentCount}}/{{maxSlots}} 项分配）。",
         "playerAlreadyScouted": "这名球员已经在被考察",
         "youthSearchAlreadyActive": "已有相同的青训招募搜索在进行中",
@@ -2841,6 +2854,7 @@
       }
     },
     "sender": {
+      "youthCoach": "青训教练",
       "boardOfDirectors": "董事会",
       "leagueOffice": "联赛办公室",
       "assistantManager": "助理教练",
@@ -2857,6 +2871,7 @@
       "transferCommittee": "转会委员会"
     },
     "role": {
+      "youthCoach": "青训教练",
       "chairman": "主席",
       "competitionSecretary": "赛事秘书",
       "assistantManager": "助理教练",
@@ -3348,6 +3363,7 @@
         },
         "effect": {
           "sign": "{{player}} 已签下青训合同并加入你的青训学院。",
+          "academyFull": "青训营已满（12人）。请先提拔或解约一名新秀。",
           "shortlist": "{{player}} 已加入你的青训候选名单。",
           "discard": "{{player}} 已从青训招募报告中移除。"
         }
@@ -3355,6 +3371,17 @@
       "youthRecruitmentShortlist": {
         "subject": "青训潜力球员已入候选名单",
         "body": "{{player}} 已移入你的青训候选名单。你可以稍后再次查看，再做最终决定。"
+      },
+      "academyReview": {
+        "subject": "青训报告：{{player}}",
+        "progress": "{{player}} 正在青训营成长（总评 {{ovr}}，潜力 {{potential}}）。请继续训练，并在下个月查看进展。",
+        "ready": "{{player}} 进步明显（总评 {{ovr}}，潜力 {{potential}}）。我认为他已经可以争取一线队机会。你可以在青训营提拔他。"
+      },
+      "academyFixture": {
+        "subject": "青训挑战赛",
+        "win": "青训队以{{count}}名球员取胜（实力{{rating}}）。新秀获得了比赛经验。",
+        "draw": "青训队以{{count}}名球员战平（实力{{rating}}）。新秀获得了比赛经验。",
+        "loss": "青训队以{{count}}名球员告负（实力{{rating}}）。新秀获得了比赛经验。"
       },
       "scoutReport": {
         "subject": "球探报告:{{player}}",

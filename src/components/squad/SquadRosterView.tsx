@@ -106,10 +106,10 @@ function SortHeader({
   const active = sortKey === col;
   const mobileColumn = ["jersey", "name", "pos", "ovr"].includes(col);
   const mobileWidths: Partial<Record<SquadListSortKey, string>> = {
-    jersey: "w-9",
-    name: "w-[52%]",
-    pos: "w-14",
-    ovr: "w-12",
+    jersey: "w-12",
+    name: "w-[48%]",
+    pos: "w-16",
+    ovr: "w-14",
   };
   const mobileWidth = mobileWidths[col] ?? "";
 
@@ -418,14 +418,15 @@ export default function SquadRosterView({
   const renderPreferredPositionMeta = (player: PlayerData) => (
     <div className="flex items-center gap-1.5 whitespace-nowrap">
       {getPreferredPositions(player).map((position, index) => (
-        <Badge
-          key={`${player.id}-${position}`}
-          variant={index === 0 ? positionBadgeVariant(position) : "neutral"}
-          size="sm"
-          className={`${index > 0 ? "hidden md:inline-flex" : ""} whitespace-nowrap`}
-        >
-          {translatePositionAbbreviation(t, position)}
-        </Badge>
+        <span key={`${player.id}-${position}`} className={index > 0 ? "hidden md:inline-flex" : ""}>
+          <Badge
+            variant={index === 0 ? positionBadgeVariant(position) : "neutral"}
+            size="sm"
+            className="whitespace-nowrap"
+          >
+            {translatePositionAbbreviation(t, position)}
+          </Badge>
+        </span>
       ))}
     </div>
   );
@@ -591,7 +592,7 @@ export default function SquadRosterView({
           </div>
         </div>
         <div className="max-w-full overflow-x-auto">
-          <table className="w-full min-w-[420px] table-fixed md:min-w-[1100px] md:table-auto text-left border-collapse">
+          <table className="w-full min-w-[360px] table-fixed md:min-w-[1100px] md:table-auto text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 dark:bg-navy-800 border-b border-gray-200 dark:border-navy-600 text-xs">
                 <SortHeader
@@ -835,11 +836,11 @@ export default function SquadRosterView({
                       title={inXI ? t("squad.startingXi") : undefined}
                       className={`hover:bg-primary-500/5 dark:hover:bg-navy-700 transition-colors group cursor-pointer ${inXI ? "border-l-4 border-l-primary-500" : rowBorderClass}`}
                     >
-                      <td className="w-9 py-2 px-2 md:w-auto md:py-2.5 md:px-4 tabular-nums text-sm font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">
+                      <td className="w-12 py-2 px-2 md:w-auto md:py-2.5 md:px-4 tabular-nums text-sm font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">
                         {player.jersey_number ?? "—"}
                       </td>
                       {/* Name: avatar + injury dot + name + country flag */}
-                      <td className="w-[52%] py-2 px-2 md:w-auto md:py-2.5 md:px-4">
+                      <td className="w-[48%] py-2 px-2 md:w-auto md:py-2.5 md:px-4">
                         <div className="flex items-center gap-2 md:gap-3 min-w-0">
                           <span className="hidden sm:block shrink-0">
                             <PlayerAvatar player={player} />
@@ -866,7 +867,7 @@ export default function SquadRosterView({
                         </div>
                       </td>
                       {/* Position badges: natural + alternates */}
-                      <td className="w-14 py-2 px-2 md:w-auto md:py-2.5 md:px-4">
+                      <td className="w-16 py-2 px-2 md:w-auto md:py-2.5 md:px-4">
                         {renderPreferredPositionMeta(player)}
                       </td>
                       {/* Formation fit: colored badge for XI (green/amber/red),
@@ -933,7 +934,7 @@ export default function SquadRosterView({
                         {player.morale}
                       </td>
                       {/* OVR (moved next to identity block) */}
-                      <td className="w-12 py-2 px-2 md:w-auto md:py-2.5 md:px-4">
+                      <td className="w-14 py-2 px-2 md:w-auto md:py-2.5 md:px-4">
                         <span
                           className={`font-heading font-bold text-sm ${
                             ovr >= 80

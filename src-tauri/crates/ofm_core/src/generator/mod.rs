@@ -190,6 +190,17 @@ fn apply_opening_youth_assignments(
         if players[index].squad_role == SquadRole::Youth {
             continue;
         }
+        let role = &players[index].natural_position;
+        let role_total = players.iter().filter(|player| &player.natural_position == role).count();
+        let senior_count = players
+            .iter()
+            .filter(|player| &player.natural_position == role && player.squad_role == SquadRole::Senior)
+            .count();
+        // Keep enough senior specialists to staff every occurrence of a
+        // formation role, even when several young players share that role.
+        if senior_count <= role_total.div_ceil(2) {
+            continue;
+        }
         players[index].squad_role = SquadRole::Youth;
         assigned += 1;
     }
@@ -430,6 +441,7 @@ fn rebalance_generated_player_for_club(
 }
 
 fn normalize_generated_team(team: &mut Team, players: &mut [Player], opening_year: i32) {
+    assign_unique_jersey_numbers(players);
     seed_opening_youth_academy(players, opening_year);
     normalize_opening_contracts(players);
 
@@ -440,6 +452,28 @@ fn normalize_generated_team(team: &mut Team, players: &mut [Player], opening_yea
     team.finance = team
         .finance
         .max(weekly_wage_spend.saturating_mul(MIN_OPENING_RUNWAY_WEEKS));
+}
+
+/// Preserve each player's first available shirt number, filling collisions
+/// from the remaining 1..=99 pool before the database unique index is hit.
+fn assign_unique_jersey_numbers(players: &mut [Player]) {
+    let mut used = std::collections::HashSet::new();
+    for player in players {
+        if player.squad_role == domain::player::SquadRole::Youth {
+            player.jersey_number = None;
+            continue;
+        }
+        if let Some(number) = player.jersey_number {
+            if (1..=99).contains(&number) && used.insert(number) {
+                continue;
+            }
+        }
+        let free = (1..=99).find(|number| !used.contains(number));
+        player.jersey_number = free;
+        if let Some(number) = free {
+            used.insert(number);
+        }
+    }
 }
 
 fn seed_starting_xi(team: &mut Team, players: &[Player]) {
@@ -874,13 +908,39 @@ fn build_club(
 
     let squad_size = rng.random_range(SQUAD_SLOTS..=26);
     let mut team_players = Vec::with_capacity(squad_size);
+    // Two players for every deployed slot, including repeated central roles.
+    // The optional places sample the actual tactical roles of this club.
+    let base_roles: Vec<Position> = crate::player_rating::formation_slots(&team.formation)
+        .into_iter()
+        .flat_map(|role| [role.clone(), role])
+        .collect();
+    let mut bonus_roles: Vec<Position> = base_roles
+        .iter()
+        .filter(|role| role.to_group_position() != Position::Goalkeeper)
+        .cloned()
+        .collect();
+    bonus_roles.sort_by_key(|role| format!("{role:?}"));
+    bonus_roles.dedup();
+    let mut group_indices = [0usize; 4];
     for index in 0..squad_size {
-        // Extra places are drawn across the outfield groups; the core 22
-        // always satisfy the positional minimums and the starting XI.
-        let slot = if index < SQUAD_SLOTS {
-            index
+        let role = if index < SQUAD_SLOTS {
+            base_roles[index].clone()
         } else {
-            senior_slot(rng.random_range(2..SQUAD_SLOTS))
+            bonus_roles.swap_remove(rng.random_range(0..bonus_roles.len()))
+        };
+        let group_index = match role.to_group_position() {
+            Position::Goalkeeper => 0,
+            Position::Defender => 1,
+            Position::Midfielder => 2,
+            _ => 3,
+        };
+        let (offset, span) = [(0, 2), (2, 8), (10, 8), (18, 4)][group_index];
+        let slot = if index < SQUAD_SLOTS {
+            let slot = offset + group_indices[group_index] % span;
+            group_indices[group_index] += 1;
+            senior_slot(slot)
+        } else {
+            senior_slot(offset + rng.random_range(0..span))
         };
         let nationality = pick_nationality_from_def(&tdef.country, country_codes, rng);
         let mut player = generate_random_player_from_def(
@@ -891,13 +951,7 @@ fn build_club(
             names_def,
             rng,
         );
-        match (team.formation.as_str(), slot) {
-            ("4-3-3", 18) => player.natural_position = Position::LeftWinger,
-            ("4-3-3", 20) => player.natural_position = Position::RightWinger,
-            ("5-3-2", 2) => player.natural_position = Position::RightWingBack,
-            ("5-3-2", 5) => player.natural_position = Position::LeftWingBack,
-            _ => {}
-        }
+        player.natural_position = role;
         rebalance_generated_player_for_club(&mut player, &team, slot, opening_year, rng);
         if rng.random_range(0..100) < 12 {
             player.transfer_listed = true;
@@ -905,6 +959,24 @@ fn build_club(
             player.loan_listed = true;
         }
         team_players.push(player);
+    }
+
+    // Academy prospects are a separate pool, outside the 22–26 senior cap.
+    // Reserved slots provide youth ages and club-strength-based potential.
+    for slot in [9, 17, 21] {
+        let nationality = pick_nationality_from_def(&tdef.country, country_codes, rng);
+        let mut prospect = generate_random_player_from_def(
+            &team_id,
+            slot,
+            &nationality,
+            opening_year,
+            names_def,
+            rng,
+        );
+        rebalance_generated_player_for_club(&mut prospect, &team, slot, opening_year, rng);
+        prospect.squad_role = domain::player::SquadRole::Youth;
+        prospect.jersey_number = None;
+        team_players.push(prospect);
     }
 
     let mut team_staff = Vec::with_capacity(4);
@@ -2132,7 +2204,7 @@ mod tests {
         let (teams, players, staff) =
             generate_world_with(&config, &definitions::DefinitionSources::embedded_only());
         assert_eq!(teams.len(), expected);
-        assert!((expected * (SQUAD_SLOTS + 1)..=expected * 27).contains(&players.len()));
+        assert!((expected * (SQUAD_SLOTS + 4)..=expected * 30).contains(&players.len()));
         let distinct_sizes: std::collections::HashSet<_> = teams
             .iter()
             .map(|team| {
@@ -2168,7 +2240,7 @@ mod tests {
                 .iter()
                 .filter(|player| player.team_id.as_deref() == Some(team.id.as_str()))
                 .collect();
-            assert!((SQUAD_SLOTS..=26).contains(&squad.len()));
+            assert!((SQUAD_SLOTS + 3..=29).contains(&squad.len()));
             let seniors: Vec<_> = squad
                 .iter()
                 .filter(|player| player.squad_role == domain::player::SquadRole::Senior)
@@ -2249,9 +2321,29 @@ mod tests {
                 .iter()
                 .filter(|p| p.team_id.as_deref() == Some(&team.id))
                 .collect();
-            assert!((22..=26).contains(&team_players.len()));
+            let seniors: Vec<_> = team_players.iter().filter(|player| player.squad_role == SquadRole::Senior).collect();
+            let academy_count = team_players.len() - seniors.len();
+            assert_eq!(academy_count, 3, "{} needs a separate academy", team.name);
+            let shirt_numbers: std::collections::HashSet<_> = seniors
+                .iter()
+                .map(|player| player.jersey_number.expect("generated player needs a shirt"))
+                .collect();
+            assert_eq!(shirt_numbers.len(), seniors.len(), "{} has duplicate shirts", team.name);
+            for player in &team_players {
+                let mut after_migration = (*player).clone();
+                crate::player_identity::upgrade_player_identity(&mut after_migration, None);
+                assert_eq!(after_migration.natural_position, player.natural_position, "{} lost a role on migration", team.name);
+            }
+            assert!((22..=26).contains(&seniors.len()));
             let slots = crate::player_rating::formation_slots(&team.formation);
             assert_eq!(team.starting_xi_ids.len(), 11, "{} needs a full XI", team.name);
+            for role in &slots {
+                let required = slots.iter().filter(|slot| *slot == role).count();
+                let available = seniors.iter().filter(|player| &player.natural_position == role).count();
+                let senior = available;
+                assert!(available >= required * 2, "{} lacks two per {:?} slot", team.name, role);
+                assert!(senior >= required, "{} lacks senior {:?} starters", team.name, role);
+            }
             for (id, role) in team.starting_xi_ids.iter().zip(slots) {
                 let starter = team_players.iter().find(|player| &player.id == id).unwrap();
                 assert_eq!(starter.natural_position, role, "{} has an unnatural starter", team.name);
@@ -2259,11 +2351,11 @@ mod tests {
             }
             for (position, minimum) in [
                 (Position::Goalkeeper, 2),
-                (Position::Defender, 8),
-                (Position::Midfielder, 8),
-                (Position::Forward, 4),
+                (Position::Defender, 6),
+                (Position::Midfielder, 4),
+                (Position::Forward, 2),
             ] {
-                let count = team_players.iter().filter(|p| p.position == position).count();
+                let count = seniors.iter().filter(|p| p.position == position).count();
                 assert!(count >= minimum, "Team {} has only {} {:?}", team.name, count, position);
             }
             let senior = |role: Position| {
@@ -2777,7 +2869,7 @@ mod tests {
             "every club should come from the overridden nation: {:?}",
             teams.iter().map(|t| &t.country).collect::<Vec<_>>()
         );
-        assert!((4 * (SQUAD_SLOTS + 1)..=4 * 27).contains(&players.len()));
+        assert!((4 * (SQUAD_SLOTS + 4)..=4 * 30).contains(&players.len()));
 
         std::fs::remove_dir_all(&dir).ok();
     }

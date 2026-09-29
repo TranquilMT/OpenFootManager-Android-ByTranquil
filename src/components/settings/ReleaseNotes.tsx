@@ -8,6 +8,8 @@ const HIGHLIGHT_KEYS = [
   "settings.careerInbox",
   "settings.careerSeason",
   "settings.careerReliability",
+  "settings.careerYouth",
+  "settings.careerYouthScouting",
 ] as const;
 
 export function ReleaseNotes({ embedded = false }: { embedded?: boolean }) {
@@ -28,6 +30,9 @@ export function ReleaseNotes({ embedded = false }: { embedded?: boolean }) {
           <li key={key}>{t(key)}</li>
         ))}
       </ul>
+      <p className="mt-3 rounded-lg bg-primary-500/10 px-3 py-2 text-sm text-gray-700 dark:text-gray-200">
+        {t("settings.nextPreview")}
+      </p>
       <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">{t("settings.patchThanks")}</p>
       <p className="mt-1 text-sm font-semibold text-gray-700 dark:text-gray-200">
         {t("settings.patchSignature")}

@@ -241,13 +241,18 @@ impl SaveManager {
         let db_open_ms = db_open_timer.elapsed().as_millis();
 
         let write_timer = Instant::now();
-        GamePersistenceWriter::write_game_and_stats(
+        let write_result = GamePersistenceWriter::write_game_and_stats(
             &db,
             &persisted_game,
             stats,
             &save_id,
             save_name,
-        )?;
+        );
+        if let Err(error) = write_result {
+            drop(db);
+            let _ = fs::remove_file(&db_path);
+            return Err(error);
+        }
         let write_ms = write_timer.elapsed().as_millis();
         drop(db);
 

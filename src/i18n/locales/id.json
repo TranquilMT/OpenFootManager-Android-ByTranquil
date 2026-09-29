@@ -24,7 +24,7 @@
     "openGithub": "Buka repositori GitHub OFMtouch",
     "openOriginalGithub": "Buka repositori GitHub asli OpenFootManager",
     "originalGame": "Game asli",
-    "doNotShowWhatsNew": "Jangan tampilkan lagi untuk v0.5.0",
+    "doNotShowWhatsNew": "Jangan tampilkan lagi untuk v0.5.1",
     "continueToGame": "Lanjutkan",
     "mainMenu": "Menu Utama",
     "worldEditor": "Editor Dunia"
@@ -1772,21 +1772,30 @@
     "patchPlayers": "Lebih banyak pemain unggulan, termasuk bintang langka berperingkat 96.",
     "patchMatches": "Lebih banyak reaksi, tembakan membentur tiang, dan komentar suara opsional.",
     "patchMobile": "Kontrol seluler, kotak masuk, tim nasional, dan awal karier ditingkatkan.",
-    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.5.0",
+    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.5.1",
     "patchPortraits": "20 wajah fiktif sumber membuat potret pemain hasil generasi lebih beragam.",
     "patchWorld": "Dunia sepak bola yang lebih luas mencakup 29 negara, dengan klub lebih kuat di Amerika dan Asia.",
     "patchTransfers": "Strategi klub memandu pinjaman dan transfer, dengan tawaran bersaing serta pemeriksaan anggaran.",
     "patchDevelopment": "Menit bermain membantu pemain muda berkembang; laporan pencarian bakat menghindari nama berulang.",
-    "careerHighlights": "Karier manajer baru memperdalam keputusan klub dan perjalanan musim.",
-    "careerInbox": "Berita dan keputusan karier lebih mudah diikuti melalui kotak masuk.",
-    "careerSeason": "Pergantian musim dan hasil pertandingan berlanjut dalam karier.",
-    "careerReliability": "Pengujian tambahan mencakup karier, penyimpanan, dan menu seluler.",
+    "careerHighlights": "Karier baru kini tersimpan dengan baik meski skuad memiliki pemain tambahan.",
+    "careerInbox": "Susunan awal mempertahankan peran dan cakupan skuad mengikuti posisi alami.",
+    "careerSeason": "Daftar skuad lebih ringkas dan mudah dibaca di ponsel.",
+    "careerReliability": "Penyimpanan gagal membersihkan berkas parsial; pengujian baru memeriksa nomor dan peran.",
+    "careerYouth": "Akademi terpisah dari 22–26 pemain senior, dengan laporan pelatih, promosi, dan batas 12 pemain muda.",
+    "careerYouthScouting": "Pencarian bakat muda dan senior terpisah; laga junior membutuhkan 12 prospek dan dua senior U21.",
+    "nextPreview": "Selanjutnya: kami menjajaki perencanaan skuad dan percakapan pemain yang lebih mendalam.",
+    "history0504": "Pengujian tambahan mencakup karier, penyimpanan, dan menu seluler.",
+    "history0503": "Pergantian musim dan hasil pertandingan berlanjut dalam karier.",
+    "history0502": "Berita dan keputusan karier lebih mudah diikuti melalui kotak masuk.",
+    "history0501": "Karier manajer baru memperdalam keputusan klub dan perjalanan musim.",
     "hotfixInbox": "Pesan kotak masuk lebih mudah dibaca di ponsel; konfirmasi memakai lebih sedikit memori.",
     "hotfixSave": "Simpan permainan ada di Pengaturan agar tanggal dan tombol Lanjut punya lebih banyak ruang.",
     "hotfixMatch": "Cedera pertandingan bertahan dalam karier dan menghasilkan pesan medis.",
     "hotfixStability": "Pemeriksaan tambahan untuk aksi pesan, penyimpanan, build Android, dan simulasi karier.",
     "patchFixes": "Memperbaiki nama cedera mentah, nama klub ganda, dan masalah pembuatan dunia.",
-    "patchThanks": "Terima kasih sudah bermain! Bantu kami memperbaiki game dengan melaporkan masalah di GitHub.",
+    "patchThanks": "Terima kasih kepada semua yang mencoba versi baru, membagikan tangkapan layar, dan melaporkan masalah. Kesabaran serta masukan kalian membentuk setiap pembaruan. Terus kirim laporan lewat GitHub.",
+    "patchHistory": "Riwayat pembaruan",
+    "patchHistoryClose": "Tutup",
     "patchSignature": "Terima kasih, TranquilMT",
     "patchReportIssue": "Laporkan masalah di GitHub",
     "about": "Tentang",
@@ -1842,7 +1851,7 @@
     "fit": "FIT",
     "keyStats": "Statistik Kunci"
   },
-  "scouting": {
+"scouting": {
     "shortlist": "Daftar pilihan",
     "shortlistEmpty": "Simpan pemain di sini untuk dibandingkan nanti.",
     "addShortlist": "Tambah ke daftar pilihan",
@@ -2648,6 +2657,7 @@
         "noLeague": "Tidak ada data liga yang tersedia untuk pertandingan ini.",
         "fixtureNotFound": "Jadwal yang dipilih tidak dapat ditemukan.",
         "emptySquad": "Salah satu tim tidak memiliki pemain yang tersedia, sehingga pertandingan tidak dapat dimainkan.",
+        "insufficientMatchdayPlayers": "Pertandingan membutuhkan sedikitnya 14 pemain senior tersedia (11 starter dan tiga cadangan).",
         "maxSubstitutionsReached": "Pergantian pemain maksimum tercapai",
         "preMatchSwapTooLate": "Pergantian pra-pertandingan hanya diizinkan sebelum kick-off",
         "cannotSubstituteSentOffPlayer": "Tidak dapat mengganti pemain yang dikeluarkan",
@@ -2832,6 +2842,9 @@
         "staffMemberNotScout": "Anggota staf bukan seorang scout",
         "scoutNotInTeam": "Scout tidak termasuk dalam tim kamu",
         "cannotScoutOwnPlayer": "Tidak dapat melakukan scouting pada pemain sendiri",
+        "youthRequiresPromotion": "Pemain akademi harus dipromosikan sebelum masuk bursa transfer atau laporan senior. Gunakan pencarian bakat muda.",
+        "academyFull": "Akademi penuh (12 pemain). Promosikan atau lepaskan satu pemain muda.",
+        "seniorSquadFull": "Skuad senior penuh (26 pemain). Kosongkan tempat sebelum promosi.",
         "scoutAssignmentFull": "Scout sudah ditugaskan ke tugas scouting lain ({{currentCount}}/{{maxSlots}} penugasan).",
         "playerAlreadyScouted": "Pemain ini sudah sedang discouting",
         "youthSearchAlreadyActive": "Pencarian rekrutmen pemuda yang cocok sudah aktif",
@@ -2841,6 +2854,7 @@
       "invalidPath": "Jalur tidak valid."
     },
     "sender": {
+      "youthCoach": "Pelatih junior",
       "boardOfDirectors": "Dewan Direksi",
       "leagueOffice": "Kantor Liga",
       "assistantManager": "Asisten Manajer",
@@ -2857,6 +2871,7 @@
       "transferCommittee": "Komite Transfer"
     },
     "role": {
+      "youthCoach": "Pelatih junior",
       "chairman": "Ketua",
       "competitionSecretary": "Sekretaris Kompetisi",
       "assistantManager": "Asisten Manajer",
@@ -3348,6 +3363,7 @@
         },
         "effect": {
           "sign": "{{player}} menandatangani kontrak pemuda dan bergabung dengan akademi kamu.",
+          "academyFull": "Akademi penuh (12 pemain). Promosikan atau lepaskan satu pemain muda.",
           "shortlist": "{{player}} ditambahkan ke shortlist pemuda kamu.",
           "discard": "{{player}} dihapus dari laporan rekrutmen pemuda."
         }
@@ -3355,6 +3371,17 @@
       "youthRecruitmentShortlist": {
         "subject": "Prospek muda masuk shortlist",
         "body": "{{player}} telah dipindahkan ke shortlist pemuda kamu. Kamu dapat meninjaunya lagi nanti sebelum mengambil keputusan final."
+      },
+      "academyReview": {
+        "subject": "Laporan akademi: {{player}}",
+        "progress": "{{player}} berkembang di akademi (OVR {{ovr}}, potensi {{potential}}). Lanjutkan latihan dan tinjau lagi bulan depan.",
+        "ready": "{{player}} berkembang pesat (OVR {{ovr}}, potensi {{potential}}). Ia siap mendapat kesempatan di tim senior. Promosikan melalui Akademi Junior."
+      },
+      "academyFixture": {
+        "subject": "Tantangan junior",
+        "win": "Akademi menang dengan {{count}} pemain (nilai {{rating}}). Para prospek mendapat pengalaman.",
+        "draw": "Akademi imbang dengan {{count}} pemain (nilai {{rating}}). Para prospek mendapat pengalaman.",
+        "loss": "Akademi kalah dengan {{count}} pemain (nilai {{rating}}). Para prospek mendapat pengalaman."
       },
       "scoutReport": {
         "subject": "Laporan Scout: {{player}}",

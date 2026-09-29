@@ -47,6 +47,7 @@ pub mod slices;
 pub mod squad_safety;
 pub mod state;
 pub mod training;
+pub mod youth_tournament;
 pub mod transfer_strategy;
 pub mod transfers;
 pub mod turn;

@@ -235,7 +235,9 @@ export function useTeamSelection({
   }, [selectedTeamId, teams]);
 
   const getTeamPlayers = (teamId: string): PlayerData[] =>
-    (gameState?.players ?? []).filter((player) => player.team_id === teamId);
+    (gameState?.players ?? []).filter(
+      (player) => player.team_id === teamId && player.squad_role !== "Youth",
+    );
 
   const getTeamAvgOvr = (teamId: string): number => {
     const players = getTeamPlayers(teamId);

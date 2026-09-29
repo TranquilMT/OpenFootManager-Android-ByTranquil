@@ -341,6 +341,9 @@ pub fn make_transfer_bid(
     if player.team_id.as_deref() == Some(&user_team_id) {
         return Err(ERR_CANNOT_BID_ON_OWN_PLAYER.into());
     }
+    if player.squad_role == domain::player::SquadRole::Youth {
+        return Err("be.error.scouting.youthRequiresPromotion".into());
+    }
 
     if player_has_active_or_pending_loan(player) {
         return Err(ERR_PLAYER_ALREADY_LOANED.into());

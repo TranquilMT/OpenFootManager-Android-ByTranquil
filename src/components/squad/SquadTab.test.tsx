@@ -240,7 +240,7 @@ describe("SquadTab", () => {
   it("keeps the mobile roster readable by limiting the visible columns", () => {
     renderSquadTab(makeGameState());
     const table = screen.getByRole("table");
-    expect(table).toHaveClass("min-w-[420px]", "table-fixed");
+    expect(table).toHaveClass("min-w-[360px]", "table-fixed");
     expect(screen.getByRole("columnheader", { name: "squad.formationFit" })).toHaveClass("hidden");
     expect(screen.getByRole("columnheader", { name: "common.name" })).not.toHaveClass("hidden");
     expect(screen.getByText(/squad.starter/)).toHaveClass("shrink-0", "whitespace-nowrap");

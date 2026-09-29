@@ -24,7 +24,7 @@
     "openGithub": "Open OFMtouch GitHub repository",
     "openOriginalGithub": "Open original OpenFootManager GitHub repository",
     "originalGame": "Original game",
-    "doNotShowWhatsNew": "Don’t show this again for v0.5.0",
+    "doNotShowWhatsNew": "Don’t show this again for v0.5.1",
     "continueToGame": "Continue",
     "mainMenu": "Main Menu",
     "worldEditor": "World Editor"
@@ -1772,21 +1772,30 @@
     "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
     "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
     "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
-    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.5.0",
+    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.5.1",
     "patchPortraits": "20 fictional source faces bring more variety to generated player portraits.",
     "patchWorld": "A larger football world spans 29 nations, with stronger clubs across the Americas and Asia.",
     "patchTransfers": "Club strategies guide loans and transfer approaches, with competing offers and budget checks.",
     "patchDevelopment": "Playing time helps young players develop, and youth scouting reports avoid repeated names.",
     "patchFixes": "Fixed raw injury names, duplicate club names and world-generation regressions.",
-    "careerHighlights": "A new manager career brings deeper club decisions and a clearer path through seasons.",
-    "careerInbox": "Career news and decisions are easier to follow in the Inbox.",
-    "careerSeason": "Season transitions and match outcomes carry forward into your career.",
-    "careerReliability": "Expanded tests cover career progression, saves and the mobile menu.",
+    "careerHighlights": "New careers now save reliably when clubs generate extra squad players.",
+    "careerInbox": "Starting lineups keep their intended roles; squad coverage reflects natural positions.",
+    "careerSeason": "The Squad list is tighter on phones, with clear shirt numbers and uncluttered position badges.",
+    "careerReliability": "Failed saves clean up partial files, with regression checks for shirt numbers and role migration.",
+    "careerYouth": "The academy now sits outside the 22–26 player senior squad, with coach reports, promotion decisions and a 12-prospect cap.",
+    "careerYouthScouting": "Senior and youth scouting use separate routes; youth matches need 12 prospects and two eligible under-21 seniors.",
+    "nextPreview": "A peek ahead: richer squad planning and more personal player conversations are being explored.",
+    "history0504": "Expanded tests cover career progression, saves and the mobile menu.",
+    "history0503": "Season transitions and match outcomes carry forward into your career.",
+    "history0502": "Career news and decisions are easier to follow in the Inbox.",
+    "history0501": "A new manager career brings deeper club decisions and a clearer path through seasons.",
     "hotfixInbox": "Inbox messages have room to read on phones; acknowledging mail uses less memory.",
     "hotfixSave": "Save game is in Settings, leaving room for the date and Continue.",
     "hotfixMatch": "Match injuries persist in the career and send a medical Inbox update.",
     "hotfixStability": "More checks cover message actions, saves, Android builds and career simulation.",
-    "patchThanks": "Thank you for playing! Please help us build a better game by reporting issues on GitHub.",
+    "patchThanks": "To everyone spending time testing new builds, sharing screenshots and reporting issues: your patience and feedback help shape every update. Thank you for playing! Please keep sending reports on GitHub.",
+    "patchHistory": "Patch history",
+    "patchHistoryClose": "Close",
     "patchSignature": "Thanks, TranquilMT",
     "patchReportIssue": "Submit an issue on GitHub",
     "about": "About",
@@ -1842,7 +1851,7 @@
     "fit": "FIT",
     "keyStats": "Key Stats"
   },
-  "scouting": {
+"scouting": {
     "shortlist": "Shortlist",
     "shortlistEmpty": "Save players here to compare them later.",
     "addShortlist": "Add to shortlist",
@@ -2662,6 +2671,7 @@
         "noLeague": "No league data is available for this match.",
         "fixtureNotFound": "The selected fixture could not be found.",
         "emptySquad": "One of the teams has no available players, so the match cannot be played.",
+        "insufficientMatchdayPlayers": "A match requires at least 14 available senior players (11 starters and three substitutes).",
         "maxSubstitutionsReached": "Maximum substitutions reached",
         "preMatchSwapTooLate": "Pre-match swaps are only allowed before kick-off",
         "cannotSubstituteSentOffPlayer": "Cannot substitute a sent-off player",
@@ -2846,6 +2856,9 @@
         "staffMemberNotScout": "Staff member is not a scout",
         "scoutNotInTeam": "Scout does not belong to your team",
         "cannotScoutOwnPlayer": "Cannot scout your own players",
+        "youthRequiresPromotion": "Academy players must be promoted before senior scouting or transfer activity. Use youth recruitment for prospects.",
+        "academyFull": "Academy is full (12 players). Promote or release a prospect before signing another.",
+        "seniorSquadFull": "Senior squad is full (26 players). Move or release a senior before promoting.",
         "scoutAssignmentFull": "Scout is already assigned to another scouting task ({{currentCount}}/{{maxSlots}} assignments).",
         "playerAlreadyScouted": "This player is already being scouted",
         "youthSearchAlreadyActive": "A matching youth recruitment search is already active",
@@ -2855,6 +2868,7 @@
       "invalidPath": "Invalid path."
     },
     "sender": {
+      "youthCoach": "Youth Coach",
       "boardOfDirectors": "Board of Directors",
       "leagueOffice": "League Office",
       "assistantManager": "Assistant Manager",
@@ -2871,6 +2885,7 @@
       "transferCommittee": "Transfer Committee"
     },
     "role": {
+      "youthCoach": "Youth Coach",
       "chairman": "Chairman",
       "competitionSecretary": "Competition Secretary",
       "assistantManager": "Assistant Manager",
@@ -3362,6 +3377,7 @@
         },
         "effect": {
           "sign": "{{player}} signed a youth contract and joined your academy.",
+          "academyFull": "Academy is full (12 players). Promote or release a prospect before signing another.",
           "shortlist": "{{player}} was added to your youth shortlist.",
           "discard": "{{player}} was removed from the youth recruitment report."
         }
@@ -3369,6 +3385,17 @@
       "youthRecruitmentShortlist": {
         "subject": "Youth prospect shortlisted",
         "body": "{{player}} has been moved to your youth shortlist. You can review them again later before making a final decision."
+      },
+      "academyReview": {
+        "subject": "Academy review: {{player}}",
+        "progress": "{{player}} is developing in the academy (OVR {{ovr}}, potential {{potential}}). Continue training and review the prospect next month.",
+        "ready": "{{player}} has made strong progress (OVR {{ovr}}, potential {{potential}}). I believe they are ready for a senior opportunity. You can promote them from the Youth Academy."
+      },
+      "academyFixture": {
+        "subject": "Youth Challenge",
+        "win": "The academy won its Youth Challenge fixture with {{count}} players (squad rating {{rating}}). Prospects gained experience.",
+        "draw": "The academy drew its Youth Challenge fixture with {{count}} players (squad rating {{rating}}). Prospects gained experience.",
+        "loss": "The academy lost its Youth Challenge fixture with {{count}} players (squad rating {{rating}}). Prospects gained experience."
       },
       "scoutReport": {
         "subject": "Scout Report: {{player}}",

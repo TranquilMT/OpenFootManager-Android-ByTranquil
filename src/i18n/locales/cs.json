@@ -24,7 +24,7 @@
     "openGithub": "Otevřít repozitář OFMtouch na GitHubu",
     "openOriginalGithub": "Otevřít původní repozitář OpenFootManager na GitHubu",
     "originalGame": "Původní hra",
-    "doNotShowWhatsNew": "Znovu nezobrazovat pro v0.5.0",
+    "doNotShowWhatsNew": "Znovu nezobrazovat pro v0.5.1",
     "continueToGame": "Pokračovat",
     "mainMenu": "Hlavní menu",
     "worldEditor": "Editor světa"
@@ -1772,21 +1772,30 @@
     "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
     "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
     "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
-    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.5.0",
+    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.5.1",
     "patchPortraits": "20 fiktivních výchozích tváří přináší pestřejší portréty hráčů.",
     "patchWorld": "Fotbalový svět zahrnuje 29 zemí a silnější kluby v Americe a Asii.",
     "patchTransfers": "Strategie klubů řídí hostování a přestupy včetně konkurenčních nabídek a kontroly rozpočtu.",
     "patchDevelopment": "Herní čas pomáhá mladým hráčům růst; zprávy o mládeži neobsahují opakovaná jména.",
-    "careerHighlights": "Nová trenérská kariéra přináší hlubší rozhodování o klubu a sezónách.",
-    "careerInbox": "Novinky a rozhodnutí v kariéře se snáze sledují v doručené poště.",
-    "careerSeason": "Přechody mezi sezónami a výsledky zápasů pokračují v kariéře.",
-    "careerReliability": "Další testy pokrývají kariéru, ukládání a mobilní nabídku.",
+    "careerHighlights": "Nové kariéry se nyní spolehlivě ukládají i s širšími kádry.",
+    "careerInbox": "Základní sestava si zachovává role a pokrytí ukazuje přirozené pozice.",
+    "careerSeason": "Seznam hráčů je na telefonu přehlednější a úspornější.",
+    "careerReliability": "Neúspěšné ukládání odstraní neúplné soubory; nové testy kontrolují čísla a role.",
+    "careerYouth": "Akademie je oddělená od 22–26 seniorů, s trenérskými zprávami, povýšením a limitem 12 hráčů.",
+    "careerYouthScouting": "Skauting mládeže a seniorů je oddělený; mládežnický zápas vyžaduje 12 talentů a dva seniory do 21 let.",
+    "nextPreview": "Co dál: zvažujeme hlubší plánování kádru a více rozhovorů s hráči.",
+    "history0504": "Další testy pokrývají kariéru, ukládání a mobilní nabídku.",
+    "history0503": "Přechody mezi sezónami a výsledky zápasů pokračují v kariéře.",
+    "history0502": "Novinky a rozhodnutí v kariéře se snáze sledují v doručené poště.",
+    "history0501": "Nová trenérská kariéra přináší hlubší rozhodování o klubu a sezónách.",
     "hotfixInbox": "Zprávy v doručené poště jsou na telefonu čitelné; potvrzení zprávy spotřebuje méně paměti.",
     "hotfixSave": "Uložit hru najdete v Nastavení, takže datum a tlačítko Pokračovat mají více místa.",
     "hotfixMatch": "Zranění ze zápasů přetrvávají v kariéře a přichází o nich zpráva od lékaře.",
     "hotfixStability": "Přidány kontroly akcí zpráv, ukládání, sestavení pro Android a simulace kariéry.",
     "patchFixes": "Opraveny nečitelné názvy zranění, duplicitní názvy klubů a chyby při tvorbě světa.",
-    "patchThanks": "Děkujeme za hraní! Pomozte nám hru zlepšit hlášením problémů na GitHubu.",
+    "patchThanks": "Děkujeme všem, kdo testují nové verze, sdílejí snímky a hlásí chyby. Vaše trpělivost a zpětná vazba utvářejí každou aktualizaci. Další podněty posílejte na GitHub.",
+    "patchHistory": "Historie aktualizací",
+    "patchHistoryClose": "Zavřít",
     "patchSignature": "Děkuji, TranquilMT",
     "patchReportIssue": "Nahlásit problém na GitHubu",
     "about": "O hře",
@@ -1842,7 +1851,7 @@
     "fit": "KOND",
     "keyStats": "Klíčové statistiky"
   },
-  "scouting": {
+"scouting": {
     "shortlist": "Seznam hráčů",
     "shortlistEmpty": "Uložte si sem hráče pro pozdější porovnání.",
     "addShortlist": "Přidat do seznamu",
@@ -2648,6 +2657,7 @@
         "noLeague": "Pro tento zápas nejsou k dispozici žádná data o lize.",
         "fixtureNotFound": "Vybrané utkání nebylo nalezeno.",
         "emptySquad": "Jeden z týmů nemá k dispozici žádné hráče, takže zápas nelze odehrát.",
+        "insufficientMatchdayPlayers": "Zápas vyžaduje alespoň 14 dostupných seniorů (11 v základu a tři náhradníky).",
         "maxSubstitutionsReached": "Bylo dosaženo maximálního počtu střídání",
         "preMatchSwapTooLate": "Předzápasové změny v sestavě jsou povoleny pouze před výkopem",
         "cannotSubstituteSentOffPlayer": "Nelze střídat vyloučeného hráče",
@@ -2832,6 +2842,9 @@
         "staffMemberNotScout": "Člen realizačního týmu není skaut",
         "scoutNotInTeam": "Skaut nepatří do vašeho týmu",
         "cannotScoutOwnPlayer": "Nemůžete skautovat vlastní hráče",
+        "youthRequiresPromotion": "Hráče akademie je nutné povýšit před skautingem a přestupy dospělých. Pro mladé talenty použij vyhledávání mládeže.",
+        "academyFull": "Akademie je plná (12 hráčů). Povyš nebo propusť talent.",
+        "seniorSquadFull": "A-tým je plný (26 hráčů). Před povýšením uvolni místo.",
         "scoutAssignmentFull": "Skaut je již přiřazen k jinému úkolu ({{currentCount}}/{{maxSlots}} přiřazení).",
         "playerAlreadyScouted": "Tento hráč již je skautován",
         "youthSearchAlreadyActive": "Odpovídající vyhledávání pro nábor mládeže je již aktivní",
@@ -2841,6 +2854,7 @@
       "invalidPath": "Neplatná cesta."
     },
     "sender": {
+      "youthCoach": "Trenér mládeže",
       "boardOfDirectors": "Představenstvo",
       "leagueOffice": "Vedení ligy",
       "assistantManager": "Asistent manažera",
@@ -2857,6 +2871,7 @@
       "transferCommittee": "Přestupová komise"
     },
     "role": {
+      "youthCoach": "Trenér mládeže",
       "chairman": "Předseda",
       "competitionSecretary": "Sekretář soutěže",
       "assistantManager": "Asistent manažera",
@@ -3348,6 +3363,7 @@
         },
         "effect": {
           "sign": "{{player}} podepsal mládežnickou smlouvu a připojil se k vaší akademii.",
+          "academyFull": "Akademie je plná (12 hráčů). Povyš nebo propusť talent.",
           "shortlist": "{{player}} byl přidán do vašeho užšího výběru mládeže.",
           "discard": "{{player}} byl odebrán ze zprávy o náboru mládeže."
         }
@@ -3355,6 +3371,17 @@
       "youthRecruitmentShortlist": {
         "subject": "Nadějný mladík přidán do užšího výběru",
         "body": "{{player}} byl přesunut do vašeho užšího výběru mládeže. Můžete se k němu vrátit později, než učiníte konečné rozhodnutí."
+      },
+      "academyReview": {
+        "subject": "Zpráva akademie: {{player}}",
+        "progress": "{{player}} se v akademii zlepšuje (CEL {{ovr}}, potenciál {{potential}}). Pokračuj v tréninku a příští měsíc vývoj zkontroluj.",
+        "ready": "{{player}} udělal pokrok (CEL {{ovr}}, potenciál {{potential}}). Je připraven dostat šanci v A-týmu. Povýšit ho můžeš v akademii."
+      },
+      "academyFixture": {
+        "subject": "Výzva mládeže",
+        "win": "Akademie vyhrála s {{count}} hráči (síla {{rating}}). Talenty získaly zkušenosti.",
+        "draw": "Akademie remizovala s {{count}} hráči (síla {{rating}}). Talenty získaly zkušenosti.",
+        "loss": "Akademie prohrála s {{count}} hráči (síla {{rating}}). Talenty získaly zkušenosti."
       },
       "scoutReport": {
         "subject": "Zpráva skauta: {{player}}",

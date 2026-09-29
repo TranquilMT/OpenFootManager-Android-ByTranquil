@@ -24,7 +24,7 @@
     "openGithub": "Apri il repository GitHub di OFMtouch",
     "openOriginalGithub": "Apri il repository GitHub originale di OpenFootManager",
     "originalGame": "Gioco originale",
-    "doNotShowWhatsNew": "Non mostrare più per la v0.5.0",
+    "doNotShowWhatsNew": "Non mostrare più per la v0.5.1",
     "continueToGame": "Continua",
     "mainMenu": "Menu principale",
     "worldEditor": "Editor Mondo"
@@ -1791,21 +1791,30 @@
     "patchPlayers": "Più giocatori di spicco, incluse rare stelle da 96 e squadre in lotta per la promozione.",
     "patchMatches": "Più reazioni, tiri sui legni e telecronaca vocale facoltativa.",
     "patchMobile": "Comandi mobili, posta, nazionali e inizio carriera migliorati.",
-    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.5.0",
+    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.5.1",
     "patchPortraits": "20 volti fittizi di partenza rendono più vari i ritratti dei giocatori generati.",
     "patchWorld": "Un mondo calcistico più ampio copre 29 nazioni, con club più forti nelle Americhe e in Asia.",
     "patchTransfers": "Le strategie dei club guidano prestiti e trasferimenti, con offerte concorrenti e controlli sul budget.",
     "patchDevelopment": "I minuti giocati aiutano i giovani a crescere; i rapporti sui talenti evitano nomi ripetuti.",
-    "careerHighlights": "Una nuova carriera da allenatore amplia le decisioni del club e le stagioni.",
-    "careerInbox": "Notizie e decisioni di carriera sono più facili da seguire nella posta.",
-    "careerSeason": "I cambi di stagione e i risultati proseguono nella tua carriera.",
-    "careerReliability": "Più test coprono carriera, salvataggi e menu mobile.",
+    "careerHighlights": "Le nuove carriere si salvano correttamente anche con rose più ampie.",
+    "careerInbox": "La formazione iniziale mantiene i ruoli e la copertura riflette le posizioni naturali.",
+    "careerSeason": "L’elenco della rosa è più compatto e leggibile su telefono.",
+    "careerReliability": "I salvataggi non riusciti eliminano i file incompleti; nuovi test verificano numeri e ruoli.",
+    "careerYouth": "Il vivaio è separato dai 22–26 senior, con rapporti degli allenatori, promozioni e massimo 12 giovani.",
+    "careerYouthScouting": "Scouting senior e giovanile sono distinti; le gare giovanili richiedono 12 talenti e due senior under 21.",
+    "nextPreview": "In futuro: stiamo valutando una gestione della rosa più profonda e dialoghi con i giocatori.",
+    "history0504": "Più test coprono carriera, salvataggi e menu mobile.",
+    "history0503": "I cambi di stagione e i risultati proseguono nella tua carriera.",
+    "history0502": "Notizie e decisioni di carriera sono più facili da seguire nella posta.",
+    "history0501": "Una nuova carriera da allenatore amplia le decisioni del club e le stagioni.",
     "hotfixInbox": "I messaggi sono leggibili sul telefono; confermarli usa meno memoria.",
     "hotfixSave": "Salva partita è nelle Impostazioni, lasciando spazio alla data e a Continua.",
     "hotfixMatch": "Gli infortuni delle partite persistono nella carriera e inviano un avviso medico.",
     "hotfixStability": "Più controlli per azioni dei messaggi, salvataggi, build Android e simulazione carriera.",
     "patchFixes": "Corretti nomi degli infortuni non leggibili, club duplicati e problemi nella generazione del mondo.",
-    "patchThanks": "Grazie per aver giocato! Aiutaci a migliorare segnalando i problemi su GitHub.",
+    "patchThanks": "Grazie a chi prova le nuove versioni, condivide schermate e segnala problemi. La vostra pazienza e i vostri suggerimenti guidano ogni aggiornamento. Continuate su GitHub.",
+    "patchHistory": "Cronologia aggiornamenti",
+    "patchHistoryClose": "Chiudi",
     "patchSignature": "Grazie, TranquilMT",
     "patchReportIssue": "Segnala un problema su GitHub",
     "about": "Informazioni",
@@ -1861,7 +1870,7 @@
     "fit": "IDO",
     "keyStats": "Statistiche chiave"
   },
-  "scouting": {
+"scouting": {
     "shortlist": "Lista preferiti",
     "shortlistEmpty": "Salva qui i giocatori per confrontarli più tardi.",
     "addShortlist": "Aggiungi ai preferiti",
@@ -2635,6 +2644,7 @@
         "noLeague": "Non ci sono dati di campionato disponibili per questa partita.",
         "fixtureNotFound": "Impossibile trovare la partita selezionata.",
         "emptySquad": "Una delle squadre non ha giocatori disponibili, quindi la partita non può essere giocata.",
+        "insufficientMatchdayPlayers": "Servono almeno 14 giocatori senior disponibili (11 titolari e tre riserve).",
         "maxSubstitutionsReached": "Raggiunto il numero massimo di sostituzioni",
         "preMatchSwapTooLate": "Gli scambi pre-partita sono consentiti solo prima del calcio d'inizio",
         "cannotSubstituteSentOffPlayer": "Non puoi sostituire un giocatore espulso",
@@ -2824,6 +2834,9 @@
         "staffMemberNotScout": "Il membro dello staff non è un osservatore",
         "scoutNotInTeam": "L'osservatore non appartiene alla tua squadra",
         "cannotScoutOwnPlayer": "Non puoi osservare i tuoi stessi giocatori",
+        "youthRequiresPromotion": "I giovani devono essere promossi prima dello scouting e dei trasferimenti senior. Usa la ricerca giovanile.",
+        "academyFull": "Il vivaio è pieno (12 giocatori). Promuovi o svincola un giovane.",
+        "seniorSquadFull": "La rosa senior è piena (26 giocatori). Libera un posto prima di promuovere.",
         "scoutAssignmentFull": "L'osservatore è già assegnato a un altro incarico di osservazione ({{currentCount}}/{{maxSlots}} incarichi).",
         "playerAlreadyScouted": "Questo giocatore è già sotto osservazione",
         "youthSearchAlreadyActive": "È già attiva una ricerca giovanile corrispondente",
@@ -2841,6 +2854,7 @@
       }
     },
     "sender": {
+      "youthCoach": "Allenatore giovanile",
       "boardOfDirectors": "Consiglio di amministrazione",
       "leagueOffice": "Ufficio della lega",
       "assistantManager": "Vice allenatore",
@@ -2857,6 +2871,7 @@
       "transferCommittee": "Comitato trasferimenti"
     },
     "role": {
+      "youthCoach": "Allenatore giovanile",
       "chairman": "Presidente",
       "competitionSecretary": "Segretario della competizione",
       "assistantManager": "Vice allenatore",
@@ -3348,6 +3363,7 @@
         },
         "effect": {
           "sign": "{{player}} ha firmato un contratto giovanile ed è entrato nella tua accademia.",
+          "academyFull": "Il vivaio è pieno (12 giocatori). Promuovi o svincola un giovane.",
           "shortlist": "{{player}} è stato aggiunto alla tua shortlist giovanile.",
           "discard": "{{player}} è stato rimosso dal rapporto di reclutamento giovanile."
         }
@@ -3355,6 +3371,17 @@
       "youthRecruitmentShortlist": {
         "subject": "Prospetto giovanile in shortlist",
         "body": "{{player}} è stato spostato nella tua shortlist giovanile. Potrai rivederlo più tardi prima di prendere una decisione finale."
+      },
+      "academyReview": {
+        "subject": "Rapporto vivaio: {{player}}",
+        "progress": "{{player}} cresce nel vivaio (GEN {{ovr}}, potenziale {{potential}}). Continua ad allenarlo e rivalutalo il mese prossimo.",
+        "ready": "{{player}} è cresciuto molto (GEN {{ovr}}, potenziale {{potential}}). È pronto per la prima squadra. Puoi promuoverlo dal vivaio."
+      },
+      "academyFixture": {
+        "subject": "Sfida giovanile",
+        "win": "Il vivaio ha vinto con {{count}} giocatori (valore {{rating}}). I talenti hanno acquisito esperienza.",
+        "draw": "Il vivaio ha pareggiato con {{count}} giocatori (valore {{rating}}). I talenti hanno acquisito esperienza.",
+        "loss": "Il vivaio ha perso con {{count}} giocatori (valore {{rating}}). I talenti hanno acquisito esperienza."
       },
       "scoutReport": {
         "subject": "Rapporto osservatore: {{player}}",

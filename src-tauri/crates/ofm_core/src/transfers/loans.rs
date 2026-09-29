@@ -518,6 +518,9 @@ pub fn make_loan_offer(
     if player.team_id.as_deref() == Some(&user_team_id) {
         return Err(ERR_CANNOT_BID_ON_OWN_PLAYER.into());
     }
+    if player.squad_role == domain::player::SquadRole::Youth {
+        return Err("be.error.scouting.youthRequiresPromotion".into());
+    }
 
     if player_has_pending_registration(player) {
         return Err(ERR_PLAYER_ALREADY_LOANED.into());
