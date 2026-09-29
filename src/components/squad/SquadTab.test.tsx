@@ -237,6 +237,15 @@ describe("SquadTab", () => {
     expect(screen.getAllByText(/squad.styleFitValues./).length).toBeGreaterThan(0);
   });
 
+  it("keeps the mobile roster readable by limiting the visible columns", () => {
+    renderSquadTab(makeGameState());
+    const table = screen.getByRole("table");
+    expect(table).toHaveClass("min-w-[340px]");
+    expect(screen.getByRole("columnheader", { name: "squad.formationFit" })).toHaveClass("hidden");
+    expect(screen.getByRole("columnheader", { name: "common.name" })).not.toHaveClass("hidden");
+    expect(screen.getByText(/squad.starter/)).toHaveClass("shrink-0", "whitespace-nowrap");
+  });
+
   it("shows progressive injury details in the roster", () => {
     const gameState = makeGameState();
     gameState.players[0] = makePlayer("gk1", "Goalkeeper", {

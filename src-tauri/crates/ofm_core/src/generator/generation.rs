@@ -564,6 +564,22 @@ pub(super) fn generate_random_player_from_def(
         position,
         attributes,
     );
+    // Broad position groups keep generation balanced; the natural role gives
+    // a new club a usable XI on its default 4-4-2 before any transfers.
+    player.natural_position = match index {
+        0..=1 => Position::Goalkeeper,
+        2 | 6 => Position::RightBack,
+        3 | 4 | 8 => Position::CenterBack,
+        5 | 7 => Position::LeftBack,
+        9 | 11 | 13 => Position::CentralMidfielder,
+        10 => Position::RightMidfielder,
+        12 => Position::LeftMidfielder,
+        14 => Position::DefensiveMidfielder,
+        15 => Position::AttackingMidfielder,
+        16 | 17 | 20 | 21 => Position::Striker,
+        18 => Position::RightWinger,
+        _ => Position::LeftWinger,
+    };
     player.team_id = Some(team_id.to_string());
     player.market_value = market_value;
     player.wage = wage;
@@ -1116,6 +1132,31 @@ pub(super) fn generate_random_unemployed_manager(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn generated_opening_squad_fills_a_natural_four_four_two() {
+        use rand::SeedableRng;
+        let mut rng = rand::rngs::StdRng::seed_from_u64(42);
+        let names = super::super::definitions::default_names_definition();
+        let players: Vec<_> = (0..SQUAD_SLOTS)
+            .map(|slot| generate_random_player_from_def("club", slot, "ENG", 2026, &names, &mut rng))
+            .collect();
+        for (position, count) in [
+            (Position::Goalkeeper, 1),
+            (Position::LeftBack, 1),
+            (Position::CenterBack, 2),
+            (Position::RightBack, 1),
+            (Position::LeftMidfielder, 1),
+            (Position::CentralMidfielder, 2),
+            (Position::RightMidfielder, 1),
+            (Position::Striker, 2),
+        ] {
+            assert!(
+                players.iter().filter(|player| player.natural_position == position).count() >= count,
+                "missing natural {position:?} starters"
+            );
+        }
+    }
 
     /// Build a `PlayerDef` from JSON rather than a struct literal.
     ///

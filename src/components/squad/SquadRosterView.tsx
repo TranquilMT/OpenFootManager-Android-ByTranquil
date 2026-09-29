@@ -104,10 +104,11 @@ function SortHeader({
   onSort: (col: SquadListSortKey) => void;
 }) {
   const active = sortKey === col;
+  const mobileColumn = ["jersey", "name", "pos", "ovr"].includes(col);
 
   return (
     <th
-      className={`py-2.5 px-4 font-heading font-bold uppercase tracking-wider cursor-pointer select-none hover:text-primary-400 transition-colors ${active ? "text-primary-500 dark:text-primary-400" : "text-gray-500 dark:text-gray-400"}`}
+      className={`py-2.5 px-2 md:px-4 font-heading font-bold uppercase tracking-wider cursor-pointer select-none whitespace-nowrap hover:text-primary-400 transition-colors ${mobileColumn ? "" : "hidden md:table-cell"} ${col === "name" ? "min-w-36" : ""} ${active ? "text-primary-500 dark:text-primary-400" : "text-gray-500 dark:text-gray-400"}`}
       onClick={() => onSort(col)}
     >
       <div className="flex items-center gap-1">
@@ -490,25 +491,37 @@ export default function SquadRosterView({
           </button>
         </div>
         <div className="touch-x flex gap-2 overflow-x-auto px-3 pb-4 sm:flex-wrap sm:overflow-visible sm:px-4">
-          <Badge variant="primary" size="sm">
+          <Badge variant="primary" size="sm" className="shrink-0 whitespace-nowrap">
             {starterCount} {t("squad.starter")}
           </Badge>
-          <Badge variant="neutral" size="sm">
+          <Badge variant="neutral" size="sm" className="shrink-0 whitespace-nowrap">
             {benchCount} {t("squad.benchOption")}
           </Badge>
-          <Badge variant="success" size="sm">
+          <Badge variant="success" size="sm" className="shrink-0 whitespace-nowrap">
             {naturalFitCount} {t("squad.naturalFit")}
           </Badge>
-          <Badge variant={thinCoverageCount > 0 ? "accent" : "success"} size="sm">
+          <Badge
+            variant={thinCoverageCount > 0 ? "accent" : "success"}
+            size="sm"
+            className="shrink-0 whitespace-nowrap"
+          >
             {thinCoverageCount} {t("squad.needsCover")}
           </Badge>
-          <Badge variant={outOfPositionCount > 0 ? "danger" : "success"} size="sm">
+          <Badge
+            variant={outOfPositionCount > 0 ? "danger" : "success"}
+            size="sm"
+            className="shrink-0 whitespace-nowrap"
+          >
             {outOfPositionCount} {t("squad.outOfPosition")}
           </Badge>
-          <Badge variant={injuredCount > 0 ? "danger" : "neutral"} size="sm">
+          <Badge
+            variant={injuredCount > 0 ? "danger" : "neutral"}
+            size="sm"
+            className="shrink-0 whitespace-nowrap"
+          >
             {injuredCount} {t("common.injured")}
           </Badge>
-          <Badge variant="primary" size="sm">
+          <Badge variant="primary" size="sm" className="shrink-0 whitespace-nowrap">
             {filteredRoster.length} {t("squad.playersLabel")}
           </Badge>
         </div>
@@ -569,8 +582,8 @@ export default function SquadRosterView({
             </div>
           </div>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+        <div className="max-w-full overflow-x-auto">
+          <table className="w-full min-w-[340px] md:min-w-[1100px] text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 dark:bg-navy-800 border-b border-gray-200 dark:border-navy-600 text-xs">
                 <SortHeader
@@ -608,7 +621,7 @@ export default function SquadRosterView({
                   sortDir={sortDir}
                   onSort={toggleSort}
                 />
-                <th className="py-2.5 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <th className="hidden md:table-cell py-2.5 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                   {t("squad.traits")}
                 </th>
                 <SortHeader
@@ -646,7 +659,7 @@ export default function SquadRosterView({
                   sortDir={sortDir}
                   onSort={toggleSort}
                 />
-                <th className="py-2.5 px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-right">
+                <th className="py-2.5 px-2 md:px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-right">
                   <span className="sr-only">{t("common.actions")}</span>
                 </th>
               </tr>
@@ -814,12 +827,12 @@ export default function SquadRosterView({
                       title={inXI ? t("squad.startingXi") : undefined}
                       className={`hover:bg-primary-500/5 dark:hover:bg-navy-700 transition-colors group cursor-pointer ${inXI ? "border-l-4 border-l-primary-500" : rowBorderClass}`}
                     >
-                      <td className="py-2.5 px-4 tabular-nums text-sm font-medium text-gray-600 dark:text-gray-400">
+                      <td className="py-2.5 px-2 md:px-4 tabular-nums text-sm font-medium text-gray-600 dark:text-gray-400">
                         {player.jersey_number ?? "—"}
                       </td>
                       {/* Name: avatar + injury dot + name + country flag */}
-                      <td className="py-2.5 px-4">
-                        <div className="flex items-center gap-3">
+                      <td className="py-2.5 px-2 md:px-4">
+                        <div className="flex items-center gap-2 md:gap-3 min-w-0">
                           <PlayerAvatar player={player} />
                           <div className="min-w-0 flex items-center gap-1.5">
                             {injuryDotClass && (
@@ -843,10 +856,10 @@ export default function SquadRosterView({
                         </div>
                       </td>
                       {/* Position badges: natural + alternates */}
-                      <td className="py-2.5 px-4">{renderPreferredPositionMeta(player)}</td>
+                      <td className="py-2.5 px-2 md:px-4">{renderPreferredPositionMeta(player)}</td>
                       {/* Formation fit: colored badge for XI (green/amber/red),
                           neutral badge showing best-role for non-XI. */}
-                      <td className="py-2.5 px-4">
+                      <td className="hidden md:table-cell py-2.5 px-4">
                         <div className="flex items-center gap-1.5">
                           {inXI ? (
                             <Badge
@@ -880,7 +893,7 @@ export default function SquadRosterView({
                         </div>
                       </td>
                       {/* Style fit */}
-                      <td className="py-2.5 px-4">
+                      <td className="hidden md:table-cell py-2.5 px-4">
                         <Badge
                           variant={
                             styleFit === "strong"
@@ -895,20 +908,20 @@ export default function SquadRosterView({
                         </Badge>
                       </td>
                       {/* Traits — all of them, wraps as needed */}
-                      <td className="py-2.5 px-4">
+                      <td className="hidden md:table-cell py-2.5 px-4">
                         <TraitList traits={player.traits || []} size="xs" />
                       </td>
-                      <td className="py-2.5 px-4 text-sm text-gray-600 dark:text-gray-400 tabular-nums">
+                      <td className="hidden md:table-cell py-2.5 px-4 text-sm text-gray-600 dark:text-gray-400 tabular-nums">
                         {age}
                       </td>
-                      <td className="py-2.5 px-4 w-28">
+                      <td className="hidden md:table-cell py-2.5 px-4 w-28">
                         <ProgressBar value={player.condition} variant="auto" size="sm" showLabel />
                       </td>
-                      <td className="py-2.5 px-4 text-sm text-gray-500 dark:text-gray-400 tabular-nums">
+                      <td className="hidden md:table-cell py-2.5 px-4 text-sm text-gray-500 dark:text-gray-400 tabular-nums">
                         {player.morale}
                       </td>
                       {/* OVR (moved next to identity block) */}
-                      <td className="py-2.5 px-4">
+                      <td className="py-2.5 px-2 md:px-4">
                         <span
                           className={`font-heading font-bold text-sm ${
                             ovr >= 80
@@ -922,7 +935,7 @@ export default function SquadRosterView({
                         </span>
                       </td>
                       {/* Contract: years + risk + expires_on + market pills */}
-                      <td className="py-2.5 px-4 text-xs text-gray-600 dark:text-gray-400">
+                      <td className="hidden md:table-cell py-2.5 px-4 text-xs text-gray-600 dark:text-gray-400">
                         <div className="space-y-1">
                           <div className="flex items-center gap-1.5">
                             <span className="font-medium text-gray-700 dark:text-gray-300">
@@ -958,7 +971,10 @@ export default function SquadRosterView({
                         </div>
                       </td>
                       {/* Actions (last column) */}
-                      <td className="py-2.5 px-4 text-right" onClick={(e) => e.stopPropagation()}>
+                      <td
+                        className="py-2.5 px-2 md:px-4 text-right"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <button
                           type="button"
                           onClick={(e) => {
