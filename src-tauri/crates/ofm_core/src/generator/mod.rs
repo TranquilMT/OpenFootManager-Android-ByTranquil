@@ -778,6 +778,8 @@ fn build_team(tdef: &TeamDef, rng: &mut impl rand::Rng) -> domain::team::Team {
         secondary: tdef.colors.secondary.clone(),
     };
     team.play_style = play_style_from_str(&tdef.play_style);
+    const OPENING_FORMATIONS: [&str; 3] = ["4-4-2", "4-3-3", "5-3-2"];
+    team.formation = OPENING_FORMATIONS[rng.random_range(0..OPENING_FORMATIONS.len())].to_string();
     team.media.logo = tdef.logo.clone();
     if let Some(ref pattern_str) = tdef.kit_pattern
         && let Ok(pattern) = pattern_str.parse()
@@ -828,6 +830,13 @@ fn build_club(
             names_def,
             rng,
         );
+        match (team.formation.as_str(), slot) {
+            ("4-3-3", 18) => player.natural_position = Position::LeftWinger,
+            ("4-3-3", 20) => player.natural_position = Position::RightWinger,
+            ("5-3-2", 2) => player.natural_position = Position::RightWingBack,
+            ("5-3-2", 5) => player.natural_position = Position::LeftWingBack,
+            _ => {}
+        }
         rebalance_generated_player_for_club(&mut player, &team, slot, opening_year, rng);
         if rng.random_range(0..100) < 12 {
             player.transfer_listed = true;
@@ -2154,6 +2163,9 @@ mod tests {
             &WorldGenConfig::compact(),
             &definitions::DefinitionSources::embedded_only(),
         );
+        let formations: std::collections::HashSet<_> =
+            teams.iter().map(|team| team.formation.as_str()).collect();
+        assert!(formations.len() > 1, "clubs should use varied opening formations");
         for team in &teams {
             let team_players: Vec<_> = players
                 .iter()
@@ -2168,6 +2180,27 @@ mod tests {
             ] {
                 let count = team_players.iter().filter(|p| p.position == position).count();
                 assert!(count >= minimum, "Team {} has only {} {:?}", team.name, count, position);
+            }
+            let senior = |role: Position| {
+                team_players.iter().filter(|player| {
+                    player.squad_role == domain::player::SquadRole::Senior
+                        && player.natural_position == role
+                }).count()
+            };
+            match team.formation.as_str() {
+                "4-3-3" => {
+                    assert!(senior(Position::LeftWinger) >= 1);
+                    assert!(senior(Position::RightWinger) >= 1);
+                    assert!(senior(Position::Striker) >= 1);
+                }
+                "5-3-2" => {
+                    assert!(senior(Position::LeftWingBack) >= 1);
+                    assert!(senior(Position::RightWingBack) >= 1);
+                    assert!(senior(Position::CenterBack) >= 3);
+                    assert!(senior(Position::Striker) >= 2);
+                }
+                "4-4-2" => assert!(senior(Position::Striker) >= 2),
+                other => panic!("unexpected formation: {other}"),
             }
         }
     }
