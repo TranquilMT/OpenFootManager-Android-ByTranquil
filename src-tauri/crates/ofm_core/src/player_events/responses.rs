@@ -696,3 +696,65 @@ pub fn apply_player_response(
         i18n_params: outcome.i18n_params,
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::clock::GameClock;
+    use crate::player_events::message_builders::transfer_request_message;
+    use domain::player::Position;
+
+    #[test]
+    fn accepting_a_transfer_request_lists_the_player_and_resolves_the_inbox_action() {
+        let start = chrono::DateTime::parse_from_rfc3339("2026-06-01T00:00:00Z")
+            .unwrap()
+            .with_timezone(&chrono::Utc);
+        let player = Player::new(
+            "player-1".to_string(),
+            "Turner".to_string(),
+            "Alex Turner".to_string(),
+            "2001-01-01".to_string(),
+            "ENG".to_string(),
+            Position::Striker,
+            serde_json::from_value(serde_json::json!({
+                "pace": 60, "stamina": 60, "strength": 60,
+                "passing": 60, "shooting": 60, "tackling": 60,
+                "dribbling": 60, "defending": 60,
+                "positioning": 60, "vision": 60, "decisions": 60
+            }))
+            .unwrap(),
+        );
+        let message = transfer_request_message(
+            "transfer_request_player-1_2026",
+            &player.id,
+            &player.match_name,
+            "2026-06-01",
+        );
+        let mut game = Game::new(
+            GameClock::new(start),
+            domain::manager::Manager::new(
+                "manager".to_string(),
+                "Test".to_string(),
+                "Manager".to_string(),
+                "1980-01-01".to_string(),
+                "ENG".to_string(),
+            ),
+            vec![],
+            vec![player],
+            vec![],
+            vec![message],
+        );
+        let result = apply_player_response(
+            &mut game,
+            "transfer_request_player-1_2026",
+            "respond",
+            "allow_move",
+        );
+        assert_eq!(
+            result.unwrap().i18n_key,
+            "be.msg.playerEvent.effects.transferRequest.allowMove"
+        );
+        assert!(game.players[0].transfer_listed);
+        assert!(game.messages[0].actions[0].resolved);
+    }
+}
