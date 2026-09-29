@@ -2,8 +2,10 @@ mod fitness_warnings;
 pub use fitness_warnings::check_squad_fitness_warnings;
 
 use crate::game::Game;
-use domain::message::{ActionType, InboxMessage, MessageAction, MessageCategory, MessageContext, MessagePriority};
 use crate::player_rating::refresh_player_derived;
+use domain::message::{
+    ActionType, InboxMessage, MessageAction, MessageCategory, MessageContext, MessagePriority,
+};
 use domain::player::{Player, PlayerAttributes, SquadRole};
 use domain::staff::{CoachingSpecialization, StaffRole};
 use domain::team::{TrainingFocus, TrainingIntensity, TrainingSchedule};
@@ -203,42 +205,85 @@ pub fn report_youth_development(game: &mut Game) {
     let Some(team_id) = game.manager.team_id.clone() else {
         return;
     };
-    let coach = game.staff.iter().find(|staff| {
-        staff.team_id.as_deref() == Some(team_id.as_str())
-            && staff.role == StaffRole::Coach
-            && staff.specialization.as_ref() == Some(&CoachingSpecialization::Youth)
-    }).or_else(|| game.staff.iter().find(|staff| {
-        staff.team_id.as_deref() == Some(team_id.as_str()) && staff.role == StaffRole::Coach
-    }));
-    let sender = coach.map(|staff| format!("{} {}", staff.first_name, staff.last_name))
+    let coach = game
+        .staff
+        .iter()
+        .find(|staff| {
+            staff.team_id.as_deref() == Some(team_id.as_str())
+                && staff.role == StaffRole::Coach
+                && staff.specialization.as_ref() == Some(&CoachingSpecialization::Youth)
+        })
+        .or_else(|| {
+            game.staff.iter().find(|staff| {
+                staff.team_id.as_deref() == Some(team_id.as_str()) && staff.role == StaffRole::Coach
+            })
+        });
+    let sender = coach
+        .map(|staff| format!("{} {}", staff.first_name, staff.last_name))
         .unwrap_or_default();
     let date = game.clock.current_date.format("%Y-%m-%d").to_string();
     let month = game.clock.current_date.format("%Y-%m").to_string();
-    let reports: Vec<_> = game.players.iter()
-        .filter(|player| player.team_id.as_deref() == Some(team_id.as_str()) && player.squad_role == SquadRole::Youth)
-        .map(|player| (player.id.clone(), player.match_name.clone(), player.ovr, player.potential))
+    let reports: Vec<_> = game
+        .players
+        .iter()
+        .filter(|player| {
+            player.team_id.as_deref() == Some(team_id.as_str())
+                && player.squad_role == SquadRole::Youth
+        })
+        .map(|player| {
+            (
+                player.id.clone(),
+                player.match_name.clone(),
+                player.ovr,
+                player.potential,
+            )
+        })
         .collect();
     for (player_id, player_name, ovr, potential) in reports {
         let ready = ovr >= 68 && potential >= 78;
         let id = format!("academy_review_{player_id}_{month}");
         crate::inbox::emit_once(game, &id, || {
-            InboxMessage::new(id.clone(), String::new(), String::new(), sender.clone(), date.clone())
-                .with_category(MessageCategory::Training)
-                .with_priority(if ready { MessagePriority::High } else { MessagePriority::Normal })
-                .with_action(MessageAction {
-                    id: "ack".to_string(),
-                    label: String::new(),
-                    action_type: ActionType::Acknowledge,
-                    resolved: false,
-                    label_key: Some("be.msg.event.ack".to_string()),
-                })
-                .with_context(MessageContext { player_id: Some(player_id.clone()), team_id: Some(team_id.clone()), ..Default::default() })
-                .with_i18n("be.msg.academyReview.subject", if ready { "be.msg.academyReview.ready" } else { "be.msg.academyReview.progress" }, [
+            InboxMessage::new(
+                id.clone(),
+                String::new(),
+                String::new(),
+                sender.clone(),
+                date.clone(),
+            )
+            .with_category(MessageCategory::Training)
+            .with_priority(if ready {
+                MessagePriority::High
+            } else {
+                MessagePriority::Normal
+            })
+            .with_action(MessageAction {
+                id: "ack".to_string(),
+                label: String::new(),
+                action_type: ActionType::Acknowledge,
+                resolved: false,
+                label_key: Some("be.msg.event.ack".to_string()),
+            })
+            .with_context(MessageContext {
+                player_id: Some(player_id.clone()),
+                team_id: Some(team_id.clone()),
+                ..Default::default()
+            })
+            .with_i18n(
+                "be.msg.academyReview.subject",
+                if ready {
+                    "be.msg.academyReview.ready"
+                } else {
+                    "be.msg.academyReview.progress"
+                },
+                [
                     ("player".to_string(), player_name.clone()),
                     ("ovr".to_string(), ovr.to_string()),
                     ("potential".to_string(), potential.to_string()),
-                ].into_iter().collect())
-                .with_sender_i18n("be.sender.youthCoach", "be.role.youthCoach")
+                ]
+                .into_iter()
+                .collect(),
+            )
+            .with_sender_i18n("be.sender.youthCoach", "be.role.youthCoach")
         });
     }
 }

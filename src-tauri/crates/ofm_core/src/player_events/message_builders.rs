@@ -158,9 +158,21 @@ pub(crate) fn transfer_request_message(
         "be.msg.playerEvent.respond",
         ActionType::ChooseOption {
             options: vec![
-                option("discuss", "be.msg.playerEvent.options.transferRequest.discuss.label", "be.msg.playerEvent.options.transferRequest.discuss.description"),
-                option("allow_move", "be.msg.playerEvent.options.transferRequest.allowMove.label", "be.msg.playerEvent.options.transferRequest.allowMove.description"),
-                option("refuse", "be.msg.playerEvent.options.transferRequest.refuse.label", "be.msg.playerEvent.options.transferRequest.refuse.description"),
+                option(
+                    "discuss",
+                    "be.msg.playerEvent.options.transferRequest.discuss.label",
+                    "be.msg.playerEvent.options.transferRequest.discuss.description",
+                ),
+                option(
+                    "allow_move",
+                    "be.msg.playerEvent.options.transferRequest.allowMove.label",
+                    "be.msg.playerEvent.options.transferRequest.allowMove.description",
+                ),
+                option(
+                    "refuse",
+                    "be.msg.playerEvent.options.transferRequest.refuse.label",
+                    "be.msg.playerEvent.options.transferRequest.refuse.description",
+                ),
             ],
         },
     ))

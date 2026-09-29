@@ -109,7 +109,12 @@ pub fn hire_manager(game: &mut Game, team_id: &str, date: &str) -> Result<String
     // Results earned before this appointment belong to the club, not the
     // incoming manager. Season rollover must only reconcile later fixtures.
     if let Some((wins, draws, losses)) = crate::end_of_season::user_division(game, team_id)
-        .and_then(|division| division.standings.iter().find(|entry| entry.team_id == team_id))
+        .and_then(|division| {
+            division
+                .standings
+                .iter()
+                .find(|entry| entry.team_id == team_id)
+        })
         .map(|entry| (entry.won, entry.drawn, entry.lost))
     {
         game.manager.career_stats.season_recorded_wins = wins;
@@ -801,10 +806,16 @@ mod tests {
     fn midseason_hire_does_not_inherit_club_results() {
         let mut game = make_game(10, false);
         let mut division = domain::league::League::new(
-            "division".to_string(), "Division".to_string(), 2026,
+            "division".to_string(),
+            "Division".to_string(),
+            2026,
             &["team1".to_string(), "team2".to_string()],
         );
-        let standing = division.standings.iter_mut().find(|entry| entry.team_id == "team2").unwrap();
+        let standing = division
+            .standings
+            .iter_mut()
+            .find(|entry| entry.team_id == "team2")
+            .unwrap();
         standing.won = 4;
         standing.drawn = 2;
         standing.lost = 3;
@@ -1281,7 +1292,9 @@ mod tests {
     fn switch_backfills_current_club_even_if_stale_other_spell_is_open() {
         let mut game = make_game(50, true);
         game.manager.career_history.push(ManagerCareerEntry::open(
-            "team3".to_string(), "Earlier FC".to_string(), "2025-01-01".to_string(),
+            "team3".to_string(),
+            "Earlier FC".to_string(),
+            "2025-01-01".to_string(),
         ));
         switch_manager_team(&mut game, "team3", "2026-11-01").unwrap();
         assert!(game.manager.career_history.iter().any(|entry| {

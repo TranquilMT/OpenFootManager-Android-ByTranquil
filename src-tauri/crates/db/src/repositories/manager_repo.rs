@@ -245,7 +245,10 @@ mod tests {
         assert_eq!(loaded.football_nation, "GB");
         assert_eq!(loaded.birth_country, None);
         assert_eq!(loaded.trophy_cabinet.len(), 1);
-        assert_eq!(loaded.trophy_cabinet[0].competition_name, "Premier Division");
+        assert_eq!(
+            loaded.trophy_cabinet[0].competition_name,
+            "Premier Division"
+        );
     }
 
     #[test]

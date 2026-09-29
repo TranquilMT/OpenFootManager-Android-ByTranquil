@@ -606,9 +606,14 @@ pub fn apply_youth_recruitment_response(
                 return None;
             }
             if let Some(team_id) = game.manager.team_id.as_deref() {
-                let academy_size = game.players.iter().filter(|player| {
-                    player.team_id.as_deref() == Some(team_id) && player.squad_role == SquadRole::Youth
-                }).count();
+                let academy_size = game
+                    .players
+                    .iter()
+                    .filter(|player| {
+                        player.team_id.as_deref() == Some(team_id)
+                            && player.squad_role == SquadRole::Youth
+                    })
+                    .count();
                 if academy_size >= 12 {
                     return Some(YouthRecruitmentEffect {
                         message: String::new(),

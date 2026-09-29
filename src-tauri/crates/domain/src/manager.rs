@@ -97,12 +97,18 @@ impl ManagerCareerEntry {
 impl Manager {
     /// Recover the open spell on older saves before crediting another match.
     pub fn ensure_current_spell(&mut self, team_name: &str, date: &str) {
-        let Some(team_id) = self.team_id.as_deref() else { return };
-        if !self.career_history.iter().any(|entry| {
-            entry.team_id == team_id && entry.end_date.is_none()
-        }) {
+        let Some(team_id) = self.team_id.as_deref() else {
+            return;
+        };
+        if !self
+            .career_history
+            .iter()
+            .any(|entry| entry.team_id == team_id && entry.end_date.is_none())
+        {
             self.career_history.push(ManagerCareerEntry::open(
-                team_id.to_string(), team_name.to_string(), date.to_string(),
+                team_id.to_string(),
+                team_name.to_string(),
+                date.to_string(),
             ));
         }
     }
@@ -260,7 +266,9 @@ mod tests {
         let mut m = manager();
         m.hire("team1".to_string());
         m.career_history.push(ManagerCareerEntry::open(
-            "team1".to_string(), "Test FC".to_string(), "2026-06-01".to_string(),
+            "team1".to_string(),
+            "Test FC".to_string(),
+            "2026-06-01".to_string(),
         ));
         m.record_league_result(2, 0);
         m.record_league_result(1, 1);
@@ -288,7 +296,9 @@ mod tests {
         let mut m = manager();
         m.hire("team1".to_string());
         m.career_history.push(ManagerCareerEntry::open(
-            "team1".to_string(), "Test FC".to_string(), "2026-06-01".to_string(),
+            "team1".to_string(),
+            "Test FC".to_string(),
+            "2026-06-01".to_string(),
         ));
         m.record_match_result(2, 1, false);
         m.record_league_result(0, 0);
@@ -303,10 +313,14 @@ mod tests {
         let mut m = manager();
         m.hire("team1".to_string());
         m.career_history.push(ManagerCareerEntry::open(
-            "team1".to_string(), "Test FC".to_string(), "2025-01-01".to_string(),
+            "team1".to_string(),
+            "Test FC".to_string(),
+            "2025-01-01".to_string(),
         ));
         m.career_history.push(ManagerCareerEntry::open(
-            "team1".to_string(), "Test FC".to_string(), "2026-01-01".to_string(),
+            "team1".to_string(),
+            "Test FC".to_string(),
+            "2026-01-01".to_string(),
         ));
         m.record_league_result(2, 0);
         assert_eq!(m.career_history[0].matches, 0);

@@ -307,9 +307,14 @@ pub fn set_player_squad_role_internal(
                 return Err("be.error.youthAcademyOverage".to_string());
             }
         }
-        let same_role_count = game.players.iter().filter(|player| {
-            player.team_id.as_deref() == Some(team_id.as_str()) && player.squad_role == target_role
-        }).count();
+        let same_role_count = game
+            .players
+            .iter()
+            .filter(|player| {
+                player.team_id.as_deref() == Some(team_id.as_str())
+                    && player.squad_role == target_role
+            })
+            .count();
         if game.players[player_index].squad_role != target_role {
             if target_role == domain::player::SquadRole::Youth && same_role_count >= 12 {
                 return Err("be.error.scouting.academyFull".to_string());
@@ -332,11 +337,14 @@ pub fn set_player_squad_role_internal(
         if target_role == domain::player::SquadRole::Youth {
             game.players[player_index].jersey_number = None;
         } else if game.players[player_index].jersey_number.is_none() {
-            let used: std::collections::HashSet<u8> = game.players.iter()
+            let used: std::collections::HashSet<u8> = game
+                .players
+                .iter()
                 .filter(|player| player.team_id.as_deref() == Some(team_id.as_str()))
                 .filter_map(|player| player.jersey_number)
                 .collect();
-            game.players[player_index].jersey_number = (1..=99).find(|number| !used.contains(number));
+            game.players[player_index].jersey_number =
+                (1..=99).find(|number| !used.contains(number));
         }
 
         Ok(())

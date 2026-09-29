@@ -510,7 +510,10 @@ mod tests {
             .expect("response");
 
         assert!(response["effect"].is_null());
-        assert!(response["game"].is_null(), "acknowledging mail must not copy the world");
+        assert!(
+            response["game"].is_null(),
+            "acknowledging mail must not copy the world"
+        );
         assert!(response["effect_i18n_key"].is_null());
         assert!(response["effect_i18n_params"].is_null());
         assert_eq!(

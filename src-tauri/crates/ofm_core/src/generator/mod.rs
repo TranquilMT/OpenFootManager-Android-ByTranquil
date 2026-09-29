@@ -191,10 +191,15 @@ fn apply_opening_youth_assignments(
             continue;
         }
         let role = &players[index].natural_position;
-        let role_total = players.iter().filter(|player| &player.natural_position == role).count();
+        let role_total = players
+            .iter()
+            .filter(|player| &player.natural_position == role)
+            .count();
         let senior_count = players
             .iter()
-            .filter(|player| &player.natural_position == role && player.squad_role == SquadRole::Senior)
+            .filter(|player| {
+                &player.natural_position == role && player.squad_role == SquadRole::Senior
+            })
             .count();
         // Keep enough senior specialists to staff every occurrence of a
         // formation role, even when several young players share that role.
@@ -256,7 +261,8 @@ pub fn repair_opening_youth_academies(game: &mut crate::game::Game) -> bool {
             .collect();
 
         sort_opening_youth_indices(&game.players, &mut candidate_indices);
-        repaired |= apply_opening_youth_assignments(&mut game.players, candidate_indices, existing) > 0;
+        repaired |=
+            apply_opening_youth_assignments(&mut game.players, candidate_indices, existing) > 0;
     }
 
     repaired
@@ -368,7 +374,9 @@ fn rebalance_generated_player_for_club(
     let youth = is_youth_reserved_slot(slot);
     let curated_average = clubs::curated_squad_target(&team.name);
     let academy_reputation = curated_average.unwrap_or(reputation).max(reputation);
-    let academy_quality = academy_reputation.saturating_add(financial_strength / 5).min(100);
+    let academy_quality = academy_reputation
+        .saturating_add(financial_strength / 5)
+        .min(100);
     let academy_tier = match academy_reputation {
         80.. => LeagueTier::Elite,
         65..=79 => LeagueTier::Top,
@@ -2218,7 +2226,10 @@ mod tests {
                     .count()
             })
             .collect();
-        assert!(distinct_sizes.len() > 1, "clubs should have varied squad sizes");
+        assert!(
+            distinct_sizes.len() > 1,
+            "clubs should have varied squad sizes"
+        );
         assert_eq!(
             players
                 .iter()
@@ -2264,7 +2275,11 @@ mod tests {
                 .filter(|player| player.squad_role == domain::player::SquadRole::Youth)
                 .collect();
             assert_eq!(youth.len(), 3);
-            youth.iter().map(|player| player.potential as u32).sum::<u32>() / youth.len() as u32
+            youth
+                .iter()
+                .map(|player| player.potential as u32)
+                .sum::<u32>()
+                / youth.len() as u32
         };
         assert!(youth_potential("Manchester United") > youth_potential("Birmingham City"));
     }
@@ -2319,38 +2334,79 @@ mod tests {
         );
         let formations: std::collections::HashSet<_> =
             teams.iter().map(|team| team.formation.as_str()).collect();
-        assert!(formations.len() > 1, "clubs should use varied opening formations");
+        assert!(
+            formations.len() > 1,
+            "clubs should use varied opening formations"
+        );
         for team in &teams {
             let team_players: Vec<_> = players
                 .iter()
                 .filter(|p| p.team_id.as_deref() == Some(&team.id))
                 .collect();
-            let seniors: Vec<_> = team_players.iter().filter(|player| player.squad_role == SquadRole::Senior).collect();
+            let seniors: Vec<_> = team_players
+                .iter()
+                .filter(|player| player.squad_role == SquadRole::Senior)
+                .collect();
             let academy_count = team_players.len() - seniors.len();
             assert_eq!(academy_count, 3, "{} needs a separate academy", team.name);
             let shirt_numbers: std::collections::HashSet<_> = seniors
                 .iter()
-                .map(|player| player.jersey_number.expect("generated player needs a shirt"))
+                .map(|player| {
+                    player
+                        .jersey_number
+                        .expect("generated player needs a shirt")
+                })
                 .collect();
-            assert_eq!(shirt_numbers.len(), seniors.len(), "{} has duplicate shirts", team.name);
+            assert_eq!(
+                shirt_numbers.len(),
+                seniors.len(),
+                "{} has duplicate shirts",
+                team.name
+            );
             for player in &team_players {
                 let mut after_migration = (*player).clone();
                 crate::player_identity::upgrade_player_identity(&mut after_migration, None);
-                assert_eq!(after_migration.natural_position, player.natural_position, "{} lost a role on migration", team.name);
+                assert_eq!(
+                    after_migration.natural_position, player.natural_position,
+                    "{} lost a role on migration",
+                    team.name
+                );
             }
             assert!((22..=26).contains(&seniors.len()));
             let slots = crate::player_rating::formation_slots(&team.formation);
-            assert_eq!(team.starting_xi_ids.len(), 11, "{} needs a full XI", team.name);
+            assert_eq!(
+                team.starting_xi_ids.len(),
+                11,
+                "{} needs a full XI",
+                team.name
+            );
             for role in &slots {
                 let required = slots.iter().filter(|slot| *slot == role).count();
-                let available = seniors.iter().filter(|player| &player.natural_position == role).count();
+                let available = seniors
+                    .iter()
+                    .filter(|player| &player.natural_position == role)
+                    .count();
                 let senior = available;
-                assert!(available >= required * 2, "{} lacks two per {:?} slot", team.name, role);
-                assert!(senior >= required, "{} lacks senior {:?} starters", team.name, role);
+                assert!(
+                    available >= required * 2,
+                    "{} lacks two per {:?} slot",
+                    team.name,
+                    role
+                );
+                assert!(
+                    senior >= required,
+                    "{} lacks senior {:?} starters",
+                    team.name,
+                    role
+                );
             }
             for (id, role) in team.starting_xi_ids.iter().zip(slots) {
                 let starter = team_players.iter().find(|player| &player.id == id).unwrap();
-                assert_eq!(starter.natural_position, role, "{} has an unnatural starter", team.name);
+                assert_eq!(
+                    starter.natural_position, role,
+                    "{} has an unnatural starter",
+                    team.name
+                );
                 assert_eq!(starter.squad_role, domain::player::SquadRole::Senior);
             }
             for (position, minimum) in [
@@ -2360,13 +2416,22 @@ mod tests {
                 (Position::Forward, 2),
             ] {
                 let count = seniors.iter().filter(|p| p.position == position).count();
-                assert!(count >= minimum, "Team {} has only {} {:?}", team.name, count, position);
+                assert!(
+                    count >= minimum,
+                    "Team {} has only {} {:?}",
+                    team.name,
+                    count,
+                    position
+                );
             }
             let senior = |role: Position| {
-                team_players.iter().filter(|player| {
-                    player.squad_role == domain::player::SquadRole::Senior
-                        && player.natural_position == role
-                }).count()
+                team_players
+                    .iter()
+                    .filter(|player| {
+                        player.squad_role == domain::player::SquadRole::Senior
+                            && player.natural_position == role
+                    })
+                    .count()
             };
             match team.formation.as_str() {
                 "4-3-3" => {

@@ -189,8 +189,12 @@ pub fn apply_match_report_with_capture<F>(
     if let Some(team_id) = game.manager.team_id.as_deref()
         && (team_id == home_team_id || team_id == away_team_id)
     {
-        let team_name = game.teams.iter().find(|team| team.id == team_id)
-            .map(|team| team.name.clone()).unwrap_or_default();
+        let team_name = game
+            .teams
+            .iter()
+            .find(|team| team.id == team_id)
+            .map(|team| team.name.clone())
+            .unwrap_or_default();
         let today = game.clock.current_date.format("%Y-%m-%d").to_string();
         game.manager.ensure_current_spell(&team_name, &today);
     }
@@ -208,7 +212,8 @@ pub fn apply_match_report_with_capture<F>(
         } else {
             report.home_goals
         };
-        game.manager.record_match_result(user_goals, opp_goals, false);
+        game.manager
+            .record_match_result(user_goals, opp_goals, false);
     }
 
     // Board and fan sentiment follow league standings results.

@@ -51,7 +51,10 @@ fn free_agent_team_name() -> String {
 fn managed_club_on_date(manager: &Manager, team_id: &str, date: &str) -> bool {
     // Some older saves have no employment history. Keep their honours eligible,
     // while using dated spells whenever a record exists.
-    !manager.career_history.iter().any(|entry| entry.team_id == team_id)
+    !manager
+        .career_history
+        .iter()
+        .any(|entry| entry.team_id == team_id)
         || manager.career_history.iter().any(|entry| {
             entry.team_id == team_id
                 && entry.start_date.as_str() <= date
@@ -836,10 +839,14 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
         .max()
         .unwrap_or(today.as_str())
         .to_string();
-    let last_user_fixture_date = league.fixtures.iter()
-        .filter(|fixture| fixture.counts_for_league_standings()
-            && fixture.status == FixtureStatus::Completed
-            && (fixture.home_team_id == user_team_id || fixture.away_team_id == user_team_id))
+    let last_user_fixture_date = league
+        .fixtures
+        .iter()
+        .filter(|fixture| {
+            fixture.counts_for_league_standings()
+                && fixture.status == FixtureStatus::Completed
+                && (fixture.home_team_id == user_team_id || fixture.away_team_id == user_team_id)
+        })
         .map(|fixture| fixture.date.as_str())
         .max()
         .map(|date| date.to_string());
@@ -1061,16 +1068,22 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
                 game.manager.career_history.iter().any(|entry| {
                     entry.team_id == winner
                         && entry.start_date.as_str() <= final_date
-                        && entry.end_date.as_deref().is_none_or(|end| final_date <= end)
+                        && entry
+                            .end_date
+                            .as_deref()
+                            .is_none_or(|end| final_date <= end)
                 })
             };
             managed.then(|| (competition.id.clone(), competition.name.clone(), winner))
         })
         .collect();
     for (competition_id, competition_name, winner) in cup_titles {
-        if game.manager.trophy_cabinet.iter().any(|trophy| {
-            trophy.competition_id == competition_id && trophy.season == season
-        }) {
+        if game
+            .manager
+            .trophy_cabinet
+            .iter()
+            .any(|trophy| trophy.competition_id == competition_id && trophy.season == season)
+        {
             continue;
         }
         game.manager.career_stats.trophies += 1;
@@ -1078,8 +1091,12 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
             competition_id,
             competition_name,
             team_id: winner.clone(),
-            team_name: game.teams.iter().find(|team| team.id == winner)
-                .map(|team| team.name.clone()).unwrap_or_default(),
+            team_name: game
+                .teams
+                .iter()
+                .find(|team| team.id == winner)
+                .map(|team| team.name.clone())
+                .unwrap_or_default(),
             season,
         });
     }
@@ -1100,13 +1117,15 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
         career.season_recorded_wins = 0;
         career.season_recorded_draws = 0;
         career.season_recorded_losses = 0;
-        let managed_final = last_user_fixture_date.as_deref().is_some_and(|date| {
-            managed_club_on_date(&game.manager, &user_team_id, date)
-        });
+        let managed_final = last_user_fixture_date
+            .as_deref()
+            .is_some_and(|date| managed_club_on_date(&game.manager, &user_team_id, date));
         if user_position == 1 && managed_final {
-            let already_recorded = game.manager.trophy_cabinet.iter().any(|trophy| {
-                trophy.competition_id == league_id && trophy.season == season
-            });
+            let already_recorded = game
+                .manager
+                .trophy_cabinet
+                .iter()
+                .any(|trophy| trophy.competition_id == league_id && trophy.season == season);
             if !already_recorded {
                 game.manager.career_stats.trophies += 1;
                 game.manager.trophy_cabinet.push(ManagerTrophy {
@@ -1169,38 +1188,82 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
 
     // A manager may leave a champion club between its last match and rollover.
     // Keep that completed title with the former club spell.
-    let former_league_titles: Vec<_> = game.competitions.iter()
-        .filter(|competition| competition.kind == CompetitionType::League
-            && competition.rules.format == CompetitionFormat::LeagueTable
-            && competition.season == season && is_league_season_ended(competition))
+    let former_league_titles: Vec<_> = game
+        .competitions
+        .iter()
+        .filter(|competition| {
+            competition.kind == CompetitionType::League
+                && competition.rules.format == CompetitionFormat::LeagueTable
+                && competition.season == season
+                && is_league_season_ended(competition)
+        })
         .filter_map(|competition| {
             let winner = competition.sorted_standings().first()?.team_id.clone();
-            if winner == user_team_id { return None; }
-            let final_date = competition.fixtures.iter()
-                .filter(|fixture| fixture.counts_for_league_standings()
-                    && fixture.status == FixtureStatus::Completed
-                    && (fixture.home_team_id == winner || fixture.away_team_id == winner))
-                .map(|fixture| fixture.date.as_str()).max()?;
-            game.manager.career_history.iter().any(|entry| {
-                entry.team_id == winner && entry.start_date.as_str() <= final_date
-                    && entry.end_date.as_deref().is_none_or(|end| final_date <= end)
-            }).then(|| (competition.id.clone(), competition.name.clone(), winner, final_date.to_string()))
-        }).collect();
+            if winner == user_team_id {
+                return None;
+            }
+            let final_date = competition
+                .fixtures
+                .iter()
+                .filter(|fixture| {
+                    fixture.counts_for_league_standings()
+                        && fixture.status == FixtureStatus::Completed
+                        && (fixture.home_team_id == winner || fixture.away_team_id == winner)
+                })
+                .map(|fixture| fixture.date.as_str())
+                .max()?;
+            game.manager
+                .career_history
+                .iter()
+                .any(|entry| {
+                    entry.team_id == winner
+                        && entry.start_date.as_str() <= final_date
+                        && entry
+                            .end_date
+                            .as_deref()
+                            .is_none_or(|end| final_date <= end)
+                })
+                .then(|| {
+                    (
+                        competition.id.clone(),
+                        competition.name.clone(),
+                        winner,
+                        final_date.to_string(),
+                    )
+                })
+        })
+        .collect();
     for (competition_id, competition_name, winner, final_date) in former_league_titles {
-        if game.manager.trophy_cabinet.iter().any(|trophy| {
-            trophy.competition_id == competition_id && trophy.season == season
-        }) { continue; }
+        if game
+            .manager
+            .trophy_cabinet
+            .iter()
+            .any(|trophy| trophy.competition_id == competition_id && trophy.season == season)
+        {
+            continue;
+        }
         game.manager.career_stats.trophies += 1;
         game.manager.career_stats.best_finish = Some(1);
-        if let Some(spell) = game.manager.career_history.iter_mut().rev()
-            .find(|entry| entry.team_id == winner && entry.start_date.as_str() <= final_date.as_str()
-                && entry.end_date.as_deref().is_none_or(|end| final_date.as_str() <= end)) {
+        if let Some(spell) = game.manager.career_history.iter_mut().rev().find(|entry| {
+            entry.team_id == winner
+                && entry.start_date.as_str() <= final_date.as_str()
+                && entry
+                    .end_date
+                    .as_deref()
+                    .is_none_or(|end| final_date.as_str() <= end)
+        }) {
             spell.best_league_position = Some(1);
         }
         game.manager.trophy_cabinet.push(ManagerTrophy {
-            competition_id, competition_name, team_id: winner.clone(),
-            team_name: game.teams.iter().find(|team| team.id == winner)
-                .map(|team| team.name.clone()).unwrap_or_default(),
+            competition_id,
+            competition_name,
+            team_id: winner.clone(),
+            team_name: game
+                .teams
+                .iter()
+                .find(|team| team.id == winner)
+                .map(|team| team.name.clone())
+                .unwrap_or_default(),
             season,
         });
     }

@@ -514,9 +514,18 @@ pub fn apply_player_response(
         }
     } else if message_id.starts_with("transfer_request_") {
         match option_id {
-            "discuss" => outcome(rng.random_range(0..=5), "be.msg.playerEvent.effects.transferRequest.discuss"),
-            "allow_move" => outcome(rng.random_range(3..=8), "be.msg.playerEvent.effects.transferRequest.allowMove"),
-            "refuse" => outcome(rng.random_range(-14..=-7), "be.msg.playerEvent.effects.transferRequest.refuse"),
+            "discuss" => outcome(
+                rng.random_range(0..=5),
+                "be.msg.playerEvent.effects.transferRequest.discuss",
+            ),
+            "allow_move" => outcome(
+                rng.random_range(3..=8),
+                "be.msg.playerEvent.effects.transferRequest.allowMove",
+            ),
+            "refuse" => outcome(
+                rng.random_range(-14..=-7),
+                "be.msg.playerEvent.effects.transferRequest.refuse",
+            ),
             _ => return None,
         }
     } else if message_id.starts_with("happy_player_") {
