@@ -301,10 +301,15 @@ pub(super) fn make_imported_baseline_world_without_staff() -> WorldData {
             domain::player::Position::Forward,
             "2012-01-01",
         ));
-        for index in 0..8 {
+        for index in 0..15 {
+            let position = match index % 3 {
+                0 => domain::player::Position::Defender,
+                1 => domain::player::Position::Midfielder,
+                _ => domain::player::Position::Forward,
+            };
             players.push(make_player(
                 format!("{}-senior-{index}", team.id),
-                domain::player::Position::Defender,
+                position,
                 "1997-01-01",
             ));
         }
