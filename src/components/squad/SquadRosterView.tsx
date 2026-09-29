@@ -105,10 +105,17 @@ function SortHeader({
 }) {
   const active = sortKey === col;
   const mobileColumn = ["jersey", "name", "pos", "ovr"].includes(col);
+  const mobileWidths: Partial<Record<SquadListSortKey, string>> = {
+    jersey: "w-9",
+    name: "w-[52%]",
+    pos: "w-14",
+    ovr: "w-12",
+  };
+  const mobileWidth = mobileWidths[col] ?? "";
 
   return (
     <th
-      className={`py-2.5 px-2 md:px-4 font-heading font-bold uppercase tracking-wider cursor-pointer select-none whitespace-nowrap hover:text-primary-400 transition-colors ${mobileColumn ? "" : "hidden md:table-cell"} ${col === "name" ? "min-w-36" : ""} ${active ? "text-primary-500 dark:text-primary-400" : "text-gray-500 dark:text-gray-400"}`}
+      className={`py-2 px-2 md:py-2.5 md:px-4 font-heading font-bold uppercase tracking-wider cursor-pointer select-none whitespace-nowrap hover:text-primary-400 transition-colors ${mobileColumn ? "" : "hidden md:table-cell"} ${mobileWidth} ${col === "name" ? "md:min-w-36" : ""} ${active ? "text-primary-500 dark:text-primary-400" : "text-gray-500 dark:text-gray-400"}`}
       onClick={() => onSort(col)}
     >
       <div className="flex items-center gap-1">
@@ -409,12 +416,13 @@ export default function SquadRosterView({
   };
 
   const renderPreferredPositionMeta = (player: PlayerData) => (
-    <div className="flex items-center gap-1.5 flex-wrap">
+    <div className="flex items-center gap-1.5 whitespace-nowrap">
       {getPreferredPositions(player).map((position, index) => (
         <Badge
           key={`${player.id}-${position}`}
           variant={index === 0 ? positionBadgeVariant(position) : "neutral"}
           size="sm"
+          className={`${index > 0 ? "hidden md:inline-flex" : ""} whitespace-nowrap`}
         >
           {translatePositionAbbreviation(t, position)}
         </Badge>
@@ -555,7 +563,7 @@ export default function SquadRosterView({
                   : t("squad.coverageStable")}
               </Badge>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="touch-x flex gap-2 overflow-x-auto md:flex-wrap md:overflow-visible">
               {roleCoverage.map((coverage) => (
                 <Badge
                   key={coverage.role}
@@ -567,7 +575,7 @@ export default function SquadRosterView({
                         : "danger"
                   }
                   size="sm"
-                  className="gap-1"
+                  className="shrink-0 gap-1 whitespace-nowrap"
                 >
                   <span>{translatePositionAbbreviation(t, coverage.role)}</span>
                   <span>
@@ -583,7 +591,7 @@ export default function SquadRosterView({
           </div>
         </div>
         <div className="max-w-full overflow-x-auto">
-          <table className="w-full min-w-[340px] md:min-w-[1100px] text-left border-collapse">
+          <table className="w-full min-w-[420px] table-fixed md:min-w-[1100px] md:table-auto text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 dark:bg-navy-800 border-b border-gray-200 dark:border-navy-600 text-xs">
                 <SortHeader
@@ -659,7 +667,7 @@ export default function SquadRosterView({
                   sortDir={sortDir}
                   onSort={toggleSort}
                 />
-                <th className="py-2.5 px-2 md:px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-right">
+                <th className="w-10 py-2 px-2 md:w-auto md:py-2.5 md:px-4 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-right">
                   <span className="sr-only">{t("common.actions")}</span>
                 </th>
               </tr>
@@ -827,13 +835,15 @@ export default function SquadRosterView({
                       title={inXI ? t("squad.startingXi") : undefined}
                       className={`hover:bg-primary-500/5 dark:hover:bg-navy-700 transition-colors group cursor-pointer ${inXI ? "border-l-4 border-l-primary-500" : rowBorderClass}`}
                     >
-                      <td className="py-2.5 px-2 md:px-4 tabular-nums text-sm font-medium text-gray-600 dark:text-gray-400">
+                      <td className="w-9 py-2 px-2 md:w-auto md:py-2.5 md:px-4 tabular-nums text-sm font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">
                         {player.jersey_number ?? "—"}
                       </td>
                       {/* Name: avatar + injury dot + name + country flag */}
-                      <td className="py-2.5 px-2 md:px-4">
+                      <td className="w-[52%] py-2 px-2 md:w-auto md:py-2.5 md:px-4">
                         <div className="flex items-center gap-2 md:gap-3 min-w-0">
-                          <PlayerAvatar player={player} />
+                          <span className="hidden sm:block shrink-0">
+                            <PlayerAvatar player={player} />
+                          </span>
                           <div className="min-w-0 flex items-center gap-1.5">
                             {injuryDotClass && (
                               <span
@@ -856,7 +866,9 @@ export default function SquadRosterView({
                         </div>
                       </td>
                       {/* Position badges: natural + alternates */}
-                      <td className="py-2.5 px-2 md:px-4">{renderPreferredPositionMeta(player)}</td>
+                      <td className="w-14 py-2 px-2 md:w-auto md:py-2.5 md:px-4">
+                        {renderPreferredPositionMeta(player)}
+                      </td>
                       {/* Formation fit: colored badge for XI (green/amber/red),
                           neutral badge showing best-role for non-XI. */}
                       <td className="hidden md:table-cell py-2.5 px-4">
@@ -921,7 +933,7 @@ export default function SquadRosterView({
                         {player.morale}
                       </td>
                       {/* OVR (moved next to identity block) */}
-                      <td className="py-2.5 px-2 md:px-4">
+                      <td className="w-12 py-2 px-2 md:w-auto md:py-2.5 md:px-4">
                         <span
                           className={`font-heading font-bold text-sm ${
                             ovr >= 80
@@ -950,7 +962,9 @@ export default function SquadRosterView({
                           </div>
                           <div className="text-gray-500 dark:text-gray-400">
                             {player.contract_end
-                              ? t("finances.contractExpiresOn", { date: player.contract_end })
+                              ? t("finances.contractExpiresOn", {
+                                  date: player.contract_end,
+                                })
                               : "—"}
                           </div>
                           {player.transfer_listed || player.loan_listed || player.injury ? (
@@ -972,7 +986,7 @@ export default function SquadRosterView({
                       </td>
                       {/* Actions (last column) */}
                       <td
-                        className="py-2.5 px-2 md:px-4 text-right"
+                        className="w-10 py-2 px-2 md:w-auto md:py-2.5 md:px-4 text-right"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <button
@@ -982,7 +996,9 @@ export default function SquadRosterView({
                             const rect = e.currentTarget.getBoundingClientRect();
                             menuRefs.current.get(player.id)?.open(rect.left, rect.bottom + 4);
                           }}
-                          aria-label={t("common.playerActions", { name: player.match_name })}
+                          aria-label={t("common.playerActions", {
+                            name: player.match_name,
+                          })}
                           aria-haspopup="menu"
                           aria-expanded={openMenuPlayerId === player.id}
                           className="relative rounded-md p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 transition-colors"
