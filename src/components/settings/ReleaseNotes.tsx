@@ -10,6 +10,7 @@ const HIGHLIGHT_KEYS = [
   "settings.careerReliability",
   "settings.careerYouth",
   "settings.careerYouthScouting",
+  "settings.careerRules",
 ] as const;
 
 export function ReleaseNotes({ embedded = false }: { embedded?: boolean }) {

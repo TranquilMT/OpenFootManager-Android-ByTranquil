@@ -10,6 +10,11 @@ use std::collections::HashMap;
 pub const ACADEMY_CAP: usize = 12;
 pub const YOUTH_MATCHDAY_MINIMUM: usize = 14;
 
+fn youth_match_ready(academy_count: usize, eligible_senior_count: usize) -> bool {
+    academy_count == ACADEMY_CAP
+        && academy_count + eligible_senior_count >= YOUTH_MATCHDAY_MINIMUM
+}
+
 fn under_21(date_of_birth: &str, year: i32) -> bool {
     date_of_birth.get(..4).and_then(|date| date.parse::<i32>().ok())
         .is_some_and(|birth_year| year - birth_year <= 21)
@@ -32,7 +37,7 @@ pub fn process_youth_fixture(game: &mut Game) {
         .filter(|player| player.team_id.as_deref() == Some(team_id.as_str()) && player.squad_role == SquadRole::Senior && player.injury.is_none() && under_21(&player.date_of_birth, year))
         .map(|player| player.id.clone())
         .collect();
-    if academy_ids.len() < ACADEMY_CAP || academy_ids.len() + senior_u21_ids.len() < YOUTH_MATCHDAY_MINIMUM {
+    if !youth_match_ready(academy_ids.len(), senior_u21_ids.len()) {
         return;
     }
     let id = format!("academy_challenge_{team_id}_{month}");
@@ -76,5 +81,12 @@ mod tests {
     fn age_rule_counts_under_21_seniors() {
         assert!(under_21("2007-04-12", 2026));
         assert!(!under_21("2000-04-12", 2026));
+    }
+
+    #[test]
+    fn youth_fixture_needs_twelve_academy_players_and_two_u21_seniors() {
+        assert!(!youth_match_ready(11, 3));
+        assert!(!youth_match_ready(12, 1));
+        assert!(youth_match_ready(12, 2));
     }
 }

@@ -1191,6 +1191,8 @@ mod tests {
             make_opening_repair_player("mid", Position::Midfielder, "2007-01-01"),
             make_opening_repair_player("fwd", Position::Forward, "2006-01-01"),
             make_opening_repair_player("senior", Position::Defender, "2000-01-01"),
+            make_opening_repair_player("senior-mid", Position::Midfielder, "2000-01-01"),
+            make_opening_repair_player("senior-fwd", Position::Forward, "2000-01-01"),
         ];
 
         Game::new(clock, manager, vec![team], players, vec![], vec![])

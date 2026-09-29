@@ -987,14 +987,18 @@ fn build_club(
         StaffRole::Physio,
     ] {
         let nationality = pick_nationality_from_def(&tdef.country, country_codes, rng);
-        team_staff.push(generate_random_staff_from_def(
+        let mut member = generate_random_staff_from_def(
             &team_id,
-            role,
+            role.clone(),
             &nationality,
             opening_year,
             names_def,
             rng,
-        ));
+        );
+        if role == StaffRole::Coach {
+            member.specialization = Some(domain::staff::CoachingSpecialization::Youth);
+        }
+        team_staff.push(member);
     }
 
     normalize_generated_team(&mut team, &mut team_players, opening_year as i32);
