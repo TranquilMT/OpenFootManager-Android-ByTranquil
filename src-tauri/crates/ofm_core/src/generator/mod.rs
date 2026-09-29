@@ -173,11 +173,14 @@ fn sort_opening_youth_indices(players: &[Player], indices: &mut [usize]) {
     });
 }
 
-fn apply_opening_youth_assignments(players: &mut [Player], candidate_indices: Vec<usize>) -> usize {
+fn apply_opening_youth_assignments(
+    players: &mut [Player],
+    candidate_indices: Vec<usize>,
+    existing: usize,
+) -> usize {
     use domain::player::SquadRole;
 
     let mut assigned = 0;
-    let existing = players.iter().filter(|player| player.squad_role == SquadRole::Youth).count();
     let remaining = OPENING_YOUTH_ACADEMY_SIZE.saturating_sub(existing);
 
     for index in candidate_indices {
@@ -203,20 +206,16 @@ fn seed_opening_youth_academy(players: &mut [Player], opening_year: i32) {
         .collect();
 
     sort_opening_youth_indices(players, &mut eligible_indices);
-    apply_opening_youth_assignments(players, eligible_indices);
+    let existing = players
+        .iter()
+        .filter(|player| player.squad_role == domain::player::SquadRole::Youth)
+        .count();
+    apply_opening_youth_assignments(players, eligible_indices, existing);
 }
 
 pub fn repair_opening_youth_academies(game: &mut crate::game::Game) -> bool {
     use chrono::Duration;
     use domain::player::SquadRole;
-
-    if game
-        .players
-        .iter()
-        .any(|player| player.squad_role == SquadRole::Youth)
-    {
-        return false;
-    }
 
     if game.clock.current_date > game.clock.start_date + Duration::days(30) {
         return false;
@@ -228,6 +227,14 @@ pub fn repair_opening_youth_academies(game: &mut crate::game::Game) -> bool {
     let opening_year = game.clock.start_date.year();
 
     for team_id in team_ids {
+        let existing = game
+            .players
+            .iter()
+            .filter(|player| {
+                player.team_id.as_deref() == Some(team_id.as_str())
+                    && player.squad_role == SquadRole::Youth
+            })
+            .count();
         let mut candidate_indices: Vec<usize> = game
             .players
             .iter()
@@ -238,7 +245,7 @@ pub fn repair_opening_youth_academies(game: &mut crate::game::Game) -> bool {
             .collect();
 
         sort_opening_youth_indices(&game.players, &mut candidate_indices);
-        repaired |= apply_opening_youth_assignments(&mut game.players, candidate_indices) > 0;
+        repaired |= apply_opening_youth_assignments(&mut game.players, candidate_indices, existing) > 0;
     }
 
     repaired

@@ -561,7 +561,10 @@ fn bootstrap_and_upgrade_sets_granular_positions() {
     let (mut game, stats_state) =
         build_game_from_world_data(clock, manager, &startup_options, world);
 
-    // All generated players start with generic (legacy-bucket) positions
+    // Simulate a saved career from before granular natural positions were generated.
+    for player in &mut game.players {
+        player.natural_position = player.position.clone();
+    }
     let outfield_before: Vec<_> = game
         .players
         .iter()
@@ -571,7 +574,7 @@ fn bootstrap_and_upgrade_sets_granular_positions() {
         outfield_before
             .iter()
             .all(|p| p.natural_position.is_legacy_bucket()),
-        "generated players should all start with generic (legacy-bucket) natural_position"
+        "legacy players should start with generic natural_position"
     );
 
     bootstrap_team_selection(&mut game, "team1", StartPhase::SeasonStart, stats_state).unwrap();
