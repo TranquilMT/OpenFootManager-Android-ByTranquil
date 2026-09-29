@@ -3050,6 +3050,20 @@
               "description": "挑战他们靠实力赢得位置。有风险——可能激发动力也可能令其沮丧。"
             }
           },
+          "transferRequest": {
+            "discuss": {
+              "label": "谈谈未来",
+              "description": "听取球员的想法，并请他再给俱乐部一次机会。"
+            },
+            "allowMove": {
+              "label": "听取报价",
+              "description": "将球员列入转会名单。转会仍需收到正式报价。"
+            },
+            "refuse": {
+              "label": "拒绝请求",
+              "description": "留下球员，但可能让他更加不满。"
+            }
+          },
           "happyPlayer": {
             "praiseBack": {
               "label": "回以赞赏",
@@ -3101,6 +3115,11 @@
               "positive": "球员斗志昂扬,要证明自己的价值。士气{{delta}}",
               "negative": "球员感到被轻视和侮辱。士气{{delta}}"
             }
+          },
+          "transferRequest": {
+            "discuss": "球员同意继续沟通。士气 {{delta}}",
+            "allowMove": "球员感谢你的坦诚，愿意接受报价。士气 {{delta}}",
+            "refuse": "球员觉得自己被困在俱乐部。士气 {{delta}}"
           },
           "happyPlayer": {
             "praiseBack": "球员因赞赏而喜笑颜开。士气{{delta}}",
@@ -3255,6 +3274,10 @@
         "subject": "{{player}}——希望获得更多出场时间",
         "body0": "老板,{{player}}来找您了。他对近期缺乏出场时间感到沮丧,想知道自己需要做些什么才能回到首发。\n\n“我感觉自己训练得不错,但就是没机会在场上展示出来。”",
         "body1": "{{player}}敲开了您办公室的门,神情郁郁。他在最近几场比赛中都没有出场,想要一个说法。\n\n“我来这家俱乐部是为了踢球。如果我不在您的计划之中,还不如直接告诉我。”"
+      },
+      "transferRequest": {
+        "subject": "{{player}} — 请求转会",
+        "body": "{{player}} 请求私下谈话。他认为缺少出场时间阻碍了自己的职业发展，希望考虑转会。\n\n你可以倾听他的想法、允许其他俱乐部报价，或请他留下。"
       },
       "happyPlayer": {
         "subject": "{{player}}——状态极佳",

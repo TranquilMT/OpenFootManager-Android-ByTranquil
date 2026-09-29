@@ -3050,6 +3050,20 @@
               "description": "Desafie-o a conquistar seu lugar. Arriscado — pode motivá-lo ou frustrá-lo."
             }
           },
+          "transferRequest": {
+            "discuss": {
+              "label": "Conversar sobre o futuro",
+              "description": "Ouça o jogador e peça que dê outra chance ao clube."
+            },
+            "allowMove": {
+              "label": "Ouvir propostas",
+              "description": "Coloque o jogador na lista de transferências. Ainda será necessária uma proposta."
+            },
+            "refuse": {
+              "label": "Recusar o pedido",
+              "description": "Mantenha o jogador, mas você pode deixá-lo ainda mais insatisfeito."
+            }
+          },
           "happyPlayer": {
             "praiseBack": {
               "label": "Retribuir o elogio",
@@ -3101,6 +3115,11 @@
               "positive": "O jogador fica motivado para provar seu valor. Moral {{delta}}",
               "negative": "O jogador se sente desprezado e insultado. Moral {{delta}}"
             }
+          },
+          "transferRequest": {
+            "discuss": "O jogador aceita continuar a conversa. Moral {{delta}}",
+            "allowMove": "O jogador valoriza sua sinceridade e está disponível para propostas. Moral {{delta}}",
+            "refuse": "O jogador se sente preso no clube. Moral {{delta}}"
           },
           "happyPlayer": {
             "praiseBack": "O jogador sorri com o elogio. Moral {{delta}}",
@@ -3255,6 +3274,10 @@
         "subject": "{{player}} — Quer Mais Tempo de Jogo",
         "body0": "Chefe, {{player}} veio falar com você. Ele está frustrado com a falta de tempo de jogo nas últimas partidas e quer saber o que precisa fazer para voltar ao time.\n\n\"Sinto que estou treinando bem, mas não estou tendo chance de mostrar isso em campo.\"",
         "body1": "{{player}} bateu na porta do seu escritório parecendo infeliz. Ele não atuou nas últimas partidas e quer respostas.\n\n\"Vim para este clube para jogar futebol. Se não estou nos seus planos, prefiro que me diga logo.\""
+      },
+      "transferRequest": {
+        "subject": "{{player}} — Pede transferência",
+        "body": "{{player}} pediu uma conversa em particular. Acredita que a falta de minutos está prejudicando sua carreira e quer considerar uma mudança.\n\nVocê pode ouvi-lo, aceitar propostas ou pedir que fique."
       },
       "happyPlayer": {
         "subject": "{{player}} — Se Sentindo Ótimo",

@@ -3050,6 +3050,20 @@
               "description": "Fordere ihn heraus, sich seinen Platz zu verdienen. Riskant — kann motivieren oder frustrieren."
             }
           },
+          "transferRequest": {
+            "discuss": {
+              "label": "Über die Zukunft sprechen",
+              "description": "Hör zu und bitte den Spieler, dem Verein noch eine Chance zu geben."
+            },
+            "allowMove": {
+              "label": "Angebote anhören",
+              "description": "Setze den Spieler auf die Transferliste. Für einen Wechsel ist weiterhin ein Angebot nötig."
+            },
+            "refuse": {
+              "label": "Anfrage ablehnen",
+              "description": "Behalte den Spieler, riskiere aber, ihn noch mehr zu verärgern."
+            }
+          },
           "happyPlayer": {
             "praiseBack": {
               "label": "Lob erwidern",
@@ -3101,6 +3115,11 @@
               "positive": "Der Spieler ist motiviert, seinen Wert zu beweisen. Moral {{delta}}",
               "negative": "Der Spieler fühlt sich abgewiesen und beleidigt. Moral {{delta}}"
             }
+          },
+          "transferRequest": {
+            "discuss": "Der Spieler ist zu weiteren Gesprächen bereit. Moral {{delta}}",
+            "allowMove": "Der Spieler schätzt deine Ehrlichkeit und ist für Angebote verfügbar. Moral {{delta}}",
+            "refuse": "Der Spieler fühlt sich im Verein gefangen. Moral {{delta}}"
           },
           "happyPlayer": {
             "praiseBack": "Der Spieler strahlt über das Lob. Moral {{delta}}",
@@ -3255,6 +3274,10 @@
         "subject": "{{player}} — Will mehr Spielzeit",
         "body0": "Trainer, {{player}} ist zu dir gekommen. Der Spieler ist frustriert über die fehlende Spielzeit in den letzten Partien und will wissen, was nötig ist, um wieder in die Mannschaft zu kommen.\n\n\"Ich habe das Gefühl, gut zu trainieren, aber ich bekomme keine Chance, das auf dem Platz zu zeigen.\"",
         "body1": "{{player}} stand unzufrieden vor deiner Bürotür. Der Spieler kam in den letzten Partien nicht zum Einsatz und will Antworten.\n\n\"Ich bin zu diesem Verein gekommen, um Fußball zu spielen. Wenn ich nicht in deinen Plänen vorkomme, sag es mir bitte direkt.\""
+      },
+      "transferRequest": {
+        "subject": "{{player}} — Bittet um einen Transfer",
+        "body": "{{player}} möchte unter vier Augen sprechen. Wegen der geringen Einsatzzeit sieht der Spieler seine Karriere gebremst und möchte einen Wechsel prüfen.\n\nDu kannst zuhören, Angebote zulassen oder um einen Verbleib bitten."
       },
       "happyPlayer": {
         "subject": "{{player}} — Fühlt sich großartig",

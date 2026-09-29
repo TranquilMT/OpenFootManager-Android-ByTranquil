@@ -3050,6 +3050,20 @@
               "description": "Vyzvěte ho, aby si své místo zasloužil. Riskantní — může ho to motivovat, nebo frustrovat."
             }
           },
+          "transferRequest": {
+            "discuss": {
+              "label": "Promluvit si o budoucnosti",
+              "description": "Vyslechni hráče a požádej ho, aby dal klubu ještě šanci."
+            },
+            "allowMove": {
+              "label": "Vyslechnout nabídky",
+              "description": "Zařaď hráče na přestupovou listinu. K odchodu je stále potřeba nabídka."
+            },
+            "refuse": {
+              "label": "Odmítnout žádost",
+              "description": "Nech hráče v klubu, ale riskuješ další nespokojenost."
+            }
+          },
           "happyPlayer": {
             "praiseBack": {
               "label": "Oplatit chválu",
@@ -3101,6 +3115,11 @@
               "positive": "Hráč je nažhavený dokázat své kvality. Morálka {{delta}}",
               "negative": "Hráč se cítí odmítnutý a uražený. Morálka {{delta}}"
             }
+          },
+          "transferRequest": {
+            "discuss": "Hráč souhlasí s dalšími rozhovory. Morálka {{delta}}",
+            "allowMove": "Hráč oceňuje tvou upřímnost a je dostupný pro nabídky. Morálka {{delta}}",
+            "refuse": "Hráč se v klubu cítí uvězněný. Morálka {{delta}}"
           },
           "happyPlayer": {
             "praiseBack": "Hráč po chvále jen září. Morálka {{delta}}",
@@ -3255,6 +3274,10 @@
         "subject": "{{player}} — Požaduje více herního času",
         "body0": "Šéfe, přišel za vámi {{player}}. Je frustrovaný kvůli nedostatku herního času v posledních zápasech a chce vědět, co musí udělat, aby se vrátil do týmu.\n\n„Mám pocit, že trénuji dobře, ale nedostávám šanci ukázat to na hřišti.“",
         "body1": "{{player}} zaklepal na dveře vaší kanceláře a nevypadal vůbec spokojeně. V posledních několika zápasech nenastoupil a požaduje vysvětlení.\n\n„Přišel jsem do tohoto klubu hrát fotbal. Pokud se mnou nepočítáte, raději mi to řekněte na rovinu.“"
+      },
+      "transferRequest": {
+        "subject": "{{player}} — Žádá o přestup",
+        "body": "{{player}} požádal o soukromý rozhovor. Má pocit, že nedostatek herního času brzdí jeho kariéru, a chce zvážit odchod.\n\nMůžeš ho vyslechnout, přijímat nabídky nebo ho požádat, aby zůstal."
       },
       "happyPlayer": {
         "subject": "{{player}} — Cítí se skvěle",

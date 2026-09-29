@@ -3050,6 +3050,20 @@
               "description": "Tantang mereka untuk pantas mendapat tempat. Berisiko — bisa memotivasi atau membuat frustrasi."
             }
           },
+          "transferRequest": {
+            "discuss": {
+              "label": "Bicarakan masa depannya",
+              "description": "Dengarkan pemain dan minta ia memberi klub kesempatan lagi."
+            },
+            "allowMove": {
+              "label": "Dengarkan tawaran",
+              "description": "Masukkan pemain ke daftar transfer. Kepindahan tetap memerlukan tawaran."
+            },
+            "refuse": {
+              "label": "Tolak permintaan",
+              "description": "Pertahankan pemain, tetapi ia bisa semakin kecewa."
+            }
+          },
           "happyPlayer": {
             "praiseBack": {
               "label": "Balas Pujian",
@@ -3101,6 +3115,11 @@
               "positive": "Pemain termotivasi untuk membuktikan kemampuannya. Moral {{delta}}",
               "negative": "Pemain merasa diabaikan dan tersinggung. Moral {{delta}}"
             }
+          },
+          "transferRequest": {
+            "discuss": "Pemain setuju untuk terus berbicara. Moral {{delta}}",
+            "allowMove": "Pemain menghargai kejujuranmu dan siap menerima tawaran. Moral {{delta}}",
+            "refuse": "Pemain merasa terjebak di klub. Moral {{delta}}"
           },
           "happyPlayer": {
             "praiseBack": "Pemain tersenyum mendengar pujian. Moral {{delta}}",
@@ -3255,6 +3274,10 @@
         "subject": "{{player}} — Ingin Lebih Banyak Menit Bermain",
         "body0": "Bos, {{player}} datang menemui kamu. Mereka frustrasi karena kurangnya menit bermain di pertandingan terakhir dan ingin tahu apa yang harus mereka lakukan untuk kembali ke tim.\n\n\"Saya merasa sudah berlatih dengan baik, tetapi saya tidak mendapat kesempatan untuk membuktikannya di lapangan.\"",
         "body1": "{{player}} mengetuk pintu kantor kamu dengan wajah tidak senang. Mereka tidak dimainkan dalam beberapa pertandingan terakhir dan ingin mendapatkan jawaban.\n\n\"Saya datang ke klub ini untuk bermain sepak bola. Jika saya tidak dalam rencana kamu, saya lebih suka kamu mengatakannya terus terang.\""
+      },
+      "transferRequest": {
+        "subject": "{{player}} — Meminta transfer",
+        "body": "{{player}} meminta bicara empat mata. Ia merasa kurangnya waktu bermain menghambat kariernya dan ingin mempertimbangkan pindah.\n\nKamu bisa mendengarkannya, membuka peluang tawaran, atau memintanya bertahan."
       },
       "happyPlayer": {
         "subject": "{{player}} — Merasa Hebat",

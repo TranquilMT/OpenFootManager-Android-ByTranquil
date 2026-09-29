@@ -3050,6 +3050,20 @@
               "description": "Yerini hak etmesi için ona meydan okuyun. Riskli — motive edebilir veya hayal kırıklığına uğratabilir."
             }
           },
+          "transferRequest": {
+            "discuss": {
+              "label": "Geleceğini konuş",
+              "description": "Oyuncuyu dinle ve kulübe bir şans daha vermesini iste."
+            },
+            "allowMove": {
+              "label": "Teklifleri dinle",
+              "description": "Oyuncuyu transfer listesine koy. Ayrılması için yine de teklif gerekir."
+            },
+            "refuse": {
+              "label": "Talebi reddet",
+              "description": "Oyuncuyu tut, ancak onu daha da mutsuz edebilirsin."
+            }
+          },
           "happyPlayer": {
             "praiseBack": {
               "label": "Övgüye karşılık ver",
@@ -3101,6 +3115,11 @@
               "positive": "Oyuncu değerini kanıtlamak için ateşlendi. Moral {{delta}}",
               "negative": "Oyuncu dışlanmış ve aşağılanmış hissediyor. Moral {{delta}}"
             }
+          },
+          "transferRequest": {
+            "discuss": "Oyuncu konuşmaya devam etmeyi kabul ediyor. Moral {{delta}}",
+            "allowMove": "Oyuncu dürüstlüğünü takdir ediyor ve tekliflere açık. Moral {{delta}}",
+            "refuse": "Oyuncu kulüpte sıkışıp kaldığını hissediyor. Moral {{delta}}"
           },
           "happyPlayer": {
             "praiseBack": "Oyuncunun övgüyle yüzü gülüyor. Moral {{delta}}",
@@ -3255,6 +3274,10 @@
         "subject": "{{player}} — Daha Fazla Süre İstiyor",
         "body0": "Hocam, {{player}} sizi görmeye geldi. Son maçlarda süre alamamaktan rahatsız ve takıma dönmek için ne yapması gerektiğini bilmek istiyor.\n\n\"İyi antrenman yaptığımı hissediyorum ama bunu sahada gösterme şansı bulamıyorum.\"",
         "body1": "{{player}} mutsuz bir şekilde ofis kapınızı çaldı. Son birkaç maçta forma yüzü görmedi ve yanıt istiyor.\n\n\"Bu kulübe futbol oynamaya geldim. Planlarınızda yoksam bunu açıkça söylemenizi tercih ederim.\""
+      },
+      "transferRequest": {
+        "subject": "{{player}} — Transfer talep ediyor",
+        "body": "{{player}} özel bir görüşme istedi. Az süre almasının kariyerini engellediğini düşünüyor ve başka bir kulübe gitmeyi değerlendirmek istiyor.\n\nOnu dinleyebilir, tekliflere açabilir veya kalmasını isteyebilirsin."
       },
       "happyPlayer": {
         "subject": "{{player}} — Keyfi Yerinde",
