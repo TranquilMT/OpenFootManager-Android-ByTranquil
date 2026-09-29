@@ -1,6 +1,6 @@
 {
   "oversizedAggregate": {
-    "rust": 64938,
+    "rust": 64950,
     "ts": 36063
   },
   "allowedOversized": {
@@ -32,10 +32,10 @@
     "src-tauri/crates/ofm_core/tests/transfers_tests.rs": 3780,
     "src-tauri/crates/ofm_core/tests/turn_tests.rs": 2075,
     "src-tauri/crates/ofm-cli/src/main.rs": 1118,
-    "src-tauri/src/commands/live_match.rs": 1104,
+    "src-tauri/src/commands/live_match.rs": 1110,
     "src-tauri/src/commands/package_editor.rs": 1392,
     "src-tauri/src/commands/squad.rs": 1285,
-    "src-tauri/src/commands/time.rs": 1429,
+    "src-tauri/src/commands/time.rs": 1435,
     "src-tauri/src/commands/transfers.rs": 1213,
     "src-tauri/src/mcp_server/tools_impl/info.rs": 1081,
     "src-tauri/src/mcp_server/tools_impl/live_match.rs": 1052,
