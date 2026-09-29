@@ -113,6 +113,8 @@ fn treatment_key(message_id: &str, option_id: &str) -> String {
         "morale_talk"
     } else if message_id.starts_with("bench_complaint_") {
         "bench_complaint"
+    } else if message_id.starts_with("transfer_request_") {
+        "transfer_request"
     } else if message_id.starts_with("happy_player_") {
         "happy_player"
     } else if message_id.starts_with("contract_concern_") {
@@ -139,6 +141,15 @@ fn base_trust_delta(message_id: &str, option_id: &str) -> i16 {
             "explain" => 3,
             "promise_chance" => 6,
             "prove_yourself" => -2,
+            _ => 0,
+        };
+    }
+
+    if message_id.starts_with("transfer_request_") {
+        return match option_id {
+            "discuss" => 3,
+            "allow_move" => 5,
+            "refuse" => -8,
             _ => 0,
         };
     }
@@ -423,6 +434,7 @@ fn implied_promise(message_id: &str, option_id: &str) -> Option<PlayerPromise> {
 fn should_apply_talk_cooldown(message_id: &str) -> bool {
     message_id.starts_with("morale_talk_")
         || message_id.starts_with("bench_complaint_")
+        || message_id.starts_with("transfer_request_")
         || message_id.starts_with("happy_player_")
         || message_id.starts_with("contract_concern_")
 }
@@ -498,6 +510,13 @@ pub fn apply_player_response(
                     )
                 }
             }
+            _ => return None,
+        }
+    } else if message_id.starts_with("transfer_request_") {
+        match option_id {
+            "discuss" => outcome(rng.random_range(0..=5), "be.msg.playerEvent.effects.transferRequest.discuss"),
+            "allow_move" => outcome(rng.random_range(3..=8), "be.msg.playerEvent.effects.transferRequest.allowMove"),
+            "refuse" => outcome(rng.random_range(-14..=-7), "be.msg.playerEvent.effects.transferRequest.refuse"),
             _ => return None,
         }
     } else if message_id.starts_with("happy_player_") {
@@ -598,6 +617,10 @@ pub fn apply_player_response(
 
         if let Some(promise) = implied_promise(message_id, option_id) {
             player.morale_core.pending_promise = Some(promise);
+        }
+
+        if message_id.starts_with("transfer_request_") && option_id == "allow_move" {
+            player.transfer_listed = true;
         }
 
         if should_apply_talk_cooldown(message_id) {

@@ -13,7 +13,7 @@ use rand::RngExt;
 
 use message_builders::{
     bench_complaint_message, contract_concern_message, happy_player_message, low_morale_message,
-    takeover_contract_review_message,
+    takeover_contract_review_message, transfer_request_message,
 };
 
 fn should_generate_contract_concern(stage: crate::contracts::ContractWarningStage) -> bool {
@@ -181,10 +181,52 @@ pub fn check_player_events(game: &mut Game) {
             m.date == today
                 && (m.id.starts_with("morale_talk_")
                     || m.id.starts_with("bench_complaint_")
+                    || m.id.starts_with("transfer_request_")
                     || m.id.starts_with("happy_player_"))
         })
         .count();
     let daily_cap: usize = 2;
+
+    // A player who remains unhappy and barely features can ask to leave.
+    // Only one request per season; letting them leave lists them for offers.
+    if let Some(league) = &game.league {
+        let matches_played = league
+            .fixtures
+            .iter()
+            .filter(|fixture| {
+                fixture.status == domain::league::FixtureStatus::Completed
+                    && (fixture.home_team_id == user_team_id
+                        || fixture.away_team_id == user_team_id)
+            })
+            .count();
+        if matches_played >= 10 {
+            for player in &game.players {
+                if new_messages.len() + today_message_count >= daily_cap {
+                    break;
+                }
+                if player.team_id.as_deref() != Some(&user_team_id)
+                    || player.injury.is_some()
+                    || player.transfer_listed
+                    || player.squad_role == domain::player::SquadRole::Youth
+                    || talk_cooldown_active(player, &today)
+                    || player.morale > 25
+                    || player.ovr < 60
+                    || (player.stats.appearances as usize) * 4 >= matches_played
+                {
+                    continue;
+                }
+                let id = format!("transfer_request_{}_{}", player.id, season);
+                if !existing_ids.contains(&id) && rng.random_range(0..30) == 0 {
+                    new_messages.push(transfer_request_message(
+                        &id,
+                        &player.id,
+                        &player.match_name,
+                        &today,
+                    ));
+                }
+            }
+        }
+    }
 
     // --- 1. Low morale meeting requests (morale < 30, 20% daily chance) ---
     for player in game.players.iter() {

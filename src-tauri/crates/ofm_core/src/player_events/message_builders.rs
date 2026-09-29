@@ -137,6 +137,45 @@ pub(crate) fn bench_complaint_message(
     .with_sender_i18n("be.sender.player", "be.role.player")
 }
 
+pub(crate) fn transfer_request_message(
+    msg_id: &str,
+    player_id: &str,
+    player_name: &str,
+    date: &str,
+) -> InboxMessage {
+    InboxMessage::new(
+        msg_id.to_string(),
+        String::new(),
+        String::new(),
+        String::new(),
+        date.to_string(),
+    )
+    .with_category(MessageCategory::PlayerMorale)
+    .with_priority(MessagePriority::High)
+    .with_sender_role("")
+    .with_action(action(
+        "respond",
+        "be.msg.playerEvent.respond",
+        ActionType::ChooseOption {
+            options: vec![
+                option("discuss", "be.msg.playerEvent.options.transferRequest.discuss.label", "be.msg.playerEvent.options.transferRequest.discuss.description"),
+                option("allow_move", "be.msg.playerEvent.options.transferRequest.allowMove.label", "be.msg.playerEvent.options.transferRequest.allowMove.description"),
+                option("refuse", "be.msg.playerEvent.options.transferRequest.refuse.label", "be.msg.playerEvent.options.transferRequest.refuse.description"),
+            ],
+        },
+    ))
+    .with_context(MessageContext {
+        player_id: Some(player_id.to_string()),
+        ..Default::default()
+    })
+    .with_i18n(
+        "be.msg.transferRequest.subject",
+        "be.msg.transferRequest.body",
+        params(&[("player", player_name)]),
+    )
+    .with_sender_i18n("be.sender.player", "be.role.player")
+}
+
 pub(crate) fn happy_player_message(
     msg_id: &str,
     player_id: &str,
