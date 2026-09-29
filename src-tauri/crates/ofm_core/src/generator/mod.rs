@@ -305,7 +305,7 @@ pub fn generate_youth_academy_recruit_with_nationality(
 }
 
 /// Generate a senior free-agent player for a national squad. `squad_slot`
-/// follows the standard squad layout (GK 0-1, DEF 2-8, MID 9-15, FWD 16-21)
+/// follows the standard squad layout (GK 0-1, DEF 2-9, MID 10-17, FWD 18-21)
 /// and drives the position; the player belongs to no club and holds no
 /// contract, so clubs may sign them afterwards.
 pub fn generate_national_team_player(
@@ -787,7 +787,7 @@ fn build_team(tdef: &TeamDef, rng: &mut impl rand::Rng) -> domain::team::Team {
     team
 }
 
-/// Build a club with a full generated squad (22 players) and staff, normalised
+/// Build a club with 22 to 26 generated players and staff, normalised
 /// to a sensible opening wage budget. Shared by the random world and world
 /// packages.
 fn build_club(
@@ -809,8 +809,16 @@ fn build_club(
     }
     let team_id = team.id.clone();
 
-    let mut team_players = Vec::with_capacity(SQUAD_SLOTS);
-    for slot in 0..SQUAD_SLOTS {
+    let squad_size = rng.random_range(SQUAD_SLOTS..=26);
+    let mut team_players = Vec::with_capacity(squad_size);
+    for index in 0..squad_size {
+        // Extra places are drawn across the outfield groups; the core 22
+        // always satisfy the positional minimums and the starting XI.
+        let slot = if index < SQUAD_SLOTS {
+            index
+        } else {
+            senior_slot(rng.random_range(2..SQUAD_SLOTS))
+        };
         let nationality = pick_nationality_from_def(&tdef.country, country_codes, rng);
         let mut player = generate_random_player_from_def(
             &team_id,
@@ -2052,7 +2060,17 @@ mod tests {
         let (teams, players, staff) =
             generate_world_with(&config, &definitions::DefinitionSources::embedded_only());
         assert_eq!(teams.len(), expected);
-        assert_eq!(players.len(), expected * (SQUAD_SLOTS + 1));
+        assert!((expected * (SQUAD_SLOTS + 1)..=expected * 27).contains(&players.len()));
+        let distinct_sizes: std::collections::HashSet<_> = teams
+            .iter()
+            .map(|team| {
+                players
+                    .iter()
+                    .filter(|player| player.team_id.as_deref() == Some(team.id.as_str()))
+                    .count()
+            })
+            .collect();
+        assert!(distinct_sizes.len() > 1, "clubs should have varied squad sizes");
         assert_eq!(
             players
                 .iter()
@@ -2078,7 +2096,7 @@ mod tests {
                 .iter()
                 .filter(|player| player.team_id.as_deref() == Some(team.id.as_str()))
                 .collect();
-            assert_eq!(squad.len(), SQUAD_SLOTS);
+            assert!((SQUAD_SLOTS..=26).contains(&squad.len()));
             squad.iter().map(|player| player.ovr as u32).sum::<u32>() / squad.len() as u32
         };
         assert!(average("Manchester United") >= 86);
@@ -2141,12 +2159,16 @@ mod tests {
                 .iter()
                 .filter(|p| p.team_id.as_deref() == Some(&team.id))
                 .collect();
-            assert_eq!(team_players.len(), 22);
-            let gk = team_players
-                .iter()
-                .filter(|p| p.position == Position::Goalkeeper)
-                .count();
-            assert!(gk >= 2, "Team {} has only {} GK", team.name, gk);
+            assert!((22..=26).contains(&team_players.len()));
+            for (position, minimum) in [
+                (Position::Goalkeeper, 2),
+                (Position::Defender, 8),
+                (Position::Midfielder, 8),
+                (Position::Forward, 4),
+            ] {
+                let count = team_players.iter().filter(|p| p.position == position).count();
+                assert!(count >= minimum, "Team {} has only {} {:?}", team.name, count, position);
+            }
         }
     }
 
@@ -2637,7 +2659,7 @@ mod tests {
             "every club should come from the overridden nation: {:?}",
             teams.iter().map(|t| &t.country).collect::<Vec<_>>()
         );
-        assert_eq!(players.len(), 4 * (SQUAD_SLOTS + 1));
+        assert!((4 * (SQUAD_SLOTS + 1)..=4 * 27).contains(&players.len()));
 
         std::fs::remove_dir_all(&dir).ok();
     }

@@ -375,10 +375,8 @@ pub(super) fn play_style_from_str(s: &str) -> PlayStyle {
     }
 }
 
-/// Number of slots in a generated squad. The slot layout is `GK 0-1`, `DEF 2-8`,
-/// `MID 9-15`, `FWD 16-21` — see [`generate_random_player_from_def`]. This is the
-/// single source of truth for squad size; anything that walks or wraps slots
-/// should use it rather than repeating the literal.
+/// Core slots in a generated squad: `GK 0-1`, `DEF 2-9`, `MID 10-17`,
+/// `FWD 18-21`. Clubs can add up to four optional players after these.
 pub(super) const SQUAD_SLOTS: usize = 22;
 
 /// Minimum number of players per position group a finished squad must keep, in
@@ -396,7 +394,7 @@ pub(super) const MIN_PLAYERS_PER_GROUP: [(Position, usize); 4] = [
 /// generate at a consistent academy age, and senior generation must avoid them.
 /// This is the single source of truth shared by the youth-recruit targeting,
 /// youth-age generation, and national-team senior remap logic.
-pub(super) const YOUTH_RESERVED_SLOTS: [usize; 4] = [1, 8, 15, 21];
+pub(super) const YOUTH_RESERVED_SLOTS: [usize; 4] = [1, 9, 17, 21];
 
 /// Candidate youth slots for a (group) position target. A specific group yields
 /// its single reserved slot; `None` (or any other position) yields all of them.
@@ -437,12 +435,12 @@ pub(super) fn generate_random_player_from_def(
     let full_name = format!("{} {}", first_name, last_name);
     let match_name = last_name.clone();
 
-    // Distribute positions: GK:0-1, DEF:2-8, MID:9-15, FWD:16-21
+    // Two keepers, eight defenders, eight midfielders and four forwards.
     let position = if index < 2 {
         Position::Goalkeeper
-    } else if index < 9 {
+    } else if index < 10 {
         Position::Defender
-    } else if index < 16 {
+    } else if index < 18 {
         Position::Midfielder
     } else {
         Position::Forward
@@ -569,19 +567,17 @@ pub(super) fn generate_random_player_from_def(
     player.natural_position = match index {
         0..=1 => Position::Goalkeeper,
         2 | 6 => Position::RightBack,
-        3 | 4 | 8 => Position::CenterBack,
-        5 | 7 => Position::LeftBack,
-        9 | 11 | 13 => Position::CentralMidfielder,
-        10 => Position::RightMidfielder,
-        12 => Position::LeftMidfielder,
-        14 => Position::DefensiveMidfielder,
-        15 => Position::AttackingMidfielder,
-        16 | 17 | 20 | 21 => Position::Striker,
-        18 => Position::RightWinger,
-        _ => Position::LeftWinger,
+        3 | 4 | 7 | 8 => Position::CenterBack,
+        5 | 9 => Position::LeftBack,
+        10 => Position::LeftMidfielder,
+        11 | 12 | 14 | 17 => Position::CentralMidfielder,
+        13 => Position::RightMidfielder,
+        15 => Position::DefensiveMidfielder,
+        16 => Position::AttackingMidfielder,
+        _ => Position::Striker,
     };
     // Keep the three outfield academy places separate from the opening XI.
-    if matches!(index, 8 | 15 | 21) {
+    if matches!(index, 9 | 17 | 21) {
         player.squad_role = domain::player::SquadRole::Youth;
     }
     player.team_id = Some(team_id.to_string());
