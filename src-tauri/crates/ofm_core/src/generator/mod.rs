@@ -2169,7 +2169,11 @@ mod tests {
                 .filter(|player| player.team_id.as_deref() == Some(team.id.as_str()))
                 .collect();
             assert!((SQUAD_SLOTS..=26).contains(&squad.len()));
-            squad.iter().map(|player| player.ovr as u32).sum::<u32>() / squad.len() as u32
+            let seniors: Vec<_> = squad
+                .iter()
+                .filter(|player| player.squad_role == domain::player::SquadRole::Senior)
+                .collect();
+            seniors.iter().map(|player| player.ovr as u32).sum::<u32>() / seniors.len() as u32
         };
         assert!(average("Manchester United") >= 86);
         assert!(average("Arsenal") >= 86);
