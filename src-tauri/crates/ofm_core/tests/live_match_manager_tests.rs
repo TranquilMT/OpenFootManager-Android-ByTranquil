@@ -671,7 +671,7 @@ fn auto_select_set_pieces_prefers_high_shooting_penalty() {
 #[test]
 fn injured_players_excluded_from_xi() {
     let mut game = make_game_with_fixture();
-    // Injure all but 11 players on team1
+    // Leave the minimum 14 available matchday players, including substitutes.
     let team1_players: Vec<String> = game
         .players
         .iter()
@@ -680,7 +680,7 @@ fn injured_players_excluded_from_xi() {
         .collect();
 
     // Injure some players
-    for id in &team1_players[11..] {
+    for id in &team1_players[14..] {
         if let Some(p) = game.players.iter_mut().find(|p| p.id == *id) {
             p.injury = Some(domain::player::Injury {
                 name: "Hamstring".to_string(),
@@ -693,11 +693,16 @@ fn injured_players_excluded_from_xi() {
         live_match_manager::create_live_match(&game, 0, MatchMode::Instant, false).unwrap();
     let snap = session.snapshot();
 
-    // The starting XI should only have non-injured players
+    // The starting XI should only have non-injured players.
     assert!(
         snap.home_team.players.len() <= 11,
         "Starting XI should have at most 11"
     );
+    assert!(snap.home_team.players.iter().all(|player| {
+        !team1_players[14..]
+            .iter()
+            .any(|injured| injured == &player.id)
+    }));
 }
 
 #[test]
