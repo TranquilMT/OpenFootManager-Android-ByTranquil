@@ -177,15 +177,18 @@ fn apply_opening_youth_assignments(players: &mut [Player], candidate_indices: Ve
     use domain::player::SquadRole;
 
     let mut assigned = 0;
+    let existing = players.iter().filter(|player| player.squad_role == SquadRole::Youth).count();
+    let remaining = OPENING_YOUTH_ACADEMY_SIZE.saturating_sub(existing);
 
-    for index in candidate_indices
-        .into_iter()
-        .take(OPENING_YOUTH_ACADEMY_SIZE)
-    {
-        if players[index].squad_role != SquadRole::Youth {
-            players[index].squad_role = SquadRole::Youth;
-            assigned += 1;
+    for index in candidate_indices {
+        if assigned >= remaining {
+            break;
         }
+        if players[index].squad_role == SquadRole::Youth {
+            continue;
+        }
+        players[index].squad_role = SquadRole::Youth;
+        assigned += 1;
     }
 
     assigned

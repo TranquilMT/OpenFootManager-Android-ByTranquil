@@ -580,6 +580,10 @@ pub(super) fn generate_random_player_from_def(
         18 => Position::RightWinger,
         _ => Position::LeftWinger,
     };
+    // Keep the three outfield academy places separate from the opening XI.
+    if matches!(index, 8 | 15 | 21) {
+        player.squad_role = domain::player::SquadRole::Youth;
+    }
     player.team_id = Some(team_id.to_string());
     player.market_value = market_value;
     player.wage = wage;
@@ -1138,9 +1142,14 @@ mod tests {
         use rand::SeedableRng;
         let mut rng = rand::rngs::StdRng::seed_from_u64(42);
         let names = super::super::definitions::default_names_definition();
-        let players: Vec<_> = (0..SQUAD_SLOTS)
+        let mut players: Vec<_> = (0..SQUAD_SLOTS)
             .map(|slot| generate_random_player_from_def("club", slot, "ENG", 2026, &names, &mut rng))
             .collect();
+        super::super::seed_opening_youth_academy(&mut players, 2026);
+        assert_eq!(
+            players.iter().filter(|player| player.squad_role == domain::player::SquadRole::Youth).count(),
+            3,
+        );
         for (position, count) in [
             (Position::Goalkeeper, 1),
             (Position::LeftBack, 1),
@@ -1152,7 +1161,7 @@ mod tests {
             (Position::Striker, 2),
         ] {
             assert!(
-                players.iter().filter(|player| player.natural_position == position).count() >= count,
+                players.iter().filter(|player| player.squad_role == domain::player::SquadRole::Senior && player.natural_position == position).count() >= count,
                 "missing natural {position:?} starters"
             );
         }
