@@ -121,8 +121,21 @@ pub fn set_team_match_roles_internal(
     match_roles: domain::team::MatchRoles,
 ) -> Result<Game, String> {
     mutate_active_game(state, |game| {
-        let team = user_team_mut(game)?;
-        team.match_roles = match_roles;
+        let team_id = user_team_id(game)?;
+        for id in [&match_roles.captain, &match_roles.vice_captain, &match_roles.penalty_taker,
+            &match_roles.free_kick_taker, &match_roles.corner_taker].into_iter().flatten() {
+            if !game.players.iter().any(|player| player.id == *id && player.team_id.as_deref() == Some(&team_id)
+                && player.squad_role == domain::player::SquadRole::Senior && !player.retired) {
+                return Err("be.error.playerNotOnTeam".to_string());
+            }
+        }
+        if match_roles.captain.is_some() && match_roles.captain == match_roles.vice_captain {
+            return Err("phase6.captainConflict".to_string());
+        }
+        ofm_core::board_room::initialize(game);
+        let old = user_team_mut(game)?.match_roles.captain.clone();
+        ofm_core::board_room::captain_reactions(game, old.as_deref(), match_roles.captain.as_deref());
+        user_team_mut(game)?.match_roles = match_roles;
 
         Ok(())
     })
