@@ -303,3 +303,11 @@ mod tests {
     #[test]
     fn different_style_does_not_meet_mandate() { let mut g=game(); g.teams[0].play_style=domain::team::PlayStyle::Defensive; credit_style_match(&mut g,"club","rival"); assert_eq!(g.board_rooms["club"].style_matches,0); }
 }
+
+pub fn weekly_salary(game: &Game, team_id: &str) -> i64 {
+    if game.manager.team_id.as_deref() != Some(team_id) { return 0; }
+    game.board_rooms.get(team_id).filter(|room| room.manager_id == game.manager.id)
+        .and_then(|room| room.contract.as_ref())
+        .filter(|contract| contract.end_date.as_str() >= game.clock.current_date.date_naive().to_string().as_str())
+        .map(|contract| i64::from(contract.weekly_salary)).unwrap_or(0)
+}
