@@ -58,17 +58,16 @@ impl ClubStrategy {
     /// behaviour.
     pub fn derive(team: &Team) -> Self {
         let reputation = team.reputation.min(1_000) as i32;
-        let facility_strength = team.facilities.training as i32 + team.facilities.scouting as i32;
+        let training = team.facilities.training.min(10) as i32;
+        let scouting = team.facilities.scouting.min(10) as i32;
+        let facility_strength = training + scouting;
         let healthy_cash = team.finance > 0;
         // An exhausted transfer allocation is not debt: clubs can keep healthy
         // cash reserves after spending their recruitment budget.
         let stressed = team.finance < 0;
 
         let ambition = clamp_score(32 + reputation / 17 + facility_strength * 2);
-        let youth_priority = clamp_score(
-            38 + team.facilities.training as i32 * 5 + team.facilities.scouting as i32 * 4
-                - reputation / 80,
-        );
+        let youth_priority = clamp_score(38 + training * 5 + scouting * 4 - reputation / 80);
         let financial_risk = if stressed {
             18
         } else {
@@ -243,6 +242,24 @@ mod tests {
         let strategy = ClubStrategy::derive(&club(900, -1, 40_000_000));
         assert_eq!(strategy.status, StrategicStatus::FinancialCrisis);
         assert_eq!(strategy.recruitment, RecruitmentPhilosophy::Value);
+    }
+
+    #[test]
+    fn imported_training_level_cannot_exceed_the_best_facility() {
+        let mut team = club(400, 1_000_000, 300_000);
+        team.facilities.training = 10;
+        let maximum = ClubStrategy::derive(&team);
+        team.facilities.training = u8::MAX;
+        assert_eq!(ClubStrategy::derive(&team), maximum);
+    }
+
+    #[test]
+    fn imported_scouting_level_cannot_exceed_the_best_facility() {
+        let mut team = club(400, 1_000_000, 300_000);
+        team.facilities.scouting = 10;
+        let maximum = ClubStrategy::derive(&team);
+        team.facilities.scouting = u8::MAX;
+        assert_eq!(ClubStrategy::derive(&team), maximum);
     }
 
     #[test]
