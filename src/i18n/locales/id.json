@@ -1265,7 +1265,9 @@
       "LeaguePosition": "Selesaikan di posisi {{target}} teratas",
       "Wins": "Menangkan setidaknya {{target}} pertandingan",
       "GoalsScored": "Cetak setidaknya {{target}} gol",
-      "FinancialStability": "Pertahankan pengeluaran gaji pada atau di bawah {{target}}% dari anggaran"
+      "FinancialStability": "Pertahankan pengeluaran gaji pada atau di bawah {{target}}% dari anggaran",
+      "YouthMinutes": "Berikan {{target}} menit kepada pemain di bawah 22 tahun",
+      "PlayingStyleMatches": "Gunakan gaya yang disepakati dalam {{target}} laga liga"
     }
   },
   "transfers": {
@@ -1775,7 +1777,7 @@
     "patchPlayers": "Lebih banyak pemain unggulan, termasuk bintang langka berperingkat 96.",
     "patchMatches": "Lebih banyak reaksi, tembakan membentur tiang, dan komentar suara opsional.",
     "patchMobile": "Kontrol seluler, kotak masuk, tim nasional, dan awal karier ditingkatkan.",
-    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.5.2",
+    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.6.0",
     "patchPortraits": "20 wajah fiktif sumber membuat potret pemain hasil generasi lebih beragam.",
     "patchWorld": "Dunia sepak bola yang lebih luas mencakup 29 negara, dengan klub lebih kuat di Amerika dan Asia.",
     "patchTransfers": "Strategi klub memandu pinjaman dan transfer, dengan tawaran bersaing serta pemeriksaan anggaran.",
@@ -1859,7 +1861,7 @@
     "fit": "FIT",
     "keyStats": "Statistik Kunci"
   },
-"scouting": {
+  "scouting": {
     "shortlist": "Daftar pilihan",
     "shortlistEmpty": "Simpan pemain di sini untuk dibandingkan nanti.",
     "addShortlist": "Tambah ke daftar pilihan",
@@ -2316,8 +2318,22 @@
       "PenaltyAwarded": "Penalti Diberikan"
     },
     "commentary": {
-      "Corner": {"headline": "Sepak pojok untuk", "lines": {"0": "Sepak pojok untuk {{team}}.", "1": "{{team}} bersiap mengambil sepak pojok.", "2": "{{team}} punya kesempatan mengirim bola dari sepak pojok."}},
-      "FreeKick": {"headline": "Tendangan bebas untuk", "lines": {"0": "Tendangan bebas untuk {{team}}.", "1": "{{team}} bersiap mengambil tendangan bebas.", "2": "Tendangan bebas memberi {{team}} peluang membangun serangan."}},
+      "Corner": {
+        "headline": "Sepak pojok untuk",
+        "lines": {
+          "0": "Sepak pojok untuk {{team}}.",
+          "1": "{{team}} bersiap mengambil sepak pojok.",
+          "2": "{{team}} punya kesempatan mengirim bola dari sepak pojok."
+        }
+      },
+      "FreeKick": {
+        "headline": "Tendangan bebas untuk",
+        "lines": {
+          "0": "Tendangan bebas untuk {{team}}.",
+          "1": "{{team}} bersiap mengambil tendangan bebas.",
+          "2": "Tendangan bebas memberi {{team}} peluang membangun serangan."
+        }
+      },
       "Goal": {
         "headline": "GOL!",
         "lines": {
@@ -4151,5 +4167,39 @@
   "generation": {
     "title": "Pembuatan & Penyelesaian",
     "coverage": "Paket kamu mencakup"
+  },
+  "phase6": {
+    "boardRoom": "Dewan dan ruang ganti",
+    "contractHelp": "Negosiasikan gaji, target liga, dan durasi kontrak. Target lebih mudah menurunkan tawaran gaji.",
+    "salary": "Gaji mingguan",
+    "expires": "Kontrak berakhir",
+    "ownership": "Era kepemilikan",
+    "style": "Gaya bermain klub",
+    "leagueTarget": "Target posisi liga",
+    "years": "Durasi (tahun)",
+    "negotiate": "Negosiasi kontrak",
+    "investment": "Investasi fasilitas",
+    "requestInvestment": "Minta dana dewan",
+    "investmentHelp": "Sekali per musim, dewan dapat membayar 25% peningkatan. Memerlukan kepercayaan minimal 50% dan keuangan sehat.",
+    "unavailable": "Dewan saat ini tidak tersedia.",
+    "takeoverPause": "Negosiasi dan investasi ditunda selama pengambilalihan.",
+    "negotiationCooldown": "Tunggu 30 hari antara negosiasi kontrak.",
+    "offerRejected": "Dewan menolak syarat ini. Turunkan gaji atau ajukan target liga lebih ambisius.",
+    "contractAgreed": "Kontrak manajer dan target liga telah disepakati.",
+    "takeoverStarted": "Klub memasuki pembicaraan pengambilalihan. Keputusan diperkirakan dalam 30 hari.",
+    "takeoverCompleted": "Pemilik baru menyelesaikan pengambilalihan dan berinvestasi. Kontrak Anda tetap berlaku.",
+    "contractRenewal": "Kontrak Anda berakhir. Kunjungi dewan untuk membahas kesepakatan baru.",
+    "investmentRejected": "Dana ditolak. Tingkatkan kepercayaan dan keuangan atau tunggu musim depan.",
+    "investmentApproved": "Dewan menyetujui peningkatan dan membayar 25% biayanya.",
+    "facilityMaximum": "Fasilitas ini telah mencapai tingkat maksimum.",
+    "captainChanged": "Keputusan kapten Anda memengaruhi pemain terkait.",
+    "captainConflict": "Pilih pemain berbeda sebagai kapten dan wakil kapten.",
+    "dressingRoom": "Ruang ganti",
+    "promise": "Janji waktu bermain: tersisa {{count}} pertandingan",
+    "concerns": "Kekhawatiran pemain",
+    "patchBoard": "Target liga lebih adil, pengembangan muda, dan harapan gaya bermain.",
+    "patchContracts": "Negosiasikan gaji, durasi kontrak, dan target liga.",
+    "patchClub": "Pengambilalihan klub dan dukungan peningkatan fasilitas.",
+    "patchSquad": "Kekhawatiran lebih jelas, reaksi kapten, dan tenggat janji."
   }
 }
