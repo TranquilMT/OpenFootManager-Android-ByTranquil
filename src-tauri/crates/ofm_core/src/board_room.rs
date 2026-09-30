@@ -9,6 +9,8 @@ pub struct BoardRoom {
     pub joined_season: u32,
     pub baseline_target: u32,
     pub style_matches: u32,
+    pub last_investment_season: u32,
+    pub last_captain_change: String,
     pub credited_matches: std::collections::BTreeSet<String>,
     pub contract: Option<ManagerContract>,
     pub ownership_generation: u32,
@@ -173,4 +175,47 @@ pub fn credit_style_match(game: &mut Game, home: &str, away: &str) {
         && room.credited_matches.insert(key) {
         room.style_matches = room.style_matches.saturating_add(1);
     }
+}
+
+pub fn request_investment(game: &mut Game, facility: domain::team::FacilityType) -> Result<(), String> {
+    let id = game.manager.team_id.clone().ok_or("be.error.noTeamAssigned")?;
+    let team = game.teams.iter().find(|team| team.id == id).ok_or("be.error.teamNotFound")?;
+    let level = match facility { domain::team::FacilityType::Training => team.facilities.training,
+        domain::team::FacilityType::Medical => team.facilities.medical,
+        domain::team::FacilityType::Scouting => team.facilities.scouting };
+    if level >= 10 { return Err("phase6.facilityMaximum".to_string()); }
+    let cost = crate::club::next_upgrade_cost(team, &facility);
+    let season = game.league.as_ref().map(|league| league.season).unwrap_or(1);
+    let room = game.board_rooms.get(&id).ok_or("phase6.unavailable")?;
+    if room.takeover_due.is_some() { return Err("phase6.takeoverPause".to_string()); }
+    let snapshot = crate::finances::team_finance_snapshot(game, &id).ok_or("phase6.unavailable")?;
+    if game.manager.satisfaction < 50 || room.last_investment_season == season
+        || team.finance < cost.saturating_mul(3) || snapshot.currently_over_budget {
+        return Err("phase6.investmentRejected".to_string());
+    }
+    let date = game.clock.current_date.date_naive();
+    crate::finances::post(game, &id, cost / 4, crate::finances::CashKind::BoardSupport, date)?;
+    crate::club::upgrade_facility(game, &id, facility)?;
+    game.board_rooms.get_mut(&id).unwrap().last_investment_season = season;
+    notify(game, "investment", "phase6.investmentApproved");
+    Ok(())
+}
+
+pub fn captain_reactions(game: &mut Game, old: Option<&str>, new: Option<&str>) {
+    if old == new { return; }
+    let Some(id) = game.manager.team_id.clone() else { return; };
+    let date = game.clock.current_date.date_naive();
+    let Some(room) = game.board_rooms.get_mut(&id) else { return; };
+    if NaiveDate::parse_from_str(&room.last_captain_change, "%Y-%m-%d").ok()
+        .is_some_and(|last| date.signed_duration_since(last).num_days() < 30) { return; }
+    room.last_captain_change = date.to_string();
+    for player in game.players.iter_mut().filter(|player| player.team_id.as_deref() == Some(&id)) {
+        if new == Some(player.id.as_str()) {
+            player.morale = player.morale.saturating_add(3).min(100);
+            player.morale_core.manager_trust = player.morale_core.manager_trust.saturating_add(2).min(100);
+        } else if old == Some(player.id.as_str()) {
+            player.morale = player.morale.saturating_sub(3).max(5);
+        }
+    }
+    notify(game, "captaincy", "phase6.captainChanged");
 }
