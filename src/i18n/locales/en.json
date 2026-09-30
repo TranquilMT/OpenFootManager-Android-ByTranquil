@@ -1265,7 +1265,9 @@
       "LeaguePosition": "Finish in the top {{target}}",
       "Wins": "Win at least {{target}} matches",
       "GoalsScored": "Score at least {{target}} goals",
-      "FinancialStability": "Keep wage spending at or below {{target}}% of budget"
+      "FinancialStability": "Keep wage spending at or below {{target}}% of budget",
+      "YouthMinutes": "Give under-22 players {{target}} competitive minutes",
+      "PlayingStyleMatches": "Use the agreed playing style in {{target}} league matches"
     }
   },
   "transfers": {
@@ -1775,7 +1777,7 @@
     "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
     "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
     "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
-    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.5.2",
+    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.0",
     "patchPortraits": "20 fictional source faces bring more variety to generated player portraits.",
     "patchWorld": "A larger football world spans 29 nations, with stronger clubs across the Americas and Asia.",
     "patchTransfers": "Club strategies guide loans and transfer approaches, with competing offers and budget checks.",
@@ -1859,7 +1861,7 @@
     "fit": "FIT",
     "keyStats": "Key Stats"
   },
-"scouting": {
+  "scouting": {
     "shortlist": "Shortlist",
     "shortlistEmpty": "Save players here to compare them later.",
     "addShortlist": "Add to shortlist",
@@ -4165,5 +4167,39 @@
   "generation": {
     "title": "Generation & Completion",
     "coverage": "Your packages cover"
+  },
+  "phase6": {
+    "boardRoom": "Board & dressing room",
+    "contractHelp": "Negotiate your salary, league target and contract length. Easier targets mean smaller salary offers.",
+    "salary": "Weekly salary",
+    "expires": "Contract ends",
+    "ownership": "Ownership era",
+    "style": "Club playing style",
+    "leagueTarget": "League position target",
+    "years": "Contract length (years)",
+    "negotiate": "Negotiate contract",
+    "investment": "Facility investment",
+    "requestInvestment": "Request board funding",
+    "investmentHelp": "Once per season, the board can cover 25% of an upgrade. Requires at least 50% confidence and healthy finances.",
+    "unavailable": "The board room is currently unavailable.",
+    "takeoverPause": "Contract talks and investment requests are paused during the takeover.",
+    "negotiationCooldown": "Please wait 30 days between contract negotiations.",
+    "offerRejected": "The board declined these terms. Try a lower salary or a more ambitious league target.",
+    "contractAgreed": "Your manager contract and league objective have been agreed.",
+    "takeoverStarted": "The club has entered takeover talks. A decision is expected in 30 days.",
+    "takeoverCompleted": "New ownership has completed the takeover and invested in the club. Your contract remains in place.",
+    "contractRenewal": "Your contract has ended. Visit the board room to discuss a new deal.",
+    "investmentRejected": "Funding was declined. Improve board confidence and finances, or wait until next season.",
+    "investmentApproved": "The board approved your facility upgrade and covered 25% of its cost.",
+    "facilityMaximum": "This facility has reached its maximum level.",
+    "captainChanged": "Your captaincy decision has affected the players involved.",
+    "captainConflict": "Choose different players as captain and vice-captain.",
+    "dressingRoom": "Dressing room",
+    "promise": "Playing-time promise: {{count}} matches remaining",
+    "concerns": "Player concerns",
+    "patchBoard": "Fairer league targets, youth goals and playing-style expectations.",
+    "patchContracts": "Negotiate your manager salary, contract length and league objective.",
+    "patchClub": "Club takeovers and board support for facility upgrades.",
+    "patchSquad": "Clearer player concerns, captaincy reactions and promise deadlines."
   }
 }
