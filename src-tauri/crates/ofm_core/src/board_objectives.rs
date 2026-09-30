@@ -206,7 +206,7 @@ pub fn generate_objectives(game: &mut Game) {
     if young_count > 0 && num_teams > 1 {
         let target = (young_count.min(3) * (num_teams - 1) * 15).min(900);
         game.board_objectives.push(BoardObjective { id: "obj_youth".to_string(),
-            description: "phase6.youthObjective".to_string(), target,
+            description: "boardObjectives.objective.YouthMinutes".to_string(), target,
             objective_type: ObjectiveType::YouthMinutes, met: false });
         if let Some(contract) = game.board_rooms.get_mut(&user_team_id).and_then(|room| room.contract.as_mut()) {
             contract.youth_minutes_target = target;
@@ -214,7 +214,7 @@ pub fn generate_objectives(game: &mut Game) {
     }
     if game.board_rooms.contains_key(&user_team_id) && num_teams > 1 {
         game.board_objectives.push(BoardObjective { id: "obj_style".to_string(),
-            description: "phase6.styleObjective".to_string(), target: num_teams - 1,
+            description: "boardObjectives.objective.PlayingStyleMatches".to_string(), target: num_teams - 1,
             objective_type: ObjectiveType::PlayingStyleMatches, met: false });
     }
 
