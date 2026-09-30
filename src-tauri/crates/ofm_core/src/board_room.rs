@@ -294,4 +294,6 @@ mod tests {
     fn facility_investment_is_once_per_season() { let mut g=game(); request_investment(&mut g,domain::team::FacilityType::Training).unwrap(); assert!(request_investment(&mut g,domain::team::FacilityType::Medical).is_err()); }
     #[test]
     fn low_confidence_blocks_board_funding() { let mut g=game(); g.manager.satisfaction=30; assert!(request_investment(&mut g,domain::team::FacilityType::Training).is_err()); }
+    #[test]
+    fn maximum_facility_cannot_absorb_more_funds() { let mut g=game(); g.teams[0].facilities.training=10; let cash=g.teams[0].finance; assert!(request_investment(&mut g,domain::team::FacilityType::Training).is_err()); assert_eq!(g.teams[0].finance,cash); }
 }
