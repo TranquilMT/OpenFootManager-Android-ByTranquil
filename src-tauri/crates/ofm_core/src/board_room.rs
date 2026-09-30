@@ -266,4 +266,6 @@ mod tests {
     fn four_year_contract_is_rejected() { let mut g=game(); assert!(negotiate(&mut g, 1000, 2, 4).is_err()); }
     #[test]
     fn negotiated_objective_updates_live_board() { let mut g=game(); negotiate(&mut g, 1000, 3, 2).unwrap(); assert_eq!(g.board_objectives.iter().find(|o|o.id=="obj_position").unwrap().target, 3); }
+    #[test]
+    fn contract_is_saved_with_agreed_objective() { let mut g=game(); negotiate(&mut g, 1000, 3, 2).unwrap(); assert_eq!(g.board_rooms["club"].contract.as_ref().unwrap().league_target, 3); }
 }
