@@ -532,6 +532,18 @@ mod tests {
         }
     }
 
+    #[test]
+    fn every_selectable_nationality_has_a_direct_name_pool() {
+        let names = default_names_definition();
+        for nation in crate::nations::all_nations() {
+            assert!(
+                names.pools.contains_key(nation.code),
+                "missing nationality: {}",
+                nation.code
+            );
+        }
+    }
+
     /// A scratch directory to stand in for one tier of the search path.
     fn tier(name: &str) -> PathBuf {
         let dir = std::env::temp_dir().join(format!("ofm-defs-{name}-{}", Uuid::new_v4()));

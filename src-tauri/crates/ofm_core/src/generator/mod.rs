@@ -2618,7 +2618,10 @@ mod tests {
     /// names, deterministically.
     #[test]
     fn an_unpooled_nationality_is_not_pinned_to_one_pool() {
-        let names_def = default_names_definition();
+        let mut names_def = default_names_definition();
+        names_def
+            .pools
+            .retain(|code, _| ["AR", "BR", "ENG", "DE"].contains(&code.as_str()));
         // Only the AR-exclusive names, because half of AR's first names also
         // appear in European pools (Federico, Lucas, Sergio …). Asserting "no
         // Argentine name at all" would fail on those shared entries and prove
@@ -2654,7 +2657,10 @@ mod tests {
     /// unpooled, and `AR`/`BR` are the only South American pools shipped.
     #[test]
     fn the_name_fallback_resolves_a_non_default_region() {
-        let names_def = default_names_definition();
+        let mut names_def = default_names_definition();
+        names_def
+            .pools
+            .retain(|code, _| code == "AR" || code == "BR");
         let south_american: std::collections::HashSet<&String> = ["AR", "BR"]
             .iter()
             .flat_map(|code| names_def.pools[*code].first_names.iter())
