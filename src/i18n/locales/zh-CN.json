@@ -1265,7 +1265,9 @@
       "LeaguePosition": "联赛排名进入前 {{target}}",
       "Wins": "至少赢得 {{target}} 场比赛",
       "GoalsScored": "至少打进 {{target}} 个进球",
-      "FinancialStability": "将工资支出控制在预算的 {{target}}% 以内"
+      "FinancialStability": "将工资支出控制在预算的 {{target}}% 以内",
+      "YouthMinutes": "让22岁以下球员获得{{target}}分钟出场时间",
+      "PlayingStyleMatches": "在{{target}}场联赛中使用约定的风格"
     }
   },
   "transfers": {
@@ -1775,7 +1777,7 @@
     "patchPlayers": "新增更多优秀球员，包括稀有的96分球星和升级热门球队。",
     "patchMatches": "比赛解说更加丰富，加入门框射门和可选语音解说。",
     "patchMobile": "改进移动端操作、收件箱、国家队与生涯创建。",
-    "patchWelcome": "欢迎来到 OFMtouch！v0.5.2 更新内容",
+    "patchWelcome": "欢迎来到 OFMtouch！v0.6.0 更新内容",
     "patchPortraits": "20 张虚构原始人脸让生成球员的肖像更加多样。",
     "patchWorld": "足球世界扩展至 29 个国家，美洲和亚洲的俱乐部实力也得到提升。",
     "patchTransfers": "俱乐部策略会影响租借和转会，包括竞争报价与预算检查。",
@@ -1859,7 +1861,7 @@
     "fit": "契合",
     "keyStats": "关键数据"
   },
-"scouting": {
+  "scouting": {
     "shortlist": "候选名单",
     "shortlistEmpty": "在此保存球员，以便稍后比较。",
     "addShortlist": "加入候选名单",
@@ -2282,8 +2284,22 @@
       "PenaltyAwarded": "判罚点球"
     },
     "commentary": {
-      "Corner": {"headline": "获得角球", "lines": {"0": "{{team}}获得角球。", "1": "{{team}}准备开出角球。", "2": "{{team}}获得角球传中的机会。"}},
-      "FreeKick": {"headline": "获得任意球", "lines": {"0": "{{team}}获得任意球。", "1": "{{team}}准备主罚任意球。", "2": "任意球给了{{team}}组织进攻的机会。"}},
+      "Corner": {
+        "headline": "获得角球",
+        "lines": {
+          "0": "{{team}}获得角球。",
+          "1": "{{team}}准备开出角球。",
+          "2": "{{team}}获得角球传中的机会。"
+        }
+      },
+      "FreeKick": {
+        "headline": "获得任意球",
+        "lines": {
+          "0": "{{team}}获得任意球。",
+          "1": "{{team}}准备主罚任意球。",
+          "2": "任意球给了{{team}}组织进攻的机会。"
+        }
+      },
       "Goal": {
         "headline": "进球啦！",
         "lines": {
@@ -4151,5 +4167,39 @@
   "generation": {
     "title": "生成与完善",
     "coverage": "您的包涵盖"
+  },
+  "phase6": {
+    "boardRoom": "董事会与更衣室",
+    "contractHelp": "协商薪水、联赛目标和合同期限。较容易的目标会降低薪资报价。",
+    "salary": "周薪",
+    "expires": "合同到期",
+    "ownership": "所有权时代",
+    "style": "俱乐部风格",
+    "leagueTarget": "联赛排名目标",
+    "years": "合同期限（年）",
+    "negotiate": "协商合同",
+    "investment": "设施投资",
+    "requestInvestment": "申请董事会资助",
+    "investmentHelp": "每赛季一次，董事会可承担升级费用的25%。需要至少50%的信任及健康的财务。",
+    "unavailable": "董事会暂不可用。",
+    "takeoverPause": "收购期间暂停合同谈判和投资申请。",
+    "negotiationCooldown": "合同谈判之间请等待30天。",
+    "offerRejected": "董事会拒绝了这些条件。请降低薪水或提出更高的联赛目标。",
+    "contractAgreed": "你的主教练合同和联赛目标已达成协议。",
+    "takeoverStarted": "俱乐部已开始收购谈判，预计30天后作出决定。",
+    "takeoverCompleted": "新所有者完成收购并向俱乐部投资。你的合同继续有效。",
+    "contractRenewal": "你的合同已到期。请前往董事会讨论续约。",
+    "investmentRejected": "资助申请被拒绝。请改善董事会信任及财务状况，或等待下赛季。",
+    "investmentApproved": "董事会批准设施升级并承担25%的费用。",
+    "facilityMaximum": "该设施已达最高等级。",
+    "captainChanged": "你的队长任命影响了相关球员。",
+    "captainConflict": "队长和副队长必须是不同球员。",
+    "dressingRoom": "更衣室",
+    "promise": "出场时间承诺：还剩{{count}}场比赛",
+    "concerns": "球员顾虑",
+    "patchBoard": "更公平的联赛目标、青训目标和比赛风格要求。",
+    "patchContracts": "协商主教练薪水、合同期限和联赛目标。",
+    "patchClub": "俱乐部收购与设施升级资助。",
+    "patchSquad": "更清晰的球员顾虑、队长任命反应和承诺期限。"
   }
 }
