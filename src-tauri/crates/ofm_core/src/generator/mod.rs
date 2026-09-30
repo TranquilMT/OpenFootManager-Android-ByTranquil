@@ -3,6 +3,7 @@ pub mod competition_def;
 pub mod definitions;
 pub mod file_format;
 mod generation;
+mod name_diversity;
 pub mod package;
 pub mod scaffold;
 pub mod world_io;
@@ -319,6 +320,23 @@ pub fn generate_youth_academy_recruit_with_nationality(
     player.transfer_listed = false;
     player.loan_listed = false;
     player
+}
+
+/// Assign fresh prospects names that do not collide with the current career.
+/// This is called before reports are shown; existing identities stay untouched.
+pub(crate) fn disambiguate_generated_recruits(
+    recruits: &mut [Player],
+    occupied: impl Iterator<Item = String>,
+) {
+    let mut used = occupied
+        .map(|name| name_diversity::normalize(&name))
+        .collect();
+    name_diversity::disambiguate(
+        recruits,
+        &default_names_definition(),
+        &mut used,
+        &mut rand::rng(),
+    );
 }
 
 /// Generate a senior free-agent player for a national squad. `squad_slot`
@@ -1648,6 +1666,13 @@ fn generate_world_with_rng(
         staff.push(s);
     }
 
+    name_diversity::disambiguate(
+        &mut players,
+        &names_def,
+        &mut std::collections::HashSet::new(),
+        &mut rng,
+    );
+
     info!(
         "[generator] world generated: {} teams, {} players, {} staff",
         teams_out.len(),
@@ -2208,6 +2233,20 @@ mod tests {
             beyond_the_old_pool,
             "no nationality outside the old Europe+BR/AR pool: {nationalities:?}"
         );
+    }
+
+    #[test]
+    fn newly_generated_world_has_distinct_full_names() {
+        let (_, players, _) = generate_world_with_rng(
+            StdRng::seed_from_u64(610),
+            &WorldGenConfig::standard(),
+            &definitions::DefinitionSources::embedded_only(),
+        );
+        let unique: std::collections::HashSet<_> = players
+            .iter()
+            .map(|player| name_diversity::normalize(&player.full_name))
+            .collect();
+        assert_eq!(unique.len(), players.len());
     }
 
     #[test]
