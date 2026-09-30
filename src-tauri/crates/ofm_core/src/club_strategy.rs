@@ -152,9 +152,12 @@ impl ClubStrategy {
         self.financial_risk = blend(self.financial_risk, derived.financial_risk, 2);
         self.manager_patience = blend(self.manager_patience, derived.manager_patience, 3);
 
-        if (1..=league_size).contains(&league_position) {
-            let top_quarter = (league_size / 4).max(1);
-            let bottom_quarter = league_size.saturating_sub(top_quarter);
+        let valid_finish = (1..=league_size).contains(&league_position);
+        let top_quarter = (league_size / 4).max(1);
+        let bottom_quarter = league_size.saturating_sub(top_quarter);
+        let poor_finish =
+            valid_finish && league_position > top_quarter && league_position > bottom_quarter;
+        if valid_finish {
             if league_position <= top_quarter {
                 self.ambition = self.ambition.saturating_add(5).min(100);
             } else if league_position > bottom_quarter {
@@ -172,7 +175,7 @@ impl ClubStrategy {
             self.recruitment = RecruitmentPhilosophy::Value;
             self.financial_risk = self.financial_risk.min(20);
             self.preferred_squad_age = 25;
-        } else if self.status != StrategicStatus::Rebuild {
+        } else if self.status != StrategicStatus::Rebuild || (valid_finish && !poor_finish) {
             self.status = derived.status;
             self.recruitment = derived.recruitment;
             self.preferred_squad_age = derived.preferred_squad_age;
@@ -299,5 +302,37 @@ mod tests {
         invalid.evolve_after_season(&team, 21, 20);
         without_table.evolve_after_season(&team, 0, 0);
         assert_eq!(invalid, without_table);
+    }
+
+    #[test]
+    fn rebuilding_club_recovers_its_identity_after_a_successful_season() {
+        let team = club(700, 10_000_000, 4_000_000);
+        let mut strategy = ClubStrategy::derive(&team);
+        strategy.evolve_after_season(&team, 19, 20);
+        assert_eq!(strategy.status, StrategicStatus::Rebuild);
+        strategy.evolve_after_season(&team, 4, 20);
+        assert_eq!(strategy.status, StrategicStatus::Growth);
+        assert_eq!(
+            strategy.recruitment,
+            ClubStrategy::derive(&team).recruitment
+        );
+    }
+
+    #[test]
+    fn midtable_recovery_ends_a_results_driven_rebuild() {
+        let team = club(500, 10_000_000, 4_000_000);
+        let mut strategy = ClubStrategy::derive(&team);
+        strategy.evolve_after_season(&team, 20, 20);
+        strategy.evolve_after_season(&team, 10, 20);
+        assert_eq!(strategy.status, StrategicStatus::Stable);
+    }
+
+    #[test]
+    fn missing_results_do_not_prematurely_end_a_rebuild() {
+        let team = club(500, 10_000_000, 4_000_000);
+        let mut strategy = ClubStrategy::derive(&team);
+        strategy.evolve_after_season(&team, 20, 20);
+        strategy.evolve_after_season(&team, 0, 20);
+        assert_eq!(strategy.status, StrategicStatus::Rebuild);
     }
 }
