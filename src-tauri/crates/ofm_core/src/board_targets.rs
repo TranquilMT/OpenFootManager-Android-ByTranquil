@@ -19,4 +19,6 @@ mod tests {
     fn small_league_has_top_two_target() { assert_eq!(league_target(1, 4, true), 2); }
     #[test]
     fn rank_is_clamped_to_table() { assert_eq!(league_target(99, 10, false), 10); }
+    #[test]
+    fn zero_rank_is_normalized() { assert_eq!(league_target(0, 20, true), 4); }
 }
