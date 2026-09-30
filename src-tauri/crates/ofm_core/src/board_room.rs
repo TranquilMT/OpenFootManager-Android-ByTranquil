@@ -250,4 +250,6 @@ mod tests {
     fn new_manager_receives_two_year_deal() { let g=game(); assert_eq!(g.board_rooms["club"].contract.as_ref().unwrap().end_date, "2028-08-01"); }
     #[test]
     fn initialization_does_not_overwrite_negotiated_salary() { let mut g=game(); negotiate(&mut g, 1000, 2, 1).unwrap(); initialize(&mut g); assert_eq!(g.board_rooms["club"].contract.as_ref().unwrap().weekly_salary, 1000); }
+    #[test]
+    fn unemployed_manager_cannot_negotiate() { let mut g=game(); g.manager.team_id=None; assert!(negotiate(&mut g, 1000, 2, 1).is_err()); }
 }
