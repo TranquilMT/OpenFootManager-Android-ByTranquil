@@ -248,4 +248,6 @@ mod tests {
     fn salary_handles_extreme_reputation() { assert!(salary_offer(u32::MAX, u32::MAX) <= 25_000); }
     #[test]
     fn new_manager_receives_two_year_deal() { let g=game(); assert_eq!(g.board_rooms["club"].contract.as_ref().unwrap().end_date, "2028-08-01"); }
+    #[test]
+    fn initialization_does_not_overwrite_negotiated_salary() { let mut g=game(); negotiate(&mut g, 1000, 2, 1).unwrap(); initialize(&mut g); assert_eq!(g.board_rooms["club"].contract.as_ref().unwrap().weekly_salary, 1000); }
 }
