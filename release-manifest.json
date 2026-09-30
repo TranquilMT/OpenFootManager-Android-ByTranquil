@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "product": "Openfoot Manager",
+  "repository": "TranquilMT/OpenFootManager-Android-ByTranquil",
+  "tag": "v0.6.0-build336",
+  "version": "0.6.0-build336",
+  "commit": "phase6-board-dressing-room",
+  "prerelease": false,
+  "publishedAt": "2026-09-30T21:43:49Z",
+  "releaseName": "OFMtouch v0.6.0 — Board & Dressing Room (Build 336)",
+  "releaseUrl": "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/tag/v0.6.0-build336",
+  "notes": "## What’s new\r\n- Fairer first-season league targets, plus financial, youth-development and playing-style objectives.\r\n- Negotiate your manager salary, contract length and league target with the board.\r\n- Club takeovers, ownership changes and board support for facility upgrades.\r\n- Review player happiness, contract and playing-time concerns, transfer requests and promises.\r\n\r\n## Improvements and fixes\r\n- New managers receive time to establish themselves before early league results affect job security.\r\n- Captaincy decisions affect the players involved.\r\n- Playing-time promises require time on the pitch and keep consistent deadlines.\r\n- Contract and board decisions remain available when you save and reload.\r\n- A shorter What’s New screen makes updates easier to read.\r\n\r\n**Android ARM64 • v0.6.0 • Build 336**\r\n\r\nThank you for playing and sharing your feedback.\r\n\r\n**TranquilMT**",
+  "assets": [
+    {
+      "id": 601848783,
+      "name": "OFMtouch-0.6.0-Board-Dressing-Room-Build336-ARM64.apk",
+      "label": "",
+      "size": 355054470,
+      "contentType": "application/vnd.android.package-archive",
+      "downloadUrl": "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.6.0-build336/OFMtouch-0.6.0-Board-Dressing-Room-Build336-ARM64.apk",
+      "sha256": "7d69d2323a854b08552268164b316a8387946bae7770a97114fdacc5a1b67681",
+      "platform": "android",
+      "arch": "arm64",
+      "kind": "unknown",
+      "extension": ".apk"
+    }
+  ]
+}
