@@ -1265,7 +1265,9 @@
       "LeaguePosition": "İlk {{target}} içinde bitir",
       "Wins": "En az {{target}} maç kazan",
       "GoalsScored": "En az {{target}} gol at",
-      "FinancialStability": "Maaş harcamalarını bütçenin %{{target}}'i veya altında tut"
+      "FinancialStability": "Maaş harcamalarını bütçenin %{{target}}'i veya altında tut",
+      "YouthMinutes": "22 yaş altına {{target}} dakika ver",
+      "PlayingStyleMatches": "{{target}} lig maçında kararlaştırılan tarzı kullan"
     }
   },
   "transfers": {
@@ -1775,7 +1777,7 @@
     "patchPlayers": "Nadir 96 puanlı yıldızlar dahil daha fazla öne çıkan oyuncu.",
     "patchMatches": "Daha fazla maç tepkisi, direğe çarpan şutlar ve isteğe bağlı sesli anlatım.",
     "patchMobile": "Mobil kontroller, gelen kutusu, millî takımlar ve kariyer başlangıcı iyileştirildi.",
-    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.5.2 yenilikleri",
+    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.6.0 yenilikleri",
     "patchPortraits": "20 kurgusal kaynak yüz, üretilen oyuncu portrelerini daha çeşitli kılıyor.",
     "patchWorld": "Futbol dünyası 29 ülkeyi kapsıyor; Amerika ve Asya kulüpleri güçlendirildi.",
     "patchTransfers": "Kulüp stratejileri kiralık ve bonservisli transferleri, rakip teklifleri ve bütçe kontrollerini yönlendiriyor.",
@@ -1859,7 +1861,7 @@
     "fit": "HAZIR",
     "keyStats": "Öne Çıkan İstatistikler"
   },
-"scouting": {
+  "scouting": {
     "shortlist": "İzleme listesi",
     "shortlistEmpty": "Oyuncuları daha sonra karşılaştırmak için buraya kaydedin.",
     "addShortlist": "İzleme listesine ekle",
@@ -2316,8 +2318,22 @@
       "PenaltyAwarded": "Penaltı Kazanıldı"
     },
     "commentary": {
-      "Corner": {"headline": "için korner", "lines": {"0": "{{team}} için korner.", "1": "{{team}} korneri kullanmaya hazırlanıyor.", "2": "{{team}} kornerden orta yapma şansı buluyor."}},
-      "FreeKick": {"headline": "için serbest vuruş", "lines": {"0": "{{team}} için serbest vuruş.", "1": "{{team}} serbest vuruşa hazırlanıyor.", "2": "Serbest vuruş {{team}} için yeni bir hücum fırsatı."}},
+      "Corner": {
+        "headline": "için korner",
+        "lines": {
+          "0": "{{team}} için korner.",
+          "1": "{{team}} korneri kullanmaya hazırlanıyor.",
+          "2": "{{team}} kornerden orta yapma şansı buluyor."
+        }
+      },
+      "FreeKick": {
+        "headline": "için serbest vuruş",
+        "lines": {
+          "0": "{{team}} için serbest vuruş.",
+          "1": "{{team}} serbest vuruşa hazırlanıyor.",
+          "2": "Serbest vuruş {{team}} için yeni bir hücum fırsatı."
+        }
+      },
       "Goal": {
         "headline": "GOOOL!",
         "lines": {
@@ -4151,5 +4167,39 @@
   "generation": {
     "title": "Oluşturma ve Tamamlama",
     "coverage": "Paketlerinizin kapsadıkları"
+  },
+  "phase6": {
+    "boardRoom": "Yönetim ve soyunma odası",
+    "contractHelp": "Maaş, lig hedefi ve sözleşme süresini görüşün. Daha kolay hedefler maaş teklifini düşürür.",
+    "salary": "Haftalık maaş",
+    "expires": "Sözleşme bitişi",
+    "ownership": "Sahiplik dönemi",
+    "style": "Kulübün oyun tarzı",
+    "leagueTarget": "Lig sıralaması hedefi",
+    "years": "Süre (yıl)",
+    "negotiate": "Sözleşmeyi görüş",
+    "investment": "Tesis yatırımı",
+    "requestInvestment": "Yönetim desteği iste",
+    "investmentHelp": "Yönetim sezonda bir kez yükseltmenin %25'ini karşılayabilir. En az %50 güven ve sağlıklı mali durum gerekir.",
+    "unavailable": "Yönetim şu anda kullanılamıyor.",
+    "takeoverPause": "Kulüp devri sırasında görüşmeler ve yatırımlar duraklatılır.",
+    "negotiationCooldown": "Sözleşme görüşmeleri arasında 30 gün bekleyin.",
+    "offerRejected": "Yönetim şartları reddetti. Maaşı düşürün veya daha iddialı bir lig hedefi önerin.",
+    "contractAgreed": "Menajer sözleşmeniz ve lig hedefiniz kabul edildi.",
+    "takeoverStarted": "Kulüp devir görüşmelerine başladı. Karar 30 gün içinde bekleniyor.",
+    "takeoverCompleted": "Yeni sahipler kulübü devraldı ve yatırım yaptı. Sözleşmeniz geçerli kalıyor.",
+    "contractRenewal": "Sözleşmeniz sona erdi. Yeni anlaşma için yönetimle görüşün.",
+    "investmentRejected": "Destek reddedildi. Güveni ve mali durumu iyileştirin veya gelecek sezonu bekleyin.",
+    "investmentApproved": "Yönetim yükseltmeyi onayladı ve maliyetin %25'ini karşıladı.",
+    "facilityMaximum": "Tesis en yüksek seviyeye ulaştı.",
+    "captainChanged": "Kaptanlık kararınız ilgili oyuncuları etkiledi.",
+    "captainConflict": "Kaptan ve yardımcı kaptan için farklı oyuncular seçin.",
+    "dressingRoom": "Soyunma odası",
+    "promise": "Oynama süresi sözü: {{count}} maç kaldı",
+    "concerns": "Oyuncu kaygıları",
+    "patchBoard": "Daha adil lig hedefleri, genç gelişimi ve oyun tarzı beklentileri.",
+    "patchContracts": "Maaş, sözleşme süresi ve lig hedefini görüşün.",
+    "patchClub": "Kulüp devirleri ve tesis yükseltmeleri için yönetim desteği.",
+    "patchSquad": "Daha açık oyuncu kaygıları, kaptanlık tepkileri ve söz süreleri."
   }
 }
