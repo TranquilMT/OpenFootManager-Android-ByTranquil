@@ -1777,7 +1777,7 @@
     "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
     "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
     "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
-    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.0",
+    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.1",
     "patchPortraits": "20 fiktivních výchozích tváří přináší pestřejší portréty hráčů.",
     "patchWorld": "Fotbalový svět zahrnuje 29 zemí a silnější kluby v Americe a Asii.",
     "patchTransfers": "Strategie klubů řídí hostování a přestupy včetně konkurenčních nabídek a kontroly rozpočtu.",
@@ -4201,6 +4201,10 @@
     "patchContracts": "Vyjednejte plat, délku smlouvy a ligový cíl.",
     "patchClub": "Převzetí klubů a podpora vylepšení zařízení.",
     "patchSquad": "Jasnější starosti hráčů, reakce na kapitána a termíny slibů.",
-    "playingTime": "Herní čas"
+    "playingTime": "Herní čas",
+    "patchNames": "Přidáno 2 818 křestních jmen a příjmení pro všech 211 dostupných národností.",
+    "patchIdentity": "Nové světy a zprávy o mladých hráčích se vyhýbají opakovaným celým jménům. Stávající hráči si svá jména ponechávají.",
+    "patchScrolling": "Nabídky formací se posouvají plynuleji a zůstávají ve viditelné části obrazovky.",
+    "patchReliability": "Spravedlivější gólové cíle v malých ligách; spolehlivější výplaty trenérského platu a financování při převzetí klubu."
   }
 }
