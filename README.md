@@ -4,8 +4,8 @@
 
 OFMtouch is a free football management game built for Android. Take charge of a club, build your squad, scout talent, shape your tactics, develop young players and compete across multiple seasons in a growing football world.
 
-> 🧪 **Current source version: v0.5.2 Career Hotfix NightlyPreRelease**
-> **Build:** generated automatically from the GitHub Actions build number
+> 🧪 **Current version: v0.6.0 — Board & Dressing Room**
+> **Build:** shown in the game and APK filename
 > NightlyPreRelease builds are playable test versions. New features and fixes arrive regularly, but some bugs and unfinished areas may remain.
 
 ## v0.6.0 — Board & Dressing Room
