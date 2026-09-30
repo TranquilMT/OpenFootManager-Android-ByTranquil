@@ -506,6 +506,15 @@ mod tests {
     }
 
     #[test]
+    fn takeover_without_pending_sale_cannot_inject_cash() {
+        let mut g = game();
+        let cash = g.teams[0].finance;
+        complete_takeover(&mut g, "club");
+        assert_eq!(g.teams[0].finance, cash);
+        assert_eq!(g.board_rooms["club"].ownership_generation, 0);
+    }
+
+    #[test]
     fn old_room_json_loads_with_defaults() {
         let room: BoardRoom = serde_json::from_str("{}").unwrap();
         assert!(room.contract.is_none());
