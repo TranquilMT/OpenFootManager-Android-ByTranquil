@@ -246,4 +246,6 @@ mod tests {
     fn minimum_salary_for_small_club() { assert_eq!(salary_offer(0, 0), 500); }
     #[test]
     fn salary_handles_extreme_reputation() { assert!(salary_offer(u32::MAX, u32::MAX) <= 25_000); }
+    #[test]
+    fn new_manager_receives_two_year_deal() { let g=game(); assert_eq!(g.board_rooms["club"].contract.as_ref().unwrap().end_date, "2028-08-01"); }
 }
