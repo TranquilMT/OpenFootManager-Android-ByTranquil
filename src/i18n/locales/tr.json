@@ -1777,7 +1777,7 @@
     "patchPlayers": "Nadir 96 puanlı yıldızlar dahil daha fazla öne çıkan oyuncu.",
     "patchMatches": "Daha fazla maç tepkisi, direğe çarpan şutlar ve isteğe bağlı sesli anlatım.",
     "patchMobile": "Mobil kontroller, gelen kutusu, millî takımlar ve kariyer başlangıcı iyileştirildi.",
-    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.6.0 yenilikleri",
+    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.6.1 yenilikleri",
     "patchPortraits": "20 kurgusal kaynak yüz, üretilen oyuncu portrelerini daha çeşitli kılıyor.",
     "patchWorld": "Futbol dünyası 29 ülkeyi kapsıyor; Amerika ve Asya kulüpleri güçlendirildi.",
     "patchTransfers": "Kulüp stratejileri kiralık ve bonservisli transferleri, rakip teklifleri ve bütçe kontrollerini yönlendiriyor.",
@@ -4201,6 +4201,10 @@
     "patchContracts": "Maaş, sözleşme süresi ve lig hedefini görüşün.",
     "patchClub": "Kulüp devirleri ve tesis yükseltmeleri için yönetim desteği.",
     "patchSquad": "Daha açık oyuncu kaygıları, kaptanlık tepkileri ve söz süreleri.",
-    "playingTime": "Oynama süresi"
+    "playingTime": "Oynama süresi",
+    "patchNames": "Seçilebilen 211 milliyeti kapsayan 2.818 ek ad ve soyad.",
+    "patchIdentity": "Yeni dünyalar ve genç oyuncu raporları aynı tam adın tekrarlanmasını önler. Mevcut oyuncular adlarını korur.",
+    "patchScrolling": "Diziliş menüleri daha akıcı kaydırılır ve ekranın görünen alanında kalır.",
+    "patchReliability": "Küçük liglerde daha adil gol hedefleri; daha güvenilir teknik direktör maaş ödemeleri ve kulüp devralma finansmanı."
   }
 }
