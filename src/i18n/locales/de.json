@@ -1265,7 +1265,9 @@
       "LeaguePosition": "Beende die Saison unter den Top {{target}}",
       "Wins": "Gewinne mindestens {{target}} Spiele",
       "GoalsScored": "Erziele mindestens {{target}} Tore",
-      "FinancialStability": "Halte die Lohnausgaben bei höchstens {{target}} % des Budgets"
+      "FinancialStability": "Halte die Lohnausgaben bei höchstens {{target}} % des Budgets",
+      "YouthMinutes": "Unter-22-Spielern {{target}} Spielminuten geben",
+      "PlayingStyleMatches": "Den vereinbarten Stil in {{target}} Ligaspielen nutzen"
     }
   },
   "transfers": {
@@ -1775,7 +1777,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.5.2",
+    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.0",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
@@ -1859,7 +1861,7 @@
     "fit": "FIT",
     "keyStats": "Wichtige Stats"
   },
-"scouting": {
+  "scouting": {
     "shortlist": "Merkliste",
     "shortlistEmpty": "Speichere Spieler hier, um sie später zu vergleichen.",
     "addShortlist": "Zur Merkliste hinzufügen",
@@ -2282,8 +2284,22 @@
       "PenaltyAwarded": "Elfmeter gegeben"
     },
     "commentary": {
-      "Corner": {"headline": "Eckball für", "lines": {"0": "Eckball für {{team}}.", "1": "{{team}} bere Maß für die Ecke.", "2": "{{team}} kann den Ball von der Ecke hereinbringen."}},
-      "FreeKick": {"headline": "Freistoß für", "lines": {"0": "Freistoß für {{team}}.", "1": "{{team}} bere Maß für den Freistoß.", "2": "Der Freistoß eröffnet {{team}} eine neue Angriffschance."}},
+      "Corner": {
+        "headline": "Eckball für",
+        "lines": {
+          "0": "Eckball für {{team}}.",
+          "1": "{{team}} bere Maß für die Ecke.",
+          "2": "{{team}} kann den Ball von der Ecke hereinbringen."
+        }
+      },
+      "FreeKick": {
+        "headline": "Freistoß für",
+        "lines": {
+          "0": "Freistoß für {{team}}.",
+          "1": "{{team}} bere Maß für den Freistoß.",
+          "2": "Der Freistoß eröffnet {{team}} eine neue Angriffschance."
+        }
+      },
       "Goal": {
         "headline": "TOOOR!",
         "lines": {
@@ -4151,5 +4167,39 @@
   "generation": {
     "title": "Generierung & Vervollständigung",
     "coverage": "Deine Pakete umfassen"
+  },
+  "phase6": {
+    "boardRoom": "Vorstand und Kabine",
+    "contractHelp": "Verhandle Gehalt, Ligaziel und Laufzeit. Leichtere Ziele bedeuten niedrigere Gehaltsangebote.",
+    "salary": "Wochengehalt",
+    "expires": "Vertragsende",
+    "ownership": "Eigentümerära",
+    "style": "Spielstil des Vereins",
+    "leagueTarget": "Zielplatzierung",
+    "years": "Laufzeit (Jahre)",
+    "negotiate": "Vertrag verhandeln",
+    "investment": "Investition in Einrichtungen",
+    "requestInvestment": "Vorstandsförderung beantragen",
+    "investmentHelp": "Einmal pro Saison kann der Vorstand 25 % eines Ausbaus bezahlen. Dafür sind 50 % Vertrauen und gesunde Finanzen nötig.",
+    "unavailable": "Der Vorstand ist derzeit nicht erreichbar.",
+    "takeoverPause": "Während der Übernahme pausieren Vertragsgespräche und Investitionen.",
+    "negotiationCooldown": "Warte 30 Tage zwischen Vertragsverhandlungen.",
+    "offerRejected": "Der Vorstand lehnt die Bedingungen ab. Senke das Gehalt oder setze ein ehrgeizigeres Ligaziel.",
+    "contractAgreed": "Dein Vertrag und dein Ligaziel wurden vereinbart.",
+    "takeoverStarted": "Der Verein führt Übernahmegespräche. Eine Entscheidung wird in 30 Tagen erwartet.",
+    "takeoverCompleted": "Die neuen Eigentümer haben den Verein übernommen und investiert. Dein Vertrag bleibt bestehen.",
+    "contractRenewal": "Dein Vertrag ist abgelaufen. Besuche den Vorstand für eine Verlängerung.",
+    "investmentRejected": "Förderung abgelehnt. Verbessere Vertrauen und Finanzen oder warte bis zur nächsten Saison.",
+    "investmentApproved": "Der Vorstand hat den Ausbau genehmigt und 25 % der Kosten übernommen.",
+    "facilityMaximum": "Diese Einrichtung hat ihre höchste Stufe erreicht.",
+    "captainChanged": "Deine Kapitänsentscheidung hat die beteiligten Spieler beeinflusst.",
+    "captainConflict": "Wähle verschiedene Spieler als Kapitän und Stellvertreter.",
+    "dressingRoom": "Kabine",
+    "promise": "Einsatzversprechen: noch {{count}} Spiele",
+    "concerns": "Spielersorgen",
+    "patchBoard": "Fairere Ligaziele sowie Erwartungen an Nachwuchs und Spielstil.",
+    "patchContracts": "Verhandle Gehalt, Vertragslaufzeit und Ligaziel.",
+    "patchClub": "Vereinsübernahmen und Förderung des Einrichtungsausbaus.",
+    "patchSquad": "Klarere Spielersorgen, Kapitänsreaktionen und Fristen für Versprechen."
   }
 }
