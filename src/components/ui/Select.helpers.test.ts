@@ -9,4 +9,5 @@ describe("select viewport placement", () => {
   it("uses the visible viewport after the keyboard opens", () => { const result=placeSelectMenu({...trigger,top:260,bottom:304}, {...viewport,height:320},240,280,8); expect(result.top).toBe(16); });
   it("respects a viewport displaced by browser chrome", () => { const result=placeSelectMenu({...trigger,top:70,bottom:114}, {...viewport,top:50,height:240},240,280,8); expect(result.top).toBeGreaterThanOrEqual(58); expect(result.top+result.listHeight+8).toBeLessThanOrEqual(282); });
   it("keeps wide labels away from the right edge", () => { const result=placeSelectMenu({...trigger,left:330},viewport,240,280,8); expect(result.left).toBe(72); });
+  it("bounds the menu on narrow devices", () => { const result=placeSelectMenu(trigger,{...viewport,width:200},240,280,8); expect(result.width).toBe(184); expect(result.left).toBe(8); });
 });
