@@ -60,7 +60,9 @@ impl ClubStrategy {
         let reputation = team.reputation.min(1_000) as i32;
         let facility_strength = team.facilities.training as i32 + team.facilities.scouting as i32;
         let healthy_cash = team.finance > 0;
-        let stressed = team.finance < 0 || team.transfer_budget <= 0;
+        // An exhausted transfer allocation is not debt: clubs can keep healthy
+        // cash reserves after spending their recruitment budget.
+        let stressed = team.finance < 0;
 
         let ambition = clamp_score(32 + reputation / 17 + facility_strength * 2);
         let youth_priority = clamp_score(
@@ -221,6 +223,26 @@ mod tests {
         assert_eq!(strategy.status, StrategicStatus::FinancialCrisis);
         assert_eq!(strategy.recruitment, RecruitmentPhilosophy::Value);
         assert!(strategy.financial_risk <= 20);
+    }
+
+    #[test]
+    fn spent_transfer_budget_does_not_make_a_cash_rich_club_insolvent() {
+        let strategy = ClubStrategy::derive(&club(900, 100_000_000, 0));
+        assert_eq!(strategy.status, StrategicStatus::Contender);
+        assert_ne!(strategy.recruitment, RecruitmentPhilosophy::Value);
+    }
+
+    #[test]
+    fn zero_cash_without_debt_is_not_a_financial_crisis() {
+        let strategy = ClubStrategy::derive(&club(500, 0, 0));
+        assert_eq!(strategy.status, StrategicStatus::Stable);
+    }
+
+    #[test]
+    fn debt_still_requires_caution_even_with_an_allocated_transfer_budget() {
+        let strategy = ClubStrategy::derive(&club(900, -1, 40_000_000));
+        assert_eq!(strategy.status, StrategicStatus::FinancialCrisis);
+        assert_eq!(strategy.recruitment, RecruitmentPhilosophy::Value);
     }
 
     #[test]
