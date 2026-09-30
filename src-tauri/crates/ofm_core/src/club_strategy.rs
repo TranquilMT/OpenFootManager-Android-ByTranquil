@@ -152,7 +152,7 @@ impl ClubStrategy {
         self.financial_risk = blend(self.financial_risk, derived.financial_risk, 2);
         self.manager_patience = blend(self.manager_patience, derived.manager_patience, 3);
 
-        if league_size > 0 {
+        if (1..=league_size).contains(&league_position) {
             let top_quarter = (league_size / 4).max(1);
             let bottom_quarter = league_size.saturating_sub(top_quarter);
             if league_position <= top_quarter {
@@ -279,5 +279,25 @@ mod tests {
         strategy.evolve_after_season(&team, 19, 20);
         assert_eq!(strategy.status, StrategicStatus::Rebuild);
         assert_eq!(strategy.recruitment, RecruitmentPhilosophy::Rebuild);
+    }
+
+    #[test]
+    fn absent_league_position_does_not_count_as_a_championship() {
+        let team = club(500, 1_000_000, 300_000);
+        let mut absent = ClubStrategy::derive(&team);
+        let mut without_table = absent.clone();
+        absent.evolve_after_season(&team, 0, 20);
+        without_table.evolve_after_season(&team, 0, 0);
+        assert_eq!(absent, without_table);
+    }
+
+    #[test]
+    fn out_of_range_league_position_does_not_force_a_rebuild() {
+        let team = club(500, 1_000_000, 300_000);
+        let mut invalid = ClubStrategy::derive(&team);
+        let mut without_table = invalid.clone();
+        invalid.evolve_after_season(&team, 21, 20);
+        without_table.evolve_after_season(&team, 0, 0);
+        assert_eq!(invalid, without_table);
     }
 }
