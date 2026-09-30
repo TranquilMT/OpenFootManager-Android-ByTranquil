@@ -292,4 +292,6 @@ mod tests {
     fn facility_investment_improves_training() { let mut g=game(); request_investment(&mut g,domain::team::FacilityType::Training).unwrap(); assert_eq!(g.teams[0].facilities.training,2); }
     #[test]
     fn facility_investment_is_once_per_season() { let mut g=game(); request_investment(&mut g,domain::team::FacilityType::Training).unwrap(); assert!(request_investment(&mut g,domain::team::FacilityType::Medical).is_err()); }
+    #[test]
+    fn low_confidence_blocks_board_funding() { let mut g=game(); g.manager.satisfaction=30; assert!(request_investment(&mut g,domain::team::FacilityType::Training).is_err()); }
 }
