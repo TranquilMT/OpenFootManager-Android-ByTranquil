@@ -219,3 +219,27 @@ pub fn captain_reactions(game: &mut Game, old: Option<&str>, new: Option<&str>) 
     }
     notify(game, "captaincy", "phase6.captainChanged");
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::clock::GameClock;
+    use domain::{manager::Manager, team::Team, league::League};
+    use chrono::{TimeZone, Utc};
+    fn game() -> Game {
+        let clock = GameClock::new(Utc.with_ymd_and_hms(2026, 8, 2, 12, 0, 0).unwrap());
+        let mut manager = Manager::new("manager".into(), "Will".into(), "Manager".into(), "1980-01-01".into(), "England".into());
+        manager.hire("club".into());
+        let mut team = Team::new("club".into(), "Club".into(), "CLB".into(), "England".into(), "City".into(), "Ground".into(), 40000);
+        team.reputation = 850;
+        team.finance = 100_000_000;
+        team.wage_budget = 10_000_000;
+        let mut game = Game::new(clock, manager, vec![team], vec![], vec![], vec![]);
+        game.league = Some(League::new("league".into(), "League".into(), 1, &["club".into(), "rival".into(), "other".into(), "fourth".into()]));
+        initialize(&mut game);
+        crate::board_objectives::generate_objectives(&mut game);
+        game
+    }
+    #[test]
+    fn old_room_json_loads_with_defaults() { let room: BoardRoom = serde_json::from_str("{}").unwrap(); assert!(room.contract.is_none()); assert_eq!(room.ownership_generation, 0); }
+}
