@@ -471,10 +471,11 @@ fn assign_unique_jersey_numbers(players: &mut [Player]) {
             player.jersey_number = None;
             continue;
         }
-        if let Some(number) = player.jersey_number {
-            if (1..=99).contains(&number) && used.insert(number) {
-                continue;
-            }
+        if player
+            .jersey_number
+            .is_some_and(|number| (1..=99).contains(&number) && used.insert(number))
+        {
+            continue;
         }
         let free = (1..=99).find(|number| !used.contains(number));
         player.jersey_number = free;
@@ -931,8 +932,8 @@ fn build_club(
     bonus_roles.dedup();
     let mut group_indices = [0usize; 4];
     for index in 0..squad_size {
-        let role = if index < SQUAD_SLOTS {
-            base_roles[index].clone()
+        let role = if let Some(role) = base_roles.get(index) {
+            role.clone()
         } else {
             bonus_roles.swap_remove(rng.random_range(0..bonus_roles.len()))
         };
