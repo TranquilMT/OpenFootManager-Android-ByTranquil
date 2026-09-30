@@ -55,7 +55,7 @@ export default function BoardRoomPanel({ gameState }: { gameState: GameStateData
           <div><dt>{t("phase6.salary")}</dt><dd className="font-semibold">{new Intl.NumberFormat(i18n.language, { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(room.contract.weekly_salary)}</dd></div>
           <div><dt>{t("phase6.expires")}</dt><dd>{room.contract.end_date}</dd></div>
           <div><dt>{t("phase6.ownership")}</dt><dd>{room.ownership_generation + 1}</dd></div>
-          <div><dt>{t("phase6.style")}</dt><dd>{t(`tactics.playStyle${room.contract.style}`)}</dd></div>
+          <div><dt>{t("phase6.style")}</dt><dd>{t(`team.playStyles.${room.contract.style}`)}</dd></div>
         </dl>
         {paused && <p className="mb-3 text-sm text-amber-700 dark:text-amber-300">{t("phase6.takeoverPause")}</p>}
         <form onSubmit={(event) => { event.preventDefault(); void submit(false); }} className="grid grid-cols-1 gap-3 sm:grid-cols-3">

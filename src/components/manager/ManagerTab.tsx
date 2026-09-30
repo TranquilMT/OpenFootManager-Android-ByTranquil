@@ -1,5 +1,6 @@
 import type { GameStateData } from "../../store/gameStore";
 import { Card, CardHeader, CardBody, ProgressBar, CountryFlag } from "../ui";
+import DressingRoomPanel from "./DressingRoomPanel";
 import BoardRoomPanel from "./BoardRoomPanel";
 import { ManagerCareerChart } from "./ManagerCareerChart";
 import { formatDate } from "../../lib/helpers";
@@ -76,6 +77,7 @@ export default function ManagerTab({ gameState, onSelectTeam }: ManagerTabProps)
       </Card>
 
       <BoardRoomPanel gameState={gameState} />
+      <DressingRoomPanel gameState={gameState} />
 
       {/* Career stats */}
       <Card accent="accent" className="md:col-span-2">
