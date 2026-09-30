@@ -1265,7 +1265,9 @@
       "LeaguePosition": "Termina entre os primeiros {{target}}",
       "Wins": "Ganha pelo menos {{target}} jogos",
       "GoalsScored": "Marca pelo menos {{target}} golos",
-      "FinancialStability": "Mantém a despesa salarial em ou abaixo de {{target}}% do orçamento"
+      "FinancialStability": "Mantém a despesa salarial em ou abaixo de {{target}}% do orçamento",
+      "YouthMinutes": "Dar {{target}} minutos a jogadores com menos de 22 anos",
+      "PlayingStyleMatches": "Usar o estilo acordado em {{target}} jogos da liga"
     }
   },
   "transfers": {
@@ -1775,7 +1777,7 @@
     "patchPlayers": "Mais jogadores de destaque, incluindo raras estrelas de nível 96.",
     "patchMatches": "Mais reações, remates à trave e comentário por voz opcional.",
     "patchMobile": "Controlos móveis, caixa de entrada, seleções e início de carreira melhorados.",
-    "patchWelcome": "Bem-vindo ao OFMtouch! Novidades da v0.5.2",
+    "patchWelcome": "Bem-vindo ao OFMtouch! Novidades da v0.6.0",
     "patchPortraits": "20 rostos fictícios de origem tornam os retratos dos jogadores mais variados.",
     "patchWorld": "Um mundo de futebol maior abrange 29 nações, com clubes mais fortes nas Américas e na Ásia.",
     "patchTransfers": "As estratégias dos clubes orientam empréstimos e transferências, com ofertas concorrentes e controlo do orçamento.",
@@ -1859,7 +1861,7 @@
     "fit": "APT",
     "keyStats": "Estatísticas-Chave"
   },
-"scouting": {
+  "scouting": {
     "shortlist": "Lista de favoritos",
     "shortlistEmpty": "Guarde jogadores aqui para os comparar mais tarde.",
     "addShortlist": "Adicionar aos favoritos",
@@ -2282,8 +2284,22 @@
       "PenaltyAwarded": "Penálti Assinalado"
     },
     "commentary": {
-      "Corner": {"headline": "Canto para", "lines": {"0": "Canto para {{team}}.", "1": "{{team}} prepara-se para marcar o canto.", "2": "{{team}} tem a oportunidade de cruzar no canto."}},
-      "FreeKick": {"headline": "Livre para", "lines": {"0": "Livre para {{team}}.", "1": "{{team}} prepara-se para marcar o livre.", "2": "O livre dá a {{team}} uma nova oportunidade de atacar."}},
+      "Corner": {
+        "headline": "Canto para",
+        "lines": {
+          "0": "Canto para {{team}}.",
+          "1": "{{team}} prepara-se para marcar o canto.",
+          "2": "{{team}} tem a oportunidade de cruzar no canto."
+        }
+      },
+      "FreeKick": {
+        "headline": "Livre para",
+        "lines": {
+          "0": "Livre para {{team}}.",
+          "1": "{{team}} prepara-se para marcar o livre.",
+          "2": "O livre dá a {{team}} uma nova oportunidade de atacar."
+        }
+      },
       "Goal": {
         "headline": "GOOOL!",
         "lines": {
@@ -4151,5 +4167,39 @@
   "generation": {
     "title": "Geração e Conclusão",
     "coverage": "Os teus pacotes cobrem"
+  },
+  "phase6": {
+    "boardRoom": "Direção e balneário",
+    "contractHelp": "Negocia o salário, objetivo na liga e duração. Objetivos mais fáceis reduzem a oferta salarial.",
+    "salary": "Salário semanal",
+    "expires": "Fim do contrato",
+    "ownership": "Era de propriedade",
+    "style": "Estilo do clube",
+    "leagueTarget": "Posição pretendida",
+    "years": "Duração (anos)",
+    "negotiate": "Negociar contrato",
+    "investment": "Investimento em instalações",
+    "requestInvestment": "Pedir financiamento",
+    "investmentHelp": "Uma vez por época, a direção pode pagar 25% de uma melhoria. Exige 50% de confiança e finanças saudáveis.",
+    "unavailable": "A direção está indisponível.",
+    "takeoverPause": "As negociações e investimentos estão suspensos durante a aquisição.",
+    "negotiationCooldown": "Espera 30 dias entre negociações.",
+    "offerRejected": "A direção rejeitou os termos. Reduz o salário ou propõe um objetivo mais ambicioso.",
+    "contractAgreed": "O contrato e o objetivo na liga foram acordados.",
+    "takeoverStarted": "O clube está em negociações de aquisição. Decisão prevista em 30 dias.",
+    "takeoverCompleted": "Os novos proprietários concluíram a aquisição e investiram no clube. O contrato mantém-se.",
+    "contractRenewal": "O contrato terminou. Visita a direção para negociar um novo.",
+    "investmentRejected": "Financiamento recusado. Melhora a confiança e as finanças ou espera pela próxima época.",
+    "investmentApproved": "A direção aprovou a melhoria e pagou 25% do custo.",
+    "facilityMaximum": "A instalação atingiu o nível máximo.",
+    "captainChanged": "A escolha de capitão afetou os jogadores envolvidos.",
+    "captainConflict": "Escolhe jogadores diferentes para capitão e vice-capitão.",
+    "dressingRoom": "Balneário",
+    "promise": "Promessa de minutos: faltam {{count}} jogos",
+    "concerns": "Preocupações dos jogadores",
+    "patchBoard": "Objetivos mais justos na liga e expectativas de formação e estilo.",
+    "patchContracts": "Negocia salário, duração do contrato e objetivo na liga.",
+    "patchClub": "Aquisições de clubes e apoio para instalações.",
+    "patchSquad": "Preocupações mais claras, reações à capitania e prazos das promessas."
   }
 }
