@@ -1265,7 +1265,9 @@
       "LeaguePosition": "Skončit do {{target}}. místa",
       "Wins": "Vyhrát alespoň {{target}} zápasů",
       "GoalsScored": "Vstřelit alespoň {{target}} gólů",
-      "FinancialStability": "Udržet mzdové výdaje na nebo pod {{target}} % rozpočtu"
+      "FinancialStability": "Udržet mzdové výdaje na nebo pod {{target}} % rozpočtu",
+      "YouthMinutes": "Dát hráčům do 22 let {{target}} minut",
+      "PlayingStyleMatches": "Použít dohodnutý styl v {{target}} ligových zápasech"
     }
   },
   "transfers": {
@@ -1775,7 +1777,7 @@
     "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
     "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
     "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
-    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.5.2",
+    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.0",
     "patchPortraits": "20 fiktivních výchozích tváří přináší pestřejší portréty hráčů.",
     "patchWorld": "Fotbalový svět zahrnuje 29 zemí a silnější kluby v Americe a Asii.",
     "patchTransfers": "Strategie klubů řídí hostování a přestupy včetně konkurenčních nabídek a kontroly rozpočtu.",
@@ -1859,7 +1861,7 @@
     "fit": "KOND",
     "keyStats": "Klíčové statistiky"
   },
-"scouting": {
+  "scouting": {
     "shortlist": "Seznam hráčů",
     "shortlistEmpty": "Uložte si sem hráče pro pozdější porovnání.",
     "addShortlist": "Přidat do seznamu",
@@ -2316,8 +2318,22 @@
       "PenaltyAwarded": "Nařízená penalta"
     },
     "commentary": {
-      "Corner": {"headline": "Rohový kop pro", "lines": {"0": "Rohový kop pro {{team}}.", "1": "{{team}} se chystá rozehrát roh.", "2": "{{team}} má příležitost rozehrát roh."}},
-      "FreeKick": {"headline": "Přímý kop pro", "lines": {"0": "Přímý kop pro {{team}}.", "1": "{{team}} se chystá rozehrát přímý kop.", "2": "Přímý kop dává týmu {{team}} šanci zaútočit."}},
+      "Corner": {
+        "headline": "Rohový kop pro",
+        "lines": {
+          "0": "Rohový kop pro {{team}}.",
+          "1": "{{team}} se chystá rozehrát roh.",
+          "2": "{{team}} má příležitost rozehrát roh."
+        }
+      },
+      "FreeKick": {
+        "headline": "Přímý kop pro",
+        "lines": {
+          "0": "Přímý kop pro {{team}}.",
+          "1": "{{team}} se chystá rozehrát přímý kop.",
+          "2": "Přímý kop dává týmu {{team}} šanci zaútočit."
+        }
+      },
       "Goal": {
         "headline": "GÓÓÓL!",
         "lines": {
@@ -4151,5 +4167,39 @@
   "generation": {
     "title": "Generování a dokončení",
     "coverage": "Vaše balíčky pokrývají"
+  },
+  "phase6": {
+    "boardRoom": "Vedení a kabina",
+    "contractHelp": "Vyjednejte plat, ligový cíl a délku smlouvy. Snazší cíle snižují nabídku platu.",
+    "salary": "Týdenní plat",
+    "expires": "Konec smlouvy",
+    "ownership": "Éra vlastníků",
+    "style": "Herní styl klubu",
+    "leagueTarget": "Cílové umístění",
+    "years": "Délka (roky)",
+    "negotiate": "Vyjednat smlouvu",
+    "investment": "Investice do zařízení",
+    "requestInvestment": "Požádat o financování",
+    "investmentHelp": "Jednou za sezonu může vedení zaplatit 25 % vylepšení. Je nutná důvěra 50 % a zdravé finance.",
+    "unavailable": "Vedení je nyní nedostupné.",
+    "takeoverPause": "Během převzetí jsou jednání a investice pozastaveny.",
+    "negotiationCooldown": "Mezi jednáními počkejte 30 dní.",
+    "offerRejected": "Podmínky byly odmítnuty. Snižte plat nebo navrhněte vyšší ligový cíl.",
+    "contractAgreed": "Smlouva a ligový cíl byly dohodnuty.",
+    "takeoverStarted": "Klub jedná o převzetí. Rozhodnutí se očekává za 30 dní.",
+    "takeoverCompleted": "Noví vlastníci převzali klub a investovali. Vaše smlouva platí dál.",
+    "contractRenewal": "Smlouva skončila. Navštivte vedení a dohodněte novou.",
+    "investmentRejected": "Financování odmítnuto. Zlepšete důvěru a finance nebo počkejte na další sezonu.",
+    "investmentApproved": "Vedení schválilo vylepšení a zaplatilo 25 % nákladů.",
+    "facilityMaximum": "Zařízení dosáhlo nejvyšší úrovně.",
+    "captainChanged": "Volba kapitána ovlivnila dotčené hráče.",
+    "captainConflict": "Zvolte různé hráče jako kapitána a zástupce.",
+    "dressingRoom": "Kabina",
+    "promise": "Slib herního času: zbývá {{count}} zápasů",
+    "concerns": "Starosti hráčů",
+    "patchBoard": "Spravedlivější ligové cíle, rozvoj mládeže a herní styl.",
+    "patchContracts": "Vyjednejte plat, délku smlouvy a ligový cíl.",
+    "patchClub": "Převzetí klubů a podpora vylepšení zařízení.",
+    "patchSquad": "Jasnější starosti hráčů, reakce na kapitána a termíny slibů."
   }
 }
