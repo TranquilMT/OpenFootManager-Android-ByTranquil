@@ -468,6 +468,25 @@ mod tests {
     }
 
     #[test]
+    fn final_salary_is_paid_when_advance_skips_contract_expiry() {
+        let mut g = game();
+        g.board_rooms
+            .get_mut("club")
+            .unwrap()
+            .contract
+            .as_mut()
+            .unwrap()
+            .end_date = "2026-08-09".into();
+        let salary = weekly_salary(&g, "club");
+        let cash = g.teams[0].finance;
+        g.clock.advance_days(10);
+        process_day(&mut g);
+        assert_eq!(g.teams[0].finance, cash - salary);
+        process_day(&mut g);
+        assert_eq!(g.teams[0].finance, cash - salary);
+    }
+
+    #[test]
     fn old_room_json_loads_with_defaults() {
         let room: BoardRoom = serde_json::from_str("{}").unwrap();
         assert!(room.contract.is_none());
