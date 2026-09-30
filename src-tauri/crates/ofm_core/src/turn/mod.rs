@@ -190,6 +190,7 @@ where
     crate::finances::process_weekly_finances(game);
 
     // Board objectives (generate if missing, update progress)
+    crate::board_room::process_day(game);
     board_objectives::generate_objectives(game);
     board_objectives::update_objective_progress(game);
 
@@ -230,6 +231,7 @@ pub fn finish_live_match_day(game: &mut Game) {
     crate::contracts::process_contract_expiries(game);
     crate::finances::process_weekly_finances(game);
 
+    crate::board_room::process_day(game);
     board_objectives::generate_objectives(game);
     board_objectives::update_objective_progress(game);
 
