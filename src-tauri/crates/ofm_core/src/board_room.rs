@@ -258,4 +258,6 @@ mod tests {
     fn rejected_salary_keeps_contract_unchanged() { let mut g=game(); let before=serde_json::to_string(&g.board_rooms).unwrap(); assert!(negotiate(&mut g, u32::MAX, 2, 1).is_err()); assert_eq!(before, serde_json::to_string(&g.board_rooms).unwrap()); }
     #[test]
     fn position_zero_is_rejected() { let mut g=game(); assert!(negotiate(&mut g, 1000, 0, 1).is_err()); }
+    #[test]
+    fn position_beyond_table_is_rejected() { let mut g=game(); assert!(negotiate(&mut g, 1000, 5, 1).is_err()); }
 }
