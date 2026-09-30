@@ -108,7 +108,7 @@ fn notify(game: &mut Game, kind: &str, body: &str) {
     use domain::message::{InboxMessage, MessageCategory};
     let today = game.clock.current_date.format("%Y-%m-%d").to_string();
     let id = game.manager.team_id.as_deref().unwrap_or_default();
-    let message = InboxMessage::new(format!("board_room_{kind}_{id}_{today}"),
+    let message = InboxMessage::new(format!("board_room_{kind}_{id}_{}", if kind == "renewal" { game.board_rooms.get(id).and_then(|room| room.contract.as_ref()).map(|contract| contract.end_date.as_str()).unwrap_or(&today) } else { &today }),
         "phase6.boardRoom".to_string(), body.to_string(), "be.sender.boardOfDirectors".to_string(), today)
         .with_category(MessageCategory::BoardDirective)
         .with_i18n("phase6.boardRoom", body, std::collections::HashMap::new())
