@@ -525,6 +525,17 @@ mod tests {
     }
 
     #[test]
+    fn completed_takeover_cannot_credit_cash_twice() {
+        let mut g = game();
+        g.board_rooms.get_mut("club").unwrap().takeover_due = Some("2026-08-02".into());
+        complete_takeover(&mut g, "club");
+        let cash = g.teams[0].finance;
+        complete_takeover(&mut g, "club");
+        assert_eq!(g.teams[0].finance, cash);
+        assert_eq!(g.board_rooms["club"].ownership_generation, 1);
+    }
+
+    #[test]
     fn old_room_json_loads_with_defaults() {
         let room: BoardRoom = serde_json::from_str("{}").unwrap();
         assert!(room.contract.is_none());
