@@ -352,6 +352,18 @@ pub fn evaluate_objectives(game: &Game) -> i8 {
     satisfaction_delta(met_count, total)
 }
 
+fn is_young(player: &domain::player::Player, game: &Game) -> bool {
+    chrono::NaiveDate::parse_from_str(&player.date_of_birth, "%Y-%m-%d")
+        .ok()
+        .is_some_and(|born| {
+            game.clock
+                .current_date
+                .date_naive()
+                .years_since(born)
+                .is_some_and(|age| age <= 21)
+        })
+}
+
 #[cfg(test)]
 mod tests {
     use super::{evaluate_objectives, generate_objectives, update_objective_progress};
@@ -1107,16 +1119,4 @@ mod tests {
         ];
         assert_eq!(evaluate_objectives(&game), -15);
     }
-}
-
-fn is_young(player: &domain::player::Player, game: &Game) -> bool {
-    chrono::NaiveDate::parse_from_str(&player.date_of_birth, "%Y-%m-%d")
-        .ok()
-        .is_some_and(|born| {
-            game.clock
-                .current_date
-                .date_naive()
-                .years_since(born)
-                .is_some_and(|age| age <= 21)
-        })
 }

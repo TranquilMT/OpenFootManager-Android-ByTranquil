@@ -395,6 +395,21 @@ pub fn captain_reactions(game: &mut Game, old: Option<&str>, new: Option<&str>) 
     notify(game, "captaincy", "phase6.captainChanged");
 }
 
+pub fn weekly_salary(game: &Game, team_id: &str) -> i64 {
+    if game.manager.team_id.as_deref() != Some(team_id) {
+        return 0;
+    }
+    game.board_rooms
+        .get(team_id)
+        .filter(|room| room.manager_id == game.manager.id)
+        .and_then(|room| room.contract.as_ref())
+        .filter(|contract| {
+            contract.end_date.as_str() >= game.clock.current_date.date_naive().to_string().as_str()
+        })
+        .map(|contract| i64::from(contract.weekly_salary))
+        .unwrap_or(0)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -688,19 +703,4 @@ mod tests {
         credit_style_match(&mut g, "club", "rival");
         assert_eq!(g.board_rooms["club"].style_matches, 0);
     }
-}
-
-pub fn weekly_salary(game: &Game, team_id: &str) -> i64 {
-    if game.manager.team_id.as_deref() != Some(team_id) {
-        return 0;
-    }
-    game.board_rooms
-        .get(team_id)
-        .filter(|room| room.manager_id == game.manager.id)
-        .and_then(|room| room.contract.as_ref())
-        .filter(|contract| {
-            contract.end_date.as_str() >= game.clock.current_date.date_naive().to_string().as_str()
-        })
-        .map(|contract| i64::from(contract.weekly_salary))
-        .unwrap_or(0)
 }
