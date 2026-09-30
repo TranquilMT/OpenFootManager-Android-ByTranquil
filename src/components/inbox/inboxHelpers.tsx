@@ -271,6 +271,17 @@ export function isNavigateAction(
   return typeof actionType === "object" && "NavigateTo" in actionType;
 }
 
+export function isOfferReviewNavigation(
+  messageId: string,
+  actionType: MessageAction["action_type"],
+): boolean {
+  return (
+    isNavigateAction(actionType) &&
+    /[?&]tab=Transfers(?:&|$)/i.test(actionType.NavigateTo.route) &&
+    /^(?:loan_offer_|transfer_offer_|transfer_interest_)/.test(messageId)
+  );
+}
+
 export function isChooseOptionAction(
   actionType: MessageAction["action_type"],
 ): actionType is ChooseOptionActionType {

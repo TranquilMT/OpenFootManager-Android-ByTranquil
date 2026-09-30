@@ -246,6 +246,9 @@ pub fn evaluate_transfer_market(game: &mut Game) {
 
     let mut shortlist: Vec<MarketTarget> = Vec::new();
     for player in &game.players {
+        if player.squad_role == domain::player::SquadRole::Youth {
+            continue;
+        }
         let Some(owner_team_id) = player.team_id.as_deref() else {
             continue;
         };

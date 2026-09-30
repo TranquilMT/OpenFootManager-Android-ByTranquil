@@ -21,7 +21,13 @@ pub fn upgrade_player_identity(player: &mut Player, assigned_slot: Option<&Posit
         return false;
     }
 
-    let natural_position = infer_natural_position(player, assigned_slot);
+    // An old alternate bucket can require migration even when the generated
+    // primary role is already precise. Never replace that primary role.
+    let natural_position = if player.natural_position.is_legacy_bucket() {
+        infer_natural_position(player, assigned_slot)
+    } else {
+        player.natural_position.clone()
+    };
     let alternate_positions = infer_alternate_positions(player, &natural_position, assigned_slot);
     let footedness = infer_footedness(player, &natural_position, assigned_slot);
     let weak_foot = infer_weak_foot(player, &alternate_positions, footedness);
@@ -523,6 +529,7 @@ mod tests {
         let changed = upgrade_player_identity(&mut player, Some(&Position::RightBack));
 
         assert!(changed);
+        assert_eq!(player.natural_position, Position::RightBack);
         assert_eq!(player.natural_position, Position::RightBack);
         assert_eq!(player.footedness, Footedness::Right);
         assert!(player.weak_foot >= 2);

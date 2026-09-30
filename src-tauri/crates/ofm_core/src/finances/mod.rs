@@ -199,7 +199,7 @@ pub fn calc_wages(game: &Game, team_id: &str) -> i64 {
         .map(|staff_member| staff_member.wage as i64 / 52)
         .sum();
 
-    player_wages + staff_wages
+    player_wages + staff_wages + crate::board_room::weekly_salary(game, team_id)
 }
 
 pub fn calc_annual_wages(game: &Game, team_id: &str) -> i64 {
@@ -216,7 +216,7 @@ pub fn calc_annual_wages(game: &Game, team_id: &str) -> i64 {
         .map(|staff_member| staff_member.wage as i64)
         .sum();
 
-    player_wages + staff_wages
+    player_wages + staff_wages + crate::board_room::weekly_salary(game, team_id) * 52
 }
 
 fn player_annual_wage_for_team(player: &domain::player::Player, team_id: &str) -> i64 {

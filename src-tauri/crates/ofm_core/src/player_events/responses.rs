@@ -113,6 +113,8 @@ fn treatment_key(message_id: &str, option_id: &str) -> String {
         "morale_talk"
     } else if message_id.starts_with("bench_complaint_") {
         "bench_complaint"
+    } else if message_id.starts_with("transfer_request_") {
+        "transfer_request"
     } else if message_id.starts_with("happy_player_") {
         "happy_player"
     } else if message_id.starts_with("contract_concern_") {
@@ -139,6 +141,15 @@ fn base_trust_delta(message_id: &str, option_id: &str) -> i16 {
             "explain" => 3,
             "promise_chance" => 6,
             "prove_yourself" => -2,
+            _ => 0,
+        };
+    }
+
+    if message_id.starts_with("transfer_request_") {
+        return match option_id {
+            "discuss" => 3,
+            "allow_move" => 5,
+            "refuse" => -8,
             _ => 0,
         };
     }
@@ -406,14 +417,14 @@ fn implied_promise(message_id: &str, option_id: &str) -> Option<PlayerPromise> {
     if message_id.starts_with("morale_talk_") && option_id == "promise_time" {
         return Some(PlayerPromise {
             kind: PlayerPromiseKind::PlayingTime,
-            matches_remaining: 1,
+            matches_remaining: 2,
         });
     }
 
     if message_id.starts_with("bench_complaint_") && option_id == "promise_chance" {
         return Some(PlayerPromise {
             kind: PlayerPromiseKind::PlayingTime,
-            matches_remaining: 1,
+            matches_remaining: 2,
         });
     }
 
@@ -423,6 +434,7 @@ fn implied_promise(message_id: &str, option_id: &str) -> Option<PlayerPromise> {
 fn should_apply_talk_cooldown(message_id: &str) -> bool {
     message_id.starts_with("morale_talk_")
         || message_id.starts_with("bench_complaint_")
+        || message_id.starts_with("transfer_request_")
         || message_id.starts_with("happy_player_")
         || message_id.starts_with("contract_concern_")
 }
@@ -498,6 +510,22 @@ pub fn apply_player_response(
                     )
                 }
             }
+            _ => return None,
+        }
+    } else if message_id.starts_with("transfer_request_") {
+        match option_id {
+            "discuss" => outcome(
+                rng.random_range(0..=5),
+                "be.msg.playerEvent.effects.transferRequest.discuss",
+            ),
+            "allow_move" => outcome(
+                rng.random_range(3..=8),
+                "be.msg.playerEvent.effects.transferRequest.allowMove",
+            ),
+            "refuse" => outcome(
+                rng.random_range(-14..=-7),
+                "be.msg.playerEvent.effects.transferRequest.refuse",
+            ),
             _ => return None,
         }
     } else if message_id.starts_with("happy_player_") {
@@ -596,8 +624,14 @@ pub fn apply_player_response(
         player.morale_core.manager_trust = trust;
         update_recent_treatment(player, &action_key);
 
-        if let Some(promise) = implied_promise(message_id, option_id) {
+        if player.morale_core.pending_promise.is_none()
+            && let Some(promise) = implied_promise(message_id, option_id)
+        {
             player.morale_core.pending_promise = Some(promise);
+        }
+
+        if message_id.starts_with("transfer_request_") && option_id == "allow_move" {
+            player.transfer_listed = true;
         }
 
         if should_apply_talk_cooldown(message_id) {
@@ -672,4 +706,66 @@ pub fn apply_player_response(
         i18n_key: outcome.effect_key,
         i18n_params: outcome.i18n_params,
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::clock::GameClock;
+    use crate::player_events::message_builders::transfer_request_message;
+    use domain::player::Position;
+
+    #[test]
+    fn accepting_a_transfer_request_lists_the_player_and_resolves_the_inbox_action() {
+        let start = chrono::DateTime::parse_from_rfc3339("2026-06-01T00:00:00Z")
+            .unwrap()
+            .with_timezone(&chrono::Utc);
+        let player = Player::new(
+            "player-1".to_string(),
+            "Turner".to_string(),
+            "Alex Turner".to_string(),
+            "2001-01-01".to_string(),
+            "ENG".to_string(),
+            Position::Striker,
+            serde_json::from_value(serde_json::json!({
+                "pace": 60, "stamina": 60, "strength": 60,
+                "passing": 60, "shooting": 60, "tackling": 60,
+                "dribbling": 60, "defending": 60,
+                "positioning": 60, "vision": 60, "decisions": 60
+            }))
+            .unwrap(),
+        );
+        let message = transfer_request_message(
+            "transfer_request_player-1_2026",
+            &player.id,
+            &player.match_name,
+            "2026-06-01",
+        );
+        let mut game = Game::new(
+            GameClock::new(start),
+            domain::manager::Manager::new(
+                "manager".to_string(),
+                "Test".to_string(),
+                "Manager".to_string(),
+                "1980-01-01".to_string(),
+                "ENG".to_string(),
+            ),
+            vec![],
+            vec![player],
+            vec![],
+            vec![message],
+        );
+        let result = apply_player_response(
+            &mut game,
+            "transfer_request_player-1_2026",
+            "respond",
+            "allow_move",
+        );
+        assert_eq!(
+            result.unwrap().i18n_key,
+            "be.msg.playerEvent.effects.transferRequest.allowMove"
+        );
+        assert!(game.players[0].transfer_listed);
+        assert!(game.messages[0].actions[0].resolved);
+    }
 }

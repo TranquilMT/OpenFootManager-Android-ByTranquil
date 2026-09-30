@@ -24,7 +24,7 @@
     "openGithub": "GitHub-Repository von OFMtouch öffnen",
     "openOriginalGithub": "Ursprüngliches GitHub-Repository von OpenFootManager öffnen",
     "originalGame": "Originalspiel",
-    "doNotShowWhatsNew": "Für v0.3.6 nicht erneut anzeigen",
+    "doNotShowWhatsNew": "Für v0.5.2 nicht erneut anzeigen",
     "continueToGame": "Weiter",
     "mainMenu": "Hauptmenü",
     "worldEditor": "Welt-Editor"
@@ -381,6 +381,9 @@
     "openScouting": "Scouting öffnen",
     "recruitmentWorkflowTitle": "Jugendrekrutierungs-Workflow",
     "recruitmentWorkflowHint": "Starte, brich ab oder weise Jugendsuchen neu zu, ohne die Jugendakademie-Ansicht zu verlassen.",
+    "tournamentTitle": "Jugendturnier",
+    "tournamentReady": "Bereit fürs nächste Jugendspiel: {{prospects}}/12 Akademiespieler und {{helpers}} Profis unter 21.",
+    "tournamentNeeds": "Für 14 Spieler brauchst du 12 Talente und zwei verfügbare Profis unter 21. Aktuell: {{prospects}}/12 Talente, {{helpers}} Helfer.",
     "noEligibleSeniorPlayers": "Derzeit stehen keine berechtigten U21-Profispieler zur Verfügung.",
     "youthPlayers": "Jugendspieler",
     "avgOvr": "Ø OVR",
@@ -1262,7 +1265,9 @@
       "LeaguePosition": "Beende die Saison unter den Top {{target}}",
       "Wins": "Gewinne mindestens {{target}} Spiele",
       "GoalsScored": "Erziele mindestens {{target}} Tore",
-      "FinancialStability": "Halte die Lohnausgaben bei höchstens {{target}} % des Budgets"
+      "FinancialStability": "Halte die Lohnausgaben bei höchstens {{target}} % des Budgets",
+      "YouthMinutes": "Unter-22-Spielern {{target}} Spielminuten geben",
+      "PlayingStyleMatches": "Den vereinbarten Stil in {{target}} Ligaspielen nutzen"
     }
   },
   "transfers": {
@@ -1772,17 +1777,35 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.3.6",
+    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.0",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
     "patchDevelopment": "Spielzeit fördert junge Spieler; Jugend-Scoutberichte vermeiden doppelte Namen.",
+    "careerHighlights": "Neue Karrieren werden auch mit zusätzlichen Kaderspielern zuverlässig gespeichert.",
+    "careerInbox": "Startelf und Rollen bleiben korrekt; die Kaderübersicht zeigt natürliche Positionen.",
+    "careerSeason": "Die Kaderliste ist auf Smartphones kompakter und besser lesbar.",
+    "careerReliability": "Fehlgeschlagene Spielstände hinterlassen keine Teildateien; neue Tests prüfen Nummern und Rollen.",
+    "careerYouth": "Die Akademie ist vom Profikader mit 22–26 Spielern getrennt, mit Trainerberichten, Beförderung und 12 Plätzen.",
+    "careerYouthScouting": "Profi- und Jugendscouting sind getrennt; Jugendspiele brauchen 12 Talente und zwei Profis unter 21.",
+    "careerRules": "Regelprüfung 2026/27: Schnellere halbautomatische Abseitsprüfung ist vorgesehen; Regel 11 bleibt in diesem Build unverändert.",
+    "hotfixInjuryDetails": "Verletzungsnamen werden in Spiel- und Tagesrückblicken korrekt angezeigt.",
+    "hotfixOfferReview": "Leih- und Transferangebote öffnen die Angebote des Spielers und bleiben im Posteingang erneut aufrufbar.",
+    "hotfixPortraitNeck": "Bei Porträts bleibt die Haut am Hals erhalten; gespeicherte Bilder werden erneuert.",
+    "hotfixConversations": "Für Einsatzzeitversprechen bleiben nun zwei Spiele Zeit.",
+    "nextPreview": "Ausblick: Wir prüfen mehr Kaderplanung und persönlichere Gespräche mit Spielern.",
+    "history0504": "Zusätzliche Tests prüfen Karriere, Spielstände und das mobile Menü.",
+    "history0503": "Saisonwechsel und Spielergebnisse wirken sich auf die Karriere aus.",
+    "history0502": "Karrierenachrichten und Entscheidungen lassen sich im Posteingang leichter verfolgen.",
+    "history0501": "Eine neue Managerkarriere vertieft Vereinsentscheidungen und die Saisonplanung.",
     "hotfixInbox": "Posteingangsnachrichten sind auf dem Handy lesbar; Bestätigungen benötigen weniger Speicher.",
     "hotfixSave": "Spiel speichern ist jetzt in den Einstellungen, damit Datum und Fortsetzen mehr Platz haben.",
     "hotfixMatch": "Verletzungen aus Spielen bleiben in der Karriere bestehen und werden medizinisch gemeldet.",
     "hotfixStability": "Zusätzliche Prüfungen für Nachrichtenaktionen, Spielstände, Android-Build und Karrieresimulation.",
     "patchFixes": "Rohe Verletzungsnamen, doppelte Vereinsnamen und Fehler bei der Welterstellung behoben.",
-    "patchThanks": "Danke fürs Spielen! Hilf uns mit Fehlermeldungen auf GitHub, das Spiel zu verbessern.",
+    "patchThanks": "Danke an alle, die neue Builds testen, Screenshots teilen und Fehler melden. Eure Geduld und Rückmeldungen prägen jedes Update. Bitte meldet weitere Probleme auf GitHub.",
+    "patchHistory": "Updateverlauf",
+    "patchHistoryClose": "Schließen",
     "patchSignature": "Danke, TranquilMT",
     "patchReportIssue": "Problem auf GitHub melden",
     "about": "Über",
@@ -2261,8 +2284,22 @@
       "PenaltyAwarded": "Elfmeter gegeben"
     },
     "commentary": {
-      "Corner": {"headline": "Eckball für", "lines": {"0": "Eckball für {{team}}.", "1": "{{team}} bere Maß für die Ecke.", "2": "{{team}} kann den Ball von der Ecke hereinbringen."}},
-      "FreeKick": {"headline": "Freistoß für", "lines": {"0": "Freistoß für {{team}}.", "1": "{{team}} bere Maß für den Freistoß.", "2": "Der Freistoß eröffnet {{team}} eine neue Angriffschance."}},
+      "Corner": {
+        "headline": "Eckball für",
+        "lines": {
+          "0": "Eckball für {{team}}.",
+          "1": "{{team}} bere Maß für die Ecke.",
+          "2": "{{team}} kann den Ball von der Ecke hereinbringen."
+        }
+      },
+      "FreeKick": {
+        "headline": "Freistoß für",
+        "lines": {
+          "0": "Freistoß für {{team}}.",
+          "1": "{{team}} bere Maß für den Freistoß.",
+          "2": "Der Freistoß eröffnet {{team}} eine neue Angriffschance."
+        }
+      },
       "Goal": {
         "headline": "TOOOR!",
         "lines": {
@@ -2631,6 +2668,7 @@
         "noLeague": "Für dieses Spiel sind keine Ligadaten verfügbar.",
         "fixtureNotFound": "Das ausgewählte Spiel konnte nicht gefunden werden.",
         "emptySquad": "Eine der Mannschaften hat keine verfügbaren Spieler, daher kann das Spiel nicht stattfinden.",
+        "insufficientMatchdayPlayers": "Für ein Spiel sind mindestens 14 verfügbare Profis nötig (11 Starter und drei Ersatzspieler).",
         "maxSubstitutionsReached": "Maximale Anzahl an Auswechslungen erreicht",
         "preMatchSwapTooLate": "Vorab-Wechsel sind nur vor dem Anstoß erlaubt",
         "cannotSubstituteSentOffPlayer": "Ein des Feldes verwiesener Spieler kann nicht ausgewechselt werden",
@@ -2820,6 +2858,9 @@
         "staffMemberNotScout": "Der Mitarbeiter ist kein Scout",
         "scoutNotInTeam": "Der Scout gehört nicht zu deinem Team",
         "cannotScoutOwnPlayer": "Du kannst deine eigenen Spieler nicht scouten",
+        "youthRequiresPromotion": "Akademiespieler müssen vor Profi-Scouting oder Transfers befördert werden. Nutze die Jugendsuche für Talente.",
+        "academyFull": "Die Akademie ist voll (12 Spieler). Befördere oder entlasse ein Talent.",
+        "seniorSquadFull": "Der Profikader ist voll (26 Spieler). Gib einen Platz für die Beförderung frei.",
         "scoutAssignmentFull": "Der Scout ist bereits mit einer anderen Beobachtungsaufgabe belegt ({{currentCount}}/{{maxSlots}} Einsätze).",
         "playerAlreadyScouted": "Dieser Spieler wird bereits beobachtet",
         "youthSearchAlreadyActive": "Eine passende Jugendsuche ist bereits aktiv",
@@ -2837,6 +2878,7 @@
       }
     },
     "sender": {
+      "youthCoach": "Jugendtrainer",
       "boardOfDirectors": "Vorstand",
       "leagueOffice": "Ligabüro",
       "assistantManager": "Co-Trainer",
@@ -2853,6 +2895,7 @@
       "transferCommittee": "Transferausschuss"
     },
     "role": {
+      "youthCoach": "Jugendtrainer",
       "chairman": "Vorsitzender",
       "competitionSecretary": "Wettbewerbssekretär",
       "assistantManager": "Co-Trainer",
@@ -3046,6 +3089,20 @@
               "description": "Fordere ihn heraus, sich seinen Platz zu verdienen. Riskant — kann motivieren oder frustrieren."
             }
           },
+          "transferRequest": {
+            "discuss": {
+              "label": "Über die Zukunft sprechen",
+              "description": "Hör zu und bitte den Spieler, dem Verein noch eine Chance zu geben."
+            },
+            "allowMove": {
+              "label": "Angebote anhören",
+              "description": "Setze den Spieler auf die Transferliste. Für einen Wechsel ist weiterhin ein Angebot nötig."
+            },
+            "refuse": {
+              "label": "Anfrage ablehnen",
+              "description": "Behalte den Spieler, riskiere aber, ihn noch mehr zu verärgern."
+            }
+          },
           "happyPlayer": {
             "praiseBack": {
               "label": "Lob erwidern",
@@ -3097,6 +3154,11 @@
               "positive": "Der Spieler ist motiviert, seinen Wert zu beweisen. Moral {{delta}}",
               "negative": "Der Spieler fühlt sich abgewiesen und beleidigt. Moral {{delta}}"
             }
+          },
+          "transferRequest": {
+            "discuss": "Der Spieler ist zu weiteren Gesprächen bereit. Moral {{delta}}",
+            "allowMove": "Der Spieler schätzt deine Ehrlichkeit und ist für Angebote verfügbar. Moral {{delta}}",
+            "refuse": "Der Spieler fühlt sich im Verein gefangen. Moral {{delta}}"
           },
           "happyPlayer": {
             "praiseBack": "Der Spieler strahlt über das Lob. Moral {{delta}}",
@@ -3252,6 +3314,10 @@
         "body0": "Trainer, {{player}} ist zu dir gekommen. Der Spieler ist frustriert über die fehlende Spielzeit in den letzten Partien und will wissen, was nötig ist, um wieder in die Mannschaft zu kommen.\n\n\"Ich habe das Gefühl, gut zu trainieren, aber ich bekomme keine Chance, das auf dem Platz zu zeigen.\"",
         "body1": "{{player}} stand unzufrieden vor deiner Bürotür. Der Spieler kam in den letzten Partien nicht zum Einsatz und will Antworten.\n\n\"Ich bin zu diesem Verein gekommen, um Fußball zu spielen. Wenn ich nicht in deinen Plänen vorkomme, sag es mir bitte direkt.\""
       },
+      "transferRequest": {
+        "subject": "{{player}} — Bittet um einen Transfer",
+        "body": "{{player}} möchte unter vier Augen sprechen. Wegen der geringen Einsatzzeit sieht der Spieler seine Karriere gebremst und möchte einen Wechsel prüfen.\n\nDu kannst zuhören, Angebote zulassen oder um einen Verbleib bitten."
+      },
       "happyPlayer": {
         "subject": "{{player}} — Fühlt sich großartig",
         "body0": "{{player}} schaute mit einem breiten Lächeln in deinem Büro vorbei. Der Spieler fühlt sich mit seiner Form und der Richtung der Mannschaft sehr wohl.\n\n\"Ich wollte nur sagen, dass ich meinen Fußball gerade wirklich genieße, Trainer. Die Stimmung in der Kabine ist fantastisch.\"",
@@ -3321,6 +3387,7 @@
         },
         "effect": {
           "sign": "{{player}} hat einen Jugendvertrag unterschrieben und ist deiner Akademie beigetreten.",
+          "academyFull": "Die Akademie ist voll (12 Spieler). Befördere oder entlasse ein Talent.",
           "shortlist": "{{player}} wurde zu deiner Jugend-Shortlist hinzugefügt.",
           "discard": "{{player}} wurde aus dem Bericht zur Jugendrekrutierung entfernt."
         }
@@ -3328,6 +3395,17 @@
       "youthRecruitmentShortlist": {
         "subject": "Jugendtalent auf der Shortlist",
         "body": "{{player}} wurde auf deine Jugend-Shortlist verschoben. Du kannst ihn später erneut prüfen, bevor du eine endgültige Entscheidung triffst."
+      },
+      "academyReview": {
+        "subject": "Akademiebericht: {{player}}",
+        "progress": "{{player}} entwickelt sich in der Akademie (GES {{ovr}}, Potenzial {{potential}}). Trainiere weiter und prüfe den Fortschritt nächsten Monat.",
+        "ready": "{{player}} hat sich gut entwickelt (GES {{ovr}}, Potenzial {{potential}}). Eine Chance bei den Profis ist möglich. Die Beförderung erfolgt in der Jugendakademie."
+      },
+      "academyFixture": {
+        "subject": "Jugendturnier",
+        "win": "Die Akademie gewann ihr Jugendspiel mit {{count}} Spielern (Stärke {{rating}}). Die Talente sammelten Erfahrung.",
+        "draw": "Die Akademie spielte mit {{count}} Spielern unentschieden (Stärke {{rating}}). Die Talente sammelten Erfahrung.",
+        "loss": "Die Akademie verlor ihr Jugendspiel mit {{count}} Spielern (Stärke {{rating}}). Die Talente sammelten Erfahrung."
       },
       "scoutReport": {
         "subject": "Scout-Bericht: {{player}}",
@@ -4089,5 +4167,40 @@
   "generation": {
     "title": "Generierung & Vervollständigung",
     "coverage": "Deine Pakete umfassen"
+  },
+  "phase6": {
+    "boardRoom": "Vorstand und Kabine",
+    "contractHelp": "Verhandle Gehalt, Ligaziel und Laufzeit. Leichtere Ziele bedeuten niedrigere Gehaltsangebote.",
+    "salary": "Wochengehalt",
+    "expires": "Vertragsende",
+    "ownership": "Eigentümerära",
+    "style": "Spielstil des Vereins",
+    "leagueTarget": "Zielplatzierung",
+    "years": "Laufzeit (Jahre)",
+    "negotiate": "Vertrag verhandeln",
+    "investment": "Investition in Einrichtungen",
+    "requestInvestment": "Vorstandsförderung beantragen",
+    "investmentHelp": "Einmal pro Saison kann der Vorstand 25 % eines Ausbaus bezahlen. Dafür sind 50 % Vertrauen und gesunde Finanzen nötig.",
+    "unavailable": "Der Vorstand ist derzeit nicht erreichbar.",
+    "takeoverPause": "Während der Übernahme pausieren Vertragsgespräche und Investitionen.",
+    "negotiationCooldown": "Warte 30 Tage zwischen Vertragsverhandlungen.",
+    "offerRejected": "Der Vorstand lehnt die Bedingungen ab. Senke das Gehalt oder setze ein ehrgeizigeres Ligaziel.",
+    "contractAgreed": "Dein Vertrag und dein Ligaziel wurden vereinbart.",
+    "takeoverStarted": "Der Verein führt Übernahmegespräche. Eine Entscheidung wird in 30 Tagen erwartet.",
+    "takeoverCompleted": "Die neuen Eigentümer haben den Verein übernommen und investiert. Dein Vertrag bleibt bestehen.",
+    "contractRenewal": "Dein Vertrag ist abgelaufen. Besuche den Vorstand für eine Verlängerung.",
+    "investmentRejected": "Förderung abgelehnt. Verbessere Vertrauen und Finanzen oder warte bis zur nächsten Saison.",
+    "investmentApproved": "Der Vorstand hat den Ausbau genehmigt und 25 % der Kosten übernommen.",
+    "facilityMaximum": "Diese Einrichtung hat ihre höchste Stufe erreicht.",
+    "captainChanged": "Deine Kapitänsentscheidung hat die beteiligten Spieler beeinflusst.",
+    "captainConflict": "Wähle verschiedene Spieler als Kapitän und Stellvertreter.",
+    "dressingRoom": "Kabine",
+    "promise": "Einsatzversprechen: noch {{count}} Spiele",
+    "concerns": "Spielersorgen",
+    "patchBoard": "Fairere Ligaziele sowie Erwartungen an Nachwuchs und Spielstil.",
+    "patchContracts": "Verhandle Gehalt, Vertragslaufzeit und Ligaziel.",
+    "patchClub": "Vereinsübernahmen und Förderung des Einrichtungsausbaus.",
+    "patchSquad": "Klarere Spielersorgen, Kapitänsreaktionen und Fristen für Versprechen.",
+    "playingTime": "Spielzeit"
   }
 }

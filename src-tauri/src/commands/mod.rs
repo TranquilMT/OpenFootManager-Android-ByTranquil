@@ -1,3 +1,5 @@
+pub mod board_room;
+pub use board_room::*;
 pub mod club;
 pub mod contracts;
 pub mod finances;

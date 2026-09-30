@@ -19,6 +19,7 @@ import {
   getCategoryIcon,
   isChooseOptionAction,
   isPlayerEventMessage,
+  isOfferReviewNavigation,
   renderMessageBodyLine,
 } from "./inboxHelpers";
 
@@ -394,6 +395,10 @@ export default function InboxMessageDetailPane({
           {selectedMessage.actions.length > 0 && !hasYouthProspects ? (
             <div className="mt-6">
               {selectedMessage.actions.map((action) => {
+                const repeatableReview = isOfferReviewNavigation(
+                  selectedMessage.id,
+                  action.action_type,
+                );
                 if (isChooseOptionAction(action.action_type)) {
                   const options = action.action_type.ChooseOption.options;
 
@@ -444,11 +449,13 @@ export default function InboxMessageDetailPane({
                   <button
                     type="button"
                     key={action.id}
-                    disabled={action.resolved}
+                    disabled={action.resolved && !repeatableReview}
                     onClick={() => onAction(selectedMessage.id, action.id)}
-                    className={getActionButtonClassName(action)}
+                    className={getActionButtonClassName(
+                      repeatableReview ? { ...action, resolved: false } : action,
+                    )}
                   >
-                    {action.resolved ? `✓ ${action.label}` : action.label}
+                    {action.resolved && !repeatableReview ? `✓ ${action.label}` : action.label}
                   </button>
                 );
               })}

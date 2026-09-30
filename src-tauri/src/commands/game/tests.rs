@@ -21,6 +21,100 @@ use ofm_core::{clock::GameClock, game::Game};
 use std::collections::{BTreeMap, BTreeSet};
 
 #[test]
+fn opening_day_selection_starts_manager_career_spell() {
+    let mut game = make_bootstrap_test_game();
+    bootstrap_team_selection(
+        &mut game,
+        "team1",
+        StartPhase::SeasonStart,
+        domain::stats::StatsState::default(),
+    )
+    .unwrap();
+    assert_eq!(game.manager.career_history.len(), 1);
+    assert_eq!(game.manager.career_history[0].team_id, "team1");
+    assert!(game.manager.career_history[0].end_date.is_none());
+}
+
+#[test]
+fn opening_day_selection_keeps_an_existing_current_spell() {
+    let mut game = make_bootstrap_test_game();
+    game.manager
+        .career_history
+        .push(domain::manager::ManagerCareerEntry::open(
+            "team1".to_string(),
+            "Alpha FC".to_string(),
+            "2031-07-01".to_string(),
+        ));
+    bootstrap_team_selection(
+        &mut game,
+        "team1",
+        StartPhase::SeasonStart,
+        domain::stats::StatsState::default(),
+    )
+    .unwrap();
+    assert_eq!(game.manager.career_history.len(), 1);
+    assert_eq!(game.manager.career_history[0].start_date, "2031-07-01");
+}
+
+#[test]
+fn existing_user_club_without_spell_gets_a_career_entry() {
+    let mut game = make_bootstrap_test_game();
+    game.manager.hire("team1".to_string());
+    game.teams
+        .iter_mut()
+        .find(|team| team.id == "team1")
+        .unwrap()
+        .manager_id = Some(game.manager.id.clone());
+    game.league = Some(League::new(
+        "existing".to_string(),
+        "Existing".to_string(),
+        2032,
+        &["team1".to_string(), "team2".to_string()],
+    ));
+    bootstrap_team_selection(
+        &mut game,
+        "team1",
+        StartPhase::SeasonStart,
+        domain::stats::StatsState::default(),
+    )
+    .unwrap();
+    assert_eq!(game.manager.career_history.len(), 1);
+    assert_eq!(game.manager.career_history[0].team_id, "team1");
+}
+
+#[test]
+fn existing_user_club_restores_manager_employment() {
+    let mut game = make_bootstrap_test_game();
+    game.teams
+        .iter_mut()
+        .find(|team| team.id == "team1")
+        .unwrap()
+        .manager_id = Some(game.manager.id.clone());
+    game.manager
+        .career_history
+        .push(domain::manager::ManagerCareerEntry::open(
+            "team1".to_string(),
+            "Alpha FC".to_string(),
+            "2031-07-01".to_string(),
+        ));
+    game.league = Some(League::new(
+        "existing".to_string(),
+        "Existing".to_string(),
+        2032,
+        &["team1".to_string(), "team2".to_string()],
+    ));
+    bootstrap_team_selection(
+        &mut game,
+        "team1",
+        StartPhase::SeasonStart,
+        domain::stats::StatsState::default(),
+    )
+    .unwrap();
+    assert_eq!(game.manager.team_id.as_deref(), Some("team1"));
+    assert_eq!(game.manager.career_history.len(), 1);
+}
+
+#[test]
 #[ignore = "perf harness; run: cargo test -p openfootmanager perf_baseline -- --ignored --nocapture"]
 fn perf_baseline() {
     use std::time::Instant;
@@ -501,7 +595,10 @@ fn bootstrap_and_upgrade_sets_granular_positions() {
     let (mut game, stats_state) =
         build_game_from_world_data(clock, manager, &startup_options, world);
 
-    // All generated players start with generic (legacy-bucket) positions
+    // Simulate a saved career from before granular natural positions were generated.
+    for player in &mut game.players {
+        player.natural_position = player.position.clone();
+    }
     let outfield_before: Vec<_> = game
         .players
         .iter()
@@ -511,7 +608,7 @@ fn bootstrap_and_upgrade_sets_granular_positions() {
         outfield_before
             .iter()
             .all(|p| p.natural_position.is_legacy_bucket()),
-        "generated players should all start with generic (legacy-bucket) natural_position"
+        "legacy players should start with generic natural_position"
     );
 
     bootstrap_team_selection(&mut game, "team1", StartPhase::SeasonStart, stats_state).unwrap();

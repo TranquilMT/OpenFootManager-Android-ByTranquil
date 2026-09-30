@@ -879,7 +879,19 @@ describe("MainMenu", () => {
     expect(openUrlMock).toHaveBeenCalledWith("https://github.com/openfootmanager/openfootmanager");
   });
 
-  it("shows the v0.3.5 notes on launch and honors the opt-out on later launches", async () => {
+  it("shows project links only on the first main menu, not during New Game setup", async () => {
+    render(<MainMenu />);
+    expect(await screen.findByRole("button", { name: "menu.openGithub" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "menu.openOriginalGithub" })).toBeInTheDocument();
+
+    await openCreateManagerForm();
+    expect(screen.queryByRole("button", { name: "menu.openGithub" })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "menu.openOriginalGithub" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("shows the current release notes on launch and honors the opt-out on later launches", async () => {
     sessionStorage.removeItem(WHATS_NEW_SEEN_KEY);
     const { unmount } = render(<MainMenu />);
 

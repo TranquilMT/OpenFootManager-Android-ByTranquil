@@ -156,6 +156,20 @@ function createGameState(players: PlayerData[]): GameStateData {
 }
 
 describe("TransfersTab.model", () => {
+  it("excludes academy prospects from senior transfer and loan markets", () => {
+    const prospect = createPlayer({
+      id: "academy-player",
+      team_id: "team-2",
+      squad_role: "Youth",
+      transfer_listed: true,
+      loan_listed: true,
+    });
+    const collections = deriveTransferCollections(createGameState([prospect]), "team-1");
+    expect(collections.marketPlayers).toEqual([]);
+    expect(collections.loanPlayers).toEqual([]);
+    expect(collections.availablePlayers).toEqual([]);
+  });
+
   it("derives the transfer collections for the current user team", () => {
     const userListed = createPlayer({
       id: "user-listed",

@@ -44,7 +44,11 @@ pub(super) fn build_team_with_bench(game: &Game, team_id: &str) -> (TeamData, Ve
     let available_players: Vec<&domain::player::Player> = game
         .players
         .iter()
-        .filter(|p| p.team_id.as_deref() == Some(team_id) && p.injury.is_none())
+        .filter(|p| {
+            p.team_id.as_deref() == Some(team_id)
+                && p.injury.is_none()
+                && p.squad_role == domain::player::SquadRole::Senior
+        })
         .collect();
     let player_roles = team.map(|t| &t.player_roles);
     // `deployed` is the granular slot the player occupies; `None` for the bench,

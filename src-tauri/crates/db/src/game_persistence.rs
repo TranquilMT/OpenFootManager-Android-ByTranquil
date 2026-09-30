@@ -138,6 +138,16 @@ fn write_game_to_connection(
         },
     )?;
 
+    conn.execute("DELETE FROM board_rooms", [])
+        .map_err(|_| game_persistence_write_error())?;
+    for (team_id, room) in &game.board_rooms {
+        let json = serde_json::to_string(room).map_err(|_| game_persistence_write_error())?;
+        conn.execute(
+            "INSERT INTO board_rooms (team_id, state_json) VALUES (?1, ?2)",
+            rusqlite::params![team_id, json],
+        )
+        .map_err(|_| game_persistence_write_error())?;
+    }
     for manager in &managers {
         manager_repo::upsert_manager(conn, manager)?;
     }
@@ -330,6 +340,7 @@ impl GamePersistenceReader {
             scouting_assignments,
             youth_scouting_assignments,
             board_objectives,
+            board_rooms: load_board_rooms(conn)?,
             season_context: domain::season::SeasonContext::default(),
             days_since_last_job_offer: None,
             available_staff_market_last_activity_date: meta
@@ -727,6 +738,8 @@ fn parse_objective_type(value: &str) -> Result<ObjectiveType, String> {
         "Wins" => Ok(ObjectiveType::Wins),
         "GoalsScored" => Ok(ObjectiveType::GoalsScored),
         "FinancialStability" => Ok(ObjectiveType::FinancialStability),
+        "YouthMinutes" => Ok(ObjectiveType::YouthMinutes),
+        "PlayingStyleMatches" => Ok(ObjectiveType::PlayingStyleMatches),
         _ => Err(game_persistence_load_error()),
     }
 }
@@ -769,4 +782,27 @@ fn parse_youth_objective(value: &str) -> Result<YouthScoutingObjective, String> 
         "ReadySoon" => Ok(YouthScoutingObjective::ReadySoon),
         _ => Err(game_persistence_load_error()),
     }
+}
+
+fn load_board_rooms(
+    conn: &Connection,
+) -> Result<std::collections::HashMap<String, ofm_core::board_room::BoardRoom>, String> {
+    let mut stmt = conn
+        .prepare("SELECT team_id, state_json FROM board_rooms")
+        .map_err(|_| "be.error.gamePersistence.loadFailed".to_string())?;
+    let rows = stmt
+        .query_map([], |row| {
+            Ok((row.get::<_, String>(0)?, row.get::<_, String>(1)?))
+        })
+        .map_err(|_| "be.error.gamePersistence.loadFailed".to_string())?;
+    let mut rooms = std::collections::HashMap::new();
+    for row in rows {
+        let (id, json) = row.map_err(|_| "be.error.gamePersistence.loadFailed".to_string())?;
+        rooms.insert(
+            id,
+            serde_json::from_str(&json)
+                .map_err(|_| "be.error.gamePersistence.loadFailed".to_string())?,
+        );
+    }
+    Ok(rooms)
 }

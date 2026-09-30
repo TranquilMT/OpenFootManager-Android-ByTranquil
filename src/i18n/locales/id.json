@@ -24,7 +24,7 @@
     "openGithub": "Buka repositori GitHub OFMtouch",
     "openOriginalGithub": "Buka repositori GitHub asli OpenFootManager",
     "originalGame": "Game asli",
-    "doNotShowWhatsNew": "Jangan tampilkan lagi untuk v0.3.6",
+    "doNotShowWhatsNew": "Jangan tampilkan lagi untuk v0.5.2",
     "continueToGame": "Lanjutkan",
     "mainMenu": "Menu Utama",
     "worldEditor": "Editor Dunia"
@@ -381,6 +381,9 @@
     "openScouting": "Buka scouting",
     "recruitmentWorkflowTitle": "Alur Perekrutan Akademi",
     "recruitmentWorkflowHint": "Mulai, batalkan, atau ganti penugasan pencarian akademi tanpa meninggalkan tampilan Akademi.",
+    "tournamentTitle": "Tantangan junior",
+    "tournamentReady": "Siap untuk laga berikutnya: {{prospects}}/12 pemain akademi dan {{helpers}} senior U21.",
+    "tournamentNeeds": "Butuh 12 pemain akademi dan dua senior U21 untuk skuad 14 orang. Saat ini: {{prospects}}/12 prospek, {{helpers}} bantuan.",
     "noEligibleSeniorPlayers": "Belum ada pemain senior di bawah 21 tahun yang memenuhi syarat.",
     "youthPlayers": "Pemain Muda",
     "avgOvr": "Rata-rata OVR",
@@ -1262,7 +1265,9 @@
       "LeaguePosition": "Selesaikan di posisi {{target}} teratas",
       "Wins": "Menangkan setidaknya {{target}} pertandingan",
       "GoalsScored": "Cetak setidaknya {{target}} gol",
-      "FinancialStability": "Pertahankan pengeluaran gaji pada atau di bawah {{target}}% dari anggaran"
+      "FinancialStability": "Pertahankan pengeluaran gaji pada atau di bawah {{target}}% dari anggaran",
+      "YouthMinutes": "Berikan {{target}} menit kepada pemain di bawah 22 tahun",
+      "PlayingStyleMatches": "Gunakan gaya yang disepakati dalam {{target}} laga liga"
     }
   },
   "transfers": {
@@ -1772,17 +1777,35 @@
     "patchPlayers": "Lebih banyak pemain unggulan, termasuk bintang langka berperingkat 96.",
     "patchMatches": "Lebih banyak reaksi, tembakan membentur tiang, dan komentar suara opsional.",
     "patchMobile": "Kontrol seluler, kotak masuk, tim nasional, dan awal karier ditingkatkan.",
-    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.3.6",
+    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.6.0",
     "patchPortraits": "20 wajah fiktif sumber membuat potret pemain hasil generasi lebih beragam.",
     "patchWorld": "Dunia sepak bola yang lebih luas mencakup 29 negara, dengan klub lebih kuat di Amerika dan Asia.",
     "patchTransfers": "Strategi klub memandu pinjaman dan transfer, dengan tawaran bersaing serta pemeriksaan anggaran.",
     "patchDevelopment": "Menit bermain membantu pemain muda berkembang; laporan pencarian bakat menghindari nama berulang.",
+    "careerHighlights": "Karier baru kini tersimpan dengan baik meski skuad memiliki pemain tambahan.",
+    "careerInbox": "Susunan awal mempertahankan peran dan cakupan skuad mengikuti posisi alami.",
+    "careerSeason": "Daftar skuad lebih ringkas dan mudah dibaca di ponsel.",
+    "careerReliability": "Penyimpanan gagal membersihkan berkas parsial; pengujian baru memeriksa nomor dan peran.",
+    "careerYouth": "Akademi terpisah dari 22–26 pemain senior, dengan laporan pelatih, promosi, dan batas 12 pemain muda.",
+    "careerYouthScouting": "Pencarian bakat muda dan senior terpisah; laga junior membutuhkan 12 prospek dan dua senior U21.",
+    "careerRules": "Aturan 2026/27: pemeriksaan offside semiotomatis lebih cepat; Hukum 11 tidak berubah pada versi ini.",
+    "hotfixInjuryDetails": "Nama cedera kini tampil dengan benar di ringkasan laga dan kemajuan waktu.",
+    "hotfixOfferReview": "Tinjau tawaran pinjaman atau transfer membuka tawaran pemain dan dapat dibuka lagi dari Kotak Masuk.",
+    "hotfixPortraitNeck": "Potret menjaga warna kulit leher dan memperbarui gambar tersimpan.",
+    "hotfixConversations": "Janji waktu bermain kini dapat dipenuhi dalam dua pertandingan.",
+    "nextPreview": "Selanjutnya: kami menjajaki perencanaan skuad dan percakapan pemain yang lebih mendalam.",
+    "history0504": "Pengujian tambahan mencakup karier, penyimpanan, dan menu seluler.",
+    "history0503": "Pergantian musim dan hasil pertandingan berlanjut dalam karier.",
+    "history0502": "Berita dan keputusan karier lebih mudah diikuti melalui kotak masuk.",
+    "history0501": "Karier manajer baru memperdalam keputusan klub dan perjalanan musim.",
     "hotfixInbox": "Pesan kotak masuk lebih mudah dibaca di ponsel; konfirmasi memakai lebih sedikit memori.",
     "hotfixSave": "Simpan permainan ada di Pengaturan agar tanggal dan tombol Lanjut punya lebih banyak ruang.",
     "hotfixMatch": "Cedera pertandingan bertahan dalam karier dan menghasilkan pesan medis.",
     "hotfixStability": "Pemeriksaan tambahan untuk aksi pesan, penyimpanan, build Android, dan simulasi karier.",
     "patchFixes": "Memperbaiki nama cedera mentah, nama klub ganda, dan masalah pembuatan dunia.",
-    "patchThanks": "Terima kasih sudah bermain! Bantu kami memperbaiki game dengan melaporkan masalah di GitHub.",
+    "patchThanks": "Terima kasih kepada semua yang mencoba versi baru, membagikan tangkapan layar, dan melaporkan masalah. Kesabaran serta masukan kalian membentuk setiap pembaruan. Terus kirim laporan lewat GitHub.",
+    "patchHistory": "Riwayat pembaruan",
+    "patchHistoryClose": "Tutup",
     "patchSignature": "Terima kasih, TranquilMT",
     "patchReportIssue": "Laporkan masalah di GitHub",
     "about": "Tentang",
@@ -2295,8 +2318,22 @@
       "PenaltyAwarded": "Penalti Diberikan"
     },
     "commentary": {
-      "Corner": {"headline": "Sepak pojok untuk", "lines": {"0": "Sepak pojok untuk {{team}}.", "1": "{{team}} bersiap mengambil sepak pojok.", "2": "{{team}} punya kesempatan mengirim bola dari sepak pojok."}},
-      "FreeKick": {"headline": "Tendangan bebas untuk", "lines": {"0": "Tendangan bebas untuk {{team}}.", "1": "{{team}} bersiap mengambil tendangan bebas.", "2": "Tendangan bebas memberi {{team}} peluang membangun serangan."}},
+      "Corner": {
+        "headline": "Sepak pojok untuk",
+        "lines": {
+          "0": "Sepak pojok untuk {{team}}.",
+          "1": "{{team}} bersiap mengambil sepak pojok.",
+          "2": "{{team}} punya kesempatan mengirim bola dari sepak pojok."
+        }
+      },
+      "FreeKick": {
+        "headline": "Tendangan bebas untuk",
+        "lines": {
+          "0": "Tendangan bebas untuk {{team}}.",
+          "1": "{{team}} bersiap mengambil tendangan bebas.",
+          "2": "Tendangan bebas memberi {{team}} peluang membangun serangan."
+        }
+      },
       "Goal": {
         "headline": "GOL!",
         "lines": {
@@ -2644,6 +2681,7 @@
         "noLeague": "Tidak ada data liga yang tersedia untuk pertandingan ini.",
         "fixtureNotFound": "Jadwal yang dipilih tidak dapat ditemukan.",
         "emptySquad": "Salah satu tim tidak memiliki pemain yang tersedia, sehingga pertandingan tidak dapat dimainkan.",
+        "insufficientMatchdayPlayers": "Pertandingan membutuhkan sedikitnya 14 pemain senior tersedia (11 starter dan tiga cadangan).",
         "maxSubstitutionsReached": "Pergantian pemain maksimum tercapai",
         "preMatchSwapTooLate": "Pergantian pra-pertandingan hanya diizinkan sebelum kick-off",
         "cannotSubstituteSentOffPlayer": "Tidak dapat mengganti pemain yang dikeluarkan",
@@ -2828,6 +2866,9 @@
         "staffMemberNotScout": "Anggota staf bukan seorang scout",
         "scoutNotInTeam": "Scout tidak termasuk dalam tim kamu",
         "cannotScoutOwnPlayer": "Tidak dapat melakukan scouting pada pemain sendiri",
+        "youthRequiresPromotion": "Pemain akademi harus dipromosikan sebelum masuk bursa transfer atau laporan senior. Gunakan pencarian bakat muda.",
+        "academyFull": "Akademi penuh (12 pemain). Promosikan atau lepaskan satu pemain muda.",
+        "seniorSquadFull": "Skuad senior penuh (26 pemain). Kosongkan tempat sebelum promosi.",
         "scoutAssignmentFull": "Scout sudah ditugaskan ke tugas scouting lain ({{currentCount}}/{{maxSlots}} penugasan).",
         "playerAlreadyScouted": "Pemain ini sudah sedang discouting",
         "youthSearchAlreadyActive": "Pencarian rekrutmen pemuda yang cocok sudah aktif",
@@ -2837,6 +2878,7 @@
       "invalidPath": "Jalur tidak valid."
     },
     "sender": {
+      "youthCoach": "Pelatih junior",
       "boardOfDirectors": "Dewan Direksi",
       "leagueOffice": "Kantor Liga",
       "assistantManager": "Asisten Manajer",
@@ -2853,6 +2895,7 @@
       "transferCommittee": "Komite Transfer"
     },
     "role": {
+      "youthCoach": "Pelatih junior",
       "chairman": "Ketua",
       "competitionSecretary": "Sekretaris Kompetisi",
       "assistantManager": "Asisten Manajer",
@@ -3046,6 +3089,20 @@
               "description": "Tantang mereka untuk pantas mendapat tempat. Berisiko — bisa memotivasi atau membuat frustrasi."
             }
           },
+          "transferRequest": {
+            "discuss": {
+              "label": "Bicarakan masa depannya",
+              "description": "Dengarkan pemain dan minta ia memberi klub kesempatan lagi."
+            },
+            "allowMove": {
+              "label": "Dengarkan tawaran",
+              "description": "Masukkan pemain ke daftar transfer. Kepindahan tetap memerlukan tawaran."
+            },
+            "refuse": {
+              "label": "Tolak permintaan",
+              "description": "Pertahankan pemain, tetapi ia bisa semakin kecewa."
+            }
+          },
           "happyPlayer": {
             "praiseBack": {
               "label": "Balas Pujian",
@@ -3097,6 +3154,11 @@
               "positive": "Pemain termotivasi untuk membuktikan kemampuannya. Moral {{delta}}",
               "negative": "Pemain merasa diabaikan dan tersinggung. Moral {{delta}}"
             }
+          },
+          "transferRequest": {
+            "discuss": "Pemain setuju untuk terus berbicara. Moral {{delta}}",
+            "allowMove": "Pemain menghargai kejujuranmu dan siap menerima tawaran. Moral {{delta}}",
+            "refuse": "Pemain merasa terjebak di klub. Moral {{delta}}"
           },
           "happyPlayer": {
             "praiseBack": "Pemain tersenyum mendengar pujian. Moral {{delta}}",
@@ -3252,6 +3314,10 @@
         "body0": "Bos, {{player}} datang menemui kamu. Mereka frustrasi karena kurangnya menit bermain di pertandingan terakhir dan ingin tahu apa yang harus mereka lakukan untuk kembali ke tim.\n\n\"Saya merasa sudah berlatih dengan baik, tetapi saya tidak mendapat kesempatan untuk membuktikannya di lapangan.\"",
         "body1": "{{player}} mengetuk pintu kantor kamu dengan wajah tidak senang. Mereka tidak dimainkan dalam beberapa pertandingan terakhir dan ingin mendapatkan jawaban.\n\n\"Saya datang ke klub ini untuk bermain sepak bola. Jika saya tidak dalam rencana kamu, saya lebih suka kamu mengatakannya terus terang.\""
       },
+      "transferRequest": {
+        "subject": "{{player}} — Meminta transfer",
+        "body": "{{player}} meminta bicara empat mata. Ia merasa kurangnya waktu bermain menghambat kariernya dan ingin mempertimbangkan pindah.\n\nKamu bisa mendengarkannya, membuka peluang tawaran, atau memintanya bertahan."
+      },
       "happyPlayer": {
         "subject": "{{player}} — Merasa Hebat",
         "body0": "{{player}} mampir ke kantor kamu dengan senyum lebar. Mereka merasa hebat dengan performa mereka dan arah tim.\n\n\"Saya hanya ingin bilang saya sangat menikmati sepak bola saya saat ini, Bos. Suasana di ruang ganti luar biasa.\"",
@@ -3321,6 +3387,7 @@
         },
         "effect": {
           "sign": "{{player}} menandatangani kontrak pemuda dan bergabung dengan akademi kamu.",
+          "academyFull": "Akademi penuh (12 pemain). Promosikan atau lepaskan satu pemain muda.",
           "shortlist": "{{player}} ditambahkan ke shortlist pemuda kamu.",
           "discard": "{{player}} dihapus dari laporan rekrutmen pemuda."
         }
@@ -3328,6 +3395,17 @@
       "youthRecruitmentShortlist": {
         "subject": "Prospek muda masuk shortlist",
         "body": "{{player}} telah dipindahkan ke shortlist pemuda kamu. Kamu dapat meninjaunya lagi nanti sebelum mengambil keputusan final."
+      },
+      "academyReview": {
+        "subject": "Laporan akademi: {{player}}",
+        "progress": "{{player}} berkembang di akademi (OVR {{ovr}}, potensi {{potential}}). Lanjutkan latihan dan tinjau lagi bulan depan.",
+        "ready": "{{player}} berkembang pesat (OVR {{ovr}}, potensi {{potential}}). Ia siap mendapat kesempatan di tim senior. Promosikan melalui Akademi Junior."
+      },
+      "academyFixture": {
+        "subject": "Tantangan junior",
+        "win": "Akademi menang dengan {{count}} pemain (nilai {{rating}}). Para prospek mendapat pengalaman.",
+        "draw": "Akademi imbang dengan {{count}} pemain (nilai {{rating}}). Para prospek mendapat pengalaman.",
+        "loss": "Akademi kalah dengan {{count}} pemain (nilai {{rating}}). Para prospek mendapat pengalaman."
       },
       "scoutReport": {
         "subject": "Laporan Scout: {{player}}",
@@ -4089,5 +4167,40 @@
   "generation": {
     "title": "Pembuatan & Penyelesaian",
     "coverage": "Paket kamu mencakup"
+  },
+  "phase6": {
+    "boardRoom": "Dewan dan ruang ganti",
+    "contractHelp": "Negosiasikan gaji, target liga, dan durasi kontrak. Target lebih mudah menurunkan tawaran gaji.",
+    "salary": "Gaji mingguan",
+    "expires": "Kontrak berakhir",
+    "ownership": "Era kepemilikan",
+    "style": "Gaya bermain klub",
+    "leagueTarget": "Target posisi liga",
+    "years": "Durasi (tahun)",
+    "negotiate": "Negosiasi kontrak",
+    "investment": "Investasi fasilitas",
+    "requestInvestment": "Minta dana dewan",
+    "investmentHelp": "Sekali per musim, dewan dapat membayar 25% peningkatan. Memerlukan kepercayaan minimal 50% dan keuangan sehat.",
+    "unavailable": "Dewan saat ini tidak tersedia.",
+    "takeoverPause": "Negosiasi dan investasi ditunda selama pengambilalihan.",
+    "negotiationCooldown": "Tunggu 30 hari antara negosiasi kontrak.",
+    "offerRejected": "Dewan menolak syarat ini. Turunkan gaji atau ajukan target liga lebih ambisius.",
+    "contractAgreed": "Kontrak manajer dan target liga telah disepakati.",
+    "takeoverStarted": "Klub memasuki pembicaraan pengambilalihan. Keputusan diperkirakan dalam 30 hari.",
+    "takeoverCompleted": "Pemilik baru menyelesaikan pengambilalihan dan berinvestasi. Kontrak Anda tetap berlaku.",
+    "contractRenewal": "Kontrak Anda berakhir. Kunjungi dewan untuk membahas kesepakatan baru.",
+    "investmentRejected": "Dana ditolak. Tingkatkan kepercayaan dan keuangan atau tunggu musim depan.",
+    "investmentApproved": "Dewan menyetujui peningkatan dan membayar 25% biayanya.",
+    "facilityMaximum": "Fasilitas ini telah mencapai tingkat maksimum.",
+    "captainChanged": "Keputusan kapten Anda memengaruhi pemain terkait.",
+    "captainConflict": "Pilih pemain berbeda sebagai kapten dan wakil kapten.",
+    "dressingRoom": "Ruang ganti",
+    "promise": "Janji waktu bermain: tersisa {{count}} pertandingan",
+    "concerns": "Kekhawatiran pemain",
+    "patchBoard": "Target liga lebih adil, pengembangan muda, dan harapan gaya bermain.",
+    "patchContracts": "Negosiasikan gaji, durasi kontrak, dan target liga.",
+    "patchClub": "Pengambilalihan klub dan dukungan peningkatan fasilitas.",
+    "patchSquad": "Kekhawatiran lebih jelas, reaksi kapten, dan tenggat janji.",
+    "playingTime": "Waktu bermain"
   }
 }

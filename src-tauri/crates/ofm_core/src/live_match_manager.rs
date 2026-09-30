@@ -240,6 +240,20 @@ pub fn create_live_match(
     // Build engine TeamData (starting XI = first 11 players by position)
     let (home_xi, home_bench) = build_team_with_bench(game, &home_team_id);
     let (away_xi, away_bench) = build_team_with_bench(game, &away_team_id);
+    if let Some(managed_team_id) = game.manager.team_id.as_deref() {
+        let (xi, bench) = if managed_team_id == home_team_id {
+            (&home_xi, &home_bench)
+        } else if managed_team_id == away_team_id {
+            (&away_xi, &away_bench)
+        } else {
+            (&home_xi, &home_bench)
+        };
+        if (managed_team_id == home_team_id || managed_team_id == away_team_id)
+            && xi.players.len() + bench.len() < 14
+        {
+            return Err("be.error.liveMatch.insufficientMatchdayPlayers".to_string());
+        }
+    }
     let home_starter_ids = home_xi
         .players
         .iter()

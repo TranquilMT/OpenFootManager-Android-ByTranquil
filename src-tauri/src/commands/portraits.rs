@@ -8,7 +8,7 @@ use std::sync::OnceLock;
 use std::time::Instant;
 use tauri::{AppHandle, Manager};
 
-const GENERATOR_VERSION: &str = "runtime-component-recipe-rust-v3-20src";
+const GENERATOR_VERSION: &str = "runtime-component-recipe-rust-v4-neck-20src";
 const SIZE: u32 = 384;
 
 #[derive(Debug, Deserialize)]
@@ -529,9 +529,21 @@ fn apply_recipe_color(mut pixel: PixelF, x: f32, y: f32, recipe: &Recipe) -> Pix
         height * 0.383,
         0.18,
     );
+    // Keep the source portrait's neck intact. The broad shirt mask otherwise
+    // paints exposed skin with a jersey colour on some source photographs.
+    let neck = ellipse_mask(
+        x,
+        y,
+        width * 0.5 + recipe.shift_x,
+        height * 0.695,
+        width * 0.14,
+        height * 0.18,
+        0.28,
+    );
     let shirt = subject
         * clamp01((y - height * 0.62) / (height * 0.18))
-        * clamp01((height * 0.98 - y) / (height * 0.20));
+        * clamp01((height * 0.98 - y) / (height * 0.20))
+        * (1.0 - neck);
     let hair =
         subject * head * if y < height * 0.43 { 1.0 } else { 0.0 } * clamp01((155.0 - luma) / 90.0);
     let beard_jaw = ellipse_mask(

@@ -50,7 +50,11 @@ export function buildTeamProfileViewModel(
   team: TeamData,
   gameState: GameStateData,
 ): TeamProfileViewModel {
-  const roster = sortRoster(gameState.players.filter((player) => player.team_id === team.id));
+  const roster = sortRoster(
+    gameState.players.filter(
+      (player) => player.team_id === team.id && player.squad_role !== "Youth",
+    ),
+  );
   const allStandings = getSortedStandings(gameState);
 
   return {

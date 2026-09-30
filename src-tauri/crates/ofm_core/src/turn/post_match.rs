@@ -88,6 +88,16 @@ pub fn apply_match_report_with_capture<F>(
 ) where
     F: FnMut(StatsState),
 {
+    // Live-match callbacks may be retried after persistence. A finished fixture
+    // must never credit standings, career stats, finances or player stats twice.
+    if game
+        .league
+        .as_ref()
+        .and_then(|league| league.fixtures.get(fixture_index))
+        .is_some_and(|fixture| fixture.status == FixtureStatus::Completed)
+    {
+        return;
+    }
     // Convert engine GoalDetails → domain GoalEvents
     let home_scorers: Vec<GoalEvent> = report
         .goals
@@ -174,7 +184,39 @@ pub fn apply_match_report_with_capture<F>(
         update_team_form(game, report, home_team_id, away_team_id);
     }
 
-    // Update board satisfaction based on match result
+    // Credit every managed fixture, including cups. Only league fixtures are
+    // reconciled against standings at the end of the season.
+    if let Some(team_id) = game.manager.team_id.as_deref()
+        && (team_id == home_team_id || team_id == away_team_id)
+    {
+        let team_name = game
+            .teams
+            .iter()
+            .find(|team| team.id == team_id)
+            .map(|team| team.name.clone())
+            .unwrap_or_default();
+        let today = game.clock.current_date.format("%Y-%m-%d").to_string();
+        game.manager.ensure_current_spell(&team_name, &today);
+    }
+    if !counts_for_standings
+        && let Some(user_team_id) = &game.manager.team_id
+        && (*user_team_id == home_team_id || *user_team_id == away_team_id)
+    {
+        let user_goals = if *user_team_id == home_team_id {
+            report.home_goals
+        } else {
+            report.away_goals
+        };
+        let opp_goals = if *user_team_id == home_team_id {
+            report.away_goals
+        } else {
+            report.home_goals
+        };
+        game.manager
+            .record_match_result(user_goals, opp_goals, false);
+    }
+
+    // Board and fan sentiment follow league standings results.
     if counts_for_standings
         && let Some(user_team_id) = &game.manager.team_id
         && (*user_team_id == home_team_id || *user_team_id == away_team_id)
@@ -189,17 +231,29 @@ pub fn apply_match_report_with_capture<F>(
         } else {
             report.home_goals
         };
+        game.manager.record_league_result(user_goals, opp_goals);
+        crate::board_room::credit_style_match(game, home_team_id, away_team_id);
+        let settling_in = game
+            .manager
+            .team_id
+            .as_ref()
+            .and_then(|id| game.board_rooms.get(id))
+            .is_some_and(|room| {
+                game.league
+                    .as_ref()
+                    .is_some_and(|league| room.joined_season == league.season)
+            });
         let sat_delta: i8 = if user_goals > opp_goals {
             2
         }
         // win: +2
         else if user_goals == opp_goals {
-            -1
+            0
         }
-        // draw: -1
+        // Draws preserve confidence during a rebuilding campaign.
         else {
-            -3
-        }; // loss: -3
+            if settling_in { -2 } else { -3 }
+        };
         let new_sat = (game.manager.satisfaction as i16 + sat_delta as i16).clamp(0, 100) as u8;
         game.manager.satisfaction = new_sat;
 
@@ -268,6 +322,7 @@ pub fn apply_match_report_with_capture<F>(
     if generates_match_news {
         super::news::generate_match_news(game, fixture_index, home_team_id, away_team_id, report);
     }
+    game.sync_user_manager_record();
 }
 
 fn apply_match_injuries(game: &mut Game, report: &engine::MatchReport, home: &str, away: &str) {
@@ -516,7 +571,13 @@ fn resolve_post_match_promises(
             continue;
         };
 
-        let played = report.player_stats.contains_key(&player.id);
+        let played = report
+            .player_stats
+            .get(&player.id)
+            .is_some_and(|stats| stats.minutes_played > 0);
+        if !played && (player.injury.is_some()) {
+            continue;
+        }
 
         match promise.kind {
             PlayerPromiseKind::PlayingTime => {

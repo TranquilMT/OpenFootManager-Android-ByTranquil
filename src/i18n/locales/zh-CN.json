@@ -24,7 +24,7 @@
     "openGithub": "打开 OFMtouch 的 GitHub 仓库",
     "openOriginalGithub": "打开原版 OpenFootManager 的 GitHub 仓库",
     "originalGame": "原版游戏",
-    "doNotShowWhatsNew": "不再显示 v0.3.6 更新提示",
+    "doNotShowWhatsNew": "不再显示 v0.5.2 更新提示",
     "continueToGame": "继续",
     "mainMenu": "主菜单",
     "worldEditor": "世界编辑器"
@@ -381,6 +381,9 @@
     "openScouting": "打开球探",
     "recruitmentWorkflowTitle": "青训招募流程",
     "recruitmentWorkflowHint": "无需离开青训学院界面，即可发起、取消或重新分配青训搜索。",
+    "tournamentTitle": "青训挑战赛",
+    "tournamentReady": "已准备好下一场青训比赛：{{prospects}}/12名新秀和{{helpers}}名可用的一线队U21球员。",
+    "tournamentNeeds": "14人比赛名单需要12名青训球员及两名可用的一线队U21球员。目前：{{prospects}}/12名新秀，{{helpers}}名补充球员。",
     "noEligibleSeniorPlayers": "当前没有符合条件的 21 岁以下一线队球员可下放。",
     "youthPlayers": "青训球员",
     "avgOvr": "平均综合",
@@ -1262,7 +1265,9 @@
       "LeaguePosition": "联赛排名进入前 {{target}}",
       "Wins": "至少赢得 {{target}} 场比赛",
       "GoalsScored": "至少打进 {{target}} 个进球",
-      "FinancialStability": "将工资支出控制在预算的 {{target}}% 以内"
+      "FinancialStability": "将工资支出控制在预算的 {{target}}% 以内",
+      "YouthMinutes": "让22岁以下球员获得{{target}}分钟出场时间",
+      "PlayingStyleMatches": "在{{target}}场联赛中使用约定的风格"
     }
   },
   "transfers": {
@@ -1772,17 +1777,35 @@
     "patchPlayers": "新增更多优秀球员，包括稀有的96分球星和升级热门球队。",
     "patchMatches": "比赛解说更加丰富，加入门框射门和可选语音解说。",
     "patchMobile": "改进移动端操作、收件箱、国家队与生涯创建。",
-    "patchWelcome": "欢迎来到 OFMtouch！v0.3.6 更新内容",
+    "patchWelcome": "欢迎来到 OFMtouch！v0.6.0 更新内容",
     "patchPortraits": "20 张虚构原始人脸让生成球员的肖像更加多样。",
     "patchWorld": "足球世界扩展至 29 个国家，美洲和亚洲的俱乐部实力也得到提升。",
     "patchTransfers": "俱乐部策略会影响租借和转会，包括竞争报价与预算检查。",
     "patchDevelopment": "比赛时间有助于年轻球员成长；青训球探报告会避免重复姓名。",
+    "careerHighlights": "新开档现在可以可靠保存包含额外球员的球队。",
+    "careerInbox": "首发阵容保留预设职责，位置覆盖会反映球员的惯用位置。",
+    "careerSeason": "手机上的阵容列表更紧凑，号码和位置更清晰。",
+    "careerReliability": "保存失败时会清理残留文件；新增测试检查球衣号码和位置迁移。",
+    "careerYouth": "青训营独立于22–26人的一线队，提供教练月报、提拔决定，最多容纳12名新秀。",
+    "careerYouthScouting": "一线队和青训球探分开；青训比赛需要12名新秀和两名符合年龄要求的一线队U21球员。",
+    "careerRules": "2026/27规则核查：半自动越位复核将更快；本版本的第11条越位判定保持不变。",
+    "hotfixInjuryDetails": "伤病名称现在会在比赛与推进摘要中正确显示。",
+    "hotfixOfferReview": "查看租借或转会报价会打开对应球员的报价，也可从收件箱再次打开。",
+    "hotfixPortraitNeck": "肖像生成会保护颈部肤色，并刷新缓存图片。",
+    "hotfixConversations": "上场时间承诺现在可在两场比赛内兑现。",
+    "nextPreview": "前瞻：我们正在探索更深入的阵容规划和球员交流。",
+    "history0504": "新增测试覆盖职业生涯、存档和移动菜单。",
+    "history0503": "赛季更替和比赛结果会延续到职业生涯中。",
+    "history0502": "职业新闻与决策在收件箱中更容易查看。",
+    "history0501": "全新经理生涯带来更深入的俱乐部决策和赛季体验。",
     "hotfixInbox": "收件箱消息在手机上更易阅读；确认消息占用更少内存。",
     "hotfixSave": "保存游戏移至设置，为日期和继续按钮留出空间。",
     "hotfixMatch": "比赛伤病会延续到生涯中，并发送医疗消息。",
     "hotfixStability": "增加消息操作、存档、安卓构建和生涯模拟检查。",
     "patchFixes": "修复了原始伤病代码、重复俱乐部名称及世界生成问题。",
-    "patchThanks": "感谢游玩！欢迎在 GitHub 上提交问题，帮助我们改进游戏。",
+    "patchThanks": "感谢每一位花时间测试新版本、分享截图和反馈问题的玩家。你们的耐心与建议推动着每次更新。欢迎继续在 GitHub 上反馈。",
+    "patchHistory": "更新历史",
+    "patchHistoryClose": "关闭",
     "patchSignature": "感谢游玩，TranquilMT",
     "patchReportIssue": "在 GitHub 上提交问题",
     "about": "关于",
@@ -2261,8 +2284,22 @@
       "PenaltyAwarded": "判罚点球"
     },
     "commentary": {
-      "Corner": {"headline": "获得角球", "lines": {"0": "{{team}}获得角球。", "1": "{{team}}准备开出角球。", "2": "{{team}}获得角球传中的机会。"}},
-      "FreeKick": {"headline": "获得任意球", "lines": {"0": "{{team}}获得任意球。", "1": "{{team}}准备主罚任意球。", "2": "任意球给了{{team}}组织进攻的机会。"}},
+      "Corner": {
+        "headline": "获得角球",
+        "lines": {
+          "0": "{{team}}获得角球。",
+          "1": "{{team}}准备开出角球。",
+          "2": "{{team}}获得角球传中的机会。"
+        }
+      },
+      "FreeKick": {
+        "headline": "获得任意球",
+        "lines": {
+          "0": "{{team}}获得任意球。",
+          "1": "{{team}}准备主罚任意球。",
+          "2": "任意球给了{{team}}组织进攻的机会。"
+        }
+      },
       "Goal": {
         "headline": "进球啦！",
         "lines": {
@@ -2631,6 +2668,7 @@
         "noLeague": "该比赛暂无联赛数据。",
         "fixtureNotFound": "未找到所选比赛。",
         "emptySquad": "其中一支球队没有可用球员，因此无法进行比赛。",
+        "insufficientMatchdayPlayers": "比赛至少需要14名可用的一线队球员（11名首发和3名替补）。",
         "maxSubstitutionsReached": "已达到最大换人次数",
         "preMatchSwapTooLate": "赛前对调只能在开球前进行",
         "cannotSubstituteSentOffPlayer": "不能换下被罚下的球员",
@@ -2820,6 +2858,9 @@
         "staffMemberNotScout": "该工作人员不是球探",
         "scoutNotInTeam": "该球探不属于你的球队",
         "cannotScoutOwnPlayer": "你不能考察自己的球员",
+        "youthRequiresPromotion": "青训球员需要先升入一线队，才能参与一线队球探或转会。寻找新秀请使用青训招募。",
+        "academyFull": "青训营已满（12人）。请先提拔或解约一名新秀。",
+        "seniorSquadFull": "一线队已满（26人）。提拔前请先腾出名额。",
         "scoutAssignmentFull": "该球探已经被分配到另一项考察任务（{{currentCount}}/{{maxSlots}} 项分配）。",
         "playerAlreadyScouted": "这名球员已经在被考察",
         "youthSearchAlreadyActive": "已有相同的青训招募搜索在进行中",
@@ -2837,6 +2878,7 @@
       }
     },
     "sender": {
+      "youthCoach": "青训教练",
       "boardOfDirectors": "董事会",
       "leagueOffice": "联赛办公室",
       "assistantManager": "助理教练",
@@ -2853,6 +2895,7 @@
       "transferCommittee": "转会委员会"
     },
     "role": {
+      "youthCoach": "青训教练",
       "chairman": "主席",
       "competitionSecretary": "赛事秘书",
       "assistantManager": "助理教练",
@@ -3046,6 +3089,20 @@
               "description": "挑战他们靠实力赢得位置。有风险——可能激发动力也可能令其沮丧。"
             }
           },
+          "transferRequest": {
+            "discuss": {
+              "label": "谈谈未来",
+              "description": "听取球员的想法，并请他再给俱乐部一次机会。"
+            },
+            "allowMove": {
+              "label": "听取报价",
+              "description": "将球员列入转会名单。转会仍需收到正式报价。"
+            },
+            "refuse": {
+              "label": "拒绝请求",
+              "description": "留下球员，但可能让他更加不满。"
+            }
+          },
           "happyPlayer": {
             "praiseBack": {
               "label": "回以赞赏",
@@ -3097,6 +3154,11 @@
               "positive": "球员斗志昂扬,要证明自己的价值。士气{{delta}}",
               "negative": "球员感到被轻视和侮辱。士气{{delta}}"
             }
+          },
+          "transferRequest": {
+            "discuss": "球员同意继续沟通。士气 {{delta}}",
+            "allowMove": "球员感谢你的坦诚，愿意接受报价。士气 {{delta}}",
+            "refuse": "球员觉得自己被困在俱乐部。士气 {{delta}}"
           },
           "happyPlayer": {
             "praiseBack": "球员因赞赏而喜笑颜开。士气{{delta}}",
@@ -3252,6 +3314,10 @@
         "body0": "老板,{{player}}来找您了。他对近期缺乏出场时间感到沮丧,想知道自己需要做些什么才能回到首发。\n\n“我感觉自己训练得不错,但就是没机会在场上展示出来。”",
         "body1": "{{player}}敲开了您办公室的门,神情郁郁。他在最近几场比赛中都没有出场,想要一个说法。\n\n“我来这家俱乐部是为了踢球。如果我不在您的计划之中,还不如直接告诉我。”"
       },
+      "transferRequest": {
+        "subject": "{{player}} — 请求转会",
+        "body": "{{player}} 请求私下谈话。他认为缺少出场时间阻碍了自己的职业发展，希望考虑转会。\n\n你可以倾听他的想法、允许其他俱乐部报价，或请他留下。"
+      },
       "happyPlayer": {
         "subject": "{{player}}——状态极佳",
         "body0": "{{player}}带着灿烂的笑容来到您的办公室。他对自己的状态和球队的走向感到满意。\n\n“老板,我就想说,我现在真的很享受踢球。更衣室的氛围棒极了。”",
@@ -3321,6 +3387,7 @@
         },
         "effect": {
           "sign": "{{player}} 已签下青训合同并加入你的青训学院。",
+          "academyFull": "青训营已满（12人）。请先提拔或解约一名新秀。",
           "shortlist": "{{player}} 已加入你的青训候选名单。",
           "discard": "{{player}} 已从青训招募报告中移除。"
         }
@@ -3328,6 +3395,17 @@
       "youthRecruitmentShortlist": {
         "subject": "青训潜力球员已入候选名单",
         "body": "{{player}} 已移入你的青训候选名单。你可以稍后再次查看，再做最终决定。"
+      },
+      "academyReview": {
+        "subject": "青训报告：{{player}}",
+        "progress": "{{player}} 正在青训营成长（总评 {{ovr}}，潜力 {{potential}}）。请继续训练，并在下个月查看进展。",
+        "ready": "{{player}} 进步明显（总评 {{ovr}}，潜力 {{potential}}）。我认为他已经可以争取一线队机会。你可以在青训营提拔他。"
+      },
+      "academyFixture": {
+        "subject": "青训挑战赛",
+        "win": "青训队以{{count}}名球员取胜（实力{{rating}}）。新秀获得了比赛经验。",
+        "draw": "青训队以{{count}}名球员战平（实力{{rating}}）。新秀获得了比赛经验。",
+        "loss": "青训队以{{count}}名球员告负（实力{{rating}}）。新秀获得了比赛经验。"
       },
       "scoutReport": {
         "subject": "球探报告:{{player}}",
@@ -4089,5 +4167,40 @@
   "generation": {
     "title": "生成与完善",
     "coverage": "您的包涵盖"
+  },
+  "phase6": {
+    "boardRoom": "董事会与更衣室",
+    "contractHelp": "协商薪水、联赛目标和合同期限。较容易的目标会降低薪资报价。",
+    "salary": "周薪",
+    "expires": "合同到期",
+    "ownership": "所有权时代",
+    "style": "俱乐部风格",
+    "leagueTarget": "联赛排名目标",
+    "years": "合同期限（年）",
+    "negotiate": "协商合同",
+    "investment": "设施投资",
+    "requestInvestment": "申请董事会资助",
+    "investmentHelp": "每赛季一次，董事会可承担升级费用的25%。需要至少50%的信任及健康的财务。",
+    "unavailable": "董事会暂不可用。",
+    "takeoverPause": "收购期间暂停合同谈判和投资申请。",
+    "negotiationCooldown": "合同谈判之间请等待30天。",
+    "offerRejected": "董事会拒绝了这些条件。请降低薪水或提出更高的联赛目标。",
+    "contractAgreed": "你的主教练合同和联赛目标已达成协议。",
+    "takeoverStarted": "俱乐部已开始收购谈判，预计30天后作出决定。",
+    "takeoverCompleted": "新所有者完成收购并向俱乐部投资。你的合同继续有效。",
+    "contractRenewal": "你的合同已到期。请前往董事会讨论续约。",
+    "investmentRejected": "资助申请被拒绝。请改善董事会信任及财务状况，或等待下赛季。",
+    "investmentApproved": "董事会批准设施升级并承担25%的费用。",
+    "facilityMaximum": "该设施已达最高等级。",
+    "captainChanged": "你的队长任命影响了相关球员。",
+    "captainConflict": "队长和副队长必须是不同球员。",
+    "dressingRoom": "更衣室",
+    "promise": "出场时间承诺：还剩{{count}}场比赛",
+    "concerns": "球员顾虑",
+    "patchBoard": "更公平的联赛目标、青训目标和比赛风格要求。",
+    "patchContracts": "协商主教练薪水、合同期限和联赛目标。",
+    "patchClub": "俱乐部收购与设施升级资助。",
+    "patchSquad": "更清晰的球员顾虑、队长任命反应和承诺期限。",
+    "playingTime": "出场时间"
   }
 }

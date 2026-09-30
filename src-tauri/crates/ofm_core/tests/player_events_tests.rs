@@ -1129,7 +1129,7 @@ fn promise_time_records_a_playing_time_promise() {
         player.morale_core.pending_promise,
         Some(PlayerPromise {
             kind: PlayerPromiseKind::PlayingTime,
-            matches_remaining: 1,
+            matches_remaining: 2,
         })
     );
 }

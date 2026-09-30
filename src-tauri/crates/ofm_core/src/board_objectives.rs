@@ -152,7 +152,42 @@ pub fn generate_objectives(game: &mut Game) {
         .filter(|&count| count > 1)
         .unwrap_or(game.teams.len()) as u32;
     let reputation = team.reputation;
-    let targets = ObjectiveTargets::new(reputation, num_teams);
+    let mut targets = ObjectiveTargets::new(reputation, num_teams);
+    let rank = 1 + game
+        .teams
+        .iter()
+        .filter(|other| {
+            other.reputation > reputation
+                && game.league.as_ref().is_some_and(|league| {
+                    league
+                        .standings
+                        .iter()
+                        .any(|standing| standing.team_id == other.id)
+                })
+        })
+        .count() as u32;
+    let season = game
+        .league
+        .as_ref()
+        .map(|league| league.season)
+        .unwrap_or(1);
+    let first_season = game
+        .board_rooms
+        .get(&user_team_id)
+        .is_none_or(|room| room.joined_season == season);
+    targets.expected_pos = crate::board_targets::league_target(rank, num_teams, first_season);
+    if let Some(room) = game.board_rooms.get_mut(&user_team_id) {
+        room.baseline_target = targets.expected_pos;
+        room.style_matches = 0;
+        room.credited_matches.clear();
+    }
+    if let Some(contract) = game
+        .board_rooms
+        .get_mut(&user_team_id)
+        .and_then(|room| room.contract.as_mut())
+    {
+        contract.league_target = targets.expected_pos;
+    }
 
     game.board_objectives = vec![
         BoardObjective {
@@ -184,6 +219,42 @@ pub fn generate_objectives(game: &mut Game) {
             met: false,
         },
     ];
+
+    let young_count = game
+        .players
+        .iter()
+        .filter(|player| {
+            player.team_id.as_deref() == Some(&user_team_id)
+                && player.squad_role == domain::player::SquadRole::Senior
+                && is_young(player, game)
+        })
+        .count() as u32;
+    if young_count > 0 && num_teams > 1 {
+        let target = (young_count.min(3) * (num_teams - 1) * 15).min(900);
+        game.board_objectives.push(BoardObjective {
+            id: "obj_youth".to_string(),
+            description: "boardObjectives.objective.YouthMinutes".to_string(),
+            target,
+            objective_type: ObjectiveType::YouthMinutes,
+            met: false,
+        });
+        if let Some(contract) = game
+            .board_rooms
+            .get_mut(&user_team_id)
+            .and_then(|room| room.contract.as_mut())
+        {
+            contract.youth_minutes_target = target;
+        }
+    }
+    if game.board_rooms.contains_key(&user_team_id) && num_teams > 1 {
+        game.board_objectives.push(BoardObjective {
+            id: "obj_style".to_string(),
+            description: "boardObjectives.objective.PlayingStyleMatches".to_string(),
+            target: num_teams - 1,
+            objective_type: ObjectiveType::PlayingStyleMatches,
+            met: false,
+        });
+    }
 
     // Send inbox message about objectives
     let today = game.clock.current_date.format("%Y-%m-%d").to_string();
@@ -240,12 +311,26 @@ pub fn update_objective_progress(game: &mut Game) {
     let user_wins = user_standing.map(|s| s.won).unwrap_or(0);
     let finance_snapshot = finances::team_finance_snapshot(game, &user_team_id);
 
+    let youth_minutes = game
+        .players
+        .iter()
+        .filter(|player| player.team_id.as_deref() == Some(&user_team_id) && is_young(player, game))
+        .fold(0_u32, |total, player| {
+            total.saturating_add(player.stats.minutes_played)
+        });
+    let style_matches = game
+        .board_rooms
+        .get(&user_team_id)
+        .map(|room| room.style_matches)
+        .unwrap_or(0);
     for obj in game.board_objectives.iter_mut() {
         obj.met = league_complete
             && match obj.objective_type {
                 ObjectiveType::LeaguePosition => user_pos <= obj.target,
                 ObjectiveType::Wins => user_wins >= obj.target,
                 ObjectiveType::GoalsScored => user_goals >= obj.target,
+                ObjectiveType::YouthMinutes => youth_minutes >= obj.target,
+                ObjectiveType::PlayingStyleMatches => style_matches >= obj.target,
                 ObjectiveType::FinancialStability => {
                     finance_snapshot.as_ref().is_some_and(|snapshot| {
                         !snapshot.currently_in_debt
@@ -265,6 +350,18 @@ pub fn evaluate_objectives(game: &Game) -> i8 {
     let total = game.board_objectives.len();
 
     satisfaction_delta(met_count, total)
+}
+
+fn is_young(player: &domain::player::Player, game: &Game) -> bool {
+    chrono::NaiveDate::parse_from_str(&player.date_of_birth, "%Y-%m-%d")
+        .ok()
+        .is_some_and(|born| {
+            game.clock
+                .current_date
+                .date_naive()
+                .years_since(born)
+                .is_some_and(|age| age <= 21)
+        })
 }
 
 #[cfg(test)]
@@ -395,7 +492,7 @@ mod tests {
         generate_objectives(&mut game);
 
         assert_eq!(game.board_objectives.len(), 4);
-        assert_eq!(objective_by_id(&game, "obj_position").target, 1);
+        assert_eq!(objective_by_id(&game, "obj_position").target, 2);
         assert_eq!(
             objective_by_id(&game, "obj_position").description,
             "boardObjectives.objective.LeaguePosition"
@@ -440,7 +537,7 @@ mod tests {
         assert_eq!(message.i18n_params.get("season"), Some(&"3".to_string()));
         assert_eq!(
             message.i18n_params.get("expectedPos"),
-            Some(&"1".to_string())
+            Some(&"2".to_string())
         );
         assert_eq!(message.i18n_params.get("winTarget"), Some(&"3".to_string()));
         assert_eq!(

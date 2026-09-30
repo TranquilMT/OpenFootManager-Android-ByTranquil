@@ -166,6 +166,8 @@ where
         training::process_training(game, weekday_num);
         training::check_squad_fitness_warnings(game);
     }
+    training::report_youth_development(game);
+    crate::youth_tournament::process_youth_fixture(game);
 
     // Tiered simulation: competitions outside the active scope are resolved by
     // scoreline only, keeping the dormant world moving without the full engine.
@@ -188,6 +190,7 @@ where
     crate::finances::process_weekly_finances(game);
 
     // Board objectives (generate if missing, update progress)
+    crate::board_room::process_day(game);
     board_objectives::generate_objectives(game);
     board_objectives::update_objective_progress(game);
 
@@ -221,11 +224,14 @@ pub fn finish_live_match_day(game: &mut Game) {
     info!("[turn] finish_live_match_day: {}", today);
     transfers::process_loan_development_reports(game);
     transfers::process_loan_returns(game);
+    training::report_youth_development(game);
+    crate::youth_tournament::process_youth_fixture(game);
     generate_matchday_news(game, &today);
 
     crate::contracts::process_contract_expiries(game);
     crate::finances::process_weekly_finances(game);
 
+    crate::board_room::process_day(game);
     board_objectives::generate_objectives(game);
     board_objectives::update_objective_progress(game);
 

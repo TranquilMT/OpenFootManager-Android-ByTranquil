@@ -102,6 +102,7 @@ export default function DashboardTabContent({ viewModel }: DashboardTabContentPr
     content = (
       <TransfersTab
         gameState={gameState}
+        initialOfferPlayerId={initialMessageId}
         onSelectPlayer={onSelectPlayer}
         onSelectTeam={onSelectTeam}
         onGameUpdate={onGameUpdate}

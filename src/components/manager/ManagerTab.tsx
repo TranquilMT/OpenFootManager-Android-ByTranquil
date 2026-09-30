@@ -1,5 +1,7 @@
 import type { GameStateData } from "../../store/gameStore";
 import { Card, CardHeader, CardBody, ProgressBar, CountryFlag } from "../ui";
+import DressingRoomPanel from "./DressingRoomPanel";
+import BoardRoomPanel from "./BoardRoomPanel";
 import { ManagerCareerChart } from "./ManagerCareerChart";
 import { formatDate } from "../../lib/helpers";
 import { useTranslation } from "react-i18next";
@@ -22,13 +24,13 @@ export default function ManagerTab({ gameState, onSelectTeam }: ManagerTabProps)
     <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
       {/* Profile card */}
       <Card accent="primary" className="md:col-span-3">
-        <div className="bg-gradient-to-r from-navy-700 to-navy-800 p-6 rounded-t-xl flex items-center gap-6">
-          <div className="w-20 h-20 rounded-xl bg-primary-500/20 flex items-center justify-center font-heading font-bold text-3xl text-primary-400 border-2 border-primary-500/30">
+        <div className="bg-gradient-to-r from-navy-700 to-navy-800 p-4 sm:p-6 rounded-t-xl flex flex-wrap items-center gap-3 sm:gap-6">
+          <div className="w-14 h-14 sm:w-20 sm:h-20 shrink-0 rounded-xl bg-primary-500/20 flex items-center justify-center font-heading font-bold text-2xl sm:text-3xl text-primary-400 border-2 border-primary-500/30">
             {mgr.first_name.charAt(0)}
             {mgr.last_name.charAt(0)}
           </div>
-          <div>
-            <h2 className="text-2xl font-heading font-bold text-white uppercase tracking-wide">
+          <div className="min-w-0 flex-1">
+            <h2 className="text-xl sm:text-2xl font-heading font-bold text-white uppercase tracking-wide break-words">
               {mgr.first_name} {mgr.last_name}
             </h2>
             <p className="text-gray-400 text-sm mt-1">
@@ -55,9 +57,17 @@ export default function ManagerTab({ gameState, onSelectTeam }: ManagerTabProps)
               <p className="text-primary-400 text-sm font-semibold mt-0.5">
                 {t("manager.managerOf", { team: myTeam.name })}
               </p>
-            ) : null}
+            ) : mgr.team_id ? (
+              <p className="text-primary-400 text-sm font-semibold mt-0.5 break-all">
+                {t("manager.managerOf", { team: mgr.team_id })}
+              </p>
+            ) : (
+              <p className="text-amber-400 text-sm font-semibold mt-0.5">
+                {t("managersWorld.unemployed")}
+              </p>
+            )}
           </div>
-          <div className="ml-auto text-right">
+          <div className="ml-auto text-right shrink-0">
             <p className="text-xs text-gray-400 font-heading uppercase tracking-wider">
               {t("manager.reputation")}
             </p>
@@ -66,16 +76,23 @@ export default function ManagerTab({ gameState, onSelectTeam }: ManagerTabProps)
         </div>
       </Card>
 
+      <BoardRoomPanel gameState={gameState} />
+      <DressingRoomPanel gameState={gameState} />
+
       {/* Career stats */}
       <Card accent="accent" className="md:col-span-2">
         <CardHeader>{t("manager.careerStats")}</CardHeader>
         <CardBody>
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
             <StatBlock label={t("manager.matches")} value={stats.matches_managed} />
             <StatBlock label={t("manager.wins")} value={stats.wins} />
             <StatBlock label={t("manager.draws")} value={stats.draws} />
             <StatBlock label={t("manager.losses")} value={stats.losses} />
             <StatBlock label={t("manager.trophies")} value={stats.trophies} />
+            <StatBlock
+              label={t("sacked.bestFinish")}
+              value={stats.best_finish ? `#${stats.best_finish}` : "—"}
+            />
             <StatBlock
               label={t("manager.winPercent")}
               value={
@@ -141,6 +158,41 @@ export default function ManagerTab({ gameState, onSelectTeam }: ManagerTabProps)
         </CardBody>
       </Card>
 
+      {!!mgr.trophy_cabinet?.length && (
+        <Card className="md:col-span-3">
+          <CardHeader>{t("manager.trophies")}</CardHeader>
+          <CardBody>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[...mgr.trophy_cabinet]
+                .sort((a, b) => b.season - a.season)
+                .map((trophy) => (
+                  <li
+                    key={`${trophy.competition_id}-${trophy.team_id}-${trophy.season}`}
+                    className="rounded-lg border border-gray-200 dark:border-navy-600 p-3"
+                  >
+                    <p className="font-heading font-bold text-gray-800 dark:text-gray-100 break-words">
+                      {trophy.competition_name} · {trophy.season}
+                    </p>
+                    {onSelectTeam && gameState.teams.some((team) => team.id === trophy.team_id) ? (
+                      <button
+                        type="button"
+                        onClick={() => onSelectTeam(trophy.team_id)}
+                        className="inline-flex min-h-11 items-center text-sm text-primary-600 dark:text-primary-400 hover:underline text-left break-words"
+                      >
+                        {trophy.team_name}
+                      </button>
+                    ) : (
+                      <p className="text-sm text-gray-500 dark:text-gray-400 break-words">
+                        {trophy.team_name}
+                      </p>
+                    )}
+                  </li>
+                ))}
+            </ul>
+          </CardBody>
+        </Card>
+      )}
+
       {/* Career history */}
       {mgr.career_history.length > 0 && (
         <Card className="md:col-span-3">
@@ -154,93 +206,91 @@ export default function ManagerTab({ gameState, onSelectTeam }: ManagerTabProps)
                 lostLabel={t("manager.losses")}
               />
             </div>
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-gray-50 dark:bg-navy-800 border-b border-gray-200 dark:border-navy-600 text-xs">
-                  <th className="py-3 px-5 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                    {t("manager.club")}
-                  </th>
-                  <th className="py-3 px-5 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                    {t("manager.period")}
-                  </th>
-                  <th className="py-3 px-5 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
-                    {t("common.played")}
-                  </th>
-                  <th className="py-3 px-5 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
-                    {t("common.won")}
-                  </th>
-                  <th className="py-3 px-5 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
-                    {t("common.drawn")}
-                  </th>
-                  <th className="py-3 px-5 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
-                    {t("common.lost")}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100 dark:divide-navy-600">
-                {mgr.career_history.map((entry, i) => {
-                  const canSelectTeam =
-                    !!onSelectTeam && gameState.teams.some((team) => team.id === entry.team_id);
-                  const historyRow = (
-                    <tr
-                      key={i}
-                      data-testid={`manager-history-${entry.team_id}`}
-                      onClick={canSelectTeam ? () => onSelectTeam(entry.team_id) : undefined}
-                      onKeyDown={
-                        canSelectTeam
-                          ? (event) => {
-                              if (event.key === "Enter" || event.key === " ") {
-                                event.preventDefault();
-                                onSelectTeam(entry.team_id);
-                              }
-                            }
-                          : undefined
-                      }
-                      role={canSelectTeam ? "button" : undefined}
-                      tabIndex={canSelectTeam ? 0 : undefined}
-                      className={
-                        canSelectTeam
-                          ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-navy-700/30 transition-colors"
-                          : undefined
-                      }
-                    >
-                      <td className="py-3 px-5 font-semibold text-sm text-gray-800 dark:text-gray-200">
-                        {entry.team_name}
-                      </td>
-                      <td className="py-3 px-5 text-sm text-gray-500 dark:text-gray-400">
-                        {entry.start_date.substring(0, 4)} —{" "}
-                        {entry.end_date?.substring(0, 4) || t("common.present")}
-                      </td>
-                      <td className="py-3 px-5 text-center text-sm text-gray-600 dark:text-gray-400 tabular-nums">
-                        {entry.matches}
-                      </td>
-                      <td className="py-3 px-5 text-center text-sm text-gray-600 dark:text-gray-400 tabular-nums">
-                        {entry.wins}
-                      </td>
-                      <td className="py-3 px-5 text-center text-sm text-gray-600 dark:text-gray-400 tabular-nums">
-                        {entry.draws}
-                      </td>
-                      <td className="py-3 px-5 text-center text-sm text-gray-600 dark:text-gray-400 tabular-nums">
-                        {entry.losses}
-                      </td>
-                    </tr>
-                  );
+            <div className="overflow-x-auto">
+              <table className="min-w-[50rem] w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-gray-50 dark:bg-navy-800 border-b border-gray-200 dark:border-navy-600 text-xs">
+                    <th className="py-3 px-5 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                      {t("manager.club")}
+                    </th>
+                    <th className="py-3 px-5 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                      {t("manager.period")}
+                    </th>
+                    <th className="py-3 px-5 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
+                      {t("common.played")}
+                    </th>
+                    <th className="py-3 px-5 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
+                      {t("common.won")}
+                    </th>
+                    <th className="py-3 px-5 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
+                      {t("common.drawn")}
+                    </th>
+                    <th className="py-3 px-5 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
+                      {t("common.lost")}
+                    </th>
+                    <th className="py-3 px-5 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
+                      {t("manager.winPercent")}
+                    </th>
+                    <th className="py-3 px-5 font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 text-center">
+                      {t("sacked.bestFinish")}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 dark:divide-navy-600">
+                  {mgr.career_history.map((entry, i) => {
+                    const canSelectTeam =
+                      !!onSelectTeam && gameState.teams.some((team) => team.id === entry.team_id);
+                    const historyRow = (
+                      <tr key={i} data-testid={`manager-history-${entry.team_id}`}>
+                        <td className="py-3 px-5 font-semibold text-sm text-gray-800 dark:text-gray-200">
+                          {canSelectTeam ? (
+                            <ContextMenu
+                              items={[buildViewTeamMenuItem(t, () => onSelectTeam(entry.team_id))]}
+                            >
+                              <button
+                                type="button"
+                                onClick={() => onSelectTeam(entry.team_id)}
+                                className="inline-flex min-h-11 items-center text-left text-primary-600 dark:text-primary-400 hover:underline"
+                              >
+                                {entry.team_name}
+                              </button>
+                            </ContextMenu>
+                          ) : (
+                            entry.team_name
+                          )}
+                        </td>
+                        <td className="py-3 px-5 text-sm text-gray-500 dark:text-gray-400">
+                          {entry.start_date.substring(0, 4)} —{" "}
+                          {entry.end_date?.substring(0, 4) || t("common.present")}
+                        </td>
+                        <td className="py-3 px-5 text-center text-sm text-gray-600 dark:text-gray-400 tabular-nums">
+                          {entry.matches}
+                        </td>
+                        <td className="py-3 px-5 text-center text-sm text-gray-600 dark:text-gray-400 tabular-nums">
+                          {entry.wins}
+                        </td>
+                        <td className="py-3 px-5 text-center text-sm text-gray-600 dark:text-gray-400 tabular-nums">
+                          {entry.draws}
+                        </td>
+                        <td className="py-3 px-5 text-center text-sm text-gray-600 dark:text-gray-400 tabular-nums">
+                          {entry.losses}
+                        </td>
+                        <td className="py-3 px-5 text-center text-sm text-gray-600 dark:text-gray-400 tabular-nums">
+                          {entry.matches
+                            ? `${Math.round((entry.wins / entry.matches) * 100)}%`
+                            : "—"}
+                        </td>
+                        <td className="py-3 px-5 text-center text-sm text-gray-600 dark:text-gray-400 tabular-nums">
+                          {entry.best_league_position ? `#${entry.best_league_position}` : "—"}
+                        </td>
+                      </tr>
+                    );
 
-                  if (!canSelectTeam) {
                     return historyRow;
-                  }
-
-                  return (
-                    <ContextMenu
-                      items={[buildViewTeamMenuItem(t, () => onSelectTeam(entry.team_id))]}
-                      key={i}
-                    >
-                      {historyRow}
-                    </ContextMenu>
-                  );
-                })}
-              </tbody>
-            </table>
+                  })}
+                </tbody>
+              </table>
+            </div>
           </CardBody>
         </Card>
       )}

@@ -26,7 +26,7 @@ fn facility_level(facilities: &Facilities, facility_type: &FacilityType) -> u8 {
 }
 
 pub fn next_upgrade_cost(team: &Team, facility_type: &FacilityType) -> i64 {
-    i64::from(facility_level(&team.facilities, facility_type)) * BASE_FACILITY_UPGRADE_COST
+    i64::from(facility_level(&team.facilities, facility_type).max(1)) * BASE_FACILITY_UPGRADE_COST
 }
 
 pub fn upgrade_facility(
@@ -40,6 +40,9 @@ pub fn upgrade_facility(
             .iter()
             .find(|team| team.id == team_id)
             .ok_or_else(|| "be.error.managedTeamNotFound".to_string())?;
+        if facility_level(&team.facilities, &facility_type) >= 10 {
+            return Err("phase6.facilityMaximum".to_string());
+        }
         let cost = next_upgrade_cost(team, &facility_type);
         if team.finance < cost {
             return Err(facility_upgrade_insufficient_funds_error(cost));

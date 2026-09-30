@@ -138,6 +138,8 @@ export default function YouthAcademyTab({
       age: calcAge(player.date_of_birth),
     }))
     .sort((left, right) => left.age - right.age || left.full_name.localeCompare(right.full_name));
+  const youthMatchHelpers = eligibleSeniorPlayers.filter((player) => !player.injury).length;
+  const youthTournamentReady = youthPlayers.length >= 12 && youthMatchHelpers >= 2;
 
   const avgOvr =
     youthPlayers.length > 0
@@ -231,6 +233,19 @@ export default function YouthAcademyTab({
         <Badge variant="neutral" size="sm">
           {t("youthAcademy.playersUnder21", { count: youthPlayers.length })}
         </Badge>
+      </div>
+
+      <div className="rounded-xl border border-primary-500/25 bg-primary-500/5 px-4 py-3 text-sm text-gray-700 dark:text-gray-200">
+        <p className="font-semibold">{t("youthAcademy.tournamentTitle")}</p>
+        <p className="mt-1">
+          {t(
+            youthTournamentReady ? "youthAcademy.tournamentReady" : "youthAcademy.tournamentNeeds",
+            {
+              prospects: youthPlayers.length,
+              helpers: youthMatchHelpers,
+            },
+          )}
+        </p>
       </div>
 
       {/* Overview Cards */}

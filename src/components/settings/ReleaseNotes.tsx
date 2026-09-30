@@ -4,10 +4,10 @@ import { useTranslation } from "react-i18next";
 const ISSUE_URL = "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new";
 
 const HIGHLIGHT_KEYS = [
-  "settings.hotfixInbox",
-  "settings.hotfixSave",
-  "settings.hotfixMatch",
-  "settings.hotfixStability",
+  "phase6.patchBoard",
+  "phase6.patchContracts",
+  "phase6.patchClub",
+  "phase6.patchSquad",
 ] as const;
 
 export function ReleaseNotes({ embedded = false }: { embedded?: boolean }) {

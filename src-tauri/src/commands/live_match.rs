@@ -403,7 +403,13 @@ mod tests {
             team_id,
             Position::Goalkeeper,
         ));
-        for index in 0..4 {
+        players.push(make_player(
+            &format!("{}_gk_sub", prefix),
+            &format!("{} GK Sub", prefix),
+            team_id,
+            Position::Goalkeeper,
+        ));
+        for index in 0..5 {
             players.push(make_player(
                 &format!("{}_def{}", prefix, index),
                 &format!("{} Def{}", prefix, index),
@@ -411,7 +417,7 @@ mod tests {
                 Position::Defender,
             ));
         }
-        for index in 0..4 {
+        for index in 0..5 {
             players.push(make_player(
                 &format!("{}_mid{}", prefix, index),
                 &format!("{} Mid{}", prefix, index),

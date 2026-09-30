@@ -173,19 +173,41 @@ fn sort_opening_youth_indices(players: &[Player], indices: &mut [usize]) {
     });
 }
 
-fn apply_opening_youth_assignments(players: &mut [Player], candidate_indices: Vec<usize>) -> usize {
+fn apply_opening_youth_assignments(
+    players: &mut [Player],
+    candidate_indices: Vec<usize>,
+    existing: usize,
+) -> usize {
     use domain::player::SquadRole;
 
     let mut assigned = 0;
+    let remaining = OPENING_YOUTH_ACADEMY_SIZE.saturating_sub(existing);
 
-    for index in candidate_indices
-        .into_iter()
-        .take(OPENING_YOUTH_ACADEMY_SIZE)
-    {
-        if players[index].squad_role != SquadRole::Youth {
-            players[index].squad_role = SquadRole::Youth;
-            assigned += 1;
+    for index in candidate_indices {
+        if assigned >= remaining {
+            break;
         }
+        if players[index].squad_role == SquadRole::Youth {
+            continue;
+        }
+        let role = &players[index].natural_position;
+        let role_total = players
+            .iter()
+            .filter(|player| &player.natural_position == role)
+            .count();
+        let senior_count = players
+            .iter()
+            .filter(|player| {
+                &player.natural_position == role && player.squad_role == SquadRole::Senior
+            })
+            .count();
+        // Keep enough senior specialists to staff every occurrence of a
+        // formation role, even when several young players share that role.
+        if senior_count <= role_total.div_ceil(2) {
+            continue;
+        }
+        players[index].squad_role = SquadRole::Youth;
+        assigned += 1;
     }
 
     assigned
@@ -200,20 +222,16 @@ fn seed_opening_youth_academy(players: &mut [Player], opening_year: i32) {
         .collect();
 
     sort_opening_youth_indices(players, &mut eligible_indices);
-    apply_opening_youth_assignments(players, eligible_indices);
+    let existing = players
+        .iter()
+        .filter(|player| player.squad_role == domain::player::SquadRole::Youth)
+        .count();
+    apply_opening_youth_assignments(players, eligible_indices, existing);
 }
 
 pub fn repair_opening_youth_academies(game: &mut crate::game::Game) -> bool {
     use chrono::Duration;
     use domain::player::SquadRole;
-
-    if game
-        .players
-        .iter()
-        .any(|player| player.squad_role == SquadRole::Youth)
-    {
-        return false;
-    }
 
     if game.clock.current_date > game.clock.start_date + Duration::days(30) {
         return false;
@@ -225,6 +243,14 @@ pub fn repair_opening_youth_academies(game: &mut crate::game::Game) -> bool {
     let opening_year = game.clock.start_date.year();
 
     for team_id in team_ids {
+        let existing = game
+            .players
+            .iter()
+            .filter(|player| {
+                player.team_id.as_deref() == Some(team_id.as_str())
+                    && player.squad_role == SquadRole::Youth
+            })
+            .count();
         let mut candidate_indices: Vec<usize> = game
             .players
             .iter()
@@ -235,7 +261,8 @@ pub fn repair_opening_youth_academies(game: &mut crate::game::Game) -> bool {
             .collect();
 
         sort_opening_youth_indices(&game.players, &mut candidate_indices);
-        repaired |= apply_opening_youth_assignments(&mut game.players, candidate_indices) > 0;
+        repaired |=
+            apply_opening_youth_assignments(&mut game.players, candidate_indices, existing) > 0;
     }
 
     repaired
@@ -295,7 +322,7 @@ pub fn generate_youth_academy_recruit_with_nationality(
 }
 
 /// Generate a senior free-agent player for a national squad. `squad_slot`
-/// follows the standard squad layout (GK 0-1, DEF 2-8, MID 9-15, FWD 16-21)
+/// follows the standard squad layout (GK 0-1, DEF 2-9, MID 10-17, FWD 18-21)
 /// and drives the position; the player belongs to no club and holds no
 /// contract, so clubs may sign them afterwards.
 pub fn generate_national_team_player(
@@ -345,6 +372,18 @@ fn rebalance_generated_player_for_club(
         _ => LeagueTier::Grassroots,
     };
     let youth = is_youth_reserved_slot(slot);
+    let curated_average = clubs::curated_squad_target(&team.name);
+    let academy_reputation = curated_average.unwrap_or(reputation).max(reputation);
+    let academy_quality = academy_reputation
+        .saturating_add(financial_strength / 5)
+        .min(100);
+    let academy_tier = match academy_reputation {
+        80.. => LeagueTier::Elite,
+        65..=79 => LeagueTier::Top,
+        45..=64 => LeagueTier::Professional,
+        25..=44 => LeagueTier::Lower,
+        _ => LeagueTier::Grassroots,
+    };
     let base = club_strength_ovr(tier, reputation, financial_strength);
     // Procedural club IDs are UUIDs. Use the stable football identity so a
     // seeded world produces the same featured players on every generation.
@@ -363,7 +402,20 @@ fn rebalance_generated_player_for_club(
     // Factual club membership and game-designed ability are separate inputs.
     // Stronger named clubs need genuinely stronger player attributes, not a
     // cosmetic number on the team-selection card. Youth still starts lower.
-    let target = if let Some(club_average) = clubs::curated_squad_target(&team.name) {
+    let target = if youth {
+        let age = player
+            .date_of_birth
+            .get(0..4)
+            .and_then(|year| year.parse::<u32>().ok())
+            .map(|year| opening_year.saturating_sub(year))
+            .unwrap_or(18) as u8;
+        crate::generated_balance::academy_current_ovr(
+            academy_tier,
+            academy_reputation,
+            academy_quality,
+            age,
+        )
+    } else if let Some(club_average) = curated_average {
         const SLOT_OFFSETS: [i16; SQUAD_SLOTS] = [
             8, 6, 6, 5, 4, 4, 3, 3, 2, 2, 1, 0, -1, -2, -3, -3, -4, -5, -6, -6, -14, -14,
         ];
@@ -381,14 +433,23 @@ fn rebalance_generated_player_for_club(
     let current = crate::player_rating::natural_ovr(player)
         .round()
         .clamp(1.0, 99.0) as u8;
-    player.potential =
-        crate::generated_career::potential_curve::potential(current, age, reputation);
+    player.potential = if youth {
+        crate::generated_balance::academy_potential(
+            academy_tier,
+            academy_reputation,
+            academy_quality,
+            current,
+        )
+    } else {
+        crate::generated_career::potential_curve::potential(current, age, reputation)
+    };
     player.market_value = market_value_eur(current, player.potential, age).max(0) as u64;
     player.wage = weekly_wage_eur(current, reputation).clamp(100, u32::MAX as i64) as u32;
     crate::player_rating::refresh_player_derived(player, opening_year);
 }
 
 fn normalize_generated_team(team: &mut Team, players: &mut [Player], opening_year: i32) {
+    assign_unique_jersey_numbers(players);
     seed_opening_youth_academy(players, opening_year);
     normalize_opening_contracts(players);
 
@@ -399,6 +460,59 @@ fn normalize_generated_team(team: &mut Team, players: &mut [Player], opening_yea
     team.finance = team
         .finance
         .max(weekly_wage_spend.saturating_mul(MIN_OPENING_RUNWAY_WEEKS));
+}
+
+/// Preserve each player's first available shirt number, filling collisions
+/// from the remaining 1..=99 pool before the database unique index is hit.
+fn assign_unique_jersey_numbers(players: &mut [Player]) {
+    let mut used = std::collections::HashSet::new();
+    for player in players {
+        if player.squad_role == domain::player::SquadRole::Youth {
+            player.jersey_number = None;
+            continue;
+        }
+        if player
+            .jersey_number
+            .is_some_and(|number| (1..=99).contains(&number) && used.insert(number))
+        {
+            continue;
+        }
+        let free = (1..=99).find(|number| !used.contains(number));
+        player.jersey_number = free;
+        if let Some(number) = free {
+            used.insert(number);
+        }
+    }
+}
+
+fn seed_starting_xi(team: &mut Team, players: &[Player]) {
+    use domain::player::SquadRole;
+
+    let mut chosen = Vec::with_capacity(11);
+    for role in crate::player_rating::formation_slots(&team.formation) {
+        let candidate = players
+            .iter()
+            .filter(|player| player.squad_role == SquadRole::Senior && player.injury.is_none())
+            .filter(|player| !chosen.contains(&player.id))
+            .filter(|player| player.natural_position == role)
+            .max_by_key(|player| player.ovr)
+            .or_else(|| {
+                players
+                    .iter()
+                    .filter(|player| {
+                        player.squad_role == SquadRole::Senior && player.injury.is_none()
+                    })
+                    .filter(|player| !chosen.contains(&player.id))
+                    .filter(|player| {
+                        player.position.to_group_position() == role.to_group_position()
+                    })
+                    .max_by_key(|player| player.ovr)
+            });
+        if let Some(player) = candidate {
+            chosen.push(player.id.clone());
+        }
+    }
+    team.starting_xi_ids = chosen;
 }
 
 /// The country a club's *people* should be drawn from.
@@ -768,6 +882,8 @@ fn build_team(tdef: &TeamDef, rng: &mut impl rand::Rng) -> domain::team::Team {
         secondary: tdef.colors.secondary.clone(),
     };
     team.play_style = play_style_from_str(&tdef.play_style);
+    const OPENING_FORMATIONS: [&str; 3] = ["4-4-2", "4-3-3", "5-3-2"];
+    team.formation = OPENING_FORMATIONS[rng.random_range(0..OPENING_FORMATIONS.len())].to_string();
     team.media.logo = tdef.logo.clone();
     if let Some(ref pattern_str) = tdef.kit_pattern
         && let Ok(pattern) = pattern_str.parse()
@@ -777,7 +893,7 @@ fn build_team(tdef: &TeamDef, rng: &mut impl rand::Rng) -> domain::team::Team {
     team
 }
 
-/// Build a club with a full generated squad (22 players) and staff, normalised
+/// Build a club with 22 to 26 generated players and staff, normalised
 /// to a sensible opening wage budget. Shared by the random world and world
 /// packages.
 fn build_club(
@@ -799,8 +915,42 @@ fn build_club(
     }
     let team_id = team.id.clone();
 
-    let mut team_players = Vec::with_capacity(SQUAD_SLOTS);
-    for slot in 0..SQUAD_SLOTS {
+    let squad_size = rng.random_range(SQUAD_SLOTS..=26);
+    let mut team_players = Vec::with_capacity(squad_size);
+    // Two players for every deployed slot, including repeated central roles.
+    // The optional places sample the actual tactical roles of this club.
+    let base_roles: Vec<Position> = crate::player_rating::formation_slots(&team.formation)
+        .into_iter()
+        .flat_map(|role| [role.clone(), role])
+        .collect();
+    let mut bonus_roles: Vec<Position> = base_roles
+        .iter()
+        .filter(|role| role.to_group_position() != Position::Goalkeeper)
+        .cloned()
+        .collect();
+    bonus_roles.sort_by_key(|role| format!("{role:?}"));
+    bonus_roles.dedup();
+    let mut group_indices = [0usize; 4];
+    for index in 0..squad_size {
+        let role = if let Some(role) = base_roles.get(index) {
+            role.clone()
+        } else {
+            bonus_roles.swap_remove(rng.random_range(0..bonus_roles.len()))
+        };
+        let group_index = match role.to_group_position() {
+            Position::Goalkeeper => 0,
+            Position::Defender => 1,
+            Position::Midfielder => 2,
+            _ => 3,
+        };
+        let (offset, span) = [(0, 2), (2, 8), (10, 8), (18, 4)][group_index];
+        let slot = if index < SQUAD_SLOTS {
+            let slot = offset + group_indices[group_index] % span;
+            group_indices[group_index] += 1;
+            senior_slot(slot)
+        } else {
+            senior_slot(offset + rng.random_range(0..span))
+        };
         let nationality = pick_nationality_from_def(&tdef.country, country_codes, rng);
         let mut player = generate_random_player_from_def(
             &team_id,
@@ -810,6 +960,7 @@ fn build_club(
             names_def,
             rng,
         );
+        player.natural_position = role;
         rebalance_generated_player_for_club(&mut player, &team, slot, opening_year, rng);
         if rng.random_range(0..100) < 12 {
             player.transfer_listed = true;
@@ -817,6 +968,24 @@ fn build_club(
             player.loan_listed = true;
         }
         team_players.push(player);
+    }
+
+    // Academy prospects are a separate pool, outside the 22–26 senior cap.
+    // Reserved slots provide youth ages and club-strength-based potential.
+    for slot in [9, 17, 21] {
+        let nationality = pick_nationality_from_def(&tdef.country, country_codes, rng);
+        let mut prospect = generate_random_player_from_def(
+            &team_id,
+            slot,
+            &nationality,
+            opening_year,
+            names_def,
+            rng,
+        );
+        rebalance_generated_player_for_club(&mut prospect, &team, slot, opening_year, rng);
+        prospect.squad_role = domain::player::SquadRole::Youth;
+        prospect.jersey_number = None;
+        team_players.push(prospect);
     }
 
     let mut team_staff = Vec::with_capacity(4);
@@ -827,17 +996,22 @@ fn build_club(
         StaffRole::Physio,
     ] {
         let nationality = pick_nationality_from_def(&tdef.country, country_codes, rng);
-        team_staff.push(generate_random_staff_from_def(
+        let mut member = generate_random_staff_from_def(
             &team_id,
-            role,
+            role.clone(),
             &nationality,
             opening_year,
             names_def,
             rng,
-        ));
+        );
+        if role == StaffRole::Coach {
+            member.specialization = Some(domain::staff::CoachingSpecialization::Youth);
+        }
+        team_staff.push(member);
     }
 
     normalize_generated_team(&mut team, &mut team_players, opening_year as i32);
+    seed_starting_xi(&mut team, &team_players);
     (team, team_players, team_staff)
 }
 
@@ -984,6 +1158,7 @@ fn build_package_club(
     // Authored wages may differ from the players they replaced, so re-normalise
     // the opening wage budget to the final squad.
     normalize_generated_team(&mut team, &mut players, opening_year as i32);
+    seed_starting_xi(&mut team, &players);
     (team, players, staff)
 }
 
@@ -2042,7 +2217,20 @@ mod tests {
         let (teams, players, staff) =
             generate_world_with(&config, &definitions::DefinitionSources::embedded_only());
         assert_eq!(teams.len(), expected);
-        assert_eq!(players.len(), expected * (SQUAD_SLOTS + 1));
+        assert!((expected * (SQUAD_SLOTS + 4)..=expected * 30).contains(&players.len()));
+        let distinct_sizes: std::collections::HashSet<_> = teams
+            .iter()
+            .map(|team| {
+                players
+                    .iter()
+                    .filter(|player| player.team_id.as_deref() == Some(team.id.as_str()))
+                    .count()
+            })
+            .collect();
+        assert!(
+            distinct_sizes.len() > 1,
+            "clubs should have varied squad sizes"
+        );
         assert_eq!(
             players
                 .iter()
@@ -2068,14 +2256,33 @@ mod tests {
                 .iter()
                 .filter(|player| player.team_id.as_deref() == Some(team.id.as_str()))
                 .collect();
-            assert_eq!(squad.len(), SQUAD_SLOTS);
-            squad.iter().map(|player| player.ovr as u32).sum::<u32>() / squad.len() as u32
+            assert!((SQUAD_SLOTS + 3..=29).contains(&squad.len()));
+            let seniors: Vec<_> = squad
+                .iter()
+                .filter(|player| player.squad_role == domain::player::SquadRole::Senior)
+                .collect();
+            seniors.iter().map(|player| player.ovr as u32).sum::<u32>() / seniors.len() as u32
         };
         assert!(average("Manchester United") >= 86);
         assert!(average("Arsenal") >= 86);
         assert!(average("Chelsea") >= 86);
         assert!(average("Liverpool") >= 86);
         assert!(average("Birmingham City") < average("Manchester United"));
+        let youth_potential = |name: &str| {
+            let team = teams.iter().find(|team| team.name == name).unwrap();
+            let youth: Vec<_> = players
+                .iter()
+                .filter(|player| player.team_id.as_deref() == Some(team.id.as_str()))
+                .filter(|player| player.squad_role == domain::player::SquadRole::Youth)
+                .collect();
+            assert_eq!(youth.len(), 3);
+            youth
+                .iter()
+                .map(|player| player.potential as u32)
+                .sum::<u32>()
+                / youth.len() as u32
+        };
+        assert!(youth_potential("Manchester United") > youth_potential("Birmingham City"));
     }
 
     #[test]
@@ -2126,17 +2333,122 @@ mod tests {
             &WorldGenConfig::compact(),
             &definitions::DefinitionSources::embedded_only(),
         );
+        let formations: std::collections::HashSet<_> =
+            teams.iter().map(|team| team.formation.as_str()).collect();
+        assert!(
+            formations.len() > 1,
+            "clubs should use varied opening formations"
+        );
         for team in &teams {
             let team_players: Vec<_> = players
                 .iter()
                 .filter(|p| p.team_id.as_deref() == Some(&team.id))
                 .collect();
-            assert_eq!(team_players.len(), 22);
-            let gk = team_players
+            let seniors: Vec<_> = team_players
                 .iter()
-                .filter(|p| p.position == Position::Goalkeeper)
-                .count();
-            assert!(gk >= 2, "Team {} has only {} GK", team.name, gk);
+                .filter(|player| player.squad_role == SquadRole::Senior)
+                .collect();
+            let academy_count = team_players.len() - seniors.len();
+            assert_eq!(academy_count, 3, "{} needs a separate academy", team.name);
+            let shirt_numbers: std::collections::HashSet<_> = seniors
+                .iter()
+                .map(|player| {
+                    player
+                        .jersey_number
+                        .expect("generated player needs a shirt")
+                })
+                .collect();
+            assert_eq!(
+                shirt_numbers.len(),
+                seniors.len(),
+                "{} has duplicate shirts",
+                team.name
+            );
+            for player in &team_players {
+                let mut after_migration = (*player).clone();
+                crate::player_identity::upgrade_player_identity(&mut after_migration, None);
+                assert_eq!(
+                    after_migration.natural_position, player.natural_position,
+                    "{} lost a role on migration",
+                    team.name
+                );
+            }
+            assert!((22..=26).contains(&seniors.len()));
+            let slots = crate::player_rating::formation_slots(&team.formation);
+            assert_eq!(
+                team.starting_xi_ids.len(),
+                11,
+                "{} needs a full XI",
+                team.name
+            );
+            for role in &slots {
+                let required = slots.iter().filter(|slot| *slot == role).count();
+                let available = seniors
+                    .iter()
+                    .filter(|player| &player.natural_position == role)
+                    .count();
+                let senior = available;
+                assert!(
+                    available >= required * 2,
+                    "{} lacks two per {:?} slot",
+                    team.name,
+                    role
+                );
+                assert!(
+                    senior >= required,
+                    "{} lacks senior {:?} starters",
+                    team.name,
+                    role
+                );
+            }
+            for (id, role) in team.starting_xi_ids.iter().zip(slots) {
+                let starter = team_players.iter().find(|player| &player.id == id).unwrap();
+                assert_eq!(
+                    starter.natural_position, role,
+                    "{} has an unnatural starter",
+                    team.name
+                );
+                assert_eq!(starter.squad_role, domain::player::SquadRole::Senior);
+            }
+            for (position, minimum) in [
+                (Position::Goalkeeper, 2),
+                (Position::Defender, 6),
+                (Position::Midfielder, 4),
+                (Position::Forward, 2),
+            ] {
+                let count = seniors.iter().filter(|p| p.position == position).count();
+                assert!(
+                    count >= minimum,
+                    "Team {} has only {} {:?}",
+                    team.name,
+                    count,
+                    position
+                );
+            }
+            let senior = |role: Position| {
+                team_players
+                    .iter()
+                    .filter(|player| {
+                        player.squad_role == domain::player::SquadRole::Senior
+                            && player.natural_position == role
+                    })
+                    .count()
+            };
+            match team.formation.as_str() {
+                "4-3-3" => {
+                    assert!(senior(Position::LeftWinger) >= 1);
+                    assert!(senior(Position::RightWinger) >= 1);
+                    assert!(senior(Position::Striker) >= 1);
+                }
+                "5-3-2" => {
+                    assert!(senior(Position::LeftWingBack) >= 1);
+                    assert!(senior(Position::RightWingBack) >= 1);
+                    assert!(senior(Position::CenterBack) >= 3);
+                    assert!(senior(Position::Striker) >= 2);
+                }
+                "4-4-2" => assert!(senior(Position::Striker) >= 2),
+                other => panic!("unexpected formation: {other}"),
+            }
         }
     }
 
@@ -2627,7 +2939,7 @@ mod tests {
             "every club should come from the overridden nation: {:?}",
             teams.iter().map(|t| &t.country).collect::<Vec<_>>()
         );
-        assert_eq!(players.len(), 4 * (SQUAD_SLOTS + 1));
+        assert!((4 * (SQUAD_SLOTS + 4)..=4 * 30).contains(&players.len()));
 
         std::fs::remove_dir_all(&dir).ok();
     }

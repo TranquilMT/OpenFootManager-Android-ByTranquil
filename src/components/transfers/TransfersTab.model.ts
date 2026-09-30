@@ -67,24 +67,34 @@ export function deriveTransferCollections(
   userTeamId: string | null,
 ): TransferCollections {
   const myTransferList = gameState.players.filter(
-    (player) => player.team_id === userTeamId && player.transfer_listed && !player.active_loan,
+    (player) =>
+      player.team_id === userTeamId &&
+      player.squad_role !== "Youth" &&
+      player.transfer_listed &&
+      !player.active_loan,
   );
   const myLoanList = gameState.players.filter(
-    (player) => player.team_id === userTeamId && player.loan_listed && !player.active_loan,
+    (player) =>
+      player.team_id === userTeamId &&
+      player.squad_role !== "Youth" &&
+      player.loan_listed &&
+      !player.active_loan,
   );
   const marketPlayers = gameState.players.filter(
     (player) =>
       player.transfer_listed &&
+      player.squad_role !== "Youth" &&
       player.team_id !== userTeamId &&
       !player.active_loan &&
       !playerHasPendingRegistration(player),
   );
   const freeAgentPlayers = gameState.players.filter(
-    (player) => player.team_id === null && !player.retired,
+    (player) => player.team_id === null && player.squad_role !== "Youth" && !player.retired,
   );
   const loanPlayers = gameState.players.filter(
     (player) =>
       player.loan_listed &&
+      player.squad_role !== "Youth" &&
       player.team_id !== userTeamId &&
       !player.active_loan &&
       !playerHasPendingRegistration(player),

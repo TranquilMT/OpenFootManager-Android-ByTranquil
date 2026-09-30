@@ -1351,13 +1351,13 @@ describe("TransfersTab", (): void => {
     render(
       <TransfersTab
         gameState={initialState}
+        initialOfferPlayerId="loan-owned"
         onSelectPlayer={vi.fn()}
         onSelectTeam={vi.fn()}
         onGameUpdate={onGameUpdate}
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /offers/i }));
     expect(screen.getByText("Loan 75% wages until 2027-01-01 — Live")).toBeInTheDocument();
     fireEvent.click(screen.getByTitle("Accept Loan"));
 

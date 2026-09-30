@@ -241,13 +241,18 @@ impl SaveManager {
         let db_open_ms = db_open_timer.elapsed().as_millis();
 
         let write_timer = Instant::now();
-        GamePersistenceWriter::write_game_and_stats(
+        let write_result = GamePersistenceWriter::write_game_and_stats(
             &db,
             &persisted_game,
             stats,
             &save_id,
             save_name,
-        )?;
+        );
+        if let Err(error) = write_result {
+            drop(db);
+            let _ = fs::remove_file(&db_path);
+            return Err(error);
+        }
         let write_ms = write_timer.elapsed().as_millis();
         drop(db);
 
@@ -639,6 +644,7 @@ impl SaveManager {
         game.scouting_assignments.clear();
         game.youth_scouting_assignments.clear();
         game.board_objectives.clear();
+        game.board_rooms.clear();
 
         // Reset clock to start date
         game.clock.current_date = game.clock.start_date;
@@ -1186,6 +1192,19 @@ mod tests {
             make_opening_repair_player("mid", Position::Midfielder, "2007-01-01"),
             make_opening_repair_player("fwd", Position::Forward, "2006-01-01"),
             make_opening_repair_player("senior", Position::Defender, "2000-01-01"),
+            make_opening_repair_player("senior-mid", Position::Midfielder, "2000-01-01"),
+            make_opening_repair_player("senior-fwd", Position::Forward, "2000-01-01"),
+            make_opening_repair_player("senior-def-2", Position::Defender, "1999-01-01"),
+            make_opening_repair_player("senior-def-3", Position::Defender, "1998-01-01"),
+            make_opening_repair_player("senior-def-4", Position::Defender, "1997-01-01"),
+            make_opening_repair_player("senior-mid-2", Position::Midfielder, "1999-01-01"),
+            make_opening_repair_player("senior-mid-3", Position::Midfielder, "1998-01-01"),
+            make_opening_repair_player("senior-mid-4", Position::Midfielder, "1997-01-01"),
+            make_opening_repair_player("senior-fwd-2", Position::Forward, "1999-01-01"),
+            make_opening_repair_player("senior-fwd-3", Position::Forward, "1998-01-01"),
+            make_opening_repair_player("senior-fwd-4", Position::Forward, "1997-01-01"),
+            make_opening_repair_player("senior-gk-2", Position::Goalkeeper, "1998-01-01"),
+            make_opening_repair_player("senior-def-5", Position::Defender, "1996-01-01"),
         ];
 
         Game::new(clock, manager, vec![team], players, vec![], vec![])
@@ -2195,6 +2214,24 @@ mod tests {
         let sm = SaveManager::init(&saves_dir).unwrap();
         assert_eq!(sm.list_saves().len(), 1);
         assert_eq!(sm.list_saves()[0].name, "Persistent Career");
+    }
+
+    #[test]
+    fn board_room_contract_and_ownership_roundtrip() {
+        let dir = tempfile::tempdir().unwrap();
+        let mut saves = SaveManager::init(&dir.path().join("saves")).unwrap();
+        let mut game = sample_game();
+        ofm_core::board_room::initialize(&mut game);
+        let id = game.manager.team_id.clone().unwrap();
+        let room = game.board_rooms.get_mut(&id).unwrap();
+        room.ownership_generation = 2;
+        room.last_negotiation_date = "2026-08-01".into();
+        room.takeover_due = Some("2026-09-01".into());
+        room.contract.as_mut().unwrap().weekly_salary = 1234;
+        let expected = serde_json::to_value(&game.board_rooms).unwrap();
+        let save_id = saves.create_save(&game, "Board room").unwrap();
+        let loaded = saves.load_game(&save_id).unwrap();
+        assert_eq!(serde_json::to_value(&loaded.board_rooms).unwrap(), expected);
     }
 
     #[test]

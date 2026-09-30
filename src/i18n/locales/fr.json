@@ -24,7 +24,7 @@
     "openGithub": "Ouvrir le dépôt GitHub d’OFMtouch",
     "openOriginalGithub": "Ouvrir le dépôt GitHub original d’OpenFootManager",
     "originalGame": "Jeu original",
-    "doNotShowWhatsNew": "Ne plus afficher pour la v0.3.6",
+    "doNotShowWhatsNew": "Ne plus afficher pour la v0.5.2",
     "continueToGame": "Continuer",
     "mainMenu": "Menu principal",
     "worldEditor": "Éditeur de Monde"
@@ -381,6 +381,9 @@
     "openScouting": "Ouvrir le scouting",
     "recruitmentWorkflowTitle": "Flux de recrutement des jeunes",
     "recruitmentWorkflowHint": "Démarrez, annulez ou réattribuez les recherches du centre de formation sans quitter la vue de l'académie.",
+    "tournamentTitle": "Défi des jeunes",
+    "tournamentReady": "Prêt pour le prochain match : {{prospects}}/12 jeunes et {{helpers}} seniors de moins de 21 ans.",
+    "tournamentNeeds": "Il faut 12 jeunes et deux seniors de moins de 21 ans pour un groupe de 14. Actuellement : {{prospects}}/12 jeunes, {{helpers}} renforts.",
     "noEligibleSeniorPlayers": "Aucun joueur senior U21 éligible n'est disponible pour le moment.",
     "youthPlayers": "Joueurs Jeunes",
     "avgOvr": "Moy. OVR",
@@ -1262,7 +1265,9 @@
       "LeaguePosition": "Terminez dans le top {{target}}",
       "Wins": "Remportez au moins {{target}} matchs",
       "GoalsScored": "Marquez au moins {{target}} buts",
-      "FinancialStability": "Maintenez la masse salariale à {{target}} % du budget ou moins"
+      "FinancialStability": "Maintenez la masse salariale à {{target}} % du budget ou moins",
+      "YouthMinutes": "Accorder {{target}} minutes aux moins de 22 ans",
+      "PlayingStyleMatches": "Utiliser le style convenu lors de {{target}} matchs de championnat"
     }
   },
   "transfers": {
@@ -1772,17 +1777,35 @@
     "patchPlayers": "Plus de talents, dont de rares stars notées 96 et de solides candidats à la montée.",
     "patchMatches": "Plus de réactions, des frappes sur les montants et un commentaire vocal facultatif.",
     "patchMobile": "Commandes mobiles, boîte de réception, sélections nationales et carrière améliorées.",
-    "patchWelcome": "Bienvenue dans OFMtouch ! Nouveautés de la v0.3.6",
+    "patchWelcome": "Bienvenue dans OFMtouch ! Nouveautés de la v0.6.0",
     "patchPortraits": "20 visages fictifs de référence diversifient les portraits des joueurs générés.",
     "patchWorld": "Un monde du football plus vaste couvre 29 nations, avec des clubs renforcés en Amérique et en Asie.",
     "patchTransfers": "La stratégie des clubs guide prêts et transferts, avec offres concurrentes et contrôle du budget.",
     "patchDevelopment": "Le temps de jeu aide les jeunes à progresser ; les rapports de recrutement évitent les noms répétés.",
+    "careerHighlights": "Les nouvelles carrières se sauvegardent correctement avec des effectifs élargis.",
+    "careerInbox": "Le onze de départ conserve ses rôles et la couverture reflète les postes naturels.",
+    "careerSeason": "La liste de l’effectif est plus compacte et lisible sur mobile.",
+    "careerReliability": "Les sauvegardes échouées suppriment les fichiers incomplets; de nouveaux tests vérifient numéros et rôles.",
+    "careerYouth": "Le centre est séparé des 22–26 seniors, avec bilans des entraîneurs, promotions et une limite de 12 jeunes.",
+    "careerYouthScouting": "Les recherches senior et jeune sont distinctes ; les matchs de jeunes exigent 12 espoirs et deux seniors de moins de 21 ans.",
+    "careerRules": "Règles 2026/27 : les contrôles de hors-jeu semi-automatisés seront plus rapides ; la Loi 11 reste inchangée ici.",
+    "hotfixInjuryDetails": "Les blessures s’affichent correctement dans les résumés de match et d’avancement.",
+    "hotfixOfferReview": "Examiner une offre de prêt ou de transfert ouvre les offres du joueur, même après une première consultation.",
+    "hotfixPortraitNeck": "Les portraits préservent la peau du cou et actualisent les images enregistrées.",
+    "hotfixConversations": "Les promesses de temps de jeu peuvent désormais être tenues sur deux matchs.",
+    "nextPreview": "À suivre : une planification d’effectif plus poussée et davantage d’échanges avec les joueurs sont à l’étude.",
+    "history0504": "Des tests supplémentaires couvrent la carrière, les sauvegardes et le menu mobile.",
+    "history0503": "Les transitions de saison et les résultats se poursuivent dans votre carrière.",
+    "history0502": "Les actualités et décisions de carrière sont plus faciles à suivre dans la boîte de réception.",
+    "history0501": "Une nouvelle carrière de manager enrichit les décisions du club et les saisons.",
     "hotfixInbox": "Les messages sont lisibles sur mobile ; leur confirmation utilise moins de mémoire.",
     "hotfixSave": "Enregistrer la partie se trouve dans les paramètres, laissant de la place à la date et à Continuer.",
     "hotfixMatch": "Les blessures en match persistent dans la carrière et donnent lieu à un message médical.",
     "hotfixStability": "Plus de vérifications des messages, sauvegardes, builds Android et simulations de carrière.",
     "patchFixes": "Correction des noms de blessures bruts, des clubs en double et de la génération du monde.",
-    "patchThanks": "Merci de jouer ! Aidez-nous à améliorer le jeu en signalant les problèmes sur GitHub.",
+    "patchThanks": "Merci à toutes les personnes qui testent les versions, partagent des captures et signalent les problèmes. Votre patience et vos retours façonnent chaque mise à jour. Continuez sur GitHub.",
+    "patchHistory": "Historique des mises à jour",
+    "patchHistoryClose": "Fermer",
     "patchSignature": "Merci, TranquilMT",
     "patchReportIssue": "Signaler un problème sur GitHub",
     "about": "À propos",
@@ -2261,8 +2284,22 @@
       "PenaltyAwarded": "Penalty accordé"
     },
     "commentary": {
-      "Corner": {"headline": "Corner pour", "lines": {"0": "Corner pour {{team}}.", "1": "{{team}} se prépare à tirer le corner.", "2": "{{team}} peut centrer depuis le corner."}},
-      "FreeKick": {"headline": "Coup franc pour", "lines": {"0": "Coup franc pour {{team}}.", "1": "{{team}} se prépare à tirer le coup franc.", "2": "Le coup franc offre à {{team}} une occasion de construire une attaque."}},
+      "Corner": {
+        "headline": "Corner pour",
+        "lines": {
+          "0": "Corner pour {{team}}.",
+          "1": "{{team}} se prépare à tirer le corner.",
+          "2": "{{team}} peut centrer depuis le corner."
+        }
+      },
+      "FreeKick": {
+        "headline": "Coup franc pour",
+        "lines": {
+          "0": "Coup franc pour {{team}}.",
+          "1": "{{team}} se prépare à tirer le coup franc.",
+          "2": "Le coup franc offre à {{team}} une occasion de construire une attaque."
+        }
+      },
       "Goal": {
         "headline": "BUUUT !",
         "lines": {
@@ -2631,6 +2668,7 @@
         "noLeague": "Aucune donnée de ligue n'est disponible pour ce match.",
         "fixtureNotFound": "Le match sélectionné est introuvable.",
         "emptySquad": "L'une des équipes n'a aucun joueur disponible, le match ne peut donc pas se jouer.",
+        "insufficientMatchdayPlayers": "Un match exige au moins 14 seniors disponibles (11 titulaires et trois remplaçants).",
         "maxSubstitutionsReached": "Nombre maximal de remplacements atteint",
         "preMatchSwapTooLate": "Les permutations d'avant-match ne sont autorisées qu'avant le coup d'envoi",
         "cannotSubstituteSentOffPlayer": "Impossible de remplacer un joueur expulsé",
@@ -2820,6 +2858,9 @@
         "staffMemberNotScout": "Ce membre du staff n'est pas un recruteur",
         "scoutNotInTeam": "Le recruteur n'appartient pas à votre équipe",
         "cannotScoutOwnPlayer": "Vous ne pouvez pas observer vos propres joueurs",
+        "youthRequiresPromotion": "Les joueurs du centre de formation doivent être promus avant les transferts et le recrutement senior. Utilisez la recherche de jeunes.",
+        "academyFull": "Le centre est complet (12 joueurs). Promouvez ou libérez un jeune.",
+        "seniorSquadFull": "L’effectif senior est complet (26 joueurs). Libérez une place avant de promouvoir.",
         "scoutAssignmentFull": "Le recruteur est déjà affecté à une autre mission d'observation ({{currentCount}}/{{maxSlots}} affectations).",
         "playerAlreadyScouted": "Ce joueur est déjà observé",
         "youthSearchAlreadyActive": "Une recherche de recrutement jeune identique est déjà active",
@@ -2837,6 +2878,7 @@
       }
     },
     "sender": {
+      "youthCoach": "Entraîneur des jeunes",
       "boardOfDirectors": "Conseil d'Administration",
       "leagueOffice": "Bureau de la Ligue",
       "assistantManager": "Entraîneur Adjoint",
@@ -2853,6 +2895,7 @@
       "transferCommittee": "Comité des transferts"
     },
     "role": {
+      "youthCoach": "Entraîneur des jeunes",
       "chairman": "Président",
       "competitionSecretary": "Secrétaire de Compétition",
       "assistantManager": "Entraîneur Adjoint",
@@ -3046,6 +3089,20 @@
               "description": "Mettez-le au défi de mériter sa place. Risqué — cela peut le motiver ou le frustrer."
             }
           },
+          "transferRequest": {
+            "discuss": {
+              "label": "Discuter de son avenir",
+              "description": "Écoutez le joueur et demandez-lui de donner une autre chance au club."
+            },
+            "allowMove": {
+              "label": "Étudier les offres",
+              "description": "Placez le joueur sur la liste des transferts. Il faudra encore recevoir une offre."
+            },
+            "refuse": {
+              "label": "Refuser la demande",
+              "description": "Gardez le joueur, au risque de le contrarier davantage."
+            }
+          },
           "happyPlayer": {
             "praiseBack": {
               "label": "Rendre le compliment",
@@ -3097,6 +3154,11 @@
               "positive": "Le joueur est déterminé à faire ses preuves. Moral {{delta}}",
               "negative": "Le joueur se sent rejeté et insulté. Moral {{delta}}"
             }
+          },
+          "transferRequest": {
+            "discuss": "Le joueur accepte de poursuivre la discussion. Moral {{delta}}",
+            "allowMove": "Le joueur apprécie votre franchise et peut recevoir des offres. Moral {{delta}}",
+            "refuse": "Le joueur se sent prisonnier du club. Moral {{delta}}"
           },
           "happyPlayer": {
             "praiseBack": "Le joueur rayonne sous le compliment. Moral {{delta}}",
@@ -3252,6 +3314,10 @@
         "body0": "Coach, {{player}} est venu vous voir. Il est frustré par son manque de temps de jeu lors des derniers matchs et veut savoir ce qu'il doit faire pour réintégrer l'équipe.\n\n\"J'ai l'impression de bien m'entraîner, mais je n'ai pas l'occasion de le montrer sur le terrain.\"",
         "body1": "{{player}} a frappé à la porte de votre bureau avec un air contrarié. Il n'a pas joué lors des derniers matchs et veut des réponses.\n\n\"Je suis venu dans ce club pour jouer au football. Si je ne fais pas partie de vos plans, je préfère que vous me le disiez franchement.\""
       },
+      "transferRequest": {
+        "subject": "{{player}} — Demande un transfert",
+        "body": "{{player}} souhaite vous parler en privé. Son manque de temps de jeu freine sa carrière et il aimerait envisager un départ.\n\nVous pouvez l’écouter, accepter les offres ou lui demander de rester."
+      },
       "happyPlayer": {
         "subject": "{{player}} — Se sent en grande forme",
         "body0": "{{player}} est passé à votre bureau avec un grand sourire. Il se sent très bien par rapport à sa forme et à la direction que prend l'équipe.\n\n\"Je voulais juste dire que je prends vraiment du plaisir à jouer en ce moment, coach. L'ambiance dans le vestiaire est fantastique.\"",
@@ -3321,6 +3387,7 @@
         },
         "effect": {
           "sign": "{{player}} a signé un contrat de jeune et a rejoint votre académie.",
+          "academyFull": "Le centre est complet (12 joueurs). Promouvez ou libérez un jeune.",
           "shortlist": "{{player}} a été ajouté à votre présélection de jeunes.",
           "discard": "{{player}} a été retiré du rapport de recrutement des jeunes."
         }
@@ -3328,6 +3395,17 @@
       "youthRecruitmentShortlist": {
         "subject": "Espoir présélectionné",
         "body": "{{player}} a été déplacé dans votre présélection de jeunes. Vous pourrez le revoir plus tard avant de prendre une décision finale."
+      },
+      "academyReview": {
+        "subject": "Bilan du centre : {{player}}",
+        "progress": "{{player}} progresse au centre de formation (GEN {{ovr}}, potentiel {{potential}}). Poursuivez son entraînement et réévaluez-le le mois prochain.",
+        "ready": "{{player}} a bien progressé (GEN {{ovr}}, potentiel {{potential}}). Il est prêt pour une chance en équipe première. Vous pouvez le promouvoir depuis le centre."
+      },
+      "academyFixture": {
+        "subject": "Défi des jeunes",
+        "win": "Le centre a gagné avec {{count}} joueurs (niveau {{rating}}). Les jeunes ont gagné en expérience.",
+        "draw": "Le centre a fait match nul avec {{count}} joueurs (niveau {{rating}}). Les jeunes ont gagné en expérience.",
+        "loss": "Le centre a perdu avec {{count}} joueurs (niveau {{rating}}). Les jeunes ont gagné en expérience."
       },
       "scoutReport": {
         "subject": "Rapport de scout : {{player}}",
@@ -4089,5 +4167,40 @@
   "generation": {
     "title": "Génération et Complétion",
     "coverage": "Vos paquets couvrent"
+  },
+  "phase6": {
+    "boardRoom": "Direction et vestiaire",
+    "contractHelp": "Négociez salaire, objectif en championnat et durée. Des objectifs plus faciles réduisent le salaire proposé.",
+    "salary": "Salaire hebdomadaire",
+    "expires": "Fin du contrat",
+    "ownership": "Ère des propriétaires",
+    "style": "Style du club",
+    "leagueTarget": "Classement visé",
+    "years": "Durée (années)",
+    "negotiate": "Négocier le contrat",
+    "investment": "Investissement dans les installations",
+    "requestInvestment": "Demander un financement",
+    "investmentHelp": "Une fois par saison, la direction peut financer 25 % d'une amélioration. Il faut 50 % de confiance et des finances saines.",
+    "unavailable": "La direction est indisponible.",
+    "takeoverPause": "Les négociations et investissements sont suspendus pendant le rachat.",
+    "negotiationCooldown": "Attendez 30 jours entre les négociations.",
+    "offerRejected": "La direction refuse ces conditions. Réduisez le salaire ou visez un meilleur classement.",
+    "contractAgreed": "Votre contrat et l'objectif en championnat sont validés.",
+    "takeoverStarted": "Le club négocie un rachat. Une décision est attendue sous 30 jours.",
+    "takeoverCompleted": "Les nouveaux propriétaires ont repris le club et investi. Votre contrat reste valable.",
+    "contractRenewal": "Votre contrat est terminé. Rendez-vous auprès de la direction pour le renouveler.",
+    "investmentRejected": "Financement refusé. Améliorez la confiance et les finances ou attendez la saison prochaine.",
+    "investmentApproved": "La direction a approuvé l'amélioration et financé 25 % du coût.",
+    "facilityMaximum": "Cette installation a atteint son niveau maximal.",
+    "captainChanged": "Votre choix de capitaine a influencé les joueurs concernés.",
+    "captainConflict": "Choisissez deux joueurs différents comme capitaine et vice-capitaine.",
+    "dressingRoom": "Vestiaire",
+    "promise": "Promesse de temps de jeu : {{count}} matchs restants",
+    "concerns": "Préoccupations des joueurs",
+    "patchBoard": "Objectifs plus réalistes, formation des jeunes et identité de jeu.",
+    "patchContracts": "Négociez salaire, durée du contrat et classement visé.",
+    "patchClub": "Rachats de clubs et soutien aux installations.",
+    "patchSquad": "Préoccupations plus claires, réactions au capitanat et échéances des promesses.",
+    "playingTime": "Temps de jeu"
   }
 }

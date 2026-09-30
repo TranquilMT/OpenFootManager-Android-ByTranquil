@@ -230,6 +230,22 @@ describe("ScoutingTab.model", () => {
     expect(lastPage.players).toHaveLength(5);
   });
 
+  it("keeps academy players out of senior scouting", () => {
+    const players = [
+      createPlayer({ id: "senior", team_id: "team-2", squad_role: "Senior" }),
+      createPlayer({ id: "academy", team_id: "team-2", squad_role: "Youth" }),
+    ];
+    expect(
+      filterScoutablePlayers({
+        players,
+        teams: [],
+        myTeamId: "team-1",
+        posFilter: "All",
+        searchQuery: "",
+      }).map((player) => player.id),
+    ).toEqual(["senior"]);
+  });
+
   it("builds the set of already scouted player ids", () => {
     const ids = buildAlreadyScoutingIds([
       createAssignment({ player_id: "player-1" }),

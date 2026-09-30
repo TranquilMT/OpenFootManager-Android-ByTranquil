@@ -121,8 +121,21 @@ pub fn set_team_match_roles_internal(
     match_roles: domain::team::MatchRoles,
 ) -> Result<Game, String> {
     mutate_active_game(state, |game| {
-        let team = user_team_mut(game)?;
-        team.match_roles = match_roles;
+        let team_id = user_team_id(game)?;
+        for id in [&match_roles.captain, &match_roles.vice_captain, &match_roles.penalty_taker,
+            &match_roles.free_kick_taker, &match_roles.corner_taker].into_iter().flatten() {
+            if !game.players.iter().any(|player| player.id == *id && player.team_id.as_deref() == Some(&team_id)
+                && player.squad_role == domain::player::SquadRole::Senior && !player.retired) {
+                return Err("be.error.playerNotOnTeam".to_string());
+            }
+        }
+        if match_roles.captain.is_some() && match_roles.captain == match_roles.vice_captain {
+            return Err("phase6.captainConflict".to_string());
+        }
+        ofm_core::board_room::initialize(game);
+        let old = user_team_mut(game)?.match_roles.captain.clone();
+        ofm_core::board_room::captain_reactions(game, old.as_deref(), match_roles.captain.as_deref());
+        user_team_mut(game)?.match_roles = match_roles;
 
         Ok(())
     })
@@ -307,6 +320,22 @@ pub fn set_player_squad_role_internal(
                 return Err("be.error.youthAcademyOverage".to_string());
             }
         }
+        let same_role_count = game
+            .players
+            .iter()
+            .filter(|player| {
+                player.team_id.as_deref() == Some(team_id.as_str())
+                    && player.squad_role == target_role
+            })
+            .count();
+        if game.players[player_index].squad_role != target_role {
+            if target_role == domain::player::SquadRole::Youth && same_role_count >= 12 {
+                return Err("be.error.scouting.academyFull".to_string());
+            }
+            if target_role == domain::player::SquadRole::Senior && same_role_count >= 26 {
+                return Err("be.error.scouting.seniorSquadFull".to_string());
+            }
+        }
 
         // Drop the player from the XI first. It is the only step here that can
         // fail, and mutate_active_game mutates the live game, so doing it after
@@ -318,6 +347,18 @@ pub fn set_player_squad_role_internal(
         }
 
         game.players[player_index].squad_role = target_role;
+        if target_role == domain::player::SquadRole::Youth {
+            game.players[player_index].jersey_number = None;
+        } else if game.players[player_index].jersey_number.is_none() {
+            let used: std::collections::HashSet<u8> = game
+                .players
+                .iter()
+                .filter(|player| player.team_id.as_deref() == Some(team_id.as_str()))
+                .filter_map(|player| player.jersey_number)
+                .collect();
+            game.players[player_index].jersey_number =
+                (1..=99).find(|number| !used.contains(number));
+        }
 
         Ok(())
     })

@@ -139,6 +139,9 @@ pub fn send_scout(game: &mut Game, scout_id: &str, player_id: &str) -> Result<()
     if player.team_id.as_deref() == Some(user_team_id.as_str()) {
         return Err(ERR_CANNOT_SCOUT_OWN_PLAYER.to_string());
     }
+    if player.squad_role == SquadRole::Youth {
+        return Err("be.error.scouting.youthRequiresPromotion".to_string());
+    }
 
     // Check scout capacity across both player and youth scouting.
     let max_slots = scout_max_assignments(scout.attributes.judging_ability);
@@ -602,16 +605,28 @@ pub fn apply_youth_recruitment_response(
             if game.players.iter().any(|player| player.id == prospect.id) {
                 return None;
             }
+            if let Some(team_id) = game.manager.team_id.as_deref() {
+                let academy_size = game
+                    .players
+                    .iter()
+                    .filter(|player| {
+                        player.team_id.as_deref() == Some(team_id)
+                            && player.squad_role == SquadRole::Youth
+                    })
+                    .count();
+                if academy_size >= 12 {
+                    return Some(YouthRecruitmentEffect {
+                        message: String::new(),
+                        i18n_key: "be.msg.youthRecruitment.effect.academyFull".to_string(),
+                        i18n_params: HashMap::new(),
+                    });
+                }
+            }
 
             let mut signed_player = prospect;
             signed_player.team_id = game.manager.team_id.clone();
             signed_player.squad_role = SquadRole::Youth;
-            if let Some(team_id) = signed_player.team_id.clone()
-                && let Some(team) = game.teams.iter().find(|team| team.id == team_id)
-            {
-                signed_player.jersey_number =
-                    crate::roster::resolve_jersey_for(game, &signed_player, team);
-            }
+            signed_player.jersey_number = None;
             let player_id = signed_player.id.clone();
             let player_name = signed_player.full_name.clone();
             let signed_jersey_number = signed_player.jersey_number;

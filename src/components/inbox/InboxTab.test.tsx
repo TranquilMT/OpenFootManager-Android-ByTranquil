@@ -588,6 +588,34 @@ describe("InboxTab", (): void => {
     expect(onGameUpdate).toHaveBeenCalledWith(resolvedGameState);
   });
 
+  it.each(["loan_offer_1", "transfer_offer_1"])(
+    "opens the linked player's offers from %s",
+    async (messageId): Promise<void> => {
+      const onNavigate = vi.fn();
+      const action: MessageAction = {
+        id: "view_transfers",
+        label: "Review offer",
+        action_type: { NavigateTo: { route: "/dashboard?tab=Transfers" } },
+        resolved: true,
+      };
+      const message = createMessage({
+        id: messageId,
+        read: true,
+        actions: [action],
+        context: { player_id: "player-1", team_id: "t1", fixture_id: null, match_result: null },
+      });
+      mockedInvoke.mockResolvedValue({ game: createGameState([message]), effect: null });
+      await renderInboxTab({
+        gameState: createGameState([message]),
+        initialMessageId: messageId,
+        onNavigate,
+      });
+      fireEvent.click(screen.getByRole("button", { name: "Review offer" }));
+      expect(onNavigate).toHaveBeenCalledWith("Transfers", { messageId: "player-1" });
+      expect(mockedInvoke).not.toHaveBeenCalledWith("resolve_message_action", expect.anything());
+    },
+  );
+
   it("acknowledges a message without replacing the generated world", async (): Promise<void> => {
     const onGameUpdate = vi.fn();
     const action: MessageAction = {

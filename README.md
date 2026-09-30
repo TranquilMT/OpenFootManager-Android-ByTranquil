@@ -4,26 +4,49 @@
 
 OFMtouch is a free football management game built for Android. Take charge of a club, build your squad, scout talent, shape your tactics, develop young players and compete across multiple seasons in a growing football world.
 
-> 🧪 **Current version: v0.3.6 NightlyPreRelease (build 315)**
-> **Full Android APK (352 MB):** [Download the installable ARM64 APK](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.6-build315/OFMtouch-0.3.6-Build315-NightlyPreRelease.apk)  
-> **Complete ZIP (359 MB):** [APK + all tracked game source + checksums](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.6-build315/OFMtouch-Build315-complete.zip)  
-> **Checksums:** [SHA-256 file](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.6-build315/OFMtouch-Build315-SHA256.txt)  
-> **Source revision:** `63e5bd4474af7de43caa73381c1c9c061955a4af` — Android only. The [source-only ZIP](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.6-build315/OFMtouch-Build315-source.zip) is smaller because it excludes the APK.
-> Automated frontend, Rust, package metadata, signature and ARM64 checks passed. Inbox reading and the action flow still need confirmation on a physical phone.
+> 🧪 **Current version: v0.6.0 — Board & Dressing Room**
+> **Build:** shown in the game and APK filename
+> NightlyPreRelease builds are playable test versions. New features and fixes arrive regularly, but some bugs and unfinished areas may remain.
 
-## What's new in v0.3.6
+## v0.6.0 — Board & Dressing Room
 
-- Inbox messages show their full contents on narrow phone screens; acknowledge actions avoid copying the whole game state.
-- Save moved into **Settings → Saves & Data**, freeing space for the game date on phones.
-- Inbox actions block repeated taps while a response is pending and report failures clearly.
-- Compact in-game What's New notes and focused regression coverage for Inbox, Save and mobile layout.
+- **Fairer board targets:** first-season league expectations reflect the competition and give new managers time to build.
+- **Manager contracts:** negotiate your weekly salary, contract length and league objective.
+- **Club direction:** youth-development goals, playing-style expectations, ownership changes and takeovers.
+- **Infrastructure:** request board support for training, medical and scouting facility upgrades.
+- **Dressing room:** review player happiness, contract and playing-time concerns, transfer listings and outstanding promises.
+- **Fixes:** captaincy choices affect the players involved; promise deadlines remain consistent and require actual playing time.
+- **Easier reading:** a compact What's New summary highlights the main updates.
 
-## Previous Android build — v0.3.5 build 314
+Thank you for playing and sharing your feedback. Your time and support help us improve OFMtouch with every update.
 
-- [Full APK](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.5-build314/OFMtouch-0.3.5-Build314-NightlyPreRelease.apk)
-- [Complete ZIP](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/download/v0.3.5-build314/OFMtouch-Build314-complete.zip)
+**Thanks, TranquilMT**
 
-## 📜 Previous Update — v0.3.5
+## v0.5.2 Career Hotfix
+
+- Injury names are translated in match and advance recaps.
+- Inbox review links open the linked player's loan or transfer offers and remain usable after the first visit.
+- Portrait rendering protects exposed neck skin and refreshes cached images.
+- Playing-time conversations give the manager two matches to fulfil a promise.
+- Next preview: deeper squad planning and follow-up player conversations.
+
+## v0.5.0 Career Update
+
+- Manager career systems now connect club decisions, post-match updates, season transitions and progression.
+- The first menu alone shows repository links; they disappear on New Game and other menus.
+- Expanded career, localization, mobile UI and package verification gates protect the nightly build.
+- Build number and release channel appear in the in-game version label and APK filename.
+
+## v0.3.6 mobile hotfix
+
+- **Inbox:** opened messages get the available phone screen; acknowledgement returns only the updated mail instead of copying the entire game world to Android.
+- **Save:** manual Save is in Settings → Saves & Data. The home header gives the game date more space.
+- **Matches:** injuries persist after the match and appear in a medical Inbox update.
+- **Reliability:** message-action, localization, mobile layout, save and career regression checks are included in the build gate.
+
+The previous v0.3.5 notes remain below as the larger gameplay update. The Android v0.3.6 APK will be linked after its CI gate passes.
+
+## 🌟 Welcome to OFMtouch! Here's what's new in v0.3.5
 
 v0.3.5 is not the introduction of Player Development V2.0 or Transfer Market V2.0 — both systems began in the previous update. This release **substantially expands and connects them to the wider career simulation**, turning them from individual features into systems that increasingly influence club strategy, recruitment, loans, squad building and long-term player careers.
 
@@ -74,10 +97,9 @@ v0.3.5 is not the introduction of Player Development V2.0 or Transfer Market V2.
 - [x] **20-source Portrait Generation** — expanded source pool with stronger diversity validation.
 - [x] **Elite Player & Club Balancing** — updated rating ceilings and stronger top-club/world-generation profiles.
 - [x] **v0.3.5 version/build pipeline** — app metadata and Android Nightly workflow upgraded to v0.3.5 with GitHub run-number builds.
-- [x] **Build 313 regression gate** — GitHub Actions passed the frontend and Rust workspace suites against the build 313 revision.
-- [x] **Build 313 Android package checks** — CI verified the ARM64 APK signature, package ID, version name and installable version code.
-- [ ] **Device startup and Inbox reading** — confirm on an Android phone; automated checks cannot prove the touch flow on a device.
-- [ ] **Phase 5+ development** — continue the next major simulation/gameplay phases after the v0.3.5 checkpoint build.
+- [ ] **Final v0.3.5 regression gate** — complete the full automated regression suite against the release candidate.
+- [ ] **v0.3.5 Android APK verification** — verify the generated ARM64 NightlyPreRelease APK, signature, package/version and startup flows.
+- [x] **Phase 5 — Manager Career** — live match records, club spells, and named league/cup honours passed the v0.5.1 release gate.
 
 Thank you for playing! Please help us improve future builds by [submitting issues on GitHub](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new).
 

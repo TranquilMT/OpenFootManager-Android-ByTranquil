@@ -46,7 +46,7 @@ for (const file of includedUnique) {
   hashes.set(hash, file);
 }
 
-if (!generator.includes("runtime-component-recipe-rust-v3-20src")) {
+if (!generator.includes("runtime-component-recipe-rust-v4-neck-20src")) {
   throw new Error("Portrait regression: 20-source cache/generator version is missing");
 }
 if (

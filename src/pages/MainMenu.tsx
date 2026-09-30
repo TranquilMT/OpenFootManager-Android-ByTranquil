@@ -16,7 +16,16 @@ import { formatAppVersion } from "../lib/appVersion";
 import { resolveBackendError } from "../utils/backendI18n";
 import { prewarmManagerSquadPortraits } from "../services/portraitService";
 import { WhatsNewModal } from "../components/menu/WhatsNewModal";
-import { FolderOpen, Settings, PlusCircle, ChevronRight, Power, Package } from "lucide-react";
+import { PatchHistoryModal } from "../components/menu/PatchHistoryModal";
+import {
+  FolderOpen,
+  Settings,
+  PlusCircle,
+  ChevronRight,
+  Power,
+  Package,
+  ScrollText,
+} from "lucide-react";
 
 const GITHUB_REPO_URL = "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil";
 const ORIGINAL_GITHUB_REPO_URL = "https://github.com/openfootmanager/openfootmanager";
@@ -258,6 +267,7 @@ export default function MainMenu() {
     "main" | "create" | "packages" | "generation" | "load"
   >("main");
   const [showProfileConfirm, setShowProfileConfirm] = useState(false);
+  const [showPatchHistory, setShowPatchHistory] = useState(false);
   const [saves, setSaves] = useState<SaveEntry[]>([]);
   const [isLoadingSaves, setIsLoadingSaves] = useState(false);
   const [loadingSaveId, setLoadingSaveId] = useState<string | null>(null);
@@ -743,6 +753,17 @@ export default function MainMenu() {
 
               <button
                 type="button"
+                onClick={() => setShowPatchHistory(true)}
+                className="group flex min-h-11 items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 text-gray-800 transition-colors hover:border-primary-500 dark:border-navy-600 dark:bg-navy-700 dark:text-gray-200"
+              >
+                <ScrollText className="h-6 w-6 text-primary-500" />
+                <span className="font-heading text-lg font-bold uppercase tracking-wide">
+                  {t("settings.patchHistory")}
+                </span>
+              </button>
+
+              <button
+                type="button"
                 onClick={() => {
                   void handleExitApp();
                 }}
@@ -854,38 +875,41 @@ export default function MainMenu() {
       </div>
 
       {/* Project and upstream source links */}
-      <div className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] left-3 z-20 flex flex-col items-start gap-1 sm:absolute sm:bottom-3 sm:left-4">
-        <button
-          type="button"
-          aria-label={t("menu.openGithub")}
-          title={t("menu.openGithub")}
-          onClick={() => {
-            void openUrl(GITHUB_REPO_URL);
-          }}
-          className="flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-navy-700 transition-colors"
-        >
-          <GithubIcon className="w-5 h-5" />
-          <span className="text-xs font-medium">OFMtouch</span>
-        </button>
-        <button
-          type="button"
-          aria-label={t("menu.openOriginalGithub")}
-          title={t("menu.openOriginalGithub")}
-          onClick={() => {
-            void openUrl(ORIGINAL_GITHUB_REPO_URL);
-          }}
-          className="flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-navy-700 transition-colors"
-        >
-          <GithubIcon className="w-5 h-5" />
-          <span className="text-xs font-medium">{t("menu.originalGame")}</span>
-        </button>
-      </div>
+      {menuState === "main" && (
+        <div className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] left-3 z-20 flex flex-col items-start gap-1 sm:absolute sm:bottom-3 sm:left-4">
+          <button
+            type="button"
+            aria-label={t("menu.openGithub")}
+            title={t("menu.openGithub")}
+            onClick={() => {
+              void openUrl(GITHUB_REPO_URL);
+            }}
+            className="flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-navy-700 transition-colors"
+          >
+            <GithubIcon className="w-5 h-5" />
+            <span className="text-xs font-medium">OFMtouch</span>
+          </button>
+          <button
+            type="button"
+            aria-label={t("menu.openOriginalGithub")}
+            title={t("menu.openOriginalGithub")}
+            onClick={() => {
+              void openUrl(ORIGINAL_GITHUB_REPO_URL);
+            }}
+            className="flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-navy-700 transition-colors"
+          >
+            <GithubIcon className="w-5 h-5" />
+            <span className="text-xs font-medium">{t("menu.originalGame")}</span>
+          </button>
+        </div>
+      )}
 
       {/* Version */}
       <div className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-3 z-20 text-gray-400 sm:absolute sm:bottom-4 sm:right-4 dark:text-gray-600 text-xs font-heading uppercase tracking-widest transition-colors">
         {formatAppVersion()}
       </div>
       <WhatsNewModal />
+      {showPatchHistory && <PatchHistoryModal onClose={() => setShowPatchHistory(false)} />}
     </div>
   );
 }

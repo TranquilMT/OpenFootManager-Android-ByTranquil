@@ -24,7 +24,7 @@
     "openGithub": "OFMtouch GitHub deposunu aç",
     "openOriginalGithub": "Orijinal OpenFootManager GitHub deposunu aç",
     "originalGame": "Orijinal oyun",
-    "doNotShowWhatsNew": "v0.3.6 için bir daha gösterme",
+    "doNotShowWhatsNew": "v0.5.2 için bir daha gösterme",
     "continueToGame": "Devam et",
     "mainMenu": "Ana Menü",
     "worldEditor": "Dünya Editörü"
@@ -381,6 +381,9 @@
     "openScouting": "Gözlemciliği aç",
     "recruitmentWorkflowTitle": "Genç Oyuncu Kazanım Süreci",
     "recruitmentWorkflowHint": "Altyapı Akademisi ekranından ayrılmadan akademi aramalarını başlatın, iptal edin veya yeniden atayın.",
+    "tournamentTitle": "Gençlik mücadelesi",
+    "tournamentReady": "Sonraki maça hazır: {{prospects}}/12 akademi oyuncusu ve {{helpers}} 21 yaş altı A takım oyuncusu.",
+    "tournamentNeeds": "14 kişilik kadro için 12 genç ve iki uygun 21 yaş altı A takım oyuncusu gerekli. Şimdi: {{prospects}}/12, {{helpers}} destek.",
     "noEligibleSeniorPlayers": "Şu anda uygun 21 yaş altı A takım oyuncusu yok.",
     "youthPlayers": "Genç Oyuncular",
     "avgOvr": "Ort. OVR",
@@ -1262,7 +1265,9 @@
       "LeaguePosition": "İlk {{target}} içinde bitir",
       "Wins": "En az {{target}} maç kazan",
       "GoalsScored": "En az {{target}} gol at",
-      "FinancialStability": "Maaş harcamalarını bütçenin %{{target}}'i veya altında tut"
+      "FinancialStability": "Maaş harcamalarını bütçenin %{{target}}'i veya altında tut",
+      "YouthMinutes": "22 yaş altına {{target}} dakika ver",
+      "PlayingStyleMatches": "{{target}} lig maçında kararlaştırılan tarzı kullan"
     }
   },
   "transfers": {
@@ -1772,17 +1777,35 @@
     "patchPlayers": "Nadir 96 puanlı yıldızlar dahil daha fazla öne çıkan oyuncu.",
     "patchMatches": "Daha fazla maç tepkisi, direğe çarpan şutlar ve isteğe bağlı sesli anlatım.",
     "patchMobile": "Mobil kontroller, gelen kutusu, millî takımlar ve kariyer başlangıcı iyileştirildi.",
-    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.3.6 yenilikleri",
+    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.6.0 yenilikleri",
     "patchPortraits": "20 kurgusal kaynak yüz, üretilen oyuncu portrelerini daha çeşitli kılıyor.",
     "patchWorld": "Futbol dünyası 29 ülkeyi kapsıyor; Amerika ve Asya kulüpleri güçlendirildi.",
     "patchTransfers": "Kulüp stratejileri kiralık ve bonservisli transferleri, rakip teklifleri ve bütçe kontrollerini yönlendiriyor.",
     "patchDevelopment": "Oynama süresi gençlerin gelişmesine yardım ediyor; altyapı gözlem raporlarında yinelenen adlar azaltıldı.",
+    "careerHighlights": "Yeni kariyerler, geniş kadrolarda da güvenilir biçimde kaydediliyor.",
+    "careerInbox": "İlk on bir rollerini koruyor; kadro kapsamı doğal pozisyonları yansıtıyor.",
+    "careerSeason": "Kadro listesi telefonda daha düzenli ve okunaklı.",
+    "careerReliability": "Başarısız kayıtlar eksik dosyaları temizliyor; yeni testler forma numaralarını ve rolleri denetliyor.",
+    "careerYouth": "Akademi 22–26 kişilik A takımdan ayrı; antrenör raporları, terfi ve 12 genç sınırı var.",
+    "careerYouthScouting": "Genç ve A takım gözlemi ayrı; genç maçları için 12 yetenek ve iki 21 yaş altı A takım oyuncusu gerekir.",
+    "careerRules": "2026/27 kuralları: yarı otomatik ofsayt incelemeleri hızlanıyor; 11. Kural bu sürümde değişmiyor.",
+    "hotfixInjuryDetails": "Sakatlık adları maç ve ilerleme özetlerinde doğru gösteriliyor.",
+    "hotfixOfferReview": "Kiralama veya transfer teklifini incelemek oyuncunun tekliflerini açar; Gelen Kutusundan tekrar açılabilir.",
+    "hotfixPortraitNeck": "Portreler boyun bölgesindeki ten rengini korur ve önbellekteki görselleri yeniler.",
+    "hotfixConversations": "Oynama süresi sözleri artık iki maç içinde tutulabilir.",
+    "nextPreview": "Sırada: daha ayrıntılı kadro planlaması ve oyuncu sohbetleri üzerinde düşünüyoruz.",
+    "history0504": "Ek testler kariyeri, kayıtları ve mobil menüyü kapsıyor.",
+    "history0503": "Sezon geçişleri ve maç sonuçları kariyerinizde devam ediyor.",
+    "history0502": "Kariyer haberleri ve kararları gelen kutusunda daha kolay takip ediliyor.",
+    "history0501": "Yeni teknik direktör kariyeri kulüp kararlarını ve sezonları derinleştiriyor.",
     "hotfixInbox": "Gelen kutusu mesajları telefonda okunabilir; onaylama daha az bellek kullanır.",
     "hotfixSave": "Oyunu kaydet Ayarlar bölümünde; tarih ve Devam için daha fazla yer var.",
     "hotfixMatch": "Maç sakatlıkları kariyerde kalır ve sağlık mesajı oluşturur.",
     "hotfixStability": "Mesaj işlemleri, kayıtlar, Android derlemesi ve kariyer simülasyonu için ek kontroller.",
     "patchFixes": "Ham sakatlık adları, yinelenen kulüp adları ve dünya oluşturma hataları düzeltildi.",
-    "patchThanks": "Oynadığınız için teşekkürler! Sorunları GitHub’da bildirerek oyunu geliştirmemize yardımcı olun.",
+    "patchThanks": "Yeni sürümleri test eden, ekran görüntüsü paylaşan ve sorun bildiren herkese teşekkürler. Sabrınız ve geri bildiriminiz her güncellemeyi şekillendiriyor. GitHub üzerinden yazmaya devam edin.",
+    "patchHistory": "Güncelleme geçmişi",
+    "patchHistoryClose": "Kapat",
     "patchSignature": "Teşekkürler, TranquilMT",
     "patchReportIssue": "GitHub’da sorun bildir",
     "about": "Hakkında",
@@ -2295,8 +2318,22 @@
       "PenaltyAwarded": "Penaltı Kazanıldı"
     },
     "commentary": {
-      "Corner": {"headline": "için korner", "lines": {"0": "{{team}} için korner.", "1": "{{team}} korneri kullanmaya hazırlanıyor.", "2": "{{team}} kornerden orta yapma şansı buluyor."}},
-      "FreeKick": {"headline": "için serbest vuruş", "lines": {"0": "{{team}} için serbest vuruş.", "1": "{{team}} serbest vuruşa hazırlanıyor.", "2": "Serbest vuruş {{team}} için yeni bir hücum fırsatı."}},
+      "Corner": {
+        "headline": "için korner",
+        "lines": {
+          "0": "{{team}} için korner.",
+          "1": "{{team}} korneri kullanmaya hazırlanıyor.",
+          "2": "{{team}} kornerden orta yapma şansı buluyor."
+        }
+      },
+      "FreeKick": {
+        "headline": "için serbest vuruş",
+        "lines": {
+          "0": "{{team}} için serbest vuruş.",
+          "1": "{{team}} serbest vuruşa hazırlanıyor.",
+          "2": "Serbest vuruş {{team}} için yeni bir hücum fırsatı."
+        }
+      },
       "Goal": {
         "headline": "GOOOL!",
         "lines": {
@@ -2644,6 +2681,7 @@
         "noLeague": "Bu maç için lig verisi mevcut değil.",
         "fixtureNotFound": "Seçilen maç bulunamadı.",
         "emptySquad": "Takımlardan birinin uygun oyuncusu yok, bu yüzden maç oynanamaz.",
+        "insufficientMatchdayPlayers": "Maç için en az 14 uygun A takım oyuncusu gerekir (11 ilk on bir ve üç yedek).",
         "maxSubstitutionsReached": "Maksimum oyuncu değişikliği sayısına ulaşıldı",
         "preMatchSwapTooLate": "Maç öncesi değişikliklere yalnızca başlama vuruşundan önce izin verilir",
         "cannotSubstituteSentOffPlayer": "Oyundan atılmış bir oyuncu değiştirilemez",
@@ -2828,6 +2866,9 @@
         "staffMemberNotScout": "Personel bir gözlemci değil",
         "scoutNotInTeam": "Gözlemci takımınıza ait değil",
         "cannotScoutOwnPlayer": "Kendi oyuncularınızı gözlemleyemezsiniz",
+        "youthRequiresPromotion": "Akademi oyuncuları, A takım transferleri ve gözleminden önce terfi ettirilmelidir. Genç yetenekler için altyapı aramasını kullanın.",
+        "academyFull": "Akademi dolu (12 oyuncu). Yeni oyuncu için bir genci terfi ettirin veya gönderin.",
+        "seniorSquadFull": "A takım dolu (26 oyuncu). Terfiden önce yer açın.",
         "scoutAssignmentFull": "Gözlemci zaten başka bir gözlem görevine atanmış ({{currentCount}}/{{maxSlots}} görev).",
         "playerAlreadyScouted": "Bu oyuncu zaten gözlemleniyor",
         "youthSearchAlreadyActive": "Eşleşen bir genç oyuncu araması zaten aktif",
@@ -2837,6 +2878,7 @@
       "invalidPath": "Geçersiz yol."
     },
     "sender": {
+      "youthCoach": "Genç takım antrenörü",
       "boardOfDirectors": "Yönetim Kurulu",
       "leagueOffice": "Lig Ofisi",
       "assistantManager": "Yardımcı Antrenör",
@@ -2853,6 +2895,7 @@
       "transferCommittee": "Transfer Komitesi"
     },
     "role": {
+      "youthCoach": "Genç takım antrenörü",
       "chairman": "Kulüp Başkanı",
       "competitionSecretary": "Turnuva Sekreteri",
       "assistantManager": "Yardımcı Antrenör",
@@ -3046,6 +3089,20 @@
               "description": "Yerini hak etmesi için ona meydan okuyun. Riskli — motive edebilir veya hayal kırıklığına uğratabilir."
             }
           },
+          "transferRequest": {
+            "discuss": {
+              "label": "Geleceğini konuş",
+              "description": "Oyuncuyu dinle ve kulübe bir şans daha vermesini iste."
+            },
+            "allowMove": {
+              "label": "Teklifleri dinle",
+              "description": "Oyuncuyu transfer listesine koy. Ayrılması için yine de teklif gerekir."
+            },
+            "refuse": {
+              "label": "Talebi reddet",
+              "description": "Oyuncuyu tut, ancak onu daha da mutsuz edebilirsin."
+            }
+          },
           "happyPlayer": {
             "praiseBack": {
               "label": "Övgüye karşılık ver",
@@ -3097,6 +3154,11 @@
               "positive": "Oyuncu değerini kanıtlamak için ateşlendi. Moral {{delta}}",
               "negative": "Oyuncu dışlanmış ve aşağılanmış hissediyor. Moral {{delta}}"
             }
+          },
+          "transferRequest": {
+            "discuss": "Oyuncu konuşmaya devam etmeyi kabul ediyor. Moral {{delta}}",
+            "allowMove": "Oyuncu dürüstlüğünü takdir ediyor ve tekliflere açık. Moral {{delta}}",
+            "refuse": "Oyuncu kulüpte sıkışıp kaldığını hissediyor. Moral {{delta}}"
           },
           "happyPlayer": {
             "praiseBack": "Oyuncunun övgüyle yüzü gülüyor. Moral {{delta}}",
@@ -3252,6 +3314,10 @@
         "body0": "Hocam, {{player}} sizi görmeye geldi. Son maçlarda süre alamamaktan rahatsız ve takıma dönmek için ne yapması gerektiğini bilmek istiyor.\n\n\"İyi antrenman yaptığımı hissediyorum ama bunu sahada gösterme şansı bulamıyorum.\"",
         "body1": "{{player}} mutsuz bir şekilde ofis kapınızı çaldı. Son birkaç maçta forma yüzü görmedi ve yanıt istiyor.\n\n\"Bu kulübe futbol oynamaya geldim. Planlarınızda yoksam bunu açıkça söylemenizi tercih ederim.\""
       },
+      "transferRequest": {
+        "subject": "{{player}} — Transfer talep ediyor",
+        "body": "{{player}} özel bir görüşme istedi. Az süre almasının kariyerini engellediğini düşünüyor ve başka bir kulübe gitmeyi değerlendirmek istiyor.\n\nOnu dinleyebilir, tekliflere açabilir veya kalmasını isteyebilirsin."
+      },
       "happyPlayer": {
         "subject": "{{player}} — Keyfi Yerinde",
         "body0": "{{player}} kocaman bir gülümsemeyle ofisinize uğradı. Formundan ve takımın gidişatından çok memnun.\n\n\"Sadece şu anda futboldan gerçekten keyif aldığımı söylemek istedim hocam. Soyunma odasındaki hava harika.\"",
@@ -3321,6 +3387,7 @@
         },
         "effect": {
           "sign": "{{player}} gençlik sözleşmesi imzaladı ve akademinize katıldı.",
+          "academyFull": "Akademi dolu (12 oyuncu). Yeni oyuncu için bir genci terfi ettirin veya gönderin.",
           "shortlist": "{{player}} genç oyuncu kısa listenize eklendi.",
           "discard": "{{player}} genç oyuncu kazanım raporundan çıkarıldı."
         }
@@ -3328,6 +3395,17 @@
       "youthRecruitmentShortlist": {
         "subject": "Genç yetenek kısa listeye alındı",
         "body": "{{player}} genç oyuncu kısa listenize taşındı. Nihai kararı vermeden önce onu daha sonra tekrar inceleyebilirsiniz."
+      },
+      "academyReview": {
+        "subject": "Akademi raporu: {{player}}",
+        "progress": "{{player}} akademide gelişiyor (GEN {{ovr}}, potansiyel {{potential}}). Antrenmana devam edip gelecek ay tekrar değerlendirin.",
+        "ready": "{{player}} iyi gelişti (GEN {{ovr}}, potansiyel {{potential}}). A takım fırsatına hazır. Altyapıdan terfi ettirebilirsiniz."
+      },
+      "academyFixture": {
+        "subject": "Gençlik mücadelesi",
+        "win": "Akademi {{count}} oyuncuyla kazandı (güç {{rating}}). Gençler deneyim kazandı.",
+        "draw": "Akademi {{count}} oyuncuyla berabere kaldı (güç {{rating}}). Gençler deneyim kazandı.",
+        "loss": "Akademi {{count}} oyuncuyla kaybetti (güç {{rating}}). Gençler deneyim kazandı."
       },
       "scoutReport": {
         "subject": "Gözlemci Raporu: {{player}}",
@@ -4089,5 +4167,40 @@
   "generation": {
     "title": "Oluşturma ve Tamamlama",
     "coverage": "Paketlerinizin kapsadıkları"
+  },
+  "phase6": {
+    "boardRoom": "Yönetim ve soyunma odası",
+    "contractHelp": "Maaş, lig hedefi ve sözleşme süresini görüşün. Daha kolay hedefler maaş teklifini düşürür.",
+    "salary": "Haftalık maaş",
+    "expires": "Sözleşme bitişi",
+    "ownership": "Sahiplik dönemi",
+    "style": "Kulübün oyun tarzı",
+    "leagueTarget": "Lig sıralaması hedefi",
+    "years": "Süre (yıl)",
+    "negotiate": "Sözleşmeyi görüş",
+    "investment": "Tesis yatırımı",
+    "requestInvestment": "Yönetim desteği iste",
+    "investmentHelp": "Yönetim sezonda bir kez yükseltmenin %25'ini karşılayabilir. En az %50 güven ve sağlıklı mali durum gerekir.",
+    "unavailable": "Yönetim şu anda kullanılamıyor.",
+    "takeoverPause": "Kulüp devri sırasında görüşmeler ve yatırımlar duraklatılır.",
+    "negotiationCooldown": "Sözleşme görüşmeleri arasında 30 gün bekleyin.",
+    "offerRejected": "Yönetim şartları reddetti. Maaşı düşürün veya daha iddialı bir lig hedefi önerin.",
+    "contractAgreed": "Menajer sözleşmeniz ve lig hedefiniz kabul edildi.",
+    "takeoverStarted": "Kulüp devir görüşmelerine başladı. Karar 30 gün içinde bekleniyor.",
+    "takeoverCompleted": "Yeni sahipler kulübü devraldı ve yatırım yaptı. Sözleşmeniz geçerli kalıyor.",
+    "contractRenewal": "Sözleşmeniz sona erdi. Yeni anlaşma için yönetimle görüşün.",
+    "investmentRejected": "Destek reddedildi. Güveni ve mali durumu iyileştirin veya gelecek sezonu bekleyin.",
+    "investmentApproved": "Yönetim yükseltmeyi onayladı ve maliyetin %25'ini karşıladı.",
+    "facilityMaximum": "Tesis en yüksek seviyeye ulaştı.",
+    "captainChanged": "Kaptanlık kararınız ilgili oyuncuları etkiledi.",
+    "captainConflict": "Kaptan ve yardımcı kaptan için farklı oyuncular seçin.",
+    "dressingRoom": "Soyunma odası",
+    "promise": "Oynama süresi sözü: {{count}} maç kaldı",
+    "concerns": "Oyuncu kaygıları",
+    "patchBoard": "Daha adil lig hedefleri, genç gelişimi ve oyun tarzı beklentileri.",
+    "patchContracts": "Maaş, sözleşme süresi ve lig hedefini görüşün.",
+    "patchClub": "Kulüp devirleri ve tesis yükseltmeleri için yönetim desteği.",
+    "patchSquad": "Daha açık oyuncu kaygıları, kaptanlık tepkileri ve söz süreleri.",
+    "playingTime": "Oynama süresi"
   }
 }
