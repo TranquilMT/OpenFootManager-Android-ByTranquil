@@ -274,4 +274,6 @@ mod tests {
     fn takeover_pauses_negotiation() { let mut g=game(); g.board_rooms.get_mut("club").unwrap().takeover_due=Some("2026-09-01".into()); assert_eq!(negotiate(&mut g, 1000, 2, 1).unwrap_err(), "phase6.takeoverPause"); }
     #[test]
     fn salary_must_fit_club_budget() { let mut g=game(); g.teams[0].wage_budget=1000; assert!(negotiate(&mut g, 1000, 2, 1).is_err()); }
+    #[test]
+    fn same_day_process_cannot_double_charge_salary() { let mut g=game(); g.clock.advance_days(7); process_day(&mut g); let balance=g.teams[0].finance; process_day(&mut g); assert_eq!(g.teams[0].finance, balance); }
 }
