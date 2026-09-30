@@ -625,7 +625,8 @@ pub fn apply_player_response(
         update_recent_treatment(player, &action_key);
 
         if player.morale_core.pending_promise.is_none()
-            && let Some(promise) = implied_promise(message_id, option_id) {
+            && let Some(promise) = implied_promise(message_id, option_id)
+        {
             player.morale_core.pending_promise = Some(promise);
         }
 

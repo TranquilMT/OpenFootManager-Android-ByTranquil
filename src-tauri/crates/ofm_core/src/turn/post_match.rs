@@ -233,8 +233,16 @@ pub fn apply_match_report_with_capture<F>(
         };
         game.manager.record_league_result(user_goals, opp_goals);
         crate::board_room::credit_style_match(game, home_team_id, away_team_id);
-        let settling_in = game.manager.team_id.as_ref().and_then(|id| game.board_rooms.get(id))
-            .is_some_and(|room| game.league.as_ref().is_some_and(|league| room.joined_season == league.season));
+        let settling_in = game
+            .manager
+            .team_id
+            .as_ref()
+            .and_then(|id| game.board_rooms.get(id))
+            .is_some_and(|room| {
+                game.league
+                    .as_ref()
+                    .is_some_and(|league| room.joined_season == league.season)
+            });
         let sat_delta: i8 = if user_goals > opp_goals {
             2
         }
@@ -563,8 +571,13 @@ fn resolve_post_match_promises(
             continue;
         };
 
-        let played = report.player_stats.get(&player.id).is_some_and(|stats| stats.minutes_played > 0);
-        if !played && (player.injury.is_some()) { continue; }
+        let played = report
+            .player_stats
+            .get(&player.id)
+            .is_some_and(|stats| stats.minutes_played > 0);
+        if !played && (player.injury.is_some()) {
+            continue;
+        }
 
         match promise.kind {
             PlayerPromiseKind::PlayingTime => {

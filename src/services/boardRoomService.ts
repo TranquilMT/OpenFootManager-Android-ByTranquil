@@ -10,7 +10,13 @@ export interface BoardRoomData {
   takeover_due: string | null;
   last_negotiation_date: string;
   last_investment_season: number;
-  contract: { weekly_salary: number; end_date: string; league_target: number; youth_minutes_target: number; style: string } | null;
+  contract: {
+    weekly_salary: number;
+    end_date: string;
+    league_target: number;
+    youth_minutes_target: number;
+    style: string;
+  } | null;
 }
 export const getBoardRoom = () => invoke<BoardRoomData>("get_board_room");
 export const negotiateManagerContract = (salary: number, target: number, years: number) =>
