@@ -15,4 +15,6 @@ mod tests {
     fn one_club_target_is_one() { assert_eq!(league_target(1, 1, true), 1); }
     #[test]
     fn empty_table_target_is_safe() { assert_eq!(league_target(1, 0, true), 1); }
+    #[test]
+    fn small_league_has_top_two_target() { assert_eq!(league_target(1, 4, true), 2); }
 }
