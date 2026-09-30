@@ -222,8 +222,19 @@ export function Select({
         list.style.maxHeight = "";
       }
       const viewport = window.visualViewport;
-      const bounds = { top: viewport?.offsetTop ?? 0, left: viewport?.offsetLeft ?? 0, width: viewport?.width ?? window.innerWidth, height: viewport?.height ?? window.innerHeight };
-      const placement = placeSelectMenu(rect, bounds, menu.offsetHeight, menu.offsetWidth, menu.offsetHeight - (list?.offsetHeight ?? 0));
+      const bounds = {
+        top: viewport?.offsetTop ?? 0,
+        left: viewport?.offsetLeft ?? 0,
+        width: viewport?.width ?? window.innerWidth,
+        height: viewport?.height ?? window.innerHeight,
+      };
+      const placement = placeSelectMenu(
+        rect,
+        bounds,
+        menu.offsetHeight,
+        menu.offsetWidth,
+        menu.offsetHeight - (list?.offsetHeight ?? 0),
+      );
       if (list) list.style.maxHeight = `${placement.listHeight}px`;
       menu.style.width = `${placement.width}px`;
       menu.style.minWidth = "0";
