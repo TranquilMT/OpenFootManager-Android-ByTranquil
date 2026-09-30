@@ -554,6 +554,27 @@ mod tests {
     }
 
     #[test]
+    fn another_club_takeover_cannot_change_user_confidence() {
+        let mut g = game();
+        let mut other = g.teams[0].clone();
+        other.id = "other".into();
+        g.teams.push(other);
+        g.board_rooms.insert(
+            "other".into(),
+            BoardRoom {
+                takeover_due: Some("2026-08-02".into()),
+                ..BoardRoom::default()
+            },
+        );
+        g.manager.satisfaction = 12;
+        let messages = g.messages.len();
+        complete_takeover(&mut g, "other");
+        assert_eq!(g.manager.satisfaction, 12);
+        assert_eq!(g.messages.len(), messages);
+        assert_eq!(g.board_rooms["other"].ownership_generation, 1);
+    }
+
+    #[test]
     fn old_room_json_loads_with_defaults() {
         let room: BoardRoom = serde_json::from_str("{}").unwrap();
         assert!(room.contract.is_none());
