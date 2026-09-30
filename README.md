@@ -335,6 +335,10 @@ OFMtouch is currently a NightlyPreRelease, so some areas are still being polishe
 
 ## 🔜 Coming Next / Remaining Work
 
+The next Phase 6 polish update adds more player variety: **2,818 additional distinct first names and surnames**, with name pools covering **all 211 selectable nationalities**. New generated worlds avoid repeated full names, and new youth scouting reports check names against existing players and earlier prospects. Existing careers keep their players' names.
+
+Formation selection also receives improved scrolling and better placement on smaller screens.
+
 The next milestones after the v0.3.5 checkpoint focus on validation and deeper career simulation:
 
 - Complete the v0.3.5 regression gate and resolve any remaining failures.
