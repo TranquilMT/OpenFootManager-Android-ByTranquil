@@ -1,5 +1,6 @@
 import type { GameStateData } from "../../store/gameStore";
 import { Card, CardHeader, CardBody, ProgressBar, CountryFlag } from "../ui";
+import BoardRoomPanel from "./BoardRoomPanel";
 import { ManagerCareerChart } from "./ManagerCareerChart";
 import { formatDate } from "../../lib/helpers";
 import { useTranslation } from "react-i18next";
@@ -73,6 +74,8 @@ export default function ManagerTab({ gameState, onSelectTeam }: ManagerTabProps)
           </div>
         </div>
       </Card>
+
+      <BoardRoomPanel gameState={gameState} />
 
       {/* Career stats */}
       <Card accent="accent" className="md:col-span-2">
