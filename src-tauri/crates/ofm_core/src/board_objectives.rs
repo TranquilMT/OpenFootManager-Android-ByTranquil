@@ -152,7 +152,18 @@ pub fn generate_objectives(game: &mut Game) {
         .filter(|&count| count > 1)
         .unwrap_or(game.teams.len()) as u32;
     let reputation = team.reputation;
-    let targets = ObjectiveTargets::new(reputation, num_teams);
+    let mut targets = ObjectiveTargets::new(reputation, num_teams);
+    let rank = 1 + game.teams.iter().filter(|other| {
+        other.reputation > reputation && game.league.as_ref().is_some_and(|league| {
+            league.standings.iter().any(|standing| standing.team_id == other.id)
+        })
+    }).count() as u32;
+    let season = game.league.as_ref().map(|league| league.season).unwrap_or(1);
+    let first_season = game.board_rooms.get(&user_team_id).is_none_or(|room| room.joined_season == season);
+    targets.expected_pos = crate::board_targets::league_target(rank, num_teams, first_season);
+    if let Some(contract) = game.board_rooms.get_mut(&user_team_id).and_then(|room| room.contract.as_mut()) {
+        contract.league_target = targets.expected_pos;
+    }
 
     game.board_objectives = vec![
         BoardObjective {
@@ -395,7 +406,7 @@ mod tests {
         generate_objectives(&mut game);
 
         assert_eq!(game.board_objectives.len(), 4);
-        assert_eq!(objective_by_id(&game, "obj_position").target, 1);
+        assert_eq!(objective_by_id(&game, "obj_position").target, 2);
         assert_eq!(
             objective_by_id(&game, "obj_position").description,
             "boardObjectives.objective.LeaguePosition"
@@ -462,7 +473,7 @@ mod tests {
 
         generate_objectives(&mut game);
 
-        assert_eq!(objective_by_id(&game, "obj_position").target, 1);
+        assert_eq!(objective_by_id(&game, "obj_position").target, 2);
         assert_eq!(objective_by_id(&game, "obj_wins").target, 0);
         assert_eq!(objective_by_id(&game, "obj_goals").target, 0);
     }
