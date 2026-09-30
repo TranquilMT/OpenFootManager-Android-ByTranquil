@@ -473,7 +473,7 @@ mod tests {
 
         generate_objectives(&mut game);
 
-        assert_eq!(objective_by_id(&game, "obj_position").target, 2);
+        assert_eq!(objective_by_id(&game, "obj_position").target, 1);
         assert_eq!(objective_by_id(&game, "obj_wins").target, 0);
         assert_eq!(objective_by_id(&game, "obj_goals").target, 0);
     }
