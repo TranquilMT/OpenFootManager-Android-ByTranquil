@@ -2,7 +2,7 @@ name: Phase 6 Board and Dressing Room checks
 
 on:
   push:
-    branches: [phase6-board-dressing-room]
+    branches: [phase6-board-dressing-room, phase6-gameplay-polish]
     paths: [.github/workflows/phase6-check.yml, src-tauri/**, src/**, package.json, package-lock.json, quality-baseline.json]
   pull_request:
     paths: [.github/workflows/phase6-check.yml, src-tauri/**, src/**, package.json, package-lock.json, quality-baseline.json]

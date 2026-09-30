@@ -368,12 +368,24 @@ fn complete_youth_scouting_assignment(
     // Prospects are scouted mid-career, so they are aged against the running
     // clock rather than the year the world opened in.
     let current_year = chrono::Datelike::year(&game.clock.current_date) as u32;
-    let prospects = generate_youth_recruitment_candidates(
+    let mut prospects = generate_youth_recruitment_candidates(
         &team,
         assignment.region,
         assignment.objective,
         assignment.target_position.as_ref(),
         current_year,
+    );
+    crate::generator::disambiguate_generated_recruits(
+        &mut prospects,
+        game.players
+            .iter()
+            .map(|player| player.full_name.clone())
+            .chain(
+                game.messages
+                    .iter()
+                    .flat_map(|message| message.context.youth_prospects.iter().flatten())
+                    .map(|player| player.full_name.clone()),
+            ),
     );
     if prospects.is_empty() {
         return;

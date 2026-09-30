@@ -493,6 +493,57 @@ pub struct WorldDatabaseInfo {
 mod tests {
     use super::*;
 
+    #[test]
+    fn expanded_names_add_at_least_two_hundred_entries() {
+        let names = default_names_definition();
+        let count: usize = names
+            .pools
+            .values()
+            .map(|pool| pool.first_names.len() + pool.last_names.len())
+            .sum();
+        assert!(
+            count >= 880,
+            "expected at least 200 additions to the original 680 entries, got {count}"
+        );
+    }
+
+    #[test]
+    fn regional_name_pools_are_usable_and_have_no_repeated_entries() {
+        let names = default_names_definition();
+        for (code, pool) in &names.pools {
+            for list in [&pool.first_names, &pool.last_names] {
+                assert!(list.len() >= 20, "small pool: {code}");
+                let unique: std::collections::HashSet<_> = list.iter().collect();
+                assert_eq!(unique.len(), list.len(), "duplicate entry: {code}");
+                assert!(
+                    list.iter()
+                        .all(|name| !name.trim().is_empty() && name.trim() == name)
+                );
+            }
+        }
+        for code in [
+            "JP", "KR", "CN", "IN", "NG", "GH", "SN", "MA", "EG", "ZA", "US", "MX", "PL", "TR",
+            "AU",
+        ] {
+            assert!(
+                names.pools.contains_key(code),
+                "missing regional pool: {code}"
+            );
+        }
+    }
+
+    #[test]
+    fn every_selectable_nationality_has_a_direct_name_pool() {
+        let names = default_names_definition();
+        for nation in crate::nations::all_nations() {
+            assert!(
+                names.pools.contains_key(nation.code),
+                "missing nationality: {}",
+                nation.code
+            );
+        }
+    }
+
     /// A scratch directory to stand in for one tier of the search path.
     fn tier(name: &str) -> PathBuf {
         let dir = std::env::temp_dir().join(format!("ofm-defs-{name}-{}", Uuid::new_v4()));
@@ -518,10 +569,9 @@ mod tests {
         let sources = DefinitionSources::embedded_only();
 
         let names = names_definition(&sources);
-        assert_eq!(
-            names.pools.len(),
-            17,
-            "the shipped name pools moved out of Rust unchanged"
+        assert!(
+            names.pools.len() >= 40,
+            "regional name coverage must remain broad"
         );
 
         let nations = nations_definition(&sources);
@@ -714,7 +764,11 @@ mod tests {
 
         let def = names_definition(&DefinitionSources::searching([dir.clone()]));
 
-        assert_eq!(def.pools.len(), 17, "the shipped pools");
+        assert_eq!(
+            def.pools.len(),
+            default_names_definition().pools.len(),
+            "the shipped pools"
+        );
 
         std::fs::remove_dir_all(&dir).ok();
     }
@@ -736,7 +790,7 @@ mod tests {
 
         assert_eq!(
             def.pools.len(),
-            17,
+            default_names_definition().pools.len(),
             "a file with no well-formed code key falls back to the shipped pools"
         );
 
@@ -760,7 +814,7 @@ mod tests {
         assert!(def.pools.contains_key("BR"), "the usable override is kept");
         assert_ne!(
             def.pools.len(),
-            17,
+            default_names_definition().pools.len(),
             "and it is the override, not the shipped set"
         );
 

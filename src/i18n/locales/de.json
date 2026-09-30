@@ -1777,7 +1777,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.0",
+    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.1",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
@@ -4201,6 +4201,10 @@
     "patchContracts": "Verhandle Gehalt, Vertragslaufzeit und Ligaziel.",
     "patchClub": "Vereinsübernahmen und Förderung des Einrichtungsausbaus.",
     "patchSquad": "Klarere Spielersorgen, Kapitänsreaktionen und Fristen für Versprechen.",
-    "playingTime": "Spielzeit"
+    "playingTime": "Spielzeit",
+    "patchNames": "2.818 zusätzliche Vor- und Nachnamen für alle 211 auswählbaren Nationalitäten.",
+    "patchIdentity": "Neue Spielwelten und Jugendberichte vermeiden doppelte vollständige Namen. Vorhandene Spieler behalten ihre Namen.",
+    "patchScrolling": "Formationsmenüs lassen sich flüssiger scrollen und bleiben im sichtbaren Bildschirmbereich.",
+    "patchReliability": "Fairere Torziele in kleinen Ligen; zuverlässigere Trainergehälter und Finanzierung bei Vereinsübernahmen."
   }
 }

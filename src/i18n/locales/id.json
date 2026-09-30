@@ -1777,7 +1777,7 @@
     "patchPlayers": "Lebih banyak pemain unggulan, termasuk bintang langka berperingkat 96.",
     "patchMatches": "Lebih banyak reaksi, tembakan membentur tiang, dan komentar suara opsional.",
     "patchMobile": "Kontrol seluler, kotak masuk, tim nasional, dan awal karier ditingkatkan.",
-    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.6.0",
+    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.6.1",
     "patchPortraits": "20 wajah fiktif sumber membuat potret pemain hasil generasi lebih beragam.",
     "patchWorld": "Dunia sepak bola yang lebih luas mencakup 29 negara, dengan klub lebih kuat di Amerika dan Asia.",
     "patchTransfers": "Strategi klub memandu pinjaman dan transfer, dengan tawaran bersaing serta pemeriksaan anggaran.",
@@ -4201,6 +4201,10 @@
     "patchContracts": "Negosiasikan gaji, durasi kontrak, dan target liga.",
     "patchClub": "Pengambilalihan klub dan dukungan peningkatan fasilitas.",
     "patchSquad": "Kekhawatiran lebih jelas, reaksi kapten, dan tenggat janji.",
-    "playingTime": "Waktu bermain"
+    "playingTime": "Waktu bermain",
+    "patchNames": "Tambahan 2.818 nama depan dan nama belakang untuk seluruh 211 kewarganegaraan yang tersedia.",
+    "patchIdentity": "Dunia baru dan laporan pemain muda menghindari nama lengkap yang berulang. Pemain yang sudah ada tetap menggunakan nama mereka.",
+    "patchScrolling": "Menu formasi dapat digulir lebih lancar dan tetap berada dalam area layar yang terlihat.",
+    "patchReliability": "Target gol yang lebih adil di liga kecil; pembayaran gaji manajer dan pendanaan pengambilalihan klub yang lebih andal."
   }
 }

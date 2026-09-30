@@ -16,6 +16,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { Check, ChevronDown } from "lucide-react";
+import { placeSelectMenu } from "./Select.helpers";
 
 interface SelectProps {
   selectSize?: "2xs" | "xs" | "sm" | "md";
@@ -208,7 +209,6 @@ export function Select({
 
       const rect = trigger.getBoundingClientRect();
       const margin = 8;
-      const gap = 4;
       // The menu may grow past the trigger (long option labels) but never
       // narrower than it, so short-option dropdowns keep their current look.
       menu.style.minWidth = `${rect.width}px`;
@@ -221,23 +221,25 @@ export function Select({
       if (list) {
         list.style.maxHeight = "";
       }
-      const availableBelow = window.innerHeight - margin - rect.bottom - gap;
-      const availableAbove = rect.top - gap - margin;
-      const naturalHeight = menu.offsetHeight;
-      const openUp = naturalHeight > availableBelow && availableAbove > availableBelow;
-      const available = openUp ? availableAbove : availableBelow;
-      if (list && naturalHeight > available) {
-        const chrome = naturalHeight - list.offsetHeight;
-        list.style.maxHeight = `${Math.max(80, available - chrome)}px`;
-      }
-
-      const menuHeight = menu.offsetHeight;
-      const menuWidth = menu.offsetWidth;
-      menu.style.top = openUp ? `${rect.top - gap - menuHeight}px` : `${rect.bottom + gap}px`;
-      menu.style.left = `${Math.max(
-        margin,
-        Math.min(rect.left, window.innerWidth - menuWidth - margin),
-      )}px`;
+      const viewport = window.visualViewport;
+      const bounds = {
+        top: viewport?.offsetTop ?? 0,
+        left: viewport?.offsetLeft ?? 0,
+        width: viewport?.width ?? window.innerWidth,
+        height: viewport?.height ?? window.innerHeight,
+      };
+      const placement = placeSelectMenu(
+        rect,
+        bounds,
+        menu.offsetHeight,
+        menu.offsetWidth,
+        menu.offsetHeight - (list?.offsetHeight ?? 0),
+      );
+      if (list) list.style.maxHeight = `${placement.listHeight}px`;
+      menu.style.width = `${placement.width}px`;
+      menu.style.minWidth = "0";
+      menu.style.top = `${placement.top}px`;
+      menu.style.left = `${placement.left}px`;
     };
 
     let frame = 0;
@@ -260,6 +262,8 @@ export function Select({
 
     place();
     window.addEventListener("resize", schedulePlace);
+    window.visualViewport?.addEventListener("resize", schedulePlace);
+    window.visualViewport?.addEventListener("scroll", schedulePlace);
     window.addEventListener("scroll", handleScroll, true);
 
     return () => {
@@ -267,6 +271,8 @@ export function Select({
         cancelAnimationFrame(frame);
       }
       window.removeEventListener("resize", schedulePlace);
+      window.visualViewport?.removeEventListener("resize", schedulePlace);
+      window.visualViewport?.removeEventListener("scroll", schedulePlace);
       window.removeEventListener("scroll", handleScroll, true);
     };
   }, [isOpen, options]);
@@ -420,7 +426,7 @@ export function Select({
                 id={listboxId}
                 role="listbox"
                 aria-required={required}
-                className="max-h-60 overflow-y-auto p-1"
+                className="touch-scroll max-h-60 overscroll-contain p-1"
               >
                 {groupedOptions.map((section, sectionIndex) => {
                   const rendered = section.options.map((option) => {

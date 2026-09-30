@@ -1777,7 +1777,7 @@
     "patchPlayers": "Más jugadores destacados, incluidas raras estrellas de 96 y aspirantes al ascenso.",
     "patchMatches": "Más reacciones, tiros al palo y narración de voz opcional.",
     "patchMobile": "Mejoras en controles móviles, bandeja de entrada, selecciones y carrera.",
-    "patchWelcome": "¡Bienvenido a OFMtouch! Novedades de la v0.6.0",
+    "patchWelcome": "¡Bienvenido a OFMtouch! Novedades de la v0.6.1",
     "patchPortraits": "20 rostros ficticios de origen aportan más variedad a los retratos de los jugadores.",
     "patchWorld": "Un mundo futbolístico más amplio abarca 29 países, con clubes más fuertes en América y Asia.",
     "patchTransfers": "Las estrategias de los clubes guían cesiones y fichajes, con ofertas rivales y controles del presupuesto.",
@@ -4201,6 +4201,10 @@
     "patchContracts": "Negocia salario, duración del contrato y objetivo liguero.",
     "patchClub": "Compras de clubes y apoyo para mejorar instalaciones.",
     "patchSquad": "Preocupaciones más claras, reacciones a la capitanía y plazos de promesas.",
-    "playingTime": "Tiempo de juego"
+    "playingTime": "Tiempo de juego",
+    "patchNames": "2.818 nombres y apellidos adicionales para las 211 nacionalidades disponibles.",
+    "patchIdentity": "Los nuevos mundos y los informes de jóvenes evitan nombres completos repetidos. Los jugadores existentes conservan sus nombres.",
+    "patchScrolling": "Los menús de formación se desplazan con fluidez y se mantienen dentro de la pantalla disponible.",
+    "patchReliability": "Objetivos de goles más justos en ligas pequeñas; pagos del salario del entrenador y financiación de las adquisiciones más fiables."
   }
 }

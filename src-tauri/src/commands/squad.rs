@@ -122,10 +122,22 @@ pub fn set_team_match_roles_internal(
 ) -> Result<Game, String> {
     mutate_active_game(state, |game| {
         let team_id = user_team_id(game)?;
-        for id in [&match_roles.captain, &match_roles.vice_captain, &match_roles.penalty_taker,
-            &match_roles.free_kick_taker, &match_roles.corner_taker].into_iter().flatten() {
-            if !game.players.iter().any(|player| player.id == *id && player.team_id.as_deref() == Some(&team_id)
-                && player.squad_role == domain::player::SquadRole::Senior && !player.retired) {
+        for id in [
+            &match_roles.captain,
+            &match_roles.vice_captain,
+            &match_roles.penalty_taker,
+            &match_roles.free_kick_taker,
+            &match_roles.corner_taker,
+        ]
+        .into_iter()
+        .flatten()
+        {
+            if !game.players.iter().any(|player| {
+                player.id == *id
+                    && player.team_id.as_deref() == Some(&team_id)
+                    && player.squad_role == domain::player::SquadRole::Senior
+                    && !player.retired
+            }) {
                 return Err("be.error.playerNotOnTeam".to_string());
             }
         }
@@ -134,7 +146,11 @@ pub fn set_team_match_roles_internal(
         }
         ofm_core::board_room::initialize(game);
         let old = user_team_mut(game)?.match_roles.captain.clone();
-        ofm_core::board_room::captain_reactions(game, old.as_deref(), match_roles.captain.as_deref());
+        ofm_core::board_room::captain_reactions(
+            game,
+            old.as_deref(),
+            match_roles.captain.as_deref(),
+        );
         user_team_mut(game)?.match_roles = match_roles;
 
         Ok(())

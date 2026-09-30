@@ -214,7 +214,8 @@ pub fn process_day(game: &mut Game) {
         .is_some_and(|due| due.as_str() <= date.to_string().as_str())
     {
         complete_takeover(game, &id);
-    } else if date.day() == 1
+    } else if room.takeover_due.is_none()
+        && date.day() == 1
         && matches!(date.month(), 1 | 4 | 7 | 10)
         && room.last_ownership_review != date.to_string()
     {
@@ -230,32 +231,48 @@ pub fn process_day(game: &mut Game) {
     let Some(contract) = room.contract else {
         return;
     };
-    if contract.end_date.as_str() < date.to_string().as_str() {
-        notify(game, "renewal", "phase6.contractRenewal");
-        // An expired contract does not silently fire the manager; renewal is negotiable.
+    let Some(end) = NaiveDate::parse_from_str(&contract.end_date, "%Y-%m-%d").ok() else {
         return;
-    }
-    let elapsed = NaiveDate::parse_from_str(&room.last_salary_date, "%Y-%m-%d")
-        .ok()
-        .map(|last| date.signed_duration_since(last).num_days())
-        .unwrap_or(0);
-    if elapsed >= 7 {
-        let weeks = elapsed / 7;
-        if crate::finances::post(
-            game,
-            &id,
-            -(i64::from(contract.weekly_salary) * weeks),
-            crate::finances::CashKind::StaffWages,
-            date,
-        )
-        .is_ok()
+    };
+    let paid_until = date.min(end);
+    if let Ok(last) = NaiveDate::parse_from_str(&room.last_salary_date, "%Y-%m-%d") {
+        let elapsed = paid_until.signed_duration_since(last).num_days().max(0);
+        let settled_days = if date >= end {
+            elapsed
+        } else {
+            elapsed / 7 * 7
+        };
+        let amount = i64::from(contract.weekly_salary) * settled_days / 7;
+        if settled_days > 0
+            && crate::finances::post(
+                game,
+                &id,
+                -amount,
+                crate::finances::CashKind::StaffWages,
+                date,
+            )
+            .is_ok()
         {
-            game.board_rooms.get_mut(&id).unwrap().last_salary_date = date.to_string();
+            game.board_rooms.get_mut(&id).unwrap().last_salary_date =
+                (last + Duration::days(settled_days)).to_string();
         }
+    }
+    if date > end {
+        notify(game, "renewal", "phase6.contractRenewal");
     }
 }
 
 pub fn complete_takeover(game: &mut Game, team_id: &str) {
+    let today = game.clock.current_date.date_naive();
+    let ready = game
+        .board_rooms
+        .get(team_id)
+        .and_then(|room| room.takeover_due.as_deref())
+        .and_then(|due| NaiveDate::parse_from_str(due, "%Y-%m-%d").ok())
+        .is_some_and(|due| due <= today);
+    if !ready {
+        return;
+    }
     let Some(team) = game.teams.iter().find(|team| team.id == team_id) else {
         return;
     };
@@ -280,8 +297,10 @@ pub fn complete_takeover(game: &mut Game, team_id: &str) {
     if let Some(team) = game.teams.iter_mut().find(|team| team.id == team_id) {
         team.transfer_budget = team.transfer_budget.saturating_add(investment / 2);
     }
-    game.manager.satisfaction = game.manager.satisfaction.max(50);
-    notify(game, "takeover", "phase6.takeoverCompleted");
+    if game.manager.team_id.as_deref() == Some(team_id) {
+        game.manager.satisfaction = game.manager.satisfaction.max(50);
+        notify(game, "takeover", "phase6.takeoverCompleted");
+    }
 }
 
 pub fn credit_style_match(game: &mut Game, home: &str, away: &str) {
@@ -454,6 +473,153 @@ mod tests {
         crate::board_objectives::generate_objectives(&mut game);
         game
     }
+    #[test]
+    fn salary_keeps_unpaid_days_between_weekly_payments() {
+        let mut g = game();
+        let salary = weekly_salary(&g, "club");
+        let cash = g.teams[0].finance;
+        g.clock.advance_days(10);
+        process_day(&mut g);
+        g.clock.advance_days(4);
+        process_day(&mut g);
+        assert_eq!(g.teams[0].finance, cash - salary * 2);
+        assert_eq!(g.board_rooms["club"].last_salary_date, "2026-08-16");
+    }
+
+    #[test]
+    fn final_salary_is_paid_when_advance_skips_contract_expiry() {
+        let mut g = game();
+        g.board_rooms
+            .get_mut("club")
+            .unwrap()
+            .contract
+            .as_mut()
+            .unwrap()
+            .end_date = "2026-08-09".into();
+        let salary = weekly_salary(&g, "club");
+        let cash = g.teams[0].finance;
+        g.clock.advance_days(10);
+        process_day(&mut g);
+        assert_eq!(g.teams[0].finance, cash - salary);
+        process_day(&mut g);
+        assert_eq!(g.teams[0].finance, cash - salary);
+    }
+
+    #[test]
+    fn final_partial_week_is_paid_once() {
+        let mut g = game();
+        g.board_rooms
+            .get_mut("club")
+            .unwrap()
+            .contract
+            .as_mut()
+            .unwrap()
+            .end_date = "2026-08-12".into();
+        let salary = weekly_salary(&g, "club");
+        let cash = g.teams[0].finance;
+        g.clock.advance_days(12);
+        process_day(&mut g);
+        assert_eq!(g.teams[0].finance, cash - salary * 10 / 7);
+        process_day(&mut g);
+        assert_eq!(g.teams[0].finance, cash - salary * 10 / 7);
+    }
+
+    #[test]
+    fn takeover_without_pending_sale_cannot_inject_cash() {
+        let mut g = game();
+        let cash = g.teams[0].finance;
+        complete_takeover(&mut g, "club");
+        assert_eq!(g.teams[0].finance, cash);
+        assert_eq!(g.board_rooms["club"].ownership_generation, 0);
+    }
+
+    #[test]
+    fn future_takeover_does_not_complete_early() {
+        let mut g = game();
+        g.board_rooms.get_mut("club").unwrap().takeover_due = Some("2026-09-01".into());
+        let cash = g.teams[0].finance;
+        complete_takeover(&mut g, "club");
+        assert_eq!(g.teams[0].finance, cash);
+        assert!(g.board_rooms["club"].takeover_due.is_some());
+    }
+
+    #[test]
+    fn completed_takeover_cannot_credit_cash_twice() {
+        let mut g = game();
+        g.board_rooms.get_mut("club").unwrap().takeover_due = Some("2026-08-02".into());
+        complete_takeover(&mut g, "club");
+        let cash = g.teams[0].finance;
+        complete_takeover(&mut g, "club");
+        assert_eq!(g.teams[0].finance, cash);
+        assert_eq!(g.board_rooms["club"].ownership_generation, 1);
+    }
+
+    #[test]
+    fn another_club_takeover_cannot_change_user_confidence() {
+        let mut g = game();
+        let mut other = g.teams[0].clone();
+        other.id = "other".into();
+        g.teams.push(other);
+        g.board_rooms.insert(
+            "other".into(),
+            BoardRoom {
+                takeover_due: Some("2026-08-02".into()),
+                ..BoardRoom::default()
+            },
+        );
+        g.manager.satisfaction = 12;
+        let messages = g.messages.len();
+        complete_takeover(&mut g, "other");
+        assert_eq!(g.manager.satisfaction, 12);
+        assert_eq!(g.messages.len(), messages);
+        assert_eq!(g.board_rooms["other"].ownership_generation, 1);
+    }
+
+    #[test]
+    fn salary_settles_partial_week_on_contract_end_date() {
+        let mut g = game();
+        g.board_rooms
+            .get_mut("club")
+            .unwrap()
+            .contract
+            .as_mut()
+            .unwrap()
+            .end_date = "2026-08-05".into();
+        let salary = weekly_salary(&g, "club");
+        let cash = g.teams[0].finance;
+        g.clock.advance_days(3);
+        process_day(&mut g);
+        assert_eq!(g.teams[0].finance, cash - salary * 3 / 7);
+        assert_eq!(g.board_rooms["club"].last_salary_date, "2026-08-05");
+    }
+
+    #[test]
+    fn backward_clock_cannot_charge_another_salary_week() {
+        let mut g = game();
+        g.clock.advance_days(7);
+        process_day(&mut g);
+        let cash = g.teams[0].finance;
+        g.clock.current_date -= Duration::days(3);
+        process_day(&mut g);
+        assert_eq!(g.teams[0].finance, cash);
+        assert_eq!(g.board_rooms["club"].last_salary_date, "2026-08-09");
+    }
+
+    #[test]
+    fn quarterly_review_does_not_replace_an_active_takeover() {
+        let mut g = game();
+        g.clock.current_date = Utc.with_ymd_and_hms(2026, 10, 1, 12, 0, 0).unwrap();
+        let room = g.board_rooms.get_mut("club").unwrap();
+        room.takeover_due = Some("2026-10-15".into());
+        room.last_ownership_review = "2026-07-01".into();
+        process_day(&mut g);
+        assert_eq!(
+            g.board_rooms["club"].takeover_due.as_deref(),
+            Some("2026-10-15")
+        );
+        assert_eq!(g.board_rooms["club"].last_ownership_review, "2026-07-01");
+    }
+
     #[test]
     fn old_room_json_loads_with_defaults() {
         let room: BoardRoom = serde_json::from_str("{}").unwrap();
@@ -631,6 +797,7 @@ mod tests {
     #[test]
     fn takeover_adds_real_cash_and_transfer_budget() {
         let mut g = game();
+        g.board_rooms.get_mut("club").unwrap().takeover_due = Some("2026-08-02".into());
         let before = g.teams[0].finance;
         let budget = g.teams[0].transfer_budget;
         complete_takeover(&mut g, "club");
@@ -641,6 +808,7 @@ mod tests {
     #[test]
     fn takeover_preserves_manager_contract() {
         let mut g = game();
+        g.board_rooms.get_mut("club").unwrap().takeover_due = Some("2026-08-02".into());
         let salary = g.board_rooms["club"]
             .contract
             .as_ref()

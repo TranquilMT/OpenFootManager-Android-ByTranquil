@@ -3,6 +3,12 @@ pub mod competition_def;
 pub mod definitions;
 pub mod file_format;
 mod generation;
+mod name_diversity;
+mod youth_generation;
+pub(crate) use youth_generation::disambiguate_generated_recruits;
+pub use youth_generation::{
+    generate_youth_academy_recruit, generate_youth_academy_recruit_with_nationality,
+};
 pub mod package;
 pub mod scaffold;
 pub mod world_io;
@@ -266,59 +272,6 @@ pub fn repair_opening_youth_academies(game: &mut crate::game::Game) -> bool {
     }
 
     repaired
-}
-
-/// Generate a youth prospect who is joining **now**.
-///
-/// `current_year` is the year the recruit arrives, not the year the world opened:
-/// a prospect scouted five seasons into a career is fifteen in *that* season. The
-/// two coincide only for the opening intake, which is why the distinction is
-/// worth naming — a call site that passed the world's opening year here would
-/// quietly produce a squad of players five years too old.
-pub fn generate_youth_academy_recruit(
-    team: &Team,
-    target_position: Option<&Position>,
-    current_year: u32,
-) -> Player {
-    generate_youth_academy_recruit_with_nationality(team, target_position, None, current_year)
-}
-
-/// As [`generate_youth_academy_recruit`], with the prospect's nationality forced
-/// rather than drawn from the club's country. See there for `current_year`.
-pub fn generate_youth_academy_recruit_with_nationality(
-    team: &Team,
-    target_position: Option<&Position>,
-    nationality_override: Option<&str>,
-    current_year: u32,
-) -> Player {
-    use domain::player::SquadRole;
-
-    let mut rng = rand::rng();
-    let names_def = default_names_definition();
-    let country_codes = generation::nationality_distribution();
-    let nationality = nationality_override
-        .map(generation::canonicalize_generated_nationality)
-        .unwrap_or_else(|| {
-            // `team_local_nationality`, not `team.country`: a club carries both a
-            // location and a football identity, and where they differ the
-            // football identity is the one a youth intake should draw on.
-            pick_nationality_from_def(team_local_nationality(team), country_codes, &mut rng)
-        });
-    let youth_slots = youth_slots_for_target(target_position.map(Position::to_group_position));
-    let slot_index = youth_slots[rng.random_range(0..youth_slots.len())];
-    let mut player = generate_random_player_from_def(
-        &team.id,
-        slot_index,
-        &nationality,
-        current_year,
-        &names_def,
-        &mut rng,
-    );
-    rebalance_generated_player_for_club(&mut player, team, slot_index, current_year, &mut rng);
-    player.squad_role = SquadRole::Youth;
-    player.transfer_listed = false;
-    player.loan_listed = false;
-    player
 }
 
 /// Generate a senior free-agent player for a national squad. `squad_slot`
@@ -1648,6 +1601,13 @@ fn generate_world_with_rng(
         staff.push(s);
     }
 
+    name_diversity::disambiguate(
+        &mut players,
+        &names_def,
+        &mut std::collections::HashSet::new(),
+        &mut rng,
+    );
+
     info!(
         "[generator] world generated: {} teams, {} players, {} staff",
         teams_out.len(),
@@ -2211,6 +2171,20 @@ mod tests {
     }
 
     #[test]
+    fn newly_generated_world_has_distinct_full_names() {
+        let (_, players, _) = generate_world_with_rng(
+            StdRng::seed_from_u64(610),
+            &WorldGenConfig::standard(),
+            &definitions::DefinitionSources::embedded_only(),
+        );
+        let unique: std::collections::HashSet<_> = players
+            .iter()
+            .map(|player| name_diversity::normalize(&player.full_name))
+            .collect();
+        assert_eq!(unique.len(), players.len());
+    }
+
+    #[test]
     fn test_generate_world_team_count() {
         let config = WorldGenConfig::compact();
         let expected = config.total_clubs();
@@ -2579,7 +2553,10 @@ mod tests {
     /// names, deterministically.
     #[test]
     fn an_unpooled_nationality_is_not_pinned_to_one_pool() {
-        let names_def = default_names_definition();
+        let mut names_def = default_names_definition();
+        names_def
+            .pools
+            .retain(|code, _| ["AR", "BR", "ENG", "DE"].contains(&code.as_str()));
         // Only the AR-exclusive names, because half of AR's first names also
         // appear in European pools (Federico, Lucas, Sergio …). Asserting "no
         // Argentine name at all" would fail on those shared entries and prove
@@ -2615,7 +2592,10 @@ mod tests {
     /// unpooled, and `AR`/`BR` are the only South American pools shipped.
     #[test]
     fn the_name_fallback_resolves_a_non_default_region() {
-        let names_def = default_names_definition();
+        let mut names_def = default_names_definition();
+        names_def
+            .pools
+            .retain(|code, _| code == "AR" || code == "BR");
         let south_american: std::collections::HashSet<&String> = ["AR", "BR"]
             .iter()
             .flat_map(|code| names_def.pools[*code].first_names.iter())

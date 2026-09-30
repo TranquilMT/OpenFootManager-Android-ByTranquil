@@ -147,8 +147,8 @@ fn draw_name(pool: &NamePool, rng: &mut impl Rng) -> (String, String) {
     (first, last)
 }
 
-/// The pool to borrow from when a nationality has none of its own — the common
-/// case, since only 17 pools ship against ~210 selectable nations.
+/// The pool to borrow from when a custom database omits a nationality.
+/// The shipped database covers every selectable football nationality.
 ///
 /// Prefers a pool from the same confederation, then any usable pool. This used to
 /// take `pools.keys().min()`, the lexicographically smallest key, which for the
