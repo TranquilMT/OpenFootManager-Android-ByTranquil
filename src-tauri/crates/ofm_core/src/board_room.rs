@@ -162,3 +162,15 @@ pub fn complete_takeover(game: &mut Game, team_id: &str) {
     game.manager.satisfaction = game.manager.satisfaction.max(50);
     notify(game, "takeover", "phase6.takeoverCompleted");
 }
+
+pub fn credit_style_match(game: &mut Game, home: &str, away: &str) {
+    let Some(id) = game.manager.team_id.as_deref() else { return; };
+    let Some(team) = game.teams.iter().find(|team| team.id == id) else { return; };
+    let style = format!("{:?}", team.play_style);
+    let key = format!("{}_{}_{}", game.clock.current_date.date_naive(), home, away);
+    if let Some(room) = game.board_rooms.get_mut(id)
+        && room.contract.as_ref().is_some_and(|contract| contract.style == style)
+        && room.credited_matches.insert(key) {
+        room.style_matches = room.style_matches.saturating_add(1);
+    }
+}

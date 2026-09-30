@@ -232,6 +232,7 @@ pub fn apply_match_report_with_capture<F>(
             report.home_goals
         };
         game.manager.record_league_result(user_goals, opp_goals);
+        crate::board_room::credit_style_match(game, home_team_id, away_team_id);
         let sat_delta: i8 = if user_goals > opp_goals {
             2
         }
