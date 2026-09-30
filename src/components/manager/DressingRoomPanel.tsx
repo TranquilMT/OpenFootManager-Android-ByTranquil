@@ -16,7 +16,7 @@ export default function DressingRoomPanel({ gameState }: { gameState: GameStateD
         {issues.map((player) => <li key={player.id} className="rounded-lg bg-gray-100 p-3 text-sm dark:bg-navy-700">
           <p className="font-semibold">{player.match_name}</p>
           <p>{t("common.morale")}: {common.morale}%</p>
-          {common.morale_core?.unresolved_issue && <p>{t("phase6.concerns")}: {t(common.morale_core.unresolved_issue.category === "Contract" ? "common.contract" : common.morale_core.unresolved_issue.category === "PlayingTime" ? "common.appearances" : "common.morale", { count: common.morale_core.pending_promise?.matches_remaining ?? 0 })}</p>}
+          {common.morale_core?.unresolved_issue && <p>{t("phase6.concerns")}: {t(common.morale_core.unresolved_issue.category === "Contract" ? "common.contract" : common.morale_core.unresolved_issue.category === "PlayingTime" ? "phase6.playingTime" : "common.morale", { count: common.morale_core.pending_promise?.matches_remaining ?? 0 })}</p>}
           {common.morale_core?.pending_promise && <p>{t("phase6.promise", { count: common.morale_core.pending_promise.matches_remaining })}</p>}
           {player.transfer_listed && <p>{t("transfers.listed")}</p>}
         </li>)}
