@@ -94,6 +94,7 @@ import { useTransferBidFlow } from "./useTransferBidFlow";
 
 interface TransfersTabProps {
   gameState: GameStateData;
+  initialOfferPlayerId?: string | null;
   onSelectPlayer: (id: string, options?: PlayerSelectionOptions) => void;
   onSelectTeam: (id: string) => void;
   onGameUpdate?: (game: GameStateData) => void;
@@ -142,6 +143,7 @@ function futureClosedWindowRegistrationDate(
 
 export default function TransfersTab({
   gameState,
+  initialOfferPlayerId,
   onSelectPlayer,
   onSelectTeam,
   onGameUpdate,
@@ -159,9 +161,11 @@ export default function TransfersTab({
     transferWindow.status === "Closed" && closedWindowRegistrationDate
       ? closedWindowRegistrationDate
       : gameState.clock.current_date;
-  const [view, setView] = useState<TransferTabView>("players");
+  const [view, setView] = useState<TransferTabView>(initialOfferPlayerId ? "offers" : "players");
   const [availabilityFilter, setAvailabilityFilter] = useState<TransferAvailabilityFilter>("all");
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(
+    () => gameState.players.find((player) => player.id === initialOfferPlayerId)?.full_name ?? "",
+  );
   const [specificPositions, setSpecificPositions] = useState<string[]>([]);
   const [openPositionPopover, setOpenPositionPopover] = useState<string | null>(null);
   const positionFilterRef = useRef<HTMLDivElement | null>(null);

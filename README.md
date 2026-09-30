@@ -4,9 +4,17 @@
 
 OFMtouch is a free football management game built for Android. Take charge of a club, build your squad, scout talent, shape your tactics, develop young players and compete across multiple seasons in a growing football world.
 
-> 🧪 **Current source version: v0.5.0 Career Update NightlyPreRelease**
+> 🧪 **Current source version: v0.5.2 Career Hotfix NightlyPreRelease**
 > **Build:** generated automatically from the GitHub Actions build number
 > NightlyPreRelease builds are playable test versions. New features and fixes arrive regularly, but some bugs and unfinished areas may remain.
+
+## v0.5.2 Career Hotfix
+
+- Injury names are translated in match and advance recaps.
+- Inbox review links open the linked player's loan or transfer offers and remain usable after the first visit.
+- Portrait rendering protects exposed neck skin and refreshes cached images.
+- Playing-time conversations give the manager two matches to fulfil a promise.
+- Next preview: deeper squad planning and follow-up player conversations.
 
 ## v0.5.0 Career Update
 
@@ -77,7 +85,7 @@ v0.3.5 is not the introduction of Player Development V2.0 or Transfer Market V2.
 - [x] **v0.3.5 version/build pipeline** — app metadata and Android Nightly workflow upgraded to v0.3.5 with GitHub run-number builds.
 - [ ] **Final v0.3.5 regression gate** — complete the full automated regression suite against the release candidate.
 - [ ] **v0.3.5 Android APK verification** — verify the generated ARM64 NightlyPreRelease APK, signature, package/version and startup flows.
-- [ ] **Phase 5 — Manager Career** — live match records, club spells, and named league/cup honours are implemented locally; validation and release integration remain outstanding.
+- [x] **Phase 5 — Manager Career** — live match records, club spells, and named league/cup honours passed the v0.5.1 release gate.
 
 Thank you for playing! Please help us improve future builds by [submitting issues on GitHub](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new).
 

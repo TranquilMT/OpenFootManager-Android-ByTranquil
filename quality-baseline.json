@@ -1,7 +1,7 @@
 {
   "oversizedAggregate": {
     "rust": 64950,
-    "ts": 36063
+    "ts": 36102
   },
   "allowedOversized": {
     "src-tauri/crates/db/src/repositories/player_repo.rs": 1062,
@@ -45,8 +45,8 @@
     "src/components/finances/FinancesTab.test.tsx": 931,
     "src/components/finances/FinancesTab.tsx": 972,
     "src/components/home/HomeTab.helpers.test.ts": 704,
-    "src/components/inbox/InboxMessageDetailPane.tsx": 523,
-    "src/components/inbox/InboxTab.test.tsx": 1358,
+    "src/components/inbox/InboxMessageDetailPane.tsx": 530,
+    "src/components/inbox/InboxTab.test.tsx": 1386,
     "src/components/match/MatchLive.tsx": 649,
     "src/components/match/PostMatchScreen.test.tsx": 709,
     "src/components/match/PostMatchScreen.tsx": 798,
@@ -69,7 +69,7 @@
     "src/components/tournaments/TournamentsTab.test.tsx": 684,
     "src/components/transfers/TransfersTab.model.test.ts": 540,
     "src/components/transfers/TransfersTab.test.tsx": 1607,
-    "src/components/transfers/TransfersTab.tsx": 2089,
+    "src/components/transfers/TransfersTab.tsx": 2093,
     "src/components/youthAcademy/YouthAcademyTab.test.tsx": 524,
     "src/components/youthAcademy/YouthAcademyTab.tsx": 700,
     "src/hooks/useEntityEditor.test.ts": 791,

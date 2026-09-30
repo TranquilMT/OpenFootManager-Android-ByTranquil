@@ -53,6 +53,31 @@ function entryWith(matches: RecapMatch[]): DigestEntry {
 }
 
 describe("DashboardSimulatingModal penalty shootouts", () => {
+  it("resolves injury names inside recap headlines", () => {
+    render(
+      <DashboardSimulatingModal
+        digestEntries={[
+          {
+            date: "2026-07-10",
+            recap: recapWith({
+              inbox: [
+                {
+                  id: "injury-1",
+                  date: "2026-07-10",
+                  text: "Injury — Diaz (common.injuries.calfStrain)",
+                  textKey: "be.msg.trainingInjury.subject",
+                  params: { player: "Diaz", injury: "common.injuries.calfStrain" },
+                  category: "Injury",
+                },
+              ],
+            }),
+          },
+        ]}
+      />,
+    );
+    expect(screen.getByText(/Injury — Diaz \(calf strain\)/i)).toBeInTheDocument();
+  });
+
   it("shows the shootout score for a penalty-decided result", () => {
     render(
       <DashboardSimulatingModal

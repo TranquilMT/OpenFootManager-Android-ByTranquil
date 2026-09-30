@@ -22,6 +22,7 @@ import {
   type DeleteModalState,
   getFilteredMessages,
   getNavigationTarget,
+  isOfferReviewNavigation,
   isNavigateAction,
   type MessageSortOrder,
   sortInboxMessages,
@@ -155,7 +156,15 @@ export default function InboxTab({
 
     if (action && isNavigateAction(action.action_type)) {
       const navigationTarget = getNavigationTarget(action.action_type.NavigateTo.route);
-      onNavigate?.(navigationTarget.tab, navigationTarget.context);
+      const offerPlayerId = isOfferReviewNavigation(messageId, action.action_type)
+        ? message?.context?.player_id
+        : null;
+      onNavigate?.(
+        navigationTarget.tab,
+        offerPlayerId ? { messageId: offerPlayerId } : navigationTarget.context,
+      );
+
+      if (offerPlayerId) return;
 
       if (!navigationTarget.shouldResolveAction) {
         return;

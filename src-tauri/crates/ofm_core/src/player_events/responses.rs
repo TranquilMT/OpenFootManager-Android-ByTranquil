@@ -417,14 +417,14 @@ fn implied_promise(message_id: &str, option_id: &str) -> Option<PlayerPromise> {
     if message_id.starts_with("morale_talk_") && option_id == "promise_time" {
         return Some(PlayerPromise {
             kind: PlayerPromiseKind::PlayingTime,
-            matches_remaining: 1,
+            matches_remaining: 2,
         });
     }
 
     if message_id.starts_with("bench_complaint_") && option_id == "promise_chance" {
         return Some(PlayerPromise {
             kind: PlayerPromiseKind::PlayingTime,
-            matches_remaining: 1,
+            matches_remaining: 2,
         });
     }
 
