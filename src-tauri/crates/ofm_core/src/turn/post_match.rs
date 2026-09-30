@@ -233,17 +233,19 @@ pub fn apply_match_report_with_capture<F>(
         };
         game.manager.record_league_result(user_goals, opp_goals);
         crate::board_room::credit_style_match(game, home_team_id, away_team_id);
+        let settling_in = game.manager.team_id.as_ref().and_then(|id| game.board_rooms.get(id))
+            .is_some_and(|room| game.league.as_ref().is_some_and(|league| room.joined_season == league.season));
         let sat_delta: i8 = if user_goals > opp_goals {
             2
         }
         // win: +2
         else if user_goals == opp_goals {
-            -1
+            0
         }
-        // draw: -1
+        // Draws preserve confidence during a rebuilding campaign.
         else {
-            -3
-        }; // loss: -3
+            if settling_in { -2 } else { -3 }
+        };
         let new_sat = (game.manager.satisfaction as i16 + sat_delta as i16).clamp(0, 100) as u8;
         game.manager.satisfaction = new_sat;
 
