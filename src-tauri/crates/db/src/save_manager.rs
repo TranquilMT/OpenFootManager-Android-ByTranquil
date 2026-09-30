@@ -2217,6 +2217,24 @@ mod tests {
     }
 
     #[test]
+    fn board_room_contract_and_ownership_roundtrip() {
+        let dir = tempfile::tempdir().unwrap();
+        let mut saves = SaveManager::init(&dir.path().join("saves")).unwrap();
+        let mut game = sample_game();
+        ofm_core::board_room::initialize(&mut game);
+        let id = game.manager.team_id.clone().unwrap();
+        let room = game.board_rooms.get_mut(&id).unwrap();
+        room.ownership_generation = 2;
+        room.last_negotiation_date = "2026-08-01".into();
+        room.takeover_due = Some("2026-09-01".into());
+        room.contract.as_mut().unwrap().weekly_salary = 1234;
+        let expected = serde_json::to_value(&game.board_rooms).unwrap();
+        let save_id = saves.create_save(&game, "Board room").unwrap();
+        let loaded = saves.load_game(&save_id).unwrap();
+        assert_eq!(serde_json::to_value(&loaded.board_rooms).unwrap(), expected);
+    }
+
+    #[test]
     fn test_game_with_objectives_roundtrip() {
         let dir = tempfile::tempdir().unwrap();
         let saves_dir = dir.path().join("saves");

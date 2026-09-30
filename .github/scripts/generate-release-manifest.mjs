@@ -1,7 +1,17 @@
 import { createHash } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 
-const INCLUDED_EXTENSIONS = new Set([".exe", ".msi", ".dmg", ".pkg", ".appimage", ".deb", ".rpm", ".apk", ".aab"]);
+const INCLUDED_EXTENSIONS = new Set([
+  ".exe",
+  ".msi",
+  ".dmg",
+  ".pkg",
+  ".appimage",
+  ".deb",
+  ".rpm",
+  ".apk",
+  ".aab",
+]);
 const EXCLUDED_FILENAMES = new Set([
   "release-manifest.json",
   "checksums.txt",
