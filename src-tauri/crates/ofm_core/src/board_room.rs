@@ -244,4 +244,6 @@ mod tests {
     fn old_room_json_loads_with_defaults() { let room: BoardRoom = serde_json::from_str("{}").unwrap(); assert!(room.contract.is_none()); assert_eq!(room.ownership_generation, 0); }
     #[test]
     fn minimum_salary_for_small_club() { assert_eq!(salary_offer(0, 0), 500); }
+    #[test]
+    fn salary_handles_extreme_reputation() { assert!(salary_offer(u32::MAX, u32::MAX) <= 25_000); }
 }
