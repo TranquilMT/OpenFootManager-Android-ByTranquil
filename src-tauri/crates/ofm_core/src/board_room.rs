@@ -230,28 +230,34 @@ pub fn process_day(game: &mut Game) {
     let Some(contract) = room.contract else {
         return;
     };
-    if contract.end_date.as_str() < date.to_string().as_str() {
-        notify(game, "renewal", "phase6.contractRenewal");
-        // An expired contract does not silently fire the manager; renewal is negotiable.
+    let Some(end) = NaiveDate::parse_from_str(&contract.end_date, "%Y-%m-%d").ok() else {
         return;
-    }
-    let elapsed = NaiveDate::parse_from_str(&room.last_salary_date, "%Y-%m-%d")
-        .ok()
-        .map(|last| date.signed_duration_since(last).num_days())
-        .unwrap_or(0);
-    if elapsed >= 7 {
-        let weeks = elapsed / 7;
-        if crate::finances::post(
-            game,
-            &id,
-            -(i64::from(contract.weekly_salary) * weeks),
-            crate::finances::CashKind::StaffWages,
-            date,
-        )
-        .is_ok()
+    };
+    let paid_until = date.min(end);
+    if let Ok(last) = NaiveDate::parse_from_str(&room.last_salary_date, "%Y-%m-%d") {
+        let elapsed = paid_until.signed_duration_since(last).num_days().max(0);
+        let settled_days = if date >= end {
+            elapsed
+        } else {
+            elapsed / 7 * 7
+        };
+        let amount = i64::from(contract.weekly_salary) * settled_days / 7;
+        if settled_days > 0
+            && crate::finances::post(
+                game,
+                &id,
+                -amount,
+                crate::finances::CashKind::StaffWages,
+                date,
+            )
+            .is_ok()
         {
-            game.board_rooms.get_mut(&id).unwrap().last_salary_date = date.to_string();
+            game.board_rooms.get_mut(&id).unwrap().last_salary_date =
+                (last + Duration::days(settled_days)).to_string();
         }
+    }
+    if date > end {
+        notify(game, "renewal", "phase6.contractRenewal");
     }
 }
 
