@@ -214,7 +214,8 @@ pub fn process_day(game: &mut Game) {
         .is_some_and(|due| due.as_str() <= date.to_string().as_str())
     {
         complete_takeover(game, &id);
-    } else if date.day() == 1
+    } else if room.takeover_due.is_none()
+        && date.day() == 1
         && matches!(date.month(), 1 | 4 | 7 | 10)
         && room.last_ownership_review != date.to_string()
     {
