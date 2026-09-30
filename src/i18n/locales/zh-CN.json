@@ -1777,7 +1777,7 @@
     "patchPlayers": "新增更多优秀球员，包括稀有的96分球星和升级热门球队。",
     "patchMatches": "比赛解说更加丰富，加入门框射门和可选语音解说。",
     "patchMobile": "改进移动端操作、收件箱、国家队与生涯创建。",
-    "patchWelcome": "欢迎来到 OFMtouch！v0.6.0 更新内容",
+    "patchWelcome": "欢迎来到 OFMtouch！v0.6.1 更新内容",
     "patchPortraits": "20 张虚构原始人脸让生成球员的肖像更加多样。",
     "patchWorld": "足球世界扩展至 29 个国家，美洲和亚洲的俱乐部实力也得到提升。",
     "patchTransfers": "俱乐部策略会影响租借和转会，包括竞争报价与预算检查。",
@@ -4201,6 +4201,10 @@
     "patchContracts": "协商主教练薪水、合同期限和联赛目标。",
     "patchClub": "俱乐部收购与设施升级资助。",
     "patchSquad": "更清晰的球员顾虑、队长任命反应和承诺期限。",
-    "playingTime": "出场时间"
+    "playingTime": "出场时间",
+    "patchNames": "新增2,818个名字和姓氏，涵盖全部211个可选国籍。",
+    "patchIdentity": "新世界和青年球探报告会避免完整姓名重复。现有球员保留原有姓名。",
+    "patchScrolling": "阵型菜单滚动更顺畅，并保持在屏幕可见范围内。",
+    "patchReliability": "小规模联赛的进球目标更合理；经理工资发放和俱乐部收购注资更可靠。"
   }
 }
