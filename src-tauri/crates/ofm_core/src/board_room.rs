@@ -268,4 +268,6 @@ mod tests {
     fn negotiated_objective_updates_live_board() { let mut g=game(); negotiate(&mut g, 1000, 3, 2).unwrap(); assert_eq!(g.board_objectives.iter().find(|o|o.id=="obj_position").unwrap().target, 3); }
     #[test]
     fn contract_is_saved_with_agreed_objective() { let mut g=game(); negotiate(&mut g, 1000, 3, 2).unwrap(); assert_eq!(g.board_rooms["club"].contract.as_ref().unwrap().league_target, 3); }
+    #[test]
+    fn negotiation_has_thirty_day_cooldown() { let mut g=game(); negotiate(&mut g, 1000, 2, 1).unwrap(); assert_eq!(negotiate(&mut g, 1000, 3, 1).unwrap_err(), "phase6.negotiationCooldown"); }
 }
