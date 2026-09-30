@@ -232,6 +232,8 @@ export interface ContractRenewalStateData {
 
 export interface PlayerMoraleCoreData {
   manager_trust: number;
+  unresolved_issue?: { category: "Contract" | "PlayingTime" | "Morale"; severity: number } | null;
+  pending_promise?: { kind: "PlayingTime"; matches_remaining: number } | null;
   renewal_state?: ContractRenewalStateData | null;
 }
 
