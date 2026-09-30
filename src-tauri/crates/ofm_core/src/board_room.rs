@@ -262,4 +262,6 @@ mod tests {
     fn position_beyond_table_is_rejected() { let mut g=game(); assert!(negotiate(&mut g, 1000, 5, 1).is_err()); }
     #[test]
     fn zero_contract_length_is_rejected() { let mut g=game(); assert!(negotiate(&mut g, 1000, 2, 0).is_err()); }
+    #[test]
+    fn four_year_contract_is_rejected() { let mut g=game(); assert!(negotiate(&mut g, 1000, 2, 4).is_err()); }
 }
