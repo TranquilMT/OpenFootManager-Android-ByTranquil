@@ -1,0 +1,51 @@
+name: Update v0.5.2 release notes
+on:
+  push:
+    branches: [docs/release-notes-v0.5.2]
+    paths: [.github/workflows/update-v052-notes.yml]
+permissions:
+  contents: write
+jobs:
+  update-notes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish update and fix notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_NOTES: |
+            ## What's new — Phase 5
+            - Manager career history tracks club spells, match results, and league and cup honours across seasons.
+            - Youth academy supports up to 12 prospects, coach reports, promotion decisions, and separate senior and youth scouting.
+            - Youth tournaments require 12 prospects and two eligible under-21 senior players.
+            - Matchday requires at least 14 available players for substitutes and injury cover.
+            - Added match commentary and optional spoken key moments, translated interface text, and patch history from the main menu.
+            - Updated 2026/27 rules guidance and faster semi-automated offside review presentation; Law 11 remains unchanged.
+            
+            ## Latest fixes — v0.5.2 Build 335
+            - Injury names display correctly in match and advance recaps instead of raw translation keys.
+            - Review Loan Offer and Review Transfer Offer open the linked player's offers and remain usable on repeat visits.
+            - Portrait generation protects visible neck skin from jersey recolouring and refreshes cached portraits.
+            - Playing-time promises allow two matches for the manager to follow through before the conversation follow-up.
+            
+            ## Included Phase 5 fixes
+            - Fixed career saves when generated clubs add squad players, and cleaned up partial files after failed saves.
+            - Preserved intended lineup roles and natural-position squad coverage, with clearer squad and shirt-number displays.
+            - Improved Inbox reading and acknowledgement on phones; moved Save Game into Settings to give the date more room.
+            - Match injuries persist into careers and create medical Inbox updates.
+            
+            ## Sneak peek
+            Deeper squad planning and more personal player conversations are being explored for upcoming updates.
+            
+            ## Download and verification
+            Download the full signed ARM64 APK below (approximately 354 MB), with its SHA-256 file. GitHub's Source code (zip) contains the matching tagged source.
+            
+            Android build 335 and the Phase 5 checks passed for commit `6f6f8cbc58abe3595a1bae0bd3511bd542ca8b69`. Physical-device confirmation remains pending. Save your career before updating.
+            
+            To everyone taking time to test, play and report issues: your feedback helps shape every update. Thank you for playing!
+            
+            Thanks, TranquilMT
+            
+        run: |
+          printf '%s' "$RELEASE_NOTES" > release-notes.md
+          gh release edit v0.5.2-build335 --notes-file release-notes.md --latest
