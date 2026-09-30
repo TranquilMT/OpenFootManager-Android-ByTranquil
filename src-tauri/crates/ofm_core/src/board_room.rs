@@ -298,4 +298,6 @@ mod tests {
     fn maximum_facility_cannot_absorb_more_funds() { let mut g=game(); g.teams[0].facilities.training=10; let cash=g.teams[0].finance; assert!(request_investment(&mut g,domain::team::FacilityType::Training).is_err()); assert_eq!(g.teams[0].finance,cash); }
     #[test]
     fn style_match_is_not_credited_twice() { let mut g=game(); credit_style_match(&mut g,"club","rival"); credit_style_match(&mut g,"club","rival"); assert_eq!(g.board_rooms["club"].style_matches,1); }
+    #[test]
+    fn different_style_does_not_meet_mandate() { let mut g=game(); g.teams[0].play_style=domain::team::PlayStyle::Defensive; credit_style_match(&mut g,"club","rival"); assert_eq!(g.board_rooms["club"].style_matches,0); }
 }
