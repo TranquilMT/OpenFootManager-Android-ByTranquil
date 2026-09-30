@@ -290,4 +290,6 @@ mod tests {
     fn unknown_takeover_club_does_not_change_cash() { let mut g=game(); let cash=g.teams[0].finance; complete_takeover(&mut g,"missing"); assert_eq!(g.teams[0].finance,cash); }
     #[test]
     fn facility_investment_improves_training() { let mut g=game(); request_investment(&mut g,domain::team::FacilityType::Training).unwrap(); assert_eq!(g.teams[0].facilities.training,2); }
+    #[test]
+    fn facility_investment_is_once_per_season() { let mut g=game(); request_investment(&mut g,domain::team::FacilityType::Training).unwrap(); assert!(request_investment(&mut g,domain::team::FacilityType::Medical).is_err()); }
 }
