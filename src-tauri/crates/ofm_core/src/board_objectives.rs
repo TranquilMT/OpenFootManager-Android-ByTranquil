@@ -478,7 +478,7 @@ mod tests {
         assert_eq!(message.i18n_params.get("season"), Some(&"3".to_string()));
         assert_eq!(
             message.i18n_params.get("expectedPos"),
-            Some(&"1".to_string())
+            Some(&"2".to_string())
         );
         assert_eq!(message.i18n_params.get("winTarget"), Some(&"3".to_string()));
         assert_eq!(

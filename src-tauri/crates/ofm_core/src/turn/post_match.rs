@@ -562,7 +562,7 @@ fn resolve_post_match_promises(
         };
 
         let played = report.player_stats.get(&player.id).is_some_and(|stats| stats.minutes_played > 0);
-        if !played && (player.injury.is_some() || player.suspended_matches > 0) { continue; }
+        if !played && (player.injury.is_some()) { continue; }
 
         match promise.kind {
             PlayerPromiseKind::PlayingTime => {
