@@ -288,4 +288,6 @@ mod tests {
     fn takeover_preserves_manager_contract() { let mut g=game(); let salary=g.board_rooms["club"].contract.as_ref().unwrap().weekly_salary; complete_takeover(&mut g,"club"); assert_eq!(g.board_rooms["club"].contract.as_ref().unwrap().weekly_salary,salary); }
     #[test]
     fn unknown_takeover_club_does_not_change_cash() { let mut g=game(); let cash=g.teams[0].finance; complete_takeover(&mut g,"missing"); assert_eq!(g.teams[0].finance,cash); }
+    #[test]
+    fn facility_investment_improves_training() { let mut g=game(); request_investment(&mut g,domain::team::FacilityType::Training).unwrap(); assert_eq!(g.teams[0].facilities.training,2); }
 }
