@@ -79,6 +79,9 @@ pub fn negotiate(game: &mut Game, salary: u32, target: u32, years: u32) -> Resul
         .map(|objective| objective.target)).unwrap_or(size);
     let base = salary_offer(team.reputation, game.manager.reputation);
     let max_salary = negotiation_limit(base, game.manager.satisfaction, target, objective);
+    let annual_wages = crate::finances::calc_annual_wages(game, &id)
+        - weekly_salary(game, &id) * 52 + i64::from(salary) * 52;
+    if annual_wages > team.wage_budget.max(0) { return Err("phase6.offerRejected".to_string()); }
     let date = game.clock.current_date.date_naive();
     let room = game.board_rooms.get(&id).ok_or("phase6.unavailable")?;
     if room.takeover_due.is_some() { return Err("phase6.takeoverPause".to_string()); }
