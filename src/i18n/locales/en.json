@@ -1777,7 +1777,7 @@
     "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
     "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
     "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
-    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.0",
+    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.1",
     "patchPortraits": "20 fictional source faces bring more variety to generated player portraits.",
     "patchWorld": "A larger football world spans 29 nations, with stronger clubs across the Americas and Asia.",
     "patchTransfers": "Club strategies guide loans and transfer approaches, with competing offers and budget checks.",
@@ -4201,6 +4201,10 @@
     "patchContracts": "Negotiate your manager salary, contract length and league objective.",
     "patchClub": "Club takeovers and board support for facility upgrades.",
     "patchSquad": "Clearer player concerns, captaincy reactions and promise deadlines.",
-    "playingTime": "Playing time"
+    "playingTime": "Playing time",
+    "patchNames": "2,818 additional first names and surnames, covering all 211 selectable nationalities.",
+    "patchIdentity": "New worlds and youth scouting reports avoid repeated full names. Existing players keep their names.",
+    "patchScrolling": "Formation menus scroll smoothly and stay within the available screen.",
+    "patchReliability": "Fairer goal targets in small leagues; more reliable manager salary payments and takeover funding."
   }
 }
