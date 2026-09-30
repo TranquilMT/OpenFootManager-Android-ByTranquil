@@ -10,13 +10,13 @@ export default function DressingRoomPanel({ gameState }: { gameState: GameStateD
   if (!gameState.manager.team_id || players.length === 0) return null;
   const issues = players.filter(
     (player) =>
-      common.morale < 40 ||
-      common.morale_core?.unresolved_issue ||
-      common.morale_core?.pending_promise ||
+      player.morale < 40 ||
+      player.morale_core?.unresolved_issue ||
+      player.morale_core?.pending_promise ||
       player.transfer_listed,
   );
   const average = Math.round(
-    players.reduce((total, player) => total + common.morale, 0) / players.length,
+    players.reduce((total, player) => total + player.morale, 0) / players.length,
   );
   return (
     <Card className="md:col-span-3">
@@ -36,25 +36,25 @@ export default function DressingRoomPanel({ gameState }: { gameState: GameStateD
               <li key={player.id} className="rounded-lg bg-gray-100 p-3 text-sm dark:bg-navy-700">
                 <p className="font-semibold">{player.match_name}</p>
                 <p>
-                  {t("common.morale")}: {common.morale}%
+                  {t("common.morale")}: {player.morale}%
                 </p>
-                {common.morale_core?.unresolved_issue && (
+                {player.morale_core?.unresolved_issue && (
                   <p>
                     {t("phase6.concerns")}:{" "}
                     {t(
-                      common.morale_core.unresolved_issue.category === "Contract"
+                      player.morale_core.unresolved_issue.category === "Contract"
                         ? "common.contract"
-                        : common.morale_core.unresolved_issue.category === "PlayingTime"
+                        : player.morale_core.unresolved_issue.category === "PlayingTime"
                           ? "phase6.playingTime"
                           : "common.morale",
-                      { count: common.morale_core.pending_promise?.matches_remaining ?? 0 },
+                      { count: player.morale_core.pending_promise?.matches_remaining ?? 0 },
                     )}
                   </p>
                 )}
-                {common.morale_core?.pending_promise && (
+                {player.morale_core?.pending_promise && (
                   <p>
                     {t("phase6.promise", {
-                      count: common.morale_core.pending_promise.matches_remaining,
+                      count: player.morale_core.pending_promise.matches_remaining,
                     })}
                   </p>
                 )}
