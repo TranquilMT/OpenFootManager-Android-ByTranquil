@@ -455,6 +455,19 @@ mod tests {
         game
     }
     #[test]
+    fn salary_keeps_unpaid_days_between_weekly_payments() {
+        let mut g = game();
+        let salary = weekly_salary(&g, "club");
+        let cash = g.teams[0].finance;
+        g.clock.advance_days(10);
+        process_day(&mut g);
+        g.clock.advance_days(4);
+        process_day(&mut g);
+        assert_eq!(g.teams[0].finance, cash - salary * 2);
+        assert_eq!(g.board_rooms["club"].last_salary_date, "2026-08-16");
+    }
+
+    #[test]
     fn old_room_json_loads_with_defaults() {
         let room: BoardRoom = serde_json::from_str("{}").unwrap();
         assert!(room.contract.is_none());
