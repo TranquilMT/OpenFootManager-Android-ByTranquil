@@ -284,4 +284,6 @@ mod tests {
     fn renewal_notice_is_not_repeated_next_day() { let mut g=game(); g.board_rooms.get_mut("club").unwrap().contract.as_mut().unwrap().end_date="2026-08-01".into(); process_day(&mut g); let count=g.messages.len(); g.clock.advance_days(1); process_day(&mut g); assert_eq!(g.messages.len(), count); }
     #[test]
     fn takeover_adds_real_cash_and_transfer_budget() { let mut g=game(); let before=g.teams[0].finance; let budget=g.teams[0].transfer_budget; complete_takeover(&mut g,"club"); assert!(g.teams[0].finance>before); assert!(g.teams[0].transfer_budget>budget); assert_eq!(g.board_rooms["club"].ownership_generation,1); }
+    #[test]
+    fn takeover_preserves_manager_contract() { let mut g=game(); let salary=g.board_rooms["club"].contract.as_ref().unwrap().weekly_salary; complete_takeover(&mut g,"club"); assert_eq!(g.board_rooms["club"].contract.as_ref().unwrap().weekly_salary,salary); }
 }
