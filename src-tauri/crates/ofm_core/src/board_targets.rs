@@ -9,4 +9,6 @@ mod tests {
     fn rank_four_first_season_has_margin() { assert_eq!(league_target(4, 20, true), 5); }
     #[test]
     fn midtable_target_is_realistic() { assert_eq!(league_target(10, 20, true), 11); }
+    #[test]
+    fn bottom_club_target_stays_in_table() { assert_eq!(league_target(20, 20, true), 20); }
 }
