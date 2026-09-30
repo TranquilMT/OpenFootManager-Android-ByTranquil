@@ -575,6 +575,24 @@ mod tests {
     }
 
     #[test]
+    fn salary_settles_partial_week_on_contract_end_date() {
+        let mut g = game();
+        g.board_rooms
+            .get_mut("club")
+            .unwrap()
+            .contract
+            .as_mut()
+            .unwrap()
+            .end_date = "2026-08-05".into();
+        let salary = weekly_salary(&g, "club");
+        let cash = g.teams[0].finance;
+        g.clock.advance_days(3);
+        process_day(&mut g);
+        assert_eq!(g.teams[0].finance, cash - salary * 3 / 7);
+        assert_eq!(g.board_rooms["club"].last_salary_date, "2026-08-05");
+    }
+
+    #[test]
     fn old_room_json_loads_with_defaults() {
         let room: BoardRoom = serde_json::from_str("{}").unwrap();
         assert!(room.contract.is_none());
