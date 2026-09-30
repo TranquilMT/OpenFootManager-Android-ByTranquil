@@ -55,6 +55,8 @@ pub fn initialize(game: &mut Game) {
         });
         room.last_salary_date = date.to_string();
         room.last_negotiation_date.clear();
+        game.board_objectives.clear();
+        crate::board_objectives::generate_objectives(game);
     }
 }
 
