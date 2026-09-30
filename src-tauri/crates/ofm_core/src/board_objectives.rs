@@ -55,11 +55,11 @@ impl ObjectiveTargets {
         let goals_target = if total_matchdays == 0 {
             0
         } else if reputation >= HIGH_REPUTATION {
-            (total_matchdays * 3 / 2).max(20)
+            (total_matchdays * 3 / 2).max(1)
         } else if reputation >= MEDIUM_REPUTATION {
-            (total_matchdays / 2).max(15)
+            (total_matchdays / 2).max(15.min(total_matchdays))
         } else {
-            (total_matchdays / 5).max(10)
+            (total_matchdays / 5).max(10.min(total_matchdays))
         };
 
         Self {
@@ -509,7 +509,7 @@ mod tests {
             objective_by_id(&game, "obj_wins").description,
             "boardObjectives.objective.Wins"
         );
-        assert_eq!(objective_by_id(&game, "obj_goals").target, 20);
+        assert_eq!(objective_by_id(&game, "obj_goals").target, 9);
         assert_eq!(
             objective_by_id(&game, "obj_goals").description,
             "boardObjectives.objective.GoalsScored"
@@ -549,7 +549,7 @@ mod tests {
         assert_eq!(message.i18n_params.get("winTarget"), Some(&"3".to_string()));
         assert_eq!(
             message.i18n_params.get("goalsTarget"),
-            Some(&"20".to_string())
+            Some(&"9".to_string())
         );
         assert_eq!(
             message.i18n_params.get("financeTarget"),
