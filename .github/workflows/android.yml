@@ -1,4 +1,4 @@
-name: OFMtouch Android Nightly 0.5.2 Career Hotfix
+name: OFMtouch Android Nightly 0.6.0 Board and Dressing Room
 
 on:
   workflow_dispatch:
@@ -7,6 +7,7 @@ on:
       - android/migration
       - major/world-simulation
       - phase5-manager-career
+      - phase6-board-dressing-room
 
 concurrency:
   group: android-nightly-${{ github.ref }}
@@ -82,8 +83,8 @@ jobs:
           OFM_CHANNEL: nightly
           VITE_APP_BUILD_NUMBER: ${{ github.run_number }}
         run: |
-          # Keep every nightly installable over the previous v0.5.2 build.
-          export OFM_ANDROID_VERSION_CODE=$((5020000 + GITHUB_RUN_NUMBER))
+          # Keep every nightly installable over the previous v0.6.0 build.
+          export OFM_ANDROID_VERSION_CODE=$((6000000 + GITHUB_RUN_NUMBER))
           node -e 'require("fs").writeFileSync("tauri.android.nightly.conf.json", JSON.stringify({bundle:{android:{versionCode:Number(process.env.OFM_ANDROID_VERSION_CODE)}}}))'
           npx tauri android build --debug --apk --target aarch64 --config tauri.android.nightly.conf.json
 
@@ -98,8 +99,8 @@ jobs:
           PACKAGE_LINE="$("$AAPT" dump badging "$APK" | sed -n '1p')"
           echo "$PACKAGE_LINE"
           [[ "$PACKAGE_LINE" == *"name='com.tranquilmt.openfootmanager'"* ]]
-          [[ "$PACKAGE_LINE" == *"versionName='0.5.2'"* ]]
-          [[ "$PACKAGE_LINE" == *"versionCode='$((5020000 + GITHUB_RUN_NUMBER))'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionName='0.6.0'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionCode='$((6000000 + GITHUB_RUN_NUMBER))'"* ]]
           APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
           "$APKSIGNER" verify --verbose "$APK"
           # A debug build is only an intermediate artifact. Final delivery is signed
@@ -110,12 +111,12 @@ jobs:
             exit 1
           fi
           mkdir -p dist-apk
-          cp "$APK" "dist-apk/OFMtouch-0.5.2-Career-Update-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk"
-          sha256sum "dist-apk/OFMtouch-0.5.2-Career-Update-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk" | tee "dist-apk/OFMtouch-0.5.2-Career-Update-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk.sha256"
+          cp "$APK" "dist-apk/OFMtouch-0.6.0-Board-Dressing-Room-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk"
+          sha256sum "dist-apk/OFMtouch-0.6.0-Board-Dressing-Room-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk" | tee "dist-apk/OFMtouch-0.6.0-Board-Dressing-Room-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk.sha256"
 
       - name: Upload ARM64 APK for persistent signing
         uses: actions/upload-artifact@v4
         with:
-          name: OFMtouch-0.5.2-Career-Update-Build${{ github.run_number }}-CI-INTERMEDIATE
+          name: OFMtouch-0.6.0-Board-Dressing-Room-Build${{ github.run_number }}-CI-INTERMEDIATE
           path: dist-apk/*
           if-no-files-found: error
