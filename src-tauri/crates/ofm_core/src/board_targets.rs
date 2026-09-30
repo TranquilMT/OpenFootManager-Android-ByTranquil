@@ -11,4 +11,6 @@ mod tests {
     fn midtable_target_is_realistic() { assert_eq!(league_target(10, 20, true), 11); }
     #[test]
     fn bottom_club_target_stays_in_table() { assert_eq!(league_target(20, 20, true), 20); }
+    #[test]
+    fn one_club_target_is_one() { assert_eq!(league_target(1, 1, true), 1); }
 }
