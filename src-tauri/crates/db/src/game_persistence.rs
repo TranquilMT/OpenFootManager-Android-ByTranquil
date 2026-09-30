@@ -330,6 +330,7 @@ impl GamePersistenceReader {
             scouting_assignments,
             youth_scouting_assignments,
             board_objectives,
+            board_rooms: load_board_rooms(conn)?,
             season_context: domain::season::SeasonContext::default(),
             days_since_last_job_offer: None,
             available_staff_market_last_activity_date: meta
