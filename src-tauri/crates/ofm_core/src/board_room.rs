@@ -262,6 +262,16 @@ pub fn process_day(game: &mut Game) {
 }
 
 pub fn complete_takeover(game: &mut Game, team_id: &str) {
+    let today = game.clock.current_date.date_naive();
+    let ready = game
+        .board_rooms
+        .get(team_id)
+        .and_then(|room| room.takeover_due.as_deref())
+        .and_then(|due| NaiveDate::parse_from_str(due, "%Y-%m-%d").ok())
+        .is_some_and(|due| due <= today);
+    if !ready {
+        return;
+    }
     let Some(team) = game.teams.iter().find(|team| team.id == team_id) else {
         return;
     };
@@ -286,8 +296,10 @@ pub fn complete_takeover(game: &mut Game, team_id: &str) {
     if let Some(team) = game.teams.iter_mut().find(|team| team.id == team_id) {
         team.transfer_budget = team.transfer_budget.saturating_add(investment / 2);
     }
-    game.manager.satisfaction = game.manager.satisfaction.max(50);
-    notify(game, "takeover", "phase6.takeoverCompleted");
+    if game.manager.team_id.as_deref() == Some(team_id) {
+        game.manager.satisfaction = game.manager.satisfaction.max(50);
+        notify(game, "takeover", "phase6.takeoverCompleted");
+    }
 }
 
 pub fn credit_style_match(game: &mut Game, home: &str, away: &str) {
@@ -718,6 +730,7 @@ mod tests {
     #[test]
     fn takeover_adds_real_cash_and_transfer_budget() {
         let mut g = game();
+        g.board_rooms.get_mut("club").unwrap().takeover_due = Some("2026-08-02".into());
         let before = g.teams[0].finance;
         let budget = g.teams[0].transfer_budget;
         complete_takeover(&mut g, "club");
@@ -728,6 +741,7 @@ mod tests {
     #[test]
     fn takeover_preserves_manager_contract() {
         let mut g = game();
+        g.board_rooms.get_mut("club").unwrap().takeover_due = Some("2026-08-02".into());
         let salary = g.board_rooms["club"]
             .contract
             .as_ref()
