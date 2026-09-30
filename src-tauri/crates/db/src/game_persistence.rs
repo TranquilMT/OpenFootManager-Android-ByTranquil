@@ -734,6 +734,8 @@ fn parse_objective_type(value: &str) -> Result<ObjectiveType, String> {
         "Wins" => Ok(ObjectiveType::Wins),
         "GoalsScored" => Ok(ObjectiveType::GoalsScored),
         "FinancialStability" => Ok(ObjectiveType::FinancialStability),
+        "YouthMinutes" => Ok(ObjectiveType::YouthMinutes),
+        "PlayingStyleMatches" => Ok(ObjectiveType::PlayingStyleMatches),
         _ => Err(game_persistence_load_error()),
     }
 }

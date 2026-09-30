@@ -20,6 +20,8 @@ pub enum ObjectiveType {
     Wins,
     GoalsScored,
     FinancialStability,
+    YouthMinutes,
+    PlayingStyleMatches,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
