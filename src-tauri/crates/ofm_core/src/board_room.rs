@@ -605,6 +605,21 @@ mod tests {
     }
 
     #[test]
+    fn quarterly_review_does_not_replace_an_active_takeover() {
+        let mut g = game();
+        g.clock.current_date = Utc.with_ymd_and_hms(2026, 10, 1, 12, 0, 0).unwrap();
+        let room = g.board_rooms.get_mut("club").unwrap();
+        room.takeover_due = Some("2026-10-15".into());
+        room.last_ownership_review = "2026-07-01".into();
+        process_day(&mut g);
+        assert_eq!(
+            g.board_rooms["club"].takeover_due.as_deref(),
+            Some("2026-10-15")
+        );
+        assert_eq!(g.board_rooms["club"].last_ownership_review, "2026-07-01");
+    }
+
+    #[test]
     fn old_room_json_loads_with_defaults() {
         let room: BoardRoom = serde_json::from_str("{}").unwrap();
         assert!(room.contract.is_none());
