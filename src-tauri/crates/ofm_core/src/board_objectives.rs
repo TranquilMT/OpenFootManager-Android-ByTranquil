@@ -201,6 +201,23 @@ pub fn generate_objectives(game: &mut Game) {
         },
     ];
 
+    let young_count = game.players.iter().filter(|player| player.team_id.as_deref() == Some(&user_team_id)
+        && player.squad_role == domain::player::SquadRole::Senior && is_young(player, game)).count() as u32;
+    if young_count > 0 && num_teams > 1 {
+        let target = (young_count.min(3) * (num_teams - 1) * 15).min(900);
+        game.board_objectives.push(BoardObjective { id: "obj_youth".to_string(),
+            description: "phase6.youthObjective".to_string(), target,
+            objective_type: ObjectiveType::YouthMinutes, met: false });
+        if let Some(contract) = game.board_rooms.get_mut(&user_team_id).and_then(|room| room.contract.as_mut()) {
+            contract.youth_minutes_target = target;
+        }
+    }
+    if game.board_rooms.contains_key(&user_team_id) && num_teams > 1 {
+        game.board_objectives.push(BoardObjective { id: "obj_style".to_string(),
+            description: "phase6.styleObjective".to_string(), target: num_teams - 1,
+            objective_type: ObjectiveType::PlayingStyleMatches, met: false });
+    }
+
     // Send inbox message about objectives
     let today = game.clock.current_date.format("%Y-%m-%d").to_string();
     // The ledger, not the mailbox: a message the player deleted was still sent.
@@ -256,12 +273,17 @@ pub fn update_objective_progress(game: &mut Game) {
     let user_wins = user_standing.map(|s| s.won).unwrap_or(0);
     let finance_snapshot = finances::team_finance_snapshot(game, &user_team_id);
 
+    let youth_minutes = game.players.iter().filter(|player| player.team_id.as_deref() == Some(&user_team_id)
+        && is_young(player, game)).fold(0_u32, |total, player| total.saturating_add(player.stats.minutes_played));
+    let style_matches = game.board_rooms.get(&user_team_id).map(|room| room.style_matches).unwrap_or(0);
     for obj in game.board_objectives.iter_mut() {
         obj.met = league_complete
             && match obj.objective_type {
                 ObjectiveType::LeaguePosition => user_pos <= obj.target,
                 ObjectiveType::Wins => user_wins >= obj.target,
                 ObjectiveType::GoalsScored => user_goals >= obj.target,
+                ObjectiveType::YouthMinutes => youth_minutes >= obj.target,
+                ObjectiveType::PlayingStyleMatches => style_matches >= obj.target,
                 ObjectiveType::FinancialStability => {
                     finance_snapshot.as_ref().is_some_and(|snapshot| {
                         !snapshot.currently_in_debt
@@ -1038,4 +1060,9 @@ mod tests {
         ];
         assert_eq!(evaluate_objectives(&game), -15);
     }
+}
+
+fn is_young(player: &domain::player::Player, game: &Game) -> bool {
+    chrono::NaiveDate::parse_from_str(&player.date_of_birth, "%Y-%m-%d").ok()
+        .is_some_and(|born| game.clock.current_date.date_naive().years_since(born).is_some_and(|age| age <= 21))
 }
