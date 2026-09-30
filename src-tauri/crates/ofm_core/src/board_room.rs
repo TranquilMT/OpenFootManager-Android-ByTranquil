@@ -593,6 +593,18 @@ mod tests {
     }
 
     #[test]
+    fn backward_clock_cannot_charge_another_salary_week() {
+        let mut g = game();
+        g.clock.advance_days(7);
+        process_day(&mut g);
+        let cash = g.teams[0].finance;
+        g.clock.current_date -= Duration::days(3);
+        process_day(&mut g);
+        assert_eq!(g.teams[0].finance, cash);
+        assert_eq!(g.board_rooms["club"].last_salary_date, "2026-08-09");
+    }
+
+    #[test]
     fn old_room_json_loads_with_defaults() {
         let room: BoardRoom = serde_json::from_str("{}").unwrap();
         assert!(room.contract.is_none());
