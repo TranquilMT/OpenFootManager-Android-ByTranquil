@@ -366,6 +366,13 @@ fn is_young(player: &domain::player::Player, game: &Game) -> bool {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn small_league_goal_targets_scale_with_available_matches() {
+        assert_eq!(super::ObjectiveTargets::new(900, 4).goals_target, 9);
+        assert!(super::ObjectiveTargets::new(700, 4).goals_target <= 6);
+        assert!(super::ObjectiveTargets::new(300, 4).goals_target <= 6);
+    }
+
     use super::{evaluate_objectives, generate_objectives, update_objective_progress};
     use crate::clock::GameClock;
     use crate::game::{BoardObjective, Game, ObjectiveType};
