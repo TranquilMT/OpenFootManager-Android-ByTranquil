@@ -515,6 +515,16 @@ mod tests {
     }
 
     #[test]
+    fn future_takeover_does_not_complete_early() {
+        let mut g = game();
+        g.board_rooms.get_mut("club").unwrap().takeover_due = Some("2026-09-01".into());
+        let cash = g.teams[0].finance;
+        complete_takeover(&mut g, "club");
+        assert_eq!(g.teams[0].finance, cash);
+        assert!(g.board_rooms["club"].takeover_due.is_some());
+    }
+
+    #[test]
     fn old_room_json_loads_with_defaults() {
         let room: BoardRoom = serde_json::from_str("{}").unwrap();
         assert!(room.contract.is_none());
