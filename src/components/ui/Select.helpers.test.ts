@@ -10,4 +10,5 @@ describe("select viewport placement", () => {
   it("respects a viewport displaced by browser chrome", () => { const result=placeSelectMenu({...trigger,top:70,bottom:114}, {...viewport,top:50,height:240},240,280,8); expect(result.top).toBeGreaterThanOrEqual(58); expect(result.top+result.listHeight+8).toBeLessThanOrEqual(282); });
   it("keeps wide labels away from the right edge", () => { const result=placeSelectMenu({...trigger,left:330},viewport,240,280,8); expect(result.left).toBe(72); });
   it("bounds the menu on narrow devices", () => { const result=placeSelectMenu(trigger,{...viewport,width:200},240,280,8); expect(result.width).toBe(184); expect(result.left).toBe(8); });
+  it("does not give an offscreen trigger a negative scroll height", () => { const result=placeSelectMenu({...trigger,top:-100,bottom:-56},viewport,240,280,8); expect(result.listHeight).toBeGreaterThanOrEqual(0); expect(result.top).toBeGreaterThanOrEqual(8); });
 });
