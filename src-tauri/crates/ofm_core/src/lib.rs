@@ -3,6 +3,7 @@ pub mod aging;
 pub mod ai_hiring;
 pub mod ai_training;
 pub mod board_objectives;
+pub mod board_targets;
 pub mod catchup;
 pub mod clock;
 pub mod club;

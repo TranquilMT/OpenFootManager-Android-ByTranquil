@@ -1,3 +1,12 @@
+/// Relative club strength sets ambition; a new manager receives room to build.
+pub fn league_target(rank: u32, size: u32, first_season: bool) -> u32 {
+    let size = size.max(1);
+    let rank = rank.clamp(1, size);
+    let elite_floor = if first_season { (size / 5).max(2) } else { 2 };
+    let margin = u32::from(first_season && rank > elite_floor);
+    rank.max(elite_floor).saturating_add(margin).min(size)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
