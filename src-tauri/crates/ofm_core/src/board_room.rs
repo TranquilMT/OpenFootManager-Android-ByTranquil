@@ -278,4 +278,6 @@ mod tests {
     fn same_day_process_cannot_double_charge_salary() { let mut g=game(); g.clock.advance_days(7); process_day(&mut g); let balance=g.teams[0].finance; process_day(&mut g); assert_eq!(g.teams[0].finance, balance); }
     #[test]
     fn weekly_salary_enters_cash_journal() { let mut g=game(); g.clock.advance_days(7); process_day(&mut g); assert!(g.cash_journal.iter().any(|post| post.kind == crate::finances::CashKind::StaffWages)); }
+    #[test]
+    fn expired_contract_does_not_fire_manager() { let mut g=game(); g.board_rooms.get_mut("club").unwrap().contract.as_mut().unwrap().end_date="2026-08-01".into(); process_day(&mut g); assert_eq!(g.manager.team_id.as_deref(), Some("club")); }
 }
