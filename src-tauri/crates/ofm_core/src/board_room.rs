@@ -270,4 +270,6 @@ mod tests {
     fn contract_is_saved_with_agreed_objective() { let mut g=game(); negotiate(&mut g, 1000, 3, 2).unwrap(); assert_eq!(g.board_rooms["club"].contract.as_ref().unwrap().league_target, 3); }
     #[test]
     fn negotiation_has_thirty_day_cooldown() { let mut g=game(); negotiate(&mut g, 1000, 2, 1).unwrap(); assert_eq!(negotiate(&mut g, 1000, 3, 1).unwrap_err(), "phase6.negotiationCooldown"); }
+    #[test]
+    fn takeover_pauses_negotiation() { let mut g=game(); g.board_rooms.get_mut("club").unwrap().takeover_due=Some("2026-09-01".into()); assert_eq!(negotiate(&mut g, 1000, 2, 1).unwrap_err(), "phase6.takeoverPause"); }
 }
