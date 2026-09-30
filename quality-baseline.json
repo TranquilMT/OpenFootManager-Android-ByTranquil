@@ -1,14 +1,14 @@
 {
   "oversizedAggregate": {
-    "rust": 64950,
-    "ts": 36102
+    "rust": 65079,
+    "ts": 36104
   },
   "allowedOversized": {
     "src-tauri/crates/db/src/repositories/player_repo.rs": 1062,
-    "src-tauri/crates/db/src/save_manager.rs": 2471,
+    "src-tauri/crates/db/src/save_manager.rs": 2490,
     "src-tauri/crates/engine/tests/live_match_tests.rs": 1828,
     "src-tauri/crates/engine/tests/simulation_tests.rs": 1057,
-    "src-tauri/crates/ofm_core/src/board_objectives.rs": 1026,
+    "src-tauri/crates/ofm_core/src/board_objectives.rs": 1123,
     "src-tauri/crates/ofm_core/src/end_of_season/berths.rs": 2370,
     "src-tauri/crates/ofm_core/src/end_of_season/mod.rs": 1557,
     "src-tauri/crates/ofm_core/src/finances/mod.rs": 1319,
@@ -34,7 +34,7 @@
     "src-tauri/crates/ofm-cli/src/main.rs": 1118,
     "src-tauri/src/commands/live_match.rs": 1110,
     "src-tauri/src/commands/package_editor.rs": 1392,
-    "src-tauri/src/commands/squad.rs": 1285,
+    "src-tauri/src/commands/squad.rs": 1298,
     "src-tauri/src/commands/time.rs": 1435,
     "src-tauri/src/commands/transfers.rs": 1213,
     "src-tauri/src/mcp_server/tools_impl/info.rs": 1081,
@@ -81,7 +81,7 @@
     "src/pages/MatchSimulation.test.tsx": 623,
     "src/pages/SimLab.tsx": 945,
     "src/pages/WorldEditor.tsx": 790,
-    "src/store/types.ts": 799,
+    "src/store/types.ts": 801,
     "src/utils/backendI18n.test.ts": 1192,
     "src/utils/backendI18n.ts": 695
   },
