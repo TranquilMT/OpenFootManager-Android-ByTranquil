@@ -67,6 +67,11 @@ fn check_user_manager_firing(game: &mut Game) -> bool {
         return false;
     }
 
+    if game.manager.team_id.as_ref().and_then(|id| game.board_rooms.get(id)).is_some_and(|room| {
+        game.league.as_ref().is_some_and(|league| room.joined_season == league.season
+            && league.standings.iter().find(|standing| Some(&standing.team_id) == game.manager.team_id.as_ref())
+                .is_some_and(|standing| standing.played < 6))
+    }) { return false; }
     let satisfaction = game.manager.satisfaction;
     let stage = game.manager.warning_stage;
 
