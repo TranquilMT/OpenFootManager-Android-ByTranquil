@@ -1,1 +1,1 @@
-7d69d2323a854b08552268164b316a8387946bae7770a97114fdacc5a1b67681  OFMtouch-0.6.0-Board-Dressing-Room-Build336-ARM64.apk
+94cd3bdcdae97dc159f7c45292ab88b54016c117d1e5d113fce74504df13c071  OFMtouch-0.6.1-Gameplay-Polish-Build337-ARM64.apk
