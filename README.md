@@ -4,9 +4,24 @@
 
 OFMtouch is a free football management game built for Android. Take charge of a club, build your squad, scout talent, shape your tactics, develop young players and compete across multiple seasons in a growing football world.
 
-> 🧪 **Current version: v0.6.0 — Board & Dressing Room**
+> 🧪 **Current version: v0.6.1 — Gameplay Polish**
 > **Build:** shown in the game and APK filename
 > NightlyPreRelease builds are playable test versions. New features and fixes arrive regularly, but some bugs and unfinished areas may remain.
+
+## v0.6.1 — Gameplay Polish
+
+### What’s new
+
+- **More player variety:** 2,818 additional distinct first names and surnames, with pools for all 211 selectable nationalities. Smaller countries share suitable language and heritage pools.
+- **Clearer identities:** new worlds avoid repeated full names. Youth scouting checks new prospects against existing players and earlier reports. Existing players keep their names.
+
+### Fixes and improvements
+
+- Formation menus scroll within the list and fit the available screen, including smaller displays and the on-screen keyboard.
+- Goal targets scale more fairly with the number of matches in small leagues.
+- Manager salary payments retain unpaid days when advancing time and settle remaining pay at contract expiry.
+- Takeover funding arrives only when a pending takeover completes and cannot be paid twice.
+- A short What’s New summary is available in every supported language.
 
 ## v0.6.0 — Board & Dressing Room
 
@@ -335,14 +350,10 @@ OFMtouch is currently a NightlyPreRelease, so some areas are still being polishe
 
 ## 🔜 Coming Next / Remaining Work
 
-The next Phase 6 polish update adds more player variety: **2,818 additional distinct first names and surnames**, with name pools covering **all 211 selectable nationalities**. New generated worlds avoid repeated full names, and new youth scouting reports check names against existing players and earlier prospects. Existing careers keep their players' names.
+Further updates will continue improving board reviews, facility investment, player promises and the wider career simulation.
 
-Formation selection also receives improved scrolling and better placement on smaller screens.
+Planned improvements focus on deeper career simulation and a smoother mobile experience:
 
-The next milestones after the v0.3.5 checkpoint focus on validation and deeper career simulation:
-
-- Complete the v0.3.5 regression gate and resolve any remaining failures.
-- Verify the v0.3.5 ARM64 Android APK.
 - Validate Transfer Market V2.0 over multi-season careers and continue economic/AI balancing.
 - Validate Player Development V2.0 over multi-season careers and tune growth, decline and loan-development outcomes.
 - Continue Phase 5+ world-simulation and gameplay development.
@@ -362,8 +373,8 @@ The next milestones after the v0.3.5 checkpoint focus on validation and deeper c
 
 ## 📦 Version
 
-**OFMtouch v0.3.5 — NightlyPreRelease**
-**Build:** GitHub Actions run number
+**OFMtouch v0.6.1 — NightlyPreRelease**
+**Build:** shown in the game and APK filename
 **Platform:** Android
 **Primary build:** ARM64
 
@@ -382,4 +393,4 @@ OFMtouch is an independent, fan-made open-source project and is not an official 
 
 ### ⚽ Build your club. Create your story. Chase trophies.
 
-**OFMtouch v0.3.5 NightlyPreRelease**
+**OFMtouch v0.6.1 NightlyPreRelease**
