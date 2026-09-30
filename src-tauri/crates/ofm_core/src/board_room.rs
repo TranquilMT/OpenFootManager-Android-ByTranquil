@@ -7,6 +7,9 @@ use serde::{Deserialize, Serialize};
 pub struct BoardRoom {
     pub manager_id: String,
     pub joined_season: u32,
+    pub baseline_target: u32,
+    pub style_matches: u32,
+    pub credited_matches: std::collections::BTreeSet<String>,
     pub contract: Option<ManagerContract>,
     pub ownership_generation: u32,
     pub takeover_due: Option<String>,
@@ -67,8 +70,9 @@ pub fn negotiate(game: &mut Game, salary: u32, target: u32, years: u32) -> Resul
     let id = game.manager.team_id.clone().ok_or("be.error.noTeamAssigned")?;
     let team = game.teams.iter().find(|team| team.id == id).ok_or("be.error.teamNotFound")?;
     let size = game.league.as_ref().map(|league| league.standings.len() as u32).unwrap_or(1).max(1);
-    let objective = game.board_objectives.iter().find(|objective| objective.id == "obj_position")
-        .map(|objective| objective.target).unwrap_or(size);
+    let objective = game.board_rooms.get(&id).map(|room| room.baseline_target).filter(|target| *target > 0)
+        .or_else(|| game.board_objectives.iter().find(|objective| objective.id == "obj_position")
+        .map(|objective| objective.target)).unwrap_or(size);
     let base = salary_offer(team.reputation, game.manager.reputation);
     let max_salary = negotiation_limit(base, game.manager.satisfaction, target, objective);
     let date = game.clock.current_date.date_naive();

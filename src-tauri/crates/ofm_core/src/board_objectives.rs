@@ -161,6 +161,11 @@ pub fn generate_objectives(game: &mut Game) {
     let season = game.league.as_ref().map(|league| league.season).unwrap_or(1);
     let first_season = game.board_rooms.get(&user_team_id).is_none_or(|room| room.joined_season == season);
     targets.expected_pos = crate::board_targets::league_target(rank, num_teams, first_season);
+    if let Some(room) = game.board_rooms.get_mut(&user_team_id) {
+        room.baseline_target = targets.expected_pos;
+        room.style_matches = 0;
+        room.credited_matches.clear();
+    }
     if let Some(contract) = game.board_rooms.get_mut(&user_team_id).and_then(|room| room.contract.as_mut()) {
         contract.league_target = targets.expected_pos;
     }
