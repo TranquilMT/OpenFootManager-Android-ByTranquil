@@ -2,26 +2,108 @@
 
 **Your club. Your tactics. Your career. Anywhere.**
 
-OFMtouch is a free football management game built for Android. Take charge of a club, build your squad, scout talent, shape your tactics, develop young players and compete across multiple seasons in a growing football world.
+OFMtouch is a free, open-source football management game for Android. Take charge of a club, shape its football identity and build a career across seasons. Recruit players, develop your academy, choose your tactics and manage the relationships and finances behind every matchday.
 
-> 🧪 **Current version: v0.6.1 — Gameplay Polish**
-> **Build:** shown in the game and APK filename
-> NightlyPreRelease builds are playable test versions. New features and fixes arrive regularly, but some bugs and unfinished areas may remain.
+**Latest release: v0.6.1 — Gameplay Polish · Build 337 · Android ARM64**
 
-## v0.6.1 — Gameplay Polish
+[Download the latest release](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/tag/v0.6.1-build337) · [Browse previous releases](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases) · [Report an issue](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new) · [Open-source licence](LICENSE.md)
 
-### What’s new
+OFMtouch is in active pre-release development. You can play full careers and help shape future updates by sharing your experience. Save your career regularly while new features and balance improvements are introduced.
 
-- **More player variety:** 2,818 additional distinct first names and surnames, with pools for all 211 selectable nationalities. Smaller countries share suitable language and heritage pools.
-- **Clearer identities:** new worlds avoid repeated full names. Youth scouting checks new prospects against existing players and earlier reports. Existing players keep their names.
+## What's new in v0.6.1 — Gameplay Polish
 
-### Fixes and improvements
+- **More player names:** 2,818 additional distinct first names and surnames expand the generated database, with name pools covering all 211 selectable nationalities. Smaller countries use suitable shared language and heritage pools.
+- **Easier player identification:** new worlds avoid repeated full names. Youth scouting also checks prospects against existing players and previous reports, making it easier to follow individual careers. Players already in your save keep their names.
+- **Smoother formation selection:** long formation menus scroll within the list and stay inside the available screen, including smaller phones and when the keyboard is open.
+- **Fairer small-league objectives:** goalscoring targets reflect the number of matches in the competition.
+- **More reliable manager pay:** advancing several days preserves unpaid salary days, and remaining pay is settled when the manager contract expires.
+- **Consistent club takeovers:** pending sales complete when due, investment is credited once, and ownership reviews preserve a takeover already in progress.
+- **Clearer update summaries:** a compact What's New screen presents the main changes in all 12 supported languages.
+- **A smaller full-game download:** unnecessary debugging information has been reduced, bringing the APK from approximately 355 MB to 53.5 MB without removing packaged game files.
 
-- Formation menus scroll within the list and fit the available screen, including smaller displays and the on-screen keyboard.
-- Goal targets scale more fairly with the number of matches in small leagues.
-- Manager salary payments retain unpaid days when advancing time and settle remaining pay at contract expiry.
-- Takeover funding arrives only when a pending takeover completes and cannot be paid twice.
-- A short What’s New summary is available in every supported language.
+### Why is the latest APK smaller?
+
+The v0.6.0 APK was **355,054,470 bytes** (about **339 MiB**). The v0.6.1 APK is **53,465,990 bytes** (about **51 MiB**) — an approximately **85% smaller download**.
+
+- **The game has not been cut down:** both released APKs contain the same 971 packaged file entries, with no file entries removed.
+- **The reduction comes from debugging information:** roughly 302 MB of information used to investigate software issues was removed from the compiled game library. This information is not playable content.
+- **The player-name database is larger:** v0.6.1 includes the expanded names alongside the latest gameplay fixes.
+- **The update uses the same signing certificate:** it retains the existing Android app identity.
+
+The smaller download does not mean fewer gameplay systems, portraits or a smaller football world.
+
+## Your football management career
+
+### Transfer Market V2.0 — Build the right squad
+
+Recruit for your club's needs and plan beyond the next transfer window.
+
+- **Buy, sell and loan players:** manage incoming and outgoing deals, review offers and use counter-offers during negotiations.
+- **Find the right fit:** compare position, age, current ability, potential, value and club before committing to a target.
+- **Plan with a shortlist:** track prospects and established players as you decide where your squad needs strengthening.
+- **Compete with smarter clubs:** AI recruitment considers positional needs, age, potential and club strategy rather than overall rating alone.
+- **Make loans work for development:** loan targeting connects playing opportunities with the needs of the player and the receiving club.
+- **Respect the budget:** transfer reserves, wage space and affordable loan wage contributions influence recruitment.
+- **Manage contracts:** player age, squad role and first-team importance influence contract length and renewal priorities.
+- **Handle the final days of a window:** deadline-day urgency influences market activity.
+- **Review your own players' offers:** Inbox loan and transfer review actions open the linked player's offers and remain usable on repeat visits.
+
+### Player Development V2.0 — Turn potential into progress
+
+Build a pathway from promising prospect to dependable first-team player.
+
+- **Develop through training and football:** playing time, training and development conditions influence progress over multiple seasons.
+- **Run a separate youth academy:** manage up to 12 prospects alongside your senior squad, review coach reports and decide when to promote them.
+- **Scout for the future:** senior scouting and youth recruitment provide different routes to strengthen the club.
+- **Use competitive youth opportunities:** Academy Challenge fixtures provide development opportunities when you have 12 available academy players and two eligible under-21 senior players.
+- **Choose strategic loans:** give prospects another route to competitive minutes when opportunities at your club are limited.
+- **Improve your facilities:** stronger youth facilities can support better intake quality.
+- **Build believable player careers:** natural position, age, potential and opportunity shape development, while veterans and goalkeepers follow different ageing patterns.
+- **Discover exceptional talent:** rare players can reach 96 OVR, while second-tier clubs can also have standout players capable of supporting a promotion challenge.
+
+### Manager Career — Build your reputation
+
+Your career records what you achieve and connects your decisions to the club around you.
+
+- **Track your club spells:** review wins, draws and losses across your managerial history.
+- **Record your achievements:** named league and cup honours give successful seasons a lasting place in your career.
+- **Negotiate your own contract:** discuss weekly salary, contract length and league objectives with the board.
+- **Work towards broader objectives:** balance league performance with financial stability, youth development and playing-style expectations.
+- **Build with fairer expectations:** first-season targets give a new manager time to establish the team, and smaller competitions receive more realistic goalscoring targets.
+- **Request club investment:** ask for support to upgrade training, medical and scouting facilities.
+- **Navigate ownership changes:** takeovers can change the direction and investment available to the club.
+- **Continue across seasons:** saved careers preserve manager contracts, board decisions and football history.
+
+### Board & Dressing Room — Manage the people behind the results
+
+- **Understand your squad:** review player happiness, contract concerns, playing-time expectations and transfer requests.
+- **Follow through on promises:** playing-time conversations allow two matches to fulfil a promise; actual time on the pitch matters.
+- **Choose your leaders:** captaincy decisions affect the players involved.
+- **Keep track of decisions:** outstanding promises and board expectations remain part of the career as you advance, save and reload.
+
+### Matchday & Mobile Management — Make every decision count
+
+- **Set your starting XI:** choose formations, tactics and match roles, then respond with substitutions and matchday decisions.
+- **Prepare an available squad:** senior matches require at least 14 available players for a starting team and adequate substitutes.
+- **Follow the action:** expanded commentary covers goals, woodwork, corners and free kicks, with optional spoken commentary on supported devices.
+- **Manage fitness and injuries:** fatigue, form, morale and condition affect performance; match injuries persist into the career and generate medical Inbox updates.
+- **Play comfortably on a phone:** touch controls, responsive management screens, scrollable lists and Android safe-area support help keep decisions within reach.
+- **Protect your progress:** use manual Save in Settings → Saves & Data, enable autosave and use the optional confirmation before advancing the date.
+- **Catch up on updates:** read the compact launch summary, hide it on future launches if preferred and revisit patch history from the main menu.
+
+## Getting started
+
+1. Open the [v0.6.1 release](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/tag/v0.6.1-build337) and download the **ARM64 APK** for a compatible Android device.
+2. If you already play OFMtouch, save your career before installing the update over the existing app.
+3. Start a new career or load your save, review the squad and set your formation.
+4. Check your Inbox and board objectives, explore the transfer market and shortlist players who fit your plans.
+5. Advance towards matchday, manage the team and build your story season by season.
+
+The release includes a SHA-256 checksum for download verification. Matching source is available through the release's **Source code** downloads.
+
+## Previous updates
+
+Earlier gameplay additions and fixes are retained below so you can follow how OFMtouch has developed.
 
 ## v0.6.0 — Board & Dressing Room
 
@@ -43,23 +125,23 @@ Thank you for playing and sharing your feedback. Your time and support help us i
 - Inbox review links open the linked player's loan or transfer offers and remain usable after the first visit.
 - Portrait rendering protects exposed neck skin and refreshes cached images.
 - Playing-time conversations give the manager two matches to fulfil a promise.
-- Next preview: deeper squad planning and follow-up player conversations.
+- Player conversations connect playing-time concerns with opportunities to follow through on promises.
 
 ## v0.5.0 Career Update
 
 - Manager career systems now connect club decisions, post-match updates, season transitions and progression.
 - The first menu alone shows repository links; they disappear on New Game and other menus.
-- Expanded career, localization, mobile UI and package verification gates protect the nightly build.
-- Build number and release channel appear in the in-game version label and APK filename.
+- Improved career reliability, translated text and management screens on phones.
+- The version and build number are shown in-game and in the APK filename, making updates easier to identify.
 
 ## v0.3.6 mobile hotfix
 
-- **Inbox:** opened messages get the available phone screen; acknowledgement returns only the updated mail instead of copying the entire game world to Android.
+- **Inbox:** opened messages use the available phone screen, and acknowledging a message uses less memory.
 - **Save:** manual Save is in Settings → Saves & Data. The home header gives the game date more space.
 - **Matches:** injuries persist after the match and appear in a medical Inbox update.
-- **Reliability:** message-action, localization, mobile layout, save and career regression checks are included in the build gate.
+- **Reliability:** improved message actions, translated text, mobile layouts, saving and career progression.
 
-The previous v0.3.5 notes remain below as the larger gameplay update. The Android v0.3.6 APK will be linked after its CI gate passes.
+The previous v0.3.5 notes remain below as the larger gameplay update.
 
 ## 🌟 Welcome to OFMtouch! Here's what's new in v0.3.5
 
@@ -81,8 +163,8 @@ v0.3.5 is not the introduction of Player Development V2.0 or Transfer Market V2.
 
 - Recruitment now uses **strategic target scoring**, considering more than raw overall rating.
 - Clubs can consider **position, age, potential and squad need** when identifying targets.
-- A deterministic **Club Strategy Engine** now feeds directly into recruitment behaviour.
-- Strategic target data is connected to the live market sweep, allowing AI clubs to pursue players that better fit their squad-building plans.
+- Each club's **squad-building strategy** influences which players it pursues.
+- AI clubs pursue players who better fit their squad-building plans.
 - **Deadline-day urgency** is now active in market behaviour, creating a stronger final phase to transfer windows.
 - Loan recruitment has been upgraded with club-strategy targeting rather than purely opportunistic movement.
 - Incoming loan wage shares are negotiated against affordability, reducing unrealistic loan deals that a club cannot sustain.
@@ -92,29 +174,27 @@ v0.3.5 is not the introduction of Player Development V2.0 or Transfer Market V2.
 
 ### 🆕 New gameplay and simulation additions in v0.3.5
 
-- **Club Strategy Engine:** clubs now have a deterministic strategic layer that can influence how they approach squad construction.
+- **Club Strategy Engine:** clubs follow squad-building strategies that influence recruitment and loan decisions.
 - **Strategic squad planning:** recruitment is increasingly based on what a club actually needs rather than simply selecting highly rated available players.
 - **Deadline-day pressure:** transfer activity can become more urgent as the window approaches its conclusion.
-- **Development-to-loan pipeline:** promising players who need football can be connected to strategic loan decisions.
+- **Development through loans:** promising players who need football can be connected to strategic loan decisions.
 - **Loan affordability negotiation:** incoming wage contribution is adjusted to make proposed loans more financially plausible.
 - **Club-identity player generation:** featured-player generation uses stable club identity to produce more consistent squad profiles.
 - **Expanded elite-player model:** the world can contain rare 96 OVR footballers while keeping those players exceptional.
-- **20-source portrait generation:** the expanded fictional face pool is protected by stronger missing-source, duplicate and diversity regression checks.
+- **20-source portrait generation:** a larger fictional face pool improves variety, with better protection against missing or repeated portraits.
 - **Wider world balancing:** stronger club/player profiles across Europe, North America, South America and Asia continue to improve the competitive hierarchy of generated careers.
-- **Simulation regression protection:** new automated checks cover player ratings, portraits, recruitment integration and other systems that could otherwise regress as the world simulation expands.
+- **Simulation reliability:** improved consistency across player ratings, portraits and recruitment as careers develop.
 
 ### 🏁 Major v0.3.5 milestones
 
-- [x] **Player Development V2.0 Expansion** — playing-time development, strategic youth handling and loan pathways connected more deeply to the evolving world.
-- [x] **Transfer Market V2.0 Expansion** — strategic recruitment scoring, club-strategy targeting, live market selection, deadline-day tuning and smarter loans integrated.
-- [x] **Club Strategy Engine** — deterministic club strategies now influence recruitment and loan decisions.
-- [x] **Strategic Loan System** — development needs, recruitment logic and affordable wage sharing are connected.
-- [x] **20-source Portrait Generation** — expanded source pool with stronger diversity validation.
-- [x] **Elite Player & Club Balancing** — updated rating ceilings and stronger top-club/world-generation profiles.
-- [x] **v0.3.5 version/build pipeline** — app metadata and Android Nightly workflow upgraded to v0.3.5 with GitHub run-number builds.
-- [ ] **Final v0.3.5 regression gate** — complete the full automated regression suite against the release candidate.
-- [ ] **v0.3.5 Android APK verification** — verify the generated ARM64 NightlyPreRelease APK, signature, package/version and startup flows.
-- [x] **Phase 5 — Manager Career** — live match records, club spells, and named league/cup honours passed the v0.5.1 release gate.
+- **Player Development V2.0 Expansion** — playing-time development, strategic youth handling and loan pathways connected more deeply to the evolving world.
+- **Transfer Market V2.0 Expansion** — strategic recruitment scoring, club-strategy targeting, live market selection, deadline-day tuning and smarter loans integrated.
+- **Club Strategy Engine** — club strategies influence recruitment and loan decisions.
+- **Strategic Loan System** — development needs, recruitment logic and affordable wage sharing are connected.
+- **20-source Portrait Generation** — expanded face variety and more consistent portrait generation.
+- **Elite Player & Club Balancing** — updated rating ceilings and stronger top-club/world-generation profiles.
+- **Clearer version information** — the app and APK filename identify the installed version and build.
+- **Later career update — v0.5.1:** manager history records match results, club spells and named league and cup honours.
 
 Thank you for playing! Please help us improve future builds by [submitting issues on GitHub](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new).
 
@@ -256,6 +336,15 @@ Player Development V2.0 strengthens the connection between opportunity, potentia
 
 ## 💾 Career Improvements
 
+- View your manager's club spells, wins, draws, losses and named league and cup honours.
+- Negotiate your manager salary, contract length and league objective with the board.
+- Review financial, youth-development and playing-style expectations as well as league performance.
+- Request board support for training, medical and scouting facility upgrades.
+- Manage player happiness, playing-time promises, contract concerns and captaincy reactions.
+- Keep board and contract decisions when saving and reloading your career.
+- Manage an academy of up to 12 prospects separately from the senior squad, review coach reports and promote players when ready.
+- Academy Challenge fixtures require 12 available academy prospects and two eligible under-21 senior players; youth results remain separate from senior records.
+- Senior matchdays require at least 14 available players for the starting team and substitutes.
 - Autosave can protect progress after advancing the in-game date.
 - Backgrounding the game on Android can protect unsaved career progress when autosave is enabled.
 - Optional confirmation before advancing to the next day.
@@ -271,10 +360,10 @@ Player Development V2.0 strengthens the connection between opportunity, potentia
 Recent fixes include:
 
 - Improved incoming-loan wage-share affordability negotiation.
-- Aligned generated-player rating regression expectations with the current rating model.
+- Improved consistency in generated-player ratings.
 - Stabilised featured-player generation around club identity.
-- Added stronger portrait-source diversity regression checks.
-- Improved build safety while strategic recruitment was connected to live market selection.
+- Improved consistency and variety in the fictional portrait pool.
+- Improved reliability when club recruitment strategies influence market decisions.
 - Fixed Android Back gestures unexpectedly closing the game from some screens.
 - Improved protection against accidental exits from edge gestures.
 - Fixed controls being hidden behind Android navigation areas on some phones.
@@ -346,7 +435,7 @@ OFMtouch is currently a NightlyPreRelease, so some areas are still being polishe
 - Performance can vary on older or lower-end Android phones during heavier simulation or information-heavy screens.
 - Generated player portraits can still repeat during very large careers despite the expanded portrait pool.
 - Transfer Market V2.0 and Player Development V2.0 will continue to receive balance tuning as longer careers are tested.
-- Nightly builds may occasionally introduce temporary regressions while new systems are being tested.
+- Pre-release updates may occasionally introduce new bugs as features are added and refined.
 
 ## 🔜 Coming Next / Remaining Work
 
@@ -356,7 +445,7 @@ Planned improvements focus on deeper career simulation and a smoother mobile exp
 
 - Validate Transfer Market V2.0 over multi-season careers and continue economic/AI balancing.
 - Validate Player Development V2.0 over multi-season careers and tune growth, decline and loan-development outcomes.
-- Continue Phase 5+ world-simulation and gameplay development.
+- Continue expanding manager careers and the wider football world.
 - Further Android Back and gesture improvements.
 - Better exit confirmation behaviour.
 - More compact portrait-mode layouts.
@@ -374,7 +463,7 @@ Planned improvements focus on deeper career simulation and a smoother mobile exp
 ## 📦 Version
 
 **OFMtouch v0.6.1 — NightlyPreRelease**
-**Build:** shown in the game and APK filename
+**Build:** 337
 **Platform:** Android
 **Primary build:** ARM64
 
