@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useSheetNavigation } from "../../hooks/useSheetNavigation";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { JSX, ReactNode } from "react";
 import {
@@ -108,6 +109,12 @@ export default function DashboardSidebar(props: DashboardSidebarProps): JSX.Elem
   } = props;
   const { t } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const mobileSheetRef = useRef<HTMLElement>(null);
+  const closeMobileMenu = useSheetNavigation(
+    mobileMenuOpen,
+    () => setMobileMenuOpen(false),
+    mobileSheetRef,
+  );
   const appName = t("app.name");
   const [appNamePrimary, ...secondary] = appName.split(" ");
   const appNameSecondary = secondary.join(" ");
@@ -154,8 +161,8 @@ export default function DashboardSidebar(props: DashboardSidebarProps): JSX.Elem
   );
 
   function selectMobileTab(tab: string): void {
-    setMobileMenuOpen(false);
-    onNavClick(tab);
+    if (mobileMenuOpen) closeMobileMenu(() => onNavClick(tab));
+    else onNavClick(tab);
   }
 
   return (
@@ -306,15 +313,18 @@ export default function DashboardSidebar(props: DashboardSidebarProps): JSX.Elem
           className="fixed inset-0 z-[60] md:hidden"
           role="dialog"
           aria-modal="true"
-          aria-label={t("dashboard.sectionWorld")}
+          aria-label={t("dashboard.more")}
         >
           <button
             type="button"
             className="absolute inset-0 h-full w-full bg-black/55"
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={() => closeMobileMenu()}
             aria-label={t("common.close")}
           />
-          <section className="mobile-safe-bottom absolute inset-x-0 bottom-0 max-h-[82dvh] overflow-hidden rounded-t-3xl border-t border-navy-600 bg-navy-800 text-white shadow-2xl">
+          <section
+            ref={mobileSheetRef}
+            className="mobile-safe-bottom absolute inset-x-0 bottom-0 max-h-[82dvh] overflow-hidden rounded-t-3xl border-t border-navy-600 bg-navy-800 text-white shadow-2xl"
+          >
             <div className="flex items-center justify-between border-b border-navy-700 px-4 py-3">
               <button
                 type="button"
@@ -326,7 +336,7 @@ export default function DashboardSidebar(props: DashboardSidebarProps): JSX.Elem
               </button>
               <button
                 type="button"
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={() => closeMobileMenu()}
                 className="flex h-11 w-11 items-center justify-center rounded-full bg-white/5 text-gray-300 active:bg-white/10"
                 aria-label={t("common.close")}
               >
@@ -351,8 +361,7 @@ export default function DashboardSidebar(props: DashboardSidebarProps): JSX.Elem
                 <button
                   type="button"
                   onClick={() => {
-                    setMobileMenuOpen(false);
-                    onNavigateSettings();
+                    closeMobileMenu(onNavigateSettings);
                   }}
                   className="tap-feedback flex items-center justify-center gap-2 rounded-xl bg-navy-700 px-3 py-3 text-sm font-semibold"
                 >
@@ -362,8 +371,7 @@ export default function DashboardSidebar(props: DashboardSidebarProps): JSX.Elem
                 <button
                   type="button"
                   onClick={() => {
-                    setMobileMenuOpen(false);
-                    onExitClick();
+                    closeMobileMenu(onExitClick);
                   }}
                   className="tap-feedback flex items-center justify-center gap-2 rounded-xl bg-navy-700 px-3 py-3 text-sm font-semibold"
                 >
@@ -378,7 +386,7 @@ export default function DashboardSidebar(props: DashboardSidebarProps): JSX.Elem
 
       <nav
         className="fixed inset-x-0 bottom-0 z-50 flex min-h-[64px] items-stretch justify-around border-t border-navy-700 bg-navy-800/98 pb-[env(safe-area-inset-bottom)] text-white shadow-[0_-8px_30px_rgba(0,0,0,.22)] backdrop-blur md:hidden"
-        aria-label="Career navigation"
+        aria-label={t("dashboard.careerNavigation")}
       >
         {primaryMobile.map((item) => (
           <button
@@ -401,10 +409,12 @@ export default function DashboardSidebar(props: DashboardSidebarProps): JSX.Elem
           type="button"
           onClick={() => setMobileMenuOpen(true)}
           className={`relative flex min-w-0 flex-1 flex-col items-center justify-center gap-1 px-1 py-2 active:bg-white/10 ${mobileMenuOpen || mobileSecondary.some((item) => item.tab === activeTab) ? "text-primary-400" : "text-gray-400"}`}
-          aria-label="More"
+          aria-label={t("dashboard.more")}
         >
           <Menu className="h-5 w-5" />
-          <span className="max-w-full truncate text-[10px] font-semibold">More</span>
+          <span className="max-w-full truncate text-[10px] font-semibold">
+            {t("dashboard.more")}
+          </span>
         </button>
       </nav>
     </>

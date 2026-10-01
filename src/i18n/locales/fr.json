@@ -192,7 +192,9 @@
     "digestEventUserNews": "Des nouvelles de votre club ou de vos joueurs",
     "digestEventTransferWindow": "Ouverture ou clôture du mercato",
     "digestContinue": "Continuer l'avance",
-    "digestError": "Erreur de simulation"
+    "digestError": "Erreur de simulation",
+    "more": "Plus",
+    "careerNavigation": "Navigation de carrière"
   },
   "continueMenu": {
     "goToField": "Aller sur le Terrain",

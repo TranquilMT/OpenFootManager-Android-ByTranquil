@@ -192,7 +192,9 @@
     "digestEventUserNews": "Neuigkeiten über deinen Verein oder deine Spieler",
     "digestEventTransferWindow": "Öffnung oder Deadline des Transferfensters",
     "digestContinue": "Weitermachen",
-    "digestError": "Simulationsfehler"
+    "digestError": "Simulationsfehler",
+    "more": "Mehr",
+    "careerNavigation": "Karrierenavigation"
   },
   "continueMenu": {
     "goToField": "Aufs Spielfeld",

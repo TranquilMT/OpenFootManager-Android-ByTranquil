@@ -192,7 +192,9 @@
     "digestEventUserNews": "Berita tentang klub atau para pemain",
     "digestEventTransferWindow": "Pembukaan jendela transfer atau hari batas akhir",
     "digestContinue": "Lanjutkan",
-    "digestError": "Kesalahan simulasi"
+    "digestError": "Kesalahan simulasi",
+    "more": "Lainnya",
+    "careerNavigation": "Navigasi karier"
   },
   "continueMenu": {
     "goToField": "Ke Lapangan",

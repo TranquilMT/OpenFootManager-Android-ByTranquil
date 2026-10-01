@@ -192,7 +192,9 @@
     "digestEventUserNews": "News about your club or players",
     "digestEventTransferWindow": "Transfer window opening or deadline day",
     "digestContinue": "Keep Going",
-    "digestError": "Simulation error"
+    "digestError": "Simulation error",
+    "more": "More",
+    "careerNavigation": "Career navigation"
   },
   "continueMenu": {
     "goToField": "Go to the Field",

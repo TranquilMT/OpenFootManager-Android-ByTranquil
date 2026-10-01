@@ -192,7 +192,9 @@
     "digestEventUserNews": "Новости о вашем клубе или игроках",
     "digestEventTransferWindow": "Открытие или закрытие трансферного окна",
     "digestContinue": "Продолжить продвижение",
-    "digestError": "Ошибка симуляции"
+    "digestError": "Ошибка симуляции",
+    "more": "Ещё",
+    "careerNavigation": "Навигация по карьере"
   },
   "continueMenu": {
     "goToField": "Перейти на поле",

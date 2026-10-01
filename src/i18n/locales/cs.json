@@ -192,7 +192,9 @@
     "digestEventUserNews": "Novinky o vašem klubu nebo hráčích",
     "digestEventTransferWindow": "Otevření nebo uzávěrka přestupového okna",
     "digestContinue": "Pokračovat v postupu",
-    "digestError": "Chyba simulace"
+    "digestError": "Chyba simulace",
+    "more": "Další",
+    "careerNavigation": "Navigace kariéry"
   },
   "continueMenu": {
     "goToField": "Vstoupit na hřiště",

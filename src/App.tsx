@@ -88,16 +88,27 @@ function MobileRuntime() {
   }, []);
 
   useEffect(() => {
+    let pendingScroll: number | undefined;
     const onFocusIn = (event: FocusEvent) => {
       const target = event.target as HTMLElement | null;
       if (!target?.matches("input, textarea, select, [contenteditable='true']")) return;
-      window.setTimeout(
-        () => target.scrollIntoView({ block: "center", inline: "nearest", behavior: "smooth" }),
-        120,
-      );
+      window.clearTimeout(pendingScroll);
+      pendingScroll = window.setTimeout(() => {
+        if (!target.isConnected || document.activeElement !== target) return;
+        target.scrollIntoView({
+          block: "center",
+          inline: "nearest",
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "instant"
+            : "smooth",
+        });
+      }, 120);
     };
     document.addEventListener("focusin", onFocusIn);
-    return () => document.removeEventListener("focusin", onFocusIn);
+    return () => {
+      window.clearTimeout(pendingScroll);
+      document.removeEventListener("focusin", onFocusIn);
+    };
   }, []);
 
   return null;

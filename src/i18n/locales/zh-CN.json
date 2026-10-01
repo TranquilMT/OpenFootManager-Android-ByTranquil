@@ -192,7 +192,9 @@
     "digestEventUserNews": "关于您俱乐部或球员的新闻",
     "digestEventTransferWindow": "转会窗口开启或截止日",
     "digestContinue": "继续推进",
-    "digestError": "模拟出错"
+    "digestError": "模拟出错",
+    "more": "更多",
+    "careerNavigation": "生涯导航"
   },
   "continueMenu": {
     "goToField": "进入球场",

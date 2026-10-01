@@ -192,7 +192,9 @@
     "digestEventUserNews": "Kulübünüz veya oyuncularınız hakkında haberler",
     "digestEventTransferWindow": "Transfer penceresinin açılışı veya kapanışı",
     "digestContinue": "İlerlemeye devam et",
-    "digestError": "Simülasyon hatası"
+    "digestError": "Simülasyon hatası",
+    "more": "Diğer",
+    "careerNavigation": "Kariyer gezinmesi"
   },
   "continueMenu": {
     "goToField": "Sahaya Çık",
