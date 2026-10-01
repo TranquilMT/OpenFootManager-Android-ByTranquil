@@ -1,6 +1,6 @@
 {
   "oversizedAggregate": {
-    "rust": 64098,
+    "rust": 64118,
     "ts": 35516
   },
   "allowedOversized": {
@@ -28,7 +28,7 @@
     "src-tauri/crates/ofm_core/tests/player_events_tests.rs": 1754,
     "src-tauri/crates/ofm_core/tests/random_events_tests.rs": 1396,
     "src-tauri/crates/ofm_core/tests/training_tests.rs": 1201,
-    "src-tauri/crates/ofm_core/tests/transfers_tests.rs": 3841,
+    "src-tauri/crates/ofm_core/tests/transfers_tests.rs": 3861,
     "src-tauri/crates/ofm_core/tests/turn_tests.rs": 2075,
     "src-tauri/crates/ofm-cli/src/main.rs": 1118,
     "src-tauri/src/commands/live_match.rs": 1110,

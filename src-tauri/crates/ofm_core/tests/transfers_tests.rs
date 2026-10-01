@@ -1623,6 +1623,7 @@ fn accepting_incoming_loan_offer_moves_user_player_to_borrowing_club() {
     });
 
     let mut game = make_game_with_player(player, vec![], 5_000_000, 2_000_000);
+    game.teams[1].wage_budget = 1_000_000;
     game.teams[0].starting_xi_ids = vec!["player-incoming-loan".to_string()];
 
     respond_to_loan_offer(&mut game, "player-incoming-loan", "loan-offer-1", true)
@@ -1662,11 +1663,28 @@ fn incoming_loan_acceptance_rechecks_borrower_cash_without_changing_offer() {
         .loan_offers
         .push(make_pending_incoming_loan_offer("cash-offer", 75, None));
     let mut game = make_game_with_player(player, vec![], 5_000_000, 2_000_000);
+    game.teams[1].wage_budget = 1_000_000;
     game.teams[1].finance = 1;
     let before = serde_json::to_value(&game.players[0]).unwrap();
     assert_eq!(
         respond_to_loan_offer(&mut game, "loan-cash", "cash-offer", true).unwrap_err(),
         "be.error.transfers.insufficientFunds"
+    );
+    assert_eq!(serde_json::to_value(&game.players[0]).unwrap(), before);
+}
+
+#[test]
+fn incoming_loan_acceptance_rechecks_borrower_wage_budget_without_changing_offer() {
+    let mut player = make_user_player("loan-wage-budget");
+    player.wage = 520_000;
+    player.loan_offers.push(make_pending_incoming_loan_offer("wage-offer", 75, None));
+    let mut game = make_game_with_player(player, vec![], 5_000_000, 2_000_000);
+    game.teams[1].finance = 5_000_000;
+    game.teams[1].wage_budget = 200_000;
+    let before = serde_json::to_value(&game.players[0]).unwrap();
+    assert_eq!(
+        respond_to_loan_offer(&mut game, "loan-wage-budget", "wage-offer", true).unwrap_err(),
+        "be.error.contracts.boardWagePolicy?budget=200000"
     );
     assert_eq!(serde_json::to_value(&game.players[0]).unwrap(), before);
 }
@@ -1696,6 +1714,7 @@ fn incoming_loan_counter_rechecks_borrower_cash_before_agreeing() {
         .loan_offers
         .push(make_pending_incoming_loan_offer("counter-cash", 50, None));
     let mut game = make_game_with_player(player, vec![], 5_000_000, 2_000_000);
+    game.teams[1].wage_budget = 1_000_000;
     game.teams[1].finance = 1;
     assert!(
         counter_loan_offer(
@@ -1727,6 +1746,7 @@ fn countering_incoming_loan_offer_can_execute_accepted_terms() {
         .push(make_pending_incoming_loan_offer("loan-counter-1", 65, None));
 
     let mut game = make_game_with_player(player, vec![], 5_000_000, 2_000_000);
+    game.teams[1].wage_budget = 1_000_000;
     game.teams[1].finance = 6_000_000;
 
     let outcome = counter_loan_offer(
