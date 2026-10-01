@@ -1,1 +1,1 @@
-94cd3bdcdae97dc159f7c45292ab88b54016c117d1e5d113fce74504df13c071  OFMtouch-0.6.1-Gameplay-Polish-Build337-ARM64.apk
+52bbd6ccabeff62997c85f6d7b0ad23001be93c2fd23fb7397313ce6faf43a72  OFMtouch-0.6.2-Gameplay-Polish-Build338-ARM64.apk
