@@ -46,6 +46,7 @@ pub(super) fn build_team_with_bench(game: &Game, team_id: &str) -> (TeamData, Ve
         .iter()
         .filter(|p| {
             p.team_id.as_deref() == Some(team_id)
+                && !p.retired
                 && p.injury.is_none()
                 && p.squad_role == domain::player::SquadRole::Senior
         })
@@ -579,6 +580,52 @@ mod tests {
         );
         p.condition = condition;
         p
+    }
+
+    #[test]
+    fn retired_players_are_excluded_from_match_squads() {
+        use crate::clock::GameClock;
+        use chrono::{TimeZone, Utc};
+        use domain::manager::Manager;
+        use domain::team::Team;
+
+        let mut retired = mk("retired", 99, 100);
+        retired.retired = true;
+        retired.team_id = Some("club".into());
+        let mut active = mk("active", 60, 100);
+        active.team_id = Some("club".into());
+        let team = Team::new(
+            "club".into(),
+            "Club".into(),
+            "CLU".into(),
+            "England".into(),
+            "London".into(),
+            "Ground".into(),
+            25_000,
+        );
+        let manager = Manager::new(
+            "manager".into(),
+            "Test".into(),
+            "Manager".into(),
+            "1980-01-01".into(),
+            "England".into(),
+        );
+        let game = Game::new(
+            GameClock::new(Utc.with_ymd_and_hms(2026, 8, 1, 12, 0, 0).unwrap()),
+            manager,
+            vec![team],
+            vec![retired, active],
+            vec![],
+            vec![],
+        );
+        let (team, bench) = build_team_with_bench(&game, "club");
+        assert!(
+            team.players
+                .iter()
+                .chain(&bench)
+                .all(|player| player.id != "retired")
+        );
+        assert_eq!(team.players.len() + bench.len(), 1);
     }
 
     #[test]

@@ -1777,7 +1777,7 @@
     "patchPlayers": "Mais craques, incluindo raras estrelas de nível 96 e candidatos ao acesso.",
     "patchMatches": "Mais reações, bolas na trave e narração por voz opcional.",
     "patchMobile": "Controles no celular, caixa de entrada, seleções e início de carreira melhorados.",
-    "patchWelcome": "Boas-vindas ao OFMtouch! Novidades da v0.6.2",
+    "patchWelcome": "Boas-vindas ao OFMtouch! Novidades da v0.6.3",
     "patchPortraits": "20 rostos fictícios de origem deixam os retratos dos jogadores mais variados.",
     "patchWorld": "Um mundo do futebol maior abrange 29 países, com clubes mais fortes nas Américas e na Ásia.",
     "patchTransfers": "As estratégias dos clubes orientam empréstimos e transferências, com ofertas concorrentes e controle do orçamento.",
@@ -2677,7 +2677,8 @@
         "playerNotOnBench": "O jogador não está no banco",
         "playerNotInStartingXi": "O jogador não está no time titular",
         "pressConferenceAlreadyHeld": "Você já deu uma coletiva de imprensa hoje",
-        "noCompletedMatch": "Nenhuma partida disputada foi encontrada para o seu time"
+        "noCompletedMatch": "Nenhuma partida disputada foi encontrada para o seu time",
+        "matchFinished": "A partida terminou."
       },
       "csv": {
         "writeFailed": "Falha ao gravar o arquivo CSV."
@@ -4212,5 +4213,11 @@
     "decisions": "Decisões melhores: esgotar o orçamento de transferências não é mais tratado como dívida, e clubes em reconstrução podem se recuperar com resultados melhores.",
     "autosave": "Os salvamentos automáticos mantêm pendentes as alterações posteriores no elenco, nos contratos e na caixa de entrada.",
     "academy": "Os jogos da base verificam a data de nascimento para a elegibilidade sub-21; o histórico mostra cada atualização na versão correta."
+  },
+  "phase63": {
+    "finances": "As transferências e os empréstimos recebidos verificam novamente as finanças do clube antes da conclusão.",
+    "matchday": "As escalações excluem jogadores aposentados; partidas encerradas não permitem mais mudanças táticas.",
+    "career": "Os relatórios de desenvolvimento dos emprestados continuam precisos na virada da temporada, com cálculos de aniversário corrigidos.",
+    "saves": "As carreiras salvas preservam as estratégias de contratação, com mais testes de regressão."
   }
 }

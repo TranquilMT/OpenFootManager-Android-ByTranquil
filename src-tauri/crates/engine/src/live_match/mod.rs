@@ -315,6 +315,9 @@ impl LiveMatchState {
 
     /// Apply a command (substitution, tactic change, set piece assignment).
     pub fn apply_command(&mut self, cmd: MatchCommand) -> Result<(), String> {
+        if self.is_finished() {
+            return Err("be.error.liveMatch.matchFinished".into());
+        }
         match cmd {
             MatchCommand::Substitute {
                 side,

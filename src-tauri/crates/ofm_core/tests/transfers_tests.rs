@@ -1655,6 +1655,67 @@ fn accepting_incoming_loan_offer_moves_user_player_to_borrowing_club() {
 }
 
 #[test]
+fn incoming_loan_acceptance_rechecks_borrower_cash_without_changing_offer() {
+    let mut player = make_user_player("loan-cash");
+    player.wage = 520_000;
+    player
+        .loan_offers
+        .push(make_pending_incoming_loan_offer("cash-offer", 75, None));
+    let mut game = make_game_with_player(player, vec![], 5_000_000, 2_000_000);
+    game.teams[1].finance = 1;
+    let before = serde_json::to_value(&game.players[0]).unwrap();
+    assert_eq!(
+        respond_to_loan_offer(&mut game, "loan-cash", "cash-offer", true).unwrap_err(),
+        "be.error.transfers.insufficientFunds"
+    );
+    assert_eq!(serde_json::to_value(&game.players[0]).unwrap(), before);
+}
+
+#[test]
+fn incoming_transfer_acceptance_rechecks_buyer_funds_without_changing_offer() {
+    for depleted_cash in [true, false] {
+        let mut player = make_user_player("sale-funds");
+        player
+            .transfer_offers
+            .push(make_pending_incoming_offer("sale", 500_000));
+        let mut game = make_game_with_player(player, vec![], 5_000_000, 2_000_000);
+        game.teams[1].finance = if depleted_cash { 1 } else { 5_000_000 };
+        game.teams[1].transfer_budget = if depleted_cash { 5_000_000 } else { 1 };
+        let before = serde_json::to_value(&game.players[0]).unwrap();
+        assert!(respond_to_offer(&mut game, "sale-funds", "sale", true).is_err());
+        assert_eq!(serde_json::to_value(&game.players[0]).unwrap(), before);
+        assert_eq!(game.teams[0].finance, 5_000_000);
+    }
+}
+
+#[test]
+fn incoming_loan_counter_rechecks_borrower_cash_before_agreeing() {
+    let mut player = make_user_player("loan-counter-cash");
+    player.wage = 520_000;
+    player
+        .loan_offers
+        .push(make_pending_incoming_loan_offer("counter-cash", 50, None));
+    let mut game = make_game_with_player(player, vec![], 5_000_000, 2_000_000);
+    game.teams[1].finance = 1;
+    assert!(
+        counter_loan_offer(
+            &mut game,
+            "loan-counter-cash",
+            "counter-cash",
+            "2027-01-01",
+            55,
+            None
+        )
+        .is_err()
+    );
+    assert_eq!(
+        game.players[0].loan_offers[0].status,
+        LoanOfferStatus::Pending
+    );
+    assert!(game.players[0].active_loan.is_none());
+}
+
+#[test]
 fn countering_incoming_loan_offer_can_execute_accepted_terms() {
     let mut player = make_user_player("player-counter-loan-accepted");
     player.loan_listed = true;

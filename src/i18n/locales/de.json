@@ -1777,7 +1777,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.2",
+    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.3",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
@@ -2677,7 +2677,8 @@
         "playerNotOnBench": "Spieler ist nicht auf der Bank",
         "playerNotInStartingXi": "Spieler ist nicht in der Startelf",
         "pressConferenceAlreadyHeld": "Du hast heute bereits eine Pressekonferenz gegeben",
-        "noCompletedMatch": "Für dein Team wurde kein abgeschlossenes Spiel gefunden"
+        "noCompletedMatch": "Für dein Team wurde kein abgeschlossenes Spiel gefunden",
+        "matchFinished": "Das Spiel ist beendet."
       },
       "csv": {
         "writeFailed": "Die CSV-Datei konnte nicht geschrieben werden."
@@ -4212,5 +4213,11 @@
     "decisions": "Bessere Vereinsentscheidungen: Ausgeschöpfte Transferbudgets gelten nicht mehr als Schulden, und Vereine im Umbruch können sich nach besseren Ergebnissen erholen.",
     "autosave": "Sicherere automatische Spielstände berücksichtigen spätere Änderungen am Kader, an Verträgen und im Posteingang.",
     "academy": "Akademiespiele prüfen das tatsächliche Alter für die U21-Zulassung; der Updateverlauf zeigt jede Veröffentlichung unter der richtigen Version."
+  },
+  "phase63": {
+    "finances": "Eingehende Transfer- und Leihangebote prüfen vor dem Abschluss erneut die Vereinsfinanzen.",
+    "matchday": "Spieltagskader schließen zurückgetretene Spieler aus; nach Spielende sind keine taktischen Änderungen mehr möglich.",
+    "career": "Entwicklungsberichte verliehener Spieler bleiben beim Saisonwechsel korrekt; Geburtstage werden genauer berechnet.",
+    "saves": "Karrierespielstände behalten die Transferstrategien bei, abgesichert durch zusätzliche Regressionstests."
   }
 }

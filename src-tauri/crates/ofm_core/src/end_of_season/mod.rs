@@ -1036,6 +1036,14 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
     for player in game.players.iter_mut() {
         // Reset stats for next season
         player.stats = PlayerSeasonStats::default();
+        // Loan reports compare against season statistics, so their baselines
+        // must reset at the same time even when the loan spans two seasons.
+        if let Some(loan) = &mut player.active_loan {
+            loan.loan_start_minutes = 0;
+            loan.loan_start_appearances = 0;
+            loan.development_reported_minutes = 0;
+            loan.development_reported_appearances = 0;
+        }
     }
 
     // 5b. Convert retired players to unemployed manager/scout candidates, then

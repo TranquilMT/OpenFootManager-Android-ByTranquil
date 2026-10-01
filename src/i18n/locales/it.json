@@ -1796,7 +1796,7 @@
     "patchPlayers": "Più giocatori di spicco, incluse rare stelle da 96 e squadre in lotta per la promozione.",
     "patchMatches": "Più reazioni, tiri sui legni e telecronaca vocale facoltativa.",
     "patchMobile": "Comandi mobili, posta, nazionali e inizio carriera migliorati.",
-    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.6.2",
+    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.6.3",
     "patchPortraits": "20 volti fittizi di partenza rendono più vari i ritratti dei giocatori generati.",
     "patchWorld": "Un mondo calcistico più ampio copre 29 nazioni, con club più forti nelle Americhe e in Asia.",
     "patchTransfers": "Le strategie dei club guidano prestiti e trasferimenti, con offerte concorrenti e controlli sul budget.",
@@ -2677,7 +2677,8 @@
         "playerNotOnBench": "Il giocatore non è in panchina",
         "playerNotInStartingXi": "Il giocatore non è nell'undici titolare",
         "pressConferenceAlreadyHeld": "Hai già tenuto una conferenza stampa oggi",
-        "noCompletedMatch": "Nessuna partita disputata trovata per la tua squadra"
+        "noCompletedMatch": "Nessuna partita disputata trovata per la tua squadra",
+        "matchFinished": "La partita è terminata."
       },
       "csv": {
         "writeFailed": "Impossibile scrivere il file CSV."
@@ -4212,5 +4213,11 @@
     "decisions": "Decisioni migliori: esaurire il budget trasferimenti non viene più considerato un debito, e i club in ricostruzione possono riprendersi dopo risultati migliori.",
     "autosave": "I salvataggi automatici mantengono da salvare le modifiche successive a rosa, contratti e posta.",
     "academy": "Le partite giovanili verificano la data di nascita per l’idoneità Under 21; la cronologia mostra ogni aggiornamento nella versione corretta."
+  },
+  "phase63": {
+    "finances": "I trasferimenti e i prestiti ricevuti ricontrollano le finanze del club prima di essere conclusi.",
+    "matchday": "Le rose per le partite escludono i giocatori ritirati; le partite concluse non consentono più modifiche tattiche.",
+    "career": "I rapporti di sviluppo dei giocatori in prestito restano accurati al cambio di stagione, con calcoli dei compleanni corretti.",
+    "saves": "I salvataggi della carriera conservano le strategie di mercato, con più test di regressione."
   }
 }

@@ -662,6 +662,10 @@ pub fn respond_to_loan_offer(
         offer_end_date
     };
 
+    if accept {
+        validate_loan_borrower_affordability(game, &from_team_id, player, wage_contribution_pct)?;
+    }
+
     if let Some(player) = game
         .players
         .iter_mut()
@@ -799,6 +803,12 @@ pub fn counter_loan_offer(
     let offer_id_string = offer.id.clone();
 
     if accepted {
+        validate_loan_borrower_affordability(
+            game,
+            &borrower_team_id,
+            player,
+            wage_contribution_pct,
+        )?;
         if let Some(player) = game
             .players
             .iter_mut()

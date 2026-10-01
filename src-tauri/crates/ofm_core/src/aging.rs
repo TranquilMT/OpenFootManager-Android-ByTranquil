@@ -13,7 +13,7 @@ fn player_age_on(current_date: NaiveDate, date_of_birth: &str) -> i32 {
     };
 
     let mut age = current_date.year() - dob.year();
-    if current_date.ordinal() < dob.ordinal() {
+    if (current_date.month(), current_date.day()) < (dob.month(), dob.day()) {
         age -= 1;
     }
     age
@@ -154,6 +154,14 @@ mod tests {
     use super::{
         apply_seasonal_aging, player_age_on, should_retire, technical_growth, veteran_pace_loss,
     };
+
+    #[test]
+    fn birthdays_after_february_are_correct_across_leap_years() {
+        let birthday = chrono::NaiveDate::from_ymd_opt(2026, 3, 1).unwrap();
+        assert_eq!(player_age_on(birthday, "2000-03-01"), 26);
+        let eve = chrono::NaiveDate::from_ymd_opt(2028, 2, 29).unwrap();
+        assert_eq!(player_age_on(eve, "2001-03-01"), 26);
+    }
     use crate::clock::GameClock;
     use crate::game::Game;
     use chrono::{NaiveDate, TimeZone, Utc};

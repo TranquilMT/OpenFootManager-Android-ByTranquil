@@ -279,8 +279,9 @@ pub fn project_transfer_bid_financial_impact(
         0
     };
 
-    let transfer_budget_after = team.transfer_budget - fee as i64;
-    let finance_after = team.finance - fee as i64;
+    let fee_i64 = i64::try_from(fee).map_err(|_| ERR_INSUFFICIENT_FUNDS.to_string())?;
+    let transfer_budget_after = team.transfer_budget.saturating_sub(fee_i64);
+    let finance_after = team.finance.saturating_sub(fee_i64);
 
     // Same rule as make_transfer_bid uses when it decides Accepted vs
     // PendingRegistration: a registration date later than today means the
@@ -611,6 +612,13 @@ pub fn respond_to_offer(
     let openness_score = player_move_openness_score(current_date, player, owner_team, buyer_team);
 
     if accept && register_immediately {
+        let fee_i64 = i64::try_from(fee).map_err(|_| ERR_INSUFFICIENT_FUNDS.to_string())?;
+        if buyer_team.finance < fee_i64 {
+            return Err(ERR_INSUFFICIENT_FUNDS.into());
+        }
+        if buyer_team.transfer_budget < fee_i64 {
+            return Err(ERR_TRANSFER_BUDGET_TOO_LOW.into());
+        }
         ensure_transfer_cash_postable(game, &from_team_id, &user_team_id, fee)?;
     }
 

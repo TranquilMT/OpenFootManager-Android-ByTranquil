@@ -109,7 +109,10 @@ pub fn evaluate_team_squad_safety(
         .players
         .iter()
         .filter(|player| {
-            player.team_id.as_deref() == Some(team_id) && !excluded_player_ids.contains(&player.id)
+            player.team_id.as_deref() == Some(team_id)
+                && !player.retired
+                && player.squad_role == domain::player::SquadRole::Senior
+                && !excluded_player_ids.contains(&player.id)
         })
         .collect();
     let healthy_roster: Vec<&Player> = roster
@@ -262,5 +265,21 @@ mod tests {
         let result = project_user_team_release_safety(&game, "player-1");
 
         assert_eq!(result.unwrap_err(), PLAYER_NOT_IN_CLUB_ERROR);
+    }
+
+    #[test]
+    fn academy_and_retired_players_do_not_hide_senior_squad_shortages() {
+        let mut game = make_game();
+        game.players[0].team_id = Some("team-1".into());
+        for retired in [false, true] {
+            game.players[0].retired = retired;
+            game.players[0].squad_role = if retired {
+                domain::player::SquadRole::Senior
+            } else {
+                domain::player::SquadRole::Youth
+            };
+            let report = evaluate_team_squad_safety(&game, "team-1", &HashSet::new()).unwrap();
+            assert_eq!(report.healthy_players, 0);
+        }
     }
 }

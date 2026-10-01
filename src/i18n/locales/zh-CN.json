@@ -1777,7 +1777,7 @@
     "patchPlayers": "新增更多优秀球员，包括稀有的96分球星和升级热门球队。",
     "patchMatches": "比赛解说更加丰富，加入门框射门和可选语音解说。",
     "patchMobile": "改进移动端操作、收件箱、国家队与生涯创建。",
-    "patchWelcome": "欢迎来到 OFMtouch！v0.6.2 更新内容",
+    "patchWelcome": "欢迎来到 OFMtouch！v0.6.3 更新内容",
     "patchPortraits": "20 张虚构原始人脸让生成球员的肖像更加多样。",
     "patchWorld": "足球世界扩展至 29 个国家，美洲和亚洲的俱乐部实力也得到提升。",
     "patchTransfers": "俱乐部策略会影响租借和转会，包括竞争报价与预算检查。",
@@ -2677,7 +2677,8 @@
         "playerNotOnBench": "球员不在替补席上",
         "playerNotInStartingXi": "球员不在首发阵容中",
         "pressConferenceAlreadyHeld": "今天你已经召开过新闻发布会了",
-        "noCompletedMatch": "未找到你的球队已完成的比赛"
+        "noCompletedMatch": "未找到你的球队已完成的比赛",
+        "matchFinished": "比赛已结束。"
       },
       "csv": {
         "writeFailed": "无法写入 CSV 文件。"
@@ -4212,5 +4213,11 @@
     "decisions": "俱乐部决策更合理：用完转会预算不再被视为负债，重建中的球队也能随成绩改善而恢复。",
     "autosave": "自动存档更可靠，之后的阵容、合同和收件箱改动仍会标记为需要保存。",
     "academy": "青训比赛根据实际生日判断未满21岁的参赛资格；更新历史按正确版本显示各次更新。"
+  },
+  "phase63": {
+    "finances": "接受转会和租借报价时，会在完成交易前重新检查俱乐部财务。",
+    "matchday": "比赛名单不再包含退役球员；比赛结束后无法更改战术。",
+    "career": "跨赛季的租借球员成长报告保持准确，并修正了生日年龄计算。",
+    "saves": "生涯存档保留引援策略，并增加了回归测试。"
   }
 }

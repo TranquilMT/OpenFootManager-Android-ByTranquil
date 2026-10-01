@@ -1724,6 +1724,32 @@ fn step_after_finished_returns_finished() {
     assert_eq!(state.phase(), MatchPhase::Finished);
 }
 
+#[test]
+fn completed_match_rejects_substitutions_and_tactical_changes() {
+    let mut state = make_live_match(false);
+    run_to_finish(&mut state, &mut seeded_rng(42));
+    let before = serde_json::to_value(state.snapshot()).unwrap();
+    let off = state.snapshot().home_team.players[0].id.clone();
+    let on = state.bench(Side::Home)[0].id.clone();
+    for command in [
+        MatchCommand::Substitute {
+            side: Side::Home,
+            player_off_id: off,
+            player_on_id: on,
+        },
+        MatchCommand::ChangePlayStyle {
+            side: Side::Home,
+            play_style: PlayStyle::Attacking,
+        },
+    ] {
+        assert_eq!(
+            state.apply_command(command).unwrap_err(),
+            "be.error.liveMatch.matchFinished"
+        );
+        assert_eq!(serde_json::to_value(state.snapshot()).unwrap(), before);
+    }
+}
+
 // ===========================================================================
 // Tests: Away side set pieces and tactics
 // ===========================================================================

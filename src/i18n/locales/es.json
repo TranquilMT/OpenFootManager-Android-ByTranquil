@@ -1777,7 +1777,7 @@
     "patchPlayers": "Más jugadores destacados, incluidas raras estrellas de 96 y aspirantes al ascenso.",
     "patchMatches": "Más reacciones, tiros al palo y narración de voz opcional.",
     "patchMobile": "Mejoras en controles móviles, bandeja de entrada, selecciones y carrera.",
-    "patchWelcome": "¡Bienvenido a OFMtouch! Novedades de la v0.6.2",
+    "patchWelcome": "¡Bienvenido a OFMtouch! Novedades de la v0.6.3",
     "patchPortraits": "20 rostros ficticios de origen aportan más variedad a los retratos de los jugadores.",
     "patchWorld": "Un mundo futbolístico más amplio abarca 29 países, con clubes más fuertes en América y Asia.",
     "patchTransfers": "Las estrategias de los clubes guían cesiones y fichajes, con ofertas rivales y controles del presupuesto.",
@@ -2677,7 +2677,8 @@
         "playerNotOnBench": "El jugador no está en el banquillo",
         "playerNotInStartingXi": "El jugador no está en el once inicial",
         "pressConferenceAlreadyHeld": "Ya has ofrecido una rueda de prensa hoy",
-        "noCompletedMatch": "No se ha encontrado ningún partido disputado por tu equipo"
+        "noCompletedMatch": "No se ha encontrado ningún partido disputado por tu equipo",
+        "matchFinished": "El partido ha terminado."
       },
       "csv": {
         "writeFailed": "No se pudo escribir el archivo CSV."
@@ -4212,5 +4213,11 @@
     "decisions": "Mejores decisiones: agotar el presupuesto de fichajes ya no se considera deuda, y los clubes en reconstrucción pueden recuperarse tras mejorar sus resultados.",
     "autosave": "El guardado automático mantiene pendientes los cambios posteriores en plantilla, contratos y bandeja de entrada.",
     "academy": "Los partidos de cantera comprueban la fecha de nacimiento para la elegibilidad sub-21; el historial muestra cada actualización con su versión correcta."
+  },
+  "phase63": {
+    "finances": "Los traspasos y préstamos recibidos vuelven a comprobar las finanzas del club antes de completarse.",
+    "matchday": "Las convocatorias excluyen a los jugadores retirados; los partidos terminados ya no permiten cambios tácticos.",
+    "career": "Los informes de desarrollo de los cedidos siguen siendo precisos al cambiar de temporada y se corrige el cálculo de cumpleaños.",
+    "saves": "Las partidas guardadas conservan las estrategias de fichajes, con más pruebas de regresión."
   }
 }

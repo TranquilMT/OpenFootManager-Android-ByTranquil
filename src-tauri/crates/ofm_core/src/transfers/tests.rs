@@ -92,6 +92,13 @@ fn make_game() -> Game {
 }
 
 #[test]
+fn transfer_projection_rejects_unrepresentable_fee() {
+    let mut game = make_game();
+    game.players[0].team_id = Some("team2".into());
+    assert!(super::project_transfer_bid_financial_impact(&game, "player-award", u64::MAX).is_err());
+}
+
+#[test]
 fn evaluate_transfer_market_targets_award_leaderboard_user_player() {
     let mut game = make_game();
 

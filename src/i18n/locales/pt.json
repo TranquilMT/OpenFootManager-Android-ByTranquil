@@ -1777,7 +1777,7 @@
     "patchPlayers": "Mais jogadores de destaque, incluindo raras estrelas de nível 96.",
     "patchMatches": "Mais reações, remates à trave e comentário por voz opcional.",
     "patchMobile": "Controlos móveis, caixa de entrada, seleções e início de carreira melhorados.",
-    "patchWelcome": "Bem-vindo ao OFMtouch! Novidades da v0.6.2",
+    "patchWelcome": "Bem-vindo ao OFMtouch! Novidades da v0.6.3",
     "patchPortraits": "20 rostos fictícios de origem tornam os retratos dos jogadores mais variados.",
     "patchWorld": "Um mundo de futebol maior abrange 29 nações, com clubes mais fortes nas Américas e na Ásia.",
     "patchTransfers": "As estratégias dos clubes orientam empréstimos e transferências, com ofertas concorrentes e controlo do orçamento.",
@@ -2677,7 +2677,8 @@
         "playerNotOnBench": "O jogador não está no banco",
         "playerNotInStartingXi": "O jogador não está no onze inicial",
         "pressConferenceAlreadyHeld": "Já deste uma conferência de imprensa hoje",
-        "noCompletedMatch": "Não foi encontrado nenhum jogo disputado pela tua equipa"
+        "noCompletedMatch": "Não foi encontrado nenhum jogo disputado pela tua equipa",
+        "matchFinished": "O jogo terminou."
       },
       "csv": {
         "writeFailed": "Falha ao escrever o ficheiro CSV."
@@ -4212,5 +4213,11 @@
     "decisions": "Melhores decisões: esgotar o orçamento de transferências já não significa dívida, e os clubes em reconstrução podem recuperar com melhores resultados.",
     "autosave": "Os guardados automáticos mantêm por guardar alterações posteriores ao plantel, contratos e caixa de entrada.",
     "academy": "Os jogos da academia verificam a data de nascimento para a elegibilidade sub-21; o histórico apresenta cada atualização na versão correta."
+  },
+  "phase63": {
+    "finances": "As transferências e os empréstimos recebidos voltam a verificar as finanças do clube antes de serem concluídos.",
+    "matchday": "As convocatórias excluem jogadores retirados; os jogos terminados já não permitem alterações táticas.",
+    "career": "Os relatórios de desenvolvimento dos emprestados mantêm a precisão na mudança de época, com cálculos de aniversário corrigidos.",
+    "saves": "As carreiras guardadas mantêm as estratégias de recrutamento, com mais testes de regressão."
   }
 }

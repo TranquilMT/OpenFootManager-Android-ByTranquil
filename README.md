@@ -186,6 +186,17 @@ Your job extends beyond the next result.
 - Fixed the in-game patch history so each version shows its own updates.
 - Updated the compact What's New summary in all 12 supported languages.
 
+### v0.6.3 — Career & Gameplay Polish
+
+- Incoming transfer acceptances recheck the buyer’s cash and transfer budget before moving a player.
+- Incoming loan acceptances and agreed counter-offers recheck the borrower’s wage affordability before changing the deal.
+- Transfer previews reject oversized fees safely instead of showing incorrect financial projections.
+- Matchday squads exclude retired players, and completed matches reject substitutions and tactical changes.
+- Active loan reporting counters reset with season statistics, keeping new-season development reports accurate.
+- Corrected birthday calculations across leap years for seasonal aging and retirement decisions.
+- Added complete career save/reload coverage for recruitment strategies and retained old-save migration checks.
+- Updated the compact What’s New summary in all 12 supported languages.
+
 ## Download & Play
 
 1. Visit the [latest release](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/tag/v0.6.2-build338) and download the **Android ARM64 APK**.

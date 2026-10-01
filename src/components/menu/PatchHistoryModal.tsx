@@ -4,6 +4,10 @@ import { ReleaseNotes } from "../settings/ReleaseNotes";
 
 const HISTORY = [
   {
+    version: "0.6.2",
+    keys: ["phase62.strategy", "phase62.decisions", "phase62.autosave", "phase62.academy"],
+  },
+  {
     version: "0.6.1",
     keys: [
       "phase6.patchNames",

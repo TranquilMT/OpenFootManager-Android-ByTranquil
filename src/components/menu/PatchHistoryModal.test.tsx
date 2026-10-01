@@ -8,9 +8,12 @@ vi.mock("@tauri-apps/plugin-opener", () => ({ openUrl: vi.fn() }));
 describe("PatchHistoryModal", () => {
   it("keeps released highlights attached to their own version", () => {
     render(<PatchHistoryModal onClose={vi.fn()} />);
-    expect(screen.getByRole("heading", { name: "v0.6.2" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "v0.6.3" })).toBeTruthy();
     expect(screen.getByRole("heading", { name: "v0.6.1" })).toBeTruthy();
     expect(screen.getByRole("heading", { name: "v0.6.0" })).toBeTruthy();
+    const previous = screen.getByRole("heading", { name: "v0.6.2" }).nextElementSibling;
+    expect(within(previous as HTMLElement).getByText("phase62.strategy")).toBeTruthy();
+    expect(within(previous as HTMLElement).queryByText("phase63.finances")).toBeNull();
     const hotfix = screen.getByRole("heading", { name: "v0.5.2" });
     const notes = hotfix.nextElementSibling;
     expect(notes).not.toBeNull();
