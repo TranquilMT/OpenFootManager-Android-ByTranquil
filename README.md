@@ -4,9 +4,9 @@
 
 OFMtouch is a free, open-source football management game for Android, based on OpenFootManager and adapted for mobile by **TranquilMT**. Build a squad, develop young talent and lead your club through seasons of league and cup football. Every career brings decisions on the pitch, in the transfer market and behind the scenes.
 
-**Current version: v0.6.1 — Gameplay Polish · Build 337 · Android ARM64**
+**Current version: v0.6.2 — Career & Gameplay Polish · Build 338 · Android ARM64**
 
-[Download OFMtouch](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/tag/v0.6.1-build337) · [Previous releases](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases) · [Report an issue](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new)
+[Download OFMtouch](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/tag/v0.6.2-build338) · [Previous releases](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases) · [Report an issue](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new)
 
 ## What Can You Do?
 
@@ -188,7 +188,7 @@ Your job extends beyond the next result.
 
 ## Download & Play
 
-1. Visit the [latest release](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/tag/v0.6.1-build337) and download the **Android ARM64 APK**.
+1. Visit the [latest release](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/tag/v0.6.2-build338) and download the **Android ARM64 APK**.
 2. Save your current career before installing an update over the existing app.
 3. Start a career or load your save, review your squad and set your tactics.
 4. Check your Inbox and board objectives, then begin planning for the next match.
