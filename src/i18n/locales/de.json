@@ -1777,7 +1777,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.1",
+    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.2",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
@@ -4206,5 +4206,11 @@
     "patchIdentity": "Neue Spielwelten und Jugendberichte vermeiden doppelte vollständige Namen. Vorhandene Spieler behalten ihre Namen.",
     "patchScrolling": "Formationsmenüs lassen sich flüssiger scrollen und bleiben im sichtbaren Bildschirmbereich.",
     "patchReliability": "Fairere Torziele in kleinen Ligen; zuverlässigere Trainergehälter und Finanzierung bei Vereinsübernahmen."
+  },
+  "phase62": {
+    "strategy": "Vereine passen ihre Kaderplanung an Saisonergebnisse an und behalten ihre Strategie beim Laden einer Karriere.",
+    "decisions": "Bessere Vereinsentscheidungen: Ausgeschöpfte Transferbudgets gelten nicht mehr als Schulden, und Vereine im Umbruch können sich nach besseren Ergebnissen erholen.",
+    "autosave": "Sicherere automatische Spielstände berücksichtigen spätere Änderungen am Kader, an Verträgen und im Posteingang.",
+    "academy": "Akademiespiele prüfen das tatsächliche Alter für die U21-Zulassung; der Updateverlauf zeigt jede Veröffentlichung unter der richtigen Version."
   }
 }

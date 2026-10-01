@@ -1777,7 +1777,7 @@
     "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
     "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
     "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
-    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.1",
+    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.2",
     "patchPortraits": "20 fiktivních výchozích tváří přináší pestřejší portréty hráčů.",
     "patchWorld": "Fotbalový svět zahrnuje 29 zemí a silnější kluby v Americe a Asii.",
     "patchTransfers": "Strategie klubů řídí hostování a přestupy včetně konkurenčních nabídek a kontroly rozpočtu.",
@@ -4206,5 +4206,11 @@
     "patchIdentity": "Nové světy a zprávy o mladých hráčích se vyhýbají opakovaným celým jménům. Stávající hráči si svá jména ponechávají.",
     "patchScrolling": "Nabídky formací se posouvají plynuleji a zůstávají ve viditelné části obrazovky.",
     "patchReliability": "Spravedlivější gólové cíle v malých ligách; spolehlivější výplaty trenérského platu a financování při převzetí klubu."
+  },
+  "phase62": {
+    "strategy": "Kluby přizpůsobují nábor výsledkům sezóny a zachovávají strategii při načtení kariéry.",
+    "decisions": "Lepší rozhodování klubů: vyčerpaný přestupový rozpočet už neznamená dluh a kluby v přestavbě se mohou po lepších výsledcích zotavit.",
+    "autosave": "Bezpečnější automatické ukládání ponechá pozdější změny kádru, smluv a zpráv označené k uložení.",
+    "academy": "Zápasy akademie ověřují skutečné datum narození pro hráče do 21 let; historie zobrazuje každou aktualizaci pod správnou verzí."
   }
 }

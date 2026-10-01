@@ -1796,7 +1796,7 @@
     "patchPlayers": "Più giocatori di spicco, incluse rare stelle da 96 e squadre in lotta per la promozione.",
     "patchMatches": "Più reazioni, tiri sui legni e telecronaca vocale facoltativa.",
     "patchMobile": "Comandi mobili, posta, nazionali e inizio carriera migliorati.",
-    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.6.1",
+    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.6.2",
     "patchPortraits": "20 volti fittizi di partenza rendono più vari i ritratti dei giocatori generati.",
     "patchWorld": "Un mondo calcistico più ampio copre 29 nazioni, con club più forti nelle Americhe e in Asia.",
     "patchTransfers": "Le strategie dei club guidano prestiti e trasferimenti, con offerte concorrenti e controlli sul budget.",
@@ -4206,5 +4206,11 @@
     "patchIdentity": "I nuovi mondi e i rapporti sui giovani evitano nomi completi ripetuti. I giocatori esistenti mantengono i propri nomi.",
     "patchScrolling": "I menu delle formazioni scorrono più facilmente e restano nell’area visibile dello schermo.",
     "patchReliability": "Obiettivi di gol più equi nei campionati piccoli; pagamenti dello stipendio dell’allenatore e finanziamenti delle acquisizioni più affidabili."
+  },
+  "phase62": {
+    "strategy": "I club adattano il mercato ai risultati della stagione e conservano la strategia quando ricarichi la carriera.",
+    "decisions": "Decisioni migliori: esaurire il budget trasferimenti non viene più considerato un debito, e i club in ricostruzione possono riprendersi dopo risultati migliori.",
+    "autosave": "I salvataggi automatici mantengono da salvare le modifiche successive a rosa, contratti e posta.",
+    "academy": "Le partite giovanili verificano la data di nascita per l’idoneità Under 21; la cronologia mostra ogni aggiornamento nella versione corretta."
   }
 }

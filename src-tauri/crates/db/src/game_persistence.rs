@@ -138,6 +138,7 @@ fn write_game_to_connection(
         },
     )?;
 
+    crate::repositories::club_strategy_repo::save(conn, &game.club_strategies)?;
     conn.execute("DELETE FROM board_rooms", [])
         .map_err(|_| game_persistence_write_error())?;
     for (team_id, room) in &game.board_rooms {
@@ -341,6 +342,7 @@ impl GamePersistenceReader {
             youth_scouting_assignments,
             board_objectives,
             board_rooms: load_board_rooms(conn)?,
+            club_strategies: crate::repositories::club_strategy_repo::load(conn)?,
             season_context: domain::season::SeasonContext::default(),
             days_since_last_job_offer: None,
             available_staff_market_last_activity_date: meta

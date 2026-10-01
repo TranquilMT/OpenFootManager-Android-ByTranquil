@@ -108,6 +108,8 @@ pub struct Game {
     #[serde(default)]
     pub board_rooms: HashMap<String, crate::board_room::BoardRoom>,
     #[serde(default)]
+    pub club_strategies: HashMap<String, crate::club_strategy::CareerStrategy>,
+    #[serde(default)]
     pub season_context: SeasonContext,
     #[serde(default)]
     pub days_since_last_job_offer: Option<u32>,
@@ -177,6 +179,7 @@ impl Game {
             youth_scouting_assignments: vec![],
             board_objectives: vec![],
             board_rooms: HashMap::new(),
+            club_strategies: HashMap::new(),
             season_context: SeasonContext::default(),
             days_since_last_job_offer: None,
             available_staff_market_last_activity_date: None,

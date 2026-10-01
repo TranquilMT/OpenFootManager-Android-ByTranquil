@@ -320,12 +320,17 @@ export default function Dashboard(): JSX.Element {
       !settings.auto_save
     )
       return;
+    const stateAtSave = latestGameStateRef.current;
+    let cancelled = false;
     void invoke("save_game")
       .then(() => {
-        // A later update may still need saving.
-        if (latestGameStateRef.current?.clock.current_date === date) markClean();
+        // Same-day squad, contract and Inbox changes are separate revisions.
+        if (!cancelled && latestGameStateRef.current === stateAtSave) markClean();
       })
       .catch((err) => console.error("Failed to auto-save after advancing:", err));
+    return () => {
+      cancelled = true;
+    };
   }, [activeSaveId, gameState?.clock.current_date, settingsLoaded, settings.auto_save, markClean]);
 
   // Phones can suspend the WebView without a window-close event. Persist the

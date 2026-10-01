@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import type { GameStateData } from "../store/gameStore";
+import { createGameState } from "./dashboardTestFixture";
 import type { LeagueData, SeasonContextData } from "../store/types";
 import { applyExtraTranslations } from "../lib/extraTranslations";
 import Dashboard from "./Dashboard";
@@ -24,156 +24,8 @@ const clearGameMock = vi.fn();
 const markCleanMock = vi.fn();
 const loadSettingsMock = vi.fn();
 
-function createGameState(): GameStateData {
-  return {
-    clock: {
-      current_date: "2026-07-10T12:00:00Z",
-      start_date: "2026-07-01T12:00:00Z",
-    },
-    manager: {
-      id: "manager-1",
-      first_name: "Jane",
-      last_name: "Doe",
-      date_of_birth: "1980-01-01",
-      nationality: "England",
-      reputation: 50,
-      satisfaction: 50,
-      fan_approval: 50,
-      team_id: "team-1",
-      career_stats: {
-        matches_managed: 0,
-        wins: 0,
-        draws: 0,
-        losses: 0,
-        trophies: 0,
-        best_finish: null,
-      },
-      career_history: [],
-    },
-    teams: [
-      {
-        id: "team-1",
-        name: "Alpha FC",
-        short_name: "ALP",
-        country: "GB",
-        city: "London",
-        stadium_name: "Alpha Ground",
-        stadium_capacity: 30000,
-        finance: 500000,
-        manager_id: "manager-1",
-        reputation: 50,
-        wage_budget: 50000,
-        transfer_budget: 250000,
-        season_income: 0,
-        season_expenses: 0,
-        formation: "4-4-2",
-        play_style: "Balanced",
-        training_focus: "General",
-        training_intensity: "Balanced",
-        training_schedule: "Balanced",
-        founded_year: 1900,
-        colors: { primary: "#000000", secondary: "#ffffff" },
-        starting_xi_ids: [],
-        form: [],
-        history: [],
-      },
-      {
-        id: "team-2",
-        name: "Beta FC",
-        short_name: "BET",
-        country: "GB",
-        city: "Manchester",
-        stadium_name: "Beta Ground",
-        stadium_capacity: 28000,
-        finance: 400000,
-        manager_id: "manager-2",
-        reputation: 48,
-        wage_budget: 45000,
-        transfer_budget: 200000,
-        season_income: 0,
-        season_expenses: 0,
-        formation: "4-3-3",
-        play_style: "Balanced",
-        training_focus: "General",
-        training_intensity: "Balanced",
-        training_schedule: "Balanced",
-        founded_year: 1901,
-        colors: { primary: "#111111", secondary: "#eeeeee" },
-        starting_xi_ids: [],
-        form: [],
-        history: [],
-      },
-    ],
-    players: [
-      {
-        id: "player-1",
-        match_name: "J. Smith",
-        full_name: "John Smith",
-        date_of_birth: "2000-01-01",
-        nationality: "GB",
-        position: "Forward",
-        natural_position: "Forward",
-        alternate_positions: [],
-        training_focus: null,
-        attributes: {
-          pace: 60,
-          stamina: 60,
-          strength: 60,
-          agility: 60,
-          passing: 60,
-          shooting: 60,
-          tackling: 60,
-          dribbling: 60,
-          defending: 60,
-          positioning: 60,
-          vision: 60,
-          decisions: 60,
-          composure: 60,
-          aggression: 60,
-          teamwork: 60,
-          leadership: 60,
-          handling: 20,
-          reflexes: 20,
-          aerial: 60,
-        },
-        condition: 80,
-        morale: 75,
-        injury: null,
-        team_id: "team-1",
-        retired: false,
-        contract_end: "2026-10-15",
-        wage: 12000,
-        market_value: 350000,
-        stats: {
-          appearances: 0,
-          goals: 0,
-          assists: 0,
-          clean_sheets: 0,
-          yellow_cards: 0,
-          red_cards: 0,
-          avg_rating: 0,
-          minutes_played: 0,
-        },
-        career: [],
-        transfer_listed: false,
-        loan_listed: false,
-        transfer_offers: [],
-        traits: [],
-      },
-    ],
-    staff: [],
-    messages: [],
-    news: [],
-    league: null,
-    scouting_assignments: [],
-    board_objectives: [],
-    extra_translations: {
-      en: { tournaments: { customCup: "Custom Cup" } },
-    },
-  };
-}
-
-const gameState = createGameState();
+let gameState = createGameState();
+let autoSaveEnabled = false;
 
 vi.mock("../lib/extraTranslations", () => ({
   applyExtraTranslations: vi.fn(),
@@ -241,6 +93,7 @@ vi.mock("../store/settingsStore", () => ({
     settings: {
       language: "en",
       default_match_mode: "live",
+      auto_save: autoSaveEnabled,
     },
     loaded: true,
     loadSettings: loadSettingsMock,
@@ -386,6 +239,8 @@ vi.mock("../components/dashboard/DashboardMatchConfirmModal", () => ({
 
 describe("Dashboard", () => {
   beforeEach(() => {
+    gameState = createGameState();
+    autoSaveEnabled = false;
     registeredEventHandlers.clear();
     listenMock.mockClear();
     invokeMock.mockReset();
@@ -589,4 +444,36 @@ describe("Dashboard", () => {
 
     getItemSpy.mockRestore();
   });
+  it.each([true, false])(
+    "only clears dirty state for the exact saved revision (later change: %s)",
+    async (changeWhileSaving) => {
+      autoSaveEnabled = true;
+      let finishSave: (() => void) | undefined;
+      invokeMock.mockImplementation((command: string) => {
+        if (command === "get_active_game") return Promise.resolve(gameState);
+        if (command === "get_active_save_id") return Promise.resolve("save-1");
+        if (command === "save_game")
+          return new Promise<void>((resolve) => {
+            finishSave = resolve;
+          });
+        return Promise.resolve(null);
+      });
+      const view = render(<Dashboard />);
+      await waitFor(() => expect(setGameStateMock).toHaveBeenCalledWith(gameState));
+      gameState = {
+        ...gameState,
+        clock: { ...gameState.clock, current_date: "2026-07-11T12:00:00Z" },
+      };
+      view.rerender(<Dashboard />);
+      await waitFor(() => expect(finishSave).toBeTypeOf("function"));
+      if (changeWhileSaving) {
+        gameState = { ...gameState, messages: [] };
+        view.rerender(<Dashboard />);
+      }
+      finishSave?.();
+      await waitFor(() => expect(invokeMock).toHaveBeenCalledWith("save_game"));
+      await Promise.resolve();
+      expect(markCleanMock).toHaveBeenCalledTimes(changeWhileSaving ? 0 : 1);
+    },
+  );
 });

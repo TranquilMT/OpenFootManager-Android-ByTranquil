@@ -645,7 +645,7 @@ impl SaveManager {
         game.youth_scouting_assignments.clear();
         game.board_objectives.clear();
         game.board_rooms.clear();
-
+        game.club_strategies.clear();
         // Reset clock to start date
         game.clock.current_date = game.clock.start_date;
 

@@ -259,7 +259,7 @@ pub(crate) fn create_incoming_user_loan_offer_if_any(
     budget: IncomingOfferBudget<'_>,
 ) -> Option<String> {
     let buyer = game.teams.iter().find(|team| team.id == buyer_id)?;
-    let strategy = crate::club_strategy::ClubStrategy::derive(buyer);
+    let strategy = crate::club_strategy::for_team(game, buyer);
     let candidate = game
         .players
         .iter()

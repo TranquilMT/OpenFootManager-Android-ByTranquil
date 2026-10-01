@@ -1777,7 +1777,7 @@
     "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
     "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
     "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
-    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.1",
+    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.2",
     "patchPortraits": "20 fictional source faces bring more variety to generated player portraits.",
     "patchWorld": "A larger football world spans 29 nations, with stronger clubs across the Americas and Asia.",
     "patchTransfers": "Club strategies guide loans and transfer approaches, with competing offers and budget checks.",
@@ -4206,5 +4206,11 @@
     "patchIdentity": "New worlds and youth scouting reports avoid repeated full names. Existing players keep their names.",
     "patchScrolling": "Formation menus scroll smoothly and stay within the available screen.",
     "patchReliability": "Fairer goal targets in small leagues; more reliable manager salary payments and takeover funding."
+  },
+  "phase62": {
+    "strategy": "Clubs adapt recruitment to season results and retain their strategy when you reload a career.",
+    "decisions": "Healthier club decisions: spent transfer budgets are no longer treated as debt, and rebuilding clubs can recover after better results.",
+    "autosave": "Safer autosaves keep later squad, contract and Inbox changes marked for saving.",
+    "academy": "Academy matches use actual birthdays for under-21 eligibility; patch history shows each release under its correct version."
   }
 }
