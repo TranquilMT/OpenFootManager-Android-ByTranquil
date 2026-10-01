@@ -1413,7 +1413,9 @@
     "transferFeedbackCounterHeadline": "El sıkışmadan önce daha fazlasını istiyorlar.",
     "transferFeedbackCounterDetail": "Teklif görüşmeyi sürdürecek kadar yakındı, ancak karşı taraf {{fee}} civarında bir fiyata işaret ediyor.",
     "transferFeedbackRejectedHeadline": "Bu turu kapattılar.",
-    "transferFeedbackRejectedDetail": "Öneri onları yeterince etkilemedi. Ciddi görüşmeleri yeniden başlatmak için {{fee}} civarında daha güçlü bir bonservis gerekir."
+    "transferFeedbackRejectedDetail": "Öneri onları yeterince etkilemedi. Ciddi görüşmeleri yeniden başlatmak için {{fee}} civarında daha güçlü bir bonservis gerekir.",
+    "dealCommitment": "Bonservis ve bir yıllık maaş: {{value}} (diğer gelir ve giderler hariç).",
+    "wageHeadroom": "Bu anlaşmadan sonra kalan haftalık maaş bütçesi: {{value}}"
   },
   "transferCentreWorld": {
     "title": "Transfer Merkezi",

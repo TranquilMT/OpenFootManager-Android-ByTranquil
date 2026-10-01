@@ -1413,7 +1413,9 @@
     "transferFeedbackCounterHeadline": "They want more before shaking hands.",
     "transferFeedbackCounterDetail": "The bid was close enough to keep talking, but their side are signalling a price nearer {{fee}}.",
     "transferFeedbackRejectedHeadline": "They shut this round down.",
-    "transferFeedbackRejectedDetail": "The proposal did not move them enough. You would need a stronger fee, closer to {{fee}}, to reopen serious talks."
+    "transferFeedbackRejectedDetail": "The proposal did not move them enough. You would need a stronger fee, closer to {{fee}}, to reopen serious talks.",
+    "dealCommitment": "Fee plus a year of wages: {{value}} (before other income and costs).",
+    "wageHeadroom": "Weekly wage budget remaining after this deal: {{value}}"
   },
   "transferCentreWorld": {
     "title": "Transfer Centre",

@@ -1413,7 +1413,9 @@
     "transferFeedbackCounterHeadline": "Mereka menginginkan lebih sebelum berjabat tangan.",
     "transferFeedbackCounterDetail": "Tawaran cukup dekat untuk terus bernegosiasi, tetapi pihak mereka mengisyaratkan harga yang mendekati {{fee}}.",
     "transferFeedbackRejectedHeadline": "Mereka menghentikan putaran ini.",
-    "transferFeedbackRejectedDetail": "Proposal tidak cukup menggugah mereka. Kamu membutuhkan nominal yang lebih kuat, mendekati {{fee}}, untuk membuka negosiasi serius lagi."
+    "transferFeedbackRejectedDetail": "Proposal tidak cukup menggugah mereka. Kamu membutuhkan nominal yang lebih kuat, mendekati {{fee}}, untuk membuka negosiasi serius lagi.",
+    "dealCommitment": "Biaya transfer dan gaji setahun: {{value}} (di luar pendapatan dan biaya lainnya).",
+    "wageHeadroom": "Sisa anggaran gaji mingguan setelah kesepakatan ini: {{value}}"
   },
   "transferCentreWorld": {
     "title": "Pusat Transfer",

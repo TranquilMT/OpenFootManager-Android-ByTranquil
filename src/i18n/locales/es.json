@@ -1413,7 +1413,9 @@
     "transferFeedbackCounterHeadline": "Quieren más antes de cerrar el trato.",
     "transferFeedbackCounterDetail": "La oferta fue suficiente para seguir hablando, pero su lado está marcando un precio más cercano a {{fee}}.",
     "transferFeedbackRejectedHeadline": "Han cerrado esta ronda.",
-    "transferFeedbackRejectedDetail": "La propuesta no les movió lo suficiente. Necesitarías una cifra mejor, más cerca de {{fee}}, para reabrir conversaciones serias."
+    "transferFeedbackRejectedDetail": "La propuesta no les movió lo suficiente. Necesitarías una cifra mejor, más cerca de {{fee}}, para reabrir conversaciones serias.",
+    "dealCommitment": "Coste del traspaso más un año de sueldo: {{value}} (sin otros ingresos ni gastos).",
+    "wageHeadroom": "Presupuesto salarial semanal restante tras este acuerdo: {{value}}"
   },
   "transferCentreWorld": {
     "title": "Centro de fichajes",
