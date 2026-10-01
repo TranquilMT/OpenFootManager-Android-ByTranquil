@@ -1677,7 +1677,9 @@ fn incoming_loan_acceptance_rechecks_borrower_cash_without_changing_offer() {
 fn incoming_loan_acceptance_rechecks_borrower_wage_budget_without_changing_offer() {
     let mut player = make_user_player("loan-wage-budget");
     player.wage = 520_000;
-    player.loan_offers.push(make_pending_incoming_loan_offer("wage-offer", 75, None));
+    player
+        .loan_offers
+        .push(make_pending_incoming_loan_offer("wage-offer", 75, None));
     let mut game = make_game_with_player(player, vec![], 5_000_000, 2_000_000);
     game.teams[1].finance = 5_000_000;
     game.teams[1].wage_budget = 200_000;
