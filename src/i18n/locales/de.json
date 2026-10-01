@@ -4225,5 +4225,11 @@
     "matchday": "Spieltagskader schließen zurückgetretene Spieler aus; nach Spielende sind keine taktischen Änderungen mehr möglich.",
     "career": "Entwicklungsberichte verliehener Spieler bleiben beim Saisonwechsel korrekt; Geburtstage werden genauer berechnet.",
     "saves": "Karrierespielstände behalten die Transferstrategien bei, abgesichert durch zusätzliche Regressionstests."
+  },
+  "phase64": {
+    "promiseAction": "Spielzeitversprechen: ein Einsatz nötig. Verbleibende Spiele: {{count}}.",
+    "promiseDeadline": "Voraussichtliche Frist: {{date}}",
+    "promisePaused": "Frist während der Verletzung ausgesetzt",
+    "promiseUnscheduled": "Frist wartet auf angesetzte Spiele"
   }
 }

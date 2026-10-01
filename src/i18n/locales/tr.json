@@ -4225,5 +4225,11 @@
     "matchday": "Maç kadroları emekli oyuncuları dışarıda bırakır; biten maçlarda taktik değişikliği yapılamaz.",
     "career": "Kiralık oyuncu gelişim raporları sezon geçişinde doğru kalır; doğum günü hesaplamaları düzeltildi.",
     "saves": "Kariyer kayıtları transfer stratejilerini korur; ek regresyon testleri eklendi."
+  },
+  "phase64": {
+    "promiseAction": "Oynama süresi sözü: bir maçta süre almalı. Kalan maç: {{count}}.",
+    "promiseDeadline": "Beklenen son tarih: {{date}}",
+    "promisePaused": "Sakatlık sırasında süre durdurulur",
+    "promiseUnscheduled": "Son tarih maç programını bekliyor"
   }
 }

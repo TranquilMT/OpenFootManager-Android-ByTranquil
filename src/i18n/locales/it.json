@@ -4225,5 +4225,11 @@
     "matchday": "Le rose per le partite escludono i giocatori ritirati; le partite concluse non consentono più modifiche tattiche.",
     "career": "I rapporti di sviluppo dei giocatori in prestito restano accurati al cambio di stagione, con calcoli dei compleanni corretti.",
     "saves": "I salvataggi della carriera conservano le strategie di mercato, con più test di regressione."
+  },
+  "phase64": {
+    "promiseAction": "Promessa di minutaggio: serve una presenza. Partite rimaste: {{count}}.",
+    "promiseDeadline": "Scadenza prevista: {{date}}",
+    "promisePaused": "Scadenza sospesa durante l’infortunio",
+    "promiseUnscheduled": "Scadenza in attesa delle partite programmate"
   }
 }

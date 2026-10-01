@@ -4225,5 +4225,11 @@
     "matchday": "Matchday squads exclude retired players; completed matches no longer accept tactical changes.",
     "career": "Loan development reports stay accurate after season rollover, with corrected birthday calculations.",
     "saves": "Career saves retain recruitment strategies, backed by expanded regression checks."
+  },
+  "phase64": {
+    "promiseAction": "Playing-time promise: one appearance needed. Matches remaining: {{count}}.",
+    "promiseDeadline": "Expected deadline: {{date}}",
+    "promisePaused": "Deadline paused while injured",
+    "promiseUnscheduled": "Deadline awaits scheduled fixtures"
   }
 }

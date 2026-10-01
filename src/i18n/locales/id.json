@@ -4225,5 +4225,11 @@
     "matchday": "Skuad pertandingan tidak menyertakan pemain pensiun; pertandingan yang selesai tidak lagi menerima perubahan taktik.",
     "career": "Laporan perkembangan pemain pinjaman tetap akurat saat pergantian musim, dengan perhitungan ulang tahun yang diperbaiki.",
     "saves": "Simpanan karier mempertahankan strategi perekrutan, didukung pengujian regresi tambahan."
+  },
+  "phase64": {
+    "promiseAction": "Janji waktu bermain: perlu tampil sekali. Sisa pertandingan: {{count}}.",
+    "promiseDeadline": "Perkiraan tenggat: {{date}}",
+    "promisePaused": "Tenggat ditunda selama cedera",
+    "promiseUnscheduled": "Tenggat menunggu jadwal pertandingan"
   }
 }

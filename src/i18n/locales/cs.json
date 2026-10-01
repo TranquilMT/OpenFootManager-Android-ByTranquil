@@ -4225,5 +4225,11 @@
     "matchday": "Zápasové soupisky vylučují hráče po ukončení kariéry; po skončení zápasu už nelze měnit taktiku.",
     "career": "Zprávy o rozvoji hostujících hráčů zůstávají přesné při změně sezóny a výpočet narozenin je opraven.",
     "saves": "Uložené kariéry zachovávají náborové strategie a přibyly regresní testy."
+  },
+  "phase64": {
+    "promiseAction": "Příslib herního času: potřebuje jeden start. Zbývá zápasů: {{count}}.",
+    "promiseDeadline": "Očekávaný termín: {{date}}",
+    "promisePaused": "Termín je během zranění pozastaven",
+    "promiseUnscheduled": "Termín čeká na naplánované zápasy"
   }
 }

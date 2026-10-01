@@ -4225,5 +4225,11 @@
     "matchday": "Les équipes de match excluent les joueurs retraités ; les matchs terminés ne permettent plus de changements tactiques.",
     "career": "Les rapports de progression des joueurs prêtés restent fiables au changement de saison, avec un calcul des anniversaires corrigé.",
     "saves": "Les sauvegardes de carrière conservent les stratégies de recrutement, avec davantage de tests de régression."
+  },
+  "phase64": {
+    "promiseAction": "Promesse de temps de jeu : une apparition nécessaire. Matchs restants : {{count}}.",
+    "promiseDeadline": "Échéance prévue : {{date}}",
+    "promisePaused": "Échéance suspendue pendant la blessure",
+    "promiseUnscheduled": "Échéance en attente de matchs programmés"
   }
 }

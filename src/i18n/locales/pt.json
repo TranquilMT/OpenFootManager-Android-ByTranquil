@@ -4225,5 +4225,11 @@
     "matchday": "As convocatórias excluem jogadores retirados; os jogos terminados já não permitem alterações táticas.",
     "career": "Os relatórios de desenvolvimento dos emprestados mantêm a precisão na mudança de época, com cálculos de aniversário corrigidos.",
     "saves": "As carreiras guardadas mantêm as estratégias de recrutamento, com mais testes de regressão."
+  },
+  "phase64": {
+    "promiseAction": "Promessa de tempo de jogo: precisa de uma participação. Jogos restantes: {{count}}.",
+    "promiseDeadline": "Prazo previsto: {{date}}",
+    "promisePaused": "Prazo suspenso durante a lesão",
+    "promiseUnscheduled": "O prazo aguarda jogos agendados"
   }
 }

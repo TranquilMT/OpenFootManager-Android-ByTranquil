@@ -4225,5 +4225,11 @@
     "matchday": "Las convocatorias excluyen a los jugadores retirados; los partidos terminados ya no permiten cambios tácticos.",
     "career": "Los informes de desarrollo de los cedidos siguen siendo precisos al cambiar de temporada y se corrige el cálculo de cumpleaños.",
     "saves": "Las partidas guardadas conservan las estrategias de fichajes, con más pruebas de regresión."
+  },
+  "phase64": {
+    "promiseAction": "Promesa de minutos: debe jugar al menos una vez. Partidos restantes: {{count}}.",
+    "promiseDeadline": "Fecha límite prevista: {{date}}",
+    "promisePaused": "Plazo en pausa por lesión",
+    "promiseUnscheduled": "El plazo depende de los próximos partidos programados"
   }
 }
