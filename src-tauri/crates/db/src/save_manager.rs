@@ -309,6 +309,7 @@ impl SaveManager {
 
         canonicalize_game_starting_xi_ids(&mut persisted_game);
 
+        crate::save_recovery::snapshot(&db_path)?;
         snapshot_db_before_write(&db_path)?;
         let db = GameDatabase::open(&db_path)?;
         GamePersistenceWriter::write_game(&db, &persisted_game, save_id, &save_name)?;
@@ -384,6 +385,7 @@ impl SaveManager {
         canonicalize_game_starting_xi_ids(&mut persisted_game);
         let clone_ms = clone_timer.elapsed().as_millis();
 
+        crate::save_recovery::snapshot(&db_path)?;
         snapshot_db_before_write(&db_path)?;
 
         let db_open_timer = Instant::now();
@@ -447,6 +449,20 @@ impl SaveManager {
         let db_path = self.saves_dir.join(&entry.db_filename);
         let db = GameDatabase::open(&db_path)?;
         GamePersistenceReader::read_stats_state(&db)
+    }
+
+    /// Explicit recovery keeps the failed file and updates the index checksum.
+    pub fn restore_recovery(&mut self, save_id: &str) -> Result<(), String> {
+        self.ensure_save_index_ready()?;
+        let mut entry = self
+            .save_index
+            .find(save_id)
+            .ok_or_else(|| save_not_found_error(save_id))?
+            .clone();
+        let path = self.saves_dir.join(&entry.db_filename);
+        crate::save_recovery::restore(&path)?;
+        entry.checksum = compute_checksum(&path)?;
+        self.save_index.update_save(entry)
     }
 
     /// Load a Game from a save database.
@@ -583,6 +599,7 @@ impl SaveManager {
         drop(db);
 
         if needs_resave {
+            crate::save_recovery::snapshot(&db_path)?;
             snapshot_db_before_write(&db_path)?;
             let db = GameDatabase::open(&db_path)?;
             GamePersistenceWriter::write_game(&db, &game, save_id, &save_name)?;
@@ -622,6 +639,7 @@ impl SaveManager {
             fs::remove_file(&db_path).map_err(|_| SAVE_DELETE_ERROR.to_string())?;
         }
 
+        crate::save_recovery::remove_copies(&db_path)?;
         self.save_index.remove_save(save_id)?;
         Ok(true)
     }
@@ -1686,6 +1704,44 @@ mod tests {
             "a current-format save must keep its empty ledger, got {:?}",
             loaded.emitted_events
         );
+    }
+
+    #[test]
+    fn recovery_restores_previous_game_and_preserves_failed_file() {
+        let directory = tempfile::tempdir().unwrap();
+        let mut sm = SaveManager::init(directory.path()).unwrap();
+        let mut game = sample_game();
+        game.manager.reputation = 101;
+        let id = sm.create_save(&game, "Recovery Career").unwrap();
+        game.manager.reputation = 202;
+        sm.save_game(&game, &id).unwrap();
+        let path = directory.path().join(&sm.list_saves()[0].db_filename);
+        std::fs::write(&path, b"broken save").unwrap();
+        assert!(sm.load_game(&id).is_err());
+        sm.restore_recovery(&id).unwrap();
+        assert_eq!(sm.load_game(&id).unwrap().manager.reputation, 101);
+        assert_eq!(
+            std::fs::read(path.with_extension("db.before-restore")).unwrap(),
+            b"broken save"
+        );
+        assert_eq!(
+            sm.list_saves()[0].checksum,
+            compute_checksum(&path).unwrap()
+        );
+        sm.delete_save(&id).unwrap();
+        assert!(!path.with_extension("db.recovery-1").exists());
+        assert!(!path.with_extension("db.before-restore").exists());
+    }
+
+    #[test]
+    fn recovery_without_backup_keeps_current_save_unchanged() {
+        let directory = tempfile::tempdir().unwrap();
+        let mut sm = SaveManager::init(directory.path()).unwrap();
+        let id = sm.create_save(&sample_game(), "No Backup").unwrap();
+        let path = directory.path().join(&sm.list_saves()[0].db_filename);
+        let before = std::fs::read(&path).unwrap();
+        assert!(sm.restore_recovery(&id).is_err());
+        assert_eq!(std::fs::read(path).unwrap(), before);
     }
 
     #[test]

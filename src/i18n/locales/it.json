@@ -27,7 +27,9 @@
     "doNotShowWhatsNew": "Non mostrare più per la v0.5.2",
     "continueToGame": "Continua",
     "mainMenu": "Menu principale",
-    "worldEditor": "Editor Mondo"
+    "worldEditor": "Editor Mondo",
+    "restoreBackup": "Ripristina l’ultima copia valida",
+    "restoreBackupHelp": "Ripristina la copia utilizzabile più recente. I progressi successivi andranno persi; il salvataggio danneggiato viene conservato separatamente."
   },
   "managerProfiles": {
     "saveConfirm": {

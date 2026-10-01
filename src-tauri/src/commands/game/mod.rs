@@ -224,6 +224,15 @@ pub async fn delete_save(
 }
 
 #[tauri::command]
+pub async fn restore_save_backup(
+    sm_state: State<'_, Arc<SaveManagerState>>,
+    save_id: String,
+) -> Result<(), String> {
+    let mut sm = map_save_manager_lock_error(sm_state.0.lock())?;
+    sm.restore_recovery(&save_id)
+}
+
+#[tauri::command]
 pub async fn load_game(
     state: State<'_, Arc<StateManager>>,
     sm_state: State<'_, Arc<SaveManagerState>>,

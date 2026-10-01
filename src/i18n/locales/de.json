@@ -27,7 +27,9 @@
     "doNotShowWhatsNew": "Für v0.5.2 nicht erneut anzeigen",
     "continueToGame": "Weiter",
     "mainMenu": "Hauptmenü",
-    "worldEditor": "Welt-Editor"
+    "worldEditor": "Welt-Editor",
+    "restoreBackup": "Letzte intakte Sicherung wiederherstellen",
+    "restoreBackupHelp": "Stellt die neueste verwendbare Sicherung wieder her. Späterer Fortschritt geht verloren; der beschädigte Spielstand wird separat aufbewahrt."
   },
   "managerProfiles": {
     "saveConfirm": {

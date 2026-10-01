@@ -27,7 +27,9 @@
     "doNotShowWhatsNew": "v0.5.2 için bir daha gösterme",
     "continueToGame": "Devam et",
     "mainMenu": "Ana Menü",
-    "worldEditor": "Dünya Editörü"
+    "worldEditor": "Dünya Editörü",
+    "restoreBackup": "Son sağlam yedeği geri yükle",
+    "restoreBackupHelp": "En yeni kullanılabilir yedeği geri yükler. Sonraki ilerleme kaybolur; bozuk kayıt ayrı olarak saklanır."
   },
   "managerProfiles": {
     "saveConfirm": {

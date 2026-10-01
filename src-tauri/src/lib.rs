@@ -287,6 +287,7 @@ pub fn run() {
             generate_player_portrait,
             prewarm_player_portraits,
             delete_save,
+            restore_save_backup,
             skip_to_match_day,
             advance_to_next_event,
             advance_one_day,

@@ -27,7 +27,9 @@
     "doNotShowWhatsNew": "Znovu nezobrazovat pro v0.5.2",
     "continueToGame": "Pokračovat",
     "mainMenu": "Hlavní menu",
-    "worldEditor": "Editor světa"
+    "worldEditor": "Editor světa",
+    "restoreBackup": "Obnovit poslední funkční zálohu",
+    "restoreBackupHelp": "Obnoví nejnovější použitelnou zálohu. Pozdější postup bude ztracen; poškozená hra zůstane uložena zvlášť."
   },
   "managerProfiles": {
     "saveConfirm": {

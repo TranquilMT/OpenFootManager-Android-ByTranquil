@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
 import i18n, { i18nReady } from "../../i18n";
@@ -44,6 +44,26 @@ function renderList(saves: ReturnType<typeof save>[], confirmDeleteId: string | 
 describe("SavesList", () => {
   beforeEach(async () => {
     await i18n.changeLanguage("en");
+  });
+
+  it("offers explicit recovery only for the failed career", () => {
+    const restore = vi.fn();
+    render(
+      <SavesList
+        saves={[save(), save({ id: "save-2" })]}
+        isLoading={false}
+        confirmDeleteId={null}
+        failedSaveId="save-1"
+        onRestore={restore}
+        onLoad={vi.fn()}
+        onDelete={vi.fn()}
+        onConfirmDelete={vi.fn()}
+        onClose={vi.fn()}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Restore last good backup" }));
+    expect(restore).toHaveBeenCalledExactlyOnceWith("save-1");
+    expect(screen.getByText(/Progress since that backup will be lost/)).toBeInTheDocument();
   });
 
   it("resolves a save name the game generated as a translation key", () => {

@@ -27,7 +27,9 @@
     "doNotShowWhatsNew": "Jangan tampilkan lagi untuk v0.5.2",
     "continueToGame": "Lanjutkan",
     "mainMenu": "Menu Utama",
-    "worldEditor": "Editor Dunia"
+    "worldEditor": "Editor Dunia",
+    "restoreBackup": "Pulihkan cadangan terakhir yang valid",
+    "restoreBackupHelp": "Memulihkan cadangan terbaru yang dapat digunakan. Kemajuan setelah cadangan itu akan hilang; simpanan rusak tetap disimpan terpisah."
   },
   "managerProfiles": {
     "saveConfirm": {

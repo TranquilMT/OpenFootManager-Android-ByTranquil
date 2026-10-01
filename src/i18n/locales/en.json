@@ -27,7 +27,9 @@
     "doNotShowWhatsNew": "Don’t show this again for v0.5.2",
     "continueToGame": "Continue",
     "mainMenu": "Main Menu",
-    "worldEditor": "World Editor"
+    "worldEditor": "World Editor",
+    "restoreBackup": "Restore last good backup",
+    "restoreBackupHelp": "Restore the newest usable backup. Progress since that backup will be lost; the failed save is kept separately."
   },
   "managerProfiles": {
     "saveConfirm": {

@@ -459,3 +459,7 @@ All entity types (`WorldMetaDef`, `ConfederationDef`, `CountryDef`, `TeamDef`, `
 - Size limits: 256 MB compressed, 1 GB uncompressed, 10,000 files
 - Security: paths validated against zip-slip attacks and symlinks
 - `read_package_manifest_from_ofm()` reads only `package.json` without full extraction (used by `ofm-cli info` and the world selector)
+
+### Save recovery (0.6.4)
+
+`restore_save_backup(saveId)` restores the newest readable recovery copy through `SaveManager`. The menu offers this action after a load fails and explains that later progress is lost. Each game save rotates three SQLite online backups, including pending WAL transactions; stats-only saves do not rotate them. Recovery validates game data and preserves the failed file as `.db.before-restore`, updates the index checksum, and never awards gameplay progress. Deleting a career removes its recovery files.
