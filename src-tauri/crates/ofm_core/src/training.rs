@@ -20,13 +20,22 @@ pub struct TeamCoachingBonus {
 }
 
 /// Compute coaching bonuses from a team's staff.
-fn compute_coaching_bonus(game: &Game, team_id: &str, focus: &TrainingFocus) -> TeamCoachingBonus {
-    let team_staff: Vec<_> = game
-        .staff
-        .iter()
-        .filter(|s| s.team_id.as_deref() == Some(team_id))
-        .collect();
+fn index_staff_by_team(
+    staff: &[domain::staff::Staff],
+) -> std::collections::HashMap<&str, Vec<&domain::staff::Staff>> {
+    let mut indexed = std::collections::HashMap::<&str, Vec<&domain::staff::Staff>>::new();
+    for member in staff {
+        if let Some(team_id) = member.team_id.as_deref() {
+            indexed.entry(team_id).or_default().push(member);
+        }
+    }
+    indexed
+}
 
+fn compute_coaching_bonus(
+    team_staff: &[&domain::staff::Staff],
+    focus: &TrainingFocus,
+) -> TeamCoachingBonus {
     // Average coaching rating of coaches + assistant managers
     let coaching_staff: Vec<_> = team_staff
         .iter()
@@ -154,11 +163,15 @@ pub fn process_training(game: &mut Game, weekday_num: u32) {
 
     // Index each team's plan by id so players are visited once (O(teams + players))
     // instead of rescanning every player for every team (O(teams * players)).
+    let staff_by_team = index_staff_by_team(&game.staff);
     let plans: std::collections::HashMap<String, TeamTrainingPlan> = game
         .teams
         .iter()
         .map(|t| {
-            let bonus = compute_coaching_bonus(game, &t.id, &t.training_focus);
+            let bonus = compute_coaching_bonus(
+                staff_by_team.get(t.id.as_str()).map_or(&[], Vec::as_slice),
+                &t.training_focus,
+            );
             let medical_facility_mult =
                 1.0 + f64::from(t.facilities.medical.saturating_sub(1)) * 0.1;
             let mut group_overrides = std::collections::HashMap::new();
@@ -595,5 +608,83 @@ mod development_tests {
         assert!(playing_time_growth_factor(19, 1200) > playing_time_growth_factor(19, 0));
         assert_eq!(playing_time_growth_factor(19, 350), 1.0);
         assert_eq!(playing_time_growth_factor(29, 1200), 1.0);
+    }
+}
+
+#[cfg(test)]
+mod staff_index_tests {
+    use super::*;
+    use domain::staff::{Staff, StaffAttributes};
+
+    fn coach(id: &str, team: Option<&str>, rating: u8) -> Staff {
+        let mut value = Staff::new(
+            id.into(),
+            "Coach".into(),
+            id.into(),
+            "1980-01-01".into(),
+            StaffRole::Coach,
+            StaffAttributes {
+                coaching: rating,
+                judging_ability: 50,
+                judging_potential: 50,
+                physiotherapy: 50,
+            },
+        );
+        value.team_id = team.map(str::to_string);
+        value
+    }
+
+    #[test]
+    fn staff_index_keeps_clubs_separate_and_excludes_unemployed_staff() {
+        let staff = vec![
+            coach("ours", Some("a"), 40),
+            coach("theirs", Some("b"), 100),
+            coach("free", None, 100),
+        ];
+        let indexed = index_staff_by_team(&staff);
+        let bonus = compute_coaching_bonus(indexed.get("a").unwrap(), &TrainingFocus::Physical);
+        assert!((bonus.coaching_mult - 1.05).abs() < f64::EPSILON);
+        assert_eq!(indexed.len(), 2);
+        assert_eq!(
+            compute_coaching_bonus(&[], &TrainingFocus::Physical).coaching_mult,
+            0.8
+        );
+    }
+
+    #[test]
+    #[ignore = "manual timing evidence; no machine-dependent assertion"]
+    fn benchmark_world_staff_lookup() {
+        use std::hint::black_box;
+        use std::time::Instant;
+        let teams: Vec<_> = (0..1200).map(|id| format!("team-{id}")).collect();
+        let staff: Vec<_> = teams
+            .iter()
+            .flat_map(|team| (0..6).map(move |id| coach(&format!("{team}-{id}"), Some(team), 60)))
+            .collect();
+        let start = Instant::now();
+        for _ in 0..20 {
+            for team in &teams {
+                let selected: Vec<_> = staff
+                    .iter()
+                    .filter(|s| s.team_id.as_deref() == Some(team.as_str()))
+                    .collect();
+                black_box(compute_coaching_bonus(&selected, &TrainingFocus::Physical));
+            }
+        }
+        let scan = start.elapsed();
+        let start = Instant::now();
+        for _ in 0..20 {
+            let indexed = index_staff_by_team(&staff);
+            for team in &teams {
+                black_box(compute_coaching_bonus(
+                    indexed.get(team.as_str()).unwrap(),
+                    &TrainingFocus::Physical,
+                ));
+            }
+        }
+        println!(
+            "1200 clubs, 7200 staff, 20 days: scan={scan:?}, indexed={:?}",
+            start.elapsed()
+        );
     }
 }
