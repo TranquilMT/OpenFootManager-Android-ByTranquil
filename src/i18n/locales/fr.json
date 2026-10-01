@@ -1777,7 +1777,7 @@
     "patchPlayers": "Plus de talents, dont de rares stars notées 96 et de solides candidats à la montée.",
     "patchMatches": "Plus de réactions, des frappes sur les montants et un commentaire vocal facultatif.",
     "patchMobile": "Commandes mobiles, boîte de réception, sélections nationales et carrière améliorées.",
-    "patchWelcome": "Bienvenue dans OFMtouch ! Nouveautés de la v0.6.1",
+    "patchWelcome": "Bienvenue dans OFMtouch ! Nouveautés de la v0.6.2",
     "patchPortraits": "20 visages fictifs de référence diversifient les portraits des joueurs générés.",
     "patchWorld": "Un monde du football plus vaste couvre 29 nations, avec des clubs renforcés en Amérique et en Asie.",
     "patchTransfers": "La stratégie des clubs guide prêts et transferts, avec offres concurrentes et contrôle du budget.",
@@ -4206,5 +4206,11 @@
     "patchIdentity": "Les nouveaux mondes et rapports sur les jeunes évitent les noms complets identiques. Les joueurs existants conservent leur nom.",
     "patchScrolling": "Les menus de formation défilent plus facilement et restent dans la zone visible de l’écran.",
     "patchReliability": "Des objectifs de buts plus justes dans les petites ligues ; des versements du salaire de l’entraîneur et des financements de rachat plus fiables."
+  },
+  "phase62": {
+    "strategy": "Les clubs adaptent leur recrutement aux résultats de la saison et conservent leur stratégie au chargement de la carrière.",
+    "decisions": "De meilleures décisions : un budget de transferts épuisé ne signifie plus des dettes, et les clubs en reconstruction peuvent se redresser après de meilleurs résultats.",
+    "autosave": "Les sauvegardes automatiques préservent les modifications ultérieures de l’effectif, des contrats et de la messagerie à enregistrer.",
+    "academy": "Les matchs de jeunes vérifient la date de naissance pour l’éligibilité des moins de 21 ans ; l’historique affiche chaque mise à jour sous sa bonne version."
   }
 }

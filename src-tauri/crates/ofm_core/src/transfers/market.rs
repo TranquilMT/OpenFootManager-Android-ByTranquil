@@ -5,7 +5,6 @@
 //! budget in `lifecycle`, which is what keeps a listed player from being buried in offers.
 
 use super::*;
-use crate::club_strategy::ClubStrategy;
 use crate::transfer_strategy::{StrategicTarget, strategic_target_score, strategy_allows_fee};
 
 /// Broad position group index (0=GK, 1=DEF, 2=MID, 3=FWD) for squad-depth maths.
@@ -285,7 +284,7 @@ pub fn evaluate_transfer_market(game: &mut Game) {
             continue;
         };
         let buyer_depths = position_depths.get(&buyer_id).copied().unwrap_or([0; 4]);
-        let strategy = ClubStrategy::derive(&buyer_team);
+        let strategy = crate::club_strategy::for_team(game, &buyer_team);
 
         let loan_offer_player_id = if let Some(user_team_id) = user_team_id.as_deref() {
             if new_user_offers_today + new_user_loan_offers_today < max_user_offers {

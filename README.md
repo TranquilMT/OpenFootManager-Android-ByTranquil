@@ -176,6 +176,16 @@ Your job extends beyond the next result.
 - Updated the compact What's New summary across all 12 supported languages.
 - Removed unnecessary debugging information for a smaller APK download.
 
+### v0.6.2 — Career & Gameplay Polish
+
+- Clubs adapt their transfer and loan recruitment to season results, with strategies retained when you save and reload your career.
+- Improved club finances: spending the transfer budget no longer puts a financially healthy club into crisis mode.
+- Rebuilding clubs can recover after stronger results, while facility influence stays balanced and incomplete league records no longer distort strategy reviews.
+- Safer autosaving keeps later squad, contract and Inbox decisions marked for saving.
+- Academy Challenge eligibility now checks actual birthdays and excludes invalid dates and retired players.
+- Fixed the in-game patch history so each version shows its own updates.
+- Updated the compact What's New summary in all 12 supported languages.
+
 ## Download & Play
 
 1. Visit the [latest release](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/tag/v0.6.1-build337) and download the **Android ARM64 APK**.

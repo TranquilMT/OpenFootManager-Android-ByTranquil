@@ -1,21 +1,62 @@
 import { useTranslation } from "react-i18next";
+import { APP_VERSION } from "../../lib/appVersion";
 import { ReleaseNotes } from "../settings/ReleaseNotes";
 
-const PREVIOUS_KEYS = [
-  "settings.history0501",
-  "settings.history0502",
-  "settings.history0503",
-  "settings.history0504",
-] as const;
-
-const CAREER_HOTFIX_KEYS = [
-  "settings.careerHighlights",
-  "settings.careerInbox",
-  "settings.careerSeason",
-  "settings.careerReliability",
-  "settings.careerYouth",
-  "settings.careerYouthScouting",
-  "settings.careerRules",
+const HISTORY = [
+  {
+    version: "0.6.1",
+    keys: [
+      "phase6.patchNames",
+      "phase6.patchIdentity",
+      "phase6.patchScrolling",
+      "phase6.patchReliability",
+    ],
+  },
+  {
+    version: "0.6.0",
+    keys: ["phase6.patchBoard", "phase6.patchContracts", "phase6.patchClub", "phase6.patchSquad"],
+  },
+  {
+    version: "0.5.2",
+    keys: [
+      "settings.hotfixInjuryDetails",
+      "settings.hotfixOfferReview",
+      "settings.hotfixPortraitNeck",
+      "settings.hotfixConversations",
+    ],
+  },
+  {
+    version: "0.5.1",
+    keys: [
+      "settings.careerHighlights",
+      "settings.careerInbox",
+      "settings.careerSeason",
+      "settings.careerYouth",
+      "settings.careerYouthScouting",
+      "settings.careerRules",
+    ],
+  },
+  {
+    version: "0.5.0",
+    keys: ["settings.history0501", "settings.history0502", "settings.history0503"],
+  },
+  {
+    version: "0.3.6",
+    keys: ["settings.hotfixInbox", "settings.hotfixSave", "settings.hotfixMatch"],
+  },
+  {
+    version: "0.3.1",
+    keys: [
+      "settings.patchPlayers",
+      "settings.patchPortraits",
+      "settings.patchWorld",
+      "settings.patchTransfers",
+      "settings.patchDevelopment",
+      "settings.patchMatches",
+      "settings.patchMobile",
+      "settings.patchFixes",
+    ],
+  },
 ] as const;
 
 export function PatchHistoryModal({ onClose }: { onClose: () => void }) {
@@ -31,24 +72,22 @@ export function PatchHistoryModal({ onClose }: { onClose: () => void }) {
         <h2 id="patch-history-title" className="font-heading text-xl font-bold">
           {t("settings.patchHistory")}
         </h2>
-        <h3 className="mt-4 font-heading font-bold">v0.5.2 · Career Hotfix</h3>
+        <h3 className="mt-4 font-heading font-bold">v{APP_VERSION.replace(/-nightly$/, "")}</h3>
         <ReleaseNotes embedded />
-        <h3 className="mt-5 border-t border-gray-200 pt-4 font-heading font-bold dark:border-navy-700">
-          v0.5.1 · Career Update
-        </h3>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-600 dark:text-gray-300">
-          {CAREER_HOTFIX_KEYS.map((key) => (
-            <li key={key}>{t(key)}</li>
-          ))}
-        </ul>
-        <h3 className="mt-5 border-t border-gray-200 pt-4 font-heading font-bold dark:border-navy-700">
-          v0.5.0 · Career Update
-        </h3>
-        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-600 dark:text-gray-300">
-          {PREVIOUS_KEYS.map((key) => (
-            <li key={key}>{t(key)}</li>
-          ))}
-        </ul>
+        {HISTORY.filter((release) => release.version !== APP_VERSION.replace(/-nightly$/, "")).map(
+          (release) => (
+            <section key={release.version}>
+              <h3 className="mt-5 border-t border-gray-200 pt-4 font-heading font-bold dark:border-navy-700">
+                v{release.version}
+              </h3>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-gray-600 dark:text-gray-300">
+                {release.keys.map((key) => (
+                  <li key={key}>{t(key)}</li>
+                ))}
+              </ul>
+            </section>
+          ),
+        )}
         <button
           type="button"
           onClick={onClose}

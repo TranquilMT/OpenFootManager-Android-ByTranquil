@@ -1777,7 +1777,7 @@
     "patchPlayers": "Lebih banyak pemain unggulan, termasuk bintang langka berperingkat 96.",
     "patchMatches": "Lebih banyak reaksi, tembakan membentur tiang, dan komentar suara opsional.",
     "patchMobile": "Kontrol seluler, kotak masuk, tim nasional, dan awal karier ditingkatkan.",
-    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.6.1",
+    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.6.2",
     "patchPortraits": "20 wajah fiktif sumber membuat potret pemain hasil generasi lebih beragam.",
     "patchWorld": "Dunia sepak bola yang lebih luas mencakup 29 negara, dengan klub lebih kuat di Amerika dan Asia.",
     "patchTransfers": "Strategi klub memandu pinjaman dan transfer, dengan tawaran bersaing serta pemeriksaan anggaran.",
@@ -4206,5 +4206,11 @@
     "patchIdentity": "Dunia baru dan laporan pemain muda menghindari nama lengkap yang berulang. Pemain yang sudah ada tetap menggunakan nama mereka.",
     "patchScrolling": "Menu formasi dapat digulir lebih lancar dan tetap berada dalam area layar yang terlihat.",
     "patchReliability": "Target gol yang lebih adil di liga kecil; pembayaran gaji manajer dan pendanaan pengambilalihan klub yang lebih andal."
+  },
+  "phase62": {
+    "strategy": "Klub menyesuaikan strategi rekrutmen dengan hasil musim dan mempertahankannya saat karier dimuat kembali.",
+    "decisions": "Keputusan klub lebih baik: anggaran transfer yang habis tidak lagi dianggap utang, dan klub yang membangun ulang dapat pulih setelah hasil membaik.",
+    "autosave": "Penyimpanan otomatis yang lebih aman tetap menandai perubahan skuad, kontrak, dan kotak masuk berikutnya untuk disimpan.",
+    "academy": "Laga akademi memakai tanggal lahir untuk menentukan kelayakan pemain di bawah 21 tahun; riwayat pembaruan menampilkan versi yang benar."
   }
 }

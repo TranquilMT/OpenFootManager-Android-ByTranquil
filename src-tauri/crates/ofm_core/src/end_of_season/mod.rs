@@ -915,9 +915,7 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
         season_awards: awards.clone(),
     };
 
-    // 4. Record team season history, pay prize money, and update reputation for
-    //    every league division — not just the user's competition — so the whole
-    //    pyramid crowns champions and keeps records.
+    // 4. Record history, prize money, reputation and strategy across all divisions.
     let divisions = division_standings_with_tiers(game);
     let user_division_tier = divisions
         .iter()
@@ -935,6 +933,13 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
             (division.standings, division.tier, division.season);
         for (idx, standing) in division_standings.iter().enumerate() {
             let position = (idx + 1) as u32;
+            crate::club_strategy::review_team(
+                game,
+                &standing.team_id,
+                position,
+                division_standings.len() as u32,
+                season,
+            );
             let prize_money = division_prize_money(position, tier);
             let team_id = standing.team_id.clone();
             let prize_posted = if prize_money > 0 {

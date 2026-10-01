@@ -1777,7 +1777,7 @@
     "patchPlayers": "Nadir 96 puanlı yıldızlar dahil daha fazla öne çıkan oyuncu.",
     "patchMatches": "Daha fazla maç tepkisi, direğe çarpan şutlar ve isteğe bağlı sesli anlatım.",
     "patchMobile": "Mobil kontroller, gelen kutusu, millî takımlar ve kariyer başlangıcı iyileştirildi.",
-    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.6.1 yenilikleri",
+    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.6.2 yenilikleri",
     "patchPortraits": "20 kurgusal kaynak yüz, üretilen oyuncu portrelerini daha çeşitli kılıyor.",
     "patchWorld": "Futbol dünyası 29 ülkeyi kapsıyor; Amerika ve Asya kulüpleri güçlendirildi.",
     "patchTransfers": "Kulüp stratejileri kiralık ve bonservisli transferleri, rakip teklifleri ve bütçe kontrollerini yönlendiriyor.",
@@ -4206,5 +4206,11 @@
     "patchIdentity": "Yeni dünyalar ve genç oyuncu raporları aynı tam adın tekrarlanmasını önler. Mevcut oyuncular adlarını korur.",
     "patchScrolling": "Diziliş menüleri daha akıcı kaydırılır ve ekranın görünen alanında kalır.",
     "patchReliability": "Küçük liglerde daha adil gol hedefleri; daha güvenilir teknik direktör maaş ödemeleri ve kulüp devralma finansmanı."
+  },
+  "phase62": {
+    "strategy": "Kulüpler transfer stratejilerini sezon sonuçlarına göre uyarlar ve kariyeri yüklediğinizde stratejilerini korur.",
+    "decisions": "Daha iyi kulüp kararları: tükenen transfer bütçesi artık borç sayılmaz ve yeniden yapılanan kulüpler daha iyi sonuçlarla toparlanabilir.",
+    "autosave": "Daha güvenli otomatik kayıtlar, sonraki kadro, sözleşme ve gelen kutusu değişikliklerini kaydedilmeyi bekleyen durumda tutar.",
+    "academy": "Akademi maçlarında 21 yaş altı uygunluğu doğum tarihine göre kontrol edilir; güncelleme geçmişi her sürümü doğru başlık altında gösterir."
   }
 }

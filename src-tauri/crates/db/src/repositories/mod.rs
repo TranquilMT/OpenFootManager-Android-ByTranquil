@@ -12,3 +12,5 @@ pub mod scouting_repo;
 pub mod staff_repo;
 pub mod stats_repo;
 pub mod team_repo;
+
+pub mod club_strategy_repo;

@@ -2,7 +2,7 @@ name: Phase 6 Board and Dressing Room checks
 
 on:
   push:
-    branches: [phase6-board-dressing-room, phase6-gameplay-polish]
+    branches: [phase6-board-dressing-room, phase6-gameplay-polish, release/0.6.2-career-polish]
     paths: [.github/workflows/phase6-check.yml, src-tauri/**, src/**, package.json, package-lock.json, quality-baseline.json]
   pull_request:
     paths: [.github/workflows/phase6-check.yml, src-tauri/**, src/**, package.json, package-lock.json, quality-baseline.json]
@@ -38,6 +38,9 @@ jobs:
       - name: Test Rust workspace
         working-directory: src-tauri
         run: cargo test --workspace --all-targets --locked
+      - name: Rust lint
+        working-directory: src-tauri
+        run: cargo clippy --workspace --all-targets --locked
       - name: Compile Rust workspace
         working-directory: src-tauri
         run: cargo check --workspace --locked

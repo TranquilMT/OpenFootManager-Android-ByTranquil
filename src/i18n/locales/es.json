@@ -1777,7 +1777,7 @@
     "patchPlayers": "Más jugadores destacados, incluidas raras estrellas de 96 y aspirantes al ascenso.",
     "patchMatches": "Más reacciones, tiros al palo y narración de voz opcional.",
     "patchMobile": "Mejoras en controles móviles, bandeja de entrada, selecciones y carrera.",
-    "patchWelcome": "¡Bienvenido a OFMtouch! Novedades de la v0.6.1",
+    "patchWelcome": "¡Bienvenido a OFMtouch! Novedades de la v0.6.2",
     "patchPortraits": "20 rostros ficticios de origen aportan más variedad a los retratos de los jugadores.",
     "patchWorld": "Un mundo futbolístico más amplio abarca 29 países, con clubes más fuertes en América y Asia.",
     "patchTransfers": "Las estrategias de los clubes guían cesiones y fichajes, con ofertas rivales y controles del presupuesto.",
@@ -4206,5 +4206,11 @@
     "patchIdentity": "Los nuevos mundos y los informes de jóvenes evitan nombres completos repetidos. Los jugadores existentes conservan sus nombres.",
     "patchScrolling": "Los menús de formación se desplazan con fluidez y se mantienen dentro de la pantalla disponible.",
     "patchReliability": "Objetivos de goles más justos en ligas pequeñas; pagos del salario del entrenador y financiación de las adquisiciones más fiables."
+  },
+  "phase62": {
+    "strategy": "Los clubes adaptan sus fichajes a los resultados de la temporada y conservan su estrategia al cargar la carrera.",
+    "decisions": "Mejores decisiones: agotar el presupuesto de fichajes ya no se considera deuda, y los clubes en reconstrucción pueden recuperarse tras mejorar sus resultados.",
+    "autosave": "El guardado automático mantiene pendientes los cambios posteriores en plantilla, contratos y bandeja de entrada.",
+    "academy": "Los partidos de cantera comprueban la fecha de nacimiento para la elegibilidad sub-21; el historial muestra cada actualización con su versión correcta."
   }
 }
