@@ -1777,7 +1777,7 @@
     "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
     "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
     "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
-    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.2",
+    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.3",
     "patchPortraits": "20 fictional source faces bring more variety to generated player portraits.",
     "patchWorld": "A larger football world spans 29 nations, with stronger clubs across the Americas and Asia.",
     "patchTransfers": "Club strategies guide loans and transfer approaches, with competing offers and budget checks.",
@@ -2690,7 +2690,8 @@
         "playerNotOnBench": "Player not on bench",
         "playerNotInStartingXi": "Player not in starting XI",
         "pressConferenceAlreadyHeld": "You have already held a press conference today",
-        "noCompletedMatch": "No completed match found for your team"
+        "noCompletedMatch": "No completed match found for your team",
+        "matchFinished": "The match has finished."
       },
       "csv": {
         "writeFailed": "Failed to write the CSV file."
@@ -4212,5 +4213,11 @@
     "decisions": "Healthier club decisions: spent transfer budgets are no longer treated as debt, and rebuilding clubs can recover after better results.",
     "autosave": "Safer autosaves keep later squad, contract and Inbox changes marked for saving.",
     "academy": "Academy matches use actual birthdays for under-21 eligibility; patch history shows each release under its correct version."
+  },
+  "phase63": {
+    "finances": "Incoming transfers and loans recheck club finances before completion.",
+    "matchday": "Matchday squads exclude retired players; completed matches no longer accept tactical changes.",
+    "career": "Loan development reports stay accurate after season rollover, with corrected birthday calculations.",
+    "saves": "Career saves retain recruitment strategies, backed by expanded regression checks."
   }
 }

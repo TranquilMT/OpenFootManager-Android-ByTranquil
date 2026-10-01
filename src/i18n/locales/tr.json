@@ -1777,7 +1777,7 @@
     "patchPlayers": "Nadir 96 puanlı yıldızlar dahil daha fazla öne çıkan oyuncu.",
     "patchMatches": "Daha fazla maç tepkisi, direğe çarpan şutlar ve isteğe bağlı sesli anlatım.",
     "patchMobile": "Mobil kontroller, gelen kutusu, millî takımlar ve kariyer başlangıcı iyileştirildi.",
-    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.6.2 yenilikleri",
+    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.6.3 yenilikleri",
     "patchPortraits": "20 kurgusal kaynak yüz, üretilen oyuncu portrelerini daha çeşitli kılıyor.",
     "patchWorld": "Futbol dünyası 29 ülkeyi kapsıyor; Amerika ve Asya kulüpleri güçlendirildi.",
     "patchTransfers": "Kulüp stratejileri kiralık ve bonservisli transferleri, rakip teklifleri ve bütçe kontrollerini yönlendiriyor.",
@@ -2690,7 +2690,8 @@
         "playerNotOnBench": "Oyuncu yedek kulübesinde değil",
         "playerNotInStartingXi": "Oyuncu ilk 11'de değil",
         "pressConferenceAlreadyHeld": "Bugün zaten bir basın toplantısı düzenlediniz",
-        "noCompletedMatch": "Takımınız için tamamlanmış bir maç bulunamadı"
+        "noCompletedMatch": "Takımınız için tamamlanmış bir maç bulunamadı",
+        "matchFinished": "Maç sona erdi."
       },
       "csv": {
         "writeFailed": "CSV dosyası yazılamadı."
@@ -4212,5 +4213,11 @@
     "decisions": "Daha iyi kulüp kararları: tükenen transfer bütçesi artık borç sayılmaz ve yeniden yapılanan kulüpler daha iyi sonuçlarla toparlanabilir.",
     "autosave": "Daha güvenli otomatik kayıtlar, sonraki kadro, sözleşme ve gelen kutusu değişikliklerini kaydedilmeyi bekleyen durumda tutar.",
     "academy": "Akademi maçlarında 21 yaş altı uygunluğu doğum tarihine göre kontrol edilir; güncelleme geçmişi her sürümü doğru başlık altında gösterir."
+  },
+  "phase63": {
+    "finances": "Gelen transfer ve kiralama teklifleri tamamlanmadan önce kulüp mali durumu yeniden kontrol edilir.",
+    "matchday": "Maç kadroları emekli oyuncuları dışarıda bırakır; biten maçlarda taktik değişikliği yapılamaz.",
+    "career": "Kiralık oyuncu gelişim raporları sezon geçişinde doğru kalır; doğum günü hesaplamaları düzeltildi.",
+    "saves": "Kariyer kayıtları transfer stratejilerini korur; ek regresyon testleri eklendi."
   }
 }

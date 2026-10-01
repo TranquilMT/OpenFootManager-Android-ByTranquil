@@ -1777,7 +1777,7 @@
     "patchPlayers": "Plus de talents, dont de rares stars notées 96 et de solides candidats à la montée.",
     "patchMatches": "Plus de réactions, des frappes sur les montants et un commentaire vocal facultatif.",
     "patchMobile": "Commandes mobiles, boîte de réception, sélections nationales et carrière améliorées.",
-    "patchWelcome": "Bienvenue dans OFMtouch ! Nouveautés de la v0.6.2",
+    "patchWelcome": "Bienvenue dans OFMtouch ! Nouveautés de la v0.6.3",
     "patchPortraits": "20 visages fictifs de référence diversifient les portraits des joueurs générés.",
     "patchWorld": "Un monde du football plus vaste couvre 29 nations, avec des clubs renforcés en Amérique et en Asie.",
     "patchTransfers": "La stratégie des clubs guide prêts et transferts, avec offres concurrentes et contrôle du budget.",
@@ -2677,7 +2677,8 @@
         "playerNotOnBench": "Le joueur n'est pas sur le banc",
         "playerNotInStartingXi": "Le joueur n'est pas dans le onze de départ",
         "pressConferenceAlreadyHeld": "Vous avez déjà tenu une conférence de presse aujourd'hui",
-        "noCompletedMatch": "Aucun match terminé n'a été trouvé pour votre équipe"
+        "noCompletedMatch": "Aucun match terminé n'a été trouvé pour votre équipe",
+        "matchFinished": "Le match est terminé."
       },
       "csv": {
         "writeFailed": "Échec de l'écriture du fichier CSV."
@@ -4212,5 +4213,11 @@
     "decisions": "De meilleures décisions : un budget de transferts épuisé ne signifie plus des dettes, et les clubs en reconstruction peuvent se redresser après de meilleurs résultats.",
     "autosave": "Les sauvegardes automatiques préservent les modifications ultérieures de l’effectif, des contrats et de la messagerie à enregistrer.",
     "academy": "Les matchs de jeunes vérifient la date de naissance pour l’éligibilité des moins de 21 ans ; l’historique affiche chaque mise à jour sous sa bonne version."
+  },
+  "phase63": {
+    "finances": "Les transferts et prêts reçus revérifient les finances du club avant leur conclusion.",
+    "matchday": "Les équipes de match excluent les joueurs retraités ; les matchs terminés ne permettent plus de changements tactiques.",
+    "career": "Les rapports de progression des joueurs prêtés restent fiables au changement de saison, avec un calcul des anniversaires corrigé.",
+    "saves": "Les sauvegardes de carrière conservent les stratégies de recrutement, avec davantage de tests de régression."
   }
 }

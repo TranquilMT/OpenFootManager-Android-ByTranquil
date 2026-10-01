@@ -641,6 +641,38 @@ mod tests {
     }
 
     #[test]
+    fn recruitment_strategy_survives_complete_career_save_and_reload() {
+        use ofm_core::club_strategy::{
+            CareerStrategy, ClubStrategy, RecruitmentPhilosophy, StrategicStatus,
+        };
+        let db = GameDatabase::open_in_memory().unwrap();
+        let mut game = sample_game_with_clock(2026, 18);
+        game.club_strategies.insert(
+            "team-1".into(),
+            CareerStrategy {
+                strategy: ClubStrategy {
+                    status: StrategicStatus::Rebuild,
+                    recruitment: RecruitmentPhilosophy::Rebuild,
+                    preferred_squad_age: 24,
+                    ..ClubStrategy::default()
+                },
+                reviewed_season: 2026,
+            },
+        );
+        GamePersistenceWriter::write_game(&db, &game, "save-1", "Career").unwrap();
+        let loaded = GamePersistenceReader::read_game(&db).unwrap();
+        assert_eq!(loaded.club_strategies, game.club_strategies);
+        assert_eq!(loaded.clock.current_date, game.clock.current_date);
+        GamePersistenceWriter::write_game(&db, &loaded, "save-1", "Career").unwrap();
+        assert_eq!(
+            GamePersistenceReader::read_game(&db)
+                .unwrap()
+                .club_strategies,
+            game.club_strategies
+        );
+    }
+
+    #[test]
     fn reading_a_game_does_not_seed_the_sent_ledger() {
         // Seeding is a save-format migration and belongs to `load_game`, which
         // knows the version on disk. This reader only reports what is stored —

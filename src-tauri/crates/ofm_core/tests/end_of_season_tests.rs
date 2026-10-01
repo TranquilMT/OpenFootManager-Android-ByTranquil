@@ -1906,6 +1906,29 @@ fn player_stats_reset() {
 }
 
 #[test]
+fn season_rollover_resets_active_loan_reporting_baselines() {
+    let mut game = make_completed_season_game();
+    game.players[0].active_loan = Some(domain::player::ActiveLoan {
+        parent_team_id: "t2".into(),
+        loan_team_id: game.players[0].team_id.clone().unwrap(),
+        start_date: "2025-01-01".into(),
+        end_date: "2027-06-30".into(),
+        wage_contribution_pct: 75,
+        buy_option_fee: None,
+        loan_start_minutes: 100,
+        loan_start_appearances: 2,
+        development_reported_minutes: 300,
+        development_reported_appearances: 5,
+    });
+    process_end_of_season(&mut game);
+    let loan = game.players[0].active_loan.as_ref().unwrap();
+    assert_eq!(loan.loan_start_minutes, 0);
+    assert_eq!(loan.loan_start_appearances, 0);
+    assert_eq!(loan.development_reported_minutes, 0);
+    assert_eq!(loan.development_reported_appearances, 0);
+}
+
+#[test]
 fn season_end_ages_players_and_retires_out_of_contract_veterans() {
     let mut game = make_completed_season_game();
     let veteran = game

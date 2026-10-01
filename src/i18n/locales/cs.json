@@ -1777,7 +1777,7 @@
     "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
     "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
     "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
-    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.2",
+    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.3",
     "patchPortraits": "20 fiktivních výchozích tváří přináší pestřejší portréty hráčů.",
     "patchWorld": "Fotbalový svět zahrnuje 29 zemí a silnější kluby v Americe a Asii.",
     "patchTransfers": "Strategie klubů řídí hostování a přestupy včetně konkurenčních nabídek a kontroly rozpočtu.",
@@ -2690,7 +2690,8 @@
         "playerNotOnBench": "Hráč není na lavički",
         "playerNotInStartingXi": "Hráč není v základní sestavě",
         "pressConferenceAlreadyHeld": "Tisková konference dnes už proběhla",
-        "noCompletedMatch": "Pro váš tým nebyl nalezen žádný odehraný zápas"
+        "noCompletedMatch": "Pro váš tým nebyl nalezen žádný odehraný zápas",
+        "matchFinished": "Zápas skončil."
       },
       "csv": {
         "writeFailed": "Nepodařilo se zapsat soubor CSV."
@@ -4212,5 +4213,11 @@
     "decisions": "Lepší rozhodování klubů: vyčerpaný přestupový rozpočet už neznamená dluh a kluby v přestavbě se mohou po lepších výsledcích zotavit.",
     "autosave": "Bezpečnější automatické ukládání ponechá pozdější změny kádru, smluv a zpráv označené k uložení.",
     "academy": "Zápasy akademie ověřují skutečné datum narození pro hráče do 21 let; historie zobrazuje každou aktualizaci pod správnou verzí."
+  },
+  "phase63": {
+    "finances": "Příchozí přestupy a hostování před dokončením znovu kontrolují finance klubu.",
+    "matchday": "Zápasové soupisky vylučují hráče po ukončení kariéry; po skončení zápasu už nelze měnit taktiku.",
+    "career": "Zprávy o rozvoji hostujících hráčů zůstávají přesné při změně sezóny a výpočet narozenin je opraven.",
+    "saves": "Uložené kariéry zachovávají náborové strategie a přibyly regresní testy."
   }
 }

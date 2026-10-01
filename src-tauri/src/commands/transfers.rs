@@ -937,6 +937,7 @@ mod tests {
         game.players[0].ovr = 68;
         game.players[0].potential = 78;
         game.teams[1].finance = 6_000_000;
+        game.teams[1].wage_budget = 1_000_000;
         game.players[0].loan_offers.push(LoanOffer {
             id: "loan-offer-counter".to_string(),
             from_team_id: "team-2".to_string(),
