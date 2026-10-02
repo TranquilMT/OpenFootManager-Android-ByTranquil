@@ -296,7 +296,7 @@ mod tests {
     }
     fn career() -> Game {
         use chrono::TimeZone;
-        let date = chrono::Utc.with_ymd_and_hms(2026, 7, 1, 12, 0, 0).unwrap();
+        let date = chrono::Utc.with_ymd_and_hms(2026, 7, 6, 12, 0, 0).unwrap();
         let manager = domain::manager::Manager::new(
             "m".into(),
             "Will".into(),
@@ -335,8 +335,11 @@ mod tests {
         );
         let balance = game.teams[0].finance;
         let entries = game.cash_journal.len();
+        let journal = game.cash_journal.clone();
         let saved = serde_json::to_string(&game).unwrap();
         let mut loaded: Game = serde_json::from_str(&saved).unwrap();
+        // Journal rows are deliberately skipped by IPC serde and restored by SQL.
+        loaded.cash_journal = journal;
         upgrade_generated_career(&mut loaded).unwrap();
         assert_eq!(loaded.teams[0].finance, balance);
         assert_eq!(loaded.cash_journal.len(), entries);
