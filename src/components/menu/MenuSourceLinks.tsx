@@ -15,7 +15,7 @@ function GithubIcon({ className }: { className?: string }) {
 export function MenuSourceLinks() {
   const { t } = useTranslation();
   return (
-    <div className="fixed bottom-[calc(2.5rem+env(safe-area-inset-bottom))] left-3 z-20 flex flex-col items-start gap-1 sm:absolute sm:bottom-10 sm:left-4">
+    <div className="mt-4 flex flex-col items-start gap-1">
       <button
         type="button"
         aria-label={t("menu.openGithub")}

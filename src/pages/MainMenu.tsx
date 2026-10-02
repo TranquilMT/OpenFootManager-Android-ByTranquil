@@ -679,7 +679,7 @@ export default function MainMenu() {
       <div
         inert={!introComplete}
         aria-hidden={!introComplete ? true : undefined}
-        className={`transition-opacity duration-[400ms] motion-reduce:transition-none ${introComplete ? "opacity-100" : "opacity-0"} touch-scroll relative flex h-[100dvh] min-h-0 w-full items-start justify-center overflow-x-hidden overflow-y-scroll bg-gray-100 px-3 pb-[calc(9rem+env(safe-area-inset-bottom))] pt-[calc(4rem+env(safe-area-inset-top))] transition-colors duration-500 sm:items-center sm:px-0 sm:py-16 dark:bg-navy-900`}
+        className={`transition-opacity duration-[400ms] motion-reduce:transition-none ${introComplete ? "opacity-100" : "opacity-0"} touch-scroll relative flex h-[100dvh] min-h-0 w-full items-start justify-center overflow-x-hidden overflow-y-scroll bg-gray-100 px-3 pb-[calc(9rem+env(safe-area-inset-bottom))] pt-[calc(4rem+env(safe-area-inset-top))] transition-colors duration-500 sm:px-0 sm:py-16 dark:bg-navy-900`}
         style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
       >
         {/* Background gradient accents */}
@@ -884,10 +884,9 @@ export default function MainMenu() {
 
             {/* Package Editor */}
           </div>
+          {menuState === "main" && <MenuSourceLinks />}
         </div>
 
-        {/* Project and upstream source links */}
-        {menuState === "main" && <MenuSourceLinks />}
         <MainMenuFooter />
 
         {introComplete && <WhatsNewModal />}
