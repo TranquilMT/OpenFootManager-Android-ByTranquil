@@ -24,7 +24,7 @@
     "openGithub": "Open OFMtouch GitHub repository",
     "openOriginalGithub": "Open original OpenFootManager GitHub repository",
     "originalGame": "Original game",
-    "doNotShowWhatsNew": "Don’t show this again for v0.6.5",
+    "doNotShowWhatsNew": "Don’t show this again for v0.6.6",
     "continueToGame": "Continue",
     "mainMenu": "Main Menu",
     "worldEditor": "World Editor",
@@ -1783,7 +1783,7 @@
     "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
     "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
     "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
-    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.5",
+    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.6",
     "patchPortraits": "20 fictional source faces bring more variety to generated player portraits.",
     "patchWorld": "A larger football world spans 29 nations, with stronger clubs across the Americas and Asia.",
     "patchTransfers": "Club strategies guide loans and transfer approaches, with competing offers and budget checks.",
@@ -4312,5 +4312,13 @@
     "values": "Balanced player values: regular squad players in the tens of millions, with exceptional stars worth more.",
     "finances": "Larger club budgets, recurring commercial and media income, operating costs and clearer cash forecasts.",
     "saves": "Existing standard careers receive a one-time financial correction while retaining contracts and past spending."
+  },
+  "phase66": {
+    "collaboration": "IN COLLABORATION WITH",
+    "skip": "Skip intro",
+    "intro": "A new fading introduction featuring TranquilGames and OpenFootManager.",
+    "footer": "A clean version and build label at the bottom right of the main menu.",
+    "notes": "Clearer update cards, refreshed thanks and a direct GitHub bug-report link.",
+    "thanks": "Thank you for playing OFMtouch and helping it improve. Your feedback, screenshots and bug reports make a difference. Please keep reporting bugs through GitHub."
   }
 }

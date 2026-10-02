@@ -4,6 +4,10 @@ import { ReleaseNotes } from "../settings/ReleaseNotes";
 
 const HISTORY = [
   {
+    version: "0.6.5",
+    keys: ["phase65.colours", "phase65.values", "phase65.finances", "phase65.saves"],
+  },
+  {
     version: "0.6.4",
     keys: [
       "phase64.releaseProgression",

@@ -24,7 +24,7 @@
     "openGithub": "打开 OFMtouch 的 GitHub 仓库",
     "openOriginalGithub": "打开原版 OpenFootManager 的 GitHub 仓库",
     "originalGame": "原版游戏",
-    "doNotShowWhatsNew": "不再显示 v0.6.5 更新提示",
+    "doNotShowWhatsNew": "不再显示 v0.6.6 更新提示",
     "continueToGame": "继续",
     "mainMenu": "主菜单",
     "worldEditor": "世界编辑器",
@@ -1783,7 +1783,7 @@
     "patchPlayers": "新增更多优秀球员，包括稀有的96分球星和升级热门球队。",
     "patchMatches": "比赛解说更加丰富，加入门框射门和可选语音解说。",
     "patchMobile": "改进移动端操作、收件箱、国家队与生涯创建。",
-    "patchWelcome": "欢迎来到 OFMtouch！v0.6.5 更新内容",
+    "patchWelcome": "欢迎来到 OFMtouch！v0.6.6 更新内容",
     "patchPortraits": "20 张虚构原始人脸让生成球员的肖像更加多样。",
     "patchWorld": "足球世界扩展至 29 个国家，美洲和亚洲的俱乐部实力也得到提升。",
     "patchTransfers": "俱乐部策略会影响租借和转会，包括竞争报价与预算检查。",
@@ -4312,5 +4312,13 @@
     "values": "平衡球员身价：普通一线队球员价值数千万，顶级球星价值更高。",
     "finances": "增加俱乐部预算、持续商业和媒体收入、运营成本，并改善现金预测。",
     "saves": "现有标准生涯将获得一次财务修正，同时保留合同和历史支出。"
+  },
+  "phase66": {
+    "collaboration": "合作伙伴",
+    "skip": "跳过片头",
+    "intro": "全新淡入淡出片头，展示 TranquilGames 和 OpenFootManager。",
+    "footer": "主菜单右下角简洁显示版本号和构建号。",
+    "notes": "更清晰的更新卡片、全新感谢词和直达 GitHub 的错误反馈链接。",
+    "thanks": "感谢您游玩 OFMtouch 并帮助我们改进游戏。您的反馈、截图和错误报告非常重要。请继续通过 GitHub 报告错误。"
   }
 }

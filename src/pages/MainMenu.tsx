@@ -1,10 +1,10 @@
 import { restoreSaveBackup } from "../services/saveRecoveryService";
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, lazy, useCallback, useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { listen } from "@tauri-apps/api/event";
-import { openUrl } from "@tauri-apps/plugin-opener";
+import { MenuSourceLinks } from "../components/menu/MenuSourceLinks";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useGameStore, type GameStateData } from "../store/gameStore";
@@ -17,6 +17,7 @@ import { formatAppVersion } from "../lib/appVersion";
 import { resolveBackendError } from "../utils/backendI18n";
 import { prewarmManagerSquadPortraits } from "../services/portraitService";
 import { WhatsNewModal } from "../components/menu/WhatsNewModal";
+import { StartupIntro, INTRO_SEEN_KEY } from "../components/menu/StartupIntro";
 import { PatchHistoryModal } from "../components/menu/PatchHistoryModal";
 import {
   FolderOpen,
@@ -27,17 +28,6 @@ import {
   Package,
   ScrollText,
 } from "lucide-react";
-
-const GITHUB_REPO_URL = "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil";
-const ORIGINAL_GITHUB_REPO_URL = "https://github.com/openfootmanager/openfootmanager";
-
-function GithubIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
-      <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.085 3.292 9.387 7.86 10.91.575.107.785-.25.785-.555 0-.275-.01-1-.015-1.965-3.2.695-3.875-1.54-3.875-1.54-.525-1.33-1.28-1.685-1.28-1.685-1.045-.715.08-.7.08-.7 1.155.08 1.765 1.185 1.765 1.185 1.025 1.755 2.69 1.25 3.345.955.1-.745.4-1.25.725-1.54-2.555-.29-5.245-1.275-5.245-5.685 0-1.255.45-2.28 1.18-3.085-.12-.29-.515-1.46.11-3.05 0 0 .965-.31 3.165 1.18a10.95 10.95 0 0 1 2.88-.39c.98.005 1.965.135 2.885.39 2.2-1.49 3.16-1.18 3.16-1.18.63 1.59.235 2.76.115 3.05.735.805 1.18 1.83 1.18 3.085 0 4.42-2.695 5.39-5.265 5.675.41.355.78 1.055.78 2.125 0 1.535-.015 2.77-.015 3.15 0 .305.205.665.79.55C20.215 21.385 23.5 17.085 23.5 12 23.5 5.65 18.35.5 12 .5Z" />
-    </svg>
-  );
-}
 
 const CreateManagerForm = lazy(() => import("../components/menu/CreateManagerForm"));
 const ProfileSaveConfirm = lazy(() => import("../components/menu/ProfileSaveConfirm"));
@@ -259,6 +249,10 @@ function MenuPanelFallback() {
 }
 
 export default function MainMenu() {
+  const [introComplete, setIntroComplete] = useState(
+    () => sessionStorage.getItem(INTRO_SEEN_KEY) === "1",
+  );
+  const finishIntro = useCallback(() => setIntroComplete(true), []);
   const navigate = useNavigate();
   const setGameActive = useGameStore((state) => state.setGameActive);
   const setGameState = useGameStore((state) => state.setGameState);
@@ -679,254 +673,232 @@ export default function MainMenu() {
   };
 
   return (
-    <div
-      className="touch-scroll relative flex h-[100dvh] min-h-0 w-full items-start justify-center overflow-x-hidden overflow-y-scroll bg-gray-100 px-3 pb-[calc(6rem+env(safe-area-inset-bottom))] pt-[calc(4rem+env(safe-area-inset-top))] transition-colors duration-500 sm:items-center sm:px-0 sm:py-16 dark:bg-navy-900"
-      style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
-    >
-      {/* Background gradient accents */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-accent-400/10 dark:bg-accent-400/5 rounded-full blur-3xl" />
-      </div>
-
-      {/* Theme Toggle */}
-      <ThemeToggle className="fixed right-3 top-[calc(0.75rem+env(safe-area-inset-top))] z-20 sm:absolute sm:right-6 sm:top-6" />
-
-      {/* Main Card */}
-      <div className="relative z-10 w-full max-w-md shrink-0 pb-4">
-        {/* Top accent bar */}
-        <div className="h-1.5 bg-gradient-to-r from-primary-500 via-accent-400 to-primary-500 rounded-t-2xl" />
-
-        <div className="rounded-b-2xl bg-white p-4 sm:p-8 dark:bg-navy-800 shadow-xl dark:shadow-2xl border border-gray-200 dark:border-navy-600 border-t-0 transition-all duration-500">
-          {/* Logo */}
-          <img
-            src="/openfootlogo.svg"
-            alt={t("app.name")}
-            className="text-center w-full h-full object-cover"
-          />
-
-          <div className="border-t border-gray-200 dark:border-navy-600 my-8 transition-colors duration-500" />
-
-          {/* Main Menu */}
-          {menuState === "main" && (
-            <div className="flex flex-col gap-3">
-              <button
-                type="button"
-                onClick={() => setMenuState("create")}
-                className="group flex items-center justify-between w-full p-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-primary-500/20"
-              >
-                <div className="flex items-center gap-3">
-                  <PlusCircle className="w-6 h-6" />
-                  <span className="font-heading font-bold text-lg uppercase tracking-wide">
-                    {t("menu.newGame")}
-                  </span>
-                </div>
-                <ChevronRight className="w-5 h-5 opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
-              </button>
-
-              <button
-                type="button"
-                onClick={handleOpenLoadMenu}
-                className="group flex items-center justify-between w-full p-4 bg-white dark:bg-navy-700 hover:bg-gray-50 dark:hover:bg-navy-600 text-gray-800 dark:text-gray-200 rounded-xl transition-all duration-300 border border-gray-200 dark:border-navy-600 hover:border-accent-400 dark:hover:border-accent-400 shadow-sm"
-              >
-                <div className="flex items-center gap-3">
-                  <FolderOpen className="w-6 h-6 text-accent-500 dark:text-accent-400" />
-                  <span className="font-heading font-bold text-lg uppercase tracking-wide">
-                    {t("menu.loadGame")}
-                  </span>
-                </div>
-                <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-70 group-hover:translate-x-0.5 transition-all text-accent-500" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => navigate("/world-editor")}
-                className="group flex items-center justify-between w-full p-4 bg-white dark:bg-navy-700 hover:bg-gray-50 dark:hover:bg-navy-600 text-gray-800 dark:text-gray-200 rounded-xl transition-all duration-300 border border-gray-200 dark:border-navy-600 hover:border-accent-400 dark:hover:border-accent-400 shadow-sm"
-              >
-                <div className="flex items-center gap-3">
-                  <Package className="w-6 h-6 text-accent-500 dark:text-accent-400" />
-                  <span className="font-heading font-bold text-lg uppercase tracking-wide">
-                    {t("menu.worldEditor")}
-                  </span>
-                </div>
-                <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-70 group-hover:translate-x-0.5 transition-all text-accent-500" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => navigate("/settings", { state: { from: "/" } })}
-                className="group flex items-center justify-between w-full p-4 bg-white dark:bg-navy-700 hover:bg-gray-50 dark:hover:bg-navy-600 text-gray-800 dark:text-gray-200 rounded-xl transition-all duration-300 border border-gray-200 dark:border-navy-600 hover:border-gray-300 dark:hover:border-navy-600 shadow-sm"
-              >
-                <div className="flex items-center gap-3">
-                  <Settings className="w-6 h-6 text-gray-400 dark:text-gray-500" />
-                  <span className="font-heading font-bold text-lg uppercase tracking-wide">
-                    {t("menu.settings")}
-                  </span>
-                </div>
-                <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-70 group-hover:translate-x-0.5 transition-all text-gray-400" />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setShowPatchHistory(true)}
-                className="group flex min-h-11 items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 text-gray-800 transition-colors hover:border-primary-500 dark:border-navy-600 dark:bg-navy-700 dark:text-gray-200"
-              >
-                <ScrollText className="h-6 w-6 text-primary-500" />
-                <span className="font-heading text-lg font-bold uppercase tracking-wide">
-                  {t("settings.patchHistory")}
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  void handleExitApp();
-                }}
-                className="group flex items-center justify-between w-full p-4 bg-white dark:bg-navy-700 hover:bg-red-50 dark:hover:bg-red-500/10 text-gray-800 dark:text-gray-200 rounded-xl transition-all duration-300 border border-gray-200 dark:border-navy-600 hover:border-red-200 dark:hover:border-red-500/30 shadow-sm"
-              >
-                <div className="flex items-center gap-3">
-                  <Power className="w-6 h-6 text-red-500 dark:text-red-400" />
-                  <span className="font-heading font-bold text-lg uppercase tracking-wide">
-                    {t("menu.exitGame")}
-                  </span>
-                </div>
-              </button>
-            </div>
-          )}
-
-          {/* Step 1: Create Manager Form */}
-          {menuState === "create" && (
-            <Suspense fallback={<MenuPanelFallback />}>
-              <CreateManagerForm
-                formData={formData}
-                formErrors={formErrors}
-                dobError={dobDisplayedError}
-                profiles={profiles}
-                selectedProfileId={loadedProfile?.id}
-                onChange={updateFormField}
-                onClearError={clearFormError}
-                onClose={() => {
-                  setMenuState("main");
-                  setFormErrors({});
-                  setLoadedProfile(null);
-                }}
-                onSelectProfile={handleSelectProfile}
-                onDeleteProfile={handleDeleteProfile}
-                onSubmit={handleGoToWorldSelect}
-              />
-            </Suspense>
-          )}
-
-          {/* Profile save confirmation modal */}
-          {showProfileConfirm && loadedProfile && (
-            <Suspense fallback={null}>
-              <ProfileSaveConfirm
-                loadedProfile={loadedProfile}
-                onUpdate={() => {
-                  void handleUpdateProfile();
-                }}
-                onSaveNew={() => {
-                  void handleSaveAsNewProfile();
-                }}
-                onSkip={proceedToPackages}
-                onClose={() => setShowProfileConfirm(false)}
-              />
-            </Suspense>
-          )}
-
-          {/* Step 2a: Build Your World (package selection) */}
-          {menuState === "packages" && (
-            <Suspense fallback={<MenuPanelFallback />}>
-              <PackageBuildStep
-                installedPackages={installedPackages}
-                activePackageIds={activePackageIds}
-                isInstallingPackage={isInstallingPackage}
-                packageStackErrors={packageStackErrors}
-                onTogglePackage={handleTogglePackage}
-                onInstallPackage={handleInstallPackage}
-                onUninstallPackage={handleUninstallPackage}
-                onNext={() => setMenuState("generation")}
-                onBack={() => setMenuState("create")}
-                onClose={() => setMenuState("main")}
-              />
-            </Suspense>
-          )}
-
-          {/* Step 2b: Generation & Completion */}
-          {menuState === "generation" && (
-            <Suspense fallback={<MenuPanelFallback />}>
-              <GenerationStep
-                isStarting={isStarting}
-                startYear={parseCareerStartYear(formData.startYear) ?? MIN_CAREER_START_YEAR}
-                startPhase={formData.startPhase}
-                historyDepthYears={historyDepthYears}
-                onChangeHistoryDepthYears={setHistoryDepthYears}
-                onStart={handleStartGame}
-                onBack={() => setMenuState("packages")}
-                onClose={() => setMenuState("main")}
-                activePackages={installedPackages.filter((p) => activePackageIds.includes(p.id))}
-              />
-            </Suspense>
-          )}
-
-          {/* Load Game List */}
-          {menuState === "load" && (
-            <Suspense fallback={<MenuPanelFallback />}>
-              <SavesList
-                failedSaveId={failedSaveId}
-                onRestore={handleRestoreSave}
-                loadingSaveId={loadingSaveId}
-                saves={saves}
-                isLoading={isLoadingSaves}
-                confirmDeleteId={confirmDeleteId}
-                onLoad={handleLoadGame}
-                onDelete={handleDeleteSave}
-                onConfirmDelete={setConfirmDeleteId}
-                onClose={() => setMenuState("main")}
-              />
-            </Suspense>
-          )}
-
-          {/* Package Editor */}
+    <>
+      {!introComplete && <StartupIntro onComplete={finishIntro} />}
+      <div
+        inert={!introComplete}
+        aria-hidden={!introComplete ? true : undefined}
+        className={`transition-opacity duration-[400ms] motion-reduce:transition-none ${introComplete ? "opacity-100" : "opacity-0"} touch-scroll relative flex h-[100dvh] min-h-0 w-full items-start justify-center overflow-x-hidden overflow-y-scroll bg-gray-100 px-3 pb-[calc(9rem+env(safe-area-inset-bottom))] pt-[calc(4rem+env(safe-area-inset-top))] transition-colors duration-500 sm:items-center sm:px-0 sm:py-16 dark:bg-navy-900`}
+        style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
+      >
+        {/* Background gradient accents */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl" />
+          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-accent-400/10 dark:bg-accent-400/5 rounded-full blur-3xl" />
         </div>
-      </div>
 
-      {/* Project and upstream source links */}
-      {menuState === "main" && (
-        <div className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] left-3 z-20 flex flex-col items-start gap-1 sm:absolute sm:bottom-3 sm:left-4">
-          <button
-            type="button"
-            aria-label={t("menu.openGithub")}
-            title={t("menu.openGithub")}
-            onClick={() => {
-              void openUrl(GITHUB_REPO_URL);
-            }}
-            className="flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-navy-700 transition-colors"
-          >
-            <GithubIcon className="w-5 h-5" />
-            <span className="text-xs font-medium">OFMtouch</span>
-          </button>
-          <button
-            type="button"
-            aria-label={t("menu.openOriginalGithub")}
-            title={t("menu.openOriginalGithub")}
-            onClick={() => {
-              void openUrl(ORIGINAL_GITHUB_REPO_URL);
-            }}
-            className="flex min-h-9 items-center gap-1.5 rounded-lg px-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-navy-700 transition-colors"
-          >
-            <GithubIcon className="w-5 h-5" />
-            <span className="text-xs font-medium">{t("menu.originalGame")}</span>
-          </button>
+        {/* Theme Toggle */}
+        <ThemeToggle className="fixed right-3 top-[calc(0.75rem+env(safe-area-inset-top))] z-20 sm:absolute sm:right-6 sm:top-6" />
+
+        {/* Main Card */}
+        <div className="relative z-10 w-full max-w-md shrink-0 pb-4">
+          {/* Top accent bar */}
+          <div className="h-1.5 bg-gradient-to-r from-primary-500 via-accent-400 to-primary-500 rounded-t-2xl" />
+
+          <div className="rounded-b-2xl bg-white p-4 sm:p-8 dark:bg-navy-800 shadow-xl dark:shadow-2xl border border-gray-200 dark:border-navy-600 border-t-0 transition-all duration-500">
+            {/* Logo */}
+            <img
+              src="/openfootlogo.svg"
+              alt={t("app.name")}
+              className="text-center w-full h-full object-cover"
+            />
+
+            <div className="border-t border-gray-200 dark:border-navy-600 my-8 transition-colors duration-500" />
+
+            {/* Main Menu */}
+            {menuState === "main" && (
+              <div className="flex flex-col gap-3">
+                <button
+                  type="button"
+                  onClick={() => setMenuState("create")}
+                  className="group flex items-center justify-between w-full p-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-primary-500/20"
+                >
+                  <div className="flex items-center gap-3">
+                    <PlusCircle className="w-6 h-6" />
+                    <span className="font-heading font-bold text-lg uppercase tracking-wide">
+                      {t("menu.newGame")}
+                    </span>
+                  </div>
+                  <ChevronRight className="w-5 h-5 opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleOpenLoadMenu}
+                  className="group flex items-center justify-between w-full p-4 bg-white dark:bg-navy-700 hover:bg-gray-50 dark:hover:bg-navy-600 text-gray-800 dark:text-gray-200 rounded-xl transition-all duration-300 border border-gray-200 dark:border-navy-600 hover:border-accent-400 dark:hover:border-accent-400 shadow-sm"
+                >
+                  <div className="flex items-center gap-3">
+                    <FolderOpen className="w-6 h-6 text-accent-500 dark:text-accent-400" />
+                    <span className="font-heading font-bold text-lg uppercase tracking-wide">
+                      {t("menu.loadGame")}
+                    </span>
+                  </div>
+                  <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-70 group-hover:translate-x-0.5 transition-all text-accent-500" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => navigate("/world-editor")}
+                  className="group flex items-center justify-between w-full p-4 bg-white dark:bg-navy-700 hover:bg-gray-50 dark:hover:bg-navy-600 text-gray-800 dark:text-gray-200 rounded-xl transition-all duration-300 border border-gray-200 dark:border-navy-600 hover:border-accent-400 dark:hover:border-accent-400 shadow-sm"
+                >
+                  <div className="flex items-center gap-3">
+                    <Package className="w-6 h-6 text-accent-500 dark:text-accent-400" />
+                    <span className="font-heading font-bold text-lg uppercase tracking-wide">
+                      {t("menu.worldEditor")}
+                    </span>
+                  </div>
+                  <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-70 group-hover:translate-x-0.5 transition-all text-accent-500" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => navigate("/settings", { state: { from: "/" } })}
+                  className="group flex items-center justify-between w-full p-4 bg-white dark:bg-navy-700 hover:bg-gray-50 dark:hover:bg-navy-600 text-gray-800 dark:text-gray-200 rounded-xl transition-all duration-300 border border-gray-200 dark:border-navy-600 hover:border-gray-300 dark:hover:border-navy-600 shadow-sm"
+                >
+                  <div className="flex items-center gap-3">
+                    <Settings className="w-6 h-6 text-gray-400 dark:text-gray-500" />
+                    <span className="font-heading font-bold text-lg uppercase tracking-wide">
+                      {t("menu.settings")}
+                    </span>
+                  </div>
+                  <ChevronRight className="w-5 h-5 opacity-0 group-hover:opacity-70 group-hover:translate-x-0.5 transition-all text-gray-400" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowPatchHistory(true)}
+                  className="group flex min-h-11 items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 text-gray-800 transition-colors hover:border-primary-500 dark:border-navy-600 dark:bg-navy-700 dark:text-gray-200"
+                >
+                  <ScrollText className="h-6 w-6 text-primary-500" />
+                  <span className="font-heading text-lg font-bold uppercase tracking-wide">
+                    {t("settings.patchHistory")}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    void handleExitApp();
+                  }}
+                  className="group flex items-center justify-between w-full p-4 bg-white dark:bg-navy-700 hover:bg-red-50 dark:hover:bg-red-500/10 text-gray-800 dark:text-gray-200 rounded-xl transition-all duration-300 border border-gray-200 dark:border-navy-600 hover:border-red-200 dark:hover:border-red-500/30 shadow-sm"
+                >
+                  <div className="flex items-center gap-3">
+                    <Power className="w-6 h-6 text-red-500 dark:text-red-400" />
+                    <span className="font-heading font-bold text-lg uppercase tracking-wide">
+                      {t("menu.exitGame")}
+                    </span>
+                  </div>
+                </button>
+              </div>
+            )}
+
+            {/* Step 1: Create Manager Form */}
+            {menuState === "create" && (
+              <Suspense fallback={<MenuPanelFallback />}>
+                <CreateManagerForm
+                  formData={formData}
+                  formErrors={formErrors}
+                  dobError={dobDisplayedError}
+                  profiles={profiles}
+                  selectedProfileId={loadedProfile?.id}
+                  onChange={updateFormField}
+                  onClearError={clearFormError}
+                  onClose={() => {
+                    setMenuState("main");
+                    setFormErrors({});
+                    setLoadedProfile(null);
+                  }}
+                  onSelectProfile={handleSelectProfile}
+                  onDeleteProfile={handleDeleteProfile}
+                  onSubmit={handleGoToWorldSelect}
+                />
+              </Suspense>
+            )}
+
+            {/* Profile save confirmation modal */}
+            {showProfileConfirm && loadedProfile && (
+              <Suspense fallback={null}>
+                <ProfileSaveConfirm
+                  loadedProfile={loadedProfile}
+                  onUpdate={() => {
+                    void handleUpdateProfile();
+                  }}
+                  onSaveNew={() => {
+                    void handleSaveAsNewProfile();
+                  }}
+                  onSkip={proceedToPackages}
+                  onClose={() => setShowProfileConfirm(false)}
+                />
+              </Suspense>
+            )}
+
+            {/* Step 2a: Build Your World (package selection) */}
+            {menuState === "packages" && (
+              <Suspense fallback={<MenuPanelFallback />}>
+                <PackageBuildStep
+                  installedPackages={installedPackages}
+                  activePackageIds={activePackageIds}
+                  isInstallingPackage={isInstallingPackage}
+                  packageStackErrors={packageStackErrors}
+                  onTogglePackage={handleTogglePackage}
+                  onInstallPackage={handleInstallPackage}
+                  onUninstallPackage={handleUninstallPackage}
+                  onNext={() => setMenuState("generation")}
+                  onBack={() => setMenuState("create")}
+                  onClose={() => setMenuState("main")}
+                />
+              </Suspense>
+            )}
+
+            {/* Step 2b: Generation & Completion */}
+            {menuState === "generation" && (
+              <Suspense fallback={<MenuPanelFallback />}>
+                <GenerationStep
+                  isStarting={isStarting}
+                  startYear={parseCareerStartYear(formData.startYear) ?? MIN_CAREER_START_YEAR}
+                  startPhase={formData.startPhase}
+                  historyDepthYears={historyDepthYears}
+                  onChangeHistoryDepthYears={setHistoryDepthYears}
+                  onStart={handleStartGame}
+                  onBack={() => setMenuState("packages")}
+                  onClose={() => setMenuState("main")}
+                  activePackages={installedPackages.filter((p) => activePackageIds.includes(p.id))}
+                />
+              </Suspense>
+            )}
+
+            {/* Load Game List */}
+            {menuState === "load" && (
+              <Suspense fallback={<MenuPanelFallback />}>
+                <SavesList
+                  failedSaveId={failedSaveId}
+                  onRestore={handleRestoreSave}
+                  loadingSaveId={loadingSaveId}
+                  saves={saves}
+                  isLoading={isLoadingSaves}
+                  confirmDeleteId={confirmDeleteId}
+                  onLoad={handleLoadGame}
+                  onDelete={handleDeleteSave}
+                  onConfirmDelete={setConfirmDeleteId}
+                  onClose={() => setMenuState("main")}
+                />
+              </Suspense>
+            )}
+
+            {/* Package Editor */}
+          </div>
         </div>
-      )}
 
-      {/* Version */}
-      <div className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-3 z-20 text-gray-400 sm:absolute sm:bottom-4 sm:right-4 dark:text-gray-600 text-xs font-heading uppercase tracking-widest transition-colors">
-        {formatAppVersion()}
+        {/* Project and upstream source links */}
+        {menuState === "main" && <MenuSourceLinks />}
+        {/* Version */}
+        <div className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] right-3 z-20 whitespace-nowrap text-gray-500 sm:absolute sm:bottom-3 sm:right-4 dark:text-gray-400 text-xs font-heading tracking-wide transition-colors">
+          {formatAppVersion()}
+        </div>
+
+        {introComplete && <WhatsNewModal />}
+        {showPatchHistory && <PatchHistoryModal onClose={() => setShowPatchHistory(false)} />}
       </div>
-      <WhatsNewModal />
-      {showPatchHistory && <PatchHistoryModal onClose={() => setShowPatchHistory(false)} />}
-    </div>
+    </>
   );
 }

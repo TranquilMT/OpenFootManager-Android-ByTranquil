@@ -4,7 +4,7 @@
 
 OFMtouch is a free, open-source football management game for Android, based on OpenFootManager and adapted for mobile by **TranquilMT**. Build a squad, develop young talent and lead your club through seasons of league and cup football. Every career brings decisions on the pitch, in the transfer market and behind the scenes.
 
-**Current version: v0.6.5 — Finance & Club Identity · Android ARM64**
+**Current version: v0.6.6 — Startup & Menu Polish · Android ARM64**
 
 [Download OFMtouch](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/latest) · [Previous releases](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases) · [Report an issue](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new)
 
@@ -85,6 +85,14 @@ Your job extends beyond the next result.
 - Interface and update summaries in 12 supported languages.
 
 ## What's New — Version History
+
+### v0.6.6 — Startup & Menu Polish
+
+- Fading TranquilGames introduction followed by the OpenFootManager logo, with a Skip button.
+- Short version and build label at the bottom right, separated from source links.
+- Compact update cards with icons, refreshed thanks and GitHub bug reporting.
+- Introduction plays once per launch and respects reduced-motion settings; update opt-out remains version-specific.
+- Previous 0.6.5 notes remain in Patch History. This closes Phase 6 before Phase 7.
 
 ### v0.6.5 — Finance & Club Identity
 

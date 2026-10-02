@@ -8,7 +8,6 @@ import { resetCountryResourcesCache } from "../components/menu/CreateManagerNati
 import type { ManagerProfile } from "../components/menu/types";
 import { WHATS_NEW_DISMISSED_KEY, WHATS_NEW_SEEN_KEY } from "../components/menu/WhatsNewModal";
 import MainMenu from "./MainMenu";
-
 const navigateMock = vi.fn();
 const setGameActiveMock = vi.fn();
 const setGameStateMock = vi.fn();
@@ -21,12 +20,10 @@ const translationState = {
 vi.mock("@tauri-apps/api/core", () => ({
   invoke: vi.fn(),
 }));
-
 const openUrlMock = vi.fn();
 vi.mock("@tauri-apps/plugin-opener", () => ({
   openUrl: (...args: unknown[]) => openUrlMock(...args),
 }));
-
 // The native file-picker returns whatever the current test stages here.
 let dialogOpenResult: string | null = null;
 vi.mock("@tauri-apps/plugin-dialog", () => ({
@@ -280,6 +277,7 @@ describe("MainMenu", () => {
     dialogOpenResult = null;
     localStorage.clear();
     sessionStorage.clear();
+    sessionStorage.setItem("ofm-startup-intro-seen", "1");
     sessionStorage.setItem(WHATS_NEW_SEEN_KEY, "1");
     latestDatePickerOnChange = null;
     translationState.language = "en";
@@ -903,6 +901,7 @@ describe("MainMenu", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     unmount();
     sessionStorage.clear();
+    sessionStorage.setItem("ofm-startup-intro-seen", "1");
     render(<MainMenu />);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
@@ -915,6 +914,7 @@ describe("MainMenu", () => {
     expect(localStorage.getItem(WHATS_NEW_DISMISSED_KEY)).toBeNull();
     unmount();
     sessionStorage.clear();
+    sessionStorage.setItem("ofm-startup-intro-seen", "1");
     render(<MainMenu />);
     expect(screen.getByRole("dialog", { name: "settings.patchWelcome" })).toBeInTheDocument();
   });

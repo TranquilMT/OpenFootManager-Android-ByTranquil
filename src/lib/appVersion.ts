@@ -1,10 +1,6 @@
 /** Android nightly build identity shown to players. */
 export const APP_VERSION = __APP_VERSION__;
-export const APP_CHANNEL = __APP_CHANNEL__;
-export const APP_COMMIT = __APP_COMMIT__;
 export const APP_BUILD_DATE = __APP_BUILD_DATE__;
-
-export const IS_STABLE_BUILD = APP_CHANNEL === "stable";
 
 /**
  * CI exposes the GitHub Actions run number to Vite where available. During
@@ -25,13 +21,7 @@ function buildNumber(): string | null {
 
 /** Player-facing identity. Android nightlies use the CI build number. */
 export function formatAppVersion(): string {
-  if (IS_STABLE_BUILD) return `v${APP_VERSION}`;
-
   const number = buildNumber();
   const releaseVersion = APP_VERSION.replace(/-nightly$/, "");
-  if (number)
-    return `v${releaseVersion} Finance & Club Identity - Build#${number} - NIGHTLYPRERELEASE`;
-
-  const commit = APP_COMMIT === "unknown" ? "" : ` - ${APP_COMMIT}`;
-  return `v${releaseVersion} Finance & Club Identity - NIGHTLYPRERELEASE${commit}`;
+  return number ? `v${releaseVersion} · Build#${number}` : `v${releaseVersion}`;
 }

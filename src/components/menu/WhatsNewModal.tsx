@@ -15,11 +15,14 @@ export function WhatsNewModal() {
       window.sessionStorage.getItem(WHATS_NEW_SEEN_KEY) !== "1",
   );
   const [doNotShowAgain, setDoNotShowAgain] = useState(false);
+  const [revealed, setRevealed] = useState(false);
   const continueRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (visible) continueRef.current?.focus();
+    const timer = setTimeout(() => setRevealed(true), 40);
+    return () => clearTimeout(timer);
   }, [visible]);
 
   if (!visible) return null;
@@ -31,7 +34,9 @@ export function WhatsNewModal() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/80 p-3 sm:p-6">
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-navy-900/80 p-3 transition-opacity duration-[400ms] motion-reduce:transition-none sm:p-6 ${revealed ? "opacity-100" : "opacity-0"}`}
+    >
       <div
         ref={dialogRef}
         role="dialog"

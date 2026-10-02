@@ -24,7 +24,7 @@
     "openGithub": "Buka repositori GitHub OFMtouch",
     "openOriginalGithub": "Buka repositori GitHub asli OpenFootManager",
     "originalGame": "Game asli",
-    "doNotShowWhatsNew": "Jangan tampilkan lagi untuk v0.6.5",
+    "doNotShowWhatsNew": "Jangan tampilkan lagi untuk v0.6.6",
     "continueToGame": "Lanjutkan",
     "mainMenu": "Menu Utama",
     "worldEditor": "Editor Dunia",
@@ -1783,7 +1783,7 @@
     "patchPlayers": "Lebih banyak pemain unggulan, termasuk bintang langka berperingkat 96.",
     "patchMatches": "Lebih banyak reaksi, tembakan membentur tiang, dan komentar suara opsional.",
     "patchMobile": "Kontrol seluler, kotak masuk, tim nasional, dan awal karier ditingkatkan.",
-    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.6.5",
+    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.6.6",
     "patchPortraits": "20 wajah fiktif sumber membuat potret pemain hasil generasi lebih beragam.",
     "patchWorld": "Dunia sepak bola yang lebih luas mencakup 29 negara, dengan klub lebih kuat di Amerika dan Asia.",
     "patchTransfers": "Strategi klub memandu pinjaman dan transfer, dengan tawaran bersaing serta pemeriksaan anggaran.",
@@ -4312,5 +4312,13 @@
     "values": "Nilai pemain seimbang: pemain biasa bernilai puluhan juta, bintang luar biasa bernilai lebih tinggi.",
     "finances": "Anggaran lebih besar, pendapatan komersial dan media rutin, biaya operasional serta perkiraan kas lebih jelas.",
     "saves": "Karier standar yang ada menerima koreksi keuangan satu kali dengan mempertahankan kontrak dan pengeluaran sebelumnya."
+  },
+  "phase66": {
+    "collaboration": "BEKERJA SAMA DENGAN",
+    "skip": "Lewati intro",
+    "intro": "Intro baru dengan transisi memudar untuk TranquilGames dan OpenFootManager.",
+    "footer": "Versi dan nomor build yang ringkas di kanan bawah menu utama.",
+    "notes": "Kartu pembaruan lebih jelas, ucapan terima kasih baru dan tautan langsung ke GitHub.",
+    "thanks": "Terima kasih telah memainkan OFMtouch dan membantu menyempurnakannya. Masukan, tangkapan layar dan laporan bug Anda sangat berarti. Terus laporkan bug melalui GitHub."
   }
 }

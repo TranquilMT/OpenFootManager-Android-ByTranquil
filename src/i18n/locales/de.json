@@ -24,7 +24,7 @@
     "openGithub": "GitHub-Repository von OFMtouch öffnen",
     "openOriginalGithub": "Ursprüngliches GitHub-Repository von OpenFootManager öffnen",
     "originalGame": "Originalspiel",
-    "doNotShowWhatsNew": "Für v0.6.5 nicht erneut anzeigen",
+    "doNotShowWhatsNew": "Für v0.6.6 nicht erneut anzeigen",
     "continueToGame": "Weiter",
     "mainMenu": "Hauptmenü",
     "worldEditor": "Welt-Editor",
@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.5",
+    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.6",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
@@ -4312,5 +4312,13 @@
     "values": "Ausgewogene Spielerwerte: reguläre Spieler im zweistelligen Millionenbereich, außergewöhnliche Stars teurer.",
     "finances": "Größere Budgets, regelmäßige Werbe- und Medieneinnahmen, Betriebskosten und klarere Finanzprognosen.",
     "saves": "Bestehende Standardkarrieren erhalten eine einmalige Finanzkorrektur; Verträge und bisherige Ausgaben bleiben erhalten."
+  },
+  "phase66": {
+    "collaboration": "IN ZUSAMMENARBEIT MIT",
+    "skip": "Intro überspringen",
+    "intro": "Neues Intro mit Überblendungen für TranquilGames und OpenFootManager.",
+    "footer": "Version und Buildnummer unten rechts im Hauptmenü.",
+    "notes": "Übersichtlichere Update-Karten, neuer Dankestext und direkter GitHub-Link.",
+    "thanks": "Danke, dass ihr OFMtouch spielt und verbessert. Eure Rückmeldungen, Screenshots und Fehlerberichte helfen uns. Meldet Fehler bitte weiterhin über GitHub."
   }
 }

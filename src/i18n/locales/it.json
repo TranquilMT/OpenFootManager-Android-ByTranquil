@@ -24,7 +24,7 @@
     "openGithub": "Apri il repository GitHub di OFMtouch",
     "openOriginalGithub": "Apri il repository GitHub originale di OpenFootManager",
     "originalGame": "Gioco originale",
-    "doNotShowWhatsNew": "Non mostrare più per la v0.6.5",
+    "doNotShowWhatsNew": "Non mostrare più per la v0.6.6",
     "continueToGame": "Continua",
     "mainMenu": "Menu principale",
     "worldEditor": "Editor Mondo",
@@ -1802,7 +1802,7 @@
     "patchPlayers": "Più giocatori di spicco, incluse rare stelle da 96 e squadre in lotta per la promozione.",
     "patchMatches": "Più reazioni, tiri sui legni e telecronaca vocale facoltativa.",
     "patchMobile": "Comandi mobili, posta, nazionali e inizio carriera migliorati.",
-    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.6.5",
+    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.6.6",
     "patchPortraits": "20 volti fittizi di partenza rendono più vari i ritratti dei giocatori generati.",
     "patchWorld": "Un mondo calcistico più ampio copre 29 nazioni, con club più forti nelle Americhe e in Asia.",
     "patchTransfers": "Le strategie dei club guidano prestiti e trasferimenti, con offerte concorrenti e controlli sul budget.",
@@ -4312,5 +4312,13 @@
     "values": "Valori dei giocatori equilibrati: giocatori ordinari da decine di milioni e stelle eccezionali più costose.",
     "finances": "Budget maggiori, entrate commerciali e televisive ricorrenti, costi operativi e previsioni più chiare.",
     "saves": "Le carriere standard esistenti ricevono una correzione finanziaria unica, mantenendo contratti e spese passate."
+  },
+  "phase66": {
+    "collaboration": "IN COLLABORAZIONE CON",
+    "skip": "Salta introduzione",
+    "intro": "Nuova introduzione in dissolvenza con TranquilGames e OpenFootManager.",
+    "footer": "Versione e numero di build in basso a destra nel menu principale.",
+    "notes": "Novità più chiare, ringraziamenti aggiornati e collegamento diretto a GitHub.",
+    "thanks": "Grazie per giocare a OFMtouch e aiutarci a migliorarlo. Commenti, schermate e segnalazioni fanno la differenza. Continuate a segnalare i bug su GitHub."
   }
 }

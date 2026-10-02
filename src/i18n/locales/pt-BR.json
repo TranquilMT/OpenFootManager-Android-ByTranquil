@@ -24,7 +24,7 @@
     "openGithub": "Abrir repositório do OFMtouch no GitHub",
     "openOriginalGithub": "Abrir repositório original do OpenFootManager no GitHub",
     "originalGame": "Jogo original",
-    "doNotShowWhatsNew": "Não mostrar novamente na v0.6.5",
+    "doNotShowWhatsNew": "Não mostrar novamente na v0.6.6",
     "continueToGame": "Continuar",
     "mainMenu": "Menu principal",
     "worldEditor": "Editor de Mundo",
@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mais craques, incluindo raras estrelas de nível 96 e candidatos ao acesso.",
     "patchMatches": "Mais reações, bolas na trave e narração por voz opcional.",
     "patchMobile": "Controles no celular, caixa de entrada, seleções e início de carreira melhorados.",
-    "patchWelcome": "Boas-vindas ao OFMtouch! Novidades da v0.6.5",
+    "patchWelcome": "Boas-vindas ao OFMtouch! Novidades da v0.6.6",
     "patchPortraits": "20 rostos fictícios de origem deixam os retratos dos jogadores mais variados.",
     "patchWorld": "Um mundo do futebol maior abrange 29 países, com clubes mais fortes nas Américas e na Ásia.",
     "patchTransfers": "As estratégias dos clubes orientam empréstimos e transferências, com ofertas concorrentes e controle do orçamento.",
@@ -4312,5 +4312,13 @@
     "values": "Valores equilibrados: jogadores comuns por dezenas de milhões e estrelas excepcionais mais caras.",
     "finances": "Orçamentos maiores, receitas comerciais e televisivas recorrentes, custos operacionais e previsões claras.",
     "saves": "As carreiras padrão existentes recebem uma correção financeira única, mantendo contratos e despesas anteriores."
+  },
+  "phase66": {
+    "collaboration": "EM COLABORAÇÃO COM",
+    "skip": "Pular introdução",
+    "intro": "Nova introdução com transições de TranquilGames e OpenFootManager.",
+    "footer": "Versão e compilação no canto inferior direito do menu principal.",
+    "notes": "Novidades mais claras, agradecimentos renovados e link direto para o GitHub.",
+    "thanks": "Obrigado por jogar OFMtouch e ajudar a melhorá-lo. Suas opiniões, capturas e relatos fazem a diferença. Continue relatando erros pelo GitHub."
   }
 }
