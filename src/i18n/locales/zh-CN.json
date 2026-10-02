@@ -4233,6 +4233,9 @@
     "promiseAction": "出场时间承诺：需要出场一次。剩余比赛：{{count}}。",
     "promiseDeadline": "预计截止日期：{{date}}",
     "promisePaused": "受伤期间暂停期限",
-    "promiseUnscheduled": "等待安排比赛后确定期限"
+    "promiseUnscheduled": "等待安排比赛后确定期限",
+    "squadPlan": "六个月阵容规划",
+    "squadPlanHint": "若不续签180天内到期的合同，一线队将剩余 {{count}} 人。下方显示预计位置储备。",
+    "noExpiringContracts": "没有一线队合同将在180天内到期。"
   }
 }

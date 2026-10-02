@@ -4233,6 +4233,9 @@
     "promiseAction": "Janji waktu bermain: perlu tampil sekali. Sisa pertandingan: {{count}}.",
     "promiseDeadline": "Perkiraan tenggat: {{date}}",
     "promisePaused": "Tenggat ditunda selama cedera",
-    "promiseUnscheduled": "Tenggat menunggu jadwal pertandingan"
+    "promiseUnscheduled": "Tenggat menunggu jadwal pertandingan",
+    "squadPlan": "Rencana skuad enam bulan",
+    "squadPlanHint": "Jika kontrak yang habis dalam 180 hari tidak diperpanjang, skuad senior tersisa {{count}} pemain. Cakupan posisi yang diproyeksikan ditampilkan di bawah.",
+    "noExpiringContracts": "Tidak ada kontrak senior yang habis dalam 180 hari."
   }
 }

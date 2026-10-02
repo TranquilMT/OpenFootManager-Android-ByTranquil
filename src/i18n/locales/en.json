@@ -4233,6 +4233,9 @@
     "promiseAction": "Playing-time promise: one appearance needed. Matches remaining: {{count}}.",
     "promiseDeadline": "Expected deadline: {{date}}",
     "promisePaused": "Deadline paused while injured",
-    "promiseUnscheduled": "Deadline awaits scheduled fixtures"
+    "promiseUnscheduled": "Deadline awaits scheduled fixtures",
+    "squadPlan": "Six-month squad plan",
+    "squadPlanHint": "If contracts due within 180 days are not renewed, senior squad size: {{count}}. Projected role coverage is shown below.",
+    "noExpiringContracts": "No senior contracts expire within 180 days."
   }
 }

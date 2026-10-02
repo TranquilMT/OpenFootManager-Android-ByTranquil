@@ -4233,6 +4233,9 @@
     "promiseAction": "Příslib herního času: potřebuje jeden start. Zbývá zápasů: {{count}}.",
     "promiseDeadline": "Očekávaný termín: {{date}}",
     "promisePaused": "Termín je během zranění pozastaven",
-    "promiseUnscheduled": "Termín čeká na naplánované zápasy"
+    "promiseUnscheduled": "Termín čeká na naplánované zápasy",
+    "squadPlan": "Plán kádru na šest měsíců",
+    "squadPlanHint": "Bez prodloužení smluv končících do 180 dnů zbude v prvním týmu {{count}} hráčů. Předpokládané pokrytí rolí je níže.",
+    "noExpiringContracts": "Žádná smlouva prvního týmu nekončí do 180 dnů."
   }
 }

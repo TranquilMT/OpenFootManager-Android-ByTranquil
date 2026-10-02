@@ -4233,6 +4233,9 @@
     "promiseAction": "Oynama süresi sözü: bir maçta süre almalı. Kalan maç: {{count}}.",
     "promiseDeadline": "Beklenen son tarih: {{date}}",
     "promisePaused": "Sakatlık sırasında süre durdurulur",
-    "promiseUnscheduled": "Son tarih maç programını bekliyor"
+    "promiseUnscheduled": "Son tarih maç programını bekliyor",
+    "squadPlan": "Altı aylık kadro planı",
+    "squadPlanHint": "180 gün içinde bitecek sözleşmeler yenilenmezse A takımda {{count}} oyuncu kalır. Öngörülen mevki derinliği aşağıdadır.",
+    "noExpiringContracts": "180 gün içinde sona erecek A takım sözleşmesi yok."
   }
 }

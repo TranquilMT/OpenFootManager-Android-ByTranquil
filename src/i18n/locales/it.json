@@ -4233,6 +4233,9 @@
     "promiseAction": "Promessa di minutaggio: serve una presenza. Partite rimaste: {{count}}.",
     "promiseDeadline": "Scadenza prevista: {{date}}",
     "promisePaused": "Scadenza sospesa durante l’infortunio",
-    "promiseUnscheduled": "Scadenza in attesa delle partite programmate"
+    "promiseUnscheduled": "Scadenza in attesa delle partite programmate",
+    "squadPlan": "Piano rosa per sei mesi",
+    "squadPlanHint": "Senza rinnovare i contratti in scadenza entro 180 giorni, la prima squadra avrà {{count}} giocatori. La copertura prevista è indicata sotto.",
+    "noExpiringContracts": "Nessun contratto della prima squadra scade entro 180 giorni."
   }
 }

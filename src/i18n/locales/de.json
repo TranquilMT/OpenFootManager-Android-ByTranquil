@@ -4233,6 +4233,9 @@
     "promiseAction": "Spielzeitversprechen: ein Einsatz nötig. Verbleibende Spiele: {{count}}.",
     "promiseDeadline": "Voraussichtliche Frist: {{date}}",
     "promisePaused": "Frist während der Verletzung ausgesetzt",
-    "promiseUnscheduled": "Frist wartet auf angesetzte Spiele"
+    "promiseUnscheduled": "Frist wartet auf angesetzte Spiele",
+    "squadPlan": "Kaderplan für sechs Monate",
+    "squadPlanHint": "Ohne Verlängerung der in 180 Tagen auslaufenden Verträge verbleiben {{count}} Profis. Die erwartete Rollenabdeckung steht unten.",
+    "noExpiringContracts": "Kein Profivertrag läuft innerhalb von 180 Tagen aus."
   }
 }
