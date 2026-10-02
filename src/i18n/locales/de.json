@@ -4249,6 +4249,10 @@
     "individualPlansHint": "Wähle unten einen individuellen Schwerpunkt. Jeder Monatsbericht setzt ein Ziel von einem Stärkepunkt, begrenzt durch das Potenzial; gemessen wird ab dem gespeicherten Bericht.",
     "newTrainingPlan": "Neuer Schwerpunkt: die Erfassung beginnt beim nächsten Bericht.",
     "trainingCeiling": "Aktuelles Potenzial erreicht; konzentriere dich auf Fitness und Leistung.",
-    "monthlyTarget": "Monatsziel: {{target}} Gesamtstärke erreichen"
+    "monthlyTarget": "Monatsziel: {{target}} Gesamtstärke erreichen",
+    "loanWatch": "Leihspielerbeobachtung",
+    "loanSeasonStats": "Diese Saison auf Leihbasis: {{appearances}} Einsätze · {{minutes}} Minuten",
+    "loanReturnDate": "Rückkehr am {{date}} · Verbleibende Tage: {{count}}",
+    "loanUnused": "Noch keine Einsatzminuten — prüfe diese Leihe."
   }
 }

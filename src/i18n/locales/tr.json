@@ -4249,6 +4249,10 @@
     "individualPlansHint": "Aşağıdaki kadrodan bireysel odak seç. Her aylık rapor, potansiyelle sınırlı bir OVR puanı hedefi belirler; ilerleme kayıtlı rapordan ölçülür.",
     "newTrainingPlan": "Yeni odak: hedef takibi sonraki raporda başlar.",
     "trainingCeiling": "Mevcut potansiyel sınırına ulaştı; kondisyon ve performansa odaklan.",
-    "monthlyTarget": "Aylık hedef: {{target}} OVR değerine ulaş"
+    "monthlyTarget": "Aylık hedef: {{target}} OVR değerine ulaş",
+    "loanWatch": "Kiralık oyuncu takibi",
+    "loanSeasonStats": "Bu sezon kiralıkken: {{appearances}} maç · {{minutes}} dakika",
+    "loanReturnDate": "Dönüş {{date}} · Kalan gün: {{count}}",
+    "loanUnused": "Henüz süre almadı — bu kiralamayı gözden geçir."
   }
 }

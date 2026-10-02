@@ -4249,6 +4249,10 @@
     "individualPlansHint": "Scegli un obiettivo individuale nella rosa sotto. Ogni rapporto mensile punta a un punto di OVR in più, entro il potenziale; i progressi partono dal rapporto salvato.",
     "newTrainingPlan": "Nuovo obiettivo: il monitoraggio inizia al prossimo rapporto.",
     "trainingCeiling": "Potenziale attuale raggiunto; concentrati su condizione e prestazioni.",
-    "monthlyTarget": "Obiettivo mensile: raggiungere {{target}} OVR"
+    "monthlyTarget": "Obiettivo mensile: raggiungere {{target}} OVR",
+    "loanWatch": "Monitoraggio prestiti",
+    "loanSeasonStats": "Questa stagione in prestito: {{appearances}} presenze · {{minutes}} minuti",
+    "loanReturnDate": "Rientro il {{date}} · Giorni rimasti: {{count}}",
+    "loanUnused": "Nessun minuto giocato — valuta questo prestito."
   }
 }

@@ -4249,6 +4249,10 @@
     "individualPlansHint": "Vyber individuální zaměření v kádru níže. Měsíční zpráva stanoví cíl zvýšit OVR o bod do hranice potenciálu; postup se měří od uložené zprávy.",
     "newTrainingPlan": "Nové zaměření: sledování začne při příští zprávě.",
     "trainingCeiling": "Současný potenciál je dosažen; zaměř se na kondici a výkon.",
-    "monthlyTarget": "Měsíční cíl: dosáhnout {{target}} OVR"
+    "monthlyTarget": "Měsíční cíl: dosáhnout {{target}} OVR",
+    "loanWatch": "Sledování hostování",
+    "loanSeasonStats": "V této sezoně na hostování: {{appearances}} startů · {{minutes}} minut",
+    "loanReturnDate": "Návrat {{date}} · Zbývá dnů: {{count}}",
+    "loanUnused": "Zatím bez minut — prověř toto hostování."
   }
 }

@@ -4249,6 +4249,10 @@
     "individualPlansHint": "Pilih fokus individu pada skuad di bawah. Setiap laporan bulanan menargetkan kenaikan satu poin OVR, dibatasi potensi; kemajuan diukur dari laporan tersimpan.",
     "newTrainingPlan": "Fokus baru: pelacakan target dimulai pada laporan berikutnya.",
     "trainingCeiling": "Batas potensi saat ini tercapai; utamakan kebugaran dan performa.",
-    "monthlyTarget": "Target bulanan: mencapai {{target}} OVR"
+    "monthlyTarget": "Target bulanan: mencapai {{target}} OVR",
+    "loanWatch": "Pantauan pemain pinjaman",
+    "loanSeasonStats": "Musim ini saat dipinjamkan: {{appearances}} penampilan · {{minutes}} menit",
+    "loanReturnDate": "Kembali {{date}} · Sisa hari: {{count}}",
+    "loanUnused": "Belum mendapat menit bermain — tinjau pinjaman ini."
   }
 }

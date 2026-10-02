@@ -4249,6 +4249,10 @@
     "individualPlansHint": "Escolhe um foco individual no plantel abaixo. Cada relatório mensal define uma melhoria de um ponto de OVR, limitada pelo potencial; o progresso parte do relatório guardado.",
     "newTrainingPlan": "Novo foco: o acompanhamento começa no próximo relatório.",
     "trainingCeiling": "Atingiu o potencial atual; dá prioridade à condição física e ao desempenho.",
-    "monthlyTarget": "Objetivo mensal: atingir {{target}} OVR"
+    "monthlyTarget": "Objetivo mensal: atingir {{target}} OVR",
+    "loanWatch": "Acompanhamento de empréstimos",
+    "loanSeasonStats": "Esta época emprestado: {{appearances}} jogos · {{minutes}} minutos",
+    "loanReturnDate": "Regressa em {{date}} · Dias restantes: {{count}}",
+    "loanUnused": "Ainda sem minutos — revê este empréstimo."
   }
 }

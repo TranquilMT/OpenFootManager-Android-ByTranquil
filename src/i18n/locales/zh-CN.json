@@ -4249,6 +4249,10 @@
     "individualPlansHint": "在下方阵容中选择个人训练重点。每月报告设置提升1点总评的目标，上限为潜力值；进度从保存的报告开始计算。",
     "newTrainingPlan": "训练重点已更改：目标记录将在下次报告时开始。",
     "trainingCeiling": "已达到当前潜力上限；请关注体能和比赛表现。",
-    "monthlyTarget": "月度目标：达到 {{target}} 总评"
+    "monthlyTarget": "月度目标：达到 {{target}} 总评",
+    "loanWatch": "租借观察",
+    "loanSeasonStats": "本赛季租借期间：{{appearances}} 次出场 · {{minutes}} 分钟",
+    "loanReturnDate": "归队日期 {{date}} · 剩余天数：{{count}}",
+    "loanUnused": "尚未获得出场时间——请检查这笔租借。"
   }
 }

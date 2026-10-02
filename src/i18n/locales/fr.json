@@ -4249,6 +4249,10 @@
     "individualPlansHint": "Choisissez un axe individuel dans l’effectif ci-dessous. Chaque bilan mensuel fixe un gain d’un point de note globale, limité par le potentiel ; la progression part du bilan enregistré.",
     "newTrainingPlan": "Nouvel axe : le suivi commence au prochain bilan.",
     "trainingCeiling": "Potentiel actuel atteint ; privilégiez la condition et les performances.",
-    "monthlyTarget": "Objectif mensuel : atteindre {{target}} de note globale"
+    "monthlyTarget": "Objectif mensuel : atteindre {{target}} de note globale",
+    "loanWatch": "Suivi des prêts",
+    "loanSeasonStats": "Cette saison en prêt : {{appearances}} apparitions · {{minutes}} minutes",
+    "loanReturnDate": "Retour le {{date}} · Jours restants : {{count}}",
+    "loanUnused": "Aucune minute jouée — examinez ce prêt."
   }
 }

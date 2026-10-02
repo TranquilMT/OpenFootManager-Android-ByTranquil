@@ -1,3 +1,4 @@
+import LoanMonitoringCard from "./LoanMonitoringCard";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type {
   GameStateData,
@@ -939,6 +940,7 @@ export default function TransfersTab({
 
   return (
     <div>
+      <LoanMonitoringCard gameState={gameState} onSelectPlayer={onSelectPlayer} />
       {/* Budget header */}
       {myTeam && (
         <Card accent="primary" className="mb-5">
