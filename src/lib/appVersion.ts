@@ -2,6 +2,10 @@
 export const APP_VERSION = __APP_VERSION__;
 export const APP_BUILD_DATE = __APP_BUILD_DATE__;
 
+export function isNightlyBuild(): boolean {
+  return __APP_CHANNEL__ === "nightly";
+}
+
 /**
  * CI exposes the GitHub Actions run number to Vite where available. During
  * local development we deliberately fall back to the app version rather than

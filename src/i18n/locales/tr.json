@@ -4319,6 +4319,8 @@
     "intro": "TranquilGames ve OpenFootManager için yumuşak geçişli yeni açılış.",
     "footer": "Ana menünün sağ alt köşesinde sade sürüm ve derleme numarası.",
     "notes": "Daha anlaşılır güncelleme kartları, yenilenen teşekkür ve doğrudan GitHub bağlantısı.",
-    "thanks": "OFMtouch oynadığınız ve gelişimine katkıda bulunduğunuz için teşekkürler. Geri bildirimleriniz, ekran görüntüleriniz ve hata raporlarınız değerlidir. Lütfen GitHub üzerinden hata bildirmeye devam edin."
+    "thanks": "OFMtouch oynadığınız ve gelişimine katkıda bulunduğunuz için teşekkürler. Geri bildirimleriniz, ekran görüntüleriniz ve hata raporlarınız değerlidir. Lütfen GitHub üzerinden hata bildirmeye devam edin.",
+    "nightlyBadge": "NIGHTLY",
+    "brand": "Orijinal logonun altında TOUCH yazısı ve ayrı bir NIGHTLY derleme rozeti."
   }
 }

@@ -4319,6 +4319,8 @@
     "intro": "A new fading introduction featuring TranquilGames and OpenFootManager.",
     "footer": "A clean version and build label at the bottom right of the main menu.",
     "notes": "Clearer update cards, refreshed thanks and a direct GitHub bug-report link.",
-    "thanks": "Thank you for playing OFMtouch and helping it improve. Your feedback, screenshots and bug reports make a difference. Please keep reporting bugs through GitHub."
+    "thanks": "Thank you for playing OFMtouch and helping it improve. Your feedback, screenshots and bug reports make a difference. Please keep reporting bugs through GitHub.",
+    "nightlyBadge": "NIGHTLY",
+    "brand": "TOUCH branding beneath the original logo, plus a separate NIGHTLY build badge."
   }
 }

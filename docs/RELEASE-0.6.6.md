@@ -2,6 +2,7 @@
 
 - Fade in TranquilGames, hold for five seconds, then fade to the OpenFootManager collaboration credit and logo before the welcome screen.
 - Skip the introduction at any time; it plays once per app launch and respects reduced-motion settings.
+- Add TOUCH branding beneath the main-menu logo and a separate NIGHTLY badge at the bottom left.
 - Show only the game version and build number at the bottom right, with room for the GitHub links.
 - Read the latest updates in compact icon cards, with refreshed thanks and a direct GitHub bug-report link.
 - Keep version-specific welcome opt-out and previous 0.6.5 notes in Patch History.

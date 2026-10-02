@@ -25,7 +25,8 @@
     "worldEditor.playerId",
     "worldEditor.competitionId",
     "worldEditor.teamId",
-    "worldEditor.staffId"
+    "worldEditor.staffId",
+    "phase66.nightlyBadge"
   ],
   "de": [
     "nations.eng",

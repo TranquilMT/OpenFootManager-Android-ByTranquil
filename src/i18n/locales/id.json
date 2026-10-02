@@ -4319,6 +4319,8 @@
     "intro": "Intro baru dengan transisi memudar untuk TranquilGames dan OpenFootManager.",
     "footer": "Versi dan nomor build yang ringkas di kanan bawah menu utama.",
     "notes": "Kartu pembaruan lebih jelas, ucapan terima kasih baru dan tautan langsung ke GitHub.",
-    "thanks": "Terima kasih telah memainkan OFMtouch dan membantu menyempurnakannya. Masukan, tangkapan layar dan laporan bug Anda sangat berarti. Terus laporkan bug melalui GitHub."
+    "thanks": "Terima kasih telah memainkan OFMtouch dan membantu menyempurnakannya. Masukan, tangkapan layar dan laporan bug Anda sangat berarti. Terus laporkan bug melalui GitHub.",
+    "nightlyBadge": "NIGHTLY",
+    "brand": "Identitas TOUCH di bawah logo asli, serta lencana build NIGHTLY terpisah."
   }
 }

@@ -4319,6 +4319,8 @@
     "intro": "Nuova introduzione in dissolvenza con TranquilGames e OpenFootManager.",
     "footer": "Versione e numero di build in basso a destra nel menu principale.",
     "notes": "Novità più chiare, ringraziamenti aggiornati e collegamento diretto a GitHub.",
-    "thanks": "Grazie per giocare a OFMtouch e aiutarci a migliorarlo. Commenti, schermate e segnalazioni fanno la differenza. Continuate a segnalare i bug su GitHub."
+    "thanks": "Grazie per giocare a OFMtouch e aiutarci a migliorarlo. Commenti, schermate e segnalazioni fanno la differenza. Continuate a segnalare i bug su GitHub.",
+    "nightlyBadge": "NIGHTLY",
+    "brand": "Scritta TOUCH sotto il logo originale e un indicatore NIGHTLY separato."
   }
 }

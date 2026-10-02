@@ -4319,6 +4319,8 @@
     "intro": "Nový úvod s prolínáním TranquilGames a OpenFootManager.",
     "footer": "Verze a číslo sestavení v pravém dolním rohu hlavní nabídky.",
     "notes": "Přehlednější karty novinek, nové poděkování a přímý odkaz na GitHub.",
-    "thanks": "Děkujeme, že hrajete OFMtouch a pomáháte jej zlepšovat. Vaše názory, snímky a hlášení mají význam. Nadále prosím hlaste chyby přes GitHub."
+    "thanks": "Děkujeme, že hrajete OFMtouch a pomáháte jej zlepšovat. Vaše názory, snímky a hlášení mají význam. Nadále prosím hlaste chyby přes GitHub.",
+    "nightlyBadge": "NIGHTLY",
+    "brand": "Označení TOUCH pod původním logem a samostatný štítek sestavení NIGHTLY."
   }
 }

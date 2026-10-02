@@ -89,6 +89,7 @@ Your job extends beyond the next result.
 ### v0.6.6 — Startup & Menu Polish
 
 - Fading TranquilGames introduction followed by the OpenFootManager logo, with a Skip button.
+- TOUCH branding below the original logo and a separate NIGHTLY badge at the bottom left.
 - Short version and build label at the bottom right, separated from source links.
 - Compact update cards with icons, refreshed thanks and GitHub bug reporting.
 - Introduction plays once per launch and respects reduced-motion settings; update opt-out remains version-specific.

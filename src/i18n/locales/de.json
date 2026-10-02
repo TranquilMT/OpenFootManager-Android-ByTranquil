@@ -4319,6 +4319,8 @@
     "intro": "Neues Intro mit Überblendungen für TranquilGames und OpenFootManager.",
     "footer": "Version und Buildnummer unten rechts im Hauptmenü.",
     "notes": "Übersichtlichere Update-Karten, neuer Dankestext und direkter GitHub-Link.",
-    "thanks": "Danke, dass ihr OFMtouch spielt und verbessert. Eure Rückmeldungen, Screenshots und Fehlerberichte helfen uns. Meldet Fehler bitte weiterhin über GitHub."
+    "thanks": "Danke, dass ihr OFMtouch spielt und verbessert. Eure Rückmeldungen, Screenshots und Fehlerberichte helfen uns. Meldet Fehler bitte weiterhin über GitHub.",
+    "nightlyBadge": "NIGHTLY",
+    "brand": "TOUCH-Schriftzug unter dem ursprünglichen Logo und ein separates NIGHTLY-Build-Abzeichen."
   }
 }

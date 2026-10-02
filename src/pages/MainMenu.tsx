@@ -13,7 +13,8 @@ import type { CareerStartPhase, CreateManagerFormData } from "../components/menu
 import type { PackageInfo, PackageIssue } from "../components/menu/WorldSelect";
 import type { ManagerProfile } from "../components/menu/types";
 import { applyExtraTranslations } from "../lib/extraTranslations";
-import { formatAppVersion } from "../lib/appVersion";
+import { GameBrand } from "../components/menu/GameBrand";
+import { MainMenuFooter } from "../components/menu/MainMenuFooter";
 import { resolveBackendError } from "../utils/backendI18n";
 import { prewarmManagerSquadPortraits } from "../services/portraitService";
 import { WhatsNewModal } from "../components/menu/WhatsNewModal";
@@ -697,11 +698,7 @@ export default function MainMenu() {
 
           <div className="rounded-b-2xl bg-white p-4 sm:p-8 dark:bg-navy-800 shadow-xl dark:shadow-2xl border border-gray-200 dark:border-navy-600 border-t-0 transition-all duration-500">
             {/* Logo */}
-            <img
-              src="/openfootlogo.svg"
-              alt={t("app.name")}
-              className="text-center w-full h-full object-cover"
-            />
+            <GameBrand />
 
             <div className="border-t border-gray-200 dark:border-navy-600 my-8 transition-colors duration-500" />
 
@@ -891,10 +888,7 @@ export default function MainMenu() {
 
         {/* Project and upstream source links */}
         {menuState === "main" && <MenuSourceLinks />}
-        {/* Version */}
-        <div className="fixed bottom-[calc(0.75rem+env(safe-area-inset-bottom))] right-3 z-20 whitespace-nowrap text-gray-500 sm:absolute sm:bottom-3 sm:right-4 dark:text-gray-400 text-xs font-heading tracking-wide transition-colors">
-          {formatAppVersion()}
-        </div>
+        <MainMenuFooter />
 
         {introComplete && <WhatsNewModal />}
         {showPatchHistory && <PatchHistoryModal onClose={() => setShowPatchHistory(false)} />}

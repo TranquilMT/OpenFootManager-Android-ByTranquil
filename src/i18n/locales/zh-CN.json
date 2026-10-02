@@ -4319,6 +4319,8 @@
     "intro": "全新淡入淡出片头，展示 TranquilGames 和 OpenFootManager。",
     "footer": "主菜单右下角简洁显示版本号和构建号。",
     "notes": "更清晰的更新卡片、全新感谢词和直达 GitHub 的错误反馈链接。",
-    "thanks": "感谢您游玩 OFMtouch 并帮助我们改进游戏。您的反馈、截图和错误报告非常重要。请继续通过 GitHub 报告错误。"
+    "thanks": "感谢您游玩 OFMtouch 并帮助我们改进游戏。您的反馈、截图和错误报告非常重要。请继续通过 GitHub 报告错误。",
+    "nightlyBadge": "NIGHTLY",
+    "brand": "原版标志下方新增 TOUCH 字样，并单独显示 NIGHTLY 构建标识。"
   }
 }
