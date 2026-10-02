@@ -962,10 +962,10 @@ fn build_club(
         }
         team_staff.push(member);
     }
-
     normalize_generated_team(&mut team, &mut team_players, opening_year as i32);
     let payroll = team_players.iter().map(|p| i64::from(p.wage)).sum::<i64>()
         + team_staff.iter().map(|s| i64::from(s.wage)).sum::<i64>();
+    team.finance = team.finance.max(crate::club_economy::opening_cash(&team));
     crate::club_economy::initialize_generated_club(&mut team, payroll);
     seed_starting_xi(&mut team, &team_players);
     (team, team_players, team_staff)

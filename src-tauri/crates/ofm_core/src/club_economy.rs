@@ -109,7 +109,6 @@ pub fn initialize_generated_club(team: &mut Team, annual_payroll: i64) {
         annual_operating_income: income,
         annual_operating_cost: cost,
     };
-    team.finance = team.finance.max(opening_cash(team));
     team.transfer_budget = (team.finance * 45 / 100).min(revenue / 10);
     team.wage_budget = (annual_payroll * 115 / 100).max(revenue / 20);
 }
@@ -218,17 +217,15 @@ fn upgrade_generated_career_inner(game: &mut Game) -> Result<(), String> {
                 .iter()
                 .position(|team| team.id == id)
                 .expect("existing club");
-            let old_cash = game.teams[index].finance;
             let old_transfer = game.teams[index].transfer_budget;
             let original_opening = game
                 .cash_journal
                 .iter()
                 .find(|p| p.club_id == id && p.kind == domain::finance::CashKind::OpeningBalance)
                 .map(|p| p.amount)
-                .unwrap_or(old_cash);
+                .unwrap_or(game.teams[index].finance);
             let grant = (opening_cash(&game.teams[index]) - original_opening).max(0);
             initialize_generated_club(&mut game.teams[index], payroll);
-            game.teams[index].finance = old_cash;
             // Add the missing opening allocation, without refunding past spending.
             game.teams[index].transfer_budget = old_transfer.saturating_add(grant * 45 / 100);
             crate::finances::journal::post(
@@ -264,6 +261,7 @@ mod tests {
     #[test]
     fn united_cash_is_separate_from_turnover_and_wages_fit() {
         let mut team = club("Manchester United", 910);
+        team.finance = opening_cash(&team);
         initialize_generated_club(&mut team, 250_000_000);
         assert_eq!(team.finance, 77_280_000);
         assert!(team.wage_budget > 250_000_000);
@@ -348,6 +346,7 @@ mod tests {
     #[test]
     fn forecast_matches_26_week_actual_cash_flow_and_signings_have_a_cost() {
         let mut game = career();
+        game.teams[0].finance = opening_cash(&game.teams[0]);
         initialize_generated_club(&mut game.teams[0], 0);
         let initial = game.teams[0].finance;
         let snapshot = crate::finances::team_finance_snapshot(&game, "test").unwrap();
