@@ -4253,6 +4253,10 @@
     "loanWatch": "Loan watch",
     "loanSeasonStats": "This season on loan: {{appearances}} appearances · {{minutes}} minutes",
     "loanReturnDate": "Returns {{date}} · Days remaining: {{count}}",
-    "loanUnused": "No minutes yet — review this loan."
+    "loanUnused": "No minutes yet — review this loan.",
+    "financeForecast": "Cash and wage forecast",
+    "forecastPeriod": "Period",
+    "forecastWeeks": "After {{count}} weeks",
+    "forecastHint": "Estimate using current recurring cash flow and agreed registrations. Match income, future contract expiries and loan returns may change the result. Wage figures are weekly."
   }
 }

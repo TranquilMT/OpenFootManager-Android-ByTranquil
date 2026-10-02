@@ -1,0 +1,69 @@
+import type { PlayerData } from "../../store/types";
+import { annualAmountToWeeklyCommitment, getPlayerAnnualWageCommitment } from "../../lib/finance";
+import { getDaysUntil } from "../../lib/contractUtils";
+
+interface ForecastInput {
+  cash: number;
+  weeklyNet: number;
+  weeklyWages: number;
+  teamId: string;
+  today: string;
+  weeks: number;
+  players: PlayerData[];
+}
+
+/** Linear recurring-cash estimate plus already agreed registration commitments. */
+export function projectClubCash({
+  cash,
+  weeklyNet,
+  weeklyWages,
+  teamId,
+  today,
+  weeks,
+  players,
+}: ForecastInput) {
+  let projectedCash = cash + weeklyNet * weeks;
+  let projectedWages = weeklyWages;
+  let transferNet = 0;
+  const credited = new Set<string>();
+  const apply = (id: string, date: string, fee: number, wageChange: number) => {
+    if (credited.has(id)) return;
+    credited.add(id);
+    const days = Math.max(0, getDaysUntil(date.slice(0, 10), today.slice(0, 10)));
+    if (!Number.isFinite(days) || days > weeks * 7) return;
+    transferNet += fee;
+    projectedCash += fee - wageChange * (weeks - days / 7);
+    projectedWages += wageChange;
+  };
+  for (const player of players) {
+    for (const offer of player.transfer_offers) {
+      if (offer.status !== "PendingRegistration") continue;
+      if (offer.from_team_id === teamId && player.team_id !== teamId) {
+        apply(
+          `transfer:${offer.id}`,
+          offer.registration_date ?? offer.date,
+          -offer.fee,
+          annualAmountToWeeklyCommitment(offer.wage_offered || player.wage),
+        );
+      } else if (player.team_id === teamId && offer.from_team_id !== teamId) {
+        apply(
+          `transfer:${offer.id}`,
+          offer.registration_date ?? offer.date,
+          offer.fee,
+          -annualAmountToWeeklyCommitment(getPlayerAnnualWageCommitment(player, teamId)),
+        );
+      }
+    }
+    for (const offer of player.loan_offers ?? []) {
+      if (offer.status !== "PendingRegistration") continue;
+      const contribution = annualAmountToWeeklyCommitment(
+        Math.floor((player.wage * offer.wage_contribution_pct) / 100),
+      );
+      if (offer.from_team_id === teamId)
+        apply(`loan:${offer.id}`, offer.start_date, 0, contribution);
+      else if (offer.parent_team_id === teamId)
+        apply(`loan:${offer.id}`, offer.start_date, 0, -contribution);
+    }
+  }
+  return { cash: Math.round(projectedCash), weeklyWages: Math.max(0, projectedWages), transferNet };
+}

@@ -4253,6 +4253,10 @@
     "loanWatch": "Pantauan pemain pinjaman",
     "loanSeasonStats": "Musim ini saat dipinjamkan: {{appearances}} penampilan · {{minutes}} menit",
     "loanReturnDate": "Kembali {{date}} · Sisa hari: {{count}}",
-    "loanUnused": "Belum mendapat menit bermain — tinjau pinjaman ini."
+    "loanUnused": "Belum mendapat menit bermain — tinjau pinjaman ini.",
+    "financeForecast": "Proyeksi kas dan gaji",
+    "forecastPeriod": "Periode",
+    "forecastWeeks": "Setelah {{count}} minggu",
+    "forecastHint": "Perkiraan berdasarkan arus kas rutin saat ini dan registrasi yang disepakati. Pendapatan pertandingan, kontrak yang berakhir, dan pemain pinjaman yang kembali dapat mengubah hasil. Angka gaji adalah per minggu."
   }
 }

@@ -4253,6 +4253,10 @@
     "loanWatch": "租借观察",
     "loanSeasonStats": "本赛季租借期间：{{appearances}} 次出场 · {{minutes}} 分钟",
     "loanReturnDate": "归队日期 {{date}} · 剩余天数：{{count}}",
-    "loanUnused": "尚未获得出场时间——请检查这笔租借。"
+    "loanUnused": "尚未获得出场时间——请检查这笔租借。",
+    "financeForecast": "现金与工资预测",
+    "forecastPeriod": "期间",
+    "forecastWeeks": "{{count}} 周后",
+    "forecastHint": "根据当前经常性现金流和已约定注册进行估算。比赛收入、合同到期和租借归队可能改变结果。工资金额按周计算。"
   }
 }

@@ -4253,6 +4253,10 @@
     "loanWatch": "Monitoraggio prestiti",
     "loanSeasonStats": "Questa stagione in prestito: {{appearances}} presenze · {{minutes}} minuti",
     "loanReturnDate": "Rientro il {{date}} · Giorni rimasti: {{count}}",
-    "loanUnused": "Nessun minuto giocato — valuta questo prestito."
+    "loanUnused": "Nessun minuto giocato — valuta questo prestito.",
+    "financeForecast": "Previsione di cassa e stipendi",
+    "forecastPeriod": "Periodo",
+    "forecastWeeks": "Tra {{count}} settimane",
+    "forecastHint": "Stima basata sul flusso di cassa ricorrente attuale e sulle registrazioni concordate. Incassi delle partite, scadenze contrattuali e rientri dai prestiti possono cambiare il risultato. Gli stipendi sono settimanali."
   }
 }

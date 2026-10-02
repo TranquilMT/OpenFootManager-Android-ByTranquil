@@ -4253,6 +4253,10 @@
     "loanWatch": "Kiralık oyuncu takibi",
     "loanSeasonStats": "Bu sezon kiralıkken: {{appearances}} maç · {{minutes}} dakika",
     "loanReturnDate": "Dönüş {{date}} · Kalan gün: {{count}}",
-    "loanUnused": "Henüz süre almadı — bu kiralamayı gözden geçir."
+    "loanUnused": "Henüz süre almadı — bu kiralamayı gözden geçir.",
+    "financeForecast": "Nakit ve maaş tahmini",
+    "forecastPeriod": "Dönem",
+    "forecastWeeks": "{{count}} hafta sonra",
+    "forecastHint": "Mevcut düzenli nakit akışı ve anlaşılmış tescillere dayanan tahmin. Maç gelirleri, sözleşme bitişleri ve kiralık oyuncu dönüşleri sonucu değiştirebilir. Maaşlar haftalıktır."
   }
 }

@@ -4253,6 +4253,10 @@
     "loanWatch": "Leihspielerbeobachtung",
     "loanSeasonStats": "Diese Saison auf Leihbasis: {{appearances}} Einsätze · {{minutes}} Minuten",
     "loanReturnDate": "Rückkehr am {{date}} · Verbleibende Tage: {{count}}",
-    "loanUnused": "Noch keine Einsatzminuten — prüfe diese Leihe."
+    "loanUnused": "Noch keine Einsatzminuten — prüfe diese Leihe.",
+    "financeForecast": "Liquiditäts- und Gehaltsprognose",
+    "forecastPeriod": "Zeitraum",
+    "forecastWeeks": "Nach {{count}} Wochen",
+    "forecastHint": "Schätzung anhand des aktuellen laufenden Cashflows und vereinbarter Registrierungen. Spieleinnahmen, Vertragsabläufe und Leihrückkehrer können das Ergebnis ändern. Gehälter werden pro Woche angegeben."
   }
 }

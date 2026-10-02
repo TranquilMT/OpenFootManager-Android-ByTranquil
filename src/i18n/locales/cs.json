@@ -4253,6 +4253,10 @@
     "loanWatch": "Sledování hostování",
     "loanSeasonStats": "V této sezoně na hostování: {{appearances}} startů · {{minutes}} minut",
     "loanReturnDate": "Návrat {{date}} · Zbývá dnů: {{count}}",
-    "loanUnused": "Zatím bez minut — prověř toto hostování."
+    "loanUnused": "Zatím bez minut — prověř toto hostování.",
+    "financeForecast": "Prognóza hotovosti a mezd",
+    "forecastPeriod": "Období",
+    "forecastWeeks": "Za {{count}} týdnů",
+    "forecastHint": "Odhad podle současného pravidelného peněžního toku a dohodnutých registrací. Příjmy ze zápasů, konce smluv a návraty z hostování mohou výsledek změnit. Mzdy jsou týdenní."
   }
 }

@@ -4253,6 +4253,10 @@
     "loanWatch": "Seguimiento de cesiones",
     "loanSeasonStats": "Esta temporada cedido: {{appearances}} partidos · {{minutes}} minutos",
     "loanReturnDate": "Regresa el {{date}} · Días restantes: {{count}}",
-    "loanUnused": "Aún no ha jugado — revisa esta cesión."
+    "loanUnused": "Aún no ha jugado — revisa esta cesión.",
+    "financeForecast": "Previsión de caja y salarios",
+    "forecastPeriod": "Periodo",
+    "forecastWeeks": "Dentro de {{count}} semanas",
+    "forecastHint": "Estimación con el flujo de caja recurrente actual y las inscripciones acordadas. Los ingresos de partidos, vencimientos de contratos y retornos de cesiones pueden cambiar el resultado. Los salarios son semanales."
   }
 }

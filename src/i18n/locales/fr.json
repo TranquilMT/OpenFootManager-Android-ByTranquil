@@ -4253,6 +4253,10 @@
     "loanWatch": "Suivi des prêts",
     "loanSeasonStats": "Cette saison en prêt : {{appearances}} apparitions · {{minutes}} minutes",
     "loanReturnDate": "Retour le {{date}} · Jours restants : {{count}}",
-    "loanUnused": "Aucune minute jouée — examinez ce prêt."
+    "loanUnused": "Aucune minute jouée — examinez ce prêt.",
+    "financeForecast": "Prévision de trésorerie et de salaires",
+    "forecastPeriod": "Période",
+    "forecastWeeks": "Dans {{count}} semaines",
+    "forecastHint": "Estimation fondée sur la trésorerie récurrente actuelle et les inscriptions convenues. Les recettes de matchs, fins de contrat et retours de prêt peuvent modifier le résultat. Les salaires sont hebdomadaires."
   }
 }
