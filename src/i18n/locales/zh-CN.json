@@ -1926,7 +1926,10 @@
     "morale": "士气",
     "estimatedAttributes": "预估属性",
     "undiscovered": "尚未发掘",
-    "confidence": "置信度"
+    "confidence": "置信度",
+    "compareShortlist": "候选球员对比",
+    "comparisonPlayer": "对比球员 {{number}}",
+    "compareHint": "将两名球员加入候选名单，以对比工资、潜力和阵型适配度。"
   },
   "match": {
     "live": "直播中",

@@ -2638,7 +2638,10 @@
     "morale": "Moral",
     "estimatedAttributes": "Atributos estimados",
     "undiscovered": "Não descoberto",
-    "confidence": "Confiança"
+    "confidence": "Confiança",
+    "compareShortlist": "Comparação da lista de alvos",
+    "comparisonPlayer": "Jogador em comparação {{number}}",
+    "compareHint": "Adicione dois jogadores à lista de alvos para comparar salários, potencial e adequação à formação."
   },
   "be": {
     "error": {

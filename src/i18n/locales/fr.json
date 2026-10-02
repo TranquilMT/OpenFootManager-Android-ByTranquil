@@ -1926,7 +1926,10 @@
     "morale": "Moral",
     "estimatedAttributes": "Attributs estimés",
     "undiscovered": "Non découvert",
-    "confidence": "Confiance"
+    "confidence": "Confiance",
+    "compareShortlist": "Comparaison de la présélection",
+    "comparisonPlayer": "Joueur à comparer {{number}}",
+    "compareHint": "Présélectionnez deux joueurs pour comparer leurs salaires, leur potentiel et leur adaptation à la formation."
   },
   "match": {
     "live": "En Direct",

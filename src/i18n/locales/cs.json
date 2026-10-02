@@ -1926,7 +1926,10 @@
     "morale": "Morálka",
     "estimatedAttributes": "Odhadované atributy",
     "undiscovered": "Neobjeveno",
-    "confidence": "Spolehlivost odhadu"
+    "confidence": "Spolehlivost odhadu",
+    "compareShortlist": "Porovnání užšího výběru",
+    "comparisonPlayer": "Porovnávaný hráč {{number}}",
+    "compareHint": "Přidej dva hráče do užšího výběru a porovnej mzdy, potenciál a vhodnost pro rozestavení."
   },
   "match": {
     "live": "Živě",

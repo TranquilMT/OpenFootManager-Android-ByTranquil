@@ -1926,7 +1926,10 @@
     "morale": "Moral",
     "estimatedAttributes": "Tahmini Özellikler",
     "undiscovered": "Keşfedilmedi",
-    "confidence": "Güven"
+    "confidence": "Güven",
+    "compareShortlist": "Aday listesi karşılaştırması",
+    "comparisonPlayer": "Karşılaştırılan oyuncu {{number}}",
+    "compareHint": "Maaş, potansiyel ve dizilişe uygunluklarını karşılaştırmak için iki oyuncuyu aday listesine ekle."
   },
   "match": {
     "live": "Canlı",

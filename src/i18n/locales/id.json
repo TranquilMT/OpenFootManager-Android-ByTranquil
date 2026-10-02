@@ -1926,7 +1926,10 @@
     "morale": "Moral",
     "estimatedAttributes": "Perkiraan Atribut",
     "undiscovered": "Belum terungkap",
-    "confidence": "Keyakinan"
+    "confidence": "Keyakinan",
+    "compareShortlist": "Perbandingan daftar incaran",
+    "comparisonPlayer": "Pemain pembanding {{number}}",
+    "compareHint": "Tambahkan dua pemain ke daftar incaran untuk membandingkan gaji, potensi, dan kecocokan formasi."
   },
   "match": {
     "live": "Langsung",

@@ -1945,7 +1945,10 @@
     "morale": "Morale",
     "estimatedAttributes": "Attributi stimati",
     "undiscovered": "Non scoperto",
-    "confidence": "Affidabilità"
+    "confidence": "Affidabilità",
+    "compareShortlist": "Confronto dei candidati",
+    "comparisonPlayer": "Giocatore da confrontare {{number}}",
+    "compareHint": "Aggiungi due giocatori alla lista per confrontare stipendi, potenziale e compatibilità con il modulo."
   },
   "match": {
     "live": "Diretta",

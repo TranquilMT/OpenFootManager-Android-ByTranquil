@@ -1926,7 +1926,10 @@
     "morale": "Morale",
     "estimatedAttributes": "Estimated Attributes",
     "undiscovered": "Not discovered",
-    "confidence": "Confidence"
+    "confidence": "Confidence",
+    "compareShortlist": "Shortlist comparison",
+    "comparisonPlayer": "Comparison player {{number}}",
+    "compareHint": "Shortlist two players to compare wages, potential and formation fit."
   },
   "match": {
     "live": "Live",

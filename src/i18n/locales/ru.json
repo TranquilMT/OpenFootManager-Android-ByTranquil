@@ -1926,7 +1926,10 @@
     "morale": "Мораль",
     "estimatedAttributes": "Оценка качеств",
     "undiscovered": "Не раскрыто",
-    "confidence": "Надёжность"
+    "confidence": "Надёжность",
+    "compareShortlist": "Сравнение кандидатов",
+    "comparisonPlayer": "Сравниваемый игрок {{number}}",
+    "compareHint": "Добавьте двух игроков в список кандидатов для сравнения зарплат, потенциала и соответствия схеме."
   },
   "match": {
     "live": "Матч",
