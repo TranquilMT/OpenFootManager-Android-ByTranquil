@@ -36,12 +36,12 @@ fn is_english(team: &Team) -> bool {
 }
 
 pub fn apply_home_identity(team: &mut Team) {
-    if is_english(team) {
-        if let Some((primary, secondary, pattern)) = english_home_identity(&team.name) {
-            team.colors.primary = primary.into();
-            team.colors.secondary = secondary.into();
-            team.kit_pattern = pattern;
-        }
+    if is_english(team)
+        && let Some((primary, secondary, pattern)) = english_home_identity(&team.name)
+    {
+        team.colors.primary = primary.into();
+        team.colors.secondary = secondary.into();
+        team.kit_pattern = pattern;
     }
 }
 
