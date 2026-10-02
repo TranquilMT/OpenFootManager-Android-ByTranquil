@@ -867,7 +867,6 @@ fn build_club(
         team.football_nation = "ENG".to_string();
     }
     let team_id = team.id.clone();
-
     let squad_size = rng.random_range(SQUAD_SLOTS..=26);
     let mut team_players = Vec::with_capacity(squad_size);
     // Two players for every deployed slot, including repeated central roles.
@@ -963,9 +962,10 @@ fn build_club(
         team_staff.push(member);
     }
     normalize_generated_team(&mut team, &mut team_players, opening_year as i32);
+    crate::club_economy::fit_generated_payroll(&team, &mut team_players, &mut team_staff);
     let payroll = team_players.iter().map(|p| i64::from(p.wage)).sum::<i64>()
         + team_staff.iter().map(|s| i64::from(s.wage)).sum::<i64>();
-    team.finance = team.finance.max(crate::club_economy::opening_cash(&team));
+    team.finance = crate::club_economy::opening_cash(&team);
     crate::club_economy::initialize_generated_club(&mut team, payroll);
     seed_starting_xi(&mut team, &team_players);
     (team, team_players, team_staff)
@@ -2432,7 +2432,7 @@ mod tests {
     #[test]
     fn test_generate_world_normalizes_opening_financials() {
         for _ in 0..8 {
-            let (teams, players, _) = generate_world_with(
+            let (teams, players, staff) = generate_world_with(
                 &WorldGenConfig::compact(),
                 &definitions::DefinitionSources::embedded_only(),
             );
@@ -2442,7 +2442,12 @@ mod tests {
                     .filter(|player| player.team_id.as_deref() == Some(team.id.as_str()))
                     .map(|player| player.wage as i64)
                     .sum();
-                let weekly_wage_spend = (annual_wages + 51) / 52;
+                let payroll = annual_wages
+                    + staff
+                        .iter()
+                        .filter(|member| member.team_id.as_deref() == Some(team.id.as_str()))
+                        .map(|member| i64::from(member.wage))
+                        .sum::<i64>();
                 let usage_percent = (annual_wages * 100) / std::cmp::max(1, team.wage_budget);
 
                 assert!(
@@ -2458,10 +2463,11 @@ mod tests {
                     team.name,
                     usage_percent
                 );
+                assert_eq!(team.finance, crate::club_economy::opening_cash(team));
+                assert!(payroll <= crate::club_economy::annual_revenue_anchor(team) * 60 / 100);
                 assert!(
-                    team.finance >= weekly_wage_spend * MIN_OPENING_RUNWAY_WEEKS,
-                    "{} opened without the minimum wage runway",
-                    team.name
+                    team.economy.annual_operating_income
+                        >= payroll + team.economy.annual_operating_cost
                 );
             }
         }

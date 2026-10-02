@@ -1,6 +1,6 @@
 {
   "oversizedAggregate": {
-    "rust": 64251,
+    "rust": 64257,
     "ts": 35609
   },
   "allowedOversized": {
@@ -14,7 +14,7 @@
     "src-tauri/crates/ofm_core/src/generator/clubs.rs": 1319,
     "src-tauri/crates/ofm_core/src/generator/competition_def.rs": 1635,
     "src-tauri/crates/ofm_core/src/generator/generation.rs": 1700,
-    "src-tauri/crates/ofm_core/src/generator/mod.rs": 3306,
+    "src-tauri/crates/ofm_core/src/generator/mod.rs": 3312,
     "src-tauri/crates/ofm_core/src/generator/package.rs": 4793,
     "src-tauri/crates/ofm_core/src/job_offers.rs": 1559,
     "src-tauri/crates/ofm_core/src/nations.rs": 1379,

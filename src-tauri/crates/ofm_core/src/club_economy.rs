@@ -98,6 +98,34 @@ pub fn opening_cash(team: &Team) -> i64 {
     }
 }
 
+/// Calibrate only newly generated contracts to the club's operating scale.
+/// Existing negotiated salaries are never rewritten by career repair.
+pub fn fit_generated_payroll(
+    team: &Team,
+    players: &mut [domain::player::Player],
+    staff: &mut [domain::staff::Staff],
+) {
+    let payroll = players.iter().map(|p| i64::from(p.wage)).sum::<i64>()
+        + staff.iter().map(|s| i64::from(s.wage)).sum::<i64>();
+    let ceiling = annual_revenue_anchor(team) * 60 / 100;
+    if payroll <= ceiling || payroll == 0 {
+        return;
+    }
+    let scale = |wage: u32| {
+        if wage == 0 {
+            0
+        } else {
+            (i64::from(wage) * ceiling / payroll).max(1) as u32
+        }
+    };
+    for player in players {
+        player.wage = scale(player.wage);
+    }
+    for member in staff {
+        member.wage = scale(member.wage);
+    }
+}
+
 pub fn initialize_generated_club(team: &mut Team, annual_payroll: i64) {
     apply_home_identity(team);
     let revenue = annual_revenue_anchor(team);
