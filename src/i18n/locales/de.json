@@ -4257,6 +4257,14 @@
     "financeForecast": "Liquiditäts- und Gehaltsprognose",
     "forecastPeriod": "Zeitraum",
     "forecastWeeks": "Nach {{count}} Wochen",
-    "forecastHint": "Schätzung anhand des aktuellen laufenden Cashflows und vereinbarter Registrierungen. Spieleinnahmen, Vertragsabläufe und Leihrückkehrer können das Ergebnis ändern. Gehälter werden pro Woche angegeben."
+    "forecastHint": "Schätzung anhand des aktuellen laufenden Cashflows und vereinbarter Registrierungen. Spieleinnahmen, Vertragsabläufe und Leihrückkehrer können das Ergebnis ändern. Gehälter werden pro Woche angegeben.",
+    "careerMilestones": "Karrieremeilensteine",
+    "milestoneMatches": "Betreute Spiele: {{count}}",
+    "milestoneWins": "Siege: {{count}}",
+    "milestoneTrophies": "Titel: {{count}}",
+    "milestoneAnniversary": "Jahre als Trainer: {{count}}",
+    "milestonePromotion": "Aufstieg in {{division}} ({{season}})",
+    "milestoneEarlier": "Früher in dieser Karriere erreicht",
+    "milestonePending": "Meilensteine erscheinen im Verlauf deiner Karriere."
   }
 }

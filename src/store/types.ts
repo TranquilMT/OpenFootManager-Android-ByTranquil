@@ -491,7 +491,17 @@ export interface MessageData {
   i18n_params?: Record<string, string>;
 }
 
+export interface CareerMilestone {
+  id: string;
+  kind: "matches" | "wins" | "trophies" | "anniversary" | "promotion";
+  value: number;
+  date: string | null;
+  context: string | null;
+}
+
 export interface ManagerCareerStats {
+  milestones?: CareerMilestone[];
+  milestones_initialized?: boolean;
   matches_managed: number;
   wins: number;
   draws: number;

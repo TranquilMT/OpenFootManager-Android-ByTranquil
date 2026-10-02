@@ -4257,6 +4257,14 @@
     "financeForecast": "Previsione di cassa e stipendi",
     "forecastPeriod": "Periodo",
     "forecastWeeks": "Tra {{count}} settimane",
-    "forecastHint": "Stima basata sul flusso di cassa ricorrente attuale e sulle registrazioni concordate. Incassi delle partite, scadenze contrattuali e rientri dai prestiti possono cambiare il risultato. Gli stipendi sono settimanali."
+    "forecastHint": "Stima basata sul flusso di cassa ricorrente attuale e sulle registrazioni concordate. Incassi delle partite, scadenze contrattuali e rientri dai prestiti possono cambiare il risultato. Gli stipendi sono settimanali.",
+    "careerMilestones": "Traguardi di carriera",
+    "milestoneMatches": "Partite allenate: {{count}}",
+    "milestoneWins": "Vittorie: {{count}}",
+    "milestoneTrophies": "Trofei: {{count}}",
+    "milestoneAnniversary": "Anni da allenatore: {{count}}",
+    "milestonePromotion": "Promozione in {{division}} ({{season}})",
+    "milestoneEarlier": "Raggiunto in precedenza in questa carriera",
+    "milestonePending": "I traguardi compaiono con il progredire della carriera."
   }
 }

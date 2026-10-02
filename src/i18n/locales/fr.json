@@ -4257,6 +4257,14 @@
     "financeForecast": "Prévision de trésorerie et de salaires",
     "forecastPeriod": "Période",
     "forecastWeeks": "Dans {{count}} semaines",
-    "forecastHint": "Estimation fondée sur la trésorerie récurrente actuelle et les inscriptions convenues. Les recettes de matchs, fins de contrat et retours de prêt peuvent modifier le résultat. Les salaires sont hebdomadaires."
+    "forecastHint": "Estimation fondée sur la trésorerie récurrente actuelle et les inscriptions convenues. Les recettes de matchs, fins de contrat et retours de prêt peuvent modifier le résultat. Les salaires sont hebdomadaires.",
+    "careerMilestones": "Étapes de carrière",
+    "milestoneMatches": "Matchs dirigés : {{count}}",
+    "milestoneWins": "Victoires : {{count}}",
+    "milestoneTrophies": "Trophées : {{count}}",
+    "milestoneAnniversary": "Années comme entraîneur : {{count}}",
+    "milestonePromotion": "Promotion en {{division}} ({{season}})",
+    "milestoneEarlier": "Atteint plus tôt dans cette carrière",
+    "milestonePending": "Les étapes apparaissent au fil de votre carrière."
   }
 }

@@ -5,6 +5,7 @@ pub mod ai_training;
 pub mod board_objectives;
 pub mod board_room;
 pub mod board_targets;
+pub mod career_milestones;
 pub mod catchup;
 pub mod clock;
 pub mod club;

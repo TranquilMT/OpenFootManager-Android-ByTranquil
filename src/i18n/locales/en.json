@@ -4257,6 +4257,14 @@
     "financeForecast": "Cash and wage forecast",
     "forecastPeriod": "Period",
     "forecastWeeks": "After {{count}} weeks",
-    "forecastHint": "Estimate using current recurring cash flow and agreed registrations. Match income, future contract expiries and loan returns may change the result. Wage figures are weekly."
+    "forecastHint": "Estimate using current recurring cash flow and agreed registrations. Match income, future contract expiries and loan returns may change the result. Wage figures are weekly.",
+    "careerMilestones": "Career milestones",
+    "milestoneMatches": "Matches managed: {{count}}",
+    "milestoneWins": "Wins: {{count}}",
+    "milestoneTrophies": "Trophies: {{count}}",
+    "milestoneAnniversary": "Years in management: {{count}}",
+    "milestonePromotion": "Promoted to {{division}} ({{season}})",
+    "milestoneEarlier": "Reached earlier in this career",
+    "milestonePending": "Milestones appear as your career progresses."
   }
 }

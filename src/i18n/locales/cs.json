@@ -4257,6 +4257,14 @@
     "financeForecast": "Prognóza hotovosti a mezd",
     "forecastPeriod": "Období",
     "forecastWeeks": "Za {{count}} týdnů",
-    "forecastHint": "Odhad podle současného pravidelného peněžního toku a dohodnutých registrací. Příjmy ze zápasů, konce smluv a návraty z hostování mohou výsledek změnit. Mzdy jsou týdenní."
+    "forecastHint": "Odhad podle současného pravidelného peněžního toku a dohodnutých registrací. Příjmy ze zápasů, konce smluv a návraty z hostování mohou výsledek změnit. Mzdy jsou týdenní.",
+    "careerMilestones": "Milníky kariéry",
+    "milestoneMatches": "Odtrénované zápasy: {{count}}",
+    "milestoneWins": "Výhry: {{count}}",
+    "milestoneTrophies": "Trofeje: {{count}}",
+    "milestoneAnniversary": "Roky v trenérské roli: {{count}}",
+    "milestonePromotion": "Postup do {{division}} ({{season}})",
+    "milestoneEarlier": "Dosaženo dříve v této kariéře",
+    "milestonePending": "Milníky se objeví s postupem kariéry."
   }
 }

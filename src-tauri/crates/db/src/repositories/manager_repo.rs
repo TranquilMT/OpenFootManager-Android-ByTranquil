@@ -294,6 +294,38 @@ mod tests {
     }
 
     #[test]
+    fn milestone_history_roundtrips_through_each_manager_query() {
+        let db = test_db();
+        let mut manager = sample_manager();
+        manager.career_stats.milestones_initialized = true;
+        manager
+            .career_stats
+            .milestones
+            .push(domain::manager::CareerMilestone {
+                id: "promotion-2027".into(),
+                kind: "promotion".into(),
+                value: 2027,
+                date: Some("2027-07-01".into()),
+                context: Some("Premier Division".into()),
+            });
+        upsert_manager(db.conn(), &manager).unwrap();
+        assert_eq!(
+            load_manager(db.conn(), &manager.id)
+                .unwrap()
+                .unwrap()
+                .career_stats
+                .milestones,
+            manager.career_stats.milestones
+        );
+        assert_eq!(
+            load_all_managers(db.conn()).unwrap()[0]
+                .career_stats
+                .milestones,
+            manager.career_stats.milestones
+        );
+    }
+
+    #[test]
     fn test_career_stats_roundtrip() {
         let db = test_db();
         let mut mgr = sample_manager();

@@ -4257,6 +4257,14 @@
     "financeForecast": "Previsão de caixa e salários",
     "forecastPeriod": "Período",
     "forecastWeeks": "Daqui a {{count}} semanas",
-    "forecastHint": "Estimativa com o fluxo de caixa recorrente atual e as inscrições acordadas. Receitas de jogos, contratos a terminar e regressos de empréstimos podem alterar o resultado. Os salários são semanais."
+    "forecastHint": "Estimativa com o fluxo de caixa recorrente atual e as inscrições acordadas. Receitas de jogos, contratos a terminar e regressos de empréstimos podem alterar o resultado. Os salários são semanais.",
+    "careerMilestones": "Marcos da carreira",
+    "milestoneMatches": "Jogos orientados: {{count}}",
+    "milestoneWins": "Vitórias: {{count}}",
+    "milestoneTrophies": "Troféus: {{count}}",
+    "milestoneAnniversary": "Anos como treinador: {{count}}",
+    "milestonePromotion": "Promoção a {{division}} ({{season}})",
+    "milestoneEarlier": "Alcançado anteriormente nesta carreira",
+    "milestonePending": "Os marcos surgem à medida que a tua carreira avança."
   }
 }

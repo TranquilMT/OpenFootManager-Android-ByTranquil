@@ -4257,6 +4257,14 @@
     "financeForecast": "Proyeksi kas dan gaji",
     "forecastPeriod": "Periode",
     "forecastWeeks": "Setelah {{count}} minggu",
-    "forecastHint": "Perkiraan berdasarkan arus kas rutin saat ini dan registrasi yang disepakati. Pendapatan pertandingan, kontrak yang berakhir, dan pemain pinjaman yang kembali dapat mengubah hasil. Angka gaji adalah per minggu."
+    "forecastHint": "Perkiraan berdasarkan arus kas rutin saat ini dan registrasi yang disepakati. Pendapatan pertandingan, kontrak yang berakhir, dan pemain pinjaman yang kembali dapat mengubah hasil. Angka gaji adalah per minggu.",
+    "careerMilestones": "Tonggak karier",
+    "milestoneMatches": "Pertandingan ditangani: {{count}}",
+    "milestoneWins": "Kemenangan: {{count}}",
+    "milestoneTrophies": "Trofi: {{count}}",
+    "milestoneAnniversary": "Tahun sebagai manajer: {{count}}",
+    "milestonePromotion": "Promosi ke {{division}} ({{season}})",
+    "milestoneEarlier": "Dicapai sebelumnya dalam karier ini",
+    "milestonePending": "Tonggak muncul seiring kemajuan karier."
   }
 }

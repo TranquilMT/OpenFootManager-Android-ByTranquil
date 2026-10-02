@@ -214,6 +214,7 @@ where
     crate::job_offers::check_job_offers(game);
 
     debug!("[turn] process_day {}: complete, advancing clock", today);
+    crate::career_milestones::refresh(game);
     game.clock.advance_days(1);
     crate::season_context::refresh_game_context(game);
 }
@@ -253,6 +254,7 @@ pub fn finish_live_match_day(game: &mut Game) {
     crate::ai_hiring::process_vacant_ai_clubs(game);
     crate::job_offers::check_job_offers(game);
 
+    crate::career_milestones::refresh(game);
     game.clock.advance_days(1);
     game.sync_legacy_league();
     crate::season_context::refresh_game_context(game);

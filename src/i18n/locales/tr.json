@@ -4257,6 +4257,14 @@
     "financeForecast": "Nakit ve maaş tahmini",
     "forecastPeriod": "Dönem",
     "forecastWeeks": "{{count}} hafta sonra",
-    "forecastHint": "Mevcut düzenli nakit akışı ve anlaşılmış tescillere dayanan tahmin. Maç gelirleri, sözleşme bitişleri ve kiralık oyuncu dönüşleri sonucu değiştirebilir. Maaşlar haftalıktır."
+    "forecastHint": "Mevcut düzenli nakit akışı ve anlaşılmış tescillere dayanan tahmin. Maç gelirleri, sözleşme bitişleri ve kiralık oyuncu dönüşleri sonucu değiştirebilir. Maaşlar haftalıktır.",
+    "careerMilestones": "Kariyer kilometre taşları",
+    "milestoneMatches": "Yönetilen maç: {{count}}",
+    "milestoneWins": "Galibiyet: {{count}}",
+    "milestoneTrophies": "Kupa: {{count}}",
+    "milestoneAnniversary": "Menajerlik yılı: {{count}}",
+    "milestonePromotion": "{{division}} ligine yükseldi ({{season}})",
+    "milestoneEarlier": "Bu kariyerin önceki döneminde ulaşıldı",
+    "milestonePending": "Kilometre taşları kariyerin ilerledikçe görünür."
   }
 }

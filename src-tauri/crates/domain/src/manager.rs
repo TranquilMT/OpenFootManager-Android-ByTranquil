@@ -47,8 +47,21 @@ pub struct ManagerTrophy {
     pub season: u32,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct CareerMilestone {
+    pub id: String,
+    pub kind: String,
+    pub value: u32,
+    pub date: Option<String>,
+    pub context: Option<String>,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ManagerCareerStats {
+    #[serde(default)]
+    pub milestones: Vec<CareerMilestone>,
+    #[serde(default)]
+    pub milestones_initialized: bool,
     pub matches_managed: u32,
     pub wins: u32,
     pub draws: u32,
@@ -183,7 +196,10 @@ impl Manager {
             fan_approval: 50,
             team_id: None,
             warning_stage: 0,
-            career_stats: ManagerCareerStats::default(),
+            career_stats: ManagerCareerStats {
+                milestones_initialized: true,
+                ..ManagerCareerStats::default()
+            },
             career_history: Vec::new(),
             trophy_cabinet: Vec::new(),
         }

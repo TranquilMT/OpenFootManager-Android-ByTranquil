@@ -4257,6 +4257,14 @@
     "financeForecast": "现金与工资预测",
     "forecastPeriod": "期间",
     "forecastWeeks": "{{count}} 周后",
-    "forecastHint": "根据当前经常性现金流和已约定注册进行估算。比赛收入、合同到期和租借归队可能改变结果。工资金额按周计算。"
+    "forecastHint": "根据当前经常性现金流和已约定注册进行估算。比赛收入、合同到期和租借归队可能改变结果。工资金额按周计算。",
+    "careerMilestones": "生涯里程碑",
+    "milestoneMatches": "执教比赛：{{count}}",
+    "milestoneWins": "胜场：{{count}}",
+    "milestoneTrophies": "奖杯：{{count}}",
+    "milestoneAnniversary": "执教年数：{{count}}",
+    "milestonePromotion": "升级至 {{division}}（{{season}}）",
+    "milestoneEarlier": "在本生涯较早阶段达成",
+    "milestonePending": "里程碑将随着生涯推进而出现。"
   }
 }

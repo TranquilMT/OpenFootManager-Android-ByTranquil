@@ -786,6 +786,18 @@ fn notify_user_division_change(
     let division_name = new_division.name.clone();
     let kind = if promoted { "promotion" } else { "relegation" };
     let msg_id = format!("{kind}_{next_season}");
+    if promoted {
+        crate::career_milestones::record(
+            &mut game.manager.career_stats,
+            domain::manager::CareerMilestone {
+                id: format!("promotion-{user_team_id}-{next_season}"),
+                kind: "promotion".into(),
+                value: next_season,
+                date: Some(date.into()),
+                context: Some(division_name.clone()),
+            },
+        );
+    }
     if crate::inbox::already_emitted(game, &msg_id) {
         return;
     }

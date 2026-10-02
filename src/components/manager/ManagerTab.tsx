@@ -1,3 +1,4 @@
+import CareerMilestones from "./CareerMilestones";
 import type { GameStateData } from "../../store/gameStore";
 import { Card, CardHeader, CardBody, ProgressBar, CountryFlag } from "../ui";
 import DressingRoomPanel from "./DressingRoomPanel";
@@ -76,6 +77,7 @@ export default function ManagerTab({ gameState, onSelectTeam }: ManagerTabProps)
         </div>
       </Card>
 
+      <CareerMilestones milestones={stats.milestones ?? []} />
       <BoardRoomPanel gameState={gameState} />
       <DressingRoomPanel gameState={gameState} />
 
