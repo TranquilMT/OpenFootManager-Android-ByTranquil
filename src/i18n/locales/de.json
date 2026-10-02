@@ -4243,6 +4243,7 @@
     "reviewDate": "Stand des Berichts: {{date}}",
     "reviewGrowth": "Änderung der Gesamtstärke seit dem Bericht: {{value}}",
     "reviewMinutes": "Minuten seit dem Bericht: {{count}}",
-    "reviewPending": "Die Erfassung beginnt beim nächsten Datumsfortschritt."
+    "reviewPending": "Die Erfassung beginnt beim nächsten Datumsfortschritt.",
+    "decisionInbox": "Offene Entscheidungen"
   }
 }

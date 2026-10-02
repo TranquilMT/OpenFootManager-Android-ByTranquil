@@ -8,10 +8,12 @@ import {
   getFilterButtonClassName,
   type MessageSortOrder,
   UNREAD_FILTER,
+  DECISIONS_FILTER,
 } from "./inboxHelpers";
 
 interface InboxToolbarProps {
   allMessagesCount: number;
+  decisionsCount: number;
   bulkSelectionEnabled: boolean;
   categories: string[];
   categoryCounts: Map<string, number>;
@@ -31,6 +33,7 @@ interface InboxToolbarProps {
 
 export default function InboxToolbar({
   allMessagesCount,
+  decisionsCount,
   bulkSelectionEnabled,
   categories,
   categoryCounts,
@@ -61,6 +64,17 @@ export default function InboxToolbar({
             )}
           >
             {t("common.all")} ({allMessagesCount})
+          </button>
+          <button
+            type="button"
+            aria-pressed={categoryFilter === DECISIONS_FILTER}
+            onClick={() => onToggleCategory(DECISIONS_FILTER)}
+            className={getFilterButtonClassName(
+              categoryFilter === DECISIONS_FILTER,
+              "min-h-9 shrink-0 whitespace-nowrap rounded-full px-3 sm:min-h-0",
+            )}
+          >
+            {t("phase64.decisionInbox")} ({decisionsCount})
           </button>
           {unreadCount > 0 ? (
             <button

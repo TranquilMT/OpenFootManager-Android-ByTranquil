@@ -4243,6 +4243,7 @@
     "reviewDate": "Rapor başlangıcı: {{date}}",
     "reviewGrowth": "Rapordan bu yana OVR değişimi: {{value}}",
     "reviewMinutes": "Rapordan bu yana oynanan dakika: {{count}}",
-    "reviewPending": "Gelişim takibi sonraki tarih ilerlemesinde başlar."
+    "reviewPending": "Gelişim takibi sonraki tarih ilerlemesinde başlar.",
+    "decisionInbox": "Bekleyen kararlar"
   }
 }

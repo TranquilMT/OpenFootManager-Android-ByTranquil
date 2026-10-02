@@ -4243,6 +4243,7 @@
     "reviewDate": "Referência do relatório: {{date}}",
     "reviewGrowth": "Variação de OVR desde o relatório: {{value}}",
     "reviewMinutes": "Minutos desde o relatório: {{count}}",
-    "reviewPending": "O acompanhamento começa no próximo avanço da data."
+    "reviewPending": "O acompanhamento começa no próximo avanço da data.",
+    "decisionInbox": "Decisões pendentes"
   }
 }

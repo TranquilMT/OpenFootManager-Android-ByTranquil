@@ -4243,6 +4243,7 @@
     "reviewDate": "报告基准日期：{{date}}",
     "reviewGrowth": "报告以来的总评变化：{{value}}",
     "reviewMinutes": "报告以来的出场分钟：{{count}}",
-    "reviewPending": "进度记录将在下次推进日期时开始。"
+    "reviewPending": "进度记录将在下次推进日期时开始。",
+    "decisionInbox": "待做决策"
   }
 }

@@ -4243,6 +4243,7 @@
     "reviewDate": "Acuan laporan: {{date}}",
     "reviewGrowth": "Perubahan OVR sejak laporan: {{value}}",
     "reviewMinutes": "Menit sejak laporan: {{count}}",
-    "reviewPending": "Pelacakan dimulai saat tanggal dimajukan berikutnya."
+    "reviewPending": "Pelacakan dimulai saat tanggal dimajukan berikutnya.",
+    "decisionInbox": "Keputusan tertunda"
   }
 }

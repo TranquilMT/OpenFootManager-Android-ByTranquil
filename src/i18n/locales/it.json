@@ -4243,6 +4243,7 @@
     "reviewDate": "Riferimento del rapporto: {{date}}",
     "reviewGrowth": "Variazione OVR dal rapporto: {{value}}",
     "reviewMinutes": "Minuti dal rapporto: {{count}}",
-    "reviewPending": "Il monitoraggio inizia al prossimo avanzamento della data."
+    "reviewPending": "Il monitoraggio inizia al prossimo avanzamento della data.",
+    "decisionInbox": "Decisioni da prendere"
   }
 }

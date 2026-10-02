@@ -4243,6 +4243,7 @@
     "reviewDate": "Review baseline: {{date}}",
     "reviewGrowth": "OVR change since review: {{value}}",
     "reviewMinutes": "Minutes since review: {{count}}",
-    "reviewPending": "Progress tracking begins at the next date advance."
+    "reviewPending": "Progress tracking begins at the next date advance.",
+    "decisionInbox": "Decisions to make"
   }
 }

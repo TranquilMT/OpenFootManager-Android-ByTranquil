@@ -4243,6 +4243,7 @@
     "reviewDate": "Référence du bilan : {{date}}",
     "reviewGrowth": "Évolution de la note globale depuis le bilan : {{value}}",
     "reviewMinutes": "Minutes depuis le bilan : {{count}}",
-    "reviewPending": "Le suivi commence à la prochaine avancée de date."
+    "reviewPending": "Le suivi commence à la prochaine avancée de date.",
+    "decisionInbox": "Décisions à prendre"
   }
 }

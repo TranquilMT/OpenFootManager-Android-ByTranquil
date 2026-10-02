@@ -20,6 +20,8 @@ import InboxMessageListPane from "./InboxMessageListPane";
 import InboxToolbar from "./InboxToolbar";
 import {
   type DeleteModalState,
+  DECISIONS_FILTER,
+  sortDecisionMessages,
   getFilteredMessages,
   getNavigationTarget,
   isOfferReviewNavigation,
@@ -96,7 +98,10 @@ export default function InboxTab({
   const categories = useMemo(() => Array.from(categoryCounts.keys()), [categoryCounts]);
 
   const filteredMessages = useMemo(
-    () => sortInboxMessages(getFilteredMessages(allMessages, categoryFilter), sortOrder),
+    () =>
+      categoryFilter === DECISIONS_FILTER
+        ? sortDecisionMessages(getFilteredMessages(allMessages, categoryFilter), sortOrder)
+        : sortInboxMessages(getFilteredMessages(allMessages, categoryFilter), sortOrder),
     [allMessages, categoryFilter, sortOrder],
   );
 
@@ -360,6 +365,7 @@ export default function InboxTab({
       <div data-testid="inbox-toolbar" className={selectedMessage ? "hidden md:block" : "block"}>
         <InboxToolbar
           allMessagesCount={allMessages.length}
+          decisionsCount={getFilteredMessages(allMessages, DECISIONS_FILTER).length}
           bulkSelectionEnabled={bulkSelectionEnabled}
           categories={categories}
           categoryCounts={categoryCounts}
