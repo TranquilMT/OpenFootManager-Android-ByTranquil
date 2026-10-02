@@ -110,6 +110,7 @@ export function FinanceCashFlowChart({
               wrapperStyle={{ fontSize: 10, fontFamily: "var(--font-heading)", lineHeight: "18px" }}
             />
             <Area
+              isAnimationActive={theme.animate}
               type="monotone"
               dataKey="income"
               name={incomeLabel}
@@ -118,6 +119,7 @@ export function FinanceCashFlowChart({
               strokeWidth={2}
             />
             <Area
+              isAnimationActive={theme.animate}
               type="monotone"
               dataKey="expenses"
               name={expensesLabel}

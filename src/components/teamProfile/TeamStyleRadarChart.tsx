@@ -76,6 +76,7 @@ export function TeamStyleRadarChart({ overview, labels }: TeamStyleRadarChartPro
             tick={{ fill: theme.axisColor, fontSize: 10, fontFamily: "var(--font-heading)" }}
           />
           <Radar
+            isAnimationActive={theme.animate}
             dataKey="value"
             stroke={theme.primary}
             fill={theme.primary}

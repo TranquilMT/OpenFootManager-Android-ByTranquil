@@ -1,5 +1,5 @@
 import { useSheetNavigation } from "../../hooks/useSheetNavigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { JSX, ReactNode } from "react";
 import {
@@ -115,6 +115,15 @@ export default function DashboardSidebar(props: DashboardSidebarProps): JSX.Elem
     () => setMobileMenuOpen(false),
     mobileSheetRef,
   );
+  useEffect(() => {
+    if (typeof window.matchMedia !== "function") return;
+    const desktop = window.matchMedia("(min-width: 768px)");
+    const onResize = () => {
+      if (desktop.matches && mobileMenuOpen) closeMobileMenu();
+    };
+    desktop.addEventListener("change", onResize);
+    return () => desktop.removeEventListener("change", onResize);
+  }, [mobileMenuOpen, closeMobileMenu]);
   const appName = t("app.name");
   const [appNamePrimary, ...secondary] = appName.split(" ");
   const appNameSecondary = secondary.join(" ");

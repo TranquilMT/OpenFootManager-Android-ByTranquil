@@ -1843,7 +1843,9 @@
     "enterFullscreen": "Vstoupit",
     "exitFullscreen": "Ukončit",
     "switchToLightMode": "Přepnout do světlého motivu",
-    "switchToDarkMode": "Přepnout do tmavého motivu"
+    "switchToDarkMode": "Přepnout do tmavého motivu",
+    "reduceMotion": "Omezit pohyb",
+    "reduceMotionDesc": "Méně animací a okamžité posouvání. Zohledňuje se také nastavení systému."
   },
   "preMatch": {
     "formationFit": "Vhodnost rozestavení",

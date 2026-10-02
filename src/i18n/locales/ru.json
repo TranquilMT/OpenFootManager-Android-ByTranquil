@@ -1843,7 +1843,9 @@
     "enterFullscreen": "Включить",
     "exitFullscreen": "Выключить",
     "switchToLightMode": "Переключиться в светлый режим",
-    "switchToDarkMode": "Переключиться в темный режим"
+    "switchToDarkMode": "Переключиться в темный режим",
+    "reduceMotion": "Уменьшить движение",
+    "reduceMotionDesc": "Меньше анимаций и мгновенная прокрутка. Учитывается также настройка системы."
   },
   "preMatch": {
     "formationFit": "Формирование",

@@ -1843,7 +1843,9 @@
     "enterFullscreen": "Aktivieren",
     "exitFullscreen": "Beenden",
     "switchToLightMode": "Zum hellen Modus wechseln",
-    "switchToDarkMode": "Zum dunklen Modus wechseln"
+    "switchToDarkMode": "Zum dunklen Modus wechseln",
+    "reduceMotion": "Bewegung reduzieren",
+    "reduceMotionDesc": "Weniger Animationen und sofortiges Scrollen. Die Systemeinstellung wird ebenfalls berücksichtigt."
   },
   "preMatch": {
     "formationFit": "Formationsanpassung",

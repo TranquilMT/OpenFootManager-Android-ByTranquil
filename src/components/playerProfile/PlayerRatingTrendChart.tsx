@@ -77,6 +77,7 @@ export function PlayerRatingTrendChart({ matches, ratingLabel }: PlayerRatingTre
             }}
           />
           <Line
+            isAnimationActive={theme.animate}
             type="monotone"
             dataKey="rating"
             stroke={theme.primary}

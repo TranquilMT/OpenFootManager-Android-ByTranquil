@@ -25,6 +25,8 @@ pub struct AppSettings {
     pub ui_scale: String, // "small" | "normal" | "large" | "xlarge"
     #[serde(default)]
     pub high_contrast: bool,
+    #[serde(default)]
+    pub reduce_motion: bool,
     /// When true, the Continue button rolls forward several days until the next
     /// event (user match, blocker, transfer deadline, high-priority inbox).
     #[serde(default)]
@@ -59,6 +61,7 @@ impl Default for AppSettings {
             confirm_advance: false,
             ui_scale: "normal".to_string(),
             high_contrast: false,
+            reduce_motion: false,
             continue_to_next_event: false,
         }
     }
@@ -153,6 +156,18 @@ mod tests {
             currency: currency.to_string(),
             ..AppSettings::default()
         }
+    }
+
+    #[test]
+    fn reduced_motion_defaults_for_legacy_settings_and_roundtrips() {
+        let mut saved = serde_json::to_value(AppSettings::default()).unwrap();
+        saved.as_object_mut().unwrap().remove("reduce_motion");
+        let mut legacy: AppSettings = serde_json::from_value(saved).unwrap();
+        assert!(!legacy.reduce_motion);
+        legacy.reduce_motion = true;
+        let loaded: AppSettings =
+            serde_json::from_str(&serde_json::to_string(&legacy).unwrap()).unwrap();
+        assert!(loaded.reduce_motion);
     }
 
     #[test]

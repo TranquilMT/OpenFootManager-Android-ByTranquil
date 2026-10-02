@@ -1843,7 +1843,9 @@
     "enterFullscreen": "Entrar",
     "exitFullscreen": "Salir",
     "switchToLightMode": "Cambiar al modo claro",
-    "switchToDarkMode": "Cambiar al modo oscuro"
+    "switchToDarkMode": "Cambiar al modo oscuro",
+    "reduceMotion": "Reducir movimiento",
+    "reduceMotionDesc": "Reduce las animaciones y usa desplazamiento instantáneo. También se respeta la preferencia del sistema."
   },
   "preMatch": {
     "formationFit": "Ajuste de Formación",

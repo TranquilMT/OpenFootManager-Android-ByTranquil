@@ -1843,7 +1843,9 @@
     "enterFullscreen": "Enter",
     "exitFullscreen": "Exit",
     "switchToLightMode": "Switch to light mode",
-    "switchToDarkMode": "Switch to dark mode"
+    "switchToDarkMode": "Switch to dark mode",
+    "reduceMotion": "Reduce motion",
+    "reduceMotionDesc": "Use fewer animations and instant scrolling. Your system preference is also respected."
   },
   "preMatch": {
     "formationFit": "Formation Fit",

@@ -1843,7 +1843,9 @@
     "enterFullscreen": "进入",
     "exitFullscreen": "退出",
     "switchToLightMode": "切换到浅色模式",
-    "switchToDarkMode": "切换到深色模式"
+    "switchToDarkMode": "切换到深色模式",
+    "reduceMotion": "减少动态效果",
+    "reduceMotionDesc": "减少动画并使用即时滚动，同时遵循系统偏好。"
   },
   "preMatch": {
     "formationFit": "阵型契合度",

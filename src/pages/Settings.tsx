@@ -200,6 +200,16 @@ export default function Settings() {
               onChange={(v) => handleUpdate({ high_contrast: v })}
             />
           </SettingRow>
+          <SettingRow
+            label={t("settings.reduceMotion")}
+            description={t("settings.reduceMotionDesc")}
+          >
+            <Toggle
+              label={t("settings.reduceMotion")}
+              checked={settings.reduce_motion}
+              onChange={(v) => handleUpdate({ reduce_motion: v })}
+            />
+          </SettingRow>
         </Section>
         <Section title={t("settings.gameplay")} icon={<Gamepad2 className="w-5 h-5" />}>
           <SettingRow

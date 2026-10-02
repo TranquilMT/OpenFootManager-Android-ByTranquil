@@ -37,9 +37,7 @@ function MobileRuntime() {
     document.documentElement.classList.add("native-mobile");
     document.body.classList.add("native-mobile");
     const viewport = document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
-    if (viewport)
-      viewport.content =
-        "width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no";
+    if (viewport) viewport.content = "width=device-width, initial-scale=1, viewport-fit=cover";
 
     const updateViewport = () => {
       const vv = window.visualViewport;
@@ -98,9 +96,11 @@ function MobileRuntime() {
         target.scrollIntoView({
           block: "center",
           inline: "nearest",
-          behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-            ? "instant"
-            : "smooth",
+          behavior:
+            document.documentElement.classList.contains("reduced-motion") ||
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches
+              ? "instant"
+              : "smooth",
         });
       }, 120);
     };
@@ -136,6 +136,9 @@ function App() {
   useEffect(() => {
     document.documentElement.classList.toggle("high-contrast", settings.high_contrast);
   }, [settings.high_contrast]);
+  useEffect(() => {
+    document.documentElement.classList.toggle("reduced-motion", settings.reduce_motion);
+  }, [settings.reduce_motion]);
   useEffect(() => {
     if (loaded && settings.language && settings.language !== i18n.language)
       void changeAppLanguage(settings.language);

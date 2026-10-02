@@ -1843,7 +1843,9 @@
     "enterFullscreen": "Aç",
     "exitFullscreen": "Çık",
     "switchToLightMode": "Açık moda geç",
-    "switchToDarkMode": "Koyu moda geç"
+    "switchToDarkMode": "Koyu moda geç",
+    "reduceMotion": "Hareketi azalt",
+    "reduceMotionDesc": "Daha az animasyon ve anında kaydırma kullanır. Sistem tercihi de dikkate alınır."
   },
   "preMatch": {
     "formationFit": "Diziliş Uyumu",

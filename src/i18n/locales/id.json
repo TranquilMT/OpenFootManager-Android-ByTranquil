@@ -1843,7 +1843,9 @@
     "enterFullscreen": "Masuk",
     "exitFullscreen": "Keluar",
     "switchToLightMode": "Beralih ke mode terang",
-    "switchToDarkMode": "Beralih ke mode gelap"
+    "switchToDarkMode": "Beralih ke mode gelap",
+    "reduceMotion": "Kurangi gerakan",
+    "reduceMotionDesc": "Kurangi animasi dan gunakan gulir instan. Preferensi sistem juga dihormati."
   },
   "preMatch": {
     "formationFit": "Kecocokan Formasi",

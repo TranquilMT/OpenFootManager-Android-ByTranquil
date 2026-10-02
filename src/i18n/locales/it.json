@@ -1862,7 +1862,9 @@
     "enterFullscreen": "Entra",
     "exitFullscreen": "Esci",
     "switchToLightMode": "Passa alla modalità chiara",
-    "switchToDarkMode": "Passa alla modalità scura"
+    "switchToDarkMode": "Passa alla modalità scura",
+    "reduceMotion": "Riduci movimento",
+    "reduceMotionDesc": "Riduce le animazioni e usa lo scorrimento istantaneo. Rispetta anche la preferenza di sistema."
   },
   "preMatch": {
     "formationFit": "Adattamento alla formazione",
