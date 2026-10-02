@@ -13,6 +13,7 @@ pub mod contract_wage_policy;
 pub mod contracts;
 pub mod currency;
 pub mod delegated_renewals;
+pub mod development_reviews;
 pub mod end_of_season;
 pub mod finances;
 pub mod firing;

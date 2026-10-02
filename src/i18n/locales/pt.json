@@ -4236,6 +4236,13 @@
     "promiseUnscheduled": "O prazo aguarda jogos agendados",
     "squadPlan": "Plano do plantel a seis meses",
     "squadPlanHint": "Sem renovar os contratos que terminam em 180 dias, o plantel sénior terá {{count}} jogadores. A cobertura prevista está abaixo.",
-    "noExpiringContracts": "Nenhum contrato sénior termina em 180 dias."
+    "noExpiringContracts": "Nenhum contrato sénior termina em 180 dias.",
+    "youthReviews": "Relatórios de desenvolvimento juvenil",
+    "promotionReady": "Considerar promoção à equipa sénior",
+    "developing": "Em desenvolvimento",
+    "reviewDate": "Referência do relatório: {{date}}",
+    "reviewGrowth": "Variação de OVR desde o relatório: {{value}}",
+    "reviewMinutes": "Minutos desde o relatório: {{count}}",
+    "reviewPending": "O acompanhamento começa no próximo avanço da data."
   }
 }

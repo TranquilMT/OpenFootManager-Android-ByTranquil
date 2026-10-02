@@ -4236,6 +4236,13 @@
     "promiseUnscheduled": "Scadenza in attesa delle partite programmate",
     "squadPlan": "Piano rosa per sei mesi",
     "squadPlanHint": "Senza rinnovare i contratti in scadenza entro 180 giorni, la prima squadra avrà {{count}} giocatori. La copertura prevista è indicata sotto.",
-    "noExpiringContracts": "Nessun contratto della prima squadra scade entro 180 giorni."
+    "noExpiringContracts": "Nessun contratto della prima squadra scade entro 180 giorni.",
+    "youthReviews": "Rapporti sullo sviluppo giovanile",
+    "promotionReady": "Valuta la promozione in prima squadra",
+    "developing": "In crescita",
+    "reviewDate": "Riferimento del rapporto: {{date}}",
+    "reviewGrowth": "Variazione OVR dal rapporto: {{value}}",
+    "reviewMinutes": "Minuti dal rapporto: {{count}}",
+    "reviewPending": "Il monitoraggio inizia al prossimo avanzamento della data."
   }
 }

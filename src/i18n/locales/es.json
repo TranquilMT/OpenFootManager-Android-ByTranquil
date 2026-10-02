@@ -4236,6 +4236,13 @@
     "promiseUnscheduled": "El plazo depende de los próximos partidos programados",
     "squadPlan": "Plan de plantilla a seis meses",
     "squadPlanHint": "Si no se renuevan los contratos que vencen en 180 días, la plantilla sénior tendrá {{count}} jugadores. Abajo se muestra la cobertura prevista.",
-    "noExpiringContracts": "Ningún contrato sénior vence en 180 días."
+    "noExpiringContracts": "Ningún contrato sénior vence en 180 días.",
+    "youthReviews": "Informes de desarrollo juvenil",
+    "promotionReady": "Valorar ascenso al primer equipo",
+    "developing": "En desarrollo",
+    "reviewDate": "Referencia del informe: {{date}}",
+    "reviewGrowth": "Cambio de OVR desde el informe: {{value}}",
+    "reviewMinutes": "Minutos desde el informe: {{count}}",
+    "reviewPending": "El seguimiento comienza al avanzar la fecha."
   }
 }

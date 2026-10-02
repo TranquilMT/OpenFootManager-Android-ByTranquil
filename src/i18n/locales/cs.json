@@ -4236,6 +4236,13 @@
     "promiseUnscheduled": "Termín čeká na naplánované zápasy",
     "squadPlan": "Plán kádru na šest měsíců",
     "squadPlanHint": "Bez prodloužení smluv končících do 180 dnů zbude v prvním týmu {{count}} hráčů. Předpokládané pokrytí rolí je níže.",
-    "noExpiringContracts": "Žádná smlouva prvního týmu nekončí do 180 dnů."
+    "noExpiringContracts": "Žádná smlouva prvního týmu nekončí do 180 dnů.",
+    "youthReviews": "Zprávy o vývoji mládeže",
+    "promotionReady": "Zvážit povýšení do prvního týmu",
+    "developing": "Stále se rozvíjí",
+    "reviewDate": "Výchozí datum zprávy: {{date}}",
+    "reviewGrowth": "Změna OVR od zprávy: {{value}}",
+    "reviewMinutes": "Minuty od zprávy: {{count}}",
+    "reviewPending": "Sledování začne při příštím posunu data."
   }
 }

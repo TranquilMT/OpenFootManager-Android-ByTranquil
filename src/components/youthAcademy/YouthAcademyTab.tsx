@@ -1,3 +1,4 @@
+import YouthDevelopmentReports from "./YouthDevelopmentReports";
 import { useEffect, useRef, useState } from "react";
 import type { GameStateData } from "../../store/gameStore";
 import { useGameStore } from "../../store/gameStore";
@@ -427,6 +428,7 @@ export default function YouthAcademyTab({
       )}
 
       {/* Youth Players Table */}
+      <YouthDevelopmentReports players={youthPlayers} season={gameState?.league?.season ?? 0} />
       <Card>
         <CardHeader>{t("youthAcademy.youthProspects")}</CardHeader>
         <CardBody className="p-0">

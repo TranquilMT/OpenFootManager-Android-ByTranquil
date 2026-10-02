@@ -4236,6 +4236,13 @@
     "promiseUnscheduled": "Deadline awaits scheduled fixtures",
     "squadPlan": "Six-month squad plan",
     "squadPlanHint": "If contracts due within 180 days are not renewed, senior squad size: {{count}}. Projected role coverage is shown below.",
-    "noExpiringContracts": "No senior contracts expire within 180 days."
+    "noExpiringContracts": "No senior contracts expire within 180 days.",
+    "youthReviews": "Youth development reviews",
+    "promotionReady": "Consider senior promotion",
+    "developing": "Still developing",
+    "reviewDate": "Review baseline: {{date}}",
+    "reviewGrowth": "OVR change since review: {{value}}",
+    "reviewMinutes": "Minutes since review: {{count}}",
+    "reviewPending": "Progress tracking begins at the next date advance."
   }
 }

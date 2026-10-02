@@ -230,6 +230,14 @@ export interface ContractRenewalStateData {
   exit_intent?: ContractExitIntentData | null;
 }
 
+export interface PlayerDevelopmentSnapshot {
+  date: string;
+  season: number;
+  ovr: number;
+  minutes_played: number;
+  focus: string | null;
+}
+
 export interface PlayerMoraleCoreData {
   manager_trust: number;
   unresolved_issue?: { category: "Contract" | "PlayingTime" | "Morale"; severity: number } | null;
@@ -292,6 +300,7 @@ export interface PlayerData {
   stats: PlayerSeasonStats;
   career: CareerEntry[];
   movement_history?: PlayerMovementEntry[];
+  development_history?: PlayerDevelopmentSnapshot[];
   transfer_listed: boolean;
   loan_listed: boolean;
   transfer_offers: TransferOfferData[];

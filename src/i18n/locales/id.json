@@ -4236,6 +4236,13 @@
     "promiseUnscheduled": "Tenggat menunggu jadwal pertandingan",
     "squadPlan": "Rencana skuad enam bulan",
     "squadPlanHint": "Jika kontrak yang habis dalam 180 hari tidak diperpanjang, skuad senior tersisa {{count}} pemain. Cakupan posisi yang diproyeksikan ditampilkan di bawah.",
-    "noExpiringContracts": "Tidak ada kontrak senior yang habis dalam 180 hari."
+    "noExpiringContracts": "Tidak ada kontrak senior yang habis dalam 180 hari.",
+    "youthReviews": "Laporan perkembangan pemain muda",
+    "promotionReady": "Pertimbangkan promosi ke tim senior",
+    "developing": "Masih berkembang",
+    "reviewDate": "Acuan laporan: {{date}}",
+    "reviewGrowth": "Perubahan OVR sejak laporan: {{value}}",
+    "reviewMinutes": "Menit sejak laporan: {{count}}",
+    "reviewPending": "Pelacakan dimulai saat tanggal dimajukan berikutnya."
   }
 }

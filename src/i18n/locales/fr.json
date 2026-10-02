@@ -4236,6 +4236,13 @@
     "promiseUnscheduled": "Échéance en attente de matchs programmés",
     "squadPlan": "Plan d’effectif sur six mois",
     "squadPlanHint": "Sans renouveler les contrats expirant sous 180 jours, l’effectif senior comptera {{count}} joueurs. La couverture prévue est indiquée ci-dessous.",
-    "noExpiringContracts": "Aucun contrat senior n’expire sous 180 jours."
+    "noExpiringContracts": "Aucun contrat senior n’expire sous 180 jours.",
+    "youthReviews": "Bilans de progression des jeunes",
+    "promotionReady": "Envisager la promotion en équipe première",
+    "developing": "En développement",
+    "reviewDate": "Référence du bilan : {{date}}",
+    "reviewGrowth": "Évolution de la note globale depuis le bilan : {{value}}",
+    "reviewMinutes": "Minutes depuis le bilan : {{count}}",
+    "reviewPending": "Le suivi commence à la prochaine avancée de date."
   }
 }

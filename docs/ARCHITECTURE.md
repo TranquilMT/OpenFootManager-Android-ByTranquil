@@ -463,3 +463,7 @@ All entity types (`WorldMetaDef`, `ConfederationDef`, `CountryDef`, `TeamDef`, `
 ### Save recovery (0.6.4)
 
 `restore_save_backup(saveId)` restores the newest readable recovery copy through `SaveManager`. The menu offers this action after a load fails and explains that later progress is lost. Each game save rotates three SQLite online backups, including pending WAL transactions; stats-only saves do not rotate them. Recovery validates game data and preserves the failed file as `.db.before-restore`, updates the index checksum, and never awards gameplay progress. Deleting a career removes its recovery files.
+
+### Player development reviews (0.6.4)
+
+`Player.development_history` defaults to an empty list for older serialized careers and is stored as JSON by migration 48. The first date advancement in each month records the user's squad and outgoing loanees, including rating, season, minutes and individual focus. The history retains 24 reviews and does not overwrite a baseline on repeated advances in the same month. Academy and training reports compare current state against the latest review; a season change uses the new season's minutes rather than subtracting the previous season's total.

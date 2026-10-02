@@ -4236,6 +4236,13 @@
     "promiseUnscheduled": "O prazo aguarda jogos agendados",
     "squadPlan": "Plano do elenco para seis meses",
     "squadPlanHint": "Sem renovar os contratos que terminam em 180 dias, o elenco profissional terá {{count}} jogadores. A cobertura prevista está abaixo.",
-    "noExpiringContracts": "Nenhum contrato profissional termina em 180 dias."
+    "noExpiringContracts": "Nenhum contrato profissional termina em 180 dias.",
+    "youthReviews": "Relatórios de desenvolvimento da base",
+    "promotionReady": "Considerar promoção ao time profissional",
+    "developing": "Em desenvolvimento",
+    "reviewDate": "Referência do relatório: {{date}}",
+    "reviewGrowth": "Variação de OVR desde o relatório: {{value}}",
+    "reviewMinutes": "Minutos desde o relatório: {{count}}",
+    "reviewPending": "O acompanhamento começa no próximo avanço da data."
   }
 }

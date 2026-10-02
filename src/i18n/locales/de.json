@@ -4236,6 +4236,13 @@
     "promiseUnscheduled": "Frist wartet auf angesetzte Spiele",
     "squadPlan": "Kaderplan für sechs Monate",
     "squadPlanHint": "Ohne Verlängerung der in 180 Tagen auslaufenden Verträge verbleiben {{count}} Profis. Die erwartete Rollenabdeckung steht unten.",
-    "noExpiringContracts": "Kein Profivertrag läuft innerhalb von 180 Tagen aus."
+    "noExpiringContracts": "Kein Profivertrag läuft innerhalb von 180 Tagen aus.",
+    "youthReviews": "Entwicklungsberichte der Jugend",
+    "promotionReady": "Beförderung zu den Profis erwägen",
+    "developing": "Noch in Entwicklung",
+    "reviewDate": "Stand des Berichts: {{date}}",
+    "reviewGrowth": "Änderung der Gesamtstärke seit dem Bericht: {{value}}",
+    "reviewMinutes": "Minuten seit dem Bericht: {{count}}",
+    "reviewPending": "Die Erfassung beginnt beim nächsten Datumsfortschritt."
   }
 }

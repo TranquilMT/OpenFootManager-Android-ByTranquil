@@ -149,6 +149,7 @@ where
     F: FnMut(StatsState),
 {
     let today = game.clock.current_date.format("%Y-%m-%d").to_string();
+    crate::development_reviews::record_managed_player_reviews(game);
     transfers::process_loan_development_reports(game);
     transfers::process_loan_returns(game);
 
@@ -222,6 +223,7 @@ where
 pub fn finish_live_match_day(game: &mut Game) {
     let today = game.clock.current_date.format("%Y-%m-%d").to_string();
     info!("[turn] finish_live_match_day: {}", today);
+    crate::development_reviews::record_managed_player_reviews(game);
     transfers::process_loan_development_reports(game);
     transfers::process_loan_returns(game);
     training::report_youth_development(game);
