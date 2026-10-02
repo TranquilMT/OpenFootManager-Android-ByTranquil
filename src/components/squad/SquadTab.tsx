@@ -1,3 +1,4 @@
+import SquadPlanningCard from "./SquadPlanningCard";
 import { useTranslation } from "react-i18next";
 import { type GameStateData, useGameStore } from "../../store/gameStore";
 import type { PlayerSelectionOptions } from "../../store/gameStore";
@@ -46,6 +47,12 @@ export default function SquadTab({
 
   return (
     <div className="android-squad-roster pb-20 md:pb-0">
+      <SquadPlanningCard
+        players={players}
+        formation={team.formation}
+        today={clockDate}
+        onSelectPlayer={onSelectPlayer}
+      />
       <SquadRosterView
         players={players}
         team={team}

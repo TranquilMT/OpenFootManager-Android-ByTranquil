@@ -19,6 +19,8 @@ pub fn upsert_player(conn: &Connection, p: &Player) -> Result<(), String> {
         serde_json::to_string(&p.stats).map_err(|_| GAME_PERSISTENCE_WRITE_ERROR.to_string())?;
     let career_json =
         serde_json::to_string(&p.career).map_err(|_| GAME_PERSISTENCE_WRITE_ERROR.to_string())?;
+    let development_history_json = serde_json::to_string(&p.development_history)
+        .map_err(|_| GAME_PERSISTENCE_WRITE_ERROR.to_string())?;
     let movement_history_json = serde_json::to_string(&p.movement_history)
         .map_err(|_| GAME_PERSISTENCE_WRITE_ERROR.to_string())?;
     let offers_json = serde_json::to_string(&p.transfer_offers)
@@ -47,8 +49,8 @@ pub fn upsert_player(conn: &Connection, p: &Player) -> Result<(), String> {
           contract_end, wage, market_value, stats, career,
           transfer_listed, loan_listed, transfer_offers, alternate_positions,
           natural_position, training_focus, morale_core, footedness, weak_foot, fitness, squad_role,
-          ovr, potential, media_json, jersey_number, loan_offers, active_loan, movement_history)
-         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29, ?30, ?31, ?32, ?33, ?34, ?35, ?36, ?37, ?38)
+          ovr, potential, media_json, jersey_number, loan_offers, active_loan, movement_history, development_history)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29, ?30, ?31, ?32, ?33, ?34, ?35, ?36, ?37, ?38, ?39)
          ON CONFLICT(id) DO UPDATE SET
            match_name = excluded.match_name,
            full_name = excluded.full_name,
@@ -86,7 +88,8 @@ pub fn upsert_player(conn: &Connection, p: &Player) -> Result<(), String> {
            jersey_number = excluded.jersey_number,
            loan_offers = excluded.loan_offers,
            active_loan = excluded.active_loan,
-           movement_history = excluded.movement_history",
+           movement_history = excluded.movement_history,
+           development_history = excluded.development_history",
         params![
             p.id,
             p.match_name,
@@ -126,6 +129,7 @@ pub fn upsert_player(conn: &Connection, p: &Player) -> Result<(), String> {
             loan_offers_json,
             active_loan_json,
             movement_history_json,
+            development_history_json,
         ],
     )
     .map_err(|_| GAME_PERSISTENCE_WRITE_ERROR.to_string())?;
@@ -201,7 +205,7 @@ pub fn load_all_players(conn: &Connection) -> Result<Vec<Player>, String> {
                     natural_position, training_focus, morale_core, footedness, weak_foot, fitness, squad_role,
                     ovr, potential, COALESCE(media_json, '{}'), jersey_number,
                     COALESCE(loan_offers, '[]'), active_loan,
-                    COALESCE(movement_history, '[]')
+                    COALESCE(movement_history, '[]'), COALESCE(development_history, '[]')
              FROM players",
         )
         .map_err(|_| GAME_PERSISTENCE_LOAD_ERROR.to_string())?;
@@ -228,7 +232,7 @@ pub fn load_players_by_team(conn: &Connection, team_id: &str) -> Result<Vec<Play
                     natural_position, training_focus, morale_core, footedness, weak_foot, fitness, squad_role,
                     ovr, potential, COALESCE(media_json, '{}'), jersey_number,
                     COALESCE(loan_offers, '[]'), active_loan,
-                    COALESCE(movement_history, '[]')
+                    COALESCE(movement_history, '[]'), COALESCE(development_history, '[]')
              FROM players WHERE team_id = ?1",
         )
         .map_err(|_| GAME_PERSISTENCE_LOAD_ERROR.to_string())?;
@@ -343,6 +347,13 @@ fn row_to_player(row: &rusqlite::Row) -> rusqlite::Result<Player> {
         stats: serde_json::from_str(&stats_json).unwrap_or_default(),
         career: serde_json::from_str(&career_json).unwrap_or_default(),
         movement_history: serde_json::from_str(&movement_history_json).unwrap_or_default(),
+        development_history: serde_json::from_str(&row.get::<_, String>(38)?).map_err(|error| {
+            rusqlite::Error::FromSqlConversionFailure(
+                38,
+                rusqlite::types::Type::Text,
+                Box::new(error),
+            )
+        })?,
         training_focus: training_focus_str.and_then(|s| parse_training_focus(&s)),
         transfer_listed: transfer_listed_int != 0,
         loan_listed: loan_listed_int != 0,
@@ -877,6 +888,26 @@ mod tests {
 
         assert!(loaded[0].transfer_listed);
         assert!(loaded[0].loan_listed);
+    }
+
+    #[test]
+    fn monthly_development_history_survives_both_player_load_paths() {
+        let db = test_db();
+        let mut player = sample_player("progress", Some("team-001"));
+        player
+            .development_history
+            .push(domain::player::PlayerDevelopmentSnapshot {
+                date: "2026-08-01".into(),
+                season: 2026,
+                ovr: 67,
+                minutes_played: 450,
+                focus: Some(domain::team::TrainingFocus::Technical),
+            });
+        upsert_player(db.conn(), &player).unwrap();
+        let all = load_all_players(db.conn()).unwrap();
+        let team = load_players_by_team(db.conn(), "team-001").unwrap();
+        assert_eq!(all[0].development_history, player.development_history);
+        assert_eq!(team[0].development_history, player.development_history);
     }
 
     #[test]

@@ -149,6 +149,7 @@ where
     F: FnMut(StatsState),
 {
     let today = game.clock.current_date.format("%Y-%m-%d").to_string();
+    crate::development_reviews::record_managed_player_reviews(game);
     transfers::process_loan_development_reports(game);
     transfers::process_loan_returns(game);
 
@@ -213,6 +214,8 @@ where
     crate::job_offers::check_job_offers(game);
 
     debug!("[turn] process_day {}: complete, advancing clock", today);
+    crate::career_milestones::refresh(game);
+    crate::achievements::refresh(game);
     game.clock.advance_days(1);
     crate::season_context::refresh_game_context(game);
 }
@@ -222,6 +225,7 @@ where
 pub fn finish_live_match_day(game: &mut Game) {
     let today = game.clock.current_date.format("%Y-%m-%d").to_string();
     info!("[turn] finish_live_match_day: {}", today);
+    crate::development_reviews::record_managed_player_reviews(game);
     transfers::process_loan_development_reports(game);
     transfers::process_loan_returns(game);
     training::report_youth_development(game);
@@ -251,6 +255,8 @@ pub fn finish_live_match_day(game: &mut Game) {
     crate::ai_hiring::process_vacant_ai_clubs(game);
     crate::job_offers::check_job_offers(game);
 
+    crate::career_milestones::refresh(game);
+    crate::achievements::refresh(game);
     game.clock.advance_days(1);
     game.sync_legacy_league();
     crate::season_context::refresh_game_context(game);
@@ -411,7 +417,7 @@ fn build_engine_team(game: &Game, team_id: &str) -> engine::TeamData {
                 DomainPosition::Forward => engine::Position::Forward,
                 _ => engine::Position::Midfielder,
             };
-            engine::PlayerData {
+            let mut player = engine::PlayerData {
                 id: p.id.clone(),
                 name: p.match_name.clone(),
                 position: pos,
@@ -442,7 +448,9 @@ fn build_engine_team(game: &Game, team_id: &str) -> engine::TeamData {
                     .and_then(|roles| roles.get(&p.id))
                     .map(domain_to_engine_role)
                     .unwrap_or(engine::PlayerRole::Standard),
-            }
+            };
+            crate::achievements::apply_match_perks(game, team_id, &mut player);
+            player
         })
         .collect();
 

@@ -1,3 +1,4 @@
+import FinanceForecastCard from "./FinanceForecastCard";
 import { useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { FinanceCashFlowChart } from "./FinanceCashFlowChart";
@@ -498,6 +499,13 @@ function FinancesTabContent({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+      <FinanceForecastCard
+        team={myTeam}
+        players={gameState.players}
+        today={gameState.clock.current_date}
+        weeklyNet={projectedWeeklyNet}
+        weeklyWages={totalWages}
+      />
       {/* Financial overview */}
       <Card accent="accent" className="lg:col-span-2">
         <CardHeader>{t("finances.overview")}</CardHeader>

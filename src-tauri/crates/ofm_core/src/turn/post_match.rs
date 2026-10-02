@@ -169,6 +169,19 @@ pub fn apply_match_report_with_capture<F>(
 
     // Update player season stats from the engine report
     apply_player_stats(game, report, home_team_id, away_team_id);
+    if game
+        .manager
+        .team_id
+        .as_deref()
+        .is_some_and(|id| id == home_team_id || id == away_team_id)
+    {
+        let played = report
+            .player_stats
+            .iter()
+            .map(|(id, stats)| (id.clone(), u32::from(stats.minutes_played)))
+            .collect::<Vec<_>>();
+        crate::achievements::credit_youth_minutes(game, &played);
+    }
     apply_match_injuries(game, report, home_team_id, away_team_id);
     resolve_post_match_promises(game, report, home_team_id, away_team_id);
 

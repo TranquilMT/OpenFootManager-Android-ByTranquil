@@ -1,5 +1,15 @@
 use serde::{Deserialize, Serialize};
 
+/// A bounded review history for players managed by the user, including loans.
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+pub struct PlayerDevelopmentSnapshot {
+    pub date: String,
+    pub season: u32,
+    pub ovr: u8,
+    pub minutes_played: u32,
+    pub focus: Option<crate::team::TrainingFocus>,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Player {
     pub id: String,
@@ -72,6 +82,8 @@ pub struct Player {
     pub career: Vec<CareerEntry>,
     #[serde(default)]
     pub movement_history: Vec<PlayerMovementEntry>,
+    #[serde(default)]
+    pub development_history: Vec<PlayerDevelopmentSnapshot>,
 
     // Individual training focus override (takes priority over group and team default)
     #[serde(default)]
@@ -680,6 +692,7 @@ impl Player {
             stats: PlayerSeasonStats::default(),
             career: Vec::new(),
             movement_history: Vec::new(),
+            development_history: Vec::new(),
             training_focus: None,
             transfer_listed: false,
             loan_listed: false,

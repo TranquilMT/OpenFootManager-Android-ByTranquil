@@ -24,10 +24,12 @@
     "openGithub": "Otevřít repozitář OFMtouch na GitHubu",
     "openOriginalGithub": "Otevřít původní repozitář OpenFootManager na GitHubu",
     "originalGame": "Původní hra",
-    "doNotShowWhatsNew": "Znovu nezobrazovat pro v0.5.2",
+    "doNotShowWhatsNew": "Znovu nezobrazovat pro v0.6.4",
     "continueToGame": "Pokračovat",
     "mainMenu": "Hlavní menu",
-    "worldEditor": "Editor světa"
+    "worldEditor": "Editor světa",
+    "restoreBackup": "Obnovit poslední funkční zálohu",
+    "restoreBackupHelp": "Obnoví nejnovější použitelnou zálohu. Pozdější postup bude ztracen; poškozená hra zůstane uložena zvlášť."
   },
   "managerProfiles": {
     "saveConfirm": {
@@ -190,7 +192,9 @@
     "digestEventUserNews": "Novinky o vašem klubu nebo hráčích",
     "digestEventTransferWindow": "Otevření nebo uzávěrka přestupového okna",
     "digestContinue": "Pokračovat v postupu",
-    "digestError": "Chyba simulace"
+    "digestError": "Chyba simulace",
+    "more": "Další",
+    "careerNavigation": "Navigace kariéry"
   },
   "continueMenu": {
     "goToField": "Vstoupit na hřiště",
@@ -1409,7 +1413,9 @@
     "transferFeedbackCounterHeadline": "Před stvrzením dohody požadují více.",
     "transferFeedbackCounterDetail": "Nabídka byla dostatečně vysoká na to, aby se pokračovalo v jednání, ale druhá strana dává najevo, že si představuje cenu bližší k {{fee}}.",
     "transferFeedbackRejectedHeadline": "Tato fáze vyjednávání byla ukončena.",
-    "transferFeedbackRejectedDetail": "Návrh je nepřesvědčil. Pro opětovné zahájení vážných rozhovorů budete muset nabídnout vyšší částku, bližší k {{fee}}."
+    "transferFeedbackRejectedDetail": "Návrh je nepřesvědčil. Pro opětovné zahájení vážných rozhovorů budete muset nabídnout vyšší částku, bližší k {{fee}}.",
+    "dealCommitment": "Přestup a roční mzda: {{value}} (bez dalších příjmů a výdajů).",
+    "wageHeadroom": "Zbývající týdenní mzdový rozpočet po této dohodě: {{value}}"
   },
   "transferCentreWorld": {
     "title": "Přestupové centrum",
@@ -1777,7 +1783,7 @@
     "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
     "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
     "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
-    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.3",
+    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.4",
     "patchPortraits": "20 fiktivních výchozích tváří přináší pestřejší portréty hráčů.",
     "patchWorld": "Fotbalový svět zahrnuje 29 zemí a silnější kluby v Americe a Asii.",
     "patchTransfers": "Strategie klubů řídí hostování a přestupy včetně konkurenčních nabídek a kontroly rozpočtu.",
@@ -1837,7 +1843,9 @@
     "enterFullscreen": "Vstoupit",
     "exitFullscreen": "Ukončit",
     "switchToLightMode": "Přepnout do světlého motivu",
-    "switchToDarkMode": "Přepnout do tmavého motivu"
+    "switchToDarkMode": "Přepnout do tmavého motivu",
+    "reduceMotion": "Omezit pohyb",
+    "reduceMotionDesc": "Méně animací a okamžité posouvání. Zohledňuje se také nastavení systému."
   },
   "preMatch": {
     "formationFit": "Vhodnost rozestavení",
@@ -1920,7 +1928,10 @@
     "morale": "Morálka",
     "estimatedAttributes": "Odhadované atributy",
     "undiscovered": "Neobjeveno",
-    "confidence": "Spolehlivost odhadu"
+    "confidence": "Spolehlivost odhadu",
+    "compareShortlist": "Porovnání užšího výběru",
+    "comparisonPlayer": "Porovnávaný hráč {{number}}",
+    "compareHint": "Přidej dva hráče do užšího výběru a porovnej mzdy, potenciál a vhodnost pro rozestavení."
   },
   "match": {
     "live": "Živě",
@@ -4219,5 +4230,79 @@
     "matchday": "Zápasové soupisky vylučují hráče po ukončení kariéry; po skončení zápasu už nelze měnit taktiku.",
     "career": "Zprávy o rozvoji hostujících hráčů zůstávají přesné při změně sezóny a výpočet narozenin je opraven.",
     "saves": "Uložené kariéry zachovávají náborové strategie a přibyly regresní testy."
+  },
+  "phase64": {
+    "promiseAction": "Příslib herního času: potřebuje jeden start. Zbývá zápasů: {{count}}.",
+    "promiseDeadline": "Očekávaný termín: {{date}}",
+    "promisePaused": "Termín je během zranění pozastaven",
+    "promiseUnscheduled": "Termín čeká na naplánované zápasy",
+    "squadPlan": "Plán kádru na šest měsíců",
+    "squadPlanHint": "Bez prodloužení smluv končících do 180 dnů zbude v prvním týmu {{count}} hráčů. Předpokládané pokrytí rolí je níže.",
+    "noExpiringContracts": "Žádná smlouva prvního týmu nekončí do 180 dnů.",
+    "youthReviews": "Zprávy o vývoji mládeže",
+    "promotionReady": "Zvážit povýšení do prvního týmu",
+    "developing": "Stále se rozvíjí",
+    "reviewDate": "Výchozí datum zprávy: {{date}}",
+    "reviewGrowth": "Změna OVR od zprávy: {{value}}",
+    "reviewMinutes": "Minuty od zprávy: {{count}}",
+    "reviewPending": "Sledování začne při příštím posunu data.",
+    "decisionInbox": "Čekající rozhodnutí",
+    "individualPlans": "Individuální rozvojové plány",
+    "individualPlansHint": "Vyber individuální zaměření v kádru níže. Měsíční zpráva stanoví cíl zvýšit OVR o bod do hranice potenciálu; postup se měří od uložené zprávy.",
+    "newTrainingPlan": "Nové zaměření: sledování začne při příští zprávě.",
+    "trainingCeiling": "Současný potenciál je dosažen; zaměř se na kondici a výkon.",
+    "monthlyTarget": "Měsíční cíl: dosáhnout {{target}} OVR",
+    "loanWatch": "Sledování hostování",
+    "loanSeasonStats": "V této sezoně na hostování: {{appearances}} startů · {{minutes}} minut",
+    "loanReturnDate": "Návrat {{date}} · Zbývá dnů: {{count}}",
+    "loanUnused": "Zatím bez minut — prověř toto hostování.",
+    "financeForecast": "Prognóza hotovosti a mezd",
+    "forecastPeriod": "Období",
+    "forecastWeeks": "Počet týdnů dopředu: {{count}}",
+    "forecastHint": "Odhad podle současného pravidelného peněžního toku a dohodnutých registrací. Příjmy ze zápasů, konce smluv a návraty z hostování mohou výsledek změnit. Mzdy jsou týdenní.",
+    "careerMilestones": "Milníky kariéry",
+    "milestoneMatches": "Odtrénované zápasy: {{count}}",
+    "milestoneWins": "Výhry: {{count}}",
+    "milestoneTrophies": "Trofeje: {{count}}",
+    "milestoneAnniversary": "Roky v trenérské roli: {{count}}",
+    "milestonePromotion": "Postup do {{division}} ({{season}})",
+    "milestoneEarlier": "Dosaženo dříve v této kariéře",
+    "milestonePending": "Milníky se objeví s postupem kariéry.",
+    "achievements": "Úspěchy",
+    "managerLevel": "Úroveň manažera {{level}}",
+    "managerXp": "{{xp}} ZK",
+    "nextLevel": "{{xp}} ZK do další úrovně",
+    "managerPerks": "Růst v tréninku +{{training}} %; klid, rozhodování a týmová hra v zápase +{{performance}}.",
+    "achievementRules": "Odměny se udělují automaticky a ukládají jednou. Každá úroveň přidá současnému týmu +2 morálky (maximum 100). Výhody zůstávají při změně klubu; trénink má limit 10 % a zápasové atributy +2. Posuň den pro záznam dosažených cílů.",
+    "achievementEarned": "Odemčeno {{date}}",
+    "achievementPending": "Cíl ještě není zaznamenán",
+    "achievementNames": {
+      "debut": "První zápas",
+      "first_win": "První výhra",
+      "ten_wins": "Vítězný návyk",
+      "fifty_matches": "Zkušený manažer",
+      "trophy": "Trofeje",
+      "promotion": "Postup",
+      "board_goal": "Důvěra vedení",
+      "player_development": "Rozvoj hráčů",
+      "academy_minutes": "Šance pro mládež",
+      "career_year": "Rok ve funkci"
+    },
+    "achievementGoals": {
+      "debut": "Veď jeden zápas.",
+      "first_win": "Vyhraj jeden zápas.",
+      "ten_wins": "Vyhraj deset zápasů v kariéře.",
+      "fifty_matches": "Veď padesát zápasů v kariéře.",
+      "trophy": "Vyhraj trofej.",
+      "promotion": "Získej postup klubu.",
+      "board_goal": "Splň cíl vedení.",
+      "player_development": "Zlepši hráče o jeden bod hodnocení proti uloženému měsíčnímu přehledu se stejným individuálním zaměřením.",
+      "academy_minutes": "Dej hráčům do 21 let dohromady 900 minut za sezónu v současném klubu.",
+      "career_year": "Dosáhni prvního výročí kariéry."
+    },
+    "releaseProgression": "Úspěchy v nabídce Více: plň kariérní cíle, získávej zkušenosti a úrovně s omezenými bonusy tréninku, výkonu a morálky. Časová osa ukládá milníky kariéry.",
+    "releasePlanning": "Plánuj pokrytí sestavy po konci smluv, porovnávej vyhlédnuté hráče a sleduj prostor pro mzdy, přestupy včetně mezd a předpověď hotovosti.",
+    "releaseDevelopment": "Měsíční přehledy akademie a individuální cíle sledují růst. Hostování ukazují minuty a návraty; sliby vysvětlují termíny a přestávky kvůli zranění.",
+    "releaseReliability": "Po chybě načtení obnov použitelnou zálohu. Rychlejší trénink, tlačítko Zpět na Androidu, zápasové zkratky, přehled rozhodnutí, silnější kontrast a méně pohybu."
   }
 }

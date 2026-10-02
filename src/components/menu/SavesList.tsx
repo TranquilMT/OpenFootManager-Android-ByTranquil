@@ -1,3 +1,4 @@
+import { Button } from "../ui";
 import { useTranslation } from "react-i18next";
 import { formatDate } from "../../lib/helpers";
 import { resolveBackendText } from "../../utils/backendI18n";
@@ -26,6 +27,8 @@ interface SaveEntry {
 interface SavesListProps {
   saves: SaveEntry[];
   isLoading: boolean;
+  failedSaveId?: string | null;
+  onRestore?: (saveId: string) => void;
   loadingSaveId?: string | null;
   confirmDeleteId: string | null;
   onLoad: (saveId: string) => void;
@@ -38,6 +41,8 @@ export default function SavesList({
   saves,
   isLoading,
   loadingSaveId,
+  failedSaveId,
+  onRestore,
   confirmDeleteId,
   onLoad,
   onDelete,
@@ -79,6 +84,21 @@ export default function SavesList({
               key={save.id}
               className="group relative flex flex-col gap-2 w-full p-4 bg-white dark:bg-navy-700 hover:bg-primary-50 dark:hover:bg-navy-600 text-left rounded-xl transition-all duration-200 border border-gray-200 dark:border-navy-600 hover:border-primary-400 dark:hover:border-primary-500 shadow-sm"
             >
+              {failedSaveId === save.id && onRestore && (
+                <div className="flex flex-col gap-2" role="status">
+                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                    {t("menu.restoreBackupHelp")}
+                  </p>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={Boolean(loadingSaveId)}
+                    onClick={() => onRestore(save.id)}
+                  >
+                    {t("menu.restoreBackup")}
+                  </Button>
+                </div>
+              )}
               {confirmDeleteId === save.id ? (
                 <div className="flex flex-col gap-2">
                   {/* The string carries its own <strong> markup, so it has to
@@ -98,6 +118,7 @@ export default function SavesList({
                   <div className="flex gap-2">
                     <button
                       type="button"
+                      disabled={Boolean(loadingSaveId)}
                       onClick={() => onDelete(save.id)}
                       className="flex-1 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-heading font-bold uppercase tracking-wider rounded-lg transition-colors"
                     >
@@ -116,6 +137,7 @@ export default function SavesList({
                 <div className="flex items-center gap-3 w-full">
                   <button
                     type="button"
+                    disabled={Boolean(loadingSaveId)}
                     onClick={() => onLoad(save.id)}
                     className="flex flex-col gap-2 flex-1 text-left min-w-0"
                   >
@@ -139,6 +161,7 @@ export default function SavesList({
                   </button>
                   <button
                     type="button"
+                    disabled={Boolean(loadingSaveId)}
                     onClick={(e) => {
                       e.stopPropagation();
                       onConfirmDelete(save.id);

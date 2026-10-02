@@ -24,10 +24,12 @@
     "openGithub": "打开 OFMtouch 的 GitHub 仓库",
     "openOriginalGithub": "打开原版 OpenFootManager 的 GitHub 仓库",
     "originalGame": "原版游戏",
-    "doNotShowWhatsNew": "不再显示 v0.5.2 更新提示",
+    "doNotShowWhatsNew": "不再显示 v0.6.4 更新提示",
     "continueToGame": "继续",
     "mainMenu": "主菜单",
-    "worldEditor": "世界编辑器"
+    "worldEditor": "世界编辑器",
+    "restoreBackup": "恢复最近的有效备份",
+    "restoreBackupHelp": "恢复最近可用的备份。备份之后的进度将丢失；损坏的存档会另行保留。"
   },
   "managerProfiles": {
     "saveConfirm": {
@@ -190,7 +192,9 @@
     "digestEventUserNews": "关于您俱乐部或球员的新闻",
     "digestEventTransferWindow": "转会窗口开启或截止日",
     "digestContinue": "继续推进",
-    "digestError": "模拟出错"
+    "digestError": "模拟出错",
+    "more": "更多",
+    "careerNavigation": "生涯导航"
   },
   "continueMenu": {
     "goToField": "进入球场",
@@ -1409,7 +1413,9 @@
     "transferFeedbackCounterHeadline": "他们希望得到更多才肯握手。",
     "transferFeedbackCounterDetail": "出价已足够接近,谈判仍在继续,但对方暗示的价位更接近 {{fee}}。",
     "transferFeedbackRejectedHeadline": "他们这一轮直接关闭了谈判。",
-    "transferFeedbackRejectedDetail": "该报价未能打动他们。你需要更有力的报价,接近 {{fee}},才能重启正式谈判。"
+    "transferFeedbackRejectedDetail": "该报价未能打动他们。你需要更有力的报价,接近 {{fee}},才能重启正式谈判。",
+    "dealCommitment": "转会费加一年工资：{{value}}（不含其他收入和支出）。",
+    "wageHeadroom": "这笔交易后剩余的每周工资预算：{{value}}"
   },
   "transferCentreWorld": {
     "title": "转会中心",
@@ -1777,7 +1783,7 @@
     "patchPlayers": "新增更多优秀球员，包括稀有的96分球星和升级热门球队。",
     "patchMatches": "比赛解说更加丰富，加入门框射门和可选语音解说。",
     "patchMobile": "改进移动端操作、收件箱、国家队与生涯创建。",
-    "patchWelcome": "欢迎来到 OFMtouch！v0.6.3 更新内容",
+    "patchWelcome": "欢迎来到 OFMtouch！v0.6.4 更新内容",
     "patchPortraits": "20 张虚构原始人脸让生成球员的肖像更加多样。",
     "patchWorld": "足球世界扩展至 29 个国家，美洲和亚洲的俱乐部实力也得到提升。",
     "patchTransfers": "俱乐部策略会影响租借和转会，包括竞争报价与预算检查。",
@@ -1837,7 +1843,9 @@
     "enterFullscreen": "进入",
     "exitFullscreen": "退出",
     "switchToLightMode": "切换到浅色模式",
-    "switchToDarkMode": "切换到深色模式"
+    "switchToDarkMode": "切换到深色模式",
+    "reduceMotion": "减少动态效果",
+    "reduceMotionDesc": "减少动画并使用即时滚动，同时遵循系统偏好。"
   },
   "preMatch": {
     "formationFit": "阵型契合度",
@@ -1920,7 +1928,10 @@
     "morale": "士气",
     "estimatedAttributes": "预估属性",
     "undiscovered": "尚未发掘",
-    "confidence": "置信度"
+    "confidence": "置信度",
+    "compareShortlist": "候选球员对比",
+    "comparisonPlayer": "对比球员 {{number}}",
+    "compareHint": "将两名球员加入候选名单，以对比工资、潜力和阵型适配度。"
   },
   "match": {
     "live": "直播中",
@@ -4219,5 +4230,79 @@
     "matchday": "比赛名单不再包含退役球员；比赛结束后无法更改战术。",
     "career": "跨赛季的租借球员成长报告保持准确，并修正了生日年龄计算。",
     "saves": "生涯存档保留引援策略，并增加了回归测试。"
+  },
+  "phase64": {
+    "promiseAction": "出场时间承诺：需要出场一次。剩余比赛：{{count}}。",
+    "promiseDeadline": "预计截止日期：{{date}}",
+    "promisePaused": "受伤期间暂停期限",
+    "promiseUnscheduled": "等待安排比赛后确定期限",
+    "squadPlan": "六个月阵容规划",
+    "squadPlanHint": "若不续签180天内到期的合同，一线队将剩余 {{count}} 人。下方显示预计位置储备。",
+    "noExpiringContracts": "没有一线队合同将在180天内到期。",
+    "youthReviews": "青训发展报告",
+    "promotionReady": "可考虑提拔至一线队",
+    "developing": "仍在成长",
+    "reviewDate": "报告基准日期：{{date}}",
+    "reviewGrowth": "报告以来的总评变化：{{value}}",
+    "reviewMinutes": "报告以来的出场分钟：{{count}}",
+    "reviewPending": "进度记录将在下次推进日期时开始。",
+    "decisionInbox": "待做决策",
+    "individualPlans": "个人发展计划",
+    "individualPlansHint": "在下方阵容中选择个人训练重点。每月报告设置提升1点总评的目标，上限为潜力值；进度从保存的报告开始计算。",
+    "newTrainingPlan": "训练重点已更改：目标记录将在下次报告时开始。",
+    "trainingCeiling": "已达到当前潜力上限；请关注体能和比赛表现。",
+    "monthlyTarget": "月度目标：达到 {{target}} 总评",
+    "loanWatch": "租借观察",
+    "loanSeasonStats": "本赛季租借期间：{{appearances}} 次出场 · {{minutes}} 分钟",
+    "loanReturnDate": "归队日期 {{date}} · 剩余天数：{{count}}",
+    "loanUnused": "尚未获得出场时间——请检查这笔租借。",
+    "financeForecast": "现金与工资预测",
+    "forecastPeriod": "期间",
+    "forecastWeeks": "{{count}} 周后",
+    "forecastHint": "根据当前经常性现金流和已约定注册进行估算。比赛收入、合同到期和租借归队可能改变结果。工资金额按周计算。",
+    "careerMilestones": "生涯里程碑",
+    "milestoneMatches": "执教比赛：{{count}}",
+    "milestoneWins": "胜场：{{count}}",
+    "milestoneTrophies": "奖杯：{{count}}",
+    "milestoneAnniversary": "执教年数：{{count}}",
+    "milestonePromotion": "升级至 {{division}}（{{season}}）",
+    "milestoneEarlier": "在本生涯较早阶段达成",
+    "milestonePending": "里程碑将随着生涯推进而出现。",
+    "achievements": "成就",
+    "managerLevel": "经理等级 {{level}}",
+    "managerXp": "{{xp}} 经验",
+    "nextLevel": "距离下一级还需 {{xp}} 经验",
+    "managerPerks": "训练成长 +{{training}}%；比赛中的镇定、决策和团队合作 +{{performance}}。",
+    "achievementRules": "奖励自动发放并仅保存一次。每次升级为当前球队增加2点士气（上限100）。更换俱乐部后仍保留加成；训练加成上限10%，比赛属性加成上限2点。推进一天以记录已达成目标。",
+    "achievementEarned": "已于 {{date}} 解锁",
+    "achievementPending": "目标尚未记录",
+    "achievementNames": {
+      "debut": "首次执教",
+      "first_win": "首场胜利",
+      "ten_wins": "常胜习惯",
+      "fifty_matches": "经验丰富",
+      "trophy": "冠军奖杯",
+      "promotion": "升级成功",
+      "board_goal": "董事会信任",
+      "player_development": "球员培养",
+      "academy_minutes": "年轻人的机会",
+      "career_year": "执教一周年"
+    },
+    "achievementGoals": {
+      "debut": "执教一场比赛。",
+      "first_win": "赢得一场比赛。",
+      "ten_wins": "职业生涯赢得十场比赛。",
+      "fifty_matches": "职业生涯执教五十场比赛。",
+      "trophy": "赢得一座奖杯。",
+      "promotion": "带领俱乐部升级。",
+      "board_goal": "达成一个董事会目标。",
+      "player_development": "在个人训练重点不变的情况下，球员总评比已保存的月度评估提高1点。",
+      "academy_minutes": "在当前俱乐部单个赛季为21岁及以下球员累计提供900分钟出场时间。",
+      "career_year": "达到职业生涯一周年。"
+    },
+    "releaseProgression": "在“更多”中查看成就：完成职业目标、获得经验并升级，解锁有上限的训练、比赛和士气加成。职业时间线保存重要里程碑。",
+    "releasePlanning": "通过合同到期后的阵容覆盖、候选球员对比、工资空间、转会费与工资总额及现金预测提前规划。",
+    "releaseDevelopment": "青训月度评估和个人目标追踪实际成长。租借监控展示出场时间与归队日期；承诺追踪说明期限及伤病暂停。",
+    "releaseReliability": "加载失败后可恢复有效备份。训练处理更快，支持安卓返回键，新增比赛快捷操作与待决事项，强化对比度并支持减少动态效果。"
   }
 }

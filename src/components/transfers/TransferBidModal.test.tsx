@@ -13,6 +13,8 @@ vi.mock("react-i18next", () => ({
       if (key === "transfers.playerValue") return `Value ${params?.value}`;
       if (key === "transfers.resumeNegotiationHint") return "Talks are still live with this club.";
       if (key === "transfers.bidAmount") return "Bid Amount";
+      if (key === "transfers.dealCommitment") return `Fee plus a year of wages ${params?.value}`;
+      if (key === "transfers.wageHeadroom") return `Weekly wage headroom ${params?.value}`;
       if (key === "transfers.bidImpactTitle") return "Projected impact";
       if (key === "transfers.bidImpactTransferBudget") {
         return `Transfer budget ${params?.before} -> ${params?.after}`;
@@ -227,6 +229,11 @@ describe("TransferBidModal", () => {
       />,
     );
 
+    expect(
+      screen.getByText(`Fee plus a year of wages ${formatExactMoney(1552000)}`),
+    ).toBeInTheDocument();
+    expect(screen.getByText(`Weekly wage headroom ${formatExactMoney(3000)}`)).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toHaveTextContent("Your club cannot afford this fee.");
     expect(screen.getByText("Your club cannot afford this fee.")).toBeInTheDocument();
     expect(screen.queryByText("error")).not.toBeInTheDocument();
   });

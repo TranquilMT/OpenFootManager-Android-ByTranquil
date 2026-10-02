@@ -24,10 +24,12 @@
     "openGithub": "Open OFMtouch GitHub repository",
     "openOriginalGithub": "Open original OpenFootManager GitHub repository",
     "originalGame": "Original game",
-    "doNotShowWhatsNew": "Don’t show this again for v0.5.2",
+    "doNotShowWhatsNew": "Don’t show this again for v0.6.4",
     "continueToGame": "Continue",
     "mainMenu": "Main Menu",
-    "worldEditor": "World Editor"
+    "worldEditor": "World Editor",
+    "restoreBackup": "Restore last good backup",
+    "restoreBackupHelp": "Restore the newest usable backup. Progress since that backup will be lost; the failed save is kept separately."
   },
   "managerProfiles": {
     "saveConfirm": {
@@ -190,7 +192,9 @@
     "digestEventUserNews": "News about your club or players",
     "digestEventTransferWindow": "Transfer window opening or deadline day",
     "digestContinue": "Keep Going",
-    "digestError": "Simulation error"
+    "digestError": "Simulation error",
+    "more": "More",
+    "careerNavigation": "Career navigation"
   },
   "continueMenu": {
     "goToField": "Go to the Field",
@@ -1409,7 +1413,9 @@
     "transferFeedbackCounterHeadline": "They want more before shaking hands.",
     "transferFeedbackCounterDetail": "The bid was close enough to keep talking, but their side are signalling a price nearer {{fee}}.",
     "transferFeedbackRejectedHeadline": "They shut this round down.",
-    "transferFeedbackRejectedDetail": "The proposal did not move them enough. You would need a stronger fee, closer to {{fee}}, to reopen serious talks."
+    "transferFeedbackRejectedDetail": "The proposal did not move them enough. You would need a stronger fee, closer to {{fee}}, to reopen serious talks.",
+    "dealCommitment": "Fee plus a year of wages: {{value}} (before other income and costs).",
+    "wageHeadroom": "Weekly wage budget remaining after this deal: {{value}}"
   },
   "transferCentreWorld": {
     "title": "Transfer Centre",
@@ -1777,7 +1783,7 @@
     "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
     "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
     "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
-    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.3",
+    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.4",
     "patchPortraits": "20 fictional source faces bring more variety to generated player portraits.",
     "patchWorld": "A larger football world spans 29 nations, with stronger clubs across the Americas and Asia.",
     "patchTransfers": "Club strategies guide loans and transfer approaches, with competing offers and budget checks.",
@@ -1837,7 +1843,9 @@
     "enterFullscreen": "Enter",
     "exitFullscreen": "Exit",
     "switchToLightMode": "Switch to light mode",
-    "switchToDarkMode": "Switch to dark mode"
+    "switchToDarkMode": "Switch to dark mode",
+    "reduceMotion": "Reduce motion",
+    "reduceMotionDesc": "Use fewer animations and instant scrolling. Your system preference is also respected."
   },
   "preMatch": {
     "formationFit": "Formation Fit",
@@ -1920,7 +1928,10 @@
     "morale": "Morale",
     "estimatedAttributes": "Estimated Attributes",
     "undiscovered": "Not discovered",
-    "confidence": "Confidence"
+    "confidence": "Confidence",
+    "compareShortlist": "Shortlist comparison",
+    "comparisonPlayer": "Comparison player {{number}}",
+    "compareHint": "Shortlist two players to compare wages, potential and formation fit."
   },
   "match": {
     "live": "Live",
@@ -4219,5 +4230,79 @@
     "matchday": "Matchday squads exclude retired players; completed matches no longer accept tactical changes.",
     "career": "Loan development reports stay accurate after season rollover, with corrected birthday calculations.",
     "saves": "Career saves retain recruitment strategies, backed by expanded regression checks."
+  },
+  "phase64": {
+    "promiseAction": "Playing-time promise: one appearance needed. Matches remaining: {{count}}.",
+    "promiseDeadline": "Expected deadline: {{date}}",
+    "promisePaused": "Deadline paused while injured",
+    "promiseUnscheduled": "Deadline awaits scheduled fixtures",
+    "squadPlan": "Six-month squad plan",
+    "squadPlanHint": "If contracts due within 180 days are not renewed, senior squad size: {{count}}. Projected role coverage is shown below.",
+    "noExpiringContracts": "No senior contracts expire within 180 days.",
+    "youthReviews": "Youth development reviews",
+    "promotionReady": "Consider senior promotion",
+    "developing": "Still developing",
+    "reviewDate": "Review baseline: {{date}}",
+    "reviewGrowth": "OVR change since review: {{value}}",
+    "reviewMinutes": "Minutes since review: {{count}}",
+    "reviewPending": "Progress tracking begins at the next date advance.",
+    "decisionInbox": "Decisions to make",
+    "individualPlans": "Individual development plans",
+    "individualPlansHint": "Choose an individual focus in the roster below. Each monthly review sets a one-point OVR goal, capped by potential; progress is measured from the saved review.",
+    "newTrainingPlan": "New focus: goal tracking starts at the next review.",
+    "trainingCeiling": "At the current potential ceiling; focus on fitness and performance.",
+    "monthlyTarget": "Monthly goal: reach {{target}} OVR",
+    "loanWatch": "Loan watch",
+    "loanSeasonStats": "This season on loan: {{appearances}} appearances · {{minutes}} minutes",
+    "loanReturnDate": "Returns {{date}} · Days remaining: {{count}}",
+    "loanUnused": "No minutes yet — review this loan.",
+    "financeForecast": "Cash and wage forecast",
+    "forecastPeriod": "Period",
+    "forecastWeeks": "After {{count}} weeks",
+    "forecastHint": "Estimate using current recurring cash flow and agreed registrations. Match income, future contract expiries and loan returns may change the result. Wage figures are weekly.",
+    "careerMilestones": "Career milestones",
+    "milestoneMatches": "Matches managed: {{count}}",
+    "milestoneWins": "Wins: {{count}}",
+    "milestoneTrophies": "Trophies: {{count}}",
+    "milestoneAnniversary": "Years in management: {{count}}",
+    "milestonePromotion": "Promoted to {{division}} ({{season}})",
+    "milestoneEarlier": "Reached earlier in this career",
+    "milestonePending": "Milestones appear as your career progresses.",
+    "achievements": "Achievements",
+    "managerLevel": "Manager level {{level}}",
+    "managerXp": "{{xp}} XP",
+    "nextLevel": "{{xp}} XP to next level",
+    "managerPerks": "Training growth +{{training}}%; match composure, decisions and teamwork +{{performance}}.",
+    "achievementRules": "Rewards are automatic and saved once. Every new level gives your current team +2 morale (maximum 100). Perks follow you between clubs; training is capped at 10% and match attributes at +2. Advance a day to record newly reached goals.",
+    "achievementEarned": "Unlocked {{date}}",
+    "achievementPending": "Goal not yet recorded",
+    "achievementNames": {
+      "debut": "First match",
+      "first_win": "First victory",
+      "ten_wins": "Winning habit",
+      "fifty_matches": "Experienced manager",
+      "trophy": "Silverware",
+      "promotion": "Moving up",
+      "board_goal": "Board confidence",
+      "player_development": "Player developer",
+      "academy_minutes": "Youth opportunity",
+      "career_year": "A year in charge"
+    },
+    "achievementGoals": {
+      "debut": "Manage one match.",
+      "first_win": "Win one match.",
+      "ten_wins": "Win ten career matches.",
+      "fifty_matches": "Manage fifty career matches.",
+      "trophy": "Win a trophy.",
+      "promotion": "Earn a club promotion.",
+      "board_goal": "Meet a board objective.",
+      "player_development": "Improve a player by one OVR point against a saved monthly review with the same individual training focus.",
+      "academy_minutes": "Give players aged 21 or younger 900 combined minutes in one season at your current club.",
+      "career_year": "Reach your first career anniversary."
+    },
+    "releaseProgression": "Achievements in More: complete career goals, earn XP and level up for capped training, performance and morale benefits. A saved timeline celebrates career milestones.",
+    "releasePlanning": "Plan ahead with contract-expiry squad depth, shortlisted player comparisons, wage headroom, fee-plus-wages totals and cash forecasts.",
+    "releaseDevelopment": "Monthly academy reviews and individual goals track real growth. Loan watch highlights game time and return dates; promise tracking explains deadlines and injury pauses.",
+    "releaseReliability": "Restore a usable save backup after a load failure. Enjoy faster training processing, Android Back support, visible match shortcuts, a decisions inbox, stronger contrast and reduced motion."
   }
 }

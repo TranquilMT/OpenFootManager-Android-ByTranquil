@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import type { MessageData } from "../../store/gameStore";
 import {
   getFilteredMessages,
+  DECISIONS_FILTER,
+  sortDecisionMessages,
   getNavigationTarget,
   isPlayerEventMessage,
   sortInboxMessages,
@@ -32,6 +34,55 @@ function createMessage(overrides: Partial<MessageData> = {}): MessageData {
 }
 
 describe("inboxHelpers", () => {
+  it("keeps read but unresolved decisions and prioritises urgent choices", () => {
+    const choice = {
+      id: "choose",
+      label: "Choose",
+      resolved: false,
+      action_type: { ChooseOption: { options: [] } },
+    };
+    const messages = [
+      createMessage({ id: "normal", read: true, actions: [choice], date: "2026-08-20" }),
+      createMessage({ id: "urgent", priority: "Urgent", actions: [choice], date: "2026-08-01" }),
+      createMessage({ id: "resolved", actions: [{ ...choice, resolved: true }] }),
+      createMessage({
+        id: "profile",
+        actions: [
+          {
+            id: "view",
+            label: "View",
+            resolved: false,
+            action_type: { NavigateTo: { route: "/player/p1" } },
+          },
+        ],
+      }),
+    ];
+    const pending = getFilteredMessages(messages, DECISIONS_FILTER);
+    expect(sortDecisionMessages(pending, "newest").map((message) => message.id)).toEqual([
+      "urgent",
+      "normal",
+    ]);
+  });
+
+  it("includes outstanding transfer reviews without treating profile links as decisions", () => {
+    const messages = [
+      createMessage({
+        id: "transfer_offer_p1",
+        actions: [
+          {
+            id: "review",
+            label: "Review",
+            resolved: false,
+            action_type: { NavigateTo: { route: "/dashboard?tab=Transfers" } },
+          },
+        ],
+      }),
+    ];
+    expect(getFilteredMessages(messages, DECISIONS_FILTER)).toHaveLength(1);
+    messages[0].actions[0].resolved = true;
+    expect(getFilteredMessages(messages, DECISIONS_FILTER)).toHaveLength(0);
+  });
+
   it("filters unread and category-specific message sets", () => {
     const messages = [
       createMessage({ id: "m1", read: false, category: "System" }),

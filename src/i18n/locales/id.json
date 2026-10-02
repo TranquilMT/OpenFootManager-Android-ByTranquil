@@ -24,10 +24,12 @@
     "openGithub": "Buka repositori GitHub OFMtouch",
     "openOriginalGithub": "Buka repositori GitHub asli OpenFootManager",
     "originalGame": "Game asli",
-    "doNotShowWhatsNew": "Jangan tampilkan lagi untuk v0.5.2",
+    "doNotShowWhatsNew": "Jangan tampilkan lagi untuk v0.6.4",
     "continueToGame": "Lanjutkan",
     "mainMenu": "Menu Utama",
-    "worldEditor": "Editor Dunia"
+    "worldEditor": "Editor Dunia",
+    "restoreBackup": "Pulihkan cadangan terakhir yang valid",
+    "restoreBackupHelp": "Memulihkan cadangan terbaru yang dapat digunakan. Kemajuan setelah cadangan itu akan hilang; simpanan rusak tetap disimpan terpisah."
   },
   "managerProfiles": {
     "saveConfirm": {
@@ -190,7 +192,9 @@
     "digestEventUserNews": "Berita tentang klub atau para pemain",
     "digestEventTransferWindow": "Pembukaan jendela transfer atau hari batas akhir",
     "digestContinue": "Lanjutkan",
-    "digestError": "Kesalahan simulasi"
+    "digestError": "Kesalahan simulasi",
+    "more": "Lainnya",
+    "careerNavigation": "Navigasi karier"
   },
   "continueMenu": {
     "goToField": "Ke Lapangan",
@@ -1409,7 +1413,9 @@
     "transferFeedbackCounterHeadline": "Mereka menginginkan lebih sebelum berjabat tangan.",
     "transferFeedbackCounterDetail": "Tawaran cukup dekat untuk terus bernegosiasi, tetapi pihak mereka mengisyaratkan harga yang mendekati {{fee}}.",
     "transferFeedbackRejectedHeadline": "Mereka menghentikan putaran ini.",
-    "transferFeedbackRejectedDetail": "Proposal tidak cukup menggugah mereka. Kamu membutuhkan nominal yang lebih kuat, mendekati {{fee}}, untuk membuka negosiasi serius lagi."
+    "transferFeedbackRejectedDetail": "Proposal tidak cukup menggugah mereka. Kamu membutuhkan nominal yang lebih kuat, mendekati {{fee}}, untuk membuka negosiasi serius lagi.",
+    "dealCommitment": "Biaya transfer dan gaji setahun: {{value}} (di luar pendapatan dan biaya lainnya).",
+    "wageHeadroom": "Sisa anggaran gaji mingguan setelah kesepakatan ini: {{value}}"
   },
   "transferCentreWorld": {
     "title": "Pusat Transfer",
@@ -1777,7 +1783,7 @@
     "patchPlayers": "Lebih banyak pemain unggulan, termasuk bintang langka berperingkat 96.",
     "patchMatches": "Lebih banyak reaksi, tembakan membentur tiang, dan komentar suara opsional.",
     "patchMobile": "Kontrol seluler, kotak masuk, tim nasional, dan awal karier ditingkatkan.",
-    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.6.3",
+    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.6.4",
     "patchPortraits": "20 wajah fiktif sumber membuat potret pemain hasil generasi lebih beragam.",
     "patchWorld": "Dunia sepak bola yang lebih luas mencakup 29 negara, dengan klub lebih kuat di Amerika dan Asia.",
     "patchTransfers": "Strategi klub memandu pinjaman dan transfer, dengan tawaran bersaing serta pemeriksaan anggaran.",
@@ -1837,7 +1843,9 @@
     "enterFullscreen": "Masuk",
     "exitFullscreen": "Keluar",
     "switchToLightMode": "Beralih ke mode terang",
-    "switchToDarkMode": "Beralih ke mode gelap"
+    "switchToDarkMode": "Beralih ke mode gelap",
+    "reduceMotion": "Kurangi gerakan",
+    "reduceMotionDesc": "Kurangi animasi dan gunakan gulir instan. Preferensi sistem juga dihormati."
   },
   "preMatch": {
     "formationFit": "Kecocokan Formasi",
@@ -1920,7 +1928,10 @@
     "morale": "Moral",
     "estimatedAttributes": "Perkiraan Atribut",
     "undiscovered": "Belum terungkap",
-    "confidence": "Keyakinan"
+    "confidence": "Keyakinan",
+    "compareShortlist": "Perbandingan daftar incaran",
+    "comparisonPlayer": "Pemain pembanding {{number}}",
+    "compareHint": "Tambahkan dua pemain ke daftar incaran untuk membandingkan gaji, potensi, dan kecocokan formasi."
   },
   "match": {
     "live": "Langsung",
@@ -4219,5 +4230,79 @@
     "matchday": "Skuad pertandingan tidak menyertakan pemain pensiun; pertandingan yang selesai tidak lagi menerima perubahan taktik.",
     "career": "Laporan perkembangan pemain pinjaman tetap akurat saat pergantian musim, dengan perhitungan ulang tahun yang diperbaiki.",
     "saves": "Simpanan karier mempertahankan strategi perekrutan, didukung pengujian regresi tambahan."
+  },
+  "phase64": {
+    "promiseAction": "Janji waktu bermain: perlu tampil sekali. Sisa pertandingan: {{count}}.",
+    "promiseDeadline": "Perkiraan tenggat: {{date}}",
+    "promisePaused": "Tenggat ditunda selama cedera",
+    "promiseUnscheduled": "Tenggat menunggu jadwal pertandingan",
+    "squadPlan": "Rencana skuad enam bulan",
+    "squadPlanHint": "Jika kontrak yang habis dalam 180 hari tidak diperpanjang, skuad senior tersisa {{count}} pemain. Cakupan posisi yang diproyeksikan ditampilkan di bawah.",
+    "noExpiringContracts": "Tidak ada kontrak senior yang habis dalam 180 hari.",
+    "youthReviews": "Laporan perkembangan pemain muda",
+    "promotionReady": "Pertimbangkan promosi ke tim senior",
+    "developing": "Masih berkembang",
+    "reviewDate": "Acuan laporan: {{date}}",
+    "reviewGrowth": "Perubahan OVR sejak laporan: {{value}}",
+    "reviewMinutes": "Menit sejak laporan: {{count}}",
+    "reviewPending": "Pelacakan dimulai saat tanggal dimajukan berikutnya.",
+    "decisionInbox": "Keputusan tertunda",
+    "individualPlans": "Rencana pengembangan individu",
+    "individualPlansHint": "Pilih fokus individu pada skuad di bawah. Setiap laporan bulanan menargetkan kenaikan satu poin OVR, dibatasi potensi; kemajuan diukur dari laporan tersimpan.",
+    "newTrainingPlan": "Fokus baru: pelacakan target dimulai pada laporan berikutnya.",
+    "trainingCeiling": "Batas potensi saat ini tercapai; utamakan kebugaran dan performa.",
+    "monthlyTarget": "Target bulanan: mencapai {{target}} OVR",
+    "loanWatch": "Pantauan pemain pinjaman",
+    "loanSeasonStats": "Musim ini saat dipinjamkan: {{appearances}} penampilan · {{minutes}} menit",
+    "loanReturnDate": "Kembali {{date}} · Sisa hari: {{count}}",
+    "loanUnused": "Belum mendapat menit bermain — tinjau pinjaman ini.",
+    "financeForecast": "Proyeksi kas dan gaji",
+    "forecastPeriod": "Periode",
+    "forecastWeeks": "Setelah {{count}} minggu",
+    "forecastHint": "Perkiraan berdasarkan arus kas rutin saat ini dan registrasi yang disepakati. Pendapatan pertandingan, kontrak yang berakhir, dan pemain pinjaman yang kembali dapat mengubah hasil. Angka gaji adalah per minggu.",
+    "careerMilestones": "Tonggak karier",
+    "milestoneMatches": "Pertandingan ditangani: {{count}}",
+    "milestoneWins": "Kemenangan: {{count}}",
+    "milestoneTrophies": "Trofi: {{count}}",
+    "milestoneAnniversary": "Tahun sebagai manajer: {{count}}",
+    "milestonePromotion": "Promosi ke {{division}} ({{season}})",
+    "milestoneEarlier": "Dicapai sebelumnya dalam karier ini",
+    "milestonePending": "Tonggak muncul seiring kemajuan karier.",
+    "achievements": "Pencapaian",
+    "managerLevel": "Level manajer {{level}}",
+    "managerXp": "{{xp}} poin pengalaman",
+    "nextLevel": "{{xp}} XP menuju level berikutnya",
+    "managerPerks": "Perkembangan latihan +{{training}}%; ketenangan, keputusan, dan kerja sama dalam laga +{{performance}}.",
+    "achievementRules": "Hadiah diberikan otomatis dan disimpan satu kali. Setiap level baru memberi tim saat ini +2 moral (maksimum 100). Manfaat tetap ada saat pindah klub; latihan dibatasi 10% dan atribut laga +2. Majukan satu hari untuk mencatat tujuan yang tercapai.",
+    "achievementEarned": "Terbuka {{date}}",
+    "achievementPending": "Tujuan belum tercatat",
+    "achievementNames": {
+      "debut": "Laga pertama",
+      "first_win": "Kemenangan pertama",
+      "ten_wins": "Kebiasaan menang",
+      "fifty_matches": "Manajer berpengalaman",
+      "trophy": "Trofi",
+      "promotion": "Promosi",
+      "board_goal": "Kepercayaan direksi",
+      "player_development": "Pengembang pemain",
+      "academy_minutes": "Kesempatan pemain muda",
+      "career_year": "Setahun memimpin"
+    },
+    "achievementGoals": {
+      "debut": "Pimpin satu laga.",
+      "first_win": "Menangi satu laga.",
+      "ten_wins": "Menangi sepuluh laga sepanjang karier.",
+      "fifty_matches": "Pimpin lima puluh laga sepanjang karier.",
+      "trophy": "Menangi satu trofi.",
+      "promotion": "Raih promosi klub.",
+      "board_goal": "Penuhi satu tujuan direksi.",
+      "player_development": "Tingkatkan OVR pemain satu poin dibanding tinjauan bulanan tersimpan dengan fokus latihan individu yang sama.",
+      "academy_minutes": "Berikan total 900 menit kepada pemain usia 21 tahun ke bawah dalam satu musim di klub saat ini.",
+      "career_year": "Capai ulang tahun pertama karier."
+    },
+    "releaseProgression": "Pencapaian di Lainnya: penuhi tujuan karier, raih pengalaman dan level untuk manfaat latihan, performa, dan moral yang dibatasi. Linimasa menyimpan tonggak karier.",
+    "releasePlanning": "Rencanakan kedalaman skuad setelah kontrak berakhir, bandingkan pemain incaran, cek ruang gaji, biaya transfer beserta gaji dan perkiraan kas.",
+    "releaseDevelopment": "Tinjauan akademi bulanan dan target individu melacak perkembangan. Pantauan pinjaman menampilkan menit dan kepulangan; janji menjelaskan tenggat dan jeda cedera.",
+    "releaseReliability": "Pulihkan cadangan yang dapat dibaca setelah gagal memuat. Latihan lebih cepat, dukungan Kembali Android, pintasan laga, kotak keputusan, kontras lebih kuat dan gerakan berkurang."
   }
 }

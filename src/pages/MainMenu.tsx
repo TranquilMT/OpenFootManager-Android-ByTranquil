@@ -1,3 +1,4 @@
+import { restoreSaveBackup } from "../services/saveRecoveryService";
 import { Suspense, lazy, useEffect, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
@@ -270,6 +271,7 @@ export default function MainMenu() {
   const [showPatchHistory, setShowPatchHistory] = useState(false);
   const [saves, setSaves] = useState<SaveEntry[]>([]);
   const [isLoadingSaves, setIsLoadingSaves] = useState(false);
+  const [failedSaveId, setFailedSaveId] = useState<string | null>(null);
   const [loadingSaveId, setLoadingSaveId] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [isStarting, setIsStarting] = useState(false);
@@ -540,6 +542,7 @@ export default function MainMenu() {
 
   const handleLoadGame = async (saveId: string) => {
     setLoadingSaveId(saveId);
+    setFailedSaveId(null);
     try {
       const managerName = await invoke<string>("load_game", { saveId });
       const activeGame = await invoke<GameStateData>("get_active_game");
@@ -553,6 +556,18 @@ export default function MainMenu() {
       navigate("/dashboard");
     } catch (error) {
       console.error("Failed to load game:", error);
+      setLoadingSaveId(null);
+      setFailedSaveId(saveId);
+      alert(t("menu.loadGameFailed", { error: resolveBackendError(error) }));
+    }
+  };
+
+  const handleRestoreSave = async (saveId: string) => {
+    setLoadingSaveId(saveId);
+    try {
+      await restoreSaveBackup(saveId);
+      await handleLoadGame(saveId);
+    } catch (error) {
       setLoadingSaveId(null);
       alert(t("menu.loadGameFailed", { error: resolveBackendError(error) }));
     }
@@ -858,6 +873,8 @@ export default function MainMenu() {
           {menuState === "load" && (
             <Suspense fallback={<MenuPanelFallback />}>
               <SavesList
+                failedSaveId={failedSaveId}
+                onRestore={handleRestoreSave}
                 loadingSaveId={loadingSaveId}
                 saves={saves}
                 isLoading={isLoadingSaves}

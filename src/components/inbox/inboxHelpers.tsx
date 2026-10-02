@@ -43,6 +43,7 @@ export type DeleteModalState =
   | null;
 
 export const UNREAD_FILTER = "__unread";
+export const DECISIONS_FILTER = "__decisions";
 
 const FILTER_BUTTON_BASE_CLASS =
   "px-3 py-1.5 rounded-lg text-xs font-heading font-bold uppercase tracking-wider transition-all";
@@ -135,6 +136,17 @@ export function getFilteredMessages(
   messages: MessageData[],
   categoryFilter: string | null,
 ): MessageData[] {
+  if (categoryFilter === DECISIONS_FILTER) {
+    return messages.filter((message) =>
+      message.actions.some(
+        (action) =>
+          !action.resolved &&
+          typeof action.action_type === "object" &&
+          ("ChooseOption" in action.action_type ||
+            isOfferReviewNavigation(message.id, action.action_type)),
+      ),
+    );
+  }
   if (categoryFilter === UNREAD_FILTER) {
     return messages.filter((message) => !message.read);
   }
@@ -172,6 +184,16 @@ export function sortInboxMessages(
     // Stable secondary sort by id so same-date messages always appear in the same order.
     return leftMessage.id < rightMessage.id ? -1 : leftMessage.id > rightMessage.id ? 1 : 0;
   });
+}
+
+export function sortDecisionMessages(
+  messages: MessageData[],
+  order: MessageSortOrder,
+): MessageData[] {
+  const priority: Record<string, number> = { Urgent: 3, High: 2, Normal: 1, Low: 0 };
+  return sortInboxMessages(messages, order).sort(
+    (a, b) => (priority[b.priority] ?? 0) - (priority[a.priority] ?? 0),
+  );
 }
 
 export function getListPaneClassName(hasSelectedMessage: boolean): string {

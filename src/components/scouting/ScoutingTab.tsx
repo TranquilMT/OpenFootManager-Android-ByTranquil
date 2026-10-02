@@ -1,3 +1,4 @@
+import ShortlistComparison from "./ShortlistComparison";
 import { useEffect, useState } from "react";
 import { loadShortlist, saveShortlist } from "./shortlist";
 import { useTranslation } from "react-i18next";
@@ -278,6 +279,13 @@ export default function ScoutingTab({
           )}
         </CardBody>
       </Card>
+
+      <ShortlistComparison
+        players={gameState.players.filter(
+          (player) => shortlist.includes(player.id) && !player.retired,
+        )}
+        formation={myTeam?.formation ?? "4-4-2"}
+      />
 
       <ScoutingAssignmentsList
         assignments={assignments}

@@ -230,6 +230,14 @@ export interface ContractRenewalStateData {
   exit_intent?: ContractExitIntentData | null;
 }
 
+export interface PlayerDevelopmentSnapshot {
+  date: string;
+  season: number;
+  ovr: number;
+  minutes_played: number;
+  focus: string | null;
+}
+
 export interface PlayerMoraleCoreData {
   manager_trust: number;
   unresolved_issue?: { category: "Contract" | "PlayingTime" | "Morale"; severity: number } | null;
@@ -292,6 +300,7 @@ export interface PlayerData {
   stats: PlayerSeasonStats;
   career: CareerEntry[];
   movement_history?: PlayerMovementEntry[];
+  development_history?: PlayerDevelopmentSnapshot[];
   transfer_listed: boolean;
   loan_listed: boolean;
   transfer_offers: TransferOfferData[];
@@ -482,7 +491,18 @@ export interface MessageData {
   i18n_params?: Record<string, string>;
 }
 
+export interface CareerMilestone {
+  id: string;
+  kind: "matches" | "wins" | "trophies" | "anniversary" | "promotion";
+  value: number;
+  date: string | null;
+  context: string | null;
+}
+
 export interface ManagerCareerStats {
+  progression?: { unlocked: { id: string; date: string }[] };
+  milestones?: CareerMilestone[];
+  milestones_initialized?: boolean;
   matches_managed: number;
   wins: number;
   draws: number;

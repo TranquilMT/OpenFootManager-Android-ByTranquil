@@ -24,10 +24,12 @@
     "openGithub": "OFMtouch GitHub deposunu aç",
     "openOriginalGithub": "Orijinal OpenFootManager GitHub deposunu aç",
     "originalGame": "Orijinal oyun",
-    "doNotShowWhatsNew": "v0.5.2 için bir daha gösterme",
+    "doNotShowWhatsNew": "v0.6.4 için bir daha gösterme",
     "continueToGame": "Devam et",
     "mainMenu": "Ana Menü",
-    "worldEditor": "Dünya Editörü"
+    "worldEditor": "Dünya Editörü",
+    "restoreBackup": "Son sağlam yedeği geri yükle",
+    "restoreBackupHelp": "En yeni kullanılabilir yedeği geri yükler. Sonraki ilerleme kaybolur; bozuk kayıt ayrı olarak saklanır."
   },
   "managerProfiles": {
     "saveConfirm": {
@@ -190,7 +192,9 @@
     "digestEventUserNews": "Kulübünüz veya oyuncularınız hakkında haberler",
     "digestEventTransferWindow": "Transfer penceresinin açılışı veya kapanışı",
     "digestContinue": "İlerlemeye devam et",
-    "digestError": "Simülasyon hatası"
+    "digestError": "Simülasyon hatası",
+    "more": "Diğer",
+    "careerNavigation": "Kariyer gezinmesi"
   },
   "continueMenu": {
     "goToField": "Sahaya Çık",
@@ -1409,7 +1413,9 @@
     "transferFeedbackCounterHeadline": "El sıkışmadan önce daha fazlasını istiyorlar.",
     "transferFeedbackCounterDetail": "Teklif görüşmeyi sürdürecek kadar yakındı, ancak karşı taraf {{fee}} civarında bir fiyata işaret ediyor.",
     "transferFeedbackRejectedHeadline": "Bu turu kapattılar.",
-    "transferFeedbackRejectedDetail": "Öneri onları yeterince etkilemedi. Ciddi görüşmeleri yeniden başlatmak için {{fee}} civarında daha güçlü bir bonservis gerekir."
+    "transferFeedbackRejectedDetail": "Öneri onları yeterince etkilemedi. Ciddi görüşmeleri yeniden başlatmak için {{fee}} civarında daha güçlü bir bonservis gerekir.",
+    "dealCommitment": "Bonservis ve bir yıllık maaş: {{value}} (diğer gelir ve giderler hariç).",
+    "wageHeadroom": "Bu anlaşmadan sonra kalan haftalık maaş bütçesi: {{value}}"
   },
   "transferCentreWorld": {
     "title": "Transfer Merkezi",
@@ -1777,7 +1783,7 @@
     "patchPlayers": "Nadir 96 puanlı yıldızlar dahil daha fazla öne çıkan oyuncu.",
     "patchMatches": "Daha fazla maç tepkisi, direğe çarpan şutlar ve isteğe bağlı sesli anlatım.",
     "patchMobile": "Mobil kontroller, gelen kutusu, millî takımlar ve kariyer başlangıcı iyileştirildi.",
-    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.6.3 yenilikleri",
+    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.6.4 yenilikleri",
     "patchPortraits": "20 kurgusal kaynak yüz, üretilen oyuncu portrelerini daha çeşitli kılıyor.",
     "patchWorld": "Futbol dünyası 29 ülkeyi kapsıyor; Amerika ve Asya kulüpleri güçlendirildi.",
     "patchTransfers": "Kulüp stratejileri kiralık ve bonservisli transferleri, rakip teklifleri ve bütçe kontrollerini yönlendiriyor.",
@@ -1837,7 +1843,9 @@
     "enterFullscreen": "Aç",
     "exitFullscreen": "Çık",
     "switchToLightMode": "Açık moda geç",
-    "switchToDarkMode": "Koyu moda geç"
+    "switchToDarkMode": "Koyu moda geç",
+    "reduceMotion": "Hareketi azalt",
+    "reduceMotionDesc": "Daha az animasyon ve anında kaydırma kullanır. Sistem tercihi de dikkate alınır."
   },
   "preMatch": {
     "formationFit": "Diziliş Uyumu",
@@ -1920,7 +1928,10 @@
     "morale": "Moral",
     "estimatedAttributes": "Tahmini Özellikler",
     "undiscovered": "Keşfedilmedi",
-    "confidence": "Güven"
+    "confidence": "Güven",
+    "compareShortlist": "Aday listesi karşılaştırması",
+    "comparisonPlayer": "Karşılaştırılan oyuncu {{number}}",
+    "compareHint": "Maaş, potansiyel ve dizilişe uygunluklarını karşılaştırmak için iki oyuncuyu aday listesine ekle."
   },
   "match": {
     "live": "Canlı",
@@ -4219,5 +4230,79 @@
     "matchday": "Maç kadroları emekli oyuncuları dışarıda bırakır; biten maçlarda taktik değişikliği yapılamaz.",
     "career": "Kiralık oyuncu gelişim raporları sezon geçişinde doğru kalır; doğum günü hesaplamaları düzeltildi.",
     "saves": "Kariyer kayıtları transfer stratejilerini korur; ek regresyon testleri eklendi."
+  },
+  "phase64": {
+    "promiseAction": "Oynama süresi sözü: bir maçta süre almalı. Kalan maç: {{count}}.",
+    "promiseDeadline": "Beklenen son tarih: {{date}}",
+    "promisePaused": "Sakatlık sırasında süre durdurulur",
+    "promiseUnscheduled": "Son tarih maç programını bekliyor",
+    "squadPlan": "Altı aylık kadro planı",
+    "squadPlanHint": "180 gün içinde bitecek sözleşmeler yenilenmezse A takımda {{count}} oyuncu kalır. Öngörülen mevki derinliği aşağıdadır.",
+    "noExpiringContracts": "180 gün içinde sona erecek A takım sözleşmesi yok.",
+    "youthReviews": "Genç oyuncu gelişim raporları",
+    "promotionReady": "A takıma yükseltmeyi değerlendir",
+    "developing": "Gelişimi sürüyor",
+    "reviewDate": "Rapor başlangıcı: {{date}}",
+    "reviewGrowth": "Rapordan bu yana OVR değişimi: {{value}}",
+    "reviewMinutes": "Rapordan bu yana oynanan dakika: {{count}}",
+    "reviewPending": "Gelişim takibi sonraki tarih ilerlemesinde başlar.",
+    "decisionInbox": "Bekleyen kararlar",
+    "individualPlans": "Bireysel gelişim planları",
+    "individualPlansHint": "Aşağıdaki kadrodan bireysel odak seç. Her aylık rapor, potansiyelle sınırlı bir OVR puanı hedefi belirler; ilerleme kayıtlı rapordan ölçülür.",
+    "newTrainingPlan": "Yeni odak: hedef takibi sonraki raporda başlar.",
+    "trainingCeiling": "Mevcut potansiyel sınırına ulaştı; kondisyon ve performansa odaklan.",
+    "monthlyTarget": "Aylık hedef: {{target}} OVR değerine ulaş",
+    "loanWatch": "Kiralık oyuncu takibi",
+    "loanSeasonStats": "Bu sezon kiralıkken: {{appearances}} maç · {{minutes}} dakika",
+    "loanReturnDate": "Dönüş {{date}} · Kalan gün: {{count}}",
+    "loanUnused": "Henüz süre almadı — bu kiralamayı gözden geçir.",
+    "financeForecast": "Nakit ve maaş tahmini",
+    "forecastPeriod": "Dönem",
+    "forecastWeeks": "{{count}} hafta sonra",
+    "forecastHint": "Mevcut düzenli nakit akışı ve anlaşılmış tescillere dayanan tahmin. Maç gelirleri, sözleşme bitişleri ve kiralık oyuncu dönüşleri sonucu değiştirebilir. Maaşlar haftalıktır.",
+    "careerMilestones": "Kariyer kilometre taşları",
+    "milestoneMatches": "Yönetilen maç: {{count}}",
+    "milestoneWins": "Galibiyet: {{count}}",
+    "milestoneTrophies": "Kupa: {{count}}",
+    "milestoneAnniversary": "Menajerlik yılı: {{count}}",
+    "milestonePromotion": "{{division}} ligine yükseldi ({{season}})",
+    "milestoneEarlier": "Bu kariyerin önceki döneminde ulaşıldı",
+    "milestonePending": "Kilometre taşları kariyerin ilerledikçe görünür.",
+    "achievements": "Başarımlar",
+    "managerLevel": "Menajer seviyesi {{level}}",
+    "managerXp": "{{xp}} TP",
+    "nextLevel": "Sonraki seviyeye {{xp}} TP",
+    "managerPerks": "Antrenman gelişimi +%{{training}}; maç soğukkanlılığı, kararlar ve takım oyunu +{{performance}}.",
+    "achievementRules": "Ödüller otomatik verilir ve bir kez kaydedilir. Her yeni seviye mevcut takıma +2 moral verir (en fazla 100). Avantajlar kulüp değişiminde korunur; antrenman %10, maç özellikleri +2 ile sınırlıdır. Ulaşılan hedefleri kaydetmek için bir gün ilerleyin.",
+    "achievementEarned": "{{date}} tarihinde açıldı",
+    "achievementPending": "Hedef henüz kaydedilmedi",
+    "achievementNames": {
+      "debut": "İlk maç",
+      "first_win": "İlk galibiyet",
+      "ten_wins": "Kazanma alışkanlığı",
+      "fifty_matches": "Deneyimli menajer",
+      "trophy": "Kupalar",
+      "promotion": "Yükseliş",
+      "board_goal": "Yönetim güveni",
+      "player_development": "Oyuncu gelişimi",
+      "academy_minutes": "Gençlere fırsat",
+      "career_year": "Görevde bir yıl"
+    },
+    "achievementGoals": {
+      "debut": "Bir maç yönetin.",
+      "first_win": "Bir maç kazanın.",
+      "ten_wins": "Kariyerinizde on maç kazanın.",
+      "fifty_matches": "Kariyerinizde elli maç yönetin.",
+      "trophy": "Bir kupa kazanın.",
+      "promotion": "Bir kulübü üst lige çıkarın.",
+      "board_goal": "Bir yönetim hedefini karşılayın.",
+      "player_development": "Aynı bireysel antrenman odağıyla kaydedilen aylık değerlendirmeye göre oyuncunun genel puanını bir artırın.",
+      "academy_minutes": "Mevcut kulüpte bir sezonda 21 yaş ve altı oyunculara toplam 900 dakika verin.",
+      "career_year": "Kariyerinizin ilk yıl dönümüne ulaşın."
+    },
+    "releaseProgression": "Diğer menüsünde Başarımlar: kariyer hedeflerini tamamlayın, deneyim ve seviye kazanarak sınırlı antrenman, performans ve moral avantajları açın. Kariyer zaman çizelgesi dönüm noktalarını saklar.",
+    "releasePlanning": "Sözleşme bitişleri sonrası kadro derinliği, izlenen oyuncu karşılaştırmaları, maaş payı, ücretlerle toplam transfer maliyeti ve nakit tahminleriyle planlayın.",
+    "releaseDevelopment": "Aylık akademi değerlendirmeleri ve bireysel hedefler gelişimi izler. Kiralık takibi süreleri ve dönüşleri gösterir; sözler son tarihleri ve sakatlık duraklamalarını açıklar.",
+    "releaseReliability": "Yükleme hatasından sonra kullanılabilir yedeği geri yükleyin. Daha hızlı antrenman, Android Geri desteği, maç kısayolları, karar kutusu, güçlü kontrast ve azaltılmış hareket."
   }
 }

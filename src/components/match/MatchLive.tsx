@@ -1,3 +1,5 @@
+import { MatchOperationGate } from "./matchOperationGate";
+import MatchdayQuickActions from "./MatchdayQuickActions";
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { useTranslation } from "react-i18next";
@@ -84,10 +86,11 @@ export default function MatchLive({
   const [speed, setSpeed] = useState<SimSpeed>(initialSpeed);
   const [activePanel, setActivePanel] = useState<ActivePanel>("events");
   const [isRunning, setIsRunning] = useState(true);
+  const [matchCommandPending, setMatchCommandPending] = useState(false);
+  const operationGate = useRef(new MatchOperationGate());
   const [showSubPanel, setShowSubPanel] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(settings.spoken_match_commentary);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const stepInFlightRef = useRef(false);
   const eventFeedRef = useRef<HTMLDivElement>(null);
   // Track phases we've already signaled to avoid double-firing
   const signaledRef = useRef<Set<string>>(new Set());
@@ -113,68 +116,66 @@ export default function MatchLive({
   // ofm_core/live_match_manager.rs; MINUTES_PER_TICK on this side is what makes batches possible.
   const stepMatch = useCallback(
     async (minutes: number) => {
-      if (stepInFlightRef.current) return;
-      stepInFlightRef.current = true;
-      try {
-        const results = await invoke<MinuteResult[]>("step_live_match", { minutes });
-        if (results.length > 0) {
-          const lastResult = results[results.length - 1];
+      await operationGate.current.run(async () => {
+        try {
+          const results = await invoke<MinuteResult[]>("step_live_match", { minutes });
+          if (results.length > 0) {
+            const lastResult = results[results.length - 1];
 
-          // Collect important events
-          for (const r of results) {
-            for (const evt of r.events) {
-              const display = getEventDisplay(evt);
-              if (display.important) {
-                onImportantEvent(evt);
+            // Collect important events
+            for (const r of results) {
+              for (const evt of r.events) {
+                const display = getEventDisplay(evt);
+                if (display.important) {
+                  onImportantEvent(evt);
+                }
               }
             }
-          }
 
-          // Fetch full snapshot
-          const snap = await invoke<MatchSnapshot>("get_match_snapshot");
-          onSnapshotUpdate(snap);
+            // Fetch full snapshot
+            const snap = await invoke<MatchSnapshot>("get_match_snapshot");
+            onSnapshotUpdate(snap);
 
-          // Check for phase transitions that should pause
-          const phase = lastResult.phase;
-          if (phase === "HalfTime" && !signaledRef.current.has("HalfTime")) {
-            signaledRef.current.add("HalfTime");
-            setIsRunning(false);
-            setSpeed("paused");
-            // Small delay so the last event renders before transitioning
-            setTimeout(() => onHalfTime("HalfTime"), 600);
-            return;
-          }
+            // Check for phase transitions that should pause
+            const phase = lastResult.phase;
+            if (phase === "HalfTime" && !signaledRef.current.has("HalfTime")) {
+              signaledRef.current.add("HalfTime");
+              setIsRunning(false);
+              setSpeed("paused");
+              // Small delay so the last event renders before transitioning
+              setTimeout(() => onHalfTime("HalfTime"), 600);
+              return;
+            }
 
-          if (phase === "ExtraTimeHalfTime" && !signaledRef.current.has("ExtraTimeHalfTime")) {
-            signaledRef.current.add("ExtraTimeHalfTime");
-            setIsRunning(false);
-            setSpeed("paused");
-            setTimeout(() => onHalfTime("ExtraTimeHalfTime"), 600);
-            return;
-          }
+            if (phase === "ExtraTimeHalfTime" && !signaledRef.current.has("ExtraTimeHalfTime")) {
+              signaledRef.current.add("ExtraTimeHalfTime");
+              setIsRunning(false);
+              setSpeed("paused");
+              setTimeout(() => onHalfTime("ExtraTimeHalfTime"), 600);
+              return;
+            }
 
-          if (phase === "PenaltyShootout" && !signaledRef.current.has("PenaltyShootout")) {
-            signaledRef.current.add("PenaltyShootout");
-            setIsRunning(false);
-            setSpeed("paused");
-            setTimeout(() => onPenaltyShootout?.(), 600);
-            return;
-          }
+            if (phase === "PenaltyShootout" && !signaledRef.current.has("PenaltyShootout")) {
+              signaledRef.current.add("PenaltyShootout");
+              setIsRunning(false);
+              setSpeed("paused");
+              setTimeout(() => onPenaltyShootout?.(), 600);
+              return;
+            }
 
-          if (lastResult.is_finished && !signaledRef.current.has("Finished")) {
-            signaledRef.current.add("Finished");
-            setIsRunning(false);
-            setSpeed("paused");
-            setTimeout(() => onFullTime(), 600);
-            return;
+            if (lastResult.is_finished && !signaledRef.current.has("Finished")) {
+              signaledRef.current.add("Finished");
+              setIsRunning(false);
+              setSpeed("paused");
+              setTimeout(() => onFullTime(), 600);
+              return;
+            }
           }
+        } catch (err) {
+          console.error("Failed to step match:", err);
+          setIsRunning(false);
         }
-      } catch (err) {
-        console.error("Failed to step match:", err);
-        setIsRunning(false);
-      } finally {
-        stepInFlightRef.current = false;
-      }
+      }, setMatchCommandPending);
     },
     [onSnapshotUpdate, onImportantEvent, onHalfTime, onFullTime, onPenaltyShootout],
   );
@@ -186,7 +187,7 @@ export default function MatchLive({
       timerRef.current = null;
     }
 
-    if (isRunning && speed !== "paused" && !isFinished && !showSubPanel) {
+    if (isRunning && speed !== "paused" && !isFinished && !showSubPanel && !matchCommandPending) {
       timerRef.current = setTimeout(async () => {
         await stepMatch(MINUTES_PER_TICK[speed]);
       }, SPEED_MS[speed]);
@@ -203,6 +204,7 @@ export default function MatchLive({
     stepMatch,
     isFinished,
     showSubPanel,
+    matchCommandPending,
   ]);
 
   // Auto-scroll event feed
@@ -222,42 +224,48 @@ export default function MatchLive({
 
   // Apply substitution
   const handleSubstitution = async (playerOffId: string, playerOnId: string) => {
-    if (!userSide || isSpectator) return;
-    try {
-      const snap = await invoke<MatchSnapshot>("apply_match_command", {
-        command: {
-          Substitute: { side: userSide, player_off_id: playerOffId, player_on_id: playerOnId },
-        },
-      });
-      onSnapshotUpdate(snap);
-      setShowSubPanel(false);
-    } catch (err) {
-      console.error("Substitution failed:", err);
-    }
+    if (!userSide || isSpectator || isFinished) return;
+    await operationGate.current.run(async () => {
+      try {
+        const snap = await invoke<MatchSnapshot>("apply_match_command", {
+          command: {
+            Substitute: { side: userSide, player_off_id: playerOffId, player_on_id: playerOnId },
+          },
+        });
+        onSnapshotUpdate(snap);
+        setShowSubPanel(false);
+      } catch (err) {
+        console.error("Substitution failed:", err);
+      }
+    }, setMatchCommandPending);
   };
 
   const handleFormationChange = async (formation: string) => {
-    if (!userSide || isSpectator) return;
-    try {
-      const snap = await invoke<MatchSnapshot>("apply_match_command", {
-        command: { ChangeFormation: { side: userSide, formation } },
-      });
-      onSnapshotUpdate(snap);
-    } catch (err) {
-      console.error("Formation change failed:", err);
-    }
+    if (!userSide || isSpectator || isFinished) return;
+    await operationGate.current.run(async () => {
+      try {
+        const snap = await invoke<MatchSnapshot>("apply_match_command", {
+          command: { ChangeFormation: { side: userSide, formation } },
+        });
+        onSnapshotUpdate(snap);
+      } catch (err) {
+        console.error("Formation change failed:", err);
+      }
+    }, setMatchCommandPending);
   };
 
   const handlePlayStyleChange = async (playStyle: string) => {
-    if (!userSide || isSpectator) return;
-    try {
-      const snap = await invoke<MatchSnapshot>("apply_match_command", {
-        command: { ChangePlayStyle: { side: userSide, play_style: playStyle } },
-      });
-      onSnapshotUpdate(snap);
-    } catch (err) {
-      console.error("Play style change failed:", err);
-    }
+    if (!userSide || isSpectator || isFinished) return;
+    await operationGate.current.run(async () => {
+      try {
+        const snap = await invoke<MatchSnapshot>("apply_match_command", {
+          command: { ChangePlayStyle: { side: userSide, play_style: playStyle } },
+        });
+        onSnapshotUpdate(snap);
+      } catch (err) {
+        console.error("Play style change failed:", err);
+      }
+    }, setMatchCommandPending);
   };
 
   return (
@@ -351,6 +359,18 @@ export default function MatchLive({
             </div>
           </div>
 
+          {!isSpectator && userSide && (
+            <MatchdayQuickActions
+              disabled={isFinished || matchCommandPending}
+              playStyle={
+                userSide === "Home" ? snapshot.home_team.play_style : snapshot.away_team.play_style
+              }
+              onSubstitutions={() => setShowSubPanel(true)}
+              onPlayStyle={(style) => {
+                void handlePlayStyleChange(style);
+              }}
+            />
+          )}
           {/* Possession bar */}
           <div className="mt-2">
             <div className="flex items-center gap-2 text-xs">

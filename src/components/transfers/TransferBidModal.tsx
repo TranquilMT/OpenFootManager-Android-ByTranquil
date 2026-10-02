@@ -175,6 +175,20 @@ export function TransferBidForm({
               percent: bidProjection.projected_wage_budget_usage_pct,
             })}
           </p>
+          <p className="text-xs font-semibold text-gray-900 dark:text-gray-100">
+            {t("transfers.dealCommitment", {
+              value: formatExactMoney(
+                (bidFee ?? 0) + bidProjection.incoming_player_weekly_wage * 52,
+              ),
+            })}
+          </p>
+          <p className="text-xs text-gray-600 dark:text-gray-300">
+            {t("transfers.wageHeadroom", {
+              value: formatExactMoney(
+                bidProjection.weekly_wage_budget - bidProjection.projected_weekly_wage_spend,
+              ),
+            })}
+          </p>
           {bidProjection.exceeds_transfer_budget ? (
             <p className="text-xs text-red-600 dark:text-red-300">
               {t("transfers.bidImpactOverTransferBudget")}
@@ -198,6 +212,7 @@ export function TransferBidForm({
       <TransferNegotiationHistory offer={activeBidOffer} mode="outgoing" />
       {bidResult ? (
         <div
+          role={bidResult === "error" || bidResult === "rejected" ? "alert" : "status"}
           className={`mb-3 text-xs font-heading font-bold uppercase tracking-wider ${bidResult === "accepted" ? "text-green-500" : bidResult === "rejected" ? "text-red-600 dark:text-red-300" : "text-amber-500"}`}
         >
           {bidResult === "accepted"

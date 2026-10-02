@@ -87,6 +87,7 @@ export function TeamSeasonHistoryChart({
             wrapperStyle={{ fontSize: 10, paddingTop: 4, fontFamily: "var(--font-heading)" }}
           />
           <Bar
+            isAnimationActive={theme.animate}
             yAxisId="left"
             dataKey="won"
             stackId="a"
@@ -95,6 +96,7 @@ export function TeamSeasonHistoryChart({
             radius={[0, 0, 0, 0]}
           />
           <Bar
+            isAnimationActive={theme.animate}
             yAxisId="left"
             dataKey="drawn"
             stackId="a"
@@ -102,6 +104,7 @@ export function TeamSeasonHistoryChart({
             name={drawnLabel}
           />
           <Bar
+            isAnimationActive={theme.animate}
             yAxisId="left"
             dataKey="lost"
             stackId="a"
@@ -110,6 +113,7 @@ export function TeamSeasonHistoryChart({
             radius={[2, 2, 0, 0]}
           />
           <Line
+            isAnimationActive={theme.animate}
             yAxisId="right"
             type="monotone"
             dataKey="pos"

@@ -69,6 +69,7 @@ const CLUB_TABS = new Set([
 ]);
 
 const TAB_TRANSLATION_KEYS: Record<string, string> = {
+  Achievements: "phase64.achievements",
   Home: "dashboard.home",
   Inbox: "dashboard.inbox",
   Manager: "dashboard.manager",

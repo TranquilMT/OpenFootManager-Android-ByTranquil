@@ -24,10 +24,12 @@
     "openGithub": "Ouvrir le dépôt GitHub d’OFMtouch",
     "openOriginalGithub": "Ouvrir le dépôt GitHub original d’OpenFootManager",
     "originalGame": "Jeu original",
-    "doNotShowWhatsNew": "Ne plus afficher pour la v0.5.2",
+    "doNotShowWhatsNew": "Ne plus afficher pour la v0.6.4",
     "continueToGame": "Continuer",
     "mainMenu": "Menu principal",
-    "worldEditor": "Éditeur de Monde"
+    "worldEditor": "Éditeur de Monde",
+    "restoreBackup": "Restaurer la dernière sauvegarde valide",
+    "restoreBackupHelp": "Restaure la copie utilisable la plus récente. La progression ultérieure sera perdue ; la sauvegarde défectueuse est conservée séparément."
   },
   "managerProfiles": {
     "saveConfirm": {
@@ -190,7 +192,9 @@
     "digestEventUserNews": "Des nouvelles de votre club ou de vos joueurs",
     "digestEventTransferWindow": "Ouverture ou clôture du mercato",
     "digestContinue": "Continuer l'avance",
-    "digestError": "Erreur de simulation"
+    "digestError": "Erreur de simulation",
+    "more": "Plus",
+    "careerNavigation": "Navigation de carrière"
   },
   "continueMenu": {
     "goToField": "Aller sur le Terrain",
@@ -1409,7 +1413,9 @@
     "transferFeedbackCounterHeadline": "Ils veulent plus avant de conclure.",
     "transferFeedbackCounterDetail": "L'offre était assez proche pour continuer à parler, mais leur camp vise plutôt un prix autour de {{fee}}.",
     "transferFeedbackRejectedHeadline": "Ils ont fermé cette manche.",
-    "transferFeedbackRejectedDetail": "La proposition ne les a pas assez fait bouger. Il faudrait une somme plus forte, plus proche de {{fee}}, pour rouvrir des discussions sérieuses."
+    "transferFeedbackRejectedDetail": "La proposition ne les a pas assez fait bouger. Il faudrait une somme plus forte, plus proche de {{fee}}, pour rouvrir des discussions sérieuses.",
+    "dealCommitment": "Indemnité et un an de salaire : {{value}} (hors autres revenus et dépenses).",
+    "wageHeadroom": "Budget salarial hebdomadaire restant après cet accord : {{value}}"
   },
   "transferCentreWorld": {
     "title": "Centre des transferts",
@@ -1777,7 +1783,7 @@
     "patchPlayers": "Plus de talents, dont de rares stars notées 96 et de solides candidats à la montée.",
     "patchMatches": "Plus de réactions, des frappes sur les montants et un commentaire vocal facultatif.",
     "patchMobile": "Commandes mobiles, boîte de réception, sélections nationales et carrière améliorées.",
-    "patchWelcome": "Bienvenue dans OFMtouch ! Nouveautés de la v0.6.3",
+    "patchWelcome": "Bienvenue dans OFMtouch ! Nouveautés de la v0.6.4",
     "patchPortraits": "20 visages fictifs de référence diversifient les portraits des joueurs générés.",
     "patchWorld": "Un monde du football plus vaste couvre 29 nations, avec des clubs renforcés en Amérique et en Asie.",
     "patchTransfers": "La stratégie des clubs guide prêts et transferts, avec offres concurrentes et contrôle du budget.",
@@ -1837,7 +1843,9 @@
     "enterFullscreen": "Entrer",
     "exitFullscreen": "Quitter",
     "switchToLightMode": "Passer au mode clair",
-    "switchToDarkMode": "Passer au mode sombre"
+    "switchToDarkMode": "Passer au mode sombre",
+    "reduceMotion": "Réduire les animations",
+    "reduceMotionDesc": "Réduit les animations et utilise un défilement instantané. La préférence du système est également respectée."
   },
   "preMatch": {
     "formationFit": "Ajustement Formation",
@@ -1920,7 +1928,10 @@
     "morale": "Moral",
     "estimatedAttributes": "Attributs estimés",
     "undiscovered": "Non découvert",
-    "confidence": "Confiance"
+    "confidence": "Confiance",
+    "compareShortlist": "Comparaison de la présélection",
+    "comparisonPlayer": "Joueur à comparer {{number}}",
+    "compareHint": "Présélectionnez deux joueurs pour comparer leurs salaires, leur potentiel et leur adaptation à la formation."
   },
   "match": {
     "live": "En Direct",
@@ -4219,5 +4230,79 @@
     "matchday": "Les équipes de match excluent les joueurs retraités ; les matchs terminés ne permettent plus de changements tactiques.",
     "career": "Les rapports de progression des joueurs prêtés restent fiables au changement de saison, avec un calcul des anniversaires corrigé.",
     "saves": "Les sauvegardes de carrière conservent les stratégies de recrutement, avec davantage de tests de régression."
+  },
+  "phase64": {
+    "promiseAction": "Promesse de temps de jeu : une apparition nécessaire. Matchs restants : {{count}}.",
+    "promiseDeadline": "Échéance prévue : {{date}}",
+    "promisePaused": "Échéance suspendue pendant la blessure",
+    "promiseUnscheduled": "Échéance en attente de matchs programmés",
+    "squadPlan": "Plan d’effectif sur six mois",
+    "squadPlanHint": "Sans renouveler les contrats expirant sous 180 jours, l’effectif senior comptera {{count}} joueurs. La couverture prévue est indiquée ci-dessous.",
+    "noExpiringContracts": "Aucun contrat senior n’expire sous 180 jours.",
+    "youthReviews": "Bilans de progression des jeunes",
+    "promotionReady": "Envisager la promotion en équipe première",
+    "developing": "En développement",
+    "reviewDate": "Référence du bilan : {{date}}",
+    "reviewGrowth": "Évolution de la note globale depuis le bilan : {{value}}",
+    "reviewMinutes": "Minutes depuis le bilan : {{count}}",
+    "reviewPending": "Le suivi commence à la prochaine avancée de date.",
+    "decisionInbox": "Décisions à prendre",
+    "individualPlans": "Plans de développement individuels",
+    "individualPlansHint": "Choisissez un axe individuel dans l’effectif ci-dessous. Chaque bilan mensuel fixe un gain d’un point de note globale, limité par le potentiel ; la progression part du bilan enregistré.",
+    "newTrainingPlan": "Nouvel axe : le suivi commence au prochain bilan.",
+    "trainingCeiling": "Potentiel actuel atteint ; privilégiez la condition et les performances.",
+    "monthlyTarget": "Objectif mensuel : atteindre {{target}} de note globale",
+    "loanWatch": "Suivi des prêts",
+    "loanSeasonStats": "Cette saison en prêt : {{appearances}} apparitions · {{minutes}} minutes",
+    "loanReturnDate": "Retour le {{date}} · Jours restants : {{count}}",
+    "loanUnused": "Aucune minute jouée — examinez ce prêt.",
+    "financeForecast": "Prévision de trésorerie et de salaires",
+    "forecastPeriod": "Période",
+    "forecastWeeks": "Dans {{count}} semaines",
+    "forecastHint": "Estimation fondée sur la trésorerie récurrente actuelle et les inscriptions convenues. Les recettes de matchs, fins de contrat et retours de prêt peuvent modifier le résultat. Les salaires sont hebdomadaires.",
+    "careerMilestones": "Étapes de carrière",
+    "milestoneMatches": "Matchs dirigés : {{count}}",
+    "milestoneWins": "Victoires : {{count}}",
+    "milestoneTrophies": "Trophées : {{count}}",
+    "milestoneAnniversary": "Années comme entraîneur : {{count}}",
+    "milestonePromotion": "Promotion en {{division}} ({{season}})",
+    "milestoneEarlier": "Atteint plus tôt dans cette carrière",
+    "milestonePending": "Les étapes apparaissent au fil de votre carrière.",
+    "achievements": "Succès",
+    "managerLevel": "Niveau du manager {{level}}",
+    "managerXp": "{{xp}} points d’expérience",
+    "nextLevel": "{{xp}} XP avant le prochain niveau",
+    "managerPerks": "Progression à l’entraînement +{{training}} % ; sang-froid, décisions et jeu collectif en match +{{performance}}.",
+    "achievementRules": "Les récompenses sont automatiques et enregistrées une fois. Chaque niveau donne +2 de moral à l’équipe actuelle (maximum 100). Les avantages vous suivent entre clubs ; entraînement plafonné à 10 % et attributs de match à +2. Avancez d’un jour pour enregistrer les objectifs atteints.",
+    "achievementEarned": "Débloqué le {{date}}",
+    "achievementPending": "Objectif pas encore enregistré",
+    "achievementNames": {
+      "debut": "Premier match",
+      "first_win": "Première victoire",
+      "ten_wins": "Habitude de gagner",
+      "fifty_matches": "Manager expérimenté",
+      "trophy": "Trophées",
+      "promotion": "Promotion",
+      "board_goal": "Confiance du conseil",
+      "player_development": "Développement des joueurs",
+      "academy_minutes": "Place aux jeunes",
+      "career_year": "Un an aux commandes"
+    },
+    "achievementGoals": {
+      "debut": "Dirigez un match.",
+      "first_win": "Gagnez un match.",
+      "ten_wins": "Gagnez dix matchs dans votre carrière.",
+      "fifty_matches": "Dirigez cinquante matchs dans votre carrière.",
+      "trophy": "Gagnez un trophée.",
+      "promotion": "Obtenez une promotion avec un club.",
+      "board_goal": "Atteignez un objectif du conseil.",
+      "player_development": "Améliorez un joueur d’un point de note par rapport au bilan mensuel enregistré avec le même axe individuel.",
+      "academy_minutes": "Accordez 900 minutes cumulées aux joueurs de 21 ans ou moins en une saison au club actuel.",
+      "career_year": "Atteignez le premier anniversaire de votre carrière."
+    },
+    "releaseProgression": "Succès dans Plus : atteignez des objectifs, gagnez de l’expérience et des niveaux pour des bonus plafonnés d’entraînement, de performance et de moral. Une chronologie conserve les étapes de carrière.",
+    "releasePlanning": "Anticipez les fins de contrat, comparez les joueurs suivis et consultez la marge salariale, les coûts de transfert avec salaires et les prévisions de trésorerie.",
+    "releaseDevelopment": "Les bilans mensuels de l’académie et les objectifs individuels suivent la progression. Les prêts affichent minutes et retours ; les promesses précisent échéances et pauses dues aux blessures.",
+    "releaseReliability": "Restaurez une sauvegarde valide après un échec de chargement. Entraînement plus rapide, Retour Android, raccourcis de match, boîte des décisions, contraste renforcé et animations réduites."
   }
 }

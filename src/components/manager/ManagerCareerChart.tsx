@@ -91,9 +91,22 @@ export function ManagerCareerChart({
                 labelFormatter={(_label, payload) => payload?.[0]?.payload?.fullName ?? _label}
               />
               <Legend wrapperStyle={{ fontSize: 10, fontFamily: "var(--font-heading)" }} />
-              <Bar dataKey="won" stackId="a" fill={theme.success} name={wonLabel} />
-              <Bar dataKey="drawn" stackId="a" fill={theme.axisColor} name={drawnLabel} />
               <Bar
+                isAnimationActive={theme.animate}
+                dataKey="won"
+                stackId="a"
+                fill={theme.success}
+                name={wonLabel}
+              />
+              <Bar
+                isAnimationActive={theme.animate}
+                dataKey="drawn"
+                stackId="a"
+                fill={theme.axisColor}
+                name={drawnLabel}
+              />
+              <Bar
+                isAnimationActive={theme.animate}
                 dataKey="lost"
                 stackId="a"
                 fill={theme.danger}

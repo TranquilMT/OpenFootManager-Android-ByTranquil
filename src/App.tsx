@@ -37,9 +37,7 @@ function MobileRuntime() {
     document.documentElement.classList.add("native-mobile");
     document.body.classList.add("native-mobile");
     const viewport = document.querySelector<HTMLMetaElement>('meta[name="viewport"]');
-    if (viewport)
-      viewport.content =
-        "width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no";
+    if (viewport) viewport.content = "width=device-width, initial-scale=1, viewport-fit=cover";
 
     const updateViewport = () => {
       const vv = window.visualViewport;
@@ -88,16 +86,29 @@ function MobileRuntime() {
   }, []);
 
   useEffect(() => {
+    let pendingScroll: number | undefined;
     const onFocusIn = (event: FocusEvent) => {
       const target = event.target as HTMLElement | null;
       if (!target?.matches("input, textarea, select, [contenteditable='true']")) return;
-      window.setTimeout(
-        () => target.scrollIntoView({ block: "center", inline: "nearest", behavior: "smooth" }),
-        120,
-      );
+      window.clearTimeout(pendingScroll);
+      pendingScroll = window.setTimeout(() => {
+        if (!target.isConnected || document.activeElement !== target) return;
+        target.scrollIntoView({
+          block: "center",
+          inline: "nearest",
+          behavior:
+            document.documentElement.classList.contains("reduced-motion") ||
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches
+              ? "instant"
+              : "smooth",
+        });
+      }, 120);
     };
     document.addEventListener("focusin", onFocusIn);
-    return () => document.removeEventListener("focusin", onFocusIn);
+    return () => {
+      window.clearTimeout(pendingScroll);
+      document.removeEventListener("focusin", onFocusIn);
+    };
   }, []);
 
   return null;
@@ -125,6 +136,9 @@ function App() {
   useEffect(() => {
     document.documentElement.classList.toggle("high-contrast", settings.high_contrast);
   }, [settings.high_contrast]);
+  useEffect(() => {
+    document.documentElement.classList.toggle("reduced-motion", settings.reduce_motion);
+  }, [settings.reduce_motion]);
   useEffect(() => {
     if (loaded && settings.language && settings.language !== i18n.language)
       void changeAppLanguage(settings.language);

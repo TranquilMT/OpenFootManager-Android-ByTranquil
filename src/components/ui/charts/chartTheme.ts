@@ -1,7 +1,9 @@
+import { useReducedMotion } from "../../../hooks/useReducedMotion";
 import { useContext } from "react";
 import { ThemeContext } from "../../../context/ThemeContext";
 
 export interface ChartTheme {
+  animate: boolean;
   primary: string;
   secondary: string;
   danger: string;
@@ -15,6 +17,7 @@ export interface ChartTheme {
 }
 
 const DARK_THEME: ChartTheme = {
+  animate: true,
   primary: "#10b981",
   secondary: "#6366f1",
   danger: "#ef4444",
@@ -28,6 +31,7 @@ const DARK_THEME: ChartTheme = {
 };
 
 const LIGHT_THEME: ChartTheme = {
+  animate: true,
   primary: "#059669",
   secondary: "#4f46e5",
   danger: "#dc2626",
@@ -43,5 +47,6 @@ const LIGHT_THEME: ChartTheme = {
 export function useChartTheme(): ChartTheme {
   const ctx = useContext(ThemeContext);
   const isDark = ctx?.isDark ?? true;
-  return isDark ? DARK_THEME : LIGHT_THEME;
+  const reducedMotion = useReducedMotion();
+  return { ...(isDark ? DARK_THEME : LIGHT_THEME), animate: !reducedMotion };
 }
