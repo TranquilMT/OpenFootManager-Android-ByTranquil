@@ -156,6 +156,7 @@ export interface TeamData {
   media?: TeamMediaData;
   facilities?: FacilitiesData;
   sponsorship?: SponsorshipData | null;
+  economy?: { version: number; annual_operating_income: number; annual_operating_cost: number };
   starting_xi_ids: string[];
   match_roles?: TeamMatchRolesData;
   player_roles?: Record<string, PlayerRole>;

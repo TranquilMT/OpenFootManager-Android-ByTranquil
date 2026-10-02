@@ -1,0 +1,1 @@
+ALTER TABLE teams ADD COLUMN economy_json TEXT NOT NULL DEFAULT '{}';

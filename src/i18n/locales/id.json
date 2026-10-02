@@ -24,7 +24,7 @@
     "openGithub": "Buka repositori GitHub OFMtouch",
     "openOriginalGithub": "Buka repositori GitHub asli OpenFootManager",
     "originalGame": "Game asli",
-    "doNotShowWhatsNew": "Jangan tampilkan lagi untuk v0.6.4",
+    "doNotShowWhatsNew": "Jangan tampilkan lagi untuk v0.6.5",
     "continueToGame": "Lanjutkan",
     "mainMenu": "Menu Utama",
     "worldEditor": "Editor Dunia",
@@ -1783,7 +1783,7 @@
     "patchPlayers": "Lebih banyak pemain unggulan, termasuk bintang langka berperingkat 96.",
     "patchMatches": "Lebih banyak reaksi, tembakan membentur tiang, dan komentar suara opsional.",
     "patchMobile": "Kontrol seluler, kotak masuk, tim nasional, dan awal karier ditingkatkan.",
-    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.6.4",
+    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.6.5",
     "patchPortraits": "20 wajah fiktif sumber membuat potret pemain hasil generasi lebih beragam.",
     "patchWorld": "Dunia sepak bola yang lebih luas mencakup 29 negara, dengan klub lebih kuat di Amerika dan Asia.",
     "patchTransfers": "Strategi klub memandu pinjaman dan transfer, dengan tawaran bersaing serta pemeriksaan anggaran.",
@@ -4304,5 +4304,13 @@
     "releasePlanning": "Rencanakan kedalaman skuad setelah kontrak berakhir, bandingkan pemain incaran, cek ruang gaji, biaya transfer beserta gaji dan perkiraan kas.",
     "releaseDevelopment": "Tinjauan akademi bulanan dan target individu melacak perkembangan. Pantauan pinjaman menampilkan menit dan kepulangan; janji menjelaskan tenggat dan jeda cedera.",
     "releaseReliability": "Pulihkan cadangan yang dapat dibaca setelah gagal memuat. Latihan lebih cepat, dukungan Kembali Android, pintasan laga, kotak keputusan, kontras lebih kuat dan gerakan berkurang."
+  },
+  "phase65": {
+    "operatingIncome": "Pendapatan operasional mingguan",
+    "operatingCosts": "Biaya operasional mingguan",
+    "colours": "Warna dan pola seragam kandang Premier League diperbaiki, termasuk biru langit Manchester City.",
+    "values": "Nilai pemain seimbang: pemain biasa bernilai puluhan juta, bintang luar biasa bernilai lebih tinggi.",
+    "finances": "Anggaran lebih besar, pendapatan komersial dan media rutin, biaya operasional serta perkiraan kas lebih jelas.",
+    "saves": "Karier standar yang ada menerima koreksi keuangan satu kali dengan mempertahankan kontrak dan pengeluaran sebelumnya."
   }
 }

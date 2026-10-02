@@ -466,8 +466,10 @@ fn regenerate_competitions_for_new_season(
         })
         .collect();
 
+    let financial_divisions = crate::club_economy::division_ranks(game);
     apply_pyramid_promotion_relegation(&mut game.competitions);
     apply_domestic_berth_promotion_relegation(game, &domestic_berth_fields);
+    crate::club_economy::apply_division_changes(game, &financial_divisions);
 
     // Re-seed continental competitions with this season's qualified entrants
     // before regeneration resets their brackets. Done as a separate pass so
@@ -1014,7 +1016,12 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
                 // negative envelope would still be rejected by
                 // `make_transfer_bid`, but showing "€-1.2M transfer budget"
                 // in the UI reads worse than a hard zero.
-                team.transfer_budget = ((team.finance as f64 * 0.15) as i64).max(0);
+                team.transfer_budget = if team.economy.version > 0 {
+                    (team.finance.max(0) * 45 / 100)
+                        .min(crate::club_economy::annual_revenue_anchor(team) / 10)
+                } else {
+                    ((team.finance as f64 * 0.15) as i64).max(0)
+                };
             }
         }
 

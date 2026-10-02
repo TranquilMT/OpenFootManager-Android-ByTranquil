@@ -61,6 +61,8 @@ pub struct TeamFinanceSnapshot {
     pub weekly_wage_budget: i64,
     pub weekly_recurring_income: i64,
     pub weekly_sponsor_income: i64,
+    pub weekly_operating_income: i64,
+    pub weekly_operating_cost: i64,
     pub projected_weekly_net: i64,
     pub cash_runway_weeks: Option<i64>,
     pub wage_budget_usage_percent: u32,
@@ -261,8 +263,8 @@ pub fn calc_matchday(
     revenue_per_match * home_match_count
 }
 
-pub fn calc_upkeep(_team: &Team) -> i64 {
-    0
+pub fn calc_upkeep(team: &Team) -> i64 {
+    team.economy.annual_operating_cost / 52
 }
 
 fn estimated_weekly_matchday_income(game: &Game, team: &Team) -> i64 {
@@ -289,8 +291,11 @@ pub fn team_finance_snapshot(game: &Game, team_id: &str) -> Option<TeamFinanceSn
         })
         .unwrap_or(0);
     let weekly_matchday_income = estimated_weekly_matchday_income(game, team);
-    let weekly_recurring_income = weekly_sponsor_income + weekly_matchday_income;
-    let projected_weekly_net = weekly_recurring_income - weekly_wage_spend;
+    let weekly_operating_income = team.economy.annual_operating_income / 52;
+    let weekly_operating_cost = calc_upkeep(team);
+    let weekly_recurring_income =
+        weekly_sponsor_income + weekly_matchday_income + weekly_operating_income;
+    let projected_weekly_net = weekly_recurring_income - weekly_wage_spend - weekly_operating_cost;
     let cash_runway_weeks = calc_cash_runway_weeks(team.finance, projected_weekly_net);
     let wage_budget_usage_percent = ((annual_wage_bill * 100) / std::cmp::max(1, team.wage_budget))
         .clamp(0, u32::MAX as i64) as u32;
@@ -303,6 +308,8 @@ pub fn team_finance_snapshot(game: &Game, team_id: &str) -> Option<TeamFinanceSn
         weekly_wage_budget,
         weekly_recurring_income,
         weekly_sponsor_income,
+        weekly_operating_income,
+        weekly_operating_cost,
         projected_weekly_net,
         cash_runway_weeks,
         wage_budget_usage_percent,
@@ -989,6 +996,15 @@ pub fn process_weekly_finances(game: &mut Game) {
                 &team.id,
                 -upkeep,
                 CashKind::Upkeep,
+                post_date,
+            ));
+        }
+        let operating_income = team.economy.annual_operating_income / 52;
+        if operating_income > 0 {
+            reqs.push(PostRequest::new(
+                &team.id,
+                operating_income,
+                CashKind::Other,
                 post_date,
             ));
         }

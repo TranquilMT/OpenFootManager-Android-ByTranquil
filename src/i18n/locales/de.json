@@ -24,7 +24,7 @@
     "openGithub": "GitHub-Repository von OFMtouch öffnen",
     "openOriginalGithub": "Ursprüngliches GitHub-Repository von OpenFootManager öffnen",
     "originalGame": "Originalspiel",
-    "doNotShowWhatsNew": "Für v0.6.4 nicht erneut anzeigen",
+    "doNotShowWhatsNew": "Für v0.6.5 nicht erneut anzeigen",
     "continueToGame": "Weiter",
     "mainMenu": "Hauptmenü",
     "worldEditor": "Welt-Editor",
@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.4",
+    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.5",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
@@ -4304,5 +4304,13 @@
     "releasePlanning": "Plane mit Kaderdeckung nach Vertragsablauf, Vergleichen von Wunschspielern, Gehaltsspielraum, Ablöse plus Gehältern und Geldprognosen.",
     "releaseDevelopment": "Monatliche Jugendbewertungen und individuelle Ziele verfolgen Fortschritte. Leihen zeigen Spielzeit und Rückkehrdaten; Zusagen erläutern Fristen und Verletzungspausen.",
     "releaseReliability": "Stelle nach einem Ladefehler eine lesbare Sicherung wieder her. Schnellere Trainingsberechnung, Android-Zurück, Spielaktionen, Entscheidungsübersicht, stärkerer Kontrast und weniger Bewegung."
+  },
+  "phase65": {
+    "operatingIncome": "Wöchentliche Betriebseinnahmen",
+    "operatingCosts": "Wöchentliche Betriebskosten",
+    "colours": "Korrigierte Heimfarben und Trikotmuster der Premier League, einschließlich Manchester Citys Himmelblau.",
+    "values": "Ausgewogene Spielerwerte: reguläre Spieler im zweistelligen Millionenbereich, außergewöhnliche Stars teurer.",
+    "finances": "Größere Budgets, regelmäßige Werbe- und Medieneinnahmen, Betriebskosten und klarere Finanzprognosen.",
+    "saves": "Bestehende Standardkarrieren erhalten eine einmalige Finanzkorrektur; Verträge und bisherige Ausgaben bleiben erhalten."
   }
 }

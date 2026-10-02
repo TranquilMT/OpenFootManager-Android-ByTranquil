@@ -370,9 +370,9 @@ fn rebalance_generated_player_for_club(
         )
     } else if let Some(club_average) = curated_average {
         const SLOT_OFFSETS: [i16; SQUAD_SLOTS] = [
-            8, 6, 6, 5, 4, 4, 3, 3, 2, 2, 1, 0, -1, -2, -3, -3, -4, -5, -6, -6, -14, -14,
+            7, 5, 4, 3, 2, 1, 0, 0, -1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -14, -15, -14, -14,
         ];
-        (club_average as i16 + 2 + SLOT_OFFSETS[slot.min(SQUAD_SLOTS - 1)]).clamp(45, 96) as u8
+        (club_average as i16 + SLOT_OFFSETS[slot.min(SQUAD_SLOTS - 1)]).clamp(45, 96) as u8
     } else {
         generated_target
     };
@@ -397,7 +397,7 @@ fn rebalance_generated_player_for_club(
         crate::generated_career::potential_curve::potential(current, age, reputation)
     };
     player.market_value = market_value_eur(current, player.potential, age).max(0) as u64;
-    player.wage = weekly_wage_eur(current, reputation).clamp(100, u32::MAX as i64) as u32;
+    player.wage = (weekly_wage_eur(current, reputation) * 52).clamp(100, u32::MAX as i64) as u32;
     crate::player_rating::refresh_player_derived(player, opening_year);
 }
 
@@ -867,7 +867,6 @@ fn build_club(
         team.football_nation = "ENG".to_string();
     }
     let team_id = team.id.clone();
-
     let squad_size = rng.random_range(SQUAD_SLOTS..=26);
     let mut team_players = Vec::with_capacity(squad_size);
     // Two players for every deployed slot, including repeated central roles.
@@ -962,8 +961,12 @@ fn build_club(
         }
         team_staff.push(member);
     }
-
     normalize_generated_team(&mut team, &mut team_players, opening_year as i32);
+    crate::club_economy::fit_generated_payroll(&team, &mut team_players, &mut team_staff);
+    let payroll = team_players.iter().map(|p| i64::from(p.wage)).sum::<i64>()
+        + team_staff.iter().map(|s| i64::from(s.wage)).sum::<i64>();
+    team.finance = crate::club_economy::opening_cash(&team);
+    crate::club_economy::initialize_generated_club(&mut team, payroll);
     seed_starting_xi(&mut team, &team_players);
     (team, team_players, team_staff)
 }
@@ -2237,10 +2240,10 @@ mod tests {
                 .collect();
             seniors.iter().map(|player| player.ovr as u32).sum::<u32>() / seniors.len() as u32
         };
-        assert!(average("Manchester United") >= 86);
-        assert!(average("Arsenal") >= 86);
-        assert!(average("Chelsea") >= 86);
-        assert!(average("Liverpool") >= 86);
+        assert!(average("Manchester United") >= 80);
+        assert!(average("Arsenal") >= 80);
+        assert!(average("Chelsea") >= 80);
+        assert!(average("Liverpool") >= 80);
         assert!(average("Birmingham City") < average("Manchester United"));
         let youth_potential = |name: &str| {
             let team = teams.iter().find(|team| team.name == name).unwrap();
@@ -2429,7 +2432,7 @@ mod tests {
     #[test]
     fn test_generate_world_normalizes_opening_financials() {
         for _ in 0..8 {
-            let (teams, players, _) = generate_world_with(
+            let (teams, players, staff) = generate_world_with(
                 &WorldGenConfig::compact(),
                 &definitions::DefinitionSources::embedded_only(),
             );
@@ -2439,7 +2442,12 @@ mod tests {
                     .filter(|player| player.team_id.as_deref() == Some(team.id.as_str()))
                     .map(|player| player.wage as i64)
                     .sum();
-                let weekly_wage_spend = (annual_wages + 51) / 52;
+                let payroll = annual_wages
+                    + staff
+                        .iter()
+                        .filter(|member| member.team_id.as_deref() == Some(team.id.as_str()))
+                        .map(|member| i64::from(member.wage))
+                        .sum::<i64>();
                 let usage_percent = (annual_wages * 100) / std::cmp::max(1, team.wage_budget);
 
                 assert!(
@@ -2450,15 +2458,16 @@ mod tests {
                     team.wage_budget
                 );
                 assert!(
-                    (90..=96).contains(&usage_percent),
+                    (1..=87).contains(&usage_percent),
                     "{} opened outside target wage band: {}%",
                     team.name,
                     usage_percent
                 );
+                assert_eq!(team.finance, crate::club_economy::opening_cash(team));
+                assert!(payroll <= crate::club_economy::annual_revenue_anchor(team) * 60 / 100);
                 assert!(
-                    team.finance >= weekly_wage_spend * MIN_OPENING_RUNWAY_WEEKS,
-                    "{} opened without the minimum wage runway",
-                    team.name
+                    team.economy.annual_operating_income
+                        >= payroll + team.economy.annual_operating_cost
                 );
             }
         }
