@@ -24,7 +24,7 @@
     "openGithub": "Otevřít repozitář OFMtouch na GitHubu",
     "openOriginalGithub": "Otevřít původní repozitář OpenFootManager na GitHubu",
     "originalGame": "Původní hra",
-    "doNotShowWhatsNew": "Znovu nezobrazovat pro v0.6.4",
+    "doNotShowWhatsNew": "Znovu nezobrazovat pro v0.6.5",
     "continueToGame": "Pokračovat",
     "mainMenu": "Hlavní menu",
     "worldEditor": "Editor světa",
@@ -1783,7 +1783,7 @@
     "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
     "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
     "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
-    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.4",
+    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.5",
     "patchPortraits": "20 fiktivních výchozích tváří přináší pestřejší portréty hráčů.",
     "patchWorld": "Fotbalový svět zahrnuje 29 zemí a silnější kluby v Americe a Asii.",
     "patchTransfers": "Strategie klubů řídí hostování a přestupy včetně konkurenčních nabídek a kontroly rozpočtu.",
@@ -4304,5 +4304,13 @@
     "releasePlanning": "Plánuj pokrytí sestavy po konci smluv, porovnávej vyhlédnuté hráče a sleduj prostor pro mzdy, přestupy včetně mezd a předpověď hotovosti.",
     "releaseDevelopment": "Měsíční přehledy akademie a individuální cíle sledují růst. Hostování ukazují minuty a návraty; sliby vysvětlují termíny a přestávky kvůli zranění.",
     "releaseReliability": "Po chybě načtení obnov použitelnou zálohu. Rychlejší trénink, tlačítko Zpět na Androidu, zápasové zkratky, přehled rozhodnutí, silnější kontrast a méně pohybu."
+  },
+  "phase65": {
+    "operatingIncome": "Týdenní provozní příjmy",
+    "operatingCosts": "Týdenní provozní náklady",
+    "colours": "Opravené domácí barvy a vzory dresů Premier League včetně světle modré Manchesteru City.",
+    "values": "Vyvážené hodnoty hráčů: běžní hráči za desítky milionů, výjimečné hvězdy za více.",
+    "finances": "Vyšší rozpočty, pravidelné komerční a televizní příjmy, provozní náklady a jasnější finanční výhled.",
+    "saves": "Stávající standardní kariéry získají jednorázovou finanční opravu při zachování smluv a minulých výdajů."
   }
 }

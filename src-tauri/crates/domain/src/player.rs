@@ -72,7 +72,7 @@ pub struct Player {
 
     // Contract & value
     pub contract_end: Option<String>,
-    pub wage: u32, // weekly wage
+    pub wage: u32, // annual wage in euros; divide by 52 for weekly payroll
     pub market_value: u64,
 
     // Season stats

@@ -370,9 +370,9 @@ fn rebalance_generated_player_for_club(
         )
     } else if let Some(club_average) = curated_average {
         const SLOT_OFFSETS: [i16; SQUAD_SLOTS] = [
-            8, 6, 6, 5, 4, 4, 3, 3, 2, 2, 1, 0, -1, -2, -3, -3, -4, -5, -6, -6, -14, -14,
+            7, 5, 4, 3, 2, 1, 0, 0, -1, -2, -3, -4, -5, -6, -7, -8, -9, -10, -14, -15, -14, -14,
         ];
-        (club_average as i16 + 2 + SLOT_OFFSETS[slot.min(SQUAD_SLOTS - 1)]).clamp(45, 96) as u8
+        (club_average as i16 + SLOT_OFFSETS[slot.min(SQUAD_SLOTS - 1)]).clamp(45, 96) as u8
     } else {
         generated_target
     };
@@ -397,7 +397,7 @@ fn rebalance_generated_player_for_club(
         crate::generated_career::potential_curve::potential(current, age, reputation)
     };
     player.market_value = market_value_eur(current, player.potential, age).max(0) as u64;
-    player.wage = weekly_wage_eur(current, reputation).clamp(100, u32::MAX as i64) as u32;
+    player.wage = (weekly_wage_eur(current, reputation) * 52).clamp(100, u32::MAX as i64) as u32;
     crate::player_rating::refresh_player_derived(player, opening_year);
 }
 
@@ -964,6 +964,9 @@ fn build_club(
     }
 
     normalize_generated_team(&mut team, &mut team_players, opening_year as i32);
+    let payroll = team_players.iter().map(|p| i64::from(p.wage)).sum::<i64>()
+        + team_staff.iter().map(|s| i64::from(s.wage)).sum::<i64>();
+    crate::club_economy::initialize_generated_club(&mut team, payroll);
     seed_starting_xi(&mut team, &team_players);
     (team, team_players, team_staff)
 }

@@ -4,7 +4,7 @@
 
 OFMtouch is a free, open-source football management game for Android, based on OpenFootManager and adapted for mobile by **TranquilMT**. Build a squad, develop young talent and lead your club through seasons of league and cup football. Every career brings decisions on the pitch, in the transfer market and behind the scenes.
 
-**Current version: v0.6.4 — Manager Progression & Planning · Android ARM64**
+**Current version: v0.6.5 — Finance & Club Identity · Android ARM64**
 
 [Download OFMtouch](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/latest) · [Previous releases](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases) · [Report an issue](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new)
 
@@ -85,6 +85,19 @@ Your job extends beyond the next result.
 - Interface and update summaries in 12 supported languages.
 
 ## What's New — Version History
+
+### v0.6.5 — Finance & Club Identity
+
+- Correct Premier League home colours and kit patterns, including Manchester City's sky blue.
+- Balance fictional player values across stars, starters, rotation players and youth prospects.
+- Correct salary generation and add larger working balances, wage headroom and transfer budgets.
+- Add recurring operating income and fixed costs to payroll, cash flow and forecasts.
+- Repair existing standard-career finances once while preserving contracts and past spending.
+- Adjust operating income on promotion and relegation, and preserve the financial model through saves.
+- Update the compact release summary in all 12 supported languages.
+
+Published turnover informs game budgets; cash and transfer spending remain separate. [Financial sources and model](docs/ECONOMY-0.6.5.md).
+
 
 ### v0.1.0 — Early Android Foundations
 

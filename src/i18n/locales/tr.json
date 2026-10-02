@@ -24,7 +24,7 @@
     "openGithub": "OFMtouch GitHub deposunu aç",
     "openOriginalGithub": "Orijinal OpenFootManager GitHub deposunu aç",
     "originalGame": "Orijinal oyun",
-    "doNotShowWhatsNew": "v0.6.4 için bir daha gösterme",
+    "doNotShowWhatsNew": "v0.6.5 için bir daha gösterme",
     "continueToGame": "Devam et",
     "mainMenu": "Ana Menü",
     "worldEditor": "Dünya Editörü",
@@ -1783,7 +1783,7 @@
     "patchPlayers": "Nadir 96 puanlı yıldızlar dahil daha fazla öne çıkan oyuncu.",
     "patchMatches": "Daha fazla maç tepkisi, direğe çarpan şutlar ve isteğe bağlı sesli anlatım.",
     "patchMobile": "Mobil kontroller, gelen kutusu, millî takımlar ve kariyer başlangıcı iyileştirildi.",
-    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.6.4 yenilikleri",
+    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.6.5 yenilikleri",
     "patchPortraits": "20 kurgusal kaynak yüz, üretilen oyuncu portrelerini daha çeşitli kılıyor.",
     "patchWorld": "Futbol dünyası 29 ülkeyi kapsıyor; Amerika ve Asya kulüpleri güçlendirildi.",
     "patchTransfers": "Kulüp stratejileri kiralık ve bonservisli transferleri, rakip teklifleri ve bütçe kontrollerini yönlendiriyor.",
@@ -4304,5 +4304,13 @@
     "releasePlanning": "Sözleşme bitişleri sonrası kadro derinliği, izlenen oyuncu karşılaştırmaları, maaş payı, ücretlerle toplam transfer maliyeti ve nakit tahminleriyle planlayın.",
     "releaseDevelopment": "Aylık akademi değerlendirmeleri ve bireysel hedefler gelişimi izler. Kiralık takibi süreleri ve dönüşleri gösterir; sözler son tarihleri ve sakatlık duraklamalarını açıklar.",
     "releaseReliability": "Yükleme hatasından sonra kullanılabilir yedeği geri yükleyin. Daha hızlı antrenman, Android Geri desteği, maç kısayolları, karar kutusu, güçlü kontrast ve azaltılmış hareket."
+  },
+  "phase65": {
+    "operatingIncome": "Haftalık işletme geliri",
+    "operatingCosts": "Haftalık işletme giderleri",
+    "colours": "Manchester City gök mavisi dahil Premier League iç saha renkleri ve forma desenleri düzeltildi.",
+    "values": "Dengeli oyuncu değerleri: sıradan kadro oyuncuları on milyonlarla, olağanüstü yıldızlar daha yüksek değerlerle.",
+    "finances": "Daha büyük bütçeler, düzenli ticari ve medya gelirleri, işletme giderleri ve daha açık nakit tahminleri.",
+    "saves": "Mevcut standart kariyerlere sözleşmeler ve geçmiş harcamalar korunarak bir defalık mali düzeltme uygulanır."
   }
 }

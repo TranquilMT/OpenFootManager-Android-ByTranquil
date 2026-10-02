@@ -263,12 +263,35 @@ pub fn position_overall(position: PositionGroup, a: GeneratedAttributes) -> u8 {
     }
 }
 pub fn market_value_eur(ovr: u8, potential: u8, age: u8) -> i64 {
-    let ability = (ovr.saturating_sub(30) as i64).pow(3) * 650;
-    let upside = potential.saturating_sub(ovr) as i64 * 180_000;
+    // Interpolate a football market curve: regular internationals remain in
+    // the tens of millions; only exceptional ability reaches nine figures.
+    const CURVE: [(u8, i64); 12] = [
+        (30, 25_000),
+        (50, 300_000),
+        (60, 2_000_000),
+        (65, 4_000_000),
+        (70, 8_000_000),
+        (75, 15_000_000),
+        (80, 28_000_000),
+        (85, 45_000_000),
+        (90, 75_000_000),
+        (93, 105_000_000),
+        (96, 145_000_000),
+        (99, 190_000_000),
+    ];
+    let mut ability = 25_000;
+    for pair in CURVE.windows(2) {
+        let [(lo, low_value), (hi, high_value)] = [pair[0], pair[1]];
+        if ovr >= lo {
+            ability = low_value
+                + (high_value - low_value) * i64::from(ovr.min(hi) - lo) / i64::from(hi - lo);
+        }
+    }
+    let upside = (potential.saturating_sub(ovr) as i64 * 180_000).min(ability / 2);
     let age_factor = match age {
-        0..=20 => 125,
-        21..=24 => 120,
-        25..=28 => 110,
+        0..=20 => 115,
+        21..=24 => 110,
+        25..=28 => 100,
         29..=31 => 90,
         32..=34 => 65,
         _ => 40,
@@ -396,5 +419,18 @@ mod elite_rating_tests {
         assert_eq!(potential_ceiling(LeagueTier::Elite, 100), 96);
         assert_eq!(clamp_generated_ovr(LeagueTier::Top, 96, false), 92);
         assert_eq!(clamp_generated_ovr(LeagueTier::Professional, 96, false), 90);
+    }
+}
+
+#[cfg(test)]
+mod valuation_regressions_065 {
+    use super::market_value_eur;
+    #[test]
+    fn regular_first_team_players_are_not_all_hundred_million_stars() {
+        assert!((25_000_000..=55_000_000).contains(&market_value_eur(85, 88, 25)));
+        assert!(market_value_eur(90, 92, 24) < 100_000_000);
+        assert!(market_value_eur(96, 97, 24) >= 100_000_000);
+        assert!(market_value_eur(60, 95, 17) < 10_000_000);
+        assert!(market_value_eur(85, 88, 34) < market_value_eur(85, 88, 25));
     }
 }

@@ -558,6 +558,11 @@ impl SaveManager {
             needs_resave = true;
         }
 
+        if !game.emitted_events.contains("economy:0.6.5") {
+            ofm_core::club_economy::upgrade_generated_career(&mut game)?;
+            needs_resave |= game.emitted_events.contains("economy:0.6.5");
+        }
+
         // Backfill OVR/potential for players from older saves that don't have them yet.
         // We use the game clock year so age is accurate.
         let current_year = game

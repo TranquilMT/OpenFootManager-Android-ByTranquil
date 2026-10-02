@@ -7,6 +7,9 @@ export interface TeamFinanceSnapshot {
   weeklyWageSpend: number;
   weeklyWageBudget: number;
   weeklySponsorIncome: number;
+  weeklyRecurringIncome?: number;
+  weeklyOperatingIncome?: number;
+  weeklyOperatingCost?: number;
   projectedWeeklyNet: number;
   cashRunwayWeeks: number | null;
   wageBudgetUsagePercent: number;
@@ -201,7 +204,14 @@ export function getTeamFinanceSnapshot(
   const weeklyWageSpend = getWeeklyWageSpend(players, staff, team.id);
   const weeklyWageBudget = annualAmountToWeeklyCommitment(team.wage_budget);
   const weeklySponsorIncome = team.sponsorship?.base_value ?? 0;
-  const projectedWeeklyNet = weeklySponsorIncome - weeklyWageSpend;
+  const weeklyOperatingIncome = Math.floor(
+    Math.max(0, team.economy?.annual_operating_income ?? 0) / 52,
+  );
+  const weeklyOperatingCost = Math.floor(
+    Math.max(0, team.economy?.annual_operating_cost ?? 0) / 52,
+  );
+  const weeklyRecurringIncome = weeklySponsorIncome + weeklyOperatingIncome;
+  const projectedWeeklyNet = weeklyRecurringIncome - weeklyWageSpend - weeklyOperatingCost;
   const cashRunwayWeeks = getCashRunwayWeeks(team.finance, projectedWeeklyNet);
   const wageBudgetUsagePercent = Math.round((annualWageBill / Math.max(1, team.wage_budget)) * 100);
   const wageBudgetStatus = getWageBudgetStatus(wageBudgetUsagePercent);
@@ -212,6 +222,9 @@ export function getTeamFinanceSnapshot(
     weeklyWageSpend,
     weeklyWageBudget,
     weeklySponsorIncome,
+    weeklyRecurringIncome,
+    weeklyOperatingIncome,
+    weeklyOperatingCost,
     projectedWeeklyNet,
     cashRunwayWeeks,
     wageBudgetUsagePercent,

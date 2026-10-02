@@ -32,6 +32,10 @@ pub struct Team {
     #[serde(default)]
     pub facilities: Facilities,
 
+    /// Persistent operating model. Defaults keep authored and legacy clubs neutral.
+    #[serde(default)]
+    pub economy: ClubEconomy,
+
     // Tactical
     pub formation: String,
     pub play_style: PlayStyle,
@@ -75,6 +79,14 @@ pub struct Team {
 
     // History
     pub history: Vec<TeamSeasonRecord>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
+#[serde(default)]
+pub struct ClubEconomy {
+    pub version: u8,
+    pub annual_operating_income: i64,
+    pub annual_operating_cost: i64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default, PartialEq)]
@@ -482,6 +494,7 @@ impl Team {
             season_expenses: 0,
             financial_ledger: Vec::new(),
             sponsorship: None,
+            economy: ClubEconomy::default(),
             facilities: Facilities::default(),
             formation: "4-4-2".to_string(),
             play_style: PlayStyle::Balanced,

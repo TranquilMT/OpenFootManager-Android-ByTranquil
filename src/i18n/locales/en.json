@@ -24,7 +24,7 @@
     "openGithub": "Open OFMtouch GitHub repository",
     "openOriginalGithub": "Open original OpenFootManager GitHub repository",
     "originalGame": "Original game",
-    "doNotShowWhatsNew": "Don’t show this again for v0.6.4",
+    "doNotShowWhatsNew": "Don’t show this again for v0.6.5",
     "continueToGame": "Continue",
     "mainMenu": "Main Menu",
     "worldEditor": "World Editor",
@@ -1783,7 +1783,7 @@
     "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
     "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
     "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
-    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.4",
+    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.5",
     "patchPortraits": "20 fictional source faces bring more variety to generated player portraits.",
     "patchWorld": "A larger football world spans 29 nations, with stronger clubs across the Americas and Asia.",
     "patchTransfers": "Club strategies guide loans and transfer approaches, with competing offers and budget checks.",
@@ -4304,5 +4304,13 @@
     "releasePlanning": "Plan ahead with contract-expiry squad depth, shortlisted player comparisons, wage headroom, fee-plus-wages totals and cash forecasts.",
     "releaseDevelopment": "Monthly academy reviews and individual goals track real growth. Loan watch highlights game time and return dates; promise tracking explains deadlines and injury pauses.",
     "releaseReliability": "Restore a usable save backup after a load failure. Enjoy faster training processing, Android Back support, visible match shortcuts, a decisions inbox, stronger contrast and reduced motion."
+  },
+  "phase65": {
+    "operatingIncome": "Weekly operating income",
+    "operatingCosts": "Weekly operating costs",
+    "colours": "Correct Premier League home colours and kit patterns, including Manchester City sky blue.",
+    "values": "Balanced player values: regular squad players in the tens of millions, with exceptional stars worth more.",
+    "finances": "Larger club budgets, recurring commercial and media income, operating costs and clearer cash forecasts.",
+    "saves": "Existing standard careers receive a one-time financial correction while retaining contracts and past spending."
   }
 }

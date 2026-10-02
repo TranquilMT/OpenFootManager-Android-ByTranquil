@@ -24,7 +24,7 @@
     "openGithub": "Abrir repositório do OFMtouch no GitHub",
     "openOriginalGithub": "Abrir repositório original do OpenFootManager no GitHub",
     "originalGame": "Jogo original",
-    "doNotShowWhatsNew": "Não mostrar novamente na v0.6.4",
+    "doNotShowWhatsNew": "Não mostrar novamente na v0.6.5",
     "continueToGame": "Continuar",
     "mainMenu": "Menu principal",
     "worldEditor": "Editor de Mundo",
@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mais craques, incluindo raras estrelas de nível 96 e candidatos ao acesso.",
     "patchMatches": "Mais reações, bolas na trave e narração por voz opcional.",
     "patchMobile": "Controles no celular, caixa de entrada, seleções e início de carreira melhorados.",
-    "patchWelcome": "Boas-vindas ao OFMtouch! Novidades da v0.6.4",
+    "patchWelcome": "Boas-vindas ao OFMtouch! Novidades da v0.6.5",
     "patchPortraits": "20 rostos fictícios de origem deixam os retratos dos jogadores mais variados.",
     "patchWorld": "Um mundo do futebol maior abrange 29 países, com clubes mais fortes nas Américas e na Ásia.",
     "patchTransfers": "As estratégias dos clubes orientam empréstimos e transferências, com ofertas concorrentes e controle do orçamento.",
@@ -4304,5 +4304,13 @@
     "releasePlanning": "Planeje com cobertura após contratos vencidos, comparação de alvos, margem salarial, custo de transferências com salários e previsões de caixa.",
     "releaseDevelopment": "Revisões mensais da base e metas individuais registram o desenvolvimento. Os empréstimos mostram minutos e retornos; as promessas esclarecem prazos e pausas por lesão.",
     "releaseReliability": "Restaure uma cópia válida após falha no carregamento. Treino mais rápido, botão Voltar do Android, atalhos de partida, caixa de decisões, maior contraste e movimento reduzido."
+  },
+  "phase65": {
+    "operatingIncome": "Receitas operacionais semanais",
+    "operatingCosts": "Custos operacionais semanais",
+    "colours": "Cores e padrões dos uniformes de casa da Premier League corrigidos, incluindo o azul-celeste do Manchester City.",
+    "values": "Valores equilibrados: jogadores comuns por dezenas de milhões e estrelas excepcionais mais caras.",
+    "finances": "Orçamentos maiores, receitas comerciais e televisivas recorrentes, custos operacionais e previsões claras.",
+    "saves": "As carreiras padrão existentes recebem uma correção financeira única, mantendo contratos e despesas anteriores."
   }
 }

@@ -31,6 +31,8 @@ pub fn upsert_team(conn: &Connection, t: &Team) -> Result<(), String> {
         .map_err(|_| GAME_PERSISTENCE_WRITE_ERROR.to_string())?;
     let tactics_phase_json = serde_json::to_string(&t.tactics_phase)
         .map_err(|_| GAME_PERSISTENCE_WRITE_ERROR.to_string())?;
+    let economy_json =
+        serde_json::to_string(&t.economy).map_err(|_| GAME_PERSISTENCE_WRITE_ERROR.to_string())?;
     let play_style_str = format!("{:?}", t.play_style);
     let kit_pattern_str = t.kit_pattern.to_string();
     let training_focus_str = format!("{:?}", t.training_focus);
@@ -45,8 +47,8 @@ pub fn upsert_team(conn: &Connection, t: &Team) -> Result<(), String> {
          training_focus, training_intensity, training_schedule,
          founded_year, colors_primary, colors_secondary,
          starting_xi_ids, match_roles, form, history, training_groups, financial_ledger, sponsorship, facilities, media_json, kit_pattern,
-         player_roles_json, tactics_phase_json)
-         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29, ?30, ?31, ?32, ?33, ?34, ?35)",
+         player_roles_json, tactics_phase_json, economy_json)
+         VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19, ?20, ?21, ?22, ?23, ?24, ?25, ?26, ?27, ?28, ?29, ?30, ?31, ?32, ?33, ?34, ?35, ?36)",
         params![
             t.id,
             t.name,
@@ -83,6 +85,7 @@ pub fn upsert_team(conn: &Connection, t: &Team) -> Result<(), String> {
             kit_pattern_str,
             player_roles_json,
             tactics_phase_json,
+            economy_json,
         ],
     )
     .map_err(|_| GAME_PERSISTENCE_WRITE_ERROR.to_string())?;
@@ -171,6 +174,7 @@ fn row_to_team(row: &rusqlite::Row) -> rusqlite::Result<Team> {
         season_expenses: row.get(14)?,
         financial_ledger: serde_json::from_str::<Vec<FinancialTransaction>>(&financial_ledger_json)
             .unwrap_or_default(),
+        economy: serde_json::from_str(&row.get::<_, String>(35)?).unwrap_or_default(),
         sponsorship: serde_json::from_str::<Option<Sponsorship>>(&sponsorship_json)
             .unwrap_or_default(),
         facilities: serde_json::from_str::<Facilities>(&facilities_json).unwrap_or_default(),
@@ -261,7 +265,7 @@ pub fn load_all_teams(conn: &Connection) -> Result<Vec<Team>, String> {
                     founded_year, colors_primary, colors_secondary,
                     starting_xi_ids, match_roles, form, history, training_groups, financial_ledger, sponsorship, facilities,
                     COALESCE(media_json, '{}'), COALESCE(kit_pattern, 'Solid'),
-                    COALESCE(player_roles_json, '{}'), COALESCE(tactics_phase_json, '{}')
+                    COALESCE(player_roles_json, '{}'), COALESCE(tactics_phase_json, '{}'), COALESCE(economy_json, '{}')
              FROM teams",
         )
         .map_err(|_| GAME_PERSISTENCE_LOAD_ERROR.to_string())?;
@@ -288,7 +292,7 @@ pub fn load_team(conn: &Connection, id: &str) -> Result<Option<Team>, String> {
                     founded_year, colors_primary, colors_secondary,
                     starting_xi_ids, match_roles, form, history, training_groups, financial_ledger, sponsorship, facilities,
                     COALESCE(media_json, '{}'), COALESCE(kit_pattern, 'Solid'),
-                    COALESCE(player_roles_json, '{}'), COALESCE(tactics_phase_json, '{}')
+                    COALESCE(player_roles_json, '{}'), COALESCE(tactics_phase_json, '{}'), COALESCE(economy_json, '{}')
              FROM teams WHERE id = ?1",
         )
         .map_err(|_| GAME_PERSISTENCE_LOAD_ERROR.to_string())?;
@@ -325,6 +329,11 @@ mod tests {
             "Test Arena".to_string(),
             50000,
         );
+        team.economy = domain::team::ClubEconomy {
+            version: 1,
+            annual_operating_income: 520_000_000,
+            annual_operating_cost: 260_000_000,
+        };
         team.play_style = PlayStyle::Possession;
         team.finance = 5_000_000;
         team.wage_budget = 200_000;
@@ -340,6 +349,7 @@ mod tests {
         upsert_team(db.conn(), &team).unwrap();
         let loaded = load_team(db.conn(), "team-001").unwrap().unwrap();
 
+        assert_eq!(loaded.economy, team.economy);
         assert_eq!(loaded.id, "team-001");
         assert_eq!(loaded.name, "London FC");
         assert_eq!(loaded.short_name, "TST");

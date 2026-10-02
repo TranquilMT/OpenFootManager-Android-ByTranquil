@@ -588,6 +588,28 @@ function FinancesTabContent({
             </div>
             <div className="rounded-xl border border-gray-200 dark:border-navy-600 bg-gray-50 dark:bg-navy-800 p-4 text-center">
               <p className="text-xs font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                {t("phase65.operatingIncome")}
+              </p>
+              <p className="font-heading font-bold text-xl text-primary-500">
+                {formatWeeklyAmount(
+                  formatSignedAmount(financeSnapshot.weeklyOperatingIncome ?? 0),
+                  weeklySuffix,
+                )}
+              </p>
+            </div>
+            <div className="rounded-xl border border-gray-200 dark:border-navy-600 bg-gray-50 dark:bg-navy-800 p-4 text-center">
+              <p className="text-xs font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
+                {t("phase65.operatingCosts")}
+              </p>
+              <p className="font-heading font-bold text-xl text-red-500">
+                {formatWeeklyAmount(
+                  formatSignedAmount(-(financeSnapshot.weeklyOperatingCost ?? 0)),
+                  weeklySuffix,
+                )}
+              </p>
+            </div>
+            <div className="rounded-xl border border-gray-200 dark:border-navy-600 bg-gray-50 dark:bg-navy-800 p-4 text-center">
+              <p className="text-xs font-heading font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-1">
                 {t("finances.projectedWeeklyNet")}
               </p>
               <p

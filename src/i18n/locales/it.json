@@ -24,7 +24,7 @@
     "openGithub": "Apri il repository GitHub di OFMtouch",
     "openOriginalGithub": "Apri il repository GitHub originale di OpenFootManager",
     "originalGame": "Gioco originale",
-    "doNotShowWhatsNew": "Non mostrare più per la v0.6.4",
+    "doNotShowWhatsNew": "Non mostrare più per la v0.6.5",
     "continueToGame": "Continua",
     "mainMenu": "Menu principale",
     "worldEditor": "Editor Mondo",
@@ -1802,7 +1802,7 @@
     "patchPlayers": "Più giocatori di spicco, incluse rare stelle da 96 e squadre in lotta per la promozione.",
     "patchMatches": "Più reazioni, tiri sui legni e telecronaca vocale facoltativa.",
     "patchMobile": "Comandi mobili, posta, nazionali e inizio carriera migliorati.",
-    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.6.4",
+    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.6.5",
     "patchPortraits": "20 volti fittizi di partenza rendono più vari i ritratti dei giocatori generati.",
     "patchWorld": "Un mondo calcistico più ampio copre 29 nazioni, con club più forti nelle Americhe e in Asia.",
     "patchTransfers": "Le strategie dei club guidano prestiti e trasferimenti, con offerte concorrenti e controlli sul budget.",
@@ -4304,5 +4304,13 @@
     "releasePlanning": "Pianifica con copertura dopo le scadenze, confronti dei giocatori seguiti, margine salariale, costo di trasferimenti e stipendi e previsioni di cassa.",
     "releaseDevelopment": "Revisioni mensili del vivaio e obiettivi individuali seguono la crescita. I prestiti mostrano minuti e ritorni; le promesse chiariscono scadenze e pause per infortunio.",
     "releaseReliability": "Ripristina una copia valida dopo un errore di caricamento. Allenamento più rapido, Indietro Android, scorciatoie di partita, casella delle decisioni, contrasto maggiore e movimento ridotto."
+  },
+  "phase65": {
+    "operatingIncome": "Entrate operative settimanali",
+    "operatingCosts": "Costi operativi settimanali",
+    "colours": "Colori e motivi delle divise di casa corretti per la Premier League, incluso il celeste del Manchester City.",
+    "values": "Valori dei giocatori equilibrati: giocatori ordinari da decine di milioni e stelle eccezionali più costose.",
+    "finances": "Budget maggiori, entrate commerciali e televisive ricorrenti, costi operativi e previsioni più chiare.",
+    "saves": "Le carriere standard esistenti ricevono una correzione finanziaria unica, mantenendo contratti e spese passate."
   }
 }

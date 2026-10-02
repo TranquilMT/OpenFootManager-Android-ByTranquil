@@ -211,3 +211,17 @@ describe("finance helpers", () => {
     expect(getPlayerAnnualWageCommitment(loanedPlayer, "parent")).toBe(51);
   });
 });
+
+describe("0.6.5 operating cash flow", () => {
+  it("includes operating receipts and fixed costs without confusing annual and weekly units", () => {
+    const team = createTeam({
+      economy: { version: 1, annual_operating_income: 5_200_000, annual_operating_cost: 2_600_000 },
+    });
+    const snapshot = getTeamFinanceSnapshot(team, [createPlayer({ wage: 520_000 })]);
+    expect(snapshot.weeklyOperatingIncome).toBe(100_000);
+    expect(snapshot.weeklyOperatingCost).toBe(50_000);
+    expect(snapshot.weeklyRecurringIncome).toBe(100_000);
+    expect(snapshot.projectedWeeklyNet).toBe(40_000);
+    expect(snapshot.cashRunwayWeeks).toBeNull();
+  });
+});

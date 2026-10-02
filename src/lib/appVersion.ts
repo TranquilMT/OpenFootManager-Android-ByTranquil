@@ -29,8 +29,9 @@ export function formatAppVersion(): string {
 
   const number = buildNumber();
   const releaseVersion = APP_VERSION.replace(/-nightly$/, "");
-  if (number) return `v${releaseVersion} Manager Progression - Build#${number} - NIGHTLYPRERELEASE`;
+  if (number)
+    return `v${releaseVersion} Finance & Club Identity - Build#${number} - NIGHTLYPRERELEASE`;
 
   const commit = APP_COMMIT === "unknown" ? "" : ` - ${APP_COMMIT}`;
-  return `v${releaseVersion} Manager Progression - NIGHTLYPRERELEASE${commit}`;
+  return `v${releaseVersion} Finance & Club Identity - NIGHTLYPRERELEASE${commit}`;
 }
