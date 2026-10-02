@@ -76,6 +76,43 @@ pub(crate) fn apply_match_perks(game: &Game, team_id: &str, player: &mut engine:
     player.teamwork = player.teamwork.saturating_add(bonus).min(100);
 }
 
+/// Called only for a completed match involving the user's current club, behind
+/// the match-report retry guard. Acquired players bring no previous-club credit.
+pub(crate) fn credit_youth_minutes(game: &mut Game, played: &[(String, u32)]) {
+    let Some(team_id) = game.manager.team_id.clone() else {
+        return;
+    };
+    let season = game
+        .primary_competition()
+        .map_or(0, |competition| competition.season);
+    let minutes = played
+        .iter()
+        .filter(|(id, _)| {
+            game.players.iter().any(|player| {
+                player.id == *id
+                    && !player.retired
+                    && player.team_id.as_ref() == Some(&team_id)
+                    && chrono::NaiveDate::parse_from_str(&player.date_of_birth, "%Y-%m-%d")
+                        .is_ok_and(|birth| {
+                            game.clock
+                                .current_date
+                                .date_naive()
+                                .years_since(birth)
+                                .is_some_and(|age| age <= 21)
+                        })
+            })
+        })
+        .map(|(_, minutes)| *minutes)
+        .fold(0, u32::saturating_add);
+    let progress = &mut game.manager.career_stats.progression;
+    if progress.youth_team_id.as_ref() != Some(&team_id) || progress.youth_season != Some(season) {
+        progress.youth_minutes = 0;
+        progress.youth_team_id = Some(team_id);
+        progress.youth_season = Some(season);
+    }
+    progress.youth_minutes = progress.youth_minutes.saturating_add(minutes);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -177,41 +214,4 @@ mod tests {
         refresh(&mut game);
         assert!(game.manager.career_stats.progression.unlocked.is_empty());
     }
-}
-
-/// Called only for a completed match involving the user's current club, behind
-/// the match-report retry guard. Acquired players bring no previous-club credit.
-pub(crate) fn credit_youth_minutes(game: &mut Game, played: &[(String, u32)]) {
-    let Some(team_id) = game.manager.team_id.clone() else {
-        return;
-    };
-    let season = game
-        .primary_competition()
-        .map_or(0, |competition| competition.season);
-    let minutes = played
-        .iter()
-        .filter(|(id, _)| {
-            game.players.iter().any(|player| {
-                player.id == *id
-                    && !player.retired
-                    && player.team_id.as_ref() == Some(&team_id)
-                    && chrono::NaiveDate::parse_from_str(&player.date_of_birth, "%Y-%m-%d")
-                        .is_ok_and(|birth| {
-                            game.clock
-                                .current_date
-                                .date_naive()
-                                .years_since(birth)
-                                .is_some_and(|age| age <= 21)
-                        })
-            })
-        })
-        .map(|(_, minutes)| *minutes)
-        .fold(0, u32::saturating_add);
-    let progress = &mut game.manager.career_stats.progression;
-    if progress.youth_team_id.as_ref() != Some(&team_id) || progress.youth_season != Some(season) {
-        progress.youth_minutes = 0;
-        progress.youth_team_id = Some(team_id);
-        progress.youth_season = Some(season);
-    }
-    progress.youth_minutes = progress.youth_minutes.saturating_add(minutes);
 }
