@@ -1,0 +1,36 @@
+name: Publish OFMtouch 0.6.6 Build 354
+on:
+  push:
+    branches: [release/0.6.6-publish-build354]
+permissions:
+  contents: write
+  actions: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify signed release package
+        run: |
+          set -euo pipefail
+          cat release-parts/part-*.bin > release-assets.zip
+          echo '64698af685949a9a397a22928f990b4c7cb0f9bedbbe841a37410a7e4e4b45b2  release-assets.zip' | sha256sum -c -
+          mkdir release-assets
+          unzip -q release-assets.zip -d release-assets
+          cd release-assets
+          sha256sum -c OFMtouch-0.6.6-Build354-SHA256SUMS.txt
+          APK=OFMtouch-0.6.6-Startup-Menu-Polish-Build354-SIGNED.apk
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          "$APKSIGNER" verify --verbose --print-certs "$APK" > signature.txt
+          grep -qi '3f0d869bfaa5f7c78a7d2a9474d44424ae4f4399e64d76b6fb9e691695412e60' signature.txt
+          rm signature.txt
+      - name: Publish latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v0.6.6-build354 release-assets/* --target a92fe492334b0b8d3b209e436676e7811ea87f57 --title "OFMtouch v0.6.6 — Startup & Menu Polish · Build 354" --notes-file release-assets/OFMtouch-0.6.6-Build354-Release-Notes.md --latest
+      - name: Refresh release metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run release-manifest.yml --ref main -f release_tag=v0.6.6-build354
