@@ -138,6 +138,7 @@ export default function DashboardSidebar(props: DashboardSidebarProps): JSX.Elem
     { icon: <TrendingUp />, label: t("dashboard.transfers"), tab: "Transfers" },
   ];
   const worldItems: MobileNavItem[] = [
+    { icon: <Trophy />, label: t("phase64.achievements"), tab: "Achievements" },
     { icon: <Globe />, label: t("transfers.centre"), tab: "TransferCentre" },
     { icon: <Medal />, label: t("dashboard.hallOfFame"), tab: "HallOfFame" },
     { icon: <UsersRound />, label: t("dashboard.players"), tab: "Players" },

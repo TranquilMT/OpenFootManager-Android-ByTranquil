@@ -500,6 +500,7 @@ export interface CareerMilestone {
 }
 
 export interface ManagerCareerStats {
+  progression?: { unlocked: { id: string; date: string }[] };
   milestones?: CareerMilestone[];
   milestones_initialized?: boolean;
   matches_managed: number;

@@ -59,6 +59,8 @@ pub struct CareerMilestone {
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct ManagerCareerStats {
     #[serde(default)]
+    pub progression: crate::manager_progression::ManagerProgression,
+    #[serde(default)]
     pub milestones: Vec<CareerMilestone>,
     #[serde(default)]
     pub milestones_initialized: bool,

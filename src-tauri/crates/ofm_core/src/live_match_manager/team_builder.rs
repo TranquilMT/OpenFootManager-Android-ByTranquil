@@ -61,7 +61,9 @@ pub(super) fn build_team_with_bench(game: &Game, team_id: &str) -> (TeamData, Ve
             .and_then(|roles| roles.get(&p.id))
             .map(domain_to_engine_role)
             .unwrap_or(EnginePlayerRole::Standard);
-        to_engine_player(p, role, deployed)
+        let mut player = to_engine_player(p, role, deployed);
+        crate::achievements::apply_match_perks(game, team_id, &mut player);
+        player
     };
 
     // The user manages their own XI by hand (saved_xi_ids); AI clubs are managed
@@ -580,6 +582,43 @@ mod tests {
         );
         p.condition = condition;
         p
+    }
+
+    #[test]
+    fn progression_bonuses_are_match_only_capped_and_user_team_only() {
+        use crate::clock::GameClock;
+        use chrono::{TimeZone, Utc};
+        use domain::manager::Manager;
+        let mut manager = Manager::new(
+            "manager".into(),
+            "Test".into(),
+            "Manager".into(),
+            "1980-01-01".into(),
+            "GB".into(),
+        );
+        manager.hire("club".into());
+        for (id, _) in domain::manager_progression::ACHIEVEMENTS {
+            manager.career_stats.progression.unlock(id, "2026-08-01");
+        }
+        let mut own = mk("own", 99, 100);
+        own.team_id = Some("club".into());
+        let mut opponent = mk("opponent", 60, 100);
+        opponent.team_id = Some("other".into());
+        let game = Game::new(
+            GameClock::new(Utc.with_ymd_and_hms(2026, 8, 1, 12, 0, 0).unwrap()),
+            manager,
+            vec![],
+            vec![own, opponent],
+            vec![],
+            vec![],
+        );
+        let (team, _) = build_team_with_bench(&game, "club");
+        assert_eq!(team.players[0].composure, 100);
+        assert_eq!(team.players[0].decisions, 100);
+        assert_eq!(team.players[0].teamwork, 100);
+        assert_eq!(game.players[0].attributes.composure, 99);
+        let (other, _) = build_team_with_bench(&game, "other");
+        assert_eq!(other.players[0].composure, 60);
     }
 
     #[test]

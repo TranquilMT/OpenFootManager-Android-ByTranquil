@@ -326,6 +326,31 @@ mod tests {
     }
 
     #[test]
+    fn achievement_ledger_roundtrips_through_both_manager_queries() {
+        let db = test_db();
+        let mut manager = sample_manager();
+        manager
+            .career_stats
+            .progression
+            .unlock("trophy", "2026-09-01");
+        upsert_manager(db.conn(), &manager).unwrap();
+        assert_eq!(
+            load_manager(db.conn(), &manager.id)
+                .unwrap()
+                .unwrap()
+                .career_stats
+                .progression,
+            manager.career_stats.progression
+        );
+        assert_eq!(
+            load_all_managers(db.conn()).unwrap()[0]
+                .career_stats
+                .progression,
+            manager.career_stats.progression
+        );
+    }
+
+    #[test]
     fn test_career_stats_roundtrip() {
         let db = test_db();
         let mut mgr = sample_manager();

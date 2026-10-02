@@ -29,8 +29,8 @@ export function formatAppVersion(): string {
 
   const number = buildNumber();
   const releaseVersion = APP_VERSION.replace(/-nightly$/, "");
-  if (number) return `v${releaseVersion} Gameplay Polish - Build#${number} - NIGHTLYPRERELEASE`;
+  if (number) return `v${releaseVersion} Manager Progression - Build#${number} - NIGHTLYPRERELEASE`;
 
   const commit = APP_COMMIT === "unknown" ? "" : ` - ${APP_COMMIT}`;
-  return `v${releaseVersion} Gameplay Polish - NIGHTLYPRERELEASE${commit}`;
+  return `v${releaseVersion} Manager Progression - NIGHTLYPRERELEASE${commit}`;
 }

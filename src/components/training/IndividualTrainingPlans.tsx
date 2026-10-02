@@ -23,7 +23,9 @@ export default function IndividualTrainingPlans({ players }: { players: PlayerDa
               >
                 <div className="flex flex-wrap justify-between gap-2">
                   <span className="font-semibold">{player.full_name}</span>
-                  <Badge variant="neutral">{t(`training.focuses.${player.training_focus}.label`)}</Badge>
+                  <Badge variant="neutral">
+                    {t(`training.focuses.${player.training_focus}.label`)}
+                  </Badge>
                 </div>
                 <p>
                   {goal.status === "new"

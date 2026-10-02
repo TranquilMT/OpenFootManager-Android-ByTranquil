@@ -2,6 +2,7 @@ pub mod finance;
 pub mod identity;
 pub mod league;
 pub mod manager;
+pub mod manager_progression;
 pub mod message;
 pub mod national_team;
 pub mod negotiation;

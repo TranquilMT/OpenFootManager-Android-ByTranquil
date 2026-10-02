@@ -3,6 +3,7 @@ import EndOfSeasonScreen from "../EndOfSeasonScreen";
 import HomeTab from "../home/HomeTab";
 import type { DashboardTabContentModel } from "./dashboardTabContentModel";
 
+const AchievementsTab = lazy(() => import("../manager/AchievementsTab"));
 const SquadTab = lazy(() => import("../squad/SquadTab"));
 const TacticsTab = lazy(() => import("../tactics/TacticsTab"));
 const TrainingTab = lazy(() => import("../training/TrainingTab"));
@@ -86,6 +87,8 @@ export default function DashboardTabContent({ viewModel }: DashboardTabContentPr
         onGameUpdate={onGameUpdate}
       />
     );
+  } else if (activeTab === "Achievements") {
+    content = <AchievementsTab manager={gameState.manager} />;
   } else if (activeTab === "Training") {
     content = <TrainingTab gameState={gameState} onGameUpdate={onGameUpdate} />;
   } else if (activeTab === "Schedule") {

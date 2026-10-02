@@ -168,10 +168,14 @@ pub fn process_training(game: &mut Game, weekday_num: u32) {
         .teams
         .iter()
         .map(|t| {
-            let bonus = compute_coaching_bonus(
+            let mut bonus = compute_coaching_bonus(
                 staff_by_team.get(t.id.as_str()).map_or(&[], Vec::as_slice),
                 &t.training_focus,
             );
+            if game.manager.team_id.as_deref() == Some(t.id.as_str()) {
+                bonus.coaching_mult *= 1.0
+                    + f64::from(game.manager.career_stats.progression.training_percent()) / 100.0;
+            }
             let medical_facility_mult =
                 1.0 + f64::from(t.facilities.medical.saturating_sub(1)) * 0.1;
             let mut group_overrides = std::collections::HashMap::new();
