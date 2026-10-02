@@ -1,3 +1,4 @@
+import MatchdayQuickActions from "./MatchdayQuickActions";
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { useTranslation } from "react-i18next";
@@ -84,6 +85,8 @@ export default function MatchLive({
   const [speed, setSpeed] = useState<SimSpeed>(initialSpeed);
   const [activePanel, setActivePanel] = useState<ActivePanel>("events");
   const [isRunning, setIsRunning] = useState(true);
+  const [matchCommandPending, setMatchCommandPending] = useState(false);
+  const commandInFlightRef = useRef(false);
   const [showSubPanel, setShowSubPanel] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(settings.spoken_match_commentary);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -186,7 +189,7 @@ export default function MatchLive({
       timerRef.current = null;
     }
 
-    if (isRunning && speed !== "paused" && !isFinished && !showSubPanel) {
+    if (isRunning && speed !== "paused" && !isFinished && !showSubPanel && !matchCommandPending) {
       timerRef.current = setTimeout(async () => {
         await stepMatch(MINUTES_PER_TICK[speed]);
       }, SPEED_MS[speed]);
@@ -203,6 +206,7 @@ export default function MatchLive({
     stepMatch,
     isFinished,
     showSubPanel,
+    matchCommandPending,
   ]);
 
   // Auto-scroll event feed
@@ -222,7 +226,9 @@ export default function MatchLive({
 
   // Apply substitution
   const handleSubstitution = async (playerOffId: string, playerOnId: string) => {
-    if (!userSide || isSpectator) return;
+    if (!userSide || isSpectator || isFinished || commandInFlightRef.current) return;
+    commandInFlightRef.current = true;
+    setMatchCommandPending(true);
     try {
       const snap = await invoke<MatchSnapshot>("apply_match_command", {
         command: {
@@ -233,11 +239,16 @@ export default function MatchLive({
       setShowSubPanel(false);
     } catch (err) {
       console.error("Substitution failed:", err);
+    } finally {
+      commandInFlightRef.current = false;
+      setMatchCommandPending(false);
     }
   };
 
   const handleFormationChange = async (formation: string) => {
-    if (!userSide || isSpectator) return;
+    if (!userSide || isSpectator || isFinished || commandInFlightRef.current) return;
+    commandInFlightRef.current = true;
+    setMatchCommandPending(true);
     try {
       const snap = await invoke<MatchSnapshot>("apply_match_command", {
         command: { ChangeFormation: { side: userSide, formation } },
@@ -245,11 +256,16 @@ export default function MatchLive({
       onSnapshotUpdate(snap);
     } catch (err) {
       console.error("Formation change failed:", err);
+    } finally {
+      commandInFlightRef.current = false;
+      setMatchCommandPending(false);
     }
   };
 
   const handlePlayStyleChange = async (playStyle: string) => {
-    if (!userSide || isSpectator) return;
+    if (!userSide || isSpectator || isFinished || commandInFlightRef.current) return;
+    commandInFlightRef.current = true;
+    setMatchCommandPending(true);
     try {
       const snap = await invoke<MatchSnapshot>("apply_match_command", {
         command: { ChangePlayStyle: { side: userSide, play_style: playStyle } },
@@ -257,6 +273,9 @@ export default function MatchLive({
       onSnapshotUpdate(snap);
     } catch (err) {
       console.error("Play style change failed:", err);
+    } finally {
+      commandInFlightRef.current = false;
+      setMatchCommandPending(false);
     }
   };
 
@@ -351,6 +370,18 @@ export default function MatchLive({
             </div>
           </div>
 
+          {!isSpectator && userSide && (
+            <MatchdayQuickActions
+              disabled={isFinished || matchCommandPending}
+              playStyle={
+                userSide === "Home" ? snapshot.home_team.play_style : snapshot.away_team.play_style
+              }
+              onSubstitutions={() => setShowSubPanel(true)}
+              onPlayStyle={(style) => {
+                void handlePlayStyleChange(style);
+              }}
+            />
+          )}
           {/* Possession bar */}
           <div className="mt-2">
             <div className="flex items-center gap-2 text-xs">
