@@ -1,3 +1,4 @@
+import IndividualTrainingPlans from "./IndividualTrainingPlans";
 import { useState, type ReactNode } from "react";
 import {
   AlertTriangle,
@@ -222,6 +223,7 @@ export default function TrainingTab({ gameState, onGameUpdate }: TrainingTabProp
           intensityColors={INTENSITY_COLORS}
         />
 
+        <IndividualTrainingPlans players={roster} />
         <TrainingGroupsCard
           team={team}
           onGameUpdate={(game) => {

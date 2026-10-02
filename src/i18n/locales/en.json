@@ -4244,6 +4244,11 @@
     "reviewGrowth": "OVR change since review: {{value}}",
     "reviewMinutes": "Minutes since review: {{count}}",
     "reviewPending": "Progress tracking begins at the next date advance.",
-    "decisionInbox": "Decisions to make"
+    "decisionInbox": "Decisions to make",
+    "individualPlans": "Individual development plans",
+    "individualPlansHint": "Choose an individual focus in the roster below. Each monthly review sets a one-point OVR goal, capped by potential; progress is measured from the saved review.",
+    "newTrainingPlan": "New focus: goal tracking starts at the next review.",
+    "trainingCeiling": "At the current potential ceiling; focus on fitness and performance.",
+    "monthlyTarget": "Monthly goal: reach {{target}} OVR"
   }
 }

@@ -4244,6 +4244,11 @@
     "reviewGrowth": "Změna OVR od zprávy: {{value}}",
     "reviewMinutes": "Minuty od zprávy: {{count}}",
     "reviewPending": "Sledování začne při příštím posunu data.",
-    "decisionInbox": "Čekající rozhodnutí"
+    "decisionInbox": "Čekající rozhodnutí",
+    "individualPlans": "Individuální rozvojové plány",
+    "individualPlansHint": "Vyber individuální zaměření v kádru níže. Měsíční zpráva stanoví cíl zvýšit OVR o bod do hranice potenciálu; postup se měří od uložené zprávy.",
+    "newTrainingPlan": "Nové zaměření: sledování začne při příští zprávě.",
+    "trainingCeiling": "Současný potenciál je dosažen; zaměř se na kondici a výkon.",
+    "monthlyTarget": "Měsíční cíl: dosáhnout {{target}} OVR"
   }
 }

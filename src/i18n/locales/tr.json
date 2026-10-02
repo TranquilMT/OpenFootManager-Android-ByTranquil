@@ -4244,6 +4244,11 @@
     "reviewGrowth": "Rapordan bu yana OVR değişimi: {{value}}",
     "reviewMinutes": "Rapordan bu yana oynanan dakika: {{count}}",
     "reviewPending": "Gelişim takibi sonraki tarih ilerlemesinde başlar.",
-    "decisionInbox": "Bekleyen kararlar"
+    "decisionInbox": "Bekleyen kararlar",
+    "individualPlans": "Bireysel gelişim planları",
+    "individualPlansHint": "Aşağıdaki kadrodan bireysel odak seç. Her aylık rapor, potansiyelle sınırlı bir OVR puanı hedefi belirler; ilerleme kayıtlı rapordan ölçülür.",
+    "newTrainingPlan": "Yeni odak: hedef takibi sonraki raporda başlar.",
+    "trainingCeiling": "Mevcut potansiyel sınırına ulaştı; kondisyon ve performansa odaklan.",
+    "monthlyTarget": "Aylık hedef: {{target}} OVR değerine ulaş"
   }
 }

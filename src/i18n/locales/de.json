@@ -4244,6 +4244,11 @@
     "reviewGrowth": "Änderung der Gesamtstärke seit dem Bericht: {{value}}",
     "reviewMinutes": "Minuten seit dem Bericht: {{count}}",
     "reviewPending": "Die Erfassung beginnt beim nächsten Datumsfortschritt.",
-    "decisionInbox": "Offene Entscheidungen"
+    "decisionInbox": "Offene Entscheidungen",
+    "individualPlans": "Individuelle Entwicklungspläne",
+    "individualPlansHint": "Wähle unten einen individuellen Schwerpunkt. Jeder Monatsbericht setzt ein Ziel von einem Stärkepunkt, begrenzt durch das Potenzial; gemessen wird ab dem gespeicherten Bericht.",
+    "newTrainingPlan": "Neuer Schwerpunkt: die Erfassung beginnt beim nächsten Bericht.",
+    "trainingCeiling": "Aktuelles Potenzial erreicht; konzentriere dich auf Fitness und Leistung.",
+    "monthlyTarget": "Monatsziel: {{target}} Gesamtstärke erreichen"
   }
 }

@@ -4244,6 +4244,11 @@
     "reviewGrowth": "Variazione OVR dal rapporto: {{value}}",
     "reviewMinutes": "Minuti dal rapporto: {{count}}",
     "reviewPending": "Il monitoraggio inizia al prossimo avanzamento della data.",
-    "decisionInbox": "Decisioni da prendere"
+    "decisionInbox": "Decisioni da prendere",
+    "individualPlans": "Piani di sviluppo individuali",
+    "individualPlansHint": "Scegli un obiettivo individuale nella rosa sotto. Ogni rapporto mensile punta a un punto di OVR in più, entro il potenziale; i progressi partono dal rapporto salvato.",
+    "newTrainingPlan": "Nuovo obiettivo: il monitoraggio inizia al prossimo rapporto.",
+    "trainingCeiling": "Potenziale attuale raggiunto; concentrati su condizione e prestazioni.",
+    "monthlyTarget": "Obiettivo mensile: raggiungere {{target}} OVR"
   }
 }

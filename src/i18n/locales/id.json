@@ -4244,6 +4244,11 @@
     "reviewGrowth": "Perubahan OVR sejak laporan: {{value}}",
     "reviewMinutes": "Menit sejak laporan: {{count}}",
     "reviewPending": "Pelacakan dimulai saat tanggal dimajukan berikutnya.",
-    "decisionInbox": "Keputusan tertunda"
+    "decisionInbox": "Keputusan tertunda",
+    "individualPlans": "Rencana pengembangan individu",
+    "individualPlansHint": "Pilih fokus individu pada skuad di bawah. Setiap laporan bulanan menargetkan kenaikan satu poin OVR, dibatasi potensi; kemajuan diukur dari laporan tersimpan.",
+    "newTrainingPlan": "Fokus baru: pelacakan target dimulai pada laporan berikutnya.",
+    "trainingCeiling": "Batas potensi saat ini tercapai; utamakan kebugaran dan performa.",
+    "monthlyTarget": "Target bulanan: mencapai {{target}} OVR"
   }
 }
