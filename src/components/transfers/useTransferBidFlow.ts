@@ -176,7 +176,8 @@ export function useTransferBidFlow({
       bidFee <= 0 ||
       bidProjection === null ||
       bidProjection.exceeds_transfer_budget ||
-      bidProjection.exceeds_finance,
+      bidProjection.exceeds_finance ||
+      bidProjection.wage_policy_allows === false,
     openBidNegotiation,
     closeBidNegotiation,
     handleMakeBid,

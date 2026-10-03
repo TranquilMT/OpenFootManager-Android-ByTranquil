@@ -14,8 +14,6 @@ use domain::team::{
 use rand::RngExt;
 use serde::Serialize;
 
-const BOARD_SUPPORT_MIN_AMOUNT: i64 = 150_000;
-const BOARD_SUPPORT_MAX_AMOUNT: i64 = 1_000_000;
 const BOARD_SUPPORT_TARGET_RUNWAY_WEEKS: i64 = 8;
 const BOARD_SUPPORT_SATISFACTION_PENALTY: u8 = 12;
 const FINANCE_WARNING_SATISFACTION_PENALTY: u8 = 2;
@@ -215,7 +213,7 @@ pub fn calc_annual_wages(game: &Game, team_id: &str) -> i64 {
     player_wages + staff_wages + crate::board_room::weekly_salary(game, team_id) * 52
 }
 
-fn player_annual_wage_for_team(player: &domain::player::Player, team_id: &str) -> i64 {
+pub(crate) fn player_annual_wage_for_team(player: &domain::player::Player, team_id: &str) -> i64 {
     if let Some(loan) = &player.active_loan {
         let wage = i64::from(player.wage);
         let loan_share = (wage * i64::from(loan.wage_contribution_pct.min(100))) / 100;
@@ -267,7 +265,7 @@ fn estimated_weekly_matchday_income(game: &Game, team: &Team) -> i64 {
         return 0;
     }
 
-    calc_matchday(team.stadium_capacity, recent_home_match_count, 0.76, match_ticket_price(team))
+    calc_matchday(team.stadium_capacity, recent_home_match_count, match_attendance(team), match_ticket_price(team))
 }
 
 pub fn team_finance_snapshot(game: &Game, team_id: &str) -> Option<TeamFinanceSnapshot> {
@@ -566,12 +564,11 @@ pub fn preview_board_support(game: &Game, team_id: &str) -> Result<BoardSupportR
         return Err("be.error.finance.boardSupportAlreadyUsed".to_string());
     }
 
-    let reserve_target = std::cmp::max(
-        snapshot.weekly_wage_spend * BOARD_SUPPORT_TARGET_RUNWAY_WEEKS,
-        BOARD_SUPPORT_MIN_AMOUNT,
-    );
-    let support_amount =
-        (reserve_target - team.finance).clamp(BOARD_SUPPORT_MIN_AMOUNT, BOARD_SUPPORT_MAX_AMOUNT);
+    let revenue = crate::club_economy::annual_revenue_anchor(team);
+    let minimum_support = (revenue / 1000).clamp(500, 250_000);
+    let maximum_support = (revenue / 20).clamp(5_000, 20_000_000);
+    let reserve_target = (snapshot.weekly_wage_spend * BOARD_SUPPORT_TARGET_RUNWAY_WEEKS).max(minimum_support);
+    let support_amount = (reserve_target - team.finance).clamp(minimum_support, maximum_support);
     let transfer_budget_reduction = std::cmp::min(team.transfer_budget.max(0), support_amount / 2);
 
     Ok(BoardSupportResult {
@@ -961,7 +958,7 @@ pub fn process_weekly_finances(game: &mut Game) {
         }
         let home_count = count_recent_home_matches(game, &team.id);
         if home_count > 0 {
-            let receipts = calc_matchday(team.stadium_capacity, home_count, 0.76, match_ticket_price(team));
+            let receipts = calc_matchday(team.stadium_capacity, home_count, match_attendance(team), match_ticket_price(team));
             reqs.push(PostRequest::new(&team.id, receipts, CashKind::Matchday, post_date));
         }
         weekly_by_club.push((team.id.clone(), reqs));
@@ -1250,7 +1247,11 @@ mod tests {
     }
 }
 
-fn match_ticket_price(team: &Team) -> f64 {
+pub(crate) fn match_ticket_price(team: &Team) -> f64 {
     // Basic ticket equivalent, not a claim about actual club ticket prices.
     8.0 + f64::from(team.reputation.min(1000)) * 0.037
+}
+
+pub(crate) fn match_attendance(team: &Team) -> f64 {
+    0.45 + f64::from(team.reputation.min(1000)) * 0.0004
 }

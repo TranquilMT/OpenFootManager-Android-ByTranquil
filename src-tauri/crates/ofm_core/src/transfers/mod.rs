@@ -65,6 +65,8 @@ pub struct TransferBidFinancialProjection {
     pub projected_wage_budget_usage_pct: i64,
     pub exceeds_transfer_budget: bool,
     pub exceeds_finance: bool,
+    #[serde(default)]
+    pub wage_policy_allows: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pending_registration_date: Option<String>,
 }

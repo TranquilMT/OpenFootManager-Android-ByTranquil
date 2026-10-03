@@ -74,7 +74,7 @@ pub struct ContractTerminationCommandResponse {
 
 /// IPC and MCP accept weekly euros; the save and game rules use annual euros.
 pub(crate) fn annual_contract_wage(weekly: u32) -> Result<u32, String> {
-    if weekly == 0 { return Err("be.error.contracts.boardWagePolicy".into()); }
+    if weekly == 0 { return Err("be.error.contracts.invalidWage".into()); }
     weekly.checked_mul(52).ok_or_else(|| "be.error.finance.amountOverflow".into())
 }
 
@@ -829,13 +829,7 @@ mod tests {
     }
 
     #[test]
-    /// IPC and MCP accept weekly euros; the save and game rules use annual euros.
-pub(crate) fn annual_contract_wage(weekly: u32) -> Result<u32, String> {
-    if weekly == 0 { return Err("be.error.contracts.boardWagePolicy".into()); }
-    weekly.checked_mul(52).ok_or_else(|| "be.error.finance.amountOverflow".into())
-}
-
-fn serialize_session_status_uses_frontend_casing() {
+    fn serialize_session_status_uses_frontend_casing() {
         assert_eq!(
             super::serialize_session_status(RenewalSessionStatus::Idle),
             "idle"
@@ -905,7 +899,7 @@ fn serialize_session_status_uses_frontend_casing() {
 
         let response =
             terminate_contract_now_internal(&state, "player-1").expect("termination response");
-        assert_eq!(response.severance_cost, 132_000);
+        assert_eq!(response.severance_cost, 2_466);
         assert!(response.squad_safety.can_field_matchday_squad);
         let player = response
             .game

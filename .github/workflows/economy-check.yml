@@ -26,6 +26,6 @@ jobs:
           name: economy-formatting
           path: formatting.patch
       - name: Backend economy regression suite
-        run: cargo test --locked --manifest-path src-tauri/Cargo.toml -p domain -p engine -p ofm_core -p db --all-targets -- --nocapture
+        run: cargo test --locked --manifest-path src-tauri/Cargo.toml -p domain -p engine -p ofm_core -p db --all-targets --no-fail-fast -- --nocapture
       - name: Backend lint
         run: cargo clippy --locked --manifest-path src-tauri/Cargo.toml -p domain -p engine -p ofm_core -p db --all-targets -- -D warnings

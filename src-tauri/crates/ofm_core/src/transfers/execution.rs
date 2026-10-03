@@ -252,6 +252,11 @@ pub(super) fn execute_transfer(
         return Err(ERR_PLAYER_ALREADY_LOANED.into());
     }
 
+    validate_transfer_commitment(game, &player_snapshot, to_team_id, fee)?;
+    let current = game.clock.current_date.date_naive();
+    let age = market_player_age(&player_snapshot.date_of_birth, current);
+    let years = crate::generated_career::contract_model::years(age, 2).min(if age < 18 { 3 } else { 5 });
+    let new_contract_end = current.checked_add_months(chrono::Months::new(u32::from(years) * 12)).ok_or("be.error.contracts.unableToCalculateContractEndDate")?;
     let from_team_name = game
         .teams
         .iter()
@@ -308,6 +313,8 @@ pub(super) fn execute_transfer(
     // Move player
     if let Some(p) = game.players.iter_mut().find(|p| p.id == player_id) {
         p.team_id = Some(to_team_id.to_string());
+        p.wage = incoming_annual_wage(&player_snapshot);
+        p.contract_end = Some(new_contract_end.to_string());
         p.jersey_number = resolved_jersey_number;
         p.transfer_listed = false;
         p.loan_listed = false;
@@ -690,4 +697,21 @@ pub fn process_pending_loan_registrations(game: &mut Game) {
             }
         }
     }
+}
+
+pub(super) fn incoming_annual_wage(player: &domain::player::Player) -> u32 {
+    if player.wage > 0 { player.wage } else { crate::contracts::reference_player_wage(player) }
+}
+
+pub(super) fn validate_transfer_commitment(game: &Game, player: &domain::player::Player, buyer_id: &str, fee: u64) -> Result<(), String> {
+    let buyer = game.teams.iter().find(|t| t.id == buyer_id).ok_or("be.error.teamNotFound")?;
+    let fee = i64::try_from(fee).map_err(|_| "be.error.finance.amountOverflow")?;
+    let wage = i64::from(incoming_annual_wage(player));
+    let bill = crate::finances::calc_annual_wages(game, buyer_id);
+    if !crate::contract_wage_policy::wage_policy_allows_projection(buyer, bill, bill + wage) {
+        return Err(crate::contract_wage_policy::renewal_wage_policy_error_message(buyer));
+    }
+    if buyer.finance < fee.saturating_add(wage * 4 / 52) { return Err(ERR_INSUFFICIENT_FUNDS.into()); }
+    if buyer.transfer_budget < fee { return Err(ERR_TRANSFER_BUDGET_TOO_LOW.into()); }
+    Ok(())
 }

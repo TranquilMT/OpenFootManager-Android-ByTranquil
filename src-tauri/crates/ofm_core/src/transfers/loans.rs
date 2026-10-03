@@ -28,7 +28,7 @@ pub(crate) fn validate_loan_borrower_affordability(
         return Err(renewal_wage_policy_error_message(borrower_team));
     }
 
-    if borrower_team.finance < projected_wage_share {
+    if borrower_team.finance < projected_wage_share * 4 / 52 {
         return Err(ERR_INSUFFICIENT_FUNDS.to_string());
     }
 

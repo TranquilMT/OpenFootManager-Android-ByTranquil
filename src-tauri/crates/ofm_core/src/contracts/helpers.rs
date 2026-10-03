@@ -66,7 +66,8 @@ pub(crate) fn expected_wage(player: &Player, team: &Team, current_date: NaiveDat
     // Negotiate a modest annual rise, rather than compounding several large
     // market-value, morale and expiry premiums at every renewal.
     let age_pct = if age <= 23 { 105 } else if age <= 29 { 103 } else if age <= 32 { 100 } else { 95 };
-    let importance_pct = if player.squad_role == domain::player::SquadRole::Youth { 100 } else if player.ovr >= 85 { 105 } else if player.ovr >= 75 { 103 } else { 100 };
+    let ability = crate::player_rating::natural_ovr(player);
+    let importance_pct = if player.squad_role == domain::player::SquadRole::Youth { 100 } else if ability >= 85.0 { 105 } else if ability >= 75.0 { 103 } else { 100 };
     let expiry_pct = if remaining_contract_days(player, current_date) <= 180 { 103 } else { 100 };
     let low_morale_pct = if player.morale <= 50 { 103 } else { 100 };
     let low_club_pct = if team.reputation < 400 { 101 } else { 100 };
@@ -148,4 +149,8 @@ pub(crate) fn contract_days_remaining(
     let contract_end = contract_end?;
     let contract_end_date = NaiveDate::parse_from_str(contract_end, "%Y-%m-%d").ok()?;
     Some((contract_end_date - current_date).num_days())
+}
+
+pub(crate) fn maximum_contract_years(player: &Player, current: NaiveDate) -> u32 {
+    if player_age_on(current, &player.date_of_birth) < 18 { 3 } else { MAX_CONTRACT_YEARS }
 }

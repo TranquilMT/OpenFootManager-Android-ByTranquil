@@ -45,7 +45,7 @@ pub fn evaluate_renewal_offer(
     let expected_years = expected_contract_years(player, current_date);
     let minimum_wage = minimum_acceptable_wage(player.wage);
 
-    if offer.contract_years == 0 || offer.contract_years > MAX_CONTRACT_YEARS {
+    if offer.contract_years == 0 || offer.contract_years > maximum_contract_years(player, current_date) {
         let feedback = build_renewal_feedback(
             player,
             current_date,
@@ -178,7 +178,7 @@ pub fn propose_renewal(
         return Err(ERR_PLAYER_NOT_OWNED_BY_CLUB.to_string());
     }
 
-    if offer.contract_years == 0 || offer.contract_years > MAX_CONTRACT_YEARS {
+    if offer.contract_years == 0 || offer.contract_years > maximum_contract_years(&game.players[player_index], game.clock.current_date.date_naive()) {
         let current_date = game.clock.current_date.date_naive();
         let round = next_renewal_round(&game.players[player_index], None);
         let expected_wage = expected_wage(&game.players[player_index], &team, current_date);
@@ -284,12 +284,7 @@ pub fn propose_renewal(
     }
 
     if outcome.decision == RenewalDecision::Accepted {
-        if !renewal_wage_policy_allows(
-            game,
-            &team,
-            game.players[player_index].wage,
-            offer.annual_wage,
-        ) {
+        if !crate::contract_wage_policy::player_contract_wage_policy_allows(game, &game.players[player_index], offer.annual_wage) {
             return Err(renewal_wage_policy_error_message(&team));
         }
 
@@ -530,9 +525,9 @@ pub(crate) fn should_manual_renewal_fail_on_relationship(
 ) -> bool {
     let trust = player.morale_core.manager_trust;
     let relationship_margin = if trust <= 20 {
-        2_000
+        (expected_wage / 10).max(520)
     } else if trust <= 30 {
-        1_000
+        (expected_wage / 20).max(260)
     } else {
         0
     };

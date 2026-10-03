@@ -367,7 +367,7 @@ pub fn transfer_free_agent_preview(
 
     Ok(format!(
         "## Free Agent Preview\n\n| Field | Value |\n|-------|-------|\n| Weekly Wage Offered | {}/wk |\n| Current Annual Wage Bill | {} |\n| Projected Annual Wage Bill | {} |\n| Annual Wage Budget | {} |\n| Annual Soft Cap | {} |\n| Current Weekly Spend | {} |\n| Projected Weekly Spend | {} |\n| Cash Runway (weeks) | {} → {} |\n| Currently Over Budget | {} |\n| Policy Allows | {} |\n\nThis is a preview — no offer was made.",
-        crate::commands::contracts::annual_contract_wage(weekly_wage)?,
+        weekly_wage,
         p.current_annual_wage_bill, p.projected_annual_wage_bill,
         p.annual_wage_budget, p.annual_soft_cap,
         p.current_weekly_wage_spend, p.projected_weekly_wage_spend,

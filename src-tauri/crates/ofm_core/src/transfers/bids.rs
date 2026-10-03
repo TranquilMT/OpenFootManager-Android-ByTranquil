@@ -272,7 +272,7 @@ pub fn project_transfer_bid_financial_impact(
         .ok_or_else(|| "be.error.managedTeamNotFound".to_string())?;
 
     let annual_wage_bill_before = calc_annual_wages(game, &team.id);
-    let annual_wage_bill_after = annual_wage_bill_before + player.wage as i64;
+    let annual_wage_bill_after = annual_wage_bill_before + i64::from(incoming_annual_wage(player));
     let projected_wage_budget_usage_pct = if team.wage_budget > 0 {
         ((annual_wage_bill_after as f64 / team.wage_budget as f64) * 100.0).round() as i64
     } else {
@@ -306,10 +306,11 @@ pub fn project_transfer_bid_financial_impact(
         current_weekly_wage_spend: annual_wage_bill_before / 52,
         projected_weekly_wage_spend: annual_wage_bill_after / 52,
         weekly_wage_budget: team.wage_budget / 52,
-        incoming_player_weekly_wage: player.wage as i64 / 52,
+        incoming_player_weekly_wage: i64::from(incoming_annual_wage(player)) / 52,
         projected_wage_budget_usage_pct,
         exceeds_transfer_budget: transfer_budget_after < 0,
-        exceeds_finance: finance_after < 0,
+        exceeds_finance: finance_after < i64::from(incoming_annual_wage(player)) * 4 / 52,
+        wage_policy_allows: wage_policy_allows_projection(team, annual_wage_bill_before, annual_wage_bill_after),
         pending_registration_date,
     })
 }
@@ -371,6 +372,8 @@ pub fn make_transfer_bid(
     if my_team.transfer_budget < fee_i64 {
         return Err(ERR_TRANSFER_BUDGET_TOO_LOW.into());
     }
+
+    validate_transfer_commitment(game, player, &user_team_id, fee)?;
 
     let owner_team = game
         .teams
@@ -619,6 +622,7 @@ pub fn respond_to_offer(
         if buyer_team.transfer_budget < fee_i64 {
             return Err(ERR_TRANSFER_BUDGET_TOO_LOW.into());
         }
+        validate_transfer_commitment(game, player, &from_team_id, fee)?;
         ensure_transfer_cash_postable(game, &from_team_id, &user_team_id, fee)?;
     }
 
@@ -731,6 +735,7 @@ pub fn counter_offer(
         ((counter_ceiling as f64) * if round >= 3 && stalled { 1.03 } else { 1.08 }).round() as u64;
     let date = game.clock.current_date.format("%Y-%m-%d").to_string();
 
+    if accepted { validate_transfer_commitment(game, player, &buyer_team_id, requested_fee)?; }
     if accepted && register_immediately {
         ensure_transfer_cash_postable(game, &buyer_team_id, &user_team_id, requested_fee)?;
     }

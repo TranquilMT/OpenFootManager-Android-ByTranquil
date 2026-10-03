@@ -74,7 +74,7 @@ pub fn offer_free_agent_contract(
     let reference_wage = reference_player_wage(&game.players[player_index]);
     let minimum_wage = minimum_acceptable_wage(reference_wage);
 
-    if offer.contract_years == 0 || offer.contract_years > MAX_CONTRACT_YEARS {
+    if offer.contract_years == 0 || offer.contract_years > maximum_contract_years(&game.players[player_index], current_date) {
         return Ok(renewal_outcome(
             RenewalDecision::Rejected,
             None,
@@ -151,6 +151,7 @@ pub fn offer_free_agent_contract(
             return Err(renewal_wage_policy_error_message(&team));
         }
 
+        if team.finance < i64::from(offer.annual_wage) * 4 / 52 { return Err("be.error.transfers.insufficientFunds".into()); }
         let new_contract_end = current_date
             .checked_add_months(Months::new(offer.contract_years * 12))
             .ok_or(ERR_UNABLE_TO_CALCULATE_CONTRACT_END_DATE.to_string())?;

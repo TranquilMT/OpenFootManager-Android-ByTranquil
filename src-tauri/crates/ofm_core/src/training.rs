@@ -177,6 +177,7 @@ pub fn process_training(game: &mut Game, weekday_num: u32) {
                 bonus.coaching_mult *= 1.0
                     + f64::from(game.manager.career_stats.progression.training_percent()) / 100.0;
             }
+            bonus.coaching_mult *= 1.0 + f64::from(t.facilities.training.saturating_sub(1).min(9)) * 0.05;
             let medical_facility_mult =
                 1.0 + f64::from(t.facilities.medical.saturating_sub(1)) * 0.1;
             let mut group_overrides = std::collections::HashMap::new();
