@@ -184,3 +184,16 @@ pub(crate) fn contract_terminated_message(
     )
     .with_sender_i18n("be.sender.assistantManager", "be.role.assistantManager")
 }
+
+#[cfg(test)]
+mod balance_tests {
+    use super::*;
+    #[test]
+    fn one_year_severance_costs_one_annual_salary() {
+        let attrs = serde_json::from_value(serde_json::json!({"pace":60,"stamina":60,"strength":60,"agility":60,"passing":60,"shooting":60,"tackling":60,"dribbling":60,"defending":60,"positioning":60,"vision":60,"decisions":60})).unwrap();
+        let mut player = Player::new("p".into(), "P".into(), "Player".into(), "2000-01-01".into(), "GB".into(), domain::player::Position::Forward, attrs);
+        player.wage = 5_200_000;
+        player.contract_end = Some("2027-08-01".into());
+        assert_eq!(termination_severance_cost(&player, NaiveDate::from_ymd_opt(2026, 8, 1).unwrap()), 5_200_000);
+    }
+}
