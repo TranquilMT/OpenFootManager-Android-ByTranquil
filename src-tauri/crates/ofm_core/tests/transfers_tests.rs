@@ -2865,8 +2865,8 @@ fn transfer_succeeds_when_incoming_player_jersey_collides_with_buyer_squad() {
     );
     assert_eq!(
         incoming_after.jersey_number,
-        Some(1),
-        "incoming player whose #6 is taken must get the lowest free number (#1)"
+        Some(2),
+        "incoming outfield player gets #2 while #1 stays reserved for a goalkeeper"
     );
 }
 
