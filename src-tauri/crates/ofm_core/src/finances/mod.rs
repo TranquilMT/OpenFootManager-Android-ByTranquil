@@ -1,6 +1,6 @@
 mod matchday;
-pub(crate) use matchday::{match_attendance, match_ticket_price};
 use matchday::{count_recent_home_matches, estimated_weekly_matchday_income};
+pub(crate) use matchday::{match_attendance, match_ticket_price};
 
 pub mod journal;
 
@@ -483,7 +483,14 @@ fn marketing_campaign_gross_revenue(team: &Team, snapshot: &TeamFinanceSnapshot)
     // Financial distress is a reason to act, not a bonus to merchandise demand.
     let _ = snapshot;
     let revenue = crate::club_economy::annual_revenue_anchor(team);
-    let form_pct = 80 + team.form.iter().take(5).filter(|r| r.as_str() == "W").count() as i64 * 8;
+    let form_pct = 80
+        + team
+            .form
+            .iter()
+            .take(5)
+            .filter(|r| r.as_str() == "W")
+            .count() as i64
+            * 8;
     (revenue * 3 / 1000 * form_pct / 100).clamp(1_000, 1_500_000)
 }
 
@@ -532,7 +539,11 @@ fn sponsor_pitch_weekly_amount(
 ) -> i64 {
     let _ = snapshot;
     let revenue = crate::club_economy::annual_revenue_anchor(team);
-    let annual_pct = match current_position { Some(1) => 4, Some(2..=4) => 3, _ => 2 };
+    let annual_pct = match current_position {
+        Some(1) => 4,
+        Some(2..=4) => 3,
+        _ => 2,
+    };
     (revenue * annual_pct / 100 / 52).clamp(150, 600_000)
 }
 
@@ -561,7 +572,8 @@ pub fn preview_board_support(game: &Game, team_id: &str) -> Result<BoardSupportR
     let revenue = crate::club_economy::annual_revenue_anchor(team);
     let minimum_support = (revenue / 1000).clamp(500, 250_000);
     let maximum_support = (revenue / 20).clamp(5_000, 20_000_000);
-    let reserve_target = (snapshot.weekly_wage_spend * BOARD_SUPPORT_TARGET_RUNWAY_WEEKS).max(minimum_support);
+    let reserve_target =
+        (snapshot.weekly_wage_spend * BOARD_SUPPORT_TARGET_RUNWAY_WEEKS).max(minimum_support);
     let support_amount = (reserve_target - team.finance).clamp(minimum_support, maximum_support);
     let transfer_budget_reduction = std::cmp::min(team.transfer_budget.max(0), support_amount / 2);
 
@@ -636,7 +648,9 @@ pub fn preview_marketing_campaign(
 
     let gross_revenue = marketing_campaign_gross_revenue(team, &snapshot);
     let campaign_cost = marketing_campaign_cost(gross_revenue);
-    if team.finance < campaign_cost { return Err("be.error.transfers.insufficientFunds".into()); }
+    if team.finance < campaign_cost {
+        return Err("be.error.transfers.insufficientFunds".into());
+    }
 
     Ok(MarketingCampaignPreview {
         gross_revenue,
@@ -853,7 +867,8 @@ pub fn process_weekly_finances(game: &mut Game) {
     for player in &game.players {
         if let Some(loan) = &player.active_loan {
             for team_id in [&loan.parent_team_id, &loan.loan_team_id] {
-                *player_wages_by_team.entry(team_id.clone()).or_default() += player_annual_wage_for_team(player, team_id) / 52;
+                *player_wages_by_team.entry(team_id.clone()).or_default() +=
+                    player_annual_wage_for_team(player, team_id) / 52;
             }
         } else if let Some(team_id) = &player.team_id {
             *player_wages_by_team.entry(team_id.clone()).or_default() += player.wage as i64 / 52;
@@ -881,10 +896,16 @@ pub fn process_weekly_finances(game: &mut Game) {
 
     let post_date = game.clock.current_date.date_naive();
     // One bounded marker per club; salary settlement by the board is separate.
-    game.emitted_events.retain(|key| !key.starts_with("finance:weekly:") || key.ends_with(&today));
+    game.emitted_events
+        .retain(|key| !key.starts_with("finance:weekly:") || key.ends_with(&today));
     let mut weekly_by_club: Vec<(String, Vec<PostRequest>)> = Vec::new();
     for team in &game.teams {
-        if game.emitted_events.contains(&format!("finance:weekly:{}:{today}", team.id)) { continue; }
+        if game
+            .emitted_events
+            .contains(&format!("finance:weekly:{}:{today}", team.id))
+        {
+            continue;
+        }
         let mut reqs = Vec::new();
         let player_wages = player_wages_by_team.get(&team.id).copied().unwrap_or(0);
         let staff_wages = staff_wages_by_team.get(&team.id).copied().unwrap_or(0);
@@ -941,8 +962,18 @@ pub fn process_weekly_finances(game: &mut Game) {
         }
         let home_count = count_recent_home_matches(game, &team.id);
         if home_count > 0 {
-            let receipts = calc_matchday(team.stadium_capacity, home_count, match_attendance(team), match_ticket_price(team));
-            reqs.push(PostRequest::new(&team.id, receipts, CashKind::Matchday, post_date));
+            let receipts = calc_matchday(
+                team.stadium_capacity,
+                home_count,
+                match_attendance(team),
+                match_ticket_price(team),
+            );
+            reqs.push(PostRequest::new(
+                &team.id,
+                receipts,
+                CashKind::Matchday,
+                post_date,
+            ));
         }
         weekly_by_club.push((team.id.clone(), reqs));
     }
@@ -954,7 +985,8 @@ pub fn process_weekly_finances(game: &mut Game) {
     let mut posted_clubs = std::collections::HashSet::new();
     for (team_id, reqs) in weekly_by_club {
         if commit_weekly_posts(game, &reqs) {
-            game.emitted_events.insert(format!("finance:weekly:{team_id}:{today}"));
+            game.emitted_events
+                .insert(format!("finance:weekly:{team_id}:{today}"));
             posted_clubs.insert(team_id);
         }
     }
@@ -1229,4 +1261,3 @@ mod tests {
         );
     }
 }
-

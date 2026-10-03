@@ -81,14 +81,18 @@ fn forecast_uses_the_season_schedule_instead_of_repeating_last_week_income() {
         id: "forecast".into(),
         name: "Forecast League".into(),
         season: 1,
-        fixtures: ["2025-06-17", "2025-06-24"].into_iter().enumerate().map(|(id, date)| Fixture {
-            id: format!("home-{id}"),
-            date: date.into(),
-            home_team_id: "team1".into(),
-            away_team_id: "team2".into(),
-            status: FixtureStatus::Scheduled,
-            ..Default::default()
-        }).collect(),
+        fixtures: ["2025-06-17", "2025-06-24"]
+            .into_iter()
+            .enumerate()
+            .map(|(id, date)| Fixture {
+                id: format!("home-{id}"),
+                date: date.into(),
+                home_team_id: "team1".into(),
+                away_team_id: "team2".into(),
+                status: FixtureStatus::Scheduled,
+                ..Default::default()
+            })
+            .collect(),
         ..Default::default()
     });
     let planned = finances::team_finance_snapshot(&game, "team1").unwrap();
@@ -99,6 +103,9 @@ fn forecast_uses_the_season_schedule_instead_of_repeating_last_week_income() {
         fixture.result = Some(MatchResult::default());
     }
     let after = finances::team_finance_snapshot(&game, "team1").unwrap();
-    assert_eq!(after.weekly_recurring_income, planned.weekly_recurring_income);
+    assert_eq!(
+        after.weekly_recurring_income,
+        planned.weekly_recurring_income
+    );
     assert_eq!(after.projected_weekly_net, planned.projected_weekly_net);
 }
