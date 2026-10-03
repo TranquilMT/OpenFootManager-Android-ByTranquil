@@ -63,6 +63,7 @@ pub fn export_world_database_internal(
         stats,
         world_history: game.world_history.clone(),
         metadata: ofm_core::generator::WorldDataMetadata {
+            generated: game.emitted_events.contains("world:generated"),
             format_version: 2,
             world_id: format!(
                 "world-export-{}-{}",

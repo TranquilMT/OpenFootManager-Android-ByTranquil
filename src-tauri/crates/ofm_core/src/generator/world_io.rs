@@ -173,7 +173,7 @@ fn world_data_from_parts(
         news: vec![],
         stats: domain::stats::StatsState::default(),
         world_history: domain::world_history::WorldHistoryArchive::default(),
-        metadata: super::definitions::WorldDataMetadata::default(),
+        metadata: super::definitions::WorldDataMetadata { generated: true, ..Default::default() },
         extra_translations: std::collections::HashMap::new(),
         build_notices: Vec::new(),
     })

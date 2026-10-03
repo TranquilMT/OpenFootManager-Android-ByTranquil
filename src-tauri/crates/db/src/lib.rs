@@ -9,5 +9,6 @@ pub mod save_index_manager;
 pub mod save_load_error;
 pub mod save_manager;
 mod save_recovery;
+mod save_economy;
 
 pub use save_load_error::SaveLoadError;

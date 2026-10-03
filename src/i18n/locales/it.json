@@ -1802,7 +1802,7 @@
     "patchPlayers": "Più giocatori di spicco, incluse rare stelle da 96 e squadre in lotta per la promozione.",
     "patchMatches": "Più reazioni, tiri sui legni e telecronaca vocale facoltativa.",
     "patchMobile": "Comandi mobili, posta, nazionali e inizio carriera migliorati.",
-    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.6.7",
+    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.6.8",
     "patchPortraits": "20 volti fittizi di partenza rendono più vari i ritratti dei giocatori generati.",
     "patchWorld": "Un mondo calcistico più ampio copre 29 nazioni, con club più forti nelle Americhe e in Asia.",
     "patchTransfers": "Le strategie dei club guidano prestiti e trasferimenti, con offerte concorrenti e controlli sul budget.",
@@ -4329,5 +4329,11 @@
     "staffTransfers": "I contratti retribuiti dello staff e i trasferimenti tengono conto di stipendi e liquidità.",
     "economy": "Ricavi, costi, sponsorizzazioni e marketing sono proporzionati alle dimensioni del club.",
     "development": "Uno sviluppo più lento premia minuti giocati, allenatori e strutture. I portieri allenano abilità specifiche."
+  },
+  "phase68": {
+    "squads": "Le rose generate assegnano il numero 1 al portiere titolare e mantengono numeri di maglia unici.",
+    "sponsors": "I club affermati iniziano con sponsorizzazioni proporzionate al fatturato.",
+    "economy": "Le entrate iniziali seguono il calendario del campionato; i pagamenti degli sponsor e le risposte ai contratti sono protetti.",
+    "saves": "Una correzione unica preserva liquidità, contratti negoziati e storico della carriera."
   }
 }

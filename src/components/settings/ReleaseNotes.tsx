@@ -5,10 +5,10 @@ import { Sparkles, Wallet, Users, Heart, Bug, FileCheck } from "lucide-react";
 const ISSUE_URL = "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new";
 
 const HIGHLIGHT_KEYS = [
-  { key: "phase67.contracts", Icon: FileCheck },
-  { key: "phase67.staffTransfers", Icon: Users },
-  { key: "phase67.economy", Icon: Wallet },
-  { key: "phase67.development", Icon: Sparkles },
+  { key: "phase68.squads", Icon: FileCheck },
+  { key: "phase68.sponsors", Icon: Users },
+  { key: "phase68.economy", Icon: Wallet },
+  { key: "phase68.saves", Icon: Sparkles },
 ] as const;
 
 export function ReleaseNotes({ embedded = false }: { embedded?: boolean }) {

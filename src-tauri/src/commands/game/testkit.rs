@@ -411,6 +411,7 @@ pub(super) fn make_historical_snapshot_world() -> WorldData {
         stats: sample_stats_state(),
         world_history: archive,
         metadata: WorldDataMetadata {
+            generated: false,
             format_version: 2,
             world_id: "historical-snapshot".to_string(),
             kind: WorldDataKind::HistoricalSnapshot,

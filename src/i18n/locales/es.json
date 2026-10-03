@@ -1783,7 +1783,7 @@
     "patchPlayers": "Más jugadores destacados, incluidas raras estrellas de 96 y aspirantes al ascenso.",
     "patchMatches": "Más reacciones, tiros al palo y narración de voz opcional.",
     "patchMobile": "Mejoras en controles móviles, bandeja de entrada, selecciones y carrera.",
-    "patchWelcome": "¡Bienvenido a OFMtouch! Novedades de la v0.6.7",
+    "patchWelcome": "¡Bienvenido a OFMtouch! Novedades de la v0.6.8",
     "patchPortraits": "20 rostros ficticios de origen aportan más variedad a los retratos de los jugadores.",
     "patchWorld": "Un mundo futbolístico más amplio abarca 29 países, con clubes más fuertes en América y Asia.",
     "patchTransfers": "Las estrategias de los clubes guían cesiones y fichajes, con ofertas rivales y controles del presupuesto.",
@@ -4329,5 +4329,11 @@
     "staffTransfers": "Los contratos del personal y los fichajes tienen en cuenta salarios y reservas de efectivo.",
     "economy": "Ingresos, costes, patrocinios y marketing se ajustan al tamaño del club.",
     "development": "Un desarrollo más lento premia los minutos de juego, los entrenadores y las instalaciones. Los porteros entrenan habilidades específicas."
+  },
+  "phase68": {
+    "squads": "Las plantillas generadas asignan el número 1 al portero titular y mantienen dorsales únicos.",
+    "sponsors": "Los clubes consolidados comienzan con patrocinios acordes a sus ingresos.",
+    "economy": "Los ingresos iniciales se adaptan al calendario de liga; se protegen los pagos de patrocinio y las respuestas a contratos.",
+    "saves": "Una reparación única conserva el dinero, los contratos negociados y el historial de carrera."
   }
 }

@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.7",
+    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.8",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
@@ -4329,5 +4329,11 @@
     "staffTransfers": "Bezahlte Mitarbeiterverträge und Transferprüfungen berücksichtigen Gehälter und Geldreserven.",
     "economy": "Einnahmen, Kosten, Sponsoring und Marketing richten sich nach der Vereinsgröße.",
     "development": "Langsamere Entwicklung belohnt Spielzeit, Trainer und Trainingsanlagen. Torhüter trainieren ihre speziellen Fähigkeiten."
+  },
+  "phase68": {
+    "squads": "Generierte Kader geben dem Stammtorwart die Nummer 1 und vergeben jede Rückennummer nur einmal.",
+    "sponsors": "Etablierte Vereine starten mit Sponsorenverträgen, die zu ihrem Umsatz passen.",
+    "economy": "Die Anfangseinnahmen folgen dem Ligaspielplan; Sponsorenzahlungen und Vertragsantworten sind abgesichert.",
+    "saves": "Eine einmalige Korrektur erhält das Guthaben, ausgehandelte Verträge und die Karrierehistorie."
   }
 }

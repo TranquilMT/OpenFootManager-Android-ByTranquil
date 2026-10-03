@@ -371,6 +371,8 @@ pub enum WorldDataKind {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct WorldDataMetadata {
     #[serde(default)]
+    pub generated: bool,
+    #[serde(default)]
     pub format_version: u32,
     #[serde(default)]
     pub world_id: String,
@@ -385,6 +387,7 @@ pub struct WorldDataMetadata {
 impl Default for WorldDataMetadata {
     fn default() -> Self {
         Self {
+            generated: false,
             format_version: 1,
             world_id: Uuid::new_v4().to_string(),
             kind: WorldDataKind::RosterBaseline,

@@ -70,6 +70,7 @@ pub(super) fn build_game_from_world_data(
     } = world;
 
     let mut game = Game::new(clock, manager, teams, players, staff, vec![]);
+    game.emitted_events.insert(if metadata.generated { "world:generated" } else { "world:authored" }.into());
     if game
         .staff
         .iter()
@@ -88,7 +89,7 @@ pub(super) fn build_game_from_world_data(
         defined_competitions
     };
 
-    match metadata.kind {
+    let (mut game, stats) = match metadata.kind {
         ofm_core::generator::WorldDataKind::HistoricalSnapshot => {
             game.managers.extend(
                 managers
@@ -121,7 +122,9 @@ pub(super) fn build_game_from_world_data(
             apply_generated_past_history(&mut game, startup_options);
             (game, StatsState::default())
         }
-    }
+    };
+    ofm_core::commercial::polish_generated_career(&mut game);
+    (game, stats)
 }
 
 pub(super) fn infer_region_id(country_code: &str) -> String {

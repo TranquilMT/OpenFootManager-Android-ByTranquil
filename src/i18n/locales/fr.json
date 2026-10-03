@@ -1783,7 +1783,7 @@
     "patchPlayers": "Plus de talents, dont de rares stars notées 96 et de solides candidats à la montée.",
     "patchMatches": "Plus de réactions, des frappes sur les montants et un commentaire vocal facultatif.",
     "patchMobile": "Commandes mobiles, boîte de réception, sélections nationales et carrière améliorées.",
-    "patchWelcome": "Bienvenue dans OFMtouch ! Nouveautés de la v0.6.7",
+    "patchWelcome": "Bienvenue dans OFMtouch ! Nouveautés de la v0.6.8",
     "patchPortraits": "20 visages fictifs de référence diversifient les portraits des joueurs générés.",
     "patchWorld": "Un monde du football plus vaste couvre 29 nations, avec des clubs renforcés en Amérique et en Asie.",
     "patchTransfers": "La stratégie des clubs guide prêts et transferts, avec offres concurrentes et contrôle du budget.",
@@ -4329,5 +4329,11 @@
     "staffTransfers": "Les contrats rémunérés du personnel et les transferts tiennent compte des salaires et des réserves de trésorerie.",
     "economy": "Revenus, charges, sponsoring et marketing sont adaptés à la taille du club.",
     "development": "Une progression plus lente récompense le temps de jeu, les entraîneurs et les installations. Les gardiens travaillent leurs compétences spécifiques."
+  },
+  "phase68": {
+    "squads": "Les effectifs générés donnent le numéro 1 au gardien titulaire et conservent des numéros uniques.",
+    "sponsors": "Les clubs établis débutent avec des sponsors adaptés à leur chiffre d’affaires.",
+    "economy": "Les revenus initiaux suivent le calendrier du championnat ; les paiements des sponsors et les réponses aux contrats sont sécurisés.",
+    "saves": "Une correction unique préserve la trésorerie, les contrats négociés et l’historique de carrière."
   }
 }

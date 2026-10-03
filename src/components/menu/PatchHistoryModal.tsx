@@ -3,6 +3,10 @@ import { APP_VERSION } from "../../lib/appVersion";
 import { ReleaseNotes } from "../settings/ReleaseNotes";
 
 const HISTORY = [
+  {
+    version: "0.6.7",
+    keys: ["phase67.contracts", "phase67.staffTransfers", "phase67.economy", "phase67.development"],
+  },
   { version: "0.6.6", keys: ["phase66.brand", "phase66.intro", "phase66.footer", "phase66.notes"] },
   {
     version: "0.6.5",

@@ -32,22 +32,15 @@ pub fn resolve_jersey_for(game: &Game, player: &Player, team: &Team) -> Option<u
         .filter_map(|other| other.jersey_number)
         .collect();
     match player.jersey_number {
-        Some(current) if (1..=99).contains(&current) && !occupied.contains(&current) => {
-            Some(current)
-        }
+        Some(current) if (1..=99).contains(&current) && !occupied.contains(&current) => Some(current),
         _ => {
-            let preferred: &[u8] =
-                if player.position.to_group_position() == domain::player::Position::Goalkeeper {
-                    &[1, 13, 22]
-                } else {
-                    &[]
-                };
-            preferred
-                .iter()
-                .copied()
-                .chain(2u8..=99)
-                .find(|number| !occupied.contains(number))
-        }
+            let preferred: &[u8] = if player.position.to_group_position() == domain::player::Position::Goalkeeper {
+                &[1, 13, 22]
+            } else {
+                &[]
+            };
+            preferred.iter().copied().chain(2u8..=99).find(|number| !occupied.contains(number))
+        },
     }
 }
 
@@ -56,25 +49,14 @@ pub fn resolve_jersey_for(game: &Game, player: &Player, team: &Team) -> Option<u
 /// Academy players are unregistered until promotion to the senior squad.
 pub fn normalize_club_numbers(players: &mut [Player]) {
     use domain::player::{Position, SquadRole};
-    for player in players
-        .iter_mut()
-        .filter(|p| p.squad_role == SquadRole::Youth)
-    {
+    for player in players.iter_mut().filter(|p| p.squad_role == SquadRole::Youth) {
         player.jersey_number = None;
     }
-    let primary = players
-        .iter()
-        .enumerate()
-        .filter(|(_, p)| {
-            p.squad_role == SquadRole::Senior
-                && p.position.to_group_position() == Position::Goalkeeper
-        })
-        .max_by_key(|(_, p)| p.ovr)
-        .map(|(index, _)| index);
+    let primary = players.iter().enumerate()
+        .filter(|(_, p)| p.squad_role == SquadRole::Senior && p.position.to_group_position() == Position::Goalkeeper)
+        .max_by_key(|(_, p)| p.ovr).map(|(index, _)| index);
     if let Some(keeper) = primary {
-        let previous = players[keeper]
-            .jersey_number
-            .filter(|n| (2..=99).contains(n));
+        let previous = players[keeper].jersey_number.filter(|n| (2..=99).contains(n));
         for (index, player) in players.iter_mut().enumerate() {
             if index != keeper && player.jersey_number == Some(1) {
                 player.jersey_number = previous;
@@ -83,36 +65,15 @@ pub fn normalize_club_numbers(players: &mut [Player]) {
         players[keeper].jersey_number = Some(1);
     }
     let mut used = std::collections::HashSet::new();
-    if primary.is_some() {
-        used.insert(1);
-    }
-    for (index, player) in players
-        .iter_mut()
-        .enumerate()
-        .filter(|(_, p)| p.squad_role != SquadRole::Youth)
-    {
-        if primary == Some(index) {
+    if primary.is_some() { used.insert(1); }
+    for (index, player) in players.iter_mut().enumerate().filter(|(_, p)| p.squad_role != SquadRole::Youth) {
+        if primary == Some(index) { continue; }
+        if player.jersey_number.is_some_and(|n| (1..=99).contains(&n) && used.insert(n)) {
             continue;
         }
-        if player
-            .jersey_number
-            .is_some_and(|n| (1..=99).contains(&n) && used.insert(n))
-        {
-            continue;
-        }
-        let preferred: &[u8] = if player.position.to_group_position() == Position::Goalkeeper {
-            &[1, 13, 22]
-        } else {
-            &[]
-        };
-        player.jersey_number = preferred
-            .iter()
-            .copied()
-            .chain(2..=99)
-            .find(|n| !used.contains(n));
-        if let Some(n) = player.jersey_number {
-            used.insert(n);
-        }
+        let preferred: &[u8] = if player.position.to_group_position() == Position::Goalkeeper { &[1, 13, 22] } else { &[] };
+        player.jersey_number = preferred.iter().copied().chain(2..=99).find(|n| !used.contains(n));
+        if let Some(n) = player.jersey_number { used.insert(n); }
     }
 }
 
@@ -272,20 +233,14 @@ mod tests {
     #[test]
     fn unnumbered_outfield_player_reserves_one_for_goalkeepers() {
         let moving = make_player("forward", None, None);
-        assert_eq!(
-            resolve_jersey_for(&make_game(vec![]), &moving, &make_team("team-a")),
-            Some(2)
-        );
+        assert_eq!(resolve_jersey_for(&make_game(vec![]), &moving, &make_team("team-a")), Some(2));
     }
 
     #[test]
     fn invalid_preferred_numbers_are_repaired() {
         for number in [0, 100, 255] {
             let moving = make_player("forward", None, Some(number));
-            assert_eq!(
-                resolve_jersey_for(&make_game(vec![]), &moving, &make_team("team-a")),
-                Some(2)
-            );
+            assert_eq!(resolve_jersey_for(&make_game(vec![]), &moving, &make_team("team-a")), Some(2));
         }
     }
 
@@ -294,10 +249,7 @@ mod tests {
         let mut moving = make_player("keeper", None, None);
         moving.position = Position::Goalkeeper;
         let game = make_game(vec![make_player("keeper-one", Some("team-a"), Some(1))]);
-        assert_eq!(
-            resolve_jersey_for(&game, &moving, &make_team("team-a")),
-            Some(13)
-        );
+        assert_eq!(resolve_jersey_for(&game, &moving, &make_team("team-a")), Some(13));
     }
 
     #[test]
@@ -321,9 +273,7 @@ mod tests {
         assert_eq!(squad[3].jersey_number, None);
         let saved = squad.clone();
         normalize_club_numbers(&mut squad);
-        assert_eq!(
-            squad.iter().map(|p| p.jersey_number).collect::<Vec<_>>(),
-            saved.iter().map(|p| p.jersey_number).collect::<Vec<_>>()
-        );
+        assert_eq!(squad.iter().map(|p| p.jersey_number).collect::<Vec<_>>(), saved.iter().map(|p| p.jersey_number).collect::<Vec<_>>());
     }
+
 }

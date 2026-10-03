@@ -558,10 +558,7 @@ impl SaveManager {
             needs_resave = true;
         }
 
-        if !game.emitted_events.contains("economy:0.6.5") {
-            ofm_core::club_economy::upgrade_generated_career(&mut game)?;
-            needs_resave |= game.emitted_events.contains("economy:0.6.5");
-        }
+        needs_resave |= crate::save_economy::upgrade(&mut game)?;
 
         // Backfill OVR/potential for players from older saves that don't have them yet.
         // We use the game clock year so age is accurate.
@@ -2547,4 +2544,7 @@ mod tests {
         let loaded_again = sm.load_game(&save_id).unwrap();
         assert_eq!(loaded_again.cash_journal.len(), loaded.cash_journal.len());
     }
+    #[path = "economy_tests.rs"]
+    mod economy_tests;
+
 }
