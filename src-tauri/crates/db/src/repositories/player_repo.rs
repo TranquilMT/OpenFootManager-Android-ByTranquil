@@ -136,13 +136,8 @@ pub fn upsert_player(conn: &Connection, p: &Player) -> Result<(), String> {
     Ok(())
 }
 
-/// Insert or replace multiple players.
-pub fn upsert_players(conn: &Connection, players: &[Player]) -> Result<(), String> {
-    for p in players {
-        upsert_player(conn, p)?;
-    }
-    Ok(())
-}
+mod batch;
+pub use batch::upsert_players;
 
 fn parse_position(s: &str) -> Position {
     match s {
@@ -776,6 +771,9 @@ mod tests {
             "original #6 wearer must still exist in the DB"
         );
     }
+
+    #[path = "shirt_tests.rs"]
+    mod shirt_tests;
 
     #[test]
     fn test_load_players_by_team() {

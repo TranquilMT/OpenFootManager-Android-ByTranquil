@@ -1,10 +1,10 @@
 {
   "oversizedAggregate": {
-    "rust": 63365,
+    "rust": 63363,
     "ts": 35570
   },
   "allowedOversized": {
-    "src-tauri/crates/db/src/repositories/player_repo.rs": 1093,
+    "src-tauri/crates/db/src/repositories/player_repo.rs": 1091,
     "src-tauri/crates/db/src/save_manager.rs": 2550,
     "src-tauri/crates/engine/tests/live_match_tests.rs": 1854,
     "src-tauri/crates/engine/tests/simulation_tests.rs": 1057,

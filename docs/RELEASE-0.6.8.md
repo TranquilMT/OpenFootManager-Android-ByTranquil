@@ -6,6 +6,8 @@ This update follows v0.6.7 with corrections across squad registration, commercia
 
 Generated squads register their strongest senior goalkeeper as #1. Backup keepers prefer #13 and #22 when a number must be allocated; unnumbered outfield players start at #2. Invalid or duplicate numbers are repaired, including transferred players. Academy prospects remain unregistered until promotion. The roster and pitch continue to show the player's actual stored shirt number.
 
+Squad saves now apply valid shirt swaps atomically, including the goalkeeper #1 repair when loading an older career. Invalid duplicate assignments are rejected without changing saved players or contracts.
+
 ## Sponsorship and economy
 
 Established generated clubs start with fictional principal sponsors. Contract values scale with club turnover and reputation, with conservative 3–8% turnover shares. Top clubs therefore have much larger agreements than smaller clubs. Principal sponsorship is moved out of the already-budgeted operating receipts, so the visible deal is not a second source of the same revenue. Initial contracts last two to three years and renew annually at their agreed value; negotiated short deals keep their original expiry rules.
