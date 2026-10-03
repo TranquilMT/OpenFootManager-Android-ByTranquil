@@ -142,7 +142,7 @@ fn calc_cash_runway_weeks_uses_projected_weekly_net() {
 fn team_finance_snapshot_uses_canonical_backend_values() {
     let mut game = make_monday_game();
     game.teams[0].sponsorship = Some(Sponsorship {
-                        auto_renew: false,
+        auto_renew: false,
         sponsor_name: "Acme Corp".to_string(),
         base_value: 2_000,
         remaining_weeks: 8,
@@ -253,7 +253,7 @@ fn calc_upkeep_defaults_to_zero_for_now() {
 #[test]
 fn evaluate_sponsorship_bonus_sums_met_criteria_for_team_context() {
     let sponsorship = Sponsorship {
-                        auto_renew: false,
+        auto_renew: false,
         sponsor_name: "Acme Corp".to_string(),
         base_value: 100_000,
         remaining_weeks: 8,
@@ -284,7 +284,7 @@ fn weekly_sponsorship_payout_is_applied_and_duration_decrements_on_monday() {
     let initial_finance = game.teams[0].finance;
     game.teams[0].form = vec!["W".to_string(), "D".to_string(), "W".to_string()];
     game.teams[0].sponsorship = Some(Sponsorship {
-                        auto_renew: false,
+        auto_renew: false,
         sponsor_name: "Acme Corp".to_string(),
         base_value: 100_000,
         remaining_weeks: 2,
@@ -313,7 +313,7 @@ fn weekly_sponsorship_payout_is_applied_and_duration_decrements_on_monday() {
 fn sponsorship_expires_after_the_final_weekly_tick() {
     let mut game = make_monday_game();
     game.teams[0].sponsorship = Some(Sponsorship {
-                        auto_renew: false,
+        auto_renew: false,
         sponsor_name: "Acme Corp".to_string(),
         base_value: 100_000,
         remaining_weeks: 1,
@@ -562,7 +562,7 @@ fn sponsorship_income_prevents_false_low_runway_warning() {
     let mut game = make_monday_game();
     game.teams[0].finance = 3_400;
     game.teams[0].sponsorship = Some(Sponsorship {
-                        auto_renew: false,
+        auto_renew: false,
         sponsor_name: "Acme Corp".to_string(),
         base_value: 2_000,
         remaining_weeks: 8,
@@ -778,10 +778,24 @@ mod commercial;
 #[test]
 fn principal_sponsorship_renews_only_after_a_successful_pay_week() {
     let mut game = make_monday_game();
-    game.teams[0].sponsorship = Some(Sponsorship { auto_renew: true, sponsor_name: "Principal".into(), base_value: 1000, remaining_weeks: 1, bonus_criteria: vec![] });
+    game.teams[0].sponsorship = Some(Sponsorship {
+        auto_renew: true,
+        sponsor_name: "Principal".into(),
+        base_value: 1000,
+        remaining_weeks: 1,
+        bonus_criteria: vec![],
+    });
     finances::process_weekly_finances(&mut game);
-    assert_eq!(game.teams[0].sponsorship.as_ref().unwrap().remaining_weeks, 52);
-    let paid = game.cash_journal.iter().filter(|p| p.kind == domain::finance::CashKind::Sponsorship).map(|p| p.amount).sum::<i64>();
+    assert_eq!(
+        game.teams[0].sponsorship.as_ref().unwrap().remaining_weeks,
+        52
+    );
+    let paid = game
+        .cash_journal
+        .iter()
+        .filter(|p| p.kind == domain::finance::CashKind::Sponsorship)
+        .map(|p| p.amount)
+        .sum::<i64>();
     assert_eq!(paid, 1000);
     let mut loaded: Game = serde_json::from_str(&serde_json::to_string(&game).unwrap()).unwrap();
     finances::process_weekly_finances(&mut loaded);
@@ -793,7 +807,18 @@ fn principal_sponsorship_renews_only_after_a_successful_pay_week() {
 #[test]
 fn expired_sponsor_is_not_paid_in_forecast_or_journal() {
     let mut game = make_monday_game();
-    game.teams[0].sponsorship = Some(Sponsorship { auto_renew: false, sponsor_name: "Expired".into(), base_value: 1000, remaining_weeks: 0, bonus_criteria: vec![] });
+    game.teams[0].sponsorship = Some(Sponsorship {
+        auto_renew: false,
+        sponsor_name: "Expired".into(),
+        base_value: 1000,
+        remaining_weeks: 0,
+        bonus_criteria: vec![],
+    });
     finances::process_weekly_finances(&mut game);
-    assert!(!game.cash_journal.iter().any(|p| p.kind == domain::finance::CashKind::Sponsorship));
+    assert!(
+        !game
+            .cash_journal
+            .iter()
+            .any(|p| p.kind == domain::finance::CashKind::Sponsorship)
+    );
 }

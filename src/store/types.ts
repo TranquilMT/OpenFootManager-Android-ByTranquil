@@ -22,8 +22,6 @@ export interface FacilitiesData {
   scouting: number;
 }
 
-
-
 export type TransactionKind =
   | "PrizeMoney"
   | "ContractTermination"
