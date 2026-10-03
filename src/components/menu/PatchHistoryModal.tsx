@@ -3,6 +3,7 @@ import { APP_VERSION } from "../../lib/appVersion";
 import { ReleaseNotes } from "../settings/ReleaseNotes";
 
 const HISTORY = [
+  { version: "0.6.6", keys: ["phase66.brand", "phase66.intro", "phase66.footer", "phase66.notes"] },
   {
     version: "0.6.5",
     keys: ["phase65.colours", "phase65.values", "phase65.finances", "phase65.saves"],

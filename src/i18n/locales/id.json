@@ -1783,7 +1783,7 @@
     "patchPlayers": "Lebih banyak pemain unggulan, termasuk bintang langka berperingkat 96.",
     "patchMatches": "Lebih banyak reaksi, tembakan membentur tiang, dan komentar suara opsional.",
     "patchMobile": "Kontrol seluler, kotak masuk, tim nasional, dan awal karier ditingkatkan.",
-    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.6.6",
+    "patchWelcome": "Selamat datang di OFMtouch! Yang baru di v0.6.7",
     "patchPortraits": "20 wajah fiktif sumber membuat potret pemain hasil generasi lebih beragam.",
     "patchWorld": "Dunia sepak bola yang lebih luas mencakup 29 negara, dengan klub lebih kuat di Amerika dan Asia.",
     "patchTransfers": "Strategi klub memandu pinjaman dan transfer, dengan tawaran bersaing serta pemeriksaan anggaran.",
@@ -2871,7 +2871,8 @@
         "terminationWouldLeaveMatchdaySquadShort": "Mengakhiri kontrak ini akan membuat skuad kamu tidak dapat menurunkan XI pertandingan",
         "noAssistantManagerAssigned": "Tidak ada asisten manajer yang ditugaskan ke tim kamu",
         "playerHasNoTeam": "Pemain tidak memiliki tim",
-        "boardWagePolicy": "Perpanjangan diblokir oleh kebijakan gaji manajemen. Jaga gaji tahunan di sekitar {{budget}} untuk pulih."
+        "boardWagePolicy": "Perpanjangan diblokir oleh kebijakan gaji manajemen. Jaga gaji tahunan di sekitar {{budget}} untuk pulih.",
+        "invalidWage": "Masukkan gaji mingguan positif dalam bilangan bulat."
       },
       "scouting": {
         "scoutNotFound": "Scout tidak ditemukan",
@@ -4322,5 +4323,11 @@
     "thanks": "Terima kasih telah memainkan OFMtouch dan membantu menyempurnakannya. Masukan, tangkapan layar dan laporan bug Anda sangat berarti. Terus laporkan bug melalui GitHub.",
     "nightlyBadge": "NIGHTLY",
     "brand": "Identitas TOUCH di bawah logo asli, serta lencana build NIGHTLY terpisah."
+  },
+  "phase67": {
+    "contracts": "Gaji mingguan dan penawaran sesuai dengan penggajian tahunan. Perpanjangan kontrak, pesangon, dan pembagian gaji pinjaman diperbaiki.",
+    "staffTransfers": "Kontrak staf berbayar dan transfer memperhitungkan gaji serta cadangan kas.",
+    "economy": "Pendapatan, biaya, sponsor, dan pemasaran disesuaikan dengan ukuran klub.",
+    "development": "Perkembangan lebih lambat menghargai menit bermain, pelatih, dan fasilitas. Kiper melatih keterampilan khususnya."
   }
 }

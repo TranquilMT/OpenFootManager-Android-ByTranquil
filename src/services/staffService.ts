@@ -21,3 +21,5 @@ export async function hireStaff(staffId: string): Promise<GameStateData> {
 export async function releaseStaff(staffId: string): Promise<GameStateData> {
   return invoke<GameStateData>("release_staff", { staffId });
 }
+
+export async function previewStaffRelease(staffId: string): Promise<number> { return invoke<number>("preview_staff_release", { staffId }); }

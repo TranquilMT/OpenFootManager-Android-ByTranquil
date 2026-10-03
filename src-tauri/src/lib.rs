@@ -250,6 +250,7 @@ pub fn run() {
             set_team_kit_pattern,
             hire_staff,
             release_staff,
+            preview_staff_release,
             mark_message_read,
             delete_message,
             delete_messages,

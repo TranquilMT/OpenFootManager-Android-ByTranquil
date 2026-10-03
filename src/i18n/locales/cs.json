@@ -1783,7 +1783,7 @@
     "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
     "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
     "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
-    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.6",
+    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.7",
     "patchPortraits": "20 fiktivních výchozích tváří přináší pestřejší portréty hráčů.",
     "patchWorld": "Fotbalový svět zahrnuje 29 zemí a silnější kluby v Americe a Asii.",
     "patchTransfers": "Strategie klubů řídí hostování a přestupy včetně konkurenčních nabídek a kontroly rozpočtu.",
@@ -2871,7 +2871,8 @@
         "terminationWouldLeaveMatchdaySquadShort": "Ukončení této smlouvy by způsobilo, že váš kádr nebude schopen postavit zápasovou jedenáctku",
         "noAssistantManagerAssigned": "K vašemu týmu není přiřazen žádný asistent manažera",
         "playerHasNoTeam": "Hráč nemá žádný tým",
-        "boardWagePolicy": "Prodloužení smlouvy je zablokováno mzdovou politikou představenstva. Pro nápravu udržujte roční platy blízko částky {{budget}}."
+        "boardWagePolicy": "Prodloužení smlouvy je zablokováno mzdovou politikou představenstva. Pro nápravu udržujte roční platy blízko částky {{budget}}.",
+        "invalidWage": "Zadej kladnou týdenní mzdu jako celé číslo."
       },
       "scouting": {
         "scoutNotFound": "Skaut nebyl nalezen",
@@ -4322,5 +4323,11 @@
     "thanks": "Děkujeme, že hrajete OFMtouch a pomáháte jej zlepšovat. Vaše názory, snímky a hlášení mají význam. Nadále prosím hlaste chyby přes GitHub.",
     "nightlyBadge": "NIGHTLY",
     "brand": "Označení TOUCH pod původním logem a samostatný štítek sestavení NIGHTLY."
+  },
+  "phase67": {
+    "contracts": "Týdenní mzdy a nabídky odpovídají ročním mzdovým nákladům. Opraveny obnovy smluv, odstupné a podíly mezd při hostování.",
+    "staffTransfers": "Placené smlouvy personálu a přestupy zohledňují mzdy a hotovostní rezervy.",
+    "economy": "Příjmy, náklady, sponzorství a marketing odpovídají velikosti klubu.",
+    "development": "Pomalejší rozvoj odměňuje herní vytížení, trenéry a zázemí. Brankáři trénují specializované dovednosti."
   }
 }

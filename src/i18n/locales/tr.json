@@ -1783,7 +1783,7 @@
     "patchPlayers": "Nadir 96 puanlı yıldızlar dahil daha fazla öne çıkan oyuncu.",
     "patchMatches": "Daha fazla maç tepkisi, direğe çarpan şutlar ve isteğe bağlı sesli anlatım.",
     "patchMobile": "Mobil kontroller, gelen kutusu, millî takımlar ve kariyer başlangıcı iyileştirildi.",
-    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.6.6 yenilikleri",
+    "patchWelcome": "OFMtouch’a hoş geldiniz! v0.6.7 yenilikleri",
     "patchPortraits": "20 kurgusal kaynak yüz, üretilen oyuncu portrelerini daha çeşitli kılıyor.",
     "patchWorld": "Futbol dünyası 29 ülkeyi kapsıyor; Amerika ve Asya kulüpleri güçlendirildi.",
     "patchTransfers": "Kulüp stratejileri kiralık ve bonservisli transferleri, rakip teklifleri ve bütçe kontrollerini yönlendiriyor.",
@@ -2871,7 +2871,8 @@
         "terminationWouldLeaveMatchdaySquadShort": "Bu sözleşmenin feshi, kadronuzu maç günü 11'i çıkaramayacak duruma düşürür",
         "noAssistantManagerAssigned": "Takımınıza atanmış yardımcı antrenör yok",
         "playerHasNoTeam": "Oyuncunun takımı yok",
-        "boardWagePolicy": "Yenileme, yönetimin maaş politikası tarafından engellendi. Toparlanmak için yıllık maaşları {{budget}} civarında tutun."
+        "boardWagePolicy": "Yenileme, yönetimin maaş politikası tarafından engellendi. Toparlanmak için yıllık maaşları {{budget}} civarında tutun.",
+        "invalidWage": "Pozitif bir haftalık maaşı tam sayı olarak gir."
       },
       "scouting": {
         "scoutNotFound": "Gözlemci bulunamadı",
@@ -4322,5 +4323,11 @@
     "thanks": "OFMtouch oynadığınız ve gelişimine katkıda bulunduğunuz için teşekkürler. Geri bildirimleriniz, ekran görüntüleriniz ve hata raporlarınız değerlidir. Lütfen GitHub üzerinden hata bildirmeye devam edin.",
     "nightlyBadge": "NIGHTLY",
     "brand": "Orijinal logonun altında TOUCH yazısı ve ayrı bir NIGHTLY derleme rozeti."
+  },
+  "phase67": {
+    "contracts": "Haftalık maaşlar ve teklifler yıllık maaş giderleriyle uyumlu. Yenilemeler, tazminatlar ve kiralık oyuncu maaş payları düzeltildi.",
+    "staffTransfers": "Ücretli personel sözleşmeleri ve transferler maaşları ve nakit rezervlerini dikkate alıyor.",
+    "economy": "Gelirler, giderler, sponsorluk ve pazarlama kulüp büyüklüğüne göre ölçekleniyor.",
+    "development": "Daha yavaş gelişim; oynama süresini, antrenörleri ve tesisleri ödüllendiriyor. Kaleciler uzmanlık becerilerini çalışıyor."
   }
 }

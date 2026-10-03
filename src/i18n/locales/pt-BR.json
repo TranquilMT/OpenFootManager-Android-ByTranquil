@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mais craques, incluindo raras estrelas de nível 96 e candidatos ao acesso.",
     "patchMatches": "Mais reações, bolas na trave e narração por voz opcional.",
     "patchMobile": "Controles no celular, caixa de entrada, seleções e início de carreira melhorados.",
-    "patchWelcome": "Boas-vindas ao OFMtouch! Novidades da v0.6.6",
+    "patchWelcome": "Boas-vindas ao OFMtouch! Novidades da v0.6.7",
     "patchPortraits": "20 rostos fictícios de origem deixam os retratos dos jogadores mais variados.",
     "patchWorld": "Um mundo do futebol maior abrange 29 países, com clubes mais fortes nas Américas e na Ásia.",
     "patchTransfers": "As estratégias dos clubes orientam empréstimos e transferências, com ofertas concorrentes e controle do orçamento.",
@@ -2863,7 +2863,8 @@
         "terminationWouldLeaveMatchdaySquadShort": "Encerrar este contrato deixaria seu elenco sem condições de escalar um onze no dia do jogo",
         "noAssistantManagerAssigned": "Nenhum auxiliar técnico foi atribuído ao seu time",
         "playerHasNoTeam": "O jogador não tem time",
-        "boardWagePolicy": "A renovação foi bloqueada pela política salarial da diretoria. Mantenha os salários anuais perto de {{budget}} para se recuperar."
+        "boardWagePolicy": "A renovação foi bloqueada pela política salarial da diretoria. Mantenha os salários anuais perto de {{budget}} para se recuperar.",
+        "invalidWage": "Digite um salário semanal positivo e inteiro."
       },
       "scouting": {
         "scoutNotFound": "Olheiro não encontrado",
@@ -4322,5 +4323,11 @@
     "thanks": "Obrigado por jogar OFMtouch e ajudar a melhorá-lo. Suas opiniões, capturas e relatos fazem a diferença. Continue relatando erros pelo GitHub.",
     "nightlyBadge": "NIGHTLY",
     "brand": "Marca TOUCH abaixo do logotipo original e um selo NIGHTLY separado."
+  },
+  "phase67": {
+    "contracts": "Os salários semanais e as ofertas correspondem à folha salarial anual. Corrigidos renovações, indenizações e divisão salarial nos empréstimos.",
+    "staffTransfers": "Os contratos remunerados da equipe técnica e as transferências consideram salários e reservas de caixa.",
+    "economy": "Receitas, custos, patrocínios e marketing acompanham o tamanho do clube.",
+    "development": "Uma evolução mais lenta recompensa minutos em campo, treinadores e instalações. Os goleiros treinam habilidades específicas."
   }
 }

@@ -271,7 +271,7 @@ mod tests {
 
         assert!(response.previews.board_support.is_some());
         assert!(response.previews.sponsor_pitch.is_some());
-        assert!(response.previews.marketing_campaign.is_some());
+        assert!(response.previews.marketing_campaign.is_none());
     }
 
     #[test]
@@ -284,7 +284,8 @@ mod tests {
 
         let response = request_board_support_internal(&state).expect("response");
 
-        assert!(response.result.support_amount >= 150_000);
+        assert!(response.result.support_amount > 25_000);
+        assert!(response.result.support_amount <= ofm_core::club_economy::annual_revenue_anchor(&response.game.teams[0]) / 20);
         assert!(response.game.teams[0].finance > 0);
         assert_eq!(response.game.manager.satisfaction, 58);
 
@@ -304,7 +305,8 @@ mod tests {
 
         let response = request_sponsor_pitch_internal(&state).expect("response");
 
-        assert!(response.result.weekly_amount >= 40_000);
+        assert!(response.result.weekly_amount > 0);
+        assert!(response.result.weekly_amount * 52 <= ofm_core::club_economy::annual_revenue_anchor(&response.game.teams[0]) * 4 / 100);
         assert!(response
             .game
             .messages
@@ -325,7 +327,7 @@ mod tests {
         let state = StateManager::new();
         let mut game = make_game();
         game.teams[0].wage_budget = 50_000;
-        game.teams[0].finance = -40_000;
+        game.teams[0].finance = 60_000;
         state.set_game(game);
 
         let response = request_marketing_campaign_internal(&state).expect("response");
@@ -353,7 +355,7 @@ mod tests {
         let stored_game = state
             .get_game(|current| current.clone())
             .expect("stored game");
-        assert!(stored_game.teams[0].finance > -40_000);
+        assert!(stored_game.teams[0].finance > 60_000);
         assert!(stored_game
             .messages
             .iter()

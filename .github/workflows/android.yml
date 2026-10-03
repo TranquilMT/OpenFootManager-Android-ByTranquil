@@ -1,4 +1,4 @@
-name: OFMtouch Android Nightly 0.6.6 Startup & Menu Polish
+name: OFMtouch Android Nightly 0.6.7 Economy & Gameplay Balance
 
 on:
   workflow_dispatch:
@@ -58,7 +58,7 @@ jobs:
         run: npm run quality:check
 
       - name: Frontend regression tests
-        run: npm test
+        run: npm test -- --maxWorkers=2
 
       - name: Frontend lint
         run: npm run lint
@@ -92,8 +92,8 @@ jobs:
           OFM_CHANNEL: nightly
           VITE_APP_BUILD_NUMBER: ${{ github.run_number }}
         run: |
-          # Keep every nightly installable over the previous v0.6.6 build.
-          export OFM_ANDROID_VERSION_CODE=$((6600000 + GITHUB_RUN_NUMBER))
+          # Keep every nightly installable over the previous v0.6.7 build.
+          export OFM_ANDROID_VERSION_CODE=$((6700000 + GITHUB_RUN_NUMBER))
           node -e 'require("fs").writeFileSync("tauri.android.nightly.conf.json", JSON.stringify({bundle:{android:{versionCode:Number(process.env.OFM_ANDROID_VERSION_CODE)}}}))'
           npx tauri android build --debug --apk --target aarch64 --config tauri.android.nightly.conf.json
 
@@ -108,8 +108,8 @@ jobs:
           PACKAGE_LINE="$("$AAPT" dump badging "$APK" | sed -n '1p')"
           echo "$PACKAGE_LINE"
           [[ "$PACKAGE_LINE" == *"name='com.tranquilmt.openfootmanager'"* ]]
-          [[ "$PACKAGE_LINE" == *"versionName='0.6.6'"* ]]
-          [[ "$PACKAGE_LINE" == *"versionCode='$((6600000 + GITHUB_RUN_NUMBER))'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionName='0.6.7'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionCode='$((6700000 + GITHUB_RUN_NUMBER))'"* ]]
           APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
           "$APKSIGNER" verify --verbose "$APK"
           # A debug build is only an intermediate artifact. Final delivery is signed
@@ -120,13 +120,13 @@ jobs:
             exit 1
           fi
           mkdir -p dist-apk
-          cp "$APK" "dist-apk/OFMtouch-0.6.6-Startup-Menu-Polish-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk"
-          sha256sum "dist-apk/OFMtouch-0.6.6-Startup-Menu-Polish-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk" | tee "dist-apk/OFMtouch-0.6.6-Startup-Menu-Polish-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk.sha256"
+          cp "$APK" "dist-apk/OFMtouch-0.6.7-Economy-Gameplay-Balance-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk"
+          sha256sum "dist-apk/OFMtouch-0.6.7-Economy-Gameplay-Balance-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk" | tee "dist-apk/OFMtouch-0.6.7-Economy-Gameplay-Balance-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk.sha256"
 
       - name: Upload ARM64 APK for persistent signing
         uses: actions/upload-artifact@v4
         with:
-          name: OFMtouch-0.6.6-Startup-Menu-Polish-Build${{ github.run_number }}-CI-INTERMEDIATE
+          name: OFMtouch-0.6.7-Economy-Gameplay-Balance-Build${{ github.run_number }}-CI-INTERMEDIATE
           path: dist-apk/*
           if-no-files-found: error
 
@@ -151,16 +151,16 @@ jobs:
           APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
           INPUT="$(find dist-apk -name '*.apk' | head -n 1)"
           mkdir -p release-assets
-          OUTPUT="release-assets/OFMtouch-0.6.6-Startup-Menu-Polish-Build${GITHUB_RUN_NUMBER}-SIGNED.apk"
+          OUTPUT="release-assets/OFMtouch-0.6.7-Economy-Gameplay-Balance-Build${GITHUB_RUN_NUMBER}-SIGNED.apk"
           "$ZIPALIGN" -p -f 4 "$INPUT" "$OUTPUT"
           "$APKSIGNER" sign --ks "$KEYSTORE" --ks-key-alias "$RELEASE_KEY_ALIAS" --ks-pass env:RELEASE_STORE_PASSWORD --key-pass env:RELEASE_KEY_PASSWORD "$OUTPUT"
           "$APKSIGNER" verify --verbose --print-certs "$OUTPUT" | tee "$RUNNER_TEMP/ofmtouch-signature.txt"
           grep -qi '3f0d869bfaa5f7c78a7d2a9474d44424ae4f4399e64d76b6fb9e691695412e60' "$RUNNER_TEMP/ofmtouch-signature.txt"
-          git archive --format=zip --prefix=OFMtouch-0.6.6/ HEAD > "release-assets/OFMtouch-0.6.6-Build${GITHUB_RUN_NUMBER}-SOURCE.zip"
+          git archive --format=zip --prefix=OFMtouch-0.6.7/ HEAD > "release-assets/OFMtouch-0.6.7-Build${GITHUB_RUN_NUMBER}-SOURCE.zip"
           (cd release-assets && sha256sum *.apk *.zip > SHA256SUMS.txt)
           python - <<'PYNOTES'
           from pathlib import Path
-          notes = Path('docs/RELEASE-0.6.6.md').read_text().strip()
+          notes = Path('docs/RELEASE-0.6.7.md').read_text().strip()
           Path('release-notes.txt').write_text(notes + '\n\nAndroid ARM64. Install over your existing OFMtouch app to keep your saves. Full matching source and SHA-256 checksums are included.\n')
           PYNOTES
-          gh release create "v0.6.6-build${GITHUB_RUN_NUMBER}" release-assets/* --target "$GITHUB_SHA" --title "OFMtouch v0.6.6 — Startup & Menu Polish · Build ${GITHUB_RUN_NUMBER}" --notes-file release-notes.txt --latest
+          gh release create "v0.6.7-build${GITHUB_RUN_NUMBER}" release-assets/* --target "$GITHUB_SHA" --title "OFMtouch v0.6.7 — Economy & Gameplay Balance · Build ${GITHUB_RUN_NUMBER}" --notes-file release-notes.txt --latest

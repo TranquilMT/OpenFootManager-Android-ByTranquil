@@ -563,6 +563,7 @@ mod tests {
 
     fn make_free_agent_game() -> Game {
         let mut game = make_game();
+        game.teams[0].wage_budget = 100_000;
         let player = &mut game.players[0];
         player.team_id = None;
         player.contract_end = None;
@@ -768,7 +769,7 @@ mod tests {
         state.set_game(make_free_agent_game());
 
         let response =
-            offer_free_agent_contract_internal(&state, "player-1", 4_000, 3).expect("response");
+            offer_free_agent_contract_internal(&state, "player-1", 70_000, 3).expect("response");
 
         assert!(matches!(response.outcome, RenewalDecision::Accepted));
         assert_eq!(response.session_status, "agreed");

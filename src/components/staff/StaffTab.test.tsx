@@ -391,6 +391,7 @@ describe("StaffTab", () => {
     const onGameUpdate = vi.fn();
     invokeMock.mockImplementation(async (command: string) => {
       if (command === "get_staff") return makeStaffSlice(staff);
+      if (command === "preview_staff_release") return 1200;
       return updatedState;
     });
 
@@ -404,6 +405,10 @@ describe("StaffTab", () => {
       within(screen.getByRole("menu")).getByRole("menuitem", { name: "Release staff" }),
     );
 
+    const dialog = await screen.findByRole("dialog");
+    await waitFor(() => expect(within(dialog).getByText(/1,200/)).toBeInTheDocument());
+    expect(invokeMock).not.toHaveBeenCalledWith("release_staff", { staffId: "staff-1" });
+    fireEvent.click(within(dialog).getByRole("button", { name: "Release staff" }));
     await waitFor(() => {
       expect(invokeMock).toHaveBeenCalledWith("release_staff", { staffId: "staff-1" });
       expect(onGameUpdate).toHaveBeenCalledWith(updatedState);

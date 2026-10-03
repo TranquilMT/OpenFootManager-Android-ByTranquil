@@ -34,3 +34,25 @@ fn accepted_transfer_assigns_paid_age_appropriate_contract() {
     assert_eq!(player.contract_end.as_deref(), Some("2029-08-01"));
     assert!(ofm_core::finances::journal_matches_cash(&game));
 }
+
+#[test]
+fn loan_offer_rejects_terms_when_user_cannot_cover_loan_wage_share() {
+    let mut player = make_player("player-loan-cash");
+    player.loan_listed = true;
+    player.wage = 120_000;
+    let mut game = make_game_with_player(player, vec![], 5_000, 2_000_000);
+    game.teams[0].wage_budget = 500_000;
+
+    let error = make_loan_offer(&mut game, "player-loan-cash", "2027-01-01", 100, None)
+        .expect_err("loan should be blocked by available finance");
+
+    assert_eq!(error, "be.error.transfers.insufficientFunds");
+    let player = game
+        .players
+        .iter()
+        .find(|player| player.id == "player-loan-cash")
+        .expect("player should exist");
+    assert!(player.active_loan.is_none());
+    assert!(player.loan_offers.is_empty());
+}
+

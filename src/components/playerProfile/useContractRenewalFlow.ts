@@ -17,7 +17,7 @@ import {
   shouldDisableRenewalSubmit,
 } from "./PlayerProfile.renewal";
 
-import { annualAmountToWeeklyCommitment } from "../../lib/finance";
+import { annualAmountToWeeklyCommitment, weeklyWageMessageParams } from "../../lib/finance";
 
 interface UseContractRenewalFlowArgs {
   player: PlayerData;
@@ -289,7 +289,7 @@ export function useContractRenewalFlow({
 
     if (outcome.showsAssistantNote) {
       setRenewalError(
-        resolveBackendText(delegatedCase.note_key, delegatedCase.note, delegatedCase.note_params),
+        resolveBackendText(delegatedCase.note_key, delegatedCase.note, weeklyWageMessageParams(delegatedCase.note_params)),
       );
     }
   }

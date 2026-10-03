@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.6",
+    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.7",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
@@ -2863,7 +2863,8 @@
         "terminationWouldLeaveMatchdaySquadShort": "Eine Vertragsauflösung würde deinen Kader daran hindern, am Spieltag eine Startelf zu stellen",
         "noAssistantManagerAssigned": "Kein Co-Trainer ist deinem Team zugewiesen",
         "playerHasNoTeam": "Der Spieler hat kein Team",
-        "boardWagePolicy": "Die Verlängerung wird durch die Gehaltspolitik des Vorstands blockiert. Halte die Jahresgehälter nahe bei {{budget}}, um dich zu erholen."
+        "boardWagePolicy": "Die Verlängerung wird durch die Gehaltspolitik des Vorstands blockiert. Halte die Jahresgehälter nahe bei {{budget}}, um dich zu erholen.",
+        "invalidWage": "Gib ein positives Wochengehalt als ganze Zahl ein."
       },
       "scouting": {
         "scoutNotFound": "Scout nicht gefunden",
@@ -4322,5 +4323,11 @@
     "thanks": "Danke, dass ihr OFMtouch spielt und verbessert. Eure Rückmeldungen, Screenshots und Fehlerberichte helfen uns. Meldet Fehler bitte weiterhin über GitHub.",
     "nightlyBadge": "NIGHTLY",
     "brand": "TOUCH-Schriftzug unter dem ursprünglichen Logo und ein separates NIGHTLY-Build-Abzeichen."
+  },
+  "phase67": {
+    "contracts": "Wochengehälter und Angebote passen jetzt zur jährlichen Gehaltsabrechnung. Verlängerungen, Abfindungen und Gehaltsanteile bei Leihen sind korrigiert.",
+    "staffTransfers": "Bezahlte Mitarbeiterverträge und Transferprüfungen berücksichtigen Gehälter und Geldreserven.",
+    "economy": "Einnahmen, Kosten, Sponsoring und Marketing richten sich nach der Vereinsgröße.",
+    "development": "Langsamere Entwicklung belohnt Spielzeit, Trainer und Trainingsanlagen. Torhüter trainieren ihre speziellen Fähigkeiten."
   }
 }

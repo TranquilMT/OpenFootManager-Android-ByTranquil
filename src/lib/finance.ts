@@ -237,3 +237,11 @@ export function getTeamFinanceSnapshot(
     ),
   };
 }
+
+/** Salary parameters in saved renewal reports are annual euros. */
+export function weeklyWageMessageParams(params?: Record<string, string>): Record<string, string> {
+  const result = { ...params };
+  const annual = Number(result.wage);
+  if (result.wage !== undefined && Number.isFinite(annual)) result.wage = String(Math.ceil(Math.max(0, annual) / 52));
+  return result;
+}

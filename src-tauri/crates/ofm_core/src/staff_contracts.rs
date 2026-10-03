@@ -33,12 +33,10 @@ pub fn hire(game: &mut Game, team_id: &str, staff_id: &str) -> Result<(), String
 
 pub fn release(game: &mut Game, team_id: &str, staff_id: &str) -> Result<(), String> {
     let index = game.staff.iter().position(|s| s.id == staff_id).ok_or("be.error.staffMemberNotFound")?;
-    let staff = &game.staff[index];
-    if staff.team_id.as_deref() != Some(team_id) { return Err("be.error.staffMemberNotInTeam".into()); }
+    if game.staff[index].team_id.as_deref() != Some(team_id) { return Err("be.error.staffMemberNotInTeam".into()); }
     let team = game.teams.iter().find(|t| t.id == team_id).ok_or("be.error.teamNotFound")?;
     let today = game.clock.current_date.date_naive();
-    let days = staff.contract_end.as_deref().and_then(|d| chrono::NaiveDate::parse_from_str(d, "%Y-%m-%d").ok()).map(|end| (end - today).num_days().max(0)).unwrap_or(28);
-    let compensation = (i64::from(staff.wage) * days + 364) / 365;
+    let compensation = termination_cost(game, team_id, staff_id)?;
     if team.finance < compensation { return Err("be.error.transfers.insufficientFunds".into()); }
     crate::finances::post(game, team_id, -compensation, crate::finances::CashKind::ContractTermination, today)?;
     game.staff[index].team_id = None;
@@ -65,3 +63,11 @@ pub(crate) fn initialize_generated(staff: &mut Staff, opening_year: u32) {
     staff.contract_end = Some(format!("{}-06-30", opening_year.saturating_add(2)));
 }
 
+
+pub fn termination_cost(game: &Game, team_id: &str, staff_id: &str) -> Result<i64, String> {
+ let staff = game.staff.iter().find(|s| s.id == staff_id).ok_or("be.error.staffMemberNotFound")?;
+ if staff.team_id.as_deref() != Some(team_id) { return Err("be.error.staffMemberNotInTeam".into()); }
+ let today = game.clock.current_date.date_naive();
+ let days = staff.contract_end.as_deref().and_then(|d| chrono::NaiveDate::parse_from_str(d, "%Y-%m-%d").ok()).map(|end| (end-today).num_days().max(0)).unwrap_or(28);
+ Ok((i64::from(staff.wage)*days+364)/365)
+}

@@ -212,7 +212,7 @@ fn request_marketing_campaign_rejects_healthy_club() {
 fn request_marketing_campaign_respects_cooldown() {
     let mut game = make_monday_game();
     game.teams[0].wage_budget = 50_000;
-    game.teams[0].finance = 10_000;
+    game.teams[0].finance = 60_000;
 
     finances::request_marketing_campaign(&mut game, "team1").expect("first campaign");
 

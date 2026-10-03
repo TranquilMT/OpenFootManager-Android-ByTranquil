@@ -1783,7 +1783,7 @@
     "patchPlayers": "Más jugadores destacados, incluidas raras estrellas de 96 y aspirantes al ascenso.",
     "patchMatches": "Más reacciones, tiros al palo y narración de voz opcional.",
     "patchMobile": "Mejoras en controles móviles, bandeja de entrada, selecciones y carrera.",
-    "patchWelcome": "¡Bienvenido a OFMtouch! Novedades de la v0.6.6",
+    "patchWelcome": "¡Bienvenido a OFMtouch! Novedades de la v0.6.7",
     "patchPortraits": "20 rostros ficticios de origen aportan más variedad a los retratos de los jugadores.",
     "patchWorld": "Un mundo futbolístico más amplio abarca 29 países, con clubes más fuertes en América y Asia.",
     "patchTransfers": "Las estrategias de los clubes guían cesiones y fichajes, con ofertas rivales y controles del presupuesto.",
@@ -2863,7 +2863,8 @@
         "terminationWouldLeaveMatchdaySquadShort": "Rescindir este contrato dejaría a tu plantilla sin poder presentar un once para el día del partido",
         "noAssistantManagerAssigned": "No hay un segundo entrenador asignado a tu equipo",
         "playerHasNoTeam": "El jugador no tiene equipo",
-        "boardWagePolicy": "La renovación está bloqueada por la política salarial de la directiva. Mantén los salarios anuales cerca de {{budget}} para recuperarte."
+        "boardWagePolicy": "La renovación está bloqueada por la política salarial de la directiva. Mantén los salarios anuales cerca de {{budget}} para recuperarte.",
+        "invalidWage": "Introduce un salario semanal positivo y entero."
       },
       "scouting": {
         "scoutNotFound": "Ojeador no encontrado",
@@ -4322,5 +4323,11 @@
     "thanks": "Gracias por jugar a OFMtouch y ayudar a mejorarlo. Vuestros comentarios, capturas e informes son valiosos. Seguid notificando errores a través de GitHub.",
     "nightlyBadge": "NIGHTLY",
     "brand": "Marca TOUCH bajo el logotipo original y una insignia NIGHTLY separada."
+  },
+  "phase67": {
+    "contracts": "Los salarios semanales y las ofertas ahora coinciden con la nómina anual. Se corrigen renovaciones, indemnizaciones y reparto salarial de cesiones.",
+    "staffTransfers": "Los contratos del personal y los fichajes tienen en cuenta salarios y reservas de efectivo.",
+    "economy": "Ingresos, costes, patrocinios y marketing se ajustan al tamaño del club.",
+    "development": "Un desarrollo más lento premia los minutos de juego, los entrenadores y las instalaciones. Los porteros entrenan habilidades específicas."
   }
 }

@@ -1,6 +1,7 @@
 import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 
+import { weeklyWageMessageParams } from "../../lib/finance";
 import { formatExactMoney } from "../../lib/helpers";
 import type { MessageData } from "../../store/gameStore";
 import { resolveBackendText } from "../../utils/backendI18n";
@@ -25,7 +26,7 @@ export default function InboxDelegatedRenewalReport({
       return String(value ?? 0);
     }
 
-    return formatExactMoney(amount);
+    return formatExactMoney(Math.floor(amount / 52));
   };
 
   if (!report || report.cases.length === 0) {
@@ -39,7 +40,7 @@ export default function InboxDelegatedRenewalReport({
     >
       <div className="space-y-2">
         {report.cases.map((renewalCase, index) => {
-          const detail = resolveBackendText(renewalCase.note_key, "", renewalCase.note_params);
+          const detail = resolveBackendText(renewalCase.note_key, "", weeklyWageMessageParams(renewalCase.note_params));
           const formattedWage = formatMoneyParam(renewalCase.agreed_wage);
 
           const line =
@@ -50,7 +51,7 @@ export default function InboxDelegatedRenewalReport({
                   {
                     player: renewalCase.player_name,
                     years: String(renewalCase.agreed_years ?? 0),
-                    wage: String(renewalCase.agreed_wage ?? 0),
+                    wage: String(Math.floor((renewalCase.agreed_wage ?? 0) / 52)),
                   },
                 )
               : renewalCase.status === "stalled"

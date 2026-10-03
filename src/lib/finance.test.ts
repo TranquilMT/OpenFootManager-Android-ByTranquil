@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { PlayerData, StaffData, TeamData } from "../store/gameStore";
 import {
   annualAmountToWeeklyCommitment,
+  weeklyWageMessageParams,
   getAnnualWageBill,
   getCashRunwayWeeks,
   getPlayerAnnualWageCommitment,
@@ -224,4 +225,10 @@ describe("0.6.5 operating cash flow", () => {
     expect(snapshot.projectedWeeklyNet).toBe(40_000);
     expect(snapshot.cashRunwayWeeks).toBeNull();
   });
+});
+
+it("converts report wages to weekly pay while keeping budgets annual", () => {
+  const saved = { wage: "5200000", budget: "25000000" };
+  expect(weeklyWageMessageParams(saved)).toEqual({ wage: "100000", budget: "25000000" });
+  expect(saved.wage).toBe("5200000");
 });

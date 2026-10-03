@@ -1783,7 +1783,7 @@
     "patchPlayers": "新增更多优秀球员，包括稀有的96分球星和升级热门球队。",
     "patchMatches": "比赛解说更加丰富，加入门框射门和可选语音解说。",
     "patchMobile": "改进移动端操作、收件箱、国家队与生涯创建。",
-    "patchWelcome": "欢迎来到 OFMtouch！v0.6.6 更新内容",
+    "patchWelcome": "欢迎来到 OFMtouch！v0.6.7 更新内容",
     "patchPortraits": "20 张虚构原始人脸让生成球员的肖像更加多样。",
     "patchWorld": "足球世界扩展至 29 个国家，美洲和亚洲的俱乐部实力也得到提升。",
     "patchTransfers": "俱乐部策略会影响租借和转会，包括竞争报价与预算检查。",
@@ -2863,7 +2863,8 @@
         "terminationWouldLeaveMatchdaySquadShort": "终止这份合同会让你的阵容无法在比赛日排出首发十一人",
         "noAssistantManagerAssigned": "你的球队没有分配助理教练",
         "playerHasNoTeam": "该球员没有所属球队",
-        "boardWagePolicy": "这次续约被董事会薪资政策阻止。请将年度工资控制在接近 {{budget}} 的水平以恢复状况。"
+        "boardWagePolicy": "这次续约被董事会薪资政策阻止。请将年度工资控制在接近 {{budget}} 的水平以恢复状况。",
+        "invalidWage": "请输入正整数周薪。"
       },
       "scouting": {
         "scoutNotFound": "未找到球探",
@@ -4322,5 +4323,11 @@
     "thanks": "感谢您游玩 OFMtouch 并帮助我们改进游戏。您的反馈、截图和错误报告非常重要。请继续通过 GitHub 报告错误。",
     "nightlyBadge": "NIGHTLY",
     "brand": "原版标志下方新增 TOUCH 字样，并单独显示 NIGHTLY 构建标识。"
+  },
+  "phase67": {
+    "contracts": "周薪及报价现在与年度工资支出一致。已修复续约、解约补偿及租借工资分摊。",
+    "staffTransfers": "职员有薪合同及转会检查包含工资和现金储备。",
+    "economy": "收入、成本、赞助和营销按俱乐部规模调整。",
+    "development": "更缓慢的成长体现比赛时间、教练和设施的作用。门将训练专属技能。"
   }
 }

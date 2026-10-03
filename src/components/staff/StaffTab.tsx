@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { type GameStateData, type StaffData, useGameStore } from "../../store/gameStore";
 import { getStaff, type StaffSlice } from "../../services/staffService";
-import { Card, CardBody, Badge, CountryFlag, ProgressBar } from "../ui";
+import { Card, CardBody, Badge, CountryFlag, ProgressBar, Button } from "../ui";
 import {
   UserCog,
   Search,
@@ -16,7 +16,10 @@ import {
 import { getTeamName, calcAge, formatVal, formatWeeklyAmount } from "../../lib/helpers";
 import { countryName } from "../../lib/countries";
 import { useTranslation } from "react-i18next";
-import { hireStaff, releaseStaff } from "../../services/staffService";
+import { hireStaff, releaseStaff, previewStaffRelease } from "../../services/staffService";
+import DashboardModalFrame from "../dashboard/DashboardModalFrame";
+import { formatExactMoney } from "../../lib/helpers";
+import { resolveTranslatedErrorMessage } from "../../utils/errorMessage";
 import ContextMenu, { type ContextMenuItem } from "../ContextMenu";
 import type { DashboardNavigateContext } from "../dashboard/dashboardProfileNavigation";
 
@@ -101,6 +104,9 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
   const [view, setView] = useState<"mystaff" | "available">("mystaff");
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<string | null>(null);
+  const [releaseTarget, setReleaseTarget] = useState<string | null>(null);
+  const [releaseCost, setReleaseCost] = useState<number | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   const teamId = sessionState?.manager?.team_id ?? gameState?.manager?.team_id ?? null;
@@ -133,12 +139,25 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
     });
   };
 
+  const reportPreviewError = useEffectEvent((error: unknown) => setActionError(resolveTranslatedErrorMessage(error, t)));
+  useEffect(() => {
+    if (!releaseTarget) return;
+    let active = true;
+    setReleaseCost(null);
+    setActionError(null);
+    void previewStaffRelease(releaseTarget)
+      .then((cost) => { if (active) setReleaseCost(cost); })
+      .catch((error: unknown) => { if (active) reportPreviewError(error); });
+    return () => { active = false; };
+  }, [releaseTarget]);
+
   const handleHire = async (staffId: string) => {
     setActionLoading(staffId);
+    setActionError(null);
     try {
       applyStaffUpdate(await hireStaff(staffId));
     } catch (err) {
-      console.error("Failed to hire staff:", err);
+      setActionError(resolveTranslatedErrorMessage(err, t));
     } finally {
       setActionLoading(null);
     }
@@ -146,10 +165,12 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
 
   const handleRelease = async (staffId: string) => {
     setActionLoading(staffId);
+    setActionError(null);
     try {
       applyStaffUpdate(await releaseStaff(staffId));
+      setReleaseTarget(null);
     } catch (err) {
-      console.error("Failed to release staff:", err);
+      setActionError(resolveTranslatedErrorMessage(err, t));
     } finally {
       setActionLoading(null);
     }
@@ -171,6 +192,19 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
 
   return (
     <div>
+      {actionError && !releaseTarget ? <p role="alert" className="mb-3 text-sm text-red-600 dark:text-red-300">{actionError}</p> : null}
+      {releaseTarget ? (
+        <DashboardModalFrame maxWidthClassName="max-w-lg">
+          <h2 className="font-heading text-lg font-bold">{t("staff.releaseStaff")}</h2>
+          <p className="mt-2 text-sm">{t("playerProfile.terminateContractBody", { name: myStaff.find((s) => s.id === releaseTarget)?.last_name ?? "" })}</p>
+          <p className="my-4 font-semibold">{t("playerProfile.terminationSeverance")}: {releaseCost === null ? t("common.loading") : formatExactMoney(releaseCost)}</p>
+          {actionError ? <p role="alert" className="mb-3 text-sm text-red-600 dark:text-red-300">{actionError}</p> : null}
+          <div className="flex justify-end gap-2">
+            <Button variant="ghost" disabled={actionLoading !== null} onClick={() => { setReleaseTarget(null); setActionError(null); }}>{t("common.cancel")}</Button>
+            <Button disabled={releaseCost === null || actionLoading !== null} onClick={() => void handleRelease(releaseTarget)}>{t("staff.releaseStaff")}</Button>
+          </div>
+        </DashboardModalFrame>
+      ) : null}
       {/* View toggle */}
       <div className="flex flex-wrap gap-3 mb-4 items-center">
         <div className="flex gap-2">
@@ -282,7 +316,7 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
                     {
                       label: t("staff.releaseStaff"),
                       icon: <UserMinus className="w-4 h-4" />,
-                      onClick: () => handleRelease(staff.id),
+                      onClick: () => setReleaseTarget(staff.id),
                       danger: true,
                       disabled: isLoading,
                     },
@@ -406,7 +440,7 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
                         <button
                           type="button"
                           disabled={isLoading}
-                          onClick={() => handleRelease(staff.id)}
+                          onClick={() => setReleaseTarget(staff.id)}
                           className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors ${isLoading ? "opacity-50 pointer-events-none" : ""}`}
                           title={t("staff.releaseStaff")}
                         >

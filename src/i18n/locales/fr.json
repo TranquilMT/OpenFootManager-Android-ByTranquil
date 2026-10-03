@@ -1783,7 +1783,7 @@
     "patchPlayers": "Plus de talents, dont de rares stars notées 96 et de solides candidats à la montée.",
     "patchMatches": "Plus de réactions, des frappes sur les montants et un commentaire vocal facultatif.",
     "patchMobile": "Commandes mobiles, boîte de réception, sélections nationales et carrière améliorées.",
-    "patchWelcome": "Bienvenue dans OFMtouch ! Nouveautés de la v0.6.6",
+    "patchWelcome": "Bienvenue dans OFMtouch ! Nouveautés de la v0.6.7",
     "patchPortraits": "20 visages fictifs de référence diversifient les portraits des joueurs générés.",
     "patchWorld": "Un monde du football plus vaste couvre 29 nations, avec des clubs renforcés en Amérique et en Asie.",
     "patchTransfers": "La stratégie des clubs guide prêts et transferts, avec offres concurrentes et contrôle du budget.",
@@ -2863,7 +2863,8 @@
         "terminationWouldLeaveMatchdaySquadShort": "Résilier ce contrat laisserait votre effectif incapable d'aligner un onze le jour du match",
         "noAssistantManagerAssigned": "Aucun entraîneur adjoint n'est assigné à votre équipe",
         "playerHasNoTeam": "Le joueur n'a pas d'équipe",
-        "boardWagePolicy": "Le renouvellement est bloqué par la politique salariale du conseil. Gardez la masse salariale annuelle proche de {{budget}} pour vous rétablir."
+        "boardWagePolicy": "Le renouvellement est bloqué par la politique salariale du conseil. Gardez la masse salariale annuelle proche de {{budget}} pour vous rétablir.",
+        "invalidWage": "Saisissez un salaire hebdomadaire positif et entier."
       },
       "scouting": {
         "scoutNotFound": "Recruteur introuvable",
@@ -4322,5 +4323,11 @@
     "thanks": "Merci de jouer à OFMtouch et de contribuer à son amélioration. Vos retours, captures et signalements comptent. Continuez à signaler les bugs sur GitHub.",
     "nightlyBadge": "NIGHTLY",
     "brand": "Mention TOUCH sous le logo d’origine et badge NIGHTLY séparé."
+  },
+  "phase67": {
+    "contracts": "Les salaires hebdomadaires et les offres correspondent à la masse salariale annuelle. Renouvellements, indemnités et salaires des prêts sont corrigés.",
+    "staffTransfers": "Les contrats rémunérés du personnel et les transferts tiennent compte des salaires et des réserves de trésorerie.",
+    "economy": "Revenus, charges, sponsoring et marketing sont adaptés à la taille du club.",
+    "development": "Une progression plus lente récompense le temps de jeu, les entraîneurs et les installations. Les gardiens travaillent leurs compétences spécifiques."
   }
 }

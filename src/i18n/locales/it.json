@@ -1802,7 +1802,7 @@
     "patchPlayers": "Più giocatori di spicco, incluse rare stelle da 96 e squadre in lotta per la promozione.",
     "patchMatches": "Più reazioni, tiri sui legni e telecronaca vocale facoltativa.",
     "patchMobile": "Comandi mobili, posta, nazionali e inizio carriera migliorati.",
-    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.6.6",
+    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.6.7",
     "patchPortraits": "20 volti fittizi di partenza rendono più vari i ritratti dei giocatori generati.",
     "patchWorld": "Un mondo calcistico più ampio copre 29 nazioni, con club più forti nelle Americhe e in Asia.",
     "patchTransfers": "Le strategie dei club guidano prestiti e trasferimenti, con offerte concorrenti e controlli sul budget.",
@@ -2863,7 +2863,8 @@
         "terminationWouldLeaveMatchdaySquadShort": "Rescindere questo contratto lascerebbe la tua rosa senza la possibilità di schierare un undici nel giorno della partita",
         "noAssistantManagerAssigned": "Nessun vice allenatore assegnato alla tua squadra",
         "playerHasNoTeam": "Il giocatore non ha una squadra",
-        "boardWagePolicy": "Il rinnovo è bloccato dalla politica salariale del consiglio. Mantieni i salari annuali vicino a {{budget}} per recuperare."
+        "boardWagePolicy": "Il rinnovo è bloccato dalla politica salariale del consiglio. Mantieni i salari annuali vicino a {{budget}} per recuperare.",
+        "invalidWage": "Inserisci uno stipendio settimanale positivo e intero."
       },
       "scouting": {
         "scoutNotFound": "Osservatore non trovato",
@@ -4322,5 +4323,11 @@
     "thanks": "Grazie per giocare a OFMtouch e aiutarci a migliorarlo. Commenti, schermate e segnalazioni fanno la differenza. Continuate a segnalare i bug su GitHub.",
     "nightlyBadge": "NIGHTLY",
     "brand": "Scritta TOUCH sotto il logo originale e un indicatore NIGHTLY separato."
+  },
+  "phase67": {
+    "contracts": "Gli stipendi settimanali e le offerte corrispondono al monte ingaggi annuale. Corretti rinnovi, indennizzi e quote salariali dei prestiti.",
+    "staffTransfers": "I contratti retribuiti dello staff e i trasferimenti tengono conto di stipendi e liquidità.",
+    "economy": "Ricavi, costi, sponsorizzazioni e marketing sono proporzionati alle dimensioni del club.",
+    "development": "Uno sviluppo più lento premia minuti giocati, allenatori e strutture. I portieri allenano abilità specifiche."
   }
 }
