@@ -52,6 +52,7 @@ pub mod season_context;
 pub mod slices;
 pub mod squad_safety;
 pub mod state;
+pub mod staff_contracts;
 pub mod training;
 pub mod transfer_strategy;
 pub mod transfers;

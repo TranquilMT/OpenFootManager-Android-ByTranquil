@@ -17,6 +17,8 @@ import {
   shouldDisableRenewalSubmit,
 } from "./PlayerProfile.renewal";
 
+import { annualAmountToWeeklyCommitment } from "../../lib/finance";
+
 interface UseContractRenewalFlowArgs {
   player: PlayerData;
   gameState: GameStateData;
@@ -126,7 +128,10 @@ export function useContractRenewalFlow({
 
   const renewalOfferedWage = Number(renewalWage);
   const renewalOfferedYears = Number(renewalLength);
-  const isRenewalWageValid = Number.isFinite(renewalOfferedWage) && renewalOfferedWage > 0;
+  const isRenewalWageValid =
+    Number.isSafeInteger(renewalOfferedWage) &&
+    renewalOfferedWage > 0 &&
+    renewalOfferedWage <= Math.floor(0xffffffff / 52);
   const isRenewalLengthValid = Number.isInteger(renewalOfferedYears) && renewalOfferedYears > 0;
   const renewalViolatesSoftCap =
     isRenewalWageValid && renewalProjection !== null && !renewalProjection.policy_allows;
@@ -150,7 +155,7 @@ export function useContractRenewalFlow({
   const renewalStatusClassName = getRenewalStatusClassName(renewalStatus);
 
   function openRenewalModal(): void {
-    setRenewalWage(String(player.wage));
+    setRenewalWage(String(Math.max(1, annualAmountToWeeklyCommitment(player.wage))));
     setRenewalLength("2");
     setRenewalSubmitting(false);
     setRenewalStatus("idle");

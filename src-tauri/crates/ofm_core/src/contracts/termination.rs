@@ -150,9 +150,8 @@ pub(crate) fn termination_severance_cost(player: &Player, current_date: NaiveDat
     let remaining_days = contract_days_remaining(player.contract_end.as_deref(), current_date)
         .unwrap_or(0)
         .max(0);
-    let remaining_weeks = (remaining_days + 6) / 7;
-
-    remaining_weeks * i64::from(player.wage)
+    // Prorate annual salary by actual remaining days, rounding up once.
+    (remaining_days * i64::from(player.wage) + 364) / 365
 }
 
 pub(crate) fn contract_terminated_message(
@@ -183,4 +182,17 @@ pub(crate) fn contract_terminated_message(
         i18n_params,
     )
     .with_sender_i18n("be.sender.assistantManager", "be.role.assistantManager")
+}
+
+#[cfg(test)]
+mod balance_tests {
+    use super::*;
+    #[test]
+    fn one_year_severance_costs_one_annual_salary() {
+        let attrs = serde_json::from_value(serde_json::json!({"pace":60,"stamina":60,"strength":60,"agility":60,"passing":60,"shooting":60,"tackling":60,"dribbling":60,"defending":60,"positioning":60,"vision":60,"decisions":60})).unwrap();
+        let mut player = Player::new("p".into(), "P".into(), "Player".into(), "2000-01-01".into(), "GB".into(), domain::player::Position::Forward, attrs);
+        player.wage = 5_200_000;
+        player.contract_end = Some("2027-08-01".into());
+        assert_eq!(termination_severance_cost(&player, NaiveDate::from_ymd_opt(2026, 8, 1).unwrap()), 5_200_000);
+    }
 }

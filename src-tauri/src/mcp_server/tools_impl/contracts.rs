@@ -23,7 +23,7 @@ pub fn contract_propose_renewal(
     let response = crate::commands::contracts::propose_renewal_internal(
         &ctx.state_manager,
         &player_id,
-        weekly_wage,
+        crate::commands::contracts::annual_contract_wage(weekly_wage)?,
         contract_years,
     )?;
 
@@ -33,7 +33,7 @@ pub fn contract_propose_renewal(
     );
     output.push_str(&format!("**Outcome**: {:?}\n", response.outcome));
     if let Some(wage) = response.suggested_wage {
-        output.push_str(&format!("**Suggested Wage**: {}/wk\n", wage));
+        output.push_str(&format!("**Suggested Wage**: {}/wk\n", wage.div_ceil(52)));
     }
     if let Some(years) = response.suggested_years {
         output.push_str(&format!("**Suggested Years**: {}\n", years));
@@ -101,7 +101,7 @@ pub fn contract_preview_renewal(
     let _response = crate::commands::contracts::preview_renewal_financial_impact_internal(
         &ctx.state_manager,
         &player_id,
-        weekly_wage,
+        crate::commands::contracts::annual_contract_wage(weekly_wage)?,
     )?;
 
     Ok(format!(

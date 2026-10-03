@@ -94,7 +94,7 @@ pub fn offer_free_agent_contract(
         ));
     }
 
-    if is_insulting_wage_offer(reference_wage, expected_wage, offer.weekly_wage) {
+    if is_insulting_wage_offer(reference_wage, expected_wage, offer.annual_wage) {
         let blocked_until = renewal_blocked_until(current_date);
         let player = &mut game.players[player_index];
         let state = player
@@ -126,7 +126,7 @@ pub fn offer_free_agent_contract(
         ));
     }
 
-    if offer.weekly_wage < minimum_wage {
+    if offer.annual_wage < minimum_wage {
         return Ok(renewal_outcome(
             RenewalDecision::Rejected,
             None,
@@ -146,8 +146,8 @@ pub fn offer_free_agent_contract(
         ));
     }
 
-    if offer.weekly_wage >= expected_wage && offer.contract_years >= expected_years {
-        if !renewal_wage_policy_allows(game, &team, 0, offer.weekly_wage) {
+    if offer.annual_wage >= expected_wage && offer.contract_years >= expected_years {
+        if !renewal_wage_policy_allows(game, &team, 0, offer.annual_wage) {
             return Err(renewal_wage_policy_error_message(&team));
         }
 
@@ -161,7 +161,7 @@ pub fn offer_free_agent_contract(
         let player = &mut game.players[player_index];
         player.team_id = Some(team.id.clone());
         player.jersey_number = resolved_jersey_number;
-        player.wage = offer.weekly_wage;
+        player.wage = offer.annual_wage;
         player.contract_end = Some(new_contract_end.format("%Y-%m-%d").to_string());
         player.transfer_listed = false;
         player.loan_listed = false;

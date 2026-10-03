@@ -539,7 +539,7 @@ pub(super) fn generate_random_player_from_def(
     };
     let base_value = (approx_ovr as f64).powi(2) * 500.0;
     let market_value = (base_value * age_factor) as u64;
-    let wage = (market_value / 200).max(500) as u32;
+    let wage = (crate::generated_balance::weekly_wage_eur(approx_ovr.min(100) as u8, 50) * 52) as u32;
     let contract_years = if age <= 21 {
         rng.random_range(3..6)
     } else if age <= 27 {
@@ -694,6 +694,7 @@ pub(super) fn generate_random_staff_from_def(
     );
     s.nationality = nationality.to_string();
     s.team_id = Some(team_id.to_string());
+    set_generated_staff_contract(&mut s, opening_year);
     s
 }
 
@@ -730,6 +731,7 @@ pub(super) fn generate_random_staff_unattached_from_def(
         attributes,
     );
     s.nationality = nationality.to_string();
+    set_generated_staff_contract(&mut s, opening_year);
     s
 }
 
@@ -1036,7 +1038,7 @@ pub(super) fn generate_player_from_def(
         0.4
     };
     let market_value = ((approx_ovr as f64).powi(2) * 500.0 * age_factor) as u64;
-    let wage = (market_value / 200).max(500) as u32;
+    let wage = (crate::generated_balance::weekly_wage_eur(approx_ovr.min(100) as u8, 50) * 52) as u32;
     let contract_years = if age <= 27 {
         rng.random_range(2..6)
     } else {
@@ -1696,4 +1698,9 @@ mod tests {
             "and must agree with the memoised pool"
         );
     }
+}
+
+fn set_generated_staff_contract(staff: &mut Staff, opening_year: u32) {
+    staff.wage = crate::staff_contracts::annual_market_wage(staff);
+    staff.contract_end = Some(format!("{}-06-30", opening_year.saturating_add(2)));
 }

@@ -21,8 +21,8 @@ interface UseFreeAgentContractFlowArgs {
   onGameUpdate?: (game: GameStateData) => void;
 }
 
-const MARKET_VALUE_TO_WAGE_RATIO = 200;
-const MINIMUM_DEFAULT_WAGE = 500;
+const MARKET_VALUE_TO_WAGE_RATIO = 10;
+const MINIMUM_DEFAULT_WAGE = 7800;
 const MAX_CONTRACT_YEARS = 5;
 
 interface UseFreeAgentContractFlowResult {
@@ -63,7 +63,7 @@ function defaultContractWage(player: PlayerData): string {
           Math.round(player.market_value / MARKET_VALUE_TO_WAGE_RATIO),
           MINIMUM_DEFAULT_WAGE,
         );
-  return String(Math.ceil(baseline / 1000) * 1000);
+  return String(Math.max(1, Math.ceil(baseline / 52)));
 }
 
 export function useFreeAgentContractFlow({
@@ -90,7 +90,10 @@ export function useFreeAgentContractFlow({
 
   const offeredWage = Number(contractWage);
   const offeredYears = Number(contractLength);
-  const isContractWageValid = Number.isFinite(offeredWage) && offeredWage > 0;
+  const isContractWageValid =
+    Number.isSafeInteger(offeredWage) &&
+    offeredWage > 0 &&
+    offeredWage <= Math.floor(0xffffffff / 52);
   const isContractLengthValid =
     Number.isInteger(offeredYears) && offeredYears > 0 && offeredYears <= MAX_CONTRACT_YEARS;
   const contractViolatesSoftCap =

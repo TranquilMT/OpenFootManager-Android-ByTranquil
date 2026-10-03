@@ -62,7 +62,7 @@ impl ContractWarningStage {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct RenewalOffer {
-    pub weekly_wage: u32,
+    pub annual_wage: u32,
     pub contract_years: u32,
 }
 

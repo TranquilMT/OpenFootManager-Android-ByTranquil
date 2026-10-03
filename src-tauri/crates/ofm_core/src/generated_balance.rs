@@ -299,9 +299,21 @@ pub fn market_value_eur(ovr: u8, potential: u8, age: u8) -> i64 {
     ((ability + upside).max(25_000) * age_factor / 100).min(220_000_000)
 }
 pub fn weekly_wage_eur(ovr: u8, reputation: u8) -> i64 {
-    let quality = (ovr.saturating_sub(30) as i64).pow(2);
-    let rep = 75 + reputation.min(100) as i64;
-    (quality * rep / 3).clamp(150, 450_000)
+    // Weekly EUR anchors: academy, semi-pro, senior professionals and elite stars.
+    // Interpolate continuously so a one-point rating change cannot double pay.
+    const BANDS: [(u8, i64); 12] = [(30, 150), (40, 250), (50, 600), (60, 2_000),
+        (65, 5_000), (70, 12_000), (75, 25_000), (80, 50_000),
+        (85, 100_000), (90, 200_000), (95, 350_000), (100, 450_000)];
+    let rating = ovr.clamp(30, 100);
+    let mut base = BANDS[0].1;
+    for pair in BANDS.windows(2) {
+        let [(low, low_pay), (high, high_pay)] = pair else { unreachable!() };
+        if rating >= *low && rating <= *high {
+            base = low_pay + (high_pay - low_pay) * i64::from(rating - low) / i64::from(high - low);
+            break;
+        }
+    }
+    (base * (60 + i64::from(reputation.min(100))) / 150).clamp(150, 450_000)
 }
 pub fn club_can_afford(
     player_value: i64,
@@ -432,5 +444,18 @@ mod valuation_regressions_065 {
         assert!(market_value_eur(96, 97, 24) >= 100_000_000);
         assert!(market_value_eur(60, 95, 17) < 10_000_000);
         assert!(market_value_eur(85, 88, 34) < market_value_eur(85, 88, 25));
+    }
+}
+
+#[cfg(test)]
+mod salary_balance_tests {
+    use super::*;
+    #[test]
+    fn squad_pay_has_realistic_quality_bands() {
+        assert!(weekly_wage_eur(50, 40) <= 1_000);
+        assert!(weekly_wage_eur(60, 50) <= 3_000);
+        assert!((75_000..=150_000).contains(&weekly_wage_eur(85, 90)));
+        assert!(weekly_wage_eur(99, 100) <= 450_000);
+        for quality in 30..100 { assert!(weekly_wage_eur(quality + 1, 70) >= weekly_wage_eur(quality, 70)); }
     }
 }

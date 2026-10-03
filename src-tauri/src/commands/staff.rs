@@ -17,31 +17,8 @@ pub fn hire_staff_internal(state: &StateManager, staff_id: &str) -> Result<Game,
     mutate_active_game(state, |game| {
         let team_id = user_team_id(game)?;
 
-        // Read and validate before writing anything: mutate_active_game mutates
-        // the live game, so a write made before an error is returned would stick.
-        let staff_wage = {
-            let staff = game
-                .staff
-                .iter()
-                .find(|s| s.id == staff_id)
-                .ok_or("be.error.staffMemberNotFound".to_string())?;
-
-            if staff.team_id.is_some() {
-                return Err("be.error.staffMemberAlreadyEmployed".to_string());
-            }
-
-            staff.wage
-        };
-
-        // Deduct wage from team budget
-        let team = user_team_mut(game)?;
-        team.season_expenses += staff_wage as i64;
-
-        game.staff
-            .iter_mut()
-            .find(|s| s.id == staff_id)
-            .ok_or("be.error.staffMemberNotFound".to_string())?
-            .team_id = Some(team_id);
+        user_team_mut(game)?;
+        ofm_core::staff_contracts::hire(game, &team_id, staff_id)?;
 
         game.available_staff_market_last_activity_date =
             Some(game.clock.current_date.format("%Y-%m-%d").to_string());
@@ -214,7 +191,7 @@ mod tests {
             .count();
 
         assert_eq!(staff.team_id.as_deref(), Some("team-1"));
-        assert_eq!(team.season_expenses, 12_000);
+        assert_eq!(team.season_expenses, 0);
         assert_eq!(available_staff, 12);
         assert_eq!(
             response
@@ -235,7 +212,7 @@ mod tests {
             .find(|team| team.id == "team-1")
             .expect("stored team should exist");
         assert_eq!(stored_staff.team_id.as_deref(), Some("team-1"));
-        assert_eq!(stored_team.season_expenses, 12_000);
+        assert_eq!(stored_team.season_expenses, 0);
         assert_eq!(
             stored_game
                 .available_staff_market_last_activity_date
@@ -281,30 +258,8 @@ pub fn release_staff_internal(state: &StateManager, staff_id: &str) -> Result<Ga
     mutate_active_game(state, |game| {
         let team_id = user_team_id(game)?;
 
-        // Read and validate before writing anything: mutate_active_game mutates
-        // the live game, so a write made before an error is returned would stick.
-        let staff_wage = {
-            let staff = game
-                .staff
-                .iter()
-                .find(|s| s.id == staff_id)
-                .ok_or("be.error.staffMemberNotFound".to_string())?;
-
-            if staff.team_id.as_deref() != Some(&team_id) {
-                return Err("be.error.staffMemberNotInTeam".to_string());
-            }
-
-            staff.wage
-        };
-
-        let team = user_team_mut(game)?;
-        team.season_expenses = team.season_expenses.saturating_sub(staff_wage as i64);
-
-        game.staff
-            .iter_mut()
-            .find(|s| s.id == staff_id)
-            .ok_or("be.error.staffMemberNotFound".to_string())?
-            .team_id = None;
+        user_team_mut(game)?;
+        ofm_core::staff_contracts::release(game, &team_id, staff_id)?;
 
         Ok(())
     })

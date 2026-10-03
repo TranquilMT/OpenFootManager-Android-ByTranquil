@@ -1,0 +1,31 @@
+name: OFMtouch 0.6.7 Economy Checks
+on:
+  push:
+    branches: [release/0.6.7-economy-balance]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.95.0
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - name: Format verification output
+        run: |
+          cargo fmt --manifest-path src-tauri/Cargo.toml --all
+          git diff > formatting.patch
+      - uses: actions/upload-artifact@v4
+        with:
+          name: economy-formatting
+          path: formatting.patch
+      - name: Backend economy regression suite
+        run: cargo test --locked --manifest-path src-tauri/Cargo.toml -p domain -p engine -p ofm_core -p db --all-targets -- --nocapture
+      - name: Backend lint
+        run: cargo clippy --locked --manifest-path src-tauri/Cargo.toml -p domain -p engine -p ofm_core -p db --all-targets -- -D warnings

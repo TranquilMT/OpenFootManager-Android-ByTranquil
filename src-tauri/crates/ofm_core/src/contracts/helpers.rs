@@ -61,34 +61,19 @@ pub(crate) fn backend_text_with_param(key: &str, param_name: &str, param_value: 
 }
 
 pub(crate) fn expected_wage(player: &Player, team: &Team, current_date: NaiveDate) -> u32 {
-    let mut wage = reference_player_wage(player) as f32;
+    let reference = reference_player_wage(player);
     let age = player_age_on(current_date, &player.date_of_birth);
-    let remaining_days = remaining_contract_days(player, current_date);
-
-    if age <= 27 {
-        wage *= 1.05;
-    } else if age >= 32 {
-        wage *= 0.95;
-    }
-
-    if player.morale <= 50 {
-        wage *= 1.10;
-    }
-
-    wage *= importance_wage_multiplier(player);
-
-    if team.reputation < 40 {
-        wage *= 1.05;
-    }
-
-    if remaining_days <= 180 {
-        wage *= 1.10;
-    } else if remaining_days <= 365 {
-        wage *= 1.05;
-    }
-
-    let rounded = round_up_to_nearest_thousand(wage.ceil() as u32);
-    rounded.max(reference_player_wage(player))
+    // Negotiate a modest annual rise, rather than compounding several large
+    // market-value, morale and expiry premiums at every renewal.
+    let age_pct = if age <= 23 { 105 } else if age <= 29 { 103 } else if age <= 32 { 100 } else { 95 };
+    let importance_pct = if player.squad_role == domain::player::SquadRole::Youth { 100 } else if player.ovr >= 85 { 105 } else if player.ovr >= 75 { 103 } else { 100 };
+    let expiry_pct = if remaining_contract_days(player, current_date) <= 180 { 103 } else { 100 };
+    let low_morale_pct = if player.morale <= 50 { 103 } else { 100 };
+    let low_club_pct = if team.reputation < 400 { 101 } else { 100 };
+    let wage = u128::from(reference) * age_pct * importance_pct * expiry_pct * low_morale_pct * low_club_pct / 10_000_000_000;
+    let cap = u128::from(reference) * 115 / 100;
+    // Round to one weekly euro, avoiding €1000 jumps for low-paid players.
+    wage.min(cap).max(u128::from(reference) * 95 / 100).div_ceil(52).saturating_mul(52).min(u128::from(u32::MAX)) as u32
 }
 
 pub(crate) fn reference_player_wage(player: &Player) -> u32 {
@@ -99,22 +84,6 @@ pub(crate) fn reference_player_wage(player: &Player) -> u32 {
     let derived_wage = (player.market_value / MARKET_VALUE_TO_WAGE_RATIO).max(MINIMUM_DEFAULT_WAGE);
 
     round_up_to_nearest_thousand(derived_wage.min(u32::MAX as u64) as u32)
-}
-
-pub(crate) fn importance_wage_multiplier(player: &Player) -> f32 {
-    if player.market_value >= 2_000_000 {
-        return 1.18;
-    }
-
-    if player.market_value >= 750_000 {
-        return 1.10;
-    }
-
-    if player.market_value <= 150_000 {
-        return 0.95;
-    }
-
-    1.0
 }
 
 pub(crate) fn expected_contract_years(player: &Player, current_date: NaiveDate) -> u32 {
@@ -169,7 +138,7 @@ pub(crate) fn round_up_to_nearest_thousand(value: u32) -> u32 {
         return 0;
     }
 
-    value.div_ceil(1000) * 1000
+    value.div_ceil(1000).saturating_mul(1000)
 }
 
 pub(crate) fn contract_days_remaining(

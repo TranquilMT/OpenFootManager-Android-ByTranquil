@@ -5,7 +5,7 @@ use domain::team::Team;
 
 const WAGE_SOFT_CAP_PCT: i64 = 110;
 const LEGACY_OVER_BUDGET_GRACE_PCT: i64 = 3;
-const LEGACY_OVER_BUDGET_GRACE_MIN: i64 = 25_000;
+const LEGACY_OVER_BUDGET_GRACE_MIN: i64 = 1_300;
 const ERR_PLAYER_HAS_NO_TEAM: &str = "be.error.contracts.playerHasNoTeam";
 
 fn backend_error_with_param(key: &str, param_name: &str, param_value: i64) -> String {
@@ -28,21 +28,7 @@ fn contract_owner_team_id(player: &domain::player::Player) -> Option<&str> {
 }
 
 fn annual_team_wage_bill(game: &Game, team_id: &str) -> i64 {
-    let player_wages: i64 = game
-        .players
-        .iter()
-        .filter(|player| contract_owner_team_id(player) == Some(team_id))
-        .map(|player| player.wage as i64)
-        .sum();
-
-    let staff_wages: i64 = game
-        .staff
-        .iter()
-        .filter(|staff_member| staff_member.team_id.as_deref() == Some(team_id))
-        .map(|staff_member| staff_member.wage as i64)
-        .sum();
-
-    player_wages + staff_wages
+    crate::finances::calc_annual_wages(game, team_id)
 }
 
 fn projected_annual_wage_bill(
@@ -69,9 +55,9 @@ pub fn project_contract_offer_financial_impact(
     let projected_weekly_wage_spend = projected_bill / 52;
 
     let current_cash_runway_weeks =
-        calc_cash_runway_weeks(team.finance, -current_weekly_wage_spend);
+        calc_cash_runway_weeks(team.finance, current_weekly_net(game, team));
     let projected_cash_runway_weeks =
-        calc_cash_runway_weeks(team.finance, -projected_weekly_wage_spend);
+        calc_cash_runway_weeks(team.finance, current_weekly_net(game, team) + current_weekly_wage_spend - projected_weekly_wage_spend);
 
     RenewalFinancialProjection {
         current_annual_wage_bill: current_bill,
@@ -151,4 +137,8 @@ pub fn project_renewal_financial_impact(
         player.wage,
         offered_wage,
     ))
+}
+
+fn current_weekly_net(game: &Game, team: &Team) -> i64 {
+    crate::finances::team_finance_snapshot(game, &team.id).map(|s| s.projected_weekly_net).unwrap_or(0)
 }

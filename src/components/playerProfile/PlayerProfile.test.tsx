@@ -1750,7 +1750,7 @@ describe("PlayerProfile free agent signing", () => {
     await waitFor(() => {
       expect(invoke).toHaveBeenCalledWith("offer_free_agent_contract", {
         playerId: "player-1",
-        weeklyWage: 3000,
+        weeklyWage: 1154,
         contractYears: 3,
       });
       expect(onGameUpdate).toHaveBeenCalled();

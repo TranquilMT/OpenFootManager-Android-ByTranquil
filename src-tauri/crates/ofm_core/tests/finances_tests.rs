@@ -984,3 +984,23 @@ fn multiple_teams_processed_independently() {
     assert_eq!(game.teams[0].finance, initial_t1 - t1_wages);
     assert_eq!(game.teams[1].finance, initial_t2 - t2_wages);
 }
+
+#[test]
+fn weekly_cash_debits_match_the_loan_shared_payroll_projection() {
+    let mut game = make_monday_game();
+    game.teams.push(make_team("borrower", "Borrower FC"));
+    game.players[0].team_id = Some("borrower".into());
+    game.players[0].active_loan = Some(domain::player::ActiveLoan {
+        parent_team_id: "team1".into(), loan_team_id: "borrower".into(),
+        start_date: "2025-06-01".into(), end_date: "2026-06-01".into(),
+        wage_contribution_pct: 60, buy_option_fee: None,
+        loan_start_minutes: 0, loan_start_appearances: 0,
+        development_reported_minutes: 0, development_reported_appearances: 0,
+    });
+    let balances: Vec<_> = game.teams.iter().map(|team| (team.id.clone(), team.finance, finances::calc_wages(&game, &team.id))).collect();
+    finances::process_weekly_finances(&mut game);
+    for (id, cash, weekly) in balances {
+        assert_eq!(game.teams.iter().find(|team| team.id == id).unwrap().finance, cash - weekly);
+    }
+    assert!(finances::journal_matches_cash(&game));
+}

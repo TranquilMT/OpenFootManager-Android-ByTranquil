@@ -82,11 +82,11 @@ pub(crate) fn minimum_acceptable_fee(
         contract_days_remaining(current_date, player.contract_end.as_deref())
     {
         if days_remaining <= 60 {
-            multiplier -= 0.25;
+            multiplier *= 0.25;
         } else if days_remaining <= 180 {
-            multiplier -= 0.15;
+            multiplier *= 0.50;
         } else if days_remaining <= 365 {
-            multiplier -= 0.05;
+            multiplier *= 0.75;
         }
     }
     match infer_player_importance(player, owner_team) {
@@ -103,7 +103,7 @@ pub(crate) fn minimum_acceptable_fee(
     } else if openness_score >= 40 {
         multiplier -= 0.10;
     }
-    let multiplier = multiplier.clamp(0.55, 1.6);
+    let multiplier = multiplier.clamp(0.20, 1.6);
     ((player.market_value as f64) * multiplier).round() as u64
 }
 

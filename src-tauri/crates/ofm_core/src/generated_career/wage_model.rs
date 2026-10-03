@@ -1,11 +1,4 @@
 pub fn weekly_wage(ovr: u8, reputation: u8, role: u8) -> i64 {
-    let q = (ovr.saturating_sub(25) as i64).pow(2);
-    let role_pct = match role {
-        0 => 135,
-        1 => 115,
-        2 => 100,
-        3 => 85,
-        _ => 70,
-    };
-    (q * (80 + reputation.min(100) as i64) * role_pct / 350).clamp(100, 500_000)
+    let role_pct = match role { 0 => 115, 1 => 105, 2 => 100, 3 => 85, _ => 70 };
+    (crate::generated_balance::weekly_wage_eur(ovr, reputation) * role_pct / 100).clamp(150, 450_000)
 }

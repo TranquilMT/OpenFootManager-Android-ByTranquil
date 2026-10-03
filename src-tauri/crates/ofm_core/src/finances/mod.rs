@@ -21,13 +21,7 @@ const BOARD_SUPPORT_SATISFACTION_PENALTY: u8 = 12;
 const FINANCE_WARNING_SATISFACTION_PENALTY: u8 = 2;
 const FINANCE_CRITICAL_SATISFACTION_PENALTY: u8 = 4;
 const MARKETING_CAMPAIGN_COOLDOWN_DAYS: i64 = 28;
-const MARKETING_CAMPAIGN_MIN_GROSS_REVENUE: i64 = 60_000;
-const MARKETING_CAMPAIGN_MAX_GROSS_REVENUE: i64 = 250_000;
-const MARKETING_CAMPAIGN_MIN_COST: i64 = 15_000;
 const SPONSOR_PITCH_DURATION_WEEKS: u32 = 12;
-const SPONSOR_PITCH_MIN_WEEKLY_AMOUNT: i64 = 40_000;
-const SPONSOR_PITCH_MAX_WEEKLY_AMOUNT: i64 = 180_000;
-const SPONSOR_PITCH_REPUTATION_MULTIPLIER: i64 = 120;
 
 fn marketing_campaign_activation_description() -> String {
     ["Marketing", "campaign", "activation", "spend"].join(" ")
@@ -224,7 +218,7 @@ pub fn calc_annual_wages(game: &Game, team_id: &str) -> i64 {
 fn player_annual_wage_for_team(player: &domain::player::Player, team_id: &str) -> i64 {
     if let Some(loan) = &player.active_loan {
         let wage = i64::from(player.wage);
-        let loan_share = (wage * i64::from(loan.wage_contribution_pct)) / 100;
+        let loan_share = (wage * i64::from(loan.wage_contribution_pct.min(100))) / 100;
 
         if loan.loan_team_id == team_id {
             return loan_share;
@@ -273,7 +267,7 @@ fn estimated_weekly_matchday_income(game: &Game, team: &Team) -> i64 {
         return 0;
     }
 
-    calc_matchday(team.stadium_capacity, recent_home_match_count, 0.76, 20.0)
+    calc_matchday(team.stadium_capacity, recent_home_match_count, 0.76, match_ticket_price(team))
 }
 
 pub fn team_finance_snapshot(game: &Game, team_id: &str) -> Option<TeamFinanceSnapshot> {
@@ -494,38 +488,15 @@ fn marketing_campaign_cooldown_days_remaining(team: &Team, today: NaiveDate) -> 
 }
 
 fn marketing_campaign_gross_revenue(team: &Team, snapshot: &TeamFinanceSnapshot) -> i64 {
-    let reputation_component = (team.reputation as i64) * 250;
-    let stadium_component = (team.stadium_capacity as i64) * 3;
-    let pressure_component = match snapshot.overall_status {
-        FinanceHealthLevel::Stable => 0,
-        FinanceHealthLevel::Watch => 10_000,
-        FinanceHealthLevel::Warning => 25_000,
-        FinanceHealthLevel::Critical => 40_000,
-    };
-    let debt_bonus = if snapshot.currently_in_debt {
-        20_000
-    } else {
-        0
-    };
-    let wage_pressure_bonus = if snapshot.currently_over_budget {
-        15_000
-    } else {
-        0
-    };
-
-    (reputation_component
-        + stadium_component
-        + pressure_component
-        + debt_bonus
-        + wage_pressure_bonus)
-        .clamp(
-            MARKETING_CAMPAIGN_MIN_GROSS_REVENUE,
-            MARKETING_CAMPAIGN_MAX_GROSS_REVENUE,
-        )
+    // Financial distress is a reason to act, not a bonus to merchandise demand.
+    let _ = snapshot;
+    let revenue = crate::club_economy::annual_revenue_anchor(team);
+    let form_pct = 80 + team.form.iter().take(5).filter(|r| r.as_str() == "W").count() as i64 * 8;
+    (revenue * 3 / 1000 * form_pct / 100).clamp(1_000, 1_500_000)
 }
 
 fn marketing_campaign_cost(gross_revenue: i64) -> i64 {
-    (gross_revenue / 4).max(MARKETING_CAMPAIGN_MIN_COST)
+    (gross_revenue * 60 / 100).max(600)
 }
 
 fn has_pending_sponsor_offer(game: &Game) -> bool {
@@ -567,40 +538,10 @@ fn sponsor_pitch_weekly_amount(
     snapshot: &TeamFinanceSnapshot,
     current_position: Option<u32>,
 ) -> i64 {
-    let reputation_component = team.reputation as i64 * SPONSOR_PITCH_REPUTATION_MULTIPLIER;
-    let league_position_component = match current_position {
-        Some(1) => 18_000,
-        Some(2..=4) => 12_000,
-        Some(5..=8) => 6_000,
-        _ => 0,
-    };
-    let pressure_component = match snapshot.overall_status {
-        FinanceHealthLevel::Stable => 0,
-        FinanceHealthLevel::Watch => 5_000,
-        FinanceHealthLevel::Warning => 15_000,
-        FinanceHealthLevel::Critical => 25_000,
-    };
-    let wage_pressure_bonus = if snapshot.currently_over_budget {
-        15_000
-    } else {
-        0
-    };
-    let debt_bonus = if snapshot.currently_in_debt {
-        20_000
-    } else {
-        0
-    };
-
-    (SPONSOR_PITCH_MIN_WEEKLY_AMOUNT
-        + reputation_component
-        + league_position_component
-        + pressure_component
-        + wage_pressure_bonus
-        + debt_bonus)
-        .clamp(
-            SPONSOR_PITCH_MIN_WEEKLY_AMOUNT,
-            SPONSOR_PITCH_MAX_WEEKLY_AMOUNT,
-        )
+    let _ = snapshot;
+    let revenue = crate::club_economy::annual_revenue_anchor(team);
+    let annual_pct = match current_position { Some(1) => 4, Some(2..=4) => 3, _ => 2 };
+    (revenue * annual_pct / 100 / 52).clamp(150, 600_000)
 }
 
 pub fn preview_board_support(game: &Game, team_id: &str) -> Result<BoardSupportResult, String> {
@@ -704,6 +645,7 @@ pub fn preview_marketing_campaign(
 
     let gross_revenue = marketing_campaign_gross_revenue(team, &snapshot);
     let campaign_cost = marketing_campaign_cost(gross_revenue);
+    if team.finance < campaign_cost { return Err("be.error.transfers.insufficientFunds".into()); }
 
     Ok(MarketingCampaignPreview {
         gross_revenue,
@@ -885,30 +827,15 @@ fn current_league_position(game: &Game, team_id: &str) -> Option<u32> {
 }
 
 fn count_recent_home_matches(game: &Game, team_id: &str) -> i64 {
-    let Some(league) = &game.league else {
-        return 0;
-    };
-
     let current = game.clock.current_date.date_naive();
     let week_ago = current - chrono::Duration::days(7);
-
-    league
-        .fixtures
-        .iter()
-        .filter(|fixture| {
-            fixture.status == domain::league::FixtureStatus::Completed
-                && fixture.home_team_id == team_id
-                && fixture.result.is_some()
-        })
-        .filter(|fixture| {
-            if let Ok(date) = chrono::NaiveDate::parse_from_str(&fixture.date, "%Y-%m-%d") {
-                date > week_ago && date <= current
-            } else {
-                false
-            }
-        })
-        .count() as i64
+    let mut paid = std::collections::HashSet::new();
+    game.competitions.iter().chain(game.league.iter()).flat_map(|league| &league.fixtures)
+        .filter(|fixture| fixture.status == domain::league::FixtureStatus::Completed && fixture.home_team_id == team_id && fixture.result.is_some())
+        .filter(|fixture| chrono::NaiveDate::parse_from_str(&fixture.date, "%Y-%m-%d").is_ok_and(|date| date > week_ago && date <= current))
+        .filter(|fixture| paid.insert(fixture.id.clone())).count() as i64
 }
+
 
 fn commit_weekly_posts(game: &mut Game, reqs: &[PostRequest]) -> bool {
     if reqs.is_empty() {
@@ -944,7 +871,11 @@ pub fn process_weekly_finances(game: &mut Game) {
     let mut staff_wages_by_team: std::collections::HashMap<String, i64> =
         std::collections::HashMap::new();
     for player in &game.players {
-        if let Some(team_id) = &player.team_id {
+        if let Some(loan) = &player.active_loan {
+            for team_id in [&loan.parent_team_id, &loan.loan_team_id] {
+                *player_wages_by_team.entry(team_id.clone()).or_default() += player_annual_wage_for_team(player, team_id) / 52;
+            }
+        } else if let Some(team_id) = &player.team_id {
             *player_wages_by_team.entry(team_id.clone()).or_default() += player.wage as i64 / 52;
         }
     }
@@ -969,8 +900,11 @@ pub fn process_weekly_finances(game: &mut Game) {
         .unwrap_or_default();
 
     let post_date = game.clock.current_date.date_naive();
+    // One bounded marker per club; salary settlement by the board is separate.
+    game.emitted_events.retain(|key| !key.starts_with("finance:weekly:") || key.ends_with(&today));
     let mut weekly_by_club: Vec<(String, Vec<PostRequest>)> = Vec::new();
     for team in &game.teams {
+        if game.emitted_events.contains(&format!("finance:weekly:{}:{today}", team.id)) { continue; }
         let mut reqs = Vec::new();
         let player_wages = player_wages_by_team.get(&team.id).copied().unwrap_or(0);
         let staff_wages = staff_wages_by_team.get(&team.id).copied().unwrap_or(0);
@@ -1025,6 +959,11 @@ pub fn process_weekly_finances(game: &mut Game) {
                 post_date,
             ));
         }
+        let home_count = count_recent_home_matches(game, &team.id);
+        if home_count > 0 {
+            let receipts = calc_matchday(team.stadium_capacity, home_count, 0.76, match_ticket_price(team));
+            reqs.push(PostRequest::new(&team.id, receipts, CashKind::Matchday, post_date));
+        }
         weekly_by_club.push((team.id.clone(), reqs));
     }
 
@@ -1035,6 +974,7 @@ pub fn process_weekly_finances(game: &mut Game) {
     let mut posted_clubs = std::collections::HashSet::new();
     for (team_id, reqs) in weekly_by_club {
         if commit_weekly_posts(game, &reqs) {
+            game.emitted_events.insert(format!("finance:weekly:{team_id}:{today}"));
             posted_clubs.insert(team_id);
         }
     }
@@ -1048,29 +988,6 @@ pub fn process_weekly_finances(game: &mut Game) {
             if sponsorship.remaining_weeks == 0 {
                 team.sponsorship = None;
             }
-        }
-    }
-
-    if game.league.is_some() {
-        let team_ids: Vec<String> = game.teams.iter().map(|team| team.id.clone()).collect();
-        for team_id in team_ids {
-            let home_count = count_recent_home_matches(game, &team_id);
-            if home_count == 0 {
-                continue;
-            }
-            let stadium_capacity = game
-                .teams
-                .iter()
-                .find(|team| team.id == team_id)
-                .map(|team| team.stadium_capacity)
-                .unwrap_or(0);
-            let mut rng = rand::rng();
-            let attendance_pct = rng.random_range(60..=92) as f64 / 100.0;
-            let avg_ticket = rng.random_range(15..=25) as f64;
-            let total_revenue =
-                calc_matchday(stadium_capacity, home_count, attendance_pct, avg_ticket);
-            let req = PostRequest::new(&team_id, total_revenue, CashKind::Matchday, post_date);
-            let _ = commit_weekly_posts(game, std::slice::from_ref(&req));
         }
     }
 
@@ -1331,4 +1248,9 @@ mod tests {
             "A stronger league position should improve sponsor pitch value when other club factors are equal"
         );
     }
+}
+
+fn match_ticket_price(team: &Team) -> f64 {
+    // Basic ticket equivalent, not a claim about actual club ticket prices.
+    8.0 + f64::from(team.reputation.min(1000)) * 0.037
 }

@@ -72,6 +72,12 @@ pub struct ContractTerminationCommandResponse {
     pub squad_safety: SquadSafetyReport,
 }
 
+/// IPC and MCP accept weekly euros; the save and game rules use annual euros.
+pub(crate) fn annual_contract_wage(weekly: u32) -> Result<u32, String> {
+    if weekly == 0 { return Err("be.error.contracts.boardWagePolicy".into()); }
+    weekly.checked_mul(52).ok_or_else(|| "be.error.finance.amountOverflow".into())
+}
+
 fn serialize_session_status(status: RenewalSessionStatus) -> String {
     match status {
         RenewalSessionStatus::Idle => "idle",
@@ -90,7 +96,9 @@ pub async fn propose_renewal(
     weekly_wage: u32,
     contract_years: u32,
 ) -> Result<RenewalCommandResponse, String> {
-    propose_renewal_internal(&state, &player_id, weekly_wage, contract_years)
+    let mut response = propose_renewal_internal(&state, &player_id, annual_contract_wage(weekly_wage)?, contract_years)?;
+    response.suggested_wage = response.suggested_wage.map(|annual| annual.div_ceil(52));
+    Ok(response)
 }
 
 #[tauri::command]
@@ -114,7 +122,7 @@ pub async fn preview_renewal_financial_impact(
     player_id: String,
     weekly_wage: u32,
 ) -> Result<RenewalFinancialProjectionCommandResponse, String> {
-    preview_renewal_financial_impact_internal(&state, &player_id, weekly_wage)
+    preview_renewal_financial_impact_internal(&state, &player_id, annual_contract_wage(weekly_wage)?)
 }
 
 #[tauri::command]
@@ -124,7 +132,9 @@ pub async fn offer_free_agent_contract(
     weekly_wage: u32,
     contract_years: u32,
 ) -> Result<FreeAgentContractCommandResponse, String> {
-    offer_free_agent_contract_internal(&state, &player_id, weekly_wage, contract_years)
+    let mut response = offer_free_agent_contract_internal(&state, &player_id, annual_contract_wage(weekly_wage)?, contract_years)?;
+    response.suggested_wage = response.suggested_wage.map(|annual| annual.div_ceil(52));
+    Ok(response)
 }
 
 #[tauri::command]
@@ -133,7 +143,7 @@ pub async fn preview_free_agent_contract_impact(
     player_id: String,
     weekly_wage: u32,
 ) -> Result<FreeAgentContractProjectionCommandResponse, String> {
-    preview_free_agent_contract_impact_internal(&state, &player_id, weekly_wage)
+    preview_free_agent_contract_impact_internal(&state, &player_id, annual_contract_wage(weekly_wage)?)
 }
 
 #[tauri::command]
@@ -172,12 +182,12 @@ pub async fn terminate_contract_now(
 pub fn propose_renewal_internal(
     state: &StateManager,
     player_id: &str,
-    weekly_wage: u32,
+    annual_wage: u32,
     contract_years: u32,
 ) -> Result<RenewalCommandResponse, String> {
     info!(
-        "[cmd] propose_renewal: player_id={}, weekly_wage={}, contract_years={}",
-        player_id, weekly_wage, contract_years
+        "[cmd] propose_renewal: player_id={}, annual_wage={}, contract_years={}",
+        player_id, annual_wage, contract_years
     );
 
     // propose_renewal validates (team/player) before mutating wage/contract.
@@ -187,7 +197,7 @@ pub fn propose_renewal_internal(
                 game,
                 player_id,
                 RenewalOffer {
-                    weekly_wage,
+                    annual_wage,
                     contract_years,
                 },
             )?;
@@ -239,16 +249,16 @@ pub fn delegate_renewals_internal(
 pub fn preview_renewal_financial_impact_internal(
     state: &StateManager,
     player_id: &str,
-    weekly_wage: u32,
+    annual_wage: u32,
 ) -> Result<RenewalFinancialProjectionCommandResponse, String> {
     info!(
-        "[cmd] preview_renewal_financial_impact: player_id={}, weekly_wage={}",
-        player_id, weekly_wage
+        "[cmd] preview_renewal_financial_impact: player_id={}, annual_wage={}",
+        player_id, annual_wage
     );
 
     let projection = state
         .get_game(|game| {
-            ofm_core::contracts::project_renewal_financial_impact(game, player_id, weekly_wage)
+            ofm_core::contracts::project_renewal_financial_impact(game, player_id, annual_wage)
         })
         .ok_or_else(|| "be.error.noActiveGameSession".to_string())??;
 
@@ -258,12 +268,12 @@ pub fn preview_renewal_financial_impact_internal(
 pub fn offer_free_agent_contract_internal(
     state: &StateManager,
     player_id: &str,
-    weekly_wage: u32,
+    annual_wage: u32,
     contract_years: u32,
 ) -> Result<FreeAgentContractCommandResponse, String> {
     info!(
-        "[cmd] offer_free_agent_contract: player_id={}, weekly_wage={}, contract_years={}",
-        player_id, weekly_wage, contract_years
+        "[cmd] offer_free_agent_contract: player_id={}, annual_wage={}, contract_years={}",
+        player_id, annual_wage, contract_years
     );
 
     // offer_free_agent_contract validates (team/player/free-agent) before mutating.
@@ -273,7 +283,7 @@ pub fn offer_free_agent_contract_internal(
                 game,
                 player_id,
                 RenewalOffer {
-                    weekly_wage,
+                    annual_wage,
                     contract_years,
                 },
             )?;
@@ -294,16 +304,16 @@ pub fn offer_free_agent_contract_internal(
 pub fn preview_free_agent_contract_impact_internal(
     state: &StateManager,
     player_id: &str,
-    weekly_wage: u32,
+    annual_wage: u32,
 ) -> Result<FreeAgentContractProjectionCommandResponse, String> {
     info!(
-        "[cmd] preview_free_agent_contract_impact: player_id={}, weekly_wage={}",
-        player_id, weekly_wage
+        "[cmd] preview_free_agent_contract_impact: player_id={}, annual_wage={}",
+        player_id, annual_wage
     );
 
     let projection = state
         .get_game(|game| {
-            ofm_core::contracts::project_free_agent_contract_impact(game, player_id, weekly_wage)
+            ofm_core::contracts::project_free_agent_contract_impact(game, player_id, annual_wage)
         })
         .ok_or_else(|| "be.error.noActiveGameSession".to_string())??;
 
@@ -819,7 +829,13 @@ mod tests {
     }
 
     #[test]
-    fn serialize_session_status_uses_frontend_casing() {
+    /// IPC and MCP accept weekly euros; the save and game rules use annual euros.
+pub(crate) fn annual_contract_wage(weekly: u32) -> Result<u32, String> {
+    if weekly == 0 { return Err("be.error.contracts.boardWagePolicy".into()); }
+    weekly.checked_mul(52).ok_or_else(|| "be.error.finance.amountOverflow".into())
+}
+
+fn serialize_session_status_uses_frontend_casing() {
         assert_eq!(
             super::serialize_session_status(RenewalSessionStatus::Idle),
             "idle"

@@ -226,6 +226,16 @@ describe("useFreeAgentContractFlow", () => {
     });
   });
 
+  it("opens an existing annual salary as weekly pay without a 52-fold increase", async () => {
+    const target = createPlayer({ wage: 5_200_000 });
+    render(<HookHarness gameState={createGameState([target])} target={target} />);
+    fireEvent.click(screen.getByRole("button", { name: "Open" }));
+    expect(screen.getByLabelText("Wage")).toHaveValue("100000");
+    await waitFor(() =>
+      expect(mockedPreviewFreeAgentContractImpact).toHaveBeenCalledWith(target.id, 100000),
+    );
+  });
+
   it("does not submit when the computed wage is invalid", async () => {
     const target = createPlayer();
     const gameState = createGameState([target]);
@@ -235,7 +245,7 @@ describe("useFreeAgentContractFlow", () => {
     fireEvent.click(screen.getByRole("button", { name: "Open" }));
 
     await waitFor(() => {
-      expect(mockedPreviewFreeAgentContractImpact).toHaveBeenCalledWith(target.id, 3000);
+      expect(mockedPreviewFreeAgentContractImpact).toHaveBeenCalledWith(target.id, 1154);
     });
 
     fireEvent.change(screen.getByLabelText("Wage"), {

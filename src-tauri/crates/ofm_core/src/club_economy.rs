@@ -206,6 +206,7 @@ pub fn upgrade_generated_career(game: &mut Game) -> Result<(), String> {
     }
     let mut candidate = game.clone();
     upgrade_generated_career_inner(&mut candidate)?;
+    upgrade_generated_staff_pay(&mut candidate);
     *game = candidate;
     Ok(())
 }
@@ -428,4 +429,30 @@ mod tests {
         );
         assert_eq!(game.teams[0].economy.annual_operating_cost, overhead);
     }
+}
+
+/// Standard old saves had generated staff with no salary. Bring that payroll
+/// into the explicit wage bill, moving its cost out of already-calibrated
+/// overhead. Preserve cash, paid contracts, authored packages and history.
+fn upgrade_generated_staff_pay(game: &mut Game) {
+    if !game.package_lockfile.is_empty() || game.emitted_events.contains("economy:0.6.7") { return; }
+    use chrono::Datelike;
+    for team in &mut game.teams {
+        if team.economy.version == 0 { continue; }
+        let zero_staff: Vec<_> = game.staff.iter().enumerate().filter(|(_, s)| s.team_id.as_deref() == Some(&team.id) && s.wage == 0).map(|(index, s)| (index, crate::staff_contracts::annual_market_wage(s))).collect();
+        let quoted = zero_staff.iter().map(|(_, wage)| i64::from(*wage)).sum::<i64>();
+        let ceiling = annual_revenue_anchor(team) / 50;
+        let mut additional = 0;
+        for (index, wage) in zero_staff {
+            let wage = if quoted > ceiling { (i64::from(wage) * ceiling / quoted).max(1) as u32 } else { wage };
+            game.staff[index].wage = wage;
+            game.staff[index].contract_end = Some(format!("{}-06-30", game.clock.current_date.year() + 2));
+            additional += i64::from(wage);
+        }
+        team.economy.annual_operating_cost = team.economy.annual_operating_cost.saturating_sub(additional).max(0);
+    }
+    for staff in &mut game.staff {
+        if staff.team_id.is_none() && staff.wage == 0 { staff.wage = crate::staff_contracts::annual_market_wage(staff); }
+    }
+    game.emitted_events.insert("economy:0.6.7".into());
 }

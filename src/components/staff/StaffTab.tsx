@@ -345,7 +345,10 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
                           )}
                           {staff.wage > 0 && (
                             <span className="text-[10px] bg-gray-100 dark:bg-navy-700 text-gray-500 dark:text-gray-400 px-1.5 py-0.5 rounded font-heading uppercase tracking-wider">
-                              {formatWeeklyAmount(formatVal(staff.wage), weeklySuffix)}
+                              {formatWeeklyAmount(
+                                formatVal(Math.floor(staff.wage / 52)),
+                                weeklySuffix,
+                              )}
                             </span>
                           )}
                           {staff.role === "Scout" ? (

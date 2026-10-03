@@ -117,8 +117,9 @@ fn playing_time_growth_factor(age: u32, minutes: u32) -> f64 {
         return 1.0;
     }
     match minutes {
-        0..=299 => 0.9,
-        300..=899 => 1.0,
+        0..=299 => 0.55,
+        300..=899 => 0.8,
+        900..=1799 => 1.0,
         _ => 1.1,
     }
 }
@@ -407,9 +408,11 @@ fn train_player(
     };
 
     // Base gain per attribute per session, boosted by coaching staff
-    let gain = 0.15
+    let gain = 0.025
         * intensity_mult
         * age_factor
+        * (f64::from(player.potential.saturating_sub(player.ovr)) / 20.0).clamp(0.15, 1.0)
+        * (f64::from(player.condition) / 90.0).clamp(0.35, 1.0)
         * playing_time_growth_factor(age, player.stats.minutes_played)
         * plan.bonus.coaching_mult
         * plan.bonus.specialization_mult
@@ -424,7 +427,11 @@ fn train_player(
     // `potential = max(potential, ovr)` invariant silently raises the career
     // ceiling in lockstep — the ceiling stops being a ceiling.
     if player.potential > player.ovr {
-        apply_focus_gains(&mut player.attributes, player_focus, gain, rng);
+        if player.natural_position.to_group_position() == domain::player::Position::Goalkeeper {
+            apply_goalkeeper_gains(&mut player.attributes, player_focus, gain, rng);
+        } else {
+            apply_focus_gains(&mut player.attributes, player_focus, gain, rng);
+        }
     }
     apply_fitness_change(&mut player.fitness, player_focus, intensity_mult, rng);
 
@@ -610,7 +617,7 @@ mod development_tests {
     #[test]
     fn young_regulars_develop_faster_than_unused_prospects() {
         assert!(playing_time_growth_factor(19, 1200) > playing_time_growth_factor(19, 0));
-        assert_eq!(playing_time_growth_factor(19, 350), 1.0);
+        assert_eq!(playing_time_growth_factor(19, 350), 0.8);
         assert_eq!(playing_time_growth_factor(29, 1200), 1.0);
     }
 }
@@ -690,5 +697,52 @@ mod staff_index_tests {
             "1200 clubs, 7200 staff, 20 days: scan={scan:?}, indexed={:?}",
             start.elapsed()
         );
+    }
+}
+
+#[cfg(test)]
+mod season_balance_tests {
+    use super::*;
+    use rand::SeedableRng;
+    fn cohort_gain(age: u32, minutes: u32) -> f64 {
+        let mut sum = 0.0;
+        for seed in 0..64 {
+            let attrs = serde_json::from_value(serde_json::json!({"pace":60,"stamina":60,"strength":60,"agility":60,"passing":60,"shooting":60,"tackling":60,"dribbling":60,"defending":60,"positioning":60,"vision":60,"decisions":60})).unwrap();
+            let mut player = Player::new("p".into(), "P".into(), "Player".into(), format!("{}-01-01", 2026-age), "GB".into(), domain::player::Position::Forward, attrs);
+            player.potential = 85;
+            player.stats.minutes_played = minutes;
+            player.morale = 80;
+            refresh_player_derived(&mut player, 2026);
+            let initial = player.ovr;
+            let mut plan = TeamTrainingPlan { default_focus: TrainingFocus::Technical, intensity: TrainingIntensity::Medium, schedule: TrainingSchedule::Balanced,
+                bonus: TeamCoachingBonus { coaching_mult: 1.3, specialization_mult: 1.25, physio_mult: 1.2, youth_mult: 1.2 }, medical_facility_mult: 1.2, group_overrides: Default::default() };
+            let mut rng = rand::rngs::StdRng::seed_from_u64(seed);
+            for day in 0..365 {
+                plan.default_focus = match (day/28)%4 { 0 => TrainingFocus::Physical, 1 => TrainingFocus::Technical, 2 => TrainingFocus::Tactical, _ => TrainingFocus::Attacking };
+                player.condition = 92;
+                train_player(&mut player, &plan, &TrainingDay { weekday_num: day%7, year: 2026 }, &mut rng);
+            }
+            sum += f64::from(player.ovr.saturating_sub(initial));
+        }
+        sum / 64.0
+    }
+    #[test]
+    fn one_season_development_is_gradual_and_playing_time_matters() {
+        let youth = cohort_gain(19, 1800);
+        let unused = cohort_gain(19, 0);
+        let veteran = cohort_gain(33, 1800);
+        println!("365 days, 64 seeded players: youth={youth:.2}, unused={unused:.2}, veteran={veteran:.2} OVR");
+        assert!((1.0..=6.0).contains(&youth));
+        assert!(unused < youth * 0.8);
+        assert!(veteran < youth * 0.6);
+    }
+}
+
+fn apply_goalkeeper_gains(attrs: &mut PlayerAttributes, focus: &TrainingFocus, gain: f64, rng: &mut impl Rng) {
+    match focus {
+        TrainingFocus::Technical => { try_gain(&mut attrs.handling, gain, rng); try_gain(&mut attrs.reflexes, gain, rng); try_gain(&mut attrs.passing, gain * 0.5, rng); }
+        TrainingFocus::Defending => { try_gain(&mut attrs.positioning, gain, rng); try_gain(&mut attrs.aerial, gain, rng); try_gain(&mut attrs.handling, gain * 0.5, rng); }
+        TrainingFocus::Attacking => { try_gain(&mut attrs.passing, gain, rng); try_gain(&mut attrs.decisions, gain * 0.5, rng); }
+        _ => apply_focus_gains(attrs, focus, gain, rng),
     }
 }

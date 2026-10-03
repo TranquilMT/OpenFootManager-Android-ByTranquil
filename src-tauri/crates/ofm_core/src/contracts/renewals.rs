@@ -66,7 +66,7 @@ pub fn evaluate_renewal_offer(
         );
     }
 
-    if is_insulting_wage_offer(player.wage, expected_wage, offer.weekly_wage) {
+    if is_insulting_wage_offer(player.wage, expected_wage, offer.annual_wage) {
         let feedback = build_renewal_feedback(
             player,
             current_date,
@@ -87,7 +87,7 @@ pub fn evaluate_renewal_offer(
         );
     }
 
-    if offer.weekly_wage < minimum_wage {
+    if offer.annual_wage < minimum_wage {
         let feedback = build_renewal_feedback(
             player,
             current_date,
@@ -108,7 +108,7 @@ pub fn evaluate_renewal_offer(
         );
     }
 
-    if offer.weekly_wage >= expected_wage && offer.contract_years >= expected_years {
+    if offer.annual_wage >= expected_wage && offer.contract_years >= expected_years {
         let feedback = build_renewal_feedback(
             player,
             current_date,
@@ -260,7 +260,7 @@ pub fn propose_renewal(
         && should_manual_renewal_fail_on_relationship(
             &game.players[player_index],
             expected_wage,
-            offer.weekly_wage,
+            offer.annual_wage,
         );
 
     if relationship_blocked {
@@ -288,7 +288,7 @@ pub fn propose_renewal(
             game,
             &team,
             game.players[player_index].wage,
-            offer.weekly_wage,
+            offer.annual_wage,
         ) {
             return Err(renewal_wage_policy_error_message(&team));
         }
@@ -298,7 +298,7 @@ pub fn propose_renewal(
             .ok_or(ERR_UNABLE_TO_CALCULATE_CONTRACT_END_DATE.to_string())?;
 
         let player = &mut game.players[player_index];
-        player.wage = offer.weekly_wage;
+        player.wage = offer.annual_wage;
         player.contract_end = Some(new_contract_end.format("%Y-%m-%d").to_string());
         let state = player
             .morale_core
