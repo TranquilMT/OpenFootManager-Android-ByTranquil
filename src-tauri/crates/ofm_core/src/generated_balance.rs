@@ -301,13 +301,26 @@ pub fn market_value_eur(ovr: u8, potential: u8, age: u8) -> i64 {
 pub fn weekly_wage_eur(ovr: u8, reputation: u8) -> i64 {
     // Weekly EUR anchors: academy, semi-pro, senior professionals and elite stars.
     // Interpolate continuously so a one-point rating change cannot double pay.
-    const BANDS: [(u8, i64); 12] = [(30, 150), (40, 250), (50, 600), (60, 2_000),
-        (65, 5_000), (70, 12_000), (75, 25_000), (80, 50_000),
-        (85, 100_000), (90, 200_000), (95, 350_000), (100, 450_000)];
+    const BANDS: [(u8, i64); 12] = [
+        (30, 150),
+        (40, 250),
+        (50, 600),
+        (60, 2_000),
+        (65, 5_000),
+        (70, 12_000),
+        (75, 25_000),
+        (80, 50_000),
+        (85, 100_000),
+        (90, 200_000),
+        (95, 350_000),
+        (100, 450_000),
+    ];
     let rating = ovr.clamp(30, 100);
     let mut base = BANDS[0].1;
     for pair in BANDS.windows(2) {
-        let [(low, low_pay), (high, high_pay)] = pair else { unreachable!() };
+        let [(low, low_pay), (high, high_pay)] = pair else {
+            unreachable!()
+        };
         if rating >= *low && rating <= *high {
             base = low_pay + (high_pay - low_pay) * i64::from(rating - low) / i64::from(high - low);
             break;
@@ -456,6 +469,8 @@ mod salary_balance_tests {
         assert!(weekly_wage_eur(60, 50) <= 3_000);
         assert!((75_000..=150_000).contains(&weekly_wage_eur(85, 90)));
         assert!(weekly_wage_eur(99, 100) <= 450_000);
-        for quality in 30..100 { assert!(weekly_wage_eur(quality + 1, 70) >= weekly_wage_eur(quality, 70)); }
+        for quality in 30..100 {
+            assert!(weekly_wage_eur(quality + 1, 70) >= weekly_wage_eur(quality, 70));
+        }
     }
 }

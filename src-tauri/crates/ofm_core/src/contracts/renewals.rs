@@ -45,7 +45,9 @@ pub fn evaluate_renewal_offer(
     let expected_years = expected_contract_years(player, current_date);
     let minimum_wage = minimum_acceptable_wage(player.wage);
 
-    if offer.contract_years == 0 || offer.contract_years > maximum_contract_years(player, current_date) {
+    if offer.contract_years == 0
+        || offer.contract_years > maximum_contract_years(player, current_date)
+    {
         let feedback = build_renewal_feedback(
             player,
             current_date,
@@ -178,7 +180,13 @@ pub fn propose_renewal(
         return Err(ERR_PLAYER_NOT_OWNED_BY_CLUB.to_string());
     }
 
-    if offer.contract_years == 0 || offer.contract_years > maximum_contract_years(&game.players[player_index], game.clock.current_date.date_naive()) {
+    if offer.contract_years == 0
+        || offer.contract_years
+            > maximum_contract_years(
+                &game.players[player_index],
+                game.clock.current_date.date_naive(),
+            )
+    {
         let current_date = game.clock.current_date.date_naive();
         let round = next_renewal_round(&game.players[player_index], None);
         let expected_wage = expected_wage(&game.players[player_index], &team, current_date);
@@ -284,7 +292,11 @@ pub fn propose_renewal(
     }
 
     if outcome.decision == RenewalDecision::Accepted {
-        if !crate::contract_wage_policy::player_contract_wage_policy_allows(game, &game.players[player_index], offer.annual_wage) {
+        if !crate::contract_wage_policy::player_contract_wage_policy_allows(
+            game,
+            &game.players[player_index],
+            offer.annual_wage,
+        ) {
             return Err(renewal_wage_policy_error_message(&team));
         }
 

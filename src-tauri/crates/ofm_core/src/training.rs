@@ -177,7 +177,8 @@ pub fn process_training(game: &mut Game, weekday_num: u32) {
                 bonus.coaching_mult *= 1.0
                     + f64::from(game.manager.career_stats.progression.training_percent()) / 100.0;
             }
-            bonus.coaching_mult *= 1.0 + f64::from(t.facilities.training.saturating_sub(1).min(9)) * 0.05;
+            bonus.coaching_mult *=
+                1.0 + f64::from(t.facilities.training.saturating_sub(1).min(9)) * 0.05;
             let medical_facility_mult =
                 1.0 + f64::from(t.facilities.medical.saturating_sub(1)) * 0.1;
             let mut group_overrides = std::collections::HashMap::new();
@@ -611,11 +612,27 @@ fn clamp_fitness(val: i16) -> u8 {
     val.clamp(0, 100) as u8
 }
 
-fn apply_goalkeeper_gains(attrs: &mut PlayerAttributes, focus: &TrainingFocus, gain: f64, rng: &mut impl Rng) {
+fn apply_goalkeeper_gains(
+    attrs: &mut PlayerAttributes,
+    focus: &TrainingFocus,
+    gain: f64,
+    rng: &mut impl Rng,
+) {
     match focus {
-        TrainingFocus::Technical => { try_gain(&mut attrs.handling, gain, rng); try_gain(&mut attrs.reflexes, gain, rng); try_gain(&mut attrs.passing, gain * 0.5, rng); }
-        TrainingFocus::Defending => { try_gain(&mut attrs.positioning, gain, rng); try_gain(&mut attrs.aerial, gain, rng); try_gain(&mut attrs.handling, gain * 0.5, rng); }
-        TrainingFocus::Attacking => { try_gain(&mut attrs.passing, gain, rng); try_gain(&mut attrs.decisions, gain * 0.5, rng); }
+        TrainingFocus::Technical => {
+            try_gain(&mut attrs.handling, gain, rng);
+            try_gain(&mut attrs.reflexes, gain, rng);
+            try_gain(&mut attrs.passing, gain * 0.5, rng);
+        }
+        TrainingFocus::Defending => {
+            try_gain(&mut attrs.positioning, gain, rng);
+            try_gain(&mut attrs.aerial, gain, rng);
+            try_gain(&mut attrs.handling, gain * 0.5, rng);
+        }
+        TrainingFocus::Attacking => {
+            try_gain(&mut attrs.passing, gain, rng);
+            try_gain(&mut attrs.decisions, gain * 0.5, rng);
+        }
         _ => apply_focus_gains(attrs, focus, gain, rng),
     }
 }
@@ -718,19 +735,51 @@ mod season_balance_tests {
         let mut sum = 0.0;
         for seed in 0..64 {
             let attrs = serde_json::from_value(serde_json::json!({"pace":60,"stamina":60,"strength":60,"agility":60,"passing":60,"shooting":60,"tackling":60,"dribbling":60,"defending":60,"positioning":60,"vision":60,"decisions":60})).unwrap();
-            let mut player = Player::new("p".into(), "P".into(), "Player".into(), format!("{}-01-01", 2026-age), "GB".into(), domain::player::Position::Forward, attrs);
+            let mut player = Player::new(
+                "p".into(),
+                "P".into(),
+                "Player".into(),
+                format!("{}-01-01", 2026 - age),
+                "GB".into(),
+                domain::player::Position::Forward,
+                attrs,
+            );
             player.potential = 85;
             player.stats.minutes_played = minutes;
             player.morale = 80;
             refresh_player_derived(&mut player, 2026);
             let initial = player.ovr;
-            let mut plan = TeamTrainingPlan { default_focus: TrainingFocus::Technical, intensity: TrainingIntensity::Medium, schedule: TrainingSchedule::Balanced,
-                bonus: TeamCoachingBonus { coaching_mult: 1.3, specialization_mult: 1.25, physio_mult: 1.2, youth_mult: 1.2 }, medical_facility_mult: 1.2, group_overrides: Default::default() };
+            let mut plan = TeamTrainingPlan {
+                default_focus: TrainingFocus::Technical,
+                intensity: TrainingIntensity::Medium,
+                schedule: TrainingSchedule::Balanced,
+                bonus: TeamCoachingBonus {
+                    coaching_mult: 1.3,
+                    specialization_mult: 1.25,
+                    physio_mult: 1.2,
+                    youth_mult: 1.2,
+                },
+                medical_facility_mult: 1.2,
+                group_overrides: Default::default(),
+            };
             let mut rng = rand::rngs::StdRng::seed_from_u64(seed);
             for day in 0..365 {
-                plan.default_focus = match (day/28)%4 { 0 => TrainingFocus::Physical, 1 => TrainingFocus::Technical, 2 => TrainingFocus::Tactical, _ => TrainingFocus::Attacking };
+                plan.default_focus = match (day / 28) % 4 {
+                    0 => TrainingFocus::Physical,
+                    1 => TrainingFocus::Technical,
+                    2 => TrainingFocus::Tactical,
+                    _ => TrainingFocus::Attacking,
+                };
                 player.condition = 92;
-                train_player(&mut player, &plan, &TrainingDay { weekday_num: day%7, year: 2026 }, &mut rng);
+                train_player(
+                    &mut player,
+                    &plan,
+                    &TrainingDay {
+                        weekday_num: day % 7,
+                        year: 2026,
+                    },
+                    &mut rng,
+                );
             }
             sum += f64::from(player.ovr.saturating_sub(initial));
         }
@@ -739,14 +788,42 @@ mod season_balance_tests {
     #[test]
     fn goalkeepers_train_handling_and_reflexes_without_striker_gains() {
         let attrs = serde_json::from_value(serde_json::json!({"pace":60,"stamina":60,"strength":60,"agility":60,"passing":60,"shooting":60,"tackling":60,"dribbling":60,"defending":60,"positioning":60,"vision":60,"decisions":60,"handling":60,"reflexes":60,"aerial":60})).unwrap();
-        let mut player = Player::new("keeper".into(), "G".into(), "Keeper".into(), "2007-01-01".into(), "GB".into(), domain::player::Position::Goalkeeper, attrs);
+        let mut player = Player::new(
+            "keeper".into(),
+            "G".into(),
+            "Keeper".into(),
+            "2007-01-01".into(),
+            "GB".into(),
+            domain::player::Position::Goalkeeper,
+            attrs,
+        );
         player.potential = 85;
         player.stats.minutes_played = 1800;
-        let plan = TeamTrainingPlan { default_focus: TrainingFocus::Technical, intensity: TrainingIntensity::Medium, schedule: TrainingSchedule::Balanced, bonus: TeamCoachingBonus { coaching_mult: 1.3, specialization_mult: 1.25, physio_mult: 1.2, youth_mult: 1.2 }, medical_facility_mult: 1.2, group_overrides: Default::default() };
+        let plan = TeamTrainingPlan {
+            default_focus: TrainingFocus::Technical,
+            intensity: TrainingIntensity::Medium,
+            schedule: TrainingSchedule::Balanced,
+            bonus: TeamCoachingBonus {
+                coaching_mult: 1.3,
+                specialization_mult: 1.25,
+                physio_mult: 1.2,
+                youth_mult: 1.2,
+            },
+            medical_facility_mult: 1.2,
+            group_overrides: Default::default(),
+        };
         let mut rng = rand::rngs::StdRng::seed_from_u64(67);
         for day in 0..365 {
             player.condition = 92;
-            train_player(&mut player, &plan, &TrainingDay { weekday_num: day % 7, year: 2026 }, &mut rng);
+            train_player(
+                &mut player,
+                &plan,
+                &TrainingDay {
+                    weekday_num: day % 7,
+                    year: 2026,
+                },
+                &mut rng,
+            );
         }
         assert!(player.attributes.handling > 60);
         assert!(player.attributes.reflexes > 60);
@@ -759,10 +836,11 @@ mod season_balance_tests {
         let youth = cohort_gain(19, 1800);
         let unused = cohort_gain(19, 0);
         let veteran = cohort_gain(33, 1800);
-        println!("365 days, 64 seeded players: youth={youth:.2}, unused={unused:.2}, veteran={veteran:.2} OVR");
+        println!(
+            "365 days, 64 seeded players: youth={youth:.2}, unused={unused:.2}, veteran={veteran:.2} OVR"
+        );
         assert!((1.0..=6.0).contains(&youth));
         assert!(unused < youth * 0.8);
         assert!(veteran < youth * 0.6);
     }
 }
-

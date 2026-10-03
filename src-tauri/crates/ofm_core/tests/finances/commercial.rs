@@ -10,7 +10,9 @@ fn request_board_support_recovers_cash_crisis_and_applies_board_costs() {
     let result = finances::request_board_support(&mut game, "team1").expect("support");
 
     assert!(result.support_amount > 25_000);
-    assert!(result.support_amount <= ofm_core::club_economy::annual_revenue_anchor(&game.teams[0]) / 20);
+    assert!(
+        result.support_amount <= ofm_core::club_economy::annual_revenue_anchor(&game.teams[0]) / 20
+    );
     assert_eq!(result.transfer_budget_reduction, result.support_amount / 2);
     assert_eq!(result.satisfaction_penalty, 12);
     assert_eq!(game.manager.satisfaction, 58);
@@ -49,7 +51,10 @@ fn finance_action_previews_are_available_without_mutating_state() {
 
     assert!(previews.board_support.is_some());
     assert!(previews.sponsor_pitch.is_some());
-    assert!(previews.marketing_campaign.is_none(), "campaigns require cash to fund activation");
+    assert!(
+        previews.marketing_campaign.is_none(),
+        "campaigns require cash to fund activation"
+    );
     assert_eq!(game.teams[0].finance, -40_000);
     assert!(game.messages.is_empty());
     assert!(game.teams[0].financial_ledger.is_empty());
@@ -85,7 +90,10 @@ fn request_sponsor_pitch_creates_pending_offer_for_over_budget_team() {
 
     assert_eq!(result.duration_weeks, 12);
     assert!(result.weekly_amount > 0);
-    assert!(result.weekly_amount * 52 <= ofm_core::club_economy::annual_revenue_anchor(&game.teams[0]) * 4 / 100);
+    assert!(
+        result.weekly_amount * 52
+            <= ofm_core::club_economy::annual_revenue_anchor(&game.teams[0]) * 4 / 100
+    );
     let message = game
         .messages
         .iter()
@@ -221,4 +229,3 @@ fn request_marketing_campaign_respects_cooldown() {
 
     assert_eq!(error, "be.error.finance.marketingCampaignCoolingDown");
 }
-

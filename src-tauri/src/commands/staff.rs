@@ -29,8 +29,16 @@ pub fn hire_staff_internal(state: &StateManager, staff_id: &str) -> Result<Game,
 }
 
 #[tauri::command]
-pub fn preview_staff_release(state: State<'_, Arc<StateManager>>, staff_id: String) -> Result<i64, String> {
- state.get_game(|game| { let team_id = user_team_id(game)?; ofm_core::staff_contracts::termination_cost(game, &team_id, &staff_id) }).unwrap_or_else(|| Err("be.error.noActiveGameSession".into()))
+pub fn preview_staff_release(
+    state: State<'_, Arc<StateManager>>,
+    staff_id: String,
+) -> Result<i64, String> {
+    state
+        .get_game(|game| {
+            let team_id = user_team_id(game)?;
+            ofm_core::staff_contracts::termination_cost(game, &team_id, &staff_id)
+        })
+        .unwrap_or_else(|| Err("be.error.noActiveGameSession".into()))
 }
 
 #[cfg(test)]

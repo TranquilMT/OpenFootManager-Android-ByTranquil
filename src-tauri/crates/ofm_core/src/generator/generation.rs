@@ -539,7 +539,8 @@ pub(super) fn generate_random_player_from_def(
     };
     let base_value = (approx_ovr as f64).powi(2) * 500.0;
     let market_value = (base_value * age_factor) as u64;
-    let wage = (crate::generated_balance::weekly_wage_eur(approx_ovr.min(100) as u8, 50) * 52) as u32;
+    let wage =
+        (crate::generated_balance::weekly_wage_eur(approx_ovr.min(100) as u8, 50) * 52) as u32;
     let contract_years = if age <= 21 {
         rng.random_range(3..6)
     } else if age <= 27 {
@@ -1038,7 +1039,8 @@ pub(super) fn generate_player_from_def(
         0.4
     };
     let market_value = ((approx_ovr as f64).powi(2) * 500.0 * age_factor) as u64;
-    let wage = (crate::generated_balance::weekly_wage_eur(approx_ovr.min(100) as u8, 50) * 52) as u32;
+    let wage =
+        (crate::generated_balance::weekly_wage_eur(approx_ovr.min(100) as u8, 50) * 52) as u32;
     let contract_years = if age <= 27 {
         rng.random_range(2..6)
     } else {

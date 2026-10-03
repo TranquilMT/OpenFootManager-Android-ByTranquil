@@ -68,4 +68,3 @@ fn technical_focus_can_improve_technical_attrs() {
         "Technical focus should improve passing after many sessions"
     );
 }
-

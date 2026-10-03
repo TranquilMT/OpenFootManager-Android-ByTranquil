@@ -40,7 +40,11 @@ export default function InboxDelegatedRenewalReport({
     >
       <div className="space-y-2">
         {report.cases.map((renewalCase, index) => {
-          const detail = resolveBackendText(renewalCase.note_key, "", weeklyWageMessageParams(renewalCase.note_params));
+          const detail = resolveBackendText(
+            renewalCase.note_key,
+            "",
+            weeklyWageMessageParams(renewalCase.note_params),
+          );
           const formattedWage = formatMoneyParam(renewalCase.agreed_wage);
 
           const line =

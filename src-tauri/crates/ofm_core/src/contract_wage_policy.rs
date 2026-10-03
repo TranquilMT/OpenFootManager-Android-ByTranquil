@@ -52,12 +52,16 @@ pub fn project_contract_offer_financial_impact(
     let annual_wage_budget = team.wage_budget;
     let annual_soft_cap = (annual_wage_budget * WAGE_SOFT_CAP_PCT) / 100;
     let current_weekly_wage_spend = crate::finances::calc_wages(game, &team.id);
-    let projected_weekly_wage_spend = current_weekly_wage_spend - i64::from(current_player_wage) / 52 + i64::from(offered_wage) / 52;
+    let projected_weekly_wage_spend = current_weekly_wage_spend
+        - i64::from(current_player_wage) / 52
+        + i64::from(offered_wage) / 52;
 
     let current_cash_runway_weeks =
         calc_cash_runway_weeks(team.finance, current_weekly_net(game, team));
-    let projected_cash_runway_weeks =
-        calc_cash_runway_weeks(team.finance, current_weekly_net(game, team) + current_weekly_wage_spend - projected_weekly_wage_spend);
+    let projected_cash_runway_weeks = calc_cash_runway_weeks(
+        team.finance,
+        current_weekly_net(game, team) + current_weekly_wage_spend - projected_weekly_wage_spend,
+    );
 
     RenewalFinancialProjection {
         current_annual_wage_bill: current_bill,
@@ -133,26 +137,44 @@ pub fn project_renewal_financial_impact(
 
     let mut offered = player.clone();
     offered.wage = offered_wage;
-    let mut projection = project_contract_offer_financial_impact(game, team,
+    let mut projection = project_contract_offer_financial_impact(
+        game,
+        team,
         crate::finances::player_annual_wage_for_team(player, team_id) as u32,
-        crate::finances::player_annual_wage_for_team(&offered, team_id) as u32);
+        crate::finances::player_annual_wage_for_team(&offered, team_id) as u32,
+    );
     projection.policy_allows = player_contract_wage_policy_allows(game, player, offered_wage);
     Ok(projection)
 }
 
 fn current_weekly_net(game: &Game, team: &Team) -> i64 {
-    crate::finances::team_finance_snapshot(game, &team.id).map(|s| s.projected_weekly_net).unwrap_or(0)
+    crate::finances::team_finance_snapshot(game, &team.id)
+        .map(|s| s.projected_weekly_net)
+        .unwrap_or(0)
 }
 
-pub fn player_contract_wage_policy_allows(game: &Game, player: &domain::player::Player, offered_wage: u32) -> bool {
-    let Some(owner) = contract_owner_team_id(player) else { return false; };
+pub fn player_contract_wage_policy_allows(
+    game: &Game,
+    player: &domain::player::Player,
+    offered_wage: u32,
+) -> bool {
+    let Some(owner) = contract_owner_team_id(player) else {
+        return false;
+    };
     let mut offered = player.clone();
     offered.wage = offered_wage;
-    let team_ids: Vec<_> = if let Some(loan) = &player.active_loan { vec![loan.parent_team_id.as_str(), loan.loan_team_id.as_str()] } else { vec![owner] };
+    let team_ids: Vec<_> = if let Some(loan) = &player.active_loan {
+        vec![loan.parent_team_id.as_str(), loan.loan_team_id.as_str()]
+    } else {
+        vec![owner]
+    };
     team_ids.into_iter().all(|id| {
-        let Some(team) = game.teams.iter().find(|t| t.id == id) else { return false; };
+        let Some(team) = game.teams.iter().find(|t| t.id == id) else {
+            return false;
+        };
         let bill = annual_team_wage_bill(game, id);
-        let projected = bill - crate::finances::player_annual_wage_for_team(player, id) + crate::finances::player_annual_wage_for_team(&offered, id);
+        let projected = bill - crate::finances::player_annual_wage_for_team(player, id)
+            + crate::finances::player_annual_wage_for_team(&offered, id);
         wage_policy_allows_projection(team, bill, projected)
     })
 }

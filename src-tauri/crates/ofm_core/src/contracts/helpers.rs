@@ -65,16 +65,46 @@ pub(crate) fn expected_wage(player: &Player, team: &Team, current_date: NaiveDat
     let age = player_age_on(current_date, &player.date_of_birth);
     // Negotiate a modest annual rise, rather than compounding several large
     // market-value, morale and expiry premiums at every renewal.
-    let age_pct = if age <= 23 { 105 } else if age <= 29 { 103 } else if age <= 32 { 100 } else { 95 };
+    let age_pct = if age <= 23 {
+        105
+    } else if age <= 29 {
+        103
+    } else if age <= 32 {
+        100
+    } else {
+        95
+    };
     let ability = crate::player_rating::natural_ovr(player);
-    let importance_pct = if player.squad_role == domain::player::SquadRole::Youth { 100 } else if ability >= 85.0 { 105 } else if ability >= 75.0 { 103 } else { 100 };
-    let expiry_pct = if remaining_contract_days(player, current_date) <= 180 { 103 } else { 100 };
+    let importance_pct = if player.squad_role == domain::player::SquadRole::Youth {
+        100
+    } else if ability >= 85.0 {
+        105
+    } else if ability >= 75.0 {
+        103
+    } else {
+        100
+    };
+    let expiry_pct = if remaining_contract_days(player, current_date) <= 180 {
+        103
+    } else {
+        100
+    };
     let low_morale_pct = if player.morale <= 50 { 103 } else { 100 };
     let low_club_pct = if team.reputation < 400 { 101 } else { 100 };
-    let wage = u128::from(reference) * age_pct * importance_pct * expiry_pct * low_morale_pct * low_club_pct / 10_000_000_000;
+    let wage = u128::from(reference)
+        * age_pct
+        * importance_pct
+        * expiry_pct
+        * low_morale_pct
+        * low_club_pct
+        / 10_000_000_000;
     let cap = u128::from(reference) * 115 / 100;
     // Round to one weekly euro, avoiding €1000 jumps for low-paid players.
-    wage.min(cap).max(u128::from(reference) * 95 / 100).div_ceil(52).saturating_mul(52).min(u128::from(u32::MAX)) as u32
+    wage.min(cap)
+        .max(u128::from(reference) * 95 / 100)
+        .div_ceil(52)
+        .saturating_mul(52)
+        .min(u128::from(u32::MAX)) as u32
 }
 
 pub(crate) fn reference_player_wage(player: &Player) -> u32 {
@@ -152,5 +182,9 @@ pub(crate) fn contract_days_remaining(
 }
 
 pub(crate) fn maximum_contract_years(player: &Player, current: NaiveDate) -> u32 {
-    if player_age_on(current, &player.date_of_birth) < 18 { 3 } else { MAX_CONTRACT_YEARS }
+    if player_age_on(current, &player.date_of_birth) < 18 {
+        3
+    } else {
+        MAX_CONTRACT_YEARS
+    }
 }

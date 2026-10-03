@@ -74,8 +74,12 @@ pub struct ContractTerminationCommandResponse {
 
 /// IPC and MCP accept weekly euros; the save and game rules use annual euros.
 pub(crate) fn annual_contract_wage(weekly: u32) -> Result<u32, String> {
-    if weekly == 0 { return Err("be.error.contracts.invalidWage".into()); }
-    weekly.checked_mul(52).ok_or_else(|| "be.error.finance.amountOverflow".into())
+    if weekly == 0 {
+        return Err("be.error.contracts.invalidWage".into());
+    }
+    weekly
+        .checked_mul(52)
+        .ok_or_else(|| "be.error.finance.amountOverflow".into())
 }
 
 fn serialize_session_status(status: RenewalSessionStatus) -> String {
@@ -96,7 +100,12 @@ pub async fn propose_renewal(
     weekly_wage: u32,
     contract_years: u32,
 ) -> Result<RenewalCommandResponse, String> {
-    let mut response = propose_renewal_internal(&state, &player_id, annual_contract_wage(weekly_wage)?, contract_years)?;
+    let mut response = propose_renewal_internal(
+        &state,
+        &player_id,
+        annual_contract_wage(weekly_wage)?,
+        contract_years,
+    )?;
     response.suggested_wage = response.suggested_wage.map(|annual| annual.div_ceil(52));
     Ok(response)
 }
@@ -122,7 +131,11 @@ pub async fn preview_renewal_financial_impact(
     player_id: String,
     weekly_wage: u32,
 ) -> Result<RenewalFinancialProjectionCommandResponse, String> {
-    preview_renewal_financial_impact_internal(&state, &player_id, annual_contract_wage(weekly_wage)?)
+    preview_renewal_financial_impact_internal(
+        &state,
+        &player_id,
+        annual_contract_wage(weekly_wage)?,
+    )
 }
 
 #[tauri::command]
@@ -132,7 +145,12 @@ pub async fn offer_free_agent_contract(
     weekly_wage: u32,
     contract_years: u32,
 ) -> Result<FreeAgentContractCommandResponse, String> {
-    let mut response = offer_free_agent_contract_internal(&state, &player_id, annual_contract_wage(weekly_wage)?, contract_years)?;
+    let mut response = offer_free_agent_contract_internal(
+        &state,
+        &player_id,
+        annual_contract_wage(weekly_wage)?,
+        contract_years,
+    )?;
     response.suggested_wage = response.suggested_wage.map(|annual| annual.div_ceil(52));
     Ok(response)
 }
@@ -143,7 +161,11 @@ pub async fn preview_free_agent_contract_impact(
     player_id: String,
     weekly_wage: u32,
 ) -> Result<FreeAgentContractProjectionCommandResponse, String> {
-    preview_free_agent_contract_impact_internal(&state, &player_id, annual_contract_wage(weekly_wage)?)
+    preview_free_agent_contract_impact_internal(
+        &state,
+        &player_id,
+        annual_contract_wage(weekly_wage)?,
+    )
 }
 
 #[tauri::command]

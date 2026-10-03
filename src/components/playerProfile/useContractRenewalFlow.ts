@@ -289,7 +289,11 @@ export function useContractRenewalFlow({
 
     if (outcome.showsAssistantNote) {
       setRenewalError(
-        resolveBackendText(delegatedCase.note_key, delegatedCase.note, weeklyWageMessageParams(delegatedCase.note_params)),
+        resolveBackendText(
+          delegatedCase.note_key,
+          delegatedCase.note,
+          weeklyWageMessageParams(delegatedCase.note_params),
+        ),
       );
     }
   }

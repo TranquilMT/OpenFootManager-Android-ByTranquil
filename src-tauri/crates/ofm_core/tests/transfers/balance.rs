@@ -55,4 +55,3 @@ fn loan_offer_rejects_terms_when_user_cannot_cover_loan_wage_share() {
     assert!(player.active_loan.is_none());
     assert!(player.loan_offers.is_empty());
 }
-

@@ -2465,9 +2465,7 @@ mod tests {
                 );
                 assert_eq!(team.finance, crate::club_economy::opening_cash(team));
                 assert!(payroll <= crate::club_economy::annual_revenue_anchor(team) * 60 / 100);
-                assert!(
-                    crate::club_economy::opening_operating_surplus(team, payroll) >= 0
-                );
+                assert!(crate::club_economy::opening_operating_surplus(team, payroll) >= 0);
             }
         }
     }

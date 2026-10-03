@@ -285,7 +285,10 @@ mod tests {
         let response = request_board_support_internal(&state).expect("response");
 
         assert!(response.result.support_amount > 25_000);
-        assert!(response.result.support_amount <= ofm_core::club_economy::annual_revenue_anchor(&response.game.teams[0]) / 20);
+        assert!(
+            response.result.support_amount
+                <= ofm_core::club_economy::annual_revenue_anchor(&response.game.teams[0]) / 20
+        );
         assert!(response.game.teams[0].finance > 0);
         assert_eq!(response.game.manager.satisfaction, 58);
 
@@ -306,7 +309,10 @@ mod tests {
         let response = request_sponsor_pitch_internal(&state).expect("response");
 
         assert!(response.result.weekly_amount > 0);
-        assert!(response.result.weekly_amount * 52 <= ofm_core::club_economy::annual_revenue_anchor(&response.game.teams[0]) * 4 / 100);
+        assert!(
+            response.result.weekly_amount * 52
+                <= ofm_core::club_economy::annual_revenue_anchor(&response.game.teams[0]) * 4 / 100
+        );
         assert!(response
             .game
             .messages

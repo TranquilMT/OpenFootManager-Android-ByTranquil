@@ -242,6 +242,7 @@ export function getTeamFinanceSnapshot(
 export function weeklyWageMessageParams(params?: Record<string, string>): Record<string, string> {
   const result = { ...params };
   const annual = Number(result.wage);
-  if (result.wage !== undefined && Number.isFinite(annual)) result.wage = String(Math.ceil(Math.max(0, annual) / 52));
+  if (result.wage !== undefined && Number.isFinite(annual))
+    result.wage = String(Math.ceil(Math.max(0, annual) / 52));
   return result;
 }

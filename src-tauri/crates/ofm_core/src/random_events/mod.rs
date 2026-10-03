@@ -95,16 +95,34 @@ pub fn check_random_events(game: &mut Game) {
     // --- 1. Sponsor offer (1% chance per day) ---
     {
         let msg_id = format!("sponsor_{}", today);
-        if !existing_ids.contains(&msg_id) && rng.random_range(0..100) == 0
-            && game.teams.iter().find(|t| t.id == user_team_id).is_some_and(|t| t.sponsorship.as_ref().is_none_or(|s| s.remaining_weeks == 0))
-            && !game.messages.iter().any(|m| m.id.starts_with("sponsor_") && m.actions.iter().any(|a| !a.resolved)) {
+        if !existing_ids.contains(&msg_id)
+            && rng.random_range(0..100) == 0
+            && game
+                .teams
+                .iter()
+                .find(|t| t.id == user_team_id)
+                .is_some_and(|t| {
+                    t.sponsorship
+                        .as_ref()
+                        .is_none_or(|s| s.remaining_weeks == 0)
+                })
+            && !game
+                .messages
+                .iter()
+                .any(|m| m.id.starts_with("sponsor_") && m.actions.iter().any(|a| !a.resolved))
+        {
             let team_name = game
                 .teams
                 .iter()
                 .find(|t| t.id == user_team_id)
                 .map(|t| t.name.as_str())
                 .unwrap_or(fallback_club_name());
-            let revenue = game.teams.iter().find(|t| t.id == user_team_id).map(crate::club_economy::annual_revenue_anchor).unwrap_or(600_000);
+            let revenue = game
+                .teams
+                .iter()
+                .find(|t| t.id == user_team_id)
+                .map(crate::club_economy::annual_revenue_anchor)
+                .unwrap_or(600_000);
             let amount = (revenue * rng.random_range(2..=4) / 100 / 52).clamp(150, 600_000) as u64;
             let sponsor = sponsor_offer_name(rng.random_range(0..8));
 

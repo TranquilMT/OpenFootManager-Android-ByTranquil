@@ -124,14 +124,21 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
 
   return (
     <div>
-      {actionError && !releaseTarget ? <p role="alert" className="mb-3 text-sm text-red-600 dark:text-red-300">{actionError}</p> : null}
+      {actionError && !releaseTarget ? (
+        <p role="alert" className="mb-3 text-sm text-red-600 dark:text-red-300">
+          {actionError}
+        </p>
+      ) : null}
       {releaseTarget ? (
         <StaffReleaseModal
           staffId={releaseTarget}
           staffName={myStaff.find((s) => s.id === releaseTarget)?.last_name ?? ""}
           submitting={actionLoading !== null}
           errorMessage={actionError}
-          onCancel={() => { setReleaseTarget(null); setActionError(null); }}
+          onCancel={() => {
+            setReleaseTarget(null);
+            setActionError(null);
+          }}
           onConfirm={() => void handleRelease(releaseTarget)}
         />
       ) : null}

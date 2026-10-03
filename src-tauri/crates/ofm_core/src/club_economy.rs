@@ -274,43 +274,75 @@ fn upgrade_generated_career_inner(game: &mut Game) -> Result<(), String> {
 /// into the explicit wage bill, moving its cost out of already-calibrated
 /// overhead. Preserve cash, paid contracts, authored packages and history.
 fn upgrade_generated_staff_pay(game: &mut Game) {
-    if !game.package_lockfile.is_empty() || game.emitted_events.contains("economy:0.6.7") { return; }
+    if !game.package_lockfile.is_empty() || game.emitted_events.contains("economy:0.6.7") {
+        return;
+    }
     use chrono::Datelike;
     for team in &mut game.teams {
-        if team.economy.version == 0 { continue; }
+        if team.economy.version == 0 {
+            continue;
+        }
         if team.economy.version == 1 {
             // Keep promotion/relegation scaling by deriving the current anchor
             // from existing receipts, rather than resetting to opening turnover.
             let revenue = team.economy.annual_operating_income * 100 / 85;
-            team.economy.annual_operating_income = revenue - expected_matchday_income(team).min(revenue * 30 / 100);
+            team.economy.annual_operating_income =
+                revenue - expected_matchday_income(team).min(revenue * 30 / 100);
             team.economy.annual_operating_cost += revenue * 15 / 100;
             team.economy.version = 2;
         }
-        let zero_staff: Vec<_> = game.staff.iter().enumerate().filter(|(_, s)| s.team_id.as_deref() == Some(&team.id) && s.wage == 0).map(|(index, s)| (index, crate::staff_contracts::annual_market_wage(s))).collect();
-        let quoted = zero_staff.iter().map(|(_, wage)| i64::from(*wage)).sum::<i64>();
+        let zero_staff: Vec<_> = game
+            .staff
+            .iter()
+            .enumerate()
+            .filter(|(_, s)| s.team_id.as_deref() == Some(&team.id) && s.wage == 0)
+            .map(|(index, s)| (index, crate::staff_contracts::annual_market_wage(s)))
+            .collect();
+        let quoted = zero_staff
+            .iter()
+            .map(|(_, wage)| i64::from(*wage))
+            .sum::<i64>();
         let ceiling = annual_revenue_anchor(team) / 50;
         let mut additional = 0;
         for (index, wage) in zero_staff {
-            let wage = if quoted > ceiling { (i64::from(wage) * ceiling / quoted).max(1) as u32 } else { wage };
+            let wage = if quoted > ceiling {
+                (i64::from(wage) * ceiling / quoted).max(1) as u32
+            } else {
+                wage
+            };
             game.staff[index].wage = wage;
-            game.staff[index].contract_end = Some(format!("{}-06-30", game.clock.current_date.year() + 2));
+            game.staff[index].contract_end =
+                Some(format!("{}-06-30", game.clock.current_date.year() + 2));
             additional += i64::from(wage);
         }
-        team.economy.annual_operating_cost = team.economy.annual_operating_cost.saturating_sub(additional).max(0);
+        team.economy.annual_operating_cost = team
+            .economy
+            .annual_operating_cost
+            .saturating_sub(additional)
+            .max(0);
     }
     for staff in &mut game.staff {
-        if staff.team_id.is_none() && staff.wage == 0 { staff.wage = crate::staff_contracts::annual_market_wage(staff); }
+        if staff.team_id.is_none() && staff.wage == 0 {
+            staff.wage = crate::staff_contracts::annual_market_wage(staff);
+        }
     }
     game.emitted_events.insert("economy:0.6.7".into());
 }
 
 fn expected_matchday_income(team: &Team) -> i64 {
-    crate::finances::calc_matchday(team.stadium_capacity, 19, crate::finances::match_attendance(team), crate::finances::match_ticket_price(team))
+    crate::finances::calc_matchday(
+        team.stadium_capacity,
+        19,
+        crate::finances::match_attendance(team),
+        crate::finances::match_ticket_price(team),
+    )
 }
 
 #[cfg(test)]
 pub(crate) fn opening_operating_surplus(team: &Team, annual_payroll: i64) -> i64 {
-    team.economy.annual_operating_income + expected_matchday_income(team) - annual_payroll - team.economy.annual_operating_cost
+    team.economy.annual_operating_income + expected_matchday_income(team)
+        - annual_payroll
+        - team.economy.annual_operating_cost
 }
 
 #[cfg(test)]
@@ -339,7 +371,8 @@ mod tests {
         assert!(team.wage_budget > 250_000_000);
         assert!(team.transfer_budget < team.finance);
         assert!(
-            team.economy.annual_operating_income + expected_matchday_income(&team) - team.economy.annual_operating_cost
+            team.economy.annual_operating_income + expected_matchday_income(&team)
+                - team.economy.annual_operating_cost
                 >= 250_000_000
         );
     }
@@ -473,4 +506,3 @@ mod tests {
         assert_eq!(game.teams[0].economy.annual_operating_cost, overhead);
     }
 }
-

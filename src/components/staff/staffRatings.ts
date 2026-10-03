@@ -54,4 +54,3 @@ export function ovrRating(s: StaffData): number {
   );
   return Math.round(weighted / total);
 }
-
