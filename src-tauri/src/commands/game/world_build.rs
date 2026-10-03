@@ -70,7 +70,14 @@ pub(super) fn build_game_from_world_data(
     } = world;
 
     let mut game = Game::new(clock, manager, teams, players, staff, vec![]);
-    game.emitted_events.insert(if metadata.generated { "world:generated" } else { "world:authored" }.into());
+    game.emitted_events.insert(
+        if metadata.generated {
+            "world:generated"
+        } else {
+            "world:authored"
+        }
+        .into(),
+    );
     if game
         .staff
         .iter()

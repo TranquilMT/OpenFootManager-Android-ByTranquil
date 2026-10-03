@@ -68,12 +68,19 @@ pub fn apply_event_response(
             "accept" => {
                 let message = game.messages.iter().find(|m| m.id == message_id)?;
                 if !message.actions.iter().any(|action| !action.resolved)
-                    || !game.teams.iter().any(|team| team.id == user_team_id
-                        && team.sponsorship.as_ref().is_none_or(|s| s.remaining_weeks == 0))
+                    || !game.teams.iter().any(|team| {
+                        team.id == user_team_id
+                            && team
+                                .sponsorship
+                                .as_ref()
+                                .is_none_or(|s| s.remaining_weeks == 0)
+                    })
                 {
                     return None;
                 }
-                let amount = message.i18n_params.get("amount")
+                let amount = message
+                    .i18n_params
+                    .get("amount")
                     .and_then(|amount| parse_amount_param(amount))
                     .filter(|amount| *amount > 0 && *amount <= i64::MAX as u64)?;
                 let sponsor_name = game

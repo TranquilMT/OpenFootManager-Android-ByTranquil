@@ -159,7 +159,6 @@ fn apply_sponsor_accept_parses_compact_amount_param_from_existing_messages() {
     assert_eq!(sponsorship.base_value, 1_200_000);
 }
 
-
 #[test]
 fn sponsor_response_cannot_replace_active_contract_or_replay() {
     let mut game = make_game();

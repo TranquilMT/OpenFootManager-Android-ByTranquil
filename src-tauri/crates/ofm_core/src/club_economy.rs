@@ -130,7 +130,11 @@ pub fn initialize_generated_club(team: &mut Team, annual_payroll: i64) {
     apply_home_identity(team);
     let revenue = annual_revenue_anchor(team);
     crate::commercial::seed_principal_sponsor(team, revenue);
-    let sponsorship = team.sponsorship.as_ref().filter(|s| s.auto_renew).map_or(0, |s| s.base_value * 52);
+    let sponsorship = team
+        .sponsorship
+        .as_ref()
+        .filter(|s| s.auto_renew)
+        .map_or(0, |s| s.base_value * 52);
     let income = revenue - expected_matchday_income(team).min(revenue * 30 / 100) - sponsorship;
     // Fix this overhead at setup: subsequent expensive signings remain a cost.
     let cost = (revenue - annual_payroll - revenue * 3 / 100).max(revenue / 10);
@@ -199,7 +203,9 @@ pub fn apply_division_changes(game: &mut Game, before: &std::collections::HashMa
 pub fn upgrade_generated_career(game: &mut Game) -> Result<(), String> {
     // The standard world includes these curated clubs. Tiny authored/custom
     // worlds must not silently receive standard-world finances.
-    if game.emitted_events.contains("world:authored") { return Ok(()); }
+    if game.emitted_events.contains("world:authored") {
+        return Ok(());
+    }
     if !game
         .teams
         .iter()
@@ -344,7 +350,8 @@ fn expected_matchday_income(team: &Team) -> i64 {
 
 #[cfg(test)]
 pub(crate) fn opening_operating_surplus(team: &Team, annual_payroll: i64) -> i64 {
-    team.economy.annual_operating_income + expected_matchday_income(team)
+    team.economy.annual_operating_income
+        + expected_matchday_income(team)
         + team.sponsorship.as_ref().map_or(0, |s| s.base_value * 52)
         - annual_payroll
         - team.economy.annual_operating_cost
@@ -375,9 +382,7 @@ mod tests {
         assert_eq!(team.finance, 77_280_000);
         assert!(team.wage_budget > 250_000_000);
         assert!(team.transfer_budget < team.finance);
-        assert!(
-            opening_operating_surplus(&team, 250_000_000) >= 0
-        );
+        assert!(opening_operating_surplus(&team, 250_000_000) >= 0);
     }
     #[test]
     fn premier_club_identities_are_stable() {
@@ -536,8 +541,9 @@ mod tests {
         let sponsor = team.sponsorship.as_ref().expect("established club sponsor");
         assert!(sponsor.base_value > 100_000);
         assert!(sponsor.remaining_weeks >= 52);
-        let total = team.economy.annual_operating_income + expected_matchday_income(&team) + sponsor.base_value * 52;
+        let total = team.economy.annual_operating_income
+            + expected_matchday_income(&team)
+            + sponsor.base_value * 52;
         assert!((total - revenue).abs() <= 52);
     }
-
 }

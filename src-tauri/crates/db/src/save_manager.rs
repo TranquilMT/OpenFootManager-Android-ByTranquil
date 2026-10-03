@@ -2546,5 +2546,4 @@ mod tests {
     }
     #[path = "economy_tests.rs"]
     mod economy_tests;
-
 }
