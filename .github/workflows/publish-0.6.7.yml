@@ -1,0 +1,57 @@
+name: Publish OFMtouch 0.6.7 Build 355
+on:
+  push:
+    branches: [release/0.6.7-publish-build355]
+permissions:
+  contents: write
+  actions: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify signed release package
+        run: |
+          set -euo pipefail
+          cat release-parts/part-*.bin > release-assets.zip
+          echo '40ab1d299b392e156ac4c933eab38333e7fd2793c972d646ca2bedd893ad5253  release-assets.zip' | sha256sum -c -
+          mkdir release-assets
+          unzip -q release-assets.zip -d release-assets
+          cd release-assets
+          sha256sum -c OFMtouch-0.6.7-Build355-SHA256SUMS.txt
+          APK=OFMtouch-0.6.7-Economy-Gameplay-Balance-Build355-SIGNED.apk
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          "$APKSIGNER" verify --verbose --print-certs "$APK" > signature.txt
+          grep -qi '3f0d869bfaa5f7c78a7d2a9474d44424ae4f4399e64d76b6fb9e691695412e60' signature.txt
+          rm signature.txt
+          AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -n 1)"
+          PACKAGE_LINE="$("$AAPT" dump badging "$APK" | sed -n '1p')"
+          [[ "$PACKAGE_LINE" == *"name='com.tranquilmt.openfootmanager'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionName='0.6.7'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionCode='6700355'"* ]]
+          unzip -l "$APK" | grep -E 'lib/arm64-v8a/.*\.so' >/dev/null
+      - uses: actions/checkout@v4
+        with:
+          ref: 732f0ec941d0902fd1b303def3daf83e3e698ea0
+          path: verified-source
+          persist-credentials: false
+      - name: Package matching source and checksums
+        run: |
+          test "$(git -C verified-source rev-parse HEAD)" = 732f0ec941d0902fd1b303def3daf83e3e698ea0
+          git -C verified-source archive --format=zip --prefix=OFMtouch-0.6.7/ HEAD > release-assets/OFMtouch-0.6.7-Build355-SOURCE.zip
+          (cd release-assets && sha256sum *.apk *.zip *.md > OFMtouch-0.6.7-Build355-SHA256SUMS.txt)
+      - name: Publish latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v0.6.7-build355 release-assets/* --target 732f0ec941d0902fd1b303def3daf83e3e698ea0 --title "OFMtouch v0.6.7 — Economy & Gameplay Balance · Build 355" --notes-file release-assets/OFMtouch-0.6.7-Build355-Release-Notes.md --latest
+      - name: Refresh release metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run release-manifest.yml --ref main -f release_tag=v0.6.7-build355
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OFMtouch-0.6.7-Build355-RELEASE
+          path: release-assets/*
+          if-no-files-found: error
