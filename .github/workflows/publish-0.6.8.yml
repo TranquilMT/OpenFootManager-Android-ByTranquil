@@ -1,0 +1,60 @@
+name: Publish OFMtouch 0.6.8 Build 357
+on:
+  push:
+    branches: [release/0.6.8-publish-build357]
+permissions:
+  contents: write
+  actions: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify signed release package
+        run: |
+          set -euo pipefail
+          cat release-parts/part-*.bin > release-assets.zip
+          echo '12b1ffb0720a08a0d61095952cff826827785fb2fd7d3f29d61b2941fed594d5  release-assets.zip' | sha256sum -c -
+          mkdir release-assets
+          unzip -q release-assets.zip -d release-assets
+          cd release-assets
+          sha256sum -c OFMtouch-0.6.8-Build357-SHA256SUMS.txt
+          APK=OFMtouch-0.6.8-Squad-Sponsorship-Economy-Polish-Build357-SIGNED.apk
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          "$APKSIGNER" verify --verbose --print-certs "$APK" > signature.txt
+          grep -qi '3f0d869bfaa5f7c78a7d2a9474d44424ae4f4399e64d76b6fb9e691695412e60' signature.txt
+          rm signature.txt
+          AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -n 1)"
+          PACKAGE_LINE="$("$AAPT" dump badging "$APK" | sed -n '1p')"
+          [[ "$PACKAGE_LINE" == *"name='com.tranquilmt.openfootmanager'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionName='0.6.8'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionCode='6800357'"* ]]
+          unzip -l "$APK" | grep -E 'lib/arm64-v8a/.*\.so' >/dev/null
+      - uses: actions/checkout@v4
+        with:
+          ref: 0c4671d9f190762856eab17613cf0f26dc1e3f96
+          path: verified-source
+          persist-credentials: false
+      - name: Verify matching complete source archive
+        run: |
+          test "$(git -C verified-source rev-parse HEAD)" = 0c4671d9f190762856eab17613cf0f26dc1e3f96
+          git -C verified-source archive --format=zip --prefix=OFMtouch-0.6.8/ HEAD > expected-source.zip
+          mkdir expected-source delivered-source
+          unzip -q expected-source.zip -d expected-source
+          unzip -q release-assets/OFMtouch-0.6.8-Build357-SOURCE.zip -d delivered-source
+          diff -r expected-source delivered-source
+      - name: Publish latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v0.6.8-build357 release-assets/* --target 0c4671d9f190762856eab17613cf0f26dc1e3f96 --title "OFMtouch v0.6.8 — Squad, Sponsorship & Economy Polish · Build 357" --notes-file release-assets/OFMtouch-0.6.8-Build357-Release-Notes.md --latest
+      - name: Refresh release metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run release-manifest.yml --ref main -f release_tag=v0.6.8-build357
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OFMtouch-0.6.8-Build357-RELEASE
+          path: release-assets/*
+          if-no-files-found: error
