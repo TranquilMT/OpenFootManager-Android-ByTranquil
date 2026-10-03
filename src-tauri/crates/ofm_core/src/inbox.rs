@@ -18,7 +18,9 @@ use domain::message::InboxMessage;
 /// Read an existing inbox item when responding to its actions. This is a
 /// lookup, not an event-generation deduplication check.
 pub fn message_by_id<'a>(game: &'a Game, message_id: &str) -> Option<&'a InboxMessage> {
-    game.messages.iter().find(|message| message.id == message_id)
+    game.messages
+        .iter()
+        .find(|message| message.id == message_id)
 }
 
 /// Send `build()` to the inbox unless `key` has already been sent, and return

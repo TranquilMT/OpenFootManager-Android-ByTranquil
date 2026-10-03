@@ -68,15 +68,24 @@ pub fn apply_event_response(
             "accept" => {
                 let message = crate::inbox::message_by_id(game, message_id)?;
                 if !message.actions.iter().any(|action| !action.resolved)
-                    || !game.teams.iter().any(|team| team.id == user_team_id
-                        && team.sponsorship.as_ref().is_none_or(|s| s.remaining_weeks == 0))
+                    || !game.teams.iter().any(|team| {
+                        team.id == user_team_id
+                            && team
+                                .sponsorship
+                                .as_ref()
+                                .is_none_or(|s| s.remaining_weeks == 0)
+                    })
                 {
                     return None;
                 }
-                let amount = message.i18n_params.get("amount")
+                let amount = message
+                    .i18n_params
+                    .get("amount")
                     .and_then(|amount| parse_amount_param(amount))
                     .filter(|amount| *amount > 0 && *amount <= i64::MAX as u64)?;
-                let sponsor_name = message.i18n_params.get("sponsor")
+                let sponsor_name = message
+                    .i18n_params
+                    .get("sponsor")
                     .cloned()
                     .unwrap_or_else(|| "Sponsor".to_string());
                 if let Some(team) = game.teams.iter_mut().find(|t| t.id == user_team_id) {
