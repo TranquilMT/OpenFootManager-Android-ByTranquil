@@ -11,7 +11,6 @@ use domain::message::*;
 use domain::team::{
     FinancialTransaction, FinancialTransactionKind, Sponsorship, SponsorshipBonusCriterion, Team,
 };
-use rand::RngExt;
 use serde::Serialize;
 
 const BOARD_SUPPORT_TARGET_RUNWAY_WEEKS: i64 = 8;
@@ -1161,6 +1160,15 @@ fn format_money(amount: u64) -> String {
         .unwrap_or_else(|| amount.to_string())
 }
 
+pub(crate) fn match_ticket_price(team: &Team) -> f64 {
+    // Basic ticket equivalent, not a claim about actual club ticket prices.
+    8.0 + f64::from(team.reputation.min(1000)) * 0.037
+}
+
+pub(crate) fn match_attendance(team: &Team) -> f64 {
+    0.45 + f64::from(team.reputation.min(1000)) * 0.0004
+}
+
 #[cfg(test)]
 mod tests {
     use super::preview_sponsor_pitch;
@@ -1247,11 +1255,3 @@ mod tests {
     }
 }
 
-pub(crate) fn match_ticket_price(team: &Team) -> f64 {
-    // Basic ticket equivalent, not a claim about actual club ticket prices.
-    8.0 + f64::from(team.reputation.min(1000)) * 0.037
-}
-
-pub(crate) fn match_attendance(team: &Team) -> f64 {
-    0.45 + f64::from(team.reputation.min(1000)) * 0.0004
-}

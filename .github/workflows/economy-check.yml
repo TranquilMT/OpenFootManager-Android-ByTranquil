@@ -17,6 +17,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: src-tauri
+          cache-on-failure: true
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -51,6 +52,7 @@ jobs:
           name: economy-formatting
           path: formatting.patch
       - name: Backend economy regression suite
+        if: always()
         run: cargo test --locked --manifest-path src-tauri/Cargo.toml -p domain -p engine -p ofm_core -p db --all-targets --no-fail-fast -- --nocapture
       - name: Backend lint
         if: always()
@@ -71,6 +73,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: src-tauri
+          cache-on-failure: true
       - name: App command and MCP regression suite
         run: cargo test --locked --manifest-path src-tauri/Cargo.toml -p openfootmanager --lib --features mcp --no-fail-fast
       - name: App and MCP lint

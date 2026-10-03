@@ -611,6 +611,15 @@ fn clamp_fitness(val: i16) -> u8 {
     val.clamp(0, 100) as u8
 }
 
+fn apply_goalkeeper_gains(attrs: &mut PlayerAttributes, focus: &TrainingFocus, gain: f64, rng: &mut impl Rng) {
+    match focus {
+        TrainingFocus::Technical => { try_gain(&mut attrs.handling, gain, rng); try_gain(&mut attrs.reflexes, gain, rng); try_gain(&mut attrs.passing, gain * 0.5, rng); }
+        TrainingFocus::Defending => { try_gain(&mut attrs.positioning, gain, rng); try_gain(&mut attrs.aerial, gain, rng); try_gain(&mut attrs.handling, gain * 0.5, rng); }
+        TrainingFocus::Attacking => { try_gain(&mut attrs.passing, gain, rng); try_gain(&mut attrs.decisions, gain * 0.5, rng); }
+        _ => apply_focus_gains(attrs, focus, gain, rng),
+    }
+}
+
 #[cfg(test)]
 mod development_tests {
     use super::playing_time_growth_factor;
@@ -728,6 +737,24 @@ mod season_balance_tests {
         sum / 64.0
     }
     #[test]
+    fn goalkeepers_train_handling_and_reflexes_without_striker_gains() {
+        let attrs = serde_json::from_value(serde_json::json!({"pace":60,"stamina":60,"strength":60,"agility":60,"passing":60,"shooting":60,"tackling":60,"dribbling":60,"defending":60,"positioning":60,"vision":60,"decisions":60,"handling":60,"reflexes":60,"aerial":60})).unwrap();
+        let mut player = Player::new("keeper".into(), "G".into(), "Keeper".into(), "2007-01-01".into(), "GB".into(), domain::player::Position::Goalkeeper, attrs);
+        player.potential = 85;
+        player.stats.minutes_played = 1800;
+        let plan = TeamTrainingPlan { default_focus: TrainingFocus::Technical, intensity: TrainingIntensity::Medium, schedule: TrainingSchedule::Balanced, bonus: TeamCoachingBonus { coaching_mult: 1.3, specialization_mult: 1.25, physio_mult: 1.2, youth_mult: 1.2 }, medical_facility_mult: 1.2, group_overrides: Default::default() };
+        let mut rng = rand::rngs::StdRng::seed_from_u64(67);
+        for day in 0..365 {
+            player.condition = 92;
+            train_player(&mut player, &plan, &TrainingDay { weekday_num: day % 7, year: 2026 }, &mut rng);
+        }
+        assert!(player.attributes.handling > 60);
+        assert!(player.attributes.reflexes > 60);
+        assert_eq!(player.attributes.shooting, 60);
+        assert_eq!(player.attributes.dribbling, 60);
+    }
+
+    #[test]
     fn one_season_development_is_gradual_and_playing_time_matters() {
         let youth = cohort_gain(19, 1800);
         let unused = cohort_gain(19, 0);
@@ -739,11 +766,3 @@ mod season_balance_tests {
     }
 }
 
-fn apply_goalkeeper_gains(attrs: &mut PlayerAttributes, focus: &TrainingFocus, gain: f64, rng: &mut impl Rng) {
-    match focus {
-        TrainingFocus::Technical => { try_gain(&mut attrs.handling, gain, rng); try_gain(&mut attrs.reflexes, gain, rng); try_gain(&mut attrs.passing, gain * 0.5, rng); }
-        TrainingFocus::Defending => { try_gain(&mut attrs.positioning, gain, rng); try_gain(&mut attrs.aerial, gain, rng); try_gain(&mut attrs.handling, gain * 0.5, rng); }
-        TrainingFocus::Attacking => { try_gain(&mut attrs.passing, gain, rng); try_gain(&mut attrs.decisions, gain * 0.5, rng); }
-        _ => apply_focus_gains(attrs, focus, gain, rng),
-    }
-}

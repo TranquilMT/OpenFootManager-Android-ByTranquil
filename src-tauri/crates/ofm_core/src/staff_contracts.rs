@@ -44,6 +44,20 @@ pub fn release(game: &mut Game, team_id: &str, staff_id: &str) -> Result<(), Str
     Ok(())
 }
 
+pub(crate) fn initialize_generated(staff: &mut Staff, opening_year: u32) {
+    staff.wage = crate::staff_contracts::annual_market_wage(staff);
+    staff.contract_end = Some(format!("{}-06-30", opening_year.saturating_add(2)));
+}
+
+
+pub fn termination_cost(game: &Game, team_id: &str, staff_id: &str) -> Result<i64, String> {
+ let staff = game.staff.iter().find(|s| s.id == staff_id).ok_or("be.error.staffMemberNotFound")?;
+ if staff.team_id.as_deref() != Some(team_id) { return Err("be.error.staffMemberNotInTeam".into()); }
+ let today = game.clock.current_date.date_naive();
+ let days = staff.contract_end.as_deref().and_then(|d| chrono::NaiveDate::parse_from_str(d, "%Y-%m-%d").ok()).map(|end| (end-today).num_days().max(0)).unwrap_or(28);
+ Ok((i64::from(staff.wage)*days+364)/365)
+}
+
 #[cfg(test)]
 mod balance_tests {
     use super::*;
@@ -58,16 +72,3 @@ mod balance_tests {
 }
 
 
-pub(crate) fn initialize_generated(staff: &mut Staff, opening_year: u32) {
-    staff.wage = crate::staff_contracts::annual_market_wage(staff);
-    staff.contract_end = Some(format!("{}-06-30", opening_year.saturating_add(2)));
-}
-
-
-pub fn termination_cost(game: &Game, team_id: &str, staff_id: &str) -> Result<i64, String> {
- let staff = game.staff.iter().find(|s| s.id == staff_id).ok_or("be.error.staffMemberNotFound")?;
- if staff.team_id.as_deref() != Some(team_id) { return Err("be.error.staffMemberNotInTeam".into()); }
- let today = game.clock.current_date.date_naive();
- let days = staff.contract_end.as_deref().and_then(|d| chrono::NaiveDate::parse_from_str(d, "%Y-%m-%d").ok()).map(|end| (end-today).num_days().max(0)).unwrap_or(28);
- Ok((i64::from(staff.wage)*days+364)/365)
-}

@@ -1,7 +1,7 @@
-import { useEffect, useEffectEvent, useState } from "react";
-import { type GameStateData, type StaffData, useGameStore } from "../../store/gameStore";
+import { useEffect, useState } from "react";
+import { type GameStateData, useGameStore } from "../../store/gameStore";
 import { getStaff, type StaffSlice } from "../../services/staffService";
-import { Card, CardBody, Badge, CountryFlag, ProgressBar, Button } from "../ui";
+import { Card, CardBody, Badge, CountryFlag, ProgressBar } from "../ui";
 import {
   UserCog,
   Search,
@@ -16,9 +16,9 @@ import {
 import { getTeamName, calcAge, formatVal, formatWeeklyAmount } from "../../lib/helpers";
 import { countryName } from "../../lib/countries";
 import { useTranslation } from "react-i18next";
-import { hireStaff, releaseStaff, previewStaffRelease } from "../../services/staffService";
-import DashboardModalFrame from "../dashboard/DashboardModalFrame";
-import { formatExactMoney } from "../../lib/helpers";
+import { hireStaff, releaseStaff } from "../../services/staffService";
+import StaffReleaseModal from "./StaffReleaseModal";
+import { bestAttr, ovrRating } from "./staffRatings";
 import { resolveTranslatedErrorMessage } from "../../utils/errorMessage";
 import ContextMenu, { type ContextMenuItem } from "../ContextMenu";
 import type { DashboardNavigateContext } from "../dashboard/dashboardProfileNavigation";
@@ -42,61 +42,6 @@ const ROLE_COLORS: Record<string, string> = {
   Physio: "text-red-400",
 };
 
-function bestAttr(s: StaffData): { key: string; value: number } {
-  const attrs = [
-    { key: "coaching", value: s.attributes.coaching },
-    { key: "judgingAbility", value: s.attributes.judgingAbility },
-    { key: "judgingPotential", value: s.attributes.judgingPotential },
-    { key: "physiotherapy", value: s.attributes.physiotherapy },
-  ];
-  return attrs.reduce((a, b) => (b.value > a.value ? b : a));
-}
-
-/**
- * Per-role attribute weights, mirroring what the engine actually consumes.
- * A flat average over all four attributes rated a specialist on work their
- * role never does — an elite physio read as mediocre because coaching and
- * scouting dragged the number down.
- *
- * Sources, so these stay honest if the engine changes:
- * - Coach: `coaching` alone drives the training multiplier (`training.rs`).
- * - Physio: `physiotherapy` alone drives recovery (`training.rs`).
- * - Scout: `judgingAbility` sets assignment speed, `judgingPotential` sets
- *   potential accuracy (`scouting.rs`).
- * - AssistantManager: `(coaching*4 + judgingAbility*3 + judgingPotential*3)/10`
- *   is the engine's own `assistant_quality` (`delegated_renewals.rs`).
- */
-const ROLE_ATTR_WEIGHTS: Record<string, Partial<Record<keyof StaffData["attributes"], number>>> = {
-  Coach: { coaching: 10 },
-  Physio: { physiotherapy: 10 },
-  Scout: { judgingAbility: 5, judgingPotential: 5 },
-  AssistantManager: { coaching: 4, judgingAbility: 3, judgingPotential: 3 },
-};
-
-/**
- * Weighting for a role we do not recognise. An even split says "no opinion",
- * which is the honest answer; borrowing another role's weighting would rate
- * someone confidently on work their role may never do.
- */
-const UNKNOWN_ROLE_WEIGHTS = {
-  coaching: 1,
-  judgingAbility: 1,
-  judgingPotential: 1,
-  physiotherapy: 1,
-} as const;
-
-function ovrRating(s: StaffData): number {
-  const weights = ROLE_ATTR_WEIGHTS[s.role] ?? UNKNOWN_ROLE_WEIGHTS;
-  const total = Object.values(weights).reduce((sum, w) => sum + (w ?? 0), 0);
-  if (total === 0) return 0;
-  const weighted = Object.entries(weights).reduce(
-    (sum, [key, weight]) =>
-      sum + s.attributes[key as keyof StaffData["attributes"]] * (weight ?? 0),
-    0,
-  );
-  return Math.round(weighted / total);
-}
-
 export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffTabProps) {
   const { t, i18n } = useTranslation();
   const { sessionState } = useGameStore();
@@ -105,7 +50,6 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState<string | null>(null);
   const [releaseTarget, setReleaseTarget] = useState<string | null>(null);
-  const [releaseCost, setReleaseCost] = useState<number | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
@@ -138,18 +82,6 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
       youth_scouting_assignments: updated.youth_scouting_assignments ?? [],
     });
   };
-
-  const reportPreviewError = useEffectEvent((error: unknown) => setActionError(resolveTranslatedErrorMessage(error, t)));
-  useEffect(() => {
-    if (!releaseTarget) return;
-    let active = true;
-    setReleaseCost(null);
-    setActionError(null);
-    void previewStaffRelease(releaseTarget)
-      .then((cost) => { if (active) setReleaseCost(cost); })
-      .catch((error: unknown) => { if (active) reportPreviewError(error); });
-    return () => { active = false; };
-  }, [releaseTarget]);
 
   const handleHire = async (staffId: string) => {
     setActionLoading(staffId);
@@ -194,16 +126,14 @@ export default function StaffTab({ gameState, onGameUpdate, onNavigate }: StaffT
     <div>
       {actionError && !releaseTarget ? <p role="alert" className="mb-3 text-sm text-red-600 dark:text-red-300">{actionError}</p> : null}
       {releaseTarget ? (
-        <DashboardModalFrame maxWidthClassName="max-w-lg">
-          <h2 className="font-heading text-lg font-bold">{t("staff.releaseStaff")}</h2>
-          <p className="mt-2 text-sm">{t("playerProfile.terminateContractBody", { name: myStaff.find((s) => s.id === releaseTarget)?.last_name ?? "" })}</p>
-          <p className="my-4 font-semibold">{t("playerProfile.terminationSeverance")}: {releaseCost === null ? t("common.loading") : formatExactMoney(releaseCost)}</p>
-          {actionError ? <p role="alert" className="mb-3 text-sm text-red-600 dark:text-red-300">{actionError}</p> : null}
-          <div className="flex justify-end gap-2">
-            <Button variant="ghost" disabled={actionLoading !== null} onClick={() => { setReleaseTarget(null); setActionError(null); }}>{t("common.cancel")}</Button>
-            <Button disabled={releaseCost === null || actionLoading !== null} onClick={() => void handleRelease(releaseTarget)}>{t("staff.releaseStaff")}</Button>
-          </div>
-        </DashboardModalFrame>
+        <StaffReleaseModal
+          staffId={releaseTarget}
+          staffName={myStaff.find((s) => s.id === releaseTarget)?.last_name ?? ""}
+          submitting={actionLoading !== null}
+          errorMessage={actionError}
+          onCancel={() => { setReleaseTarget(null); setActionError(null); }}
+          onConfirm={() => void handleRelease(releaseTarget)}
+        />
       ) : null}
       {/* View toggle */}
       <div className="flex flex-wrap gap-3 mb-4 items-center">
