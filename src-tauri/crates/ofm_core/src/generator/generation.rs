@@ -694,7 +694,7 @@ pub(super) fn generate_random_staff_from_def(
     );
     s.nationality = nationality.to_string();
     s.team_id = Some(team_id.to_string());
-    set_generated_staff_contract(&mut s, opening_year);
+    crate::staff_contracts::initialize_generated(&mut s, opening_year);
     s
 }
 
@@ -731,7 +731,7 @@ pub(super) fn generate_random_staff_unattached_from_def(
         attributes,
     );
     s.nationality = nationality.to_string();
-    set_generated_staff_contract(&mut s, opening_year);
+    crate::staff_contracts::initialize_generated(&mut s, opening_year);
     s
 }
 
@@ -1698,9 +1698,4 @@ mod tests {
             "and must agree with the memoised pool"
         );
     }
-}
-
-fn set_generated_staff_contract(staff: &mut Staff, opening_year: u32) {
-    staff.wage = crate::staff_contracts::annual_market_wage(staff);
-    staff.contract_end = Some(format!("{}-06-30", opening_year.saturating_add(2)));
 }

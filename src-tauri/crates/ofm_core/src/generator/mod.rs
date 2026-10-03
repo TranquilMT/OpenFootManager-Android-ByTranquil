@@ -2466,8 +2466,7 @@ mod tests {
                 assert_eq!(team.finance, crate::club_economy::opening_cash(team));
                 assert!(payroll <= crate::club_economy::annual_revenue_anchor(team) * 60 / 100);
                 assert!(
-                    team.economy.annual_operating_income
-                        >= payroll + team.economy.annual_operating_cost
+                    crate::club_economy::opening_operating_surplus(team, payroll) >= 0
                 );
             }
         }

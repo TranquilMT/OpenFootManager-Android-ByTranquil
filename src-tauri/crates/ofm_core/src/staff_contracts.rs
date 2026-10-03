@@ -58,3 +58,10 @@ mod balance_tests {
         assert!(annual_market_wage(&staff) / 52 < 12_000);
     }
 }
+
+
+pub(crate) fn initialize_generated(staff: &mut Staff, opening_year: u32) {
+    staff.wage = crate::staff_contracts::annual_market_wage(staff);
+    staff.contract_end = Some(format!("{}-06-30", opening_year.saturating_add(2)));
+}
+

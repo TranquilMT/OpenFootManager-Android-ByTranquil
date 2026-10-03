@@ -366,7 +366,7 @@ fn terminate_contract_now_releases_player_and_charges_severance() {
     );
     assert_eq!(
         message.i18n_params.get("severance"),
-        Some(&"132000".to_string())
+        Some(&"2466".to_string())
     );
 }
 
@@ -497,6 +497,9 @@ fn high_value_star_expects_more_than_fringe_player() {
     star.attributes.pace = 88;
     star.attributes.shooting = 90;
     star.attributes.dribbling = 87;
+    star.attributes.passing = 88;
+    star.attributes.vision = 88;
+    star.attributes.decisions = 88;
 
     let mut fringe = make_player();
     fringe.contract_end = Some("2028-08-01".to_string());

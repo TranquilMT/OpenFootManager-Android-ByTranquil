@@ -468,3 +468,8 @@ fn upgrade_generated_staff_pay(game: &mut Game) {
 fn expected_matchday_income(team: &Team) -> i64 {
     crate::finances::calc_matchday(team.stadium_capacity, 19, crate::finances::match_attendance(team), crate::finances::match_ticket_price(team))
 }
+
+#[cfg(test)]
+pub(crate) fn opening_operating_surplus(team: &Team, annual_payroll: i64) -> i64 {
+    team.economy.annual_operating_income + expected_matchday_income(team) - annual_payroll - team.economy.annual_operating_cost
+}

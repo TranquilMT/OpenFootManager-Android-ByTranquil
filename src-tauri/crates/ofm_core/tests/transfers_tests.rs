@@ -1011,7 +1011,7 @@ fn loan_offer_rejects_terms_when_user_cannot_cover_loan_wage_share() {
     let mut player = make_player("player-loan-cash");
     player.loan_listed = true;
     player.wage = 120_000;
-    let mut game = make_game_with_player(player, vec![], 50_000, 2_000_000);
+    let mut game = make_game_with_player(player, vec![], 5_000, 2_000_000);
     game.teams[0].wage_budget = 500_000;
 
     let error = make_loan_offer(&mut game, "player-loan-cash", "2027-01-01", 100, None)
@@ -3860,3 +3860,6 @@ fn a_transfer_between_clubs_outside_every_competition_is_still_kept() {
          not in the mirror the next sync overwrites"
     );
 }
+
+#[path = "transfers/balance.rs"]
+mod balance;

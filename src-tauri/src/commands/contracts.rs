@@ -829,6 +829,13 @@ mod tests {
     }
 
     #[test]
+    fn weekly_contract_input_converts_once_and_rejects_invalid_amounts() {
+        assert_eq!(super::annual_contract_wage(100_000).unwrap(), 5_200_000);
+        assert!(super::annual_contract_wage(0).is_err());
+        assert!(super::annual_contract_wage(u32::MAX / 52 + 1).is_err());
+    }
+
+    #[test]
     fn serialize_session_status_uses_frontend_casing() {
         assert_eq!(
             super::serialize_session_status(RenewalSessionStatus::Idle),
