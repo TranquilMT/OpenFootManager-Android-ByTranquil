@@ -1393,3 +1393,24 @@ fn unfit_players_get_more_training_injuries() {
         peak_injuries
     );
 }
+
+#[test]
+fn sponsor_response_cannot_replace_active_contract_or_replay() {
+    let mut game = make_game();
+    game.messages.push(sponsor_message(100_000));
+    assert!(apply_event_response(&mut game, "sponsor_2025-06-15", "respond", "accept").is_some());
+    let existing = game.teams[0].sponsorship.clone();
+    game.messages.push(sponsor_message(200_000));
+    assert!(apply_event_response(&mut game, "sponsor_2025-06-15", "respond", "accept").is_none());
+    assert_eq!(game.teams[0].sponsorship, existing);
+}
+
+#[test]
+fn missing_sponsor_amount_never_invents_a_contract() {
+    let mut game = make_game();
+    let mut message = sponsor_message(100_000);
+    message.i18n_params.remove("amount");
+    game.messages.push(message);
+    assert!(apply_event_response(&mut game, "sponsor_2025-06-15", "respond", "accept").is_none());
+    assert!(game.teams[0].sponsorship.is_none());
+}
