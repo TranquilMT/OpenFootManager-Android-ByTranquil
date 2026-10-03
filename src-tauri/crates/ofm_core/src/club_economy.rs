@@ -525,4 +525,16 @@ mod tests {
         );
         assert_eq!(game.teams[0].economy.annual_operating_cost, overhead);
     }
+    #[test]
+    fn established_clubs_open_with_sponsorship_already_in_turnover() {
+        let mut team = club("Manchester United", 900);
+        let revenue = annual_revenue_anchor(&team);
+        initialize_generated_club(&mut team, revenue / 2);
+        let sponsor = team.sponsorship.as_ref().expect("established club sponsor");
+        assert!(sponsor.base_value > 100_000);
+        assert!(sponsor.remaining_weeks >= 52);
+        let total = team.economy.annual_operating_income + expected_matchday_income(&team) + sponsor.base_value * 52;
+        assert!((total - revenue).abs() <= 52);
+    }
+
 }

@@ -190,4 +190,26 @@ mod tests {
             None
         );
     }
+    #[test]
+    fn unnumbered_outfield_player_reserves_one_for_goalkeepers() {
+        let moving = make_player("forward", None, None);
+        assert_eq!(resolve_jersey_for(&make_game(vec![]), &moving, &make_team("team-a")), Some(2));
+    }
+
+    #[test]
+    fn invalid_preferred_numbers_are_repaired() {
+        for number in [0, 100, 255] {
+            let moving = make_player("forward", None, Some(number));
+            assert_eq!(resolve_jersey_for(&make_game(vec![]), &moving, &make_team("team-a")), Some(2));
+        }
+    }
+
+    #[test]
+    fn keeper_prefers_thirteen_when_one_is_taken() {
+        let mut moving = make_player("keeper", None, None);
+        moving.position = Position::Goalkeeper;
+        let game = make_game(vec![make_player("keeper-one", Some("team-a"), Some(1))]);
+        assert_eq!(resolve_jersey_for(&game, &moving, &make_team("team-a")), Some(13));
+    }
+
 }
