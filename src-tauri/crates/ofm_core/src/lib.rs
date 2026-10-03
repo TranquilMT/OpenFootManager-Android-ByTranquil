@@ -12,6 +12,7 @@ pub mod clock;
 pub mod club;
 pub mod club_economy;
 pub mod club_strategy;
+pub mod commercial;
 pub mod contract_wage_policy;
 pub mod contracts;
 pub mod currency;

@@ -434,6 +434,9 @@ pub enum SponsorshipBonusCriterion {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Default)]
 #[serde(default)]
 pub struct Sponsorship {
+    /// Existing principal deals renew annually; negotiated short deals do not.
+    #[serde(default)]
+    pub auto_renew: bool,
     pub sponsor_name: String,
     pub base_value: i64,
     pub remaining_weeks: u32,

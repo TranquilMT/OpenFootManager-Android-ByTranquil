@@ -12,7 +12,7 @@ use domain::team::Team;
 /// Decide which jersey number `player` should wear at `team`.
 ///
 /// * If the player's current jersey is free at `team`, returns it (no churn).
-/// * Otherwise picks the lowest available number in `1..=99` at the destination.
+/// * Otherwise keepers prefer 1, 13 and 22; outfield players use `2..=99`.
 /// * Returns `None` only when all 99 slots at the destination are already
 ///   taken — unreachable for any realistic squad size, but the caller should
 ///   still handle it.
@@ -32,8 +32,48 @@ pub fn resolve_jersey_for(game: &Game, player: &Player, team: &Team) -> Option<u
         .filter_map(|other| other.jersey_number)
         .collect();
     match player.jersey_number {
-        Some(current) if !occupied.contains(&current) => Some(current),
-        _ => (1u8..=99).find(|number| !occupied.contains(number)),
+        Some(current) if (1..=99).contains(&current) && !occupied.contains(&current) => Some(current),
+        _ => {
+            let preferred: &[u8] = if player.position.to_group_position() == domain::player::Position::Goalkeeper {
+                &[1, 13, 22]
+            } else {
+                &[]
+            };
+            preferred.iter().copied().chain(2u8..=99).find(|number| !occupied.contains(number))
+        },
+    }
+}
+
+/// Standard generated squads register the strongest senior keeper as #1.
+/// Swap the displaced shirt rather than discard valid outfield numbers.
+/// Academy players are unregistered until promotion to the senior squad.
+pub fn normalize_club_numbers(players: &mut [Player]) {
+    use domain::player::{Position, SquadRole};
+    for player in players.iter_mut().filter(|p| p.squad_role == SquadRole::Youth) {
+        player.jersey_number = None;
+    }
+    let primary = players.iter().enumerate()
+        .filter(|(_, p)| p.squad_role == SquadRole::Senior && p.position.to_group_position() == Position::Goalkeeper)
+        .max_by_key(|(_, p)| p.ovr).map(|(index, _)| index);
+    if let Some(keeper) = primary {
+        let previous = players[keeper].jersey_number.filter(|n| (2..=99).contains(n));
+        for (index, player) in players.iter_mut().enumerate() {
+            if index != keeper && player.jersey_number == Some(1) {
+                player.jersey_number = previous;
+            }
+        }
+        players[keeper].jersey_number = Some(1);
+    }
+    let mut used = std::collections::HashSet::new();
+    if primary.is_some() { used.insert(1); }
+    for (index, player) in players.iter_mut().enumerate().filter(|(_, p)| p.squad_role != SquadRole::Youth) {
+        if primary == Some(index) { continue; }
+        if player.jersey_number.is_some_and(|n| (1..=99).contains(&n) && used.insert(n)) {
+            continue;
+        }
+        let preferred: &[u8] = if player.position.to_group_position() == Position::Goalkeeper { &[1, 13, 22] } else { &[] };
+        player.jersey_number = preferred.iter().copied().chain(2..=99).find(|n| !used.contains(n));
+        if let Some(n) = player.jersey_number { used.insert(n); }
     }
 }
 
@@ -132,7 +172,7 @@ mod tests {
         let game = make_game(vec![make_player("p-existing", Some("team-a"), Some(6))]);
         assert_eq!(
             resolve_jersey_for(&game, &moving, &make_team("team-a")),
-            Some(1)
+            Some(2)
         );
     }
 
@@ -210,6 +250,30 @@ mod tests {
         moving.position = Position::Goalkeeper;
         let game = make_game(vec![make_player("keeper-one", Some("team-a"), Some(1))]);
         assert_eq!(resolve_jersey_for(&game, &moving, &make_team("team-a")), Some(13));
+    }
+
+    #[test]
+    fn primary_keeper_gets_one_even_after_an_unnumbered_backup() {
+        let mut backup = make_player("backup", Some("team-a"), None);
+        backup.position = Position::Goalkeeper;
+        backup.ovr = 50;
+        let mut primary = backup.clone();
+        primary.id = "primary".into();
+        primary.ovr = 80;
+        primary.jersey_number = Some(2);
+        let mut displaced = make_player("outfield", Some("team-a"), Some(1));
+        displaced.ovr = 70;
+        let mut youth = make_player("youth", Some("team-a"), Some(9));
+        youth.squad_role = domain::player::SquadRole::Youth;
+        let mut squad = vec![backup, primary, displaced, youth];
+        normalize_club_numbers(&mut squad);
+        assert_eq!(squad[0].jersey_number, Some(13));
+        assert_eq!(squad[1].jersey_number, Some(1));
+        assert_eq!(squad[2].jersey_number, Some(2));
+        assert_eq!(squad[3].jersey_number, None);
+        let saved = squad.clone();
+        normalize_club_numbers(&mut squad);
+        assert_eq!(squad.iter().map(|p| p.jersey_number).collect::<Vec<_>>(), saved.iter().map(|p| p.jersey_number).collect::<Vec<_>>());
     }
 
 }

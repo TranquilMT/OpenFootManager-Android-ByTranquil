@@ -271,6 +271,7 @@ pub fn team_finance_snapshot(game: &Game, team_id: &str) -> Option<TeamFinanceSn
     let weekly_sponsor_income = team
         .sponsorship
         .as_ref()
+        .filter(|sponsorship| sponsorship.remaining_weeks > 0)
         .map(|sponsorship| {
             sponsorship.base_value
                 + evaluate_sponsorship_bonus(current_position, &team.form, sponsorship)
@@ -947,6 +948,7 @@ pub fn process_weekly_finances(game: &mut Game) {
         let sponsorship_income = team
             .sponsorship
             .as_ref()
+            .filter(|sponsorship| sponsorship.remaining_weeks > 0)
             .map(|sponsorship| {
                 sponsorship.base_value
                     + evaluate_sponsorship_bonus(current_position, &team.form, sponsorship)
@@ -995,12 +997,7 @@ pub fn process_weekly_finances(game: &mut Game) {
         if !posted_clubs.contains(&team.id) {
             continue;
         }
-        if let Some(sponsorship) = team.sponsorship.as_mut() {
-            sponsorship.remaining_weeks = sponsorship.remaining_weeks.saturating_sub(1);
-            if sponsorship.remaining_weeks == 0 {
-                team.sponsorship = None;
-            }
-        }
+        crate::commercial::expire_weekly_sponsor(team);
     }
 
     // --- Financial health warnings for user's team ---

@@ -402,8 +402,8 @@ fn rebalance_generated_player_for_club(
 }
 
 fn normalize_generated_team(team: &mut Team, players: &mut [Player], opening_year: i32) {
-    assign_unique_jersey_numbers(players);
     seed_opening_youth_academy(players, opening_year);
+    assign_unique_jersey_numbers(players);
     normalize_opening_contracts(players);
 
     let annual_wage_bill: i64 = players.iter().map(|player| player.wage as i64).sum();
@@ -418,24 +418,7 @@ fn normalize_generated_team(team: &mut Team, players: &mut [Player], opening_yea
 /// Preserve each player's first available shirt number, filling collisions
 /// from the remaining 1..=99 pool before the database unique index is hit.
 fn assign_unique_jersey_numbers(players: &mut [Player]) {
-    let mut used = std::collections::HashSet::new();
-    for player in players {
-        if player.squad_role == domain::player::SquadRole::Youth {
-            player.jersey_number = None;
-            continue;
-        }
-        if player
-            .jersey_number
-            .is_some_and(|number| (1..=99).contains(&number) && used.insert(number))
-        {
-            continue;
-        }
-        let free = (1..=99).find(|number| !used.contains(number));
-        player.jersey_number = free;
-        if let Some(number) = free {
-            used.insert(number);
-        }
-    }
+    crate::roster::normalize_club_numbers(players);
 }
 
 fn seed_starting_xi(team: &mut Team, players: &[Player]) {

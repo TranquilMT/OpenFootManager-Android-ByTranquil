@@ -148,6 +148,7 @@ pub async fn start_new_game(
     let (mut new_game, stats_state) =
         build_game_from_world_data(clock, manager, &startup_options, world);
     new_game.package_lockfile = package_lockfile;
+    ofm_core::commercial::polish_generated_career(&mut new_game);
     info!(
         "[cmd] start_new_game: world loaded with {} teams, {} players, {} staff",
         new_game.teams.len(),

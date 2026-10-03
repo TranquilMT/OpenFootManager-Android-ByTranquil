@@ -362,6 +362,7 @@ pub fn bootstrap_game_for_mcp(
     let clock = game_clock_for_world(&startup_options, &world.metadata)?;
     let (mut game, current_stats_state) =
         build_game_from_world_data(clock, manager, &startup_options, world);
+    ofm_core::commercial::polish_generated_career(&mut game);
 
     info!(
         "[mcp-bootstrap] Built game: {} teams, {} players, manager.team_id={:?}",

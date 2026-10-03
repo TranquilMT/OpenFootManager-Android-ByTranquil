@@ -66,13 +66,16 @@ pub fn apply_event_response(
         let user_team_id = game.manager.team_id.clone()?;
         match option_id {
             "accept" => {
-                let amount = game
-                    .messages
-                    .iter()
-                    .find(|m| m.id == message_id)
-                    .and_then(|m| m.i18n_params.get("amount"))
+                let message = game.messages.iter().find(|m| m.id == message_id)?;
+                if !message.actions.iter().any(|action| !action.resolved)
+                    || !game.teams.iter().any(|team| team.id == user_team_id
+                        && team.sponsorship.as_ref().is_none_or(|s| s.remaining_weeks == 0))
+                {
+                    return None;
+                }
+                let amount = message.i18n_params.get("amount")
                     .and_then(|amount| parse_amount_param(amount))
-                    .unwrap_or(100_000);
+                    .filter(|amount| *amount > 0 && *amount <= i64::MAX as u64)?;
                 let sponsor_name = game
                     .messages
                     .iter()
@@ -82,6 +85,7 @@ pub fn apply_event_response(
                     .unwrap_or_else(|| "Sponsor".to_string());
                 if let Some(team) = game.teams.iter_mut().find(|t| t.id == user_team_id) {
                     team.sponsorship = Some(Sponsorship {
+                        auto_renew: false,
                         sponsor_name,
                         base_value: amount as i64,
                         remaining_weeks: 12,

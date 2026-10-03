@@ -1,3 +1,6 @@
+import type { SponsorshipData } from "./sponsorshipTypes";
+export type { SponsorshipData } from "./sponsorshipTypes";
+
 /** One training group as the backend stores it. */
 export interface TrainingGroupData {
   id: string;
@@ -19,12 +22,7 @@ export interface FacilitiesData {
   scouting: number;
 }
 
-export interface SponsorshipData {
-  sponsor_name: string;
-  base_value: number;
-  remaining_weeks: number;
-  bonus_criteria: unknown[];
-}
+
 
 export type TransactionKind =
   | "PrizeMoney"

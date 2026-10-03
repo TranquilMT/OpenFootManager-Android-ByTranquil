@@ -520,6 +520,7 @@ mod tests {
         let db = test_db();
         let mut team = sample_team("team-001", "Sponsor FC");
         team.sponsorship = Some(Sponsorship {
+            auto_renew: true,
             sponsor_name: "Acme Corp".to_string(),
             base_value: 100_000,
             remaining_weeks: 12,
@@ -535,6 +536,7 @@ mod tests {
         let sponsorship = loaded
             .sponsorship
             .expect("sponsorship should roundtrip through DB");
+        assert!(sponsorship.auto_renew);
         assert_eq!(sponsorship.sponsor_name, "Acme Corp");
         assert_eq!(sponsorship.base_value, 100_000);
         assert_eq!(sponsorship.remaining_weeks, 12);
