@@ -19,3 +19,7 @@ Training is slower and tapers near potential and at poor condition. Youth match 
 UEFA's 2026 finance overview provides context for avoiding limitless wage growth and guaranteed profits: https://www.uefa.com/news-media/news/02a2-200452a66064-0cfd3f86b94f-1000/ . Generated salary and commercial curves are game estimates.
 
 Regression coverage includes salary conversion/overflow, termination, loan payroll, save/reload settlement, year-long cash reconciliation, transfer commitments, paid junior registration, commercial cooldowns and season development. The verification workflow checks frontend, engine/domain/core/database, application commands and MCP before release packaging.
+
+Attendance estimates also respect the club's turnover scale: 19 baseline home matches cannot produce more than 30% of that annual anchor merely because a small club has a large stadium. A regression spans clubs from grassroots to elite and checks the target opening operating margin.
+
+Cash forecasts average the current season's known home schedule over 52 weeks. They do not repeatedly extrapolate one unusually busy home week or assume a blank away week lasts all year. Actual cash still settles completed home fixtures, once, on the weekly posting date.

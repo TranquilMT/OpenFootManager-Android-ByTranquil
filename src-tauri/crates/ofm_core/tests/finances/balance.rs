@@ -73,3 +73,32 @@ fn fifty_two_weeks_settle_revenue_costs_and_payroll_once() {
     assert_eq!(game.teams[0].season_expenses, 4_160_000 + annual_payroll);
     assert!(finances::journal_matches_cash(&game));
 }
+
+#[test]
+fn forecast_uses_the_season_schedule_instead_of_repeating_last_week_income() {
+    let mut game = make_monday_game();
+    game.league = Some(League {
+        id: "forecast".into(),
+        name: "Forecast League".into(),
+        season: 1,
+        fixtures: ["2025-06-17", "2025-06-24"].into_iter().enumerate().map(|(id, date)| Fixture {
+            id: format!("home-{id}"),
+            date: date.into(),
+            home_team_id: "team1".into(),
+            away_team_id: "team2".into(),
+            status: FixtureStatus::Scheduled,
+            ..Default::default()
+        }).collect(),
+        ..Default::default()
+    });
+    let planned = finances::team_finance_snapshot(&game, "team1").unwrap();
+    assert!(planned.weekly_recurring_income > 0);
+    game.clock.current_date += chrono::Duration::weeks(4);
+    for fixture in &mut game.league.as_mut().unwrap().fixtures {
+        fixture.status = FixtureStatus::Completed;
+        fixture.result = Some(MatchResult::default());
+    }
+    let after = finances::team_finance_snapshot(&game, "team1").unwrap();
+    assert_eq!(after.weekly_recurring_income, planned.weekly_recurring_income);
+    assert_eq!(after.projected_weekly_net, planned.projected_weekly_net);
+}

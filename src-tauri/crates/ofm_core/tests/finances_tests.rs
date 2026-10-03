@@ -682,8 +682,7 @@ fn home_match_generates_income() {
     // After wage deduction AND matchday income
     let wages = (52_000 + 26_000 + 10_400) / 52;
     // Income should make final finance > initial - wages
-    // (stadium capacity 40000, attendance 60-92%, ticket €15-25)
-    // Min income: 40000 * 0.60 * 15 = 360,000
+    // Attendance income scales with club demand and turnover.
     let final_finance = game.teams[0].finance;
     assert!(
         final_finance > initial_finance - wages,
