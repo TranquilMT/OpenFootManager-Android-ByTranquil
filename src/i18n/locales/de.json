@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.8",
+    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.9",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
@@ -4335,5 +4335,10 @@
     "sponsors": "Etablierte Vereine starten mit Sponsorenverträgen, die zu ihrem Umsatz passen.",
     "economy": "Die Anfangseinnahmen folgen dem Ligaspielplan; Sponsorenzahlungen und Vertragsantworten sind abgesichert.",
     "saves": "Eine einmalige Korrektur erhält das Guthaben, ausgehandelte Verträge und die Karrierehistorie."
+  },
+  "phase69": {
+    "prizes": "Saisonprämien richten sich nach den Einnahmen der Liga.",
+    "promotion": "Ein Aufstieg stellt die Gehaltsbudgetkapazität nach einem Abstieg wieder her.",
+    "sponsors": "Sponsorenboni verwenden die korrekte Tabelle der nationalen Liga."
   }
 }

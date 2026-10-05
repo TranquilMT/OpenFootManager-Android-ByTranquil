@@ -1783,7 +1783,7 @@
     "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
     "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
     "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
-    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.8",
+    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.9",
     "patchPortraits": "20 fiktivních výchozích tváří přináší pestřejší portréty hráčů.",
     "patchWorld": "Fotbalový svět zahrnuje 29 zemí a silnější kluby v Americe a Asii.",
     "patchTransfers": "Strategie klubů řídí hostování a přestupy včetně konkurenčních nabídek a kontroly rozpočtu.",
@@ -4335,5 +4335,10 @@
     "sponsors": "Zavedené kluby začínají se sponzorskými smlouvami odpovídajícími jejich obratu.",
     "economy": "Počáteční příjmy vycházejí z rozpisu ligy; platby sponzorů a odpovědi na smlouvy jsou chráněny.",
     "saves": "Jednorázová oprava zachovává peníze, sjednané smlouvy a historii kariéry."
+  },
+  "phase69": {
+    "prizes": "Sezónní odměny odpovídají příjmům soutěže.",
+    "promotion": "Postup obnovuje kapacitu mzdového rozpočtu po sestupu.",
+    "sponsors": "Sponzorské bonusy používají správnou tabulku domácí ligy."
   }
 }

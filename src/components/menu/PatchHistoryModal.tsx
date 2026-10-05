@@ -4,6 +4,10 @@ import { ReleaseNotes } from "../settings/ReleaseNotes";
 
 const HISTORY = [
   {
+    version: "0.6.8",
+    keys: ["phase68.squads", "phase68.sponsors", "phase68.economy", "phase68.saves"],
+  },
+  {
     version: "0.6.7",
     keys: ["phase67.contracts", "phase67.staffTransfers", "phase67.economy", "phase67.development"],
   },

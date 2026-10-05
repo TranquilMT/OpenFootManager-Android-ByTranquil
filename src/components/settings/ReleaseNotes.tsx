@@ -1,14 +1,13 @@
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { useTranslation } from "react-i18next";
-import { Sparkles, Wallet, Users, Heart, Bug, FileCheck } from "lucide-react";
+import { Sparkles, Wallet, Users, Heart, Bug } from "lucide-react";
 
 const ISSUE_URL = "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new";
 
 const HIGHLIGHT_KEYS = [
-  { key: "phase68.squads", Icon: FileCheck },
-  { key: "phase68.sponsors", Icon: Users },
-  { key: "phase68.economy", Icon: Wallet },
-  { key: "phase68.saves", Icon: Sparkles },
+  { key: "phase69.prizes", Icon: Wallet },
+  { key: "phase69.promotion", Icon: Sparkles },
+  { key: "phase69.sponsors", Icon: Users },
 ] as const;
 
 export function ReleaseNotes({ embedded = false }: { embedded?: boolean }) {

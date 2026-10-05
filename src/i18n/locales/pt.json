@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mais jogadores de destaque, incluindo raras estrelas de nível 96.",
     "patchMatches": "Mais reações, remates à trave e comentário por voz opcional.",
     "patchMobile": "Controlos móveis, caixa de entrada, seleções e início de carreira melhorados.",
-    "patchWelcome": "Bem-vindo ao OFMtouch! Novidades da v0.6.8",
+    "patchWelcome": "Bem-vindo ao OFMtouch! Novidades da v0.6.9",
     "patchPortraits": "20 rostos fictícios de origem tornam os retratos dos jogadores mais variados.",
     "patchWorld": "Um mundo de futebol maior abrange 29 nações, com clubes mais fortes nas Américas e na Ásia.",
     "patchTransfers": "As estratégias dos clubes orientam empréstimos e transferências, com ofertas concorrentes e controlo do orçamento.",
@@ -4335,5 +4335,10 @@
     "sponsors": "Os clubes estabelecidos começam com patrocínios proporcionais às suas receitas.",
     "economy": "As receitas iniciais seguem o calendário da liga; os pagamentos de patrocínio e as respostas contratuais estão protegidos.",
     "saves": "Uma correção única preserva o dinheiro, os contratos negociados e o histórico da carreira."
+  },
+  "phase69": {
+    "prizes": "Os prémios de época acompanham as receitas da divisão.",
+    "promotion": "A promoção restaura a capacidade do orçamento salarial após a despromoção.",
+    "sponsors": "Os bónus dos patrocinadores usam a classificação correta da liga nacional."
   }
 }

@@ -1783,7 +1783,7 @@
     "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
     "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
     "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
-    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.8",
+    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.9",
     "patchPortraits": "20 fictional source faces bring more variety to generated player portraits.",
     "patchWorld": "A larger football world spans 29 nations, with stronger clubs across the Americas and Asia.",
     "patchTransfers": "Club strategies guide loans and transfer approaches, with competing offers and budget checks.",
@@ -4335,5 +4335,10 @@
     "sponsors": "Established clubs start with sponsorships scaled to their turnover.",
     "economy": "Opening income follows the league schedule; sponsorship payments and contract responses are protected.",
     "saves": "A one-time repair preserves cash, negotiated contracts and career history."
+  },
+  "phase69": {
+    "prizes": "Season prizes scale with division income.",
+    "promotion": "Promotion restores wage budget capacity after relegation.",
+    "sponsors": "Sponsor bonuses use the correct domestic league standings."
   }
 }
