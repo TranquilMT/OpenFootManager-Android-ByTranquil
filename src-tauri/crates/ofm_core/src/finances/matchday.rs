@@ -41,7 +41,7 @@ pub(super) fn count_recent_home_matches(game: &Game, team_id: &str) -> i64 {
 
 /// Recurring forecasts average the current season's known home schedule.
 /// Actual settlement still posts only completed matches from the past week.
-pub(super) fn estimated_weekly_matchday_income(game: &Game, team: &Team) -> i64 {
+pub(crate) fn estimated_weekly_matchday_income(game: &Game, team: &Team) -> i64 {
     let mut counted = std::collections::HashSet::new();
     let home_matches = game
         .competitions

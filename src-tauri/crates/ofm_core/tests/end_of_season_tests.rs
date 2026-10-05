@@ -13,8 +13,8 @@ use ofm_core::end_of_season::{
 };
 use ofm_core::game::{BoardObjective, Game, ObjectiveType};
 
-// ---------------------------------------------------------------------------
-// Test helpers
+#[path = "end_of_season/economy.rs"]
+mod economy;
 // ---------------------------------------------------------------------------
 
 fn make_team(id: &str, name: &str) -> Team {

@@ -11,6 +11,7 @@ use domain::staff::{Staff, StaffAttributes, StaffRole};
 use domain::team::{FinancialTransaction, FinancialTransactionKind, TeamSeasonRecord};
 
 mod berths;
+mod payouts;
 use berths::{
     apply_domestic_berth_promotion_relegation, apply_pyramid_promotion_relegation,
     resolve_domestic_berth_fields,
@@ -931,20 +932,12 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
 
     // 4. Record history, prize money, reputation and strategy across all divisions.
     let divisions = division_standings_with_tiers(game);
-    let user_division_tier = divisions
-        .iter()
-        .find(|division| {
-            division
-                .standings
-                .iter()
-                .any(|entry| entry.team_id == user_team_id)
-        })
-        .map(|division| division.tier)
-        .unwrap_or(0);
     let mut user_prize_posted = false;
+    let mut user_prize_money = 0;
     for division in divisions {
         let (division_standings, tier, season) =
             (division.standings, division.tier, division.season);
+        let champion_cap = payouts::champion_prize_cap(game, &division_standings, tier);
         for (idx, standing) in division_standings.iter().enumerate() {
             let position = (idx + 1) as u32;
             crate::club_strategy::review_team(
@@ -954,7 +947,7 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
                 division_standings.len() as u32,
                 season,
             );
-            let prize_money = division_prize_money(position, tier);
+            let prize_money = payouts::scaled_prize(position, tier, champion_cap);
             let team_id = standing.team_id.clone();
             let prize_posted = if prize_money > 0 {
                 let date = chrono::NaiveDate::parse_from_str(&last_fixture_date, "%Y-%m-%d")
@@ -977,6 +970,7 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
             };
             if prize_posted && team_id == user_team_id {
                 user_prize_posted = true;
+                user_prize_money = prize_money;
             }
             if let Some(team) = game.teams.iter_mut().find(|t| t.id == team_id) {
                 team.history.push(TeamSeasonRecord {
@@ -1352,7 +1346,6 @@ pub fn process_end_of_season(game: &mut Game) -> EndOfSeasonSummary {
     // Each check reads the live ledger rather than a snapshot: the three emits
     // below are interleaved with the checks, so a snapshot would go stale.
     let payout_msg_id = format!("season_payout_{}", season);
-    let user_prize_money = division_prize_money(user_position, user_division_tier);
     if user_prize_posted && !crate::inbox::already_emitted(game, &payout_msg_id) {
         let payout_message = InboxMessage::new(
             payout_msg_id,

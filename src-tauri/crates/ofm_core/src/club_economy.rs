@@ -194,6 +194,10 @@ pub fn apply_division_changes(game: &mut Game, before: &std::collections::HashMa
         team.economy.annual_operating_cost = team.economy.annual_operating_cost * cost_pct / 100;
         if new > old {
             team.wage_budget = team.wage_budget * 75 / 100;
+        } else {
+            // Restore the capacity removed by relegation. Signed salaries and
+            // cash stay untouched; income rises faster than this budget limit.
+            team.wage_budget = team.wage_budget.saturating_mul(4) / 3;
         }
     }
 }
@@ -374,6 +378,123 @@ mod tests {
         team.finance = 6_700_000;
         team
     }
+    #[test]
+    fn five_year_operating_cash_flow_stays_bounded_across_club_sizes_and_renewals() {
+        use domain::league::{Fixture, FixtureStatus, League, MatchResult};
+        for reputation in [100, 350, 500, 650, 750, 900] {
+            let mut game = career();
+            game.teams[0].name = "Balance FC".into();
+            game.teams[0].reputation = reputation;
+            game.teams[0].stadium_capacity = 12_000;
+            let revenue = annual_revenue_anchor(&game.teams[0]);
+            let mut player = domain::player::Player::new(
+                "paid-player".into(),
+                "Test".into(),
+                "Paid Player".into(),
+                "2000-01-01".into(),
+                "GB".into(),
+                domain::player::Position::Striker,
+                domain::player::PlayerAttributes {
+                    pace: 60,
+                    stamina: 60,
+                    strength: 60,
+                    agility: 60,
+                    passing: 60,
+                    shooting: 60,
+                    tackling: 60,
+                    dribbling: 60,
+                    defending: 60,
+                    positioning: 60,
+                    vision: 60,
+                    decisions: 60,
+                    composure: 60,
+                    aggression: 60,
+                    teamwork: 60,
+                    leadership: 60,
+                    handling: 60,
+                    reflexes: 60,
+                    aerial: 60,
+                },
+            );
+            player.team_id = Some("test".into());
+            player.wage = (revenue / 2) as u32;
+            let annual_payroll = i64::from(player.wage);
+            game.players.push(player);
+            game.teams[0].finance = opening_cash(&game.teams[0]);
+            initialize_generated_club(&mut game.teams[0], annual_payroll);
+            let initial = game.teams[0].finance;
+            for year in 0..5 {
+                let start = game.clock.current_date.date_naive();
+                let fixtures = (1..=19)
+                    .map(|week| Fixture {
+                        id: format!("gate-{year}-{week}"),
+                        date: (start + chrono::Duration::days(week * 7))
+                            .format("%Y-%m-%d")
+                            .to_string(),
+                        home_team_id: "test".into(),
+                        away_team_id: "visitor".into(),
+                        status: FixtureStatus::Completed,
+                        result: Some(MatchResult {
+                            home_goals: 0,
+                            away_goals: 0,
+                            home_scorers: vec![],
+                            away_scorers: vec![],
+                            report: None,
+                            home_penalties: None,
+                            away_penalties: None,
+                        }),
+                        ..Default::default()
+                    })
+                    .collect();
+                game.competitions = vec![League {
+                    fixtures,
+                    ..Default::default()
+                }];
+                for _ in 0..52 {
+                    game.clock.advance_days(7);
+                    crate::finances::process_weekly_finances(&mut game);
+                }
+                assert!(crate::finances::journal_matches_cash(&game));
+                assert_eq!(i64::from(game.players[0].wage), annual_payroll);
+                assert!(
+                    game.teams[0].finance > 0,
+                    "club size {reputation} year {year}"
+                );
+            }
+            let expected = initial + revenue * 3 / 100 * 5;
+            assert!(
+                (game.teams[0].finance - expected).abs() < 5_000,
+                "club size {reputation}: actual {} expected {expected}",
+                game.teams[0].finance
+            );
+            if reputation >= 300 {
+                assert!(game.teams[0].sponsorship.as_ref().unwrap().remaining_weeks > 0);
+            }
+        }
+    }
+
+    #[test]
+    fn promotion_restores_wage_capacity_without_changing_cash_or_contracts() {
+        let mut game = career();
+        game.teams[0].economy.version = 3;
+        game.teams[0].economy.annual_operating_income = 10_000_000;
+        game.teams[0].economy.annual_operating_cost = 5_000_000;
+        game.teams[0].wage_budget = 6_000_000;
+        game.competitions = vec![domain::league::League {
+            participant_ids: vec!["test".into()],
+            ..Default::default()
+        }];
+        let before = std::collections::HashMap::from([("test".into(), 1)]);
+        apply_division_changes(&mut game, &before);
+        assert_eq!(game.teams[0].wage_budget, 8_000_000);
+        assert_eq!(game.teams[0].finance, 6_700_000);
+        assert_eq!(game.teams[0].economy.annual_operating_income, 15_000_000);
+        // A stay in the same tier must not create another budget increase.
+        let current = division_ranks(&game);
+        apply_division_changes(&mut game, &current);
+        assert_eq!(game.teams[0].wage_budget, 8_000_000);
+    }
+
     #[test]
     fn united_cash_is_separate_from_turnover_and_wages_fit() {
         let mut team = club("Manchester United", 910);
