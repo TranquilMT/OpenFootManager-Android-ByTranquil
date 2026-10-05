@@ -1,5 +1,7 @@
 mod matchday;
-use matchday::{count_recent_home_matches, estimated_weekly_matchday_income};
+mod standings;
+use matchday::count_recent_home_matches;
+pub(crate) use matchday::estimated_weekly_matchday_income;
 pub(crate) use matchday::{match_attendance, match_ticket_price};
 
 pub mod journal;
@@ -823,13 +825,7 @@ pub fn evaluate_sponsorship_bonus(
 }
 
 fn current_league_position(game: &Game, team_id: &str) -> Option<u32> {
-    let league = game.league.as_ref()?;
-
-    league
-        .sorted_standings()
-        .iter()
-        .position(|standing| standing.team_id == team_id)
-        .map(|index| index as u32 + 1)
+    standings::league_positions(game).get(team_id).copied()
 }
 
 fn commit_weekly_posts(game: &mut Game, reqs: &[PostRequest]) -> bool {
@@ -882,18 +878,7 @@ pub fn process_weekly_finances(game: &mut Game) {
         }
     }
 
-    let position_by_team: std::collections::HashMap<String, u32> = game
-        .league
-        .as_ref()
-        .map(|league| {
-            league
-                .sorted_standings()
-                .iter()
-                .enumerate()
-                .map(|(index, standing)| (standing.team_id.clone(), index as u32 + 1))
-                .collect()
-        })
-        .unwrap_or_default();
+    let position_by_team = standings::league_positions(game);
 
     let post_date = game.clock.current_date.date_naive();
     // One bounded marker per club; salary settlement by the board is separate.
@@ -1200,7 +1185,7 @@ mod tests {
         team
     }
 
-    fn make_game() -> Game {
+    pub(super) fn make_game() -> Game {
         let clock = GameClock::new(Utc.with_ymd_and_hms(2026, 2, 16, 12, 0, 0).unwrap());
         let mut manager = Manager::new(
             "mgr-user".to_string(),
