@@ -195,4 +195,10 @@ mod tests {
             })
         );
     }
+    #[test]
+    fn old_event_json_loads_without_shot_metadata() {
+        let event: MatchEvent = serde_json::from_str(r#"{"minute":10,"event_type":"Goal","side":"Home","zone":"AwayBox","player_id":"p1","secondary_player_id":null}"#).unwrap();
+        assert!(event.shot.is_none());
+    }
+
 }
