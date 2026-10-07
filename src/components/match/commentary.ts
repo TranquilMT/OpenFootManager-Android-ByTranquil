@@ -9,6 +9,7 @@ import type {
   GoalContext,
 } from "./types";
 import { getPlayerName } from "./helpers";
+import { eventContext, narrativeKey } from "./narrativeContext";
 
 /** Event types that get the full headline + prose treatment. */
 const COMMENTARY_EVENTS = new Set([
