@@ -147,9 +147,9 @@ impl LiveMatchState {
 
     pub(super) fn effective_press(&self, pressing_side: Side) -> f64 {
         let team = self.team_ref(pressing_side);
-        let base = team.position_attr_avg(Position::Midfielder, |p| {
-            ((p.stamina as u16 + p.tackling as u16 + p.pace as u16) / 3) as u8
-        });
+        let base = crate::shared::active_position_rating(&team.players,&self.sent_off,Position::Midfielder,
+            |p|(p.stamina as f64+p.tackling as f64+p.pace as f64)/3.0,
+            |p|self.condition_adjusted_skill(&p.id,1.0));
         let modifier = play_style_modifier(team.play_style, PlayStylePhase::Press, true);
         base * modifier
             * tactics_pressing_press(&team.tactics)
