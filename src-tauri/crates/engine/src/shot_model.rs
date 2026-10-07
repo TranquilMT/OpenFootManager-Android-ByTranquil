@@ -12,6 +12,8 @@ pub(crate) fn contest_probability(attack: f64, defense: f64) -> f64 { let attack
 
 pub(crate) fn goal_context(own: u8, opponent: u8) -> crate::event::GoalContext { use crate::event::GoalContext; if own == 0 && opponent == 0 { GoalContext::Opener } else if own.saturating_add(1) == opponent { GoalContext::Equaliser } else if own >= opponent { GoalContext::Extends } else { GoalContext::Consolation } }
 
+pub(crate) fn save_difficulty(xg: f64) -> crate::event::SaveQuality { use crate::event::SaveQuality; if xg >= 0.30 { SaveQuality::WorldClass } else if xg >= 0.15 { SaveQuality::Strong } else { SaveQuality::Routine } }
+
 #[cfg(test)]
 mod tests {
     use super::*;
