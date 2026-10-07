@@ -40,7 +40,6 @@ impl LiveMatchState {
         self.phase = MatchPhase::SecondHalf;
         // Second half starts after halftime; use at least minute 46 but never before current_minute
         let start_min = self.current_minute;
-        self.current_minute = start_min;
         self.ball_zone = Zone::Midfield;
         self.possession = Side::Away;
         self.second_half_stoppage = rng.random_range(0..=self.config.stoppage_time_max.min(10));
