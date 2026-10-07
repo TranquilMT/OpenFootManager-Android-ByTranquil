@@ -11,6 +11,7 @@ import {
 import { getEventDisplay, getPlayerName, makeTeamFallback } from "./helpers";
 import { getTalkIcon } from "./TeamTalkIcons";
 import { Badge, TeamLogo, ThemeToggle } from "../ui";
+import { MatchPulse } from "./MatchPulse";
 import { QuickStat, renderScorers, PlayerRatingsPanel } from "./PostMatchHelpers";
 import { PossessionDonut } from "./PostMatchCharts";
 import {
