@@ -32,4 +32,5 @@ describe("truthful match narratives", () => {
   it("legacy event logs have unavailable xg", () => { expect(matchMetrics([event("Goal",10)],"Home").hasXg).toBe(false); });
   it("keeper saves belong to the defending team", () => { expect(matchMetrics([event("ShotSaved",10,"Away")],"Home").saves).toBe(1); });
   it("woodwork counts once without an extra shot", () => { const e=event("ShotOffTarget",10);e.detail="Woodwork";expect(matchMetrics([e],"Home")).toMatchObject({shots:1,woodwork:1}); });
+  it("ignores malformed chance metadata", () => { const e=event("Goal",10);e.shot={expected_goals:NaN,goalkeeper_id:"gk"};expect(matchMetrics([e],"Home").xg).toBe(0); });
 });
