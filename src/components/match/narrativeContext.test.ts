@@ -13,4 +13,5 @@ describe("truthful match narratives", () => {
   it("does not call an early equaliser late", () => { const a=event("Goal",10,"Away"); const b=event("Goal",30); expect(narrativeKey(b,[a,b])).not.toBe("lateEqualiser"); });
   it("recognizes a comeback lead", () => { const a=event("Goal",10,"Away"); const b=event("Goal",30); const c=event("Goal",60,"Home","p2"); expect(narrativeKey(c,[a,b,c])).toBe("comebackLead"); });
   it("does not invent a comeback from a level match", () => { const e=event("Goal",60); expect(narrativeKey(e,[e])).not.toBe("comebackLead"); });
+  it("describes a late lead without promising victory", () => { const e=event("Goal",89); expect(narrativeKey(e,[e])).toBe("lateLead"); });
 });
