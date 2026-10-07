@@ -325,7 +325,9 @@ impl LiveMatchState {
                 player_on_id,
             } => self.do_substitution(side, &player_off_id, &player_on_id),
             MatchCommand::ChangeFormation { side, formation } => {
+                let changed = self.team_ref(side).formation != formation;
                 self.apply_formation(side, &formation);
+                if changed && self.phase != MatchPhase::PreKickOff { self.events.push(MatchEvent::new(self.current_minute, EventType::TacticalChange, side, Zone::Midfield)); }
                 Ok(())
             }
             MatchCommand::ChangePlayStyle { side, play_style } => {
