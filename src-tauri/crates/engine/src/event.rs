@@ -139,6 +139,7 @@ impl MatchEvent {
             player_id: None,
             secondary_player_id: None,
             detail: None,
+            shot: None,
         }
     }
 
