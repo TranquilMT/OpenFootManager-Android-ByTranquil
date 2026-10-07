@@ -16,6 +16,9 @@ pub struct MatchEvent {
     /// events that carry no extra colour.
     #[serde(default)]
     pub detail: Option<EventDetail>,
+    /// Pre-outcome chance probability; old event logs have no shot metadata.
+    #[serde(default)]
+    pub shot: Option<ShotInfo>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
