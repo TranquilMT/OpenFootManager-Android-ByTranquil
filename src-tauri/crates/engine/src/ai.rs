@@ -127,6 +127,12 @@ fn consider_substitution<R: Rng>(
     // Higher experience → earlier and smarter substitutions
     let experience_factor = profile.experience as f64 / 100.0;
 
+    // A recorded injury takes precedence over routine fatigue or score changes.
+    if let Some(injured)=snap.events.iter().rev().filter(|e|e.side==side && e.event_type==crate::event::EventType::Injury).find_map(|e|e.player_id.as_ref().and_then(|id|team.players.iter().find(|p|p.id==*id && !snap.sent_off.contains(id))))
+        && let Some(replacement)=find_best_bench_replacement(bench,injured.position,&unavailable,None) {
+        return Some(MatchCommand::Substitute {side,player_off_id:injured.id.clone(),player_on_id:replacement.id.clone()});
+    }
+
     // --- Fatigue-based substitutions (after minute 55+) ---
     let fatigue_threshold = if minute >= 75 {
         55.0 + experience_factor * 10.0 // experienced managers sub earlier
