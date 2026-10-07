@@ -23,4 +23,5 @@ describe("truthful match narratives", () => {
   it("identifies a first yellow without a prior booking", () => { const e=event("YellowCard",20); expect(narrativeKey(e,[e])).toBe("bookingRisk"); });
   it("identifies a dismissal without miscounting goals", () => { const e=event("RedCard",20); expect(narrativeKey(e,[e])).toBe("numericalDisadvantage"); });
   it("recognizes injury substitutions from recorded injuries", () => { const a=event("Injury",40); const b=event("Substitution",41,"Home","p2"); b.secondary_player_id="p1"; expect(narrativeKey(b,[a,b])).toBe("injuryChange"); });
+  it("does not invent an injury for a tactical substitution", () => { const e=event("Substitution",65); e.secondary_player_id="p2"; expect(narrativeKey(e,[e])).toBe("freshLegs"); });
 });
