@@ -6,6 +6,8 @@ pub(crate) fn accuracy(base: f64, skill: f64) -> f64 { (finite_or(base, 0.35) + 
 
 pub(crate) fn conversion(base: f64, shooter: f64, keeper: f64, shape: f64) -> f64 { (finite_or(base, 0.36) * finite_or(shape, 1.0).clamp(0.5, 1.5) + (finite_or(shooter, 50.0) - finite_or(keeper, 50.0)) / 150.0).clamp(0.10, 0.70) }
 
+pub(crate) fn expected_goals(accuracy: f64, conversion: f64) -> f64 { finite_or(accuracy, 0.0).clamp(0.0, 1.0) * finite_or(conversion, 0.0).clamp(0.0, 1.0) }
+
 #[cfg(test)]
 mod tests {
     use super::*;
