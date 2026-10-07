@@ -586,6 +586,7 @@ export default function PostMatchScreen({
                   label={t("match.possession")}
                 />
               </div>
+              <MatchPulse snapshot={snapshot} />
               <QuickStat label={t("match.shots")} home={homeShots} away={awayShots} />
               <QuickStat
                 label={t("match.fouls")}
