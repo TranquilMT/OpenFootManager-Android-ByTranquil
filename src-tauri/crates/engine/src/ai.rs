@@ -106,6 +106,8 @@ fn consider_substitution<R: Rng>(
         Side::Away => &snap.away_team,
     };
     let bench = match_state.bench(side);
+    let mut unavailable = snap.sent_off.clone();
+    unavailable.extend(snap.substitutions.iter().map(|sub| sub.player_off_id.clone()));
 
     if bench.is_empty() {
         return None;
