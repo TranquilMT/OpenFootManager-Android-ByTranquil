@@ -1,5 +1,7 @@
 //! Shared bounded shot probabilities for live and background matches.
 
+fn finite_or(value: f64, fallback: f64) -> f64 { if value.is_finite() { value } else { fallback } }
+
 #[cfg(test)]
 mod tests {
     use super::*;
