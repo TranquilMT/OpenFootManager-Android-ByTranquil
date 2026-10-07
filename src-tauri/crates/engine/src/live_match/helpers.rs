@@ -69,16 +69,6 @@ impl LiveMatchState {
             .unwrap_or_else(PlayerSnap::nobody)
     }
 
-    pub(super) fn snap_player_by_id(&self, player_id: &str, side: Side) -> PlayerSnap {
-        let team = self.team_ref(side);
-        team.players
-            .iter()
-            .find(|player| player.id == player_id)
-            .or_else(|| team.players.first())
-            .map(PlayerSnap::from)
-            .unwrap_or_else(PlayerSnap::nobody)
-    }
-
     pub(super) fn pick_penalty_taker<R: Rng>(&self, side: Side, rng: &mut R) -> PlayerSnap {
         // Use designated taker if set
         if let Some(ref id) = self.set_pieces_ref(side).penalty_taker {
