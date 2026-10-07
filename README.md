@@ -4,7 +4,7 @@
 
 OFMtouch is a free, open-source football management game for Android, based on OpenFootManager and adapted for mobile by **TranquilMT**. Build a squad, develop young talent and lead your club through seasons of league and cup football. Every career brings decisions on the pitch, in the transfer market and behind the scenes.
 
-**Current version: v0.6.8 — Squad, Sponsorship & Economy Polish · Android ARM64**
+**Current version: v0.7.0 — Match Engine V2 · Android ARM64**
 
 [Download OFMtouch](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/latest) · [Previous releases](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases) · [Report an issue](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new)
 
@@ -38,6 +38,10 @@ OFMtouch is a free, open-source football management game for Android, based on O
 - 💾 **Build a long-term career and football dynasty**, saving your progress and continuing season after season.
 
 ## Featured Gameplay Systems
+
+### ⚽ Match Engine V2
+
+Read the game with chance quality, goalkeeper saves, woodwork and recent pressure. React to formation and style changes, follow score-aware commentary and review the match after the final whistle.
 
 ### 🔄 Transfer Market V2.0
 
@@ -85,6 +89,33 @@ Your job extends beyond the next result.
 - Interface and update summaries in 12 supported languages.
 
 ## What's New — Version History
+
+### v0.7.0 — Match Engine V2
+
+**A deeper matchday: clearer chances, richer commentary and better decisions.**
+
+- ⚽ Shared shot accuracy and conversion logic keeps live and background chance calculations aligned.
+- 🎯 Recorded expected goals describe each simulated attempt before its outcome, including in-match penalties.
+- 🧤 Goalkeeper-linked saves and chance-based save difficulty distinguish routine stops from demanding chances.
+- 🥅 Woodwork, goalkeeper saves and expected-goals totals appear beside the action and after full time.
+- 📊 The new Match Pulse shows recent attacking pressure and shots in the last five minutes.
+- 🗣️ Commentary follows the score: late equalisers, late leads, comeback leads and commanding advantages.
+- 🌟 Player narratives cover braces, hat-tricks and four-goal matches without counting later or same-minute goals too early.
+- 🔄 Substitution context distinguishes recent injuries, fresh legs, protecting a lead and chasing a result.
+- 🟨 Booking risk, numerical disadvantage and injury concerns are connected to recorded match events.
+- 🧠 Formation and playing-style decisions appear immediately in the match feed and retained fixture summaries.
+- ⚠️ Verified defensive buildup errors, frame hits and difficult saves receive clearer event icons and prominence.
+- 🏙️ Local derby labels use matching club cities and countries rather than guessing from club names.
+- 🤖 Opposing managers avoid players who cannot return and weigh replacement fitness more carefully.
+- 💨 Background matches apply the energy cost of pressing, improving consistency with live matches.
+- ⏱️ Fixed clock rewinds and missing action minutes around half-time and extra-time restarts.
+- 📝 Fixture history retains new chance-quality and woodwork totals while older careers continue to load.
+- 🛠️ Fixed self-assists, malformed commentary variants, unresolved placeholders and zero-strength possession calculations.
+- 📱 Refreshed menu icon tiles, a major-update entry point and six compact What’s New cards support small screens and reduced motion.
+- 🌍 All new interface and commentary content is translated across all 12 supported languages.
+
+Expected goals are the engine’s simulated chance probabilities, not tracking-data measurements or guaranteed goals. Recent pressure is based on actual shot events and gives no artificial scoring bonus. Existing career, economy, transfers, academy and board systems remain part of this full release.
+
 
 ### v0.6.7 — Economy & Gameplay Balance
 
