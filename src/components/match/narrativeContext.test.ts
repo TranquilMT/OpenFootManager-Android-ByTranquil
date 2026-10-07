@@ -5,4 +5,5 @@ const event = (type: string, minute: number, side: "Home" | "Away" = "Home", pla
 describe("truthful match narratives", () => {
   it("does not read goals from the future", () => { const e = event("Goal", 10); expect(eventContext(e, [e, event("Goal", 50)]).ownAfter).toBe(1); });
   it("distinguishes goals in the same minute", () => { const a = event("Goal", 10); const b = event("Goal", 10, "Home", "p2"); expect(eventContext(a, [a,b]).ownAfter).toBe(1); });
+  it("accepts snapshot copies of an event", () => { const e = event("Goal", 10); expect(eventContext({...e}, [e, event("Goal", 20)]).ownAfter).toBe(1); });
 });
