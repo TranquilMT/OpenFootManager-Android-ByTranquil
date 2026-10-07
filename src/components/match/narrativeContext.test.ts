@@ -31,4 +31,5 @@ describe("truthful match narratives", () => {
   it("xg totals are independent of finishing", () => { const a=event("ShotOffTarget",10);a.shot={expected_goals:0.2,goalkeeper_id:"gk"};expect(matchMetrics([a],"Home").xg).toBeCloseTo(0.2); });
   it("legacy event logs have unavailable xg", () => { expect(matchMetrics([event("Goal",10)],"Home").hasXg).toBe(false); });
   it("keeper saves belong to the defending team", () => { expect(matchMetrics([event("ShotSaved",10,"Away")],"Home").saves).toBe(1); });
+  it("woodwork counts once without an extra shot", () => { const e=event("ShotOffTarget",10);e.detail="Woodwork";expect(matchMetrics([e],"Home")).toMatchObject({shots:1,woodwork:1}); });
 });
