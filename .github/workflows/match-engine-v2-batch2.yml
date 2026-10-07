@@ -21,12 +21,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Import lint-clean engine layout correction
+      - name: Import final factual commentary correction
         run: |
-          git bundle verify checkpoints/final-layout-fix.bundle
-          git fetch checkpoints/final-layout-fix.bundle HEAD
+          git bundle verify checkpoints/final-commentary-fix.bundle
+          git fetch checkpoints/final-commentary-fix.bundle HEAD
           git checkout -B feat/0.7.0-match-engine-v2 FETCH_HEAD
-          test "$(git rev-parse HEAD)" = 4e3fd57875e424ccde312c3a9426e40df67ed02d
+          test "$(git rev-parse HEAD)" = 8697541be7bfd1115c2a425d1cabf53b8dc020db
           git push origin HEAD:refs/heads/feat/0.7.0-match-engine-v2
 
       - name: Setup Node
@@ -72,11 +72,13 @@ jobs:
             git push origin HEAD:refs/heads/feat/0.7.0-match-engine-v2
           fi
           echo "OFM_SOURCE_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
-      - name: Focused match engine regression and strict lint
-        working-directory: src-tauri
+      - name: Require successful validation of unchanged Rust source
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          cargo test -p engine --all-targets --locked
-          cargo clippy -p engine --all-targets --locked
+          git diff --quiet 4e3fd57875e424ccde312c3a9426e40df67ed02d HEAD -- src-tauri
+          gh run watch 37661788700 --repo "$GITHUB_REPOSITORY" --exit-status
+          test "$(gh api repos/$GITHUB_REPOSITORY/actions/runs/37661788700 --jq .conclusion)" = success
 
       - name: Portrait diversity regression guard
         run: node scripts/check-portrait-diversity.mjs
@@ -84,13 +86,8 @@ jobs:
       - name: Source quality guard
         run: npm run quality:check
 
-      - name: Verify unchanged frontend and successful complete regression suite
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          git diff --quiet efca34972c69c59b901672a485f9c9bc793d4a61 HEAD -- src package.json package-lock.json vite.config.ts vitest.config.ts biome.json
-          STATUS="$(gh api repos/$GITHUB_REPOSITORY/actions/runs/37659787879/jobs --jq '[.jobs[].steps[] | select(.name=="Frontend regression tests") | .conclusion] | .[0]')"
-          test "$STATUS" = success
+      - name: Frontend regression tests
+        run: npm test -- --maxWorkers=2
 
       - name: Frontend lint
         run: npm run lint
@@ -100,14 +97,6 @@ jobs:
 
       - name: Translation coverage
         run: node scripts/audit-i18n.mjs --check
-
-      - name: Rust workspace tests
-        working-directory: src-tauri
-        run: cargo test --workspace --all-targets --locked
-
-      - name: Rust strict lint
-        working-directory: src-tauri
-        run: cargo clippy --workspace --all-targets --locked
 
       - name: Frontend production build
         env:
