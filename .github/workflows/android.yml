@@ -1,4 +1,4 @@
-name: OFMtouch Android Nightly 0.6.9 Season Economy Fixes
+name: OFMtouch Android Nightly 0.7.0 Match Engine V2
 
 on:
   workflow_dispatch:
@@ -11,7 +11,8 @@ on:
       - phase6-gameplay-polish
       - release/0.6.6-startup-polish
       - release/0.6.7-economy-balance
-      - release/0.6.9-season-economy
+      - release/0.7.0-season-economy
+      - feat/0.7.0-match-engine-v2
 
 permissions:
   contents: write
@@ -81,9 +82,13 @@ jobs:
         working-directory: src-tauri
         run: cargo test --workspace --all-targets --locked
 
+      - name: Rust strict lint
+        working-directory: src-tauri
+        run: cargo clippy --workspace --all-targets --locked
+
       - name: Frontend production build
         env:
-          OFM_CHANNEL: nightly
+          OFM_CHANNEL: stable
           VITE_APP_BUILD_NUMBER: ${{ github.run_number }}
         run: npm run build
 
@@ -97,11 +102,11 @@ jobs:
         env:
           RUSTFLAGS: "-C debuginfo=0"
           NDK_HOME: ${{ env.ANDROID_NDK_HOME }}
-          OFM_CHANNEL: nightly
+          OFM_CHANNEL: stable
           VITE_APP_BUILD_NUMBER: ${{ github.run_number }}
         run: |
-          # Keep every nightly installable over the previous v0.6.9 build.
-          export OFM_ANDROID_VERSION_CODE=$((6900000 + GITHUB_RUN_NUMBER))
+          # Keep every nightly installable over the previous v0.7.0 build.
+          export OFM_ANDROID_VERSION_CODE=$((7000000 + GITHUB_RUN_NUMBER))
           node -e 'require("fs").writeFileSync("tauri.android.nightly.conf.json", JSON.stringify({bundle:{android:{versionCode:Number(process.env.OFM_ANDROID_VERSION_CODE)}}}))'
           npx tauri android build --debug --apk --target aarch64 --config tauri.android.nightly.conf.json
 
@@ -116,8 +121,8 @@ jobs:
           PACKAGE_LINE="$("$AAPT" dump badging "$APK" | sed -n '1p')"
           echo "$PACKAGE_LINE"
           [[ "$PACKAGE_LINE" == *"name='com.tranquilmt.openfootmanager'"* ]]
-          [[ "$PACKAGE_LINE" == *"versionName='0.6.9'"* ]]
-          [[ "$PACKAGE_LINE" == *"versionCode='$((6900000 + GITHUB_RUN_NUMBER))'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionName='0.7.0'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionCode='$((7000000 + GITHUB_RUN_NUMBER))'"* ]]
           APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
           "$APKSIGNER" verify --verbose "$APK"
           # A debug build is only an intermediate artifact. Final delivery is signed
@@ -128,13 +133,13 @@ jobs:
             exit 1
           fi
           mkdir -p dist-apk
-          cp "$APK" "dist-apk/OFMtouch-0.6.9-Season-Economy-Fixes-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk"
-          sha256sum "dist-apk/OFMtouch-0.6.9-Season-Economy-Fixes-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk" | tee "dist-apk/OFMtouch-0.6.9-Season-Economy-Fixes-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk.sha256"
+          cp "$APK" "dist-apk/OFMtouch-0.7.0-Match-Engine-V2-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk"
+          sha256sum "dist-apk/OFMtouch-0.7.0-Match-Engine-V2-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk" | tee "dist-apk/OFMtouch-0.7.0-Match-Engine-V2-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk.sha256"
 
       - name: Upload ARM64 APK for persistent signing
         uses: actions/upload-artifact@v4
         with:
-          name: OFMtouch-0.6.9-Season-Economy-Fixes-Build${{ github.run_number }}-CI-INTERMEDIATE
+          name: OFMtouch-0.7.0-Match-Engine-V2-Build${{ github.run_number }}-CI-INTERMEDIATE
           path: dist-apk/*
           if-no-files-found: error
 
