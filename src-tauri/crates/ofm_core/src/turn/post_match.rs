@@ -41,6 +41,7 @@ fn compact_match_report(report: &engine::MatchReport) -> CompactMatchReport {
                     | engine::EventType::SecondYellow
                     | engine::EventType::Injury
                     | engine::EventType::Substitution
+                    | engine::EventType::TacticalChange
             )
         })
         .map(|event| CompactMatchEvent {
