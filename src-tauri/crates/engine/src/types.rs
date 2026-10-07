@@ -467,4 +467,6 @@ fn probabilities_are_bounded() { let config=MatchConfig { yellow_card_probabilit
 fn negative_fatigue_cannot_restore_fitness() { assert_eq!(MatchConfig { fatigue_per_minute:-1.0,..MatchConfig::default() }.sanitized().fatigue_per_minute,0.0); }
 #[test]
 fn stoppage_limits_keep_the_clock_representable() { assert_eq!(MatchConfig { stoppage_time_max:255,..MatchConfig::default() }.sanitized().stoppage_time_max,10); }
+#[test]
+fn home_advantage_remains_finite() { assert!(MatchConfig { home_advantage:f64::NAN,..MatchConfig::default() }.sanitized().home_advantage.is_finite()); }
 }
