@@ -22,4 +22,5 @@ describe("truthful match narratives", () => {
   it("recognizes late pressure from actual shots", () => { const events=[event("ShotSaved",80),event("ShotBlocked",81),event("Corner",82)]; expect(narrativeKey(events[2],events)).toBe("sustainedPressure"); });
   it("identifies a first yellow without a prior booking", () => { const e=event("YellowCard",20); expect(narrativeKey(e,[e])).toBe("bookingRisk"); });
   it("identifies a dismissal without miscounting goals", () => { const e=event("RedCard",20); expect(narrativeKey(e,[e])).toBe("numericalDisadvantage"); });
+  it("recognizes injury substitutions from recorded injuries", () => { const a=event("Injury",40); const b=event("Substitution",41,"Home","p2"); b.secondary_player_id="p1"; expect(narrativeKey(b,[a,b])).toBe("injuryChange"); });
 });
