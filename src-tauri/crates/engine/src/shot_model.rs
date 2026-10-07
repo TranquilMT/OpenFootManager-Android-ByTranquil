@@ -29,4 +29,6 @@ mod tests {
     fn contest_never_emits_nan() { assert_eq!(contest_probability(f64::NAN, 0.0), 0.5); }
     #[test]
     fn contest_rewards_superior_midfield() { assert!(contest_probability(80.0, 40.0) > 0.5); }
+    #[test]
+    fn goal_context_identifies_equaliser() { assert_eq!(goal_context(0, 1), crate::event::GoalContext::Equaliser); }
 }
