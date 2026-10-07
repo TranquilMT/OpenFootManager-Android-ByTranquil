@@ -21,22 +21,15 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Import consolidated second batch
+      - name: Import expanded second batch with one translation commit
         run: |
-          git bundle verify checkpoints/batch2-consolidated.bundle
-          git fetch checkpoints/batch2-consolidated.bundle HEAD
+          git bundle verify checkpoints/batch2-expanded.bundle
+          git fetch checkpoints/batch2-expanded.bundle HEAD
           git checkout -B feat/0.7.0-match-engine-v2 FETCH_HEAD
-          test "$(git rev-parse HEAD)" = 1c87b88319ff04165974a80d672f1da2acf5994f
+          test "$(git rev-parse HEAD)" = 5fdc926429cff863ef73e842253c71b26e80a9d2
           git fetch origin feat/0.7.0-match-engine-v2
-          git push --force-with-lease=refs/heads/feat/0.7.0-match-engine-v2:8b3822e84fa248730e2abb7d25e3326425bb4775 origin HEAD:refs/heads/feat/0.7.0-match-engine-v2
-      - name: Require successful validation of the identical source tree
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          test "$(git rev-parse HEAD^{tree})" = "$(git rev-parse 8b3822e84fa248730e2abb7d25e3326425bb4775^{tree})"
-          gh run watch 37656595396 --repo "$GITHUB_REPOSITORY" --exit-status
-          test "$(gh api repos/$GITHUB_REPOSITORY/actions/runs/37656595396 --jq .conclusion)" = success
-          test "$(git rev-list --count 719c848c8e62ef8080adb16d04bbd09587c21e52..HEAD)" = 181
+          git push --force-with-lease=refs/heads/feat/0.7.0-match-engine-v2:1c87b88319ff04165974a80d672f1da2acf5994f origin HEAD:refs/heads/feat/0.7.0-match-engine-v2
+          test "$(git rev-list --count 719c848c8e62ef8080adb16d04bbd09587c21e52..HEAD)" = 237
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -81,6 +74,32 @@ jobs:
             git push origin HEAD:refs/heads/feat/0.7.0-match-engine-v2
           fi
           echo "OFM_SOURCE_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Portrait diversity regression guard
+        run: node scripts/check-portrait-diversity.mjs
+
+      - name: Source quality guard
+        run: npm run quality:check
+
+      - name: Frontend regression tests
+        run: npm test -- --maxWorkers=2
+
+      - name: Frontend lint
+        run: npm run lint
+
+      - name: Frontend formatting
+        run: npm run format:check
+
+      - name: Translation coverage
+        run: node scripts/audit-i18n.mjs --check
+
+      - name: Rust workspace tests
+        working-directory: src-tauri
+        run: cargo test --workspace --all-targets --locked
+
+      - name: Rust strict lint
+        working-directory: src-tauri
+        run: cargo clippy --workspace --all-targets --locked
+
       - name: Frontend production build
         env:
           OFM_CHANNEL: stable
