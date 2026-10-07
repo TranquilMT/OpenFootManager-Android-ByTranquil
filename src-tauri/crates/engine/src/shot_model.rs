@@ -13,4 +13,6 @@ mod tests {
     fn invalid_accuracy_uses_safe_default() { assert!(accuracy(f64::NAN, f64::NAN).is_finite()); }
     #[test]
     fn keeper_quality_reduces_conversion() { assert!(conversion(0.36, 70.0, 30.0, 1.0) > conversion(0.36, 70.0, 90.0, 1.0)); }
+    #[test]
+    fn conversion_respects_defensive_shape() { assert!(conversion(0.36, 60.0, 60.0, 0.9) < conversion(0.36, 60.0, 60.0, 1.1)); }
 }
