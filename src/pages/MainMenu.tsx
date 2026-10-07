@@ -712,7 +712,7 @@ export default function MainMenu() {
                   className="group flex items-center justify-between w-full p-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-primary-500/20"
                 >
                   <div className="flex items-center gap-3">
-                    <PlusCircle className="w-6 h-6" />
+                    <MenuIcon icon={PlusCircle} tone="primary" />
                     <span className="font-heading font-bold text-lg uppercase tracking-wide">
                       {t("menu.newGame")}
                     </span>
