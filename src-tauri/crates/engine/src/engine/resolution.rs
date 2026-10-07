@@ -425,9 +425,10 @@ pub(super) fn effective_midfield(ctx: &MatchContext, side: Side) -> f64 {
 
 fn effective_press(ctx: &MatchContext, pressing_side: Side) -> f64 {
     let team = ctx.team(pressing_side);
-    let base = team.position_attr_avg(Position::Midfielder, |p| {
-        ((p.stamina as u16 + p.tackling as u16 + p.pace as u16) / 3) as u8
-    });
+    let condition=match pressing_side {Side::Home=>ctx.home_condition,Side::Away=>ctx.away_condition};
+    let base = crate::shared::active_position_rating(&team.players,&ctx.sent_off,Position::Midfielder,
+        |p|(p.stamina as f64+p.tackling as f64+p.pace as f64)/3.0,
+        |_|condition);
     let modifier = play_style_modifier(team.play_style, PlayStylePhase::Press, true);
     base * modifier * tactics_pressing_press(&team.tactics) * home_mod(pressing_side, ctx.config)
 }
