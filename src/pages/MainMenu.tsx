@@ -754,7 +754,7 @@ export default function MainMenu() {
                   className="group flex items-center justify-between w-full p-4 bg-white dark:bg-navy-700 hover:bg-gray-50 dark:hover:bg-navy-600 text-gray-800 dark:text-gray-200 rounded-xl transition-all duration-300 border border-gray-200 dark:border-navy-600 hover:border-gray-300 dark:hover:border-navy-600 shadow-sm"
                 >
                   <div className="flex items-center gap-3">
-                    <Settings className="w-6 h-6 text-gray-400 dark:text-gray-500" />
+                    <MenuIcon icon={Settings} tone="neutral" />
                     <span className="font-heading font-bold text-lg uppercase tracking-wide">
                       {t("menu.settings")}
                     </span>
