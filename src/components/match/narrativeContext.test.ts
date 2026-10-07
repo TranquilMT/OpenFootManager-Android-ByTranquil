@@ -29,4 +29,5 @@ describe("truthful match narratives", () => {
   it("marks goalframe shots truthfully", () => { const e=event("ShotOffTarget",20);e.detail="Woodwork";expect(narrativeKey(e,[e])).toBe("woodwork"); });
   it("xg totals omit shootout kicks", () => { const a=event("ShootoutGoal",90);a.shot={expected_goals:0.8,goalkeeper_id:"gk"};expect(matchMetrics([a],"Home").xg).toBe(0); });
   it("xg totals are independent of finishing", () => { const a=event("ShotOffTarget",10);a.shot={expected_goals:0.2,goalkeeper_id:"gk"};expect(matchMetrics([a],"Home").xg).toBeCloseTo(0.2); });
+  it("legacy event logs have unavailable xg", () => { expect(matchMetrics([event("Goal",10)],"Home").hasXg).toBe(false); });
 });
