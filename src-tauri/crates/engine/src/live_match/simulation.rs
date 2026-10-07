@@ -97,7 +97,7 @@ impl LiveMatchState {
         if self.allows_extra_time && self.home_score == self.away_score {
             // Go to extra time
             self.phase = MatchPhase::ExtraTimeFirstHalf;
-            self.current_minute = 91;
+            self.current_minute = self.current_minute.saturating_add(1).max(91);
             self.ball_zone = Zone::Midfield;
             self.possession = Side::Home;
             self.et_first_half_stoppage = rng.random_range(0..=2);
