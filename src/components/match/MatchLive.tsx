@@ -24,6 +24,7 @@ import {
   useSpokenCommentary,
 } from "./useSpokenCommentary";
 import MatchScreenLayout from "./MatchScreenLayout";
+import { MatchPulse } from "./MatchPulse";
 import { SubPanel } from "./SubPanel";
 import {
   Play,
