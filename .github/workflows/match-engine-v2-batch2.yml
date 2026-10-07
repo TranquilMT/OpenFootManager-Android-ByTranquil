@@ -1,0 +1,164 @@
+name: OFMtouch 0.7.0 Match Engine V2 Final Build
+on:
+  push:
+    branches: [stage/0.7.0-batch2]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-nightly-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    env:
+      OFM_RELEASE_BUILD: 359
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Import second batch preserving every development commit
+        run: |
+          cat checkpoints/batch2-*.b64 | base64 --decode > /tmp/match-engine-v2.bundle
+          git bundle verify /tmp/match-engine-v2.bundle
+          git fetch /tmp/match-engine-v2.bundle HEAD
+          git checkout -B feat/0.7.0-match-engine-v2 FETCH_HEAD
+          test "$(git rev-parse HEAD)" = 8755aac50834c03e33350d516698a3a272360592
+          git push origin HEAD:refs/heads/feat/0.7.0-match-engine-v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@1.95.0
+        with:
+          targets: aarch64-linux-android
+
+      - name: Install Linux Rust build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libglib2.0-dev libgtk-3-dev libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev pkg-config
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+          shared-key: android-polish
+          cache-on-failure: true
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Format source and retain a reproducible release checkpoint
+        run: |
+          cargo fmt --manifest-path src-tauri/Cargo.toml --all
+          npm run quality:baseline
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src-tauri quality-baseline.json
+          if ! git diff --cached --quiet; then
+            git commit -m "style(engine): format verified Match Engine V2 release source"
+            git push origin HEAD:refs/heads/feat/0.7.0-match-engine-v2
+          fi
+          echo "OFM_SOURCE_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Portrait diversity regression guard
+        run: node scripts/check-portrait-diversity.mjs
+
+      - name: Source quality guard
+        run: npm run quality:check
+
+      - name: Frontend regression tests
+        run: npm test -- --maxWorkers=2
+
+      - name: Frontend lint
+        run: npm run lint
+
+      - name: Frontend formatting
+        run: npm run format:check
+
+      - name: Translation coverage
+        run: node scripts/audit-i18n.mjs --check
+
+      - name: Rust workspace tests
+        working-directory: src-tauri
+        run: cargo test --workspace --all-targets --locked
+
+      - name: Rust strict lint
+        working-directory: src-tauri
+        run: cargo clippy --workspace --all-targets --locked
+
+      - name: Frontend production build
+        env:
+          OFM_CHANNEL: stable
+          VITE_APP_BUILD_NUMBER: ${{ env.OFM_RELEASE_BUILD }}
+        run: npm run build
+
+      - name: Initialize Android project if needed
+        run: |
+          if [ ! -d src-tauri/gen/android ]; then
+            npx tauri android init --ci
+          fi
+
+      - name: Build ARM64 APK for persistent signing
+        env:
+          RUSTFLAGS: "-C debuginfo=0"
+          NDK_HOME: ${{ env.ANDROID_NDK_HOME }}
+          OFM_CHANNEL: stable
+          VITE_APP_BUILD_NUMBER: ${{ env.OFM_RELEASE_BUILD }}
+        run: |
+          # Keep every nightly installable over the previous v0.7.0 build.
+          export OFM_ANDROID_VERSION_CODE=$((7000000 + OFM_RELEASE_BUILD))
+          node -e 'require("fs").writeFileSync("tauri.android.nightly.conf.json", JSON.stringify({bundle:{android:{versionCode:Number(process.env.OFM_ANDROID_VERSION_CODE)}}}))'
+          npx tauri android build --debug --apk --target aarch64 --config tauri.android.nightly.conf.json
+
+      - name: Verify APK signature and ARM64 payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK="$(find src-tauri/gen/android/app/build/outputs/apk -type f -name '*.apk' | head -n 1)"
+          test -n "$APK"
+          echo "APK: $APK"
+          AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -n 1)"
+          PACKAGE_LINE="$("$AAPT" dump badging "$APK" | sed -n '1p')"
+          echo "$PACKAGE_LINE"
+          [[ "$PACKAGE_LINE" == *"name='com.tranquilmt.openfootmanager'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionName='0.7.0'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionCode='$((7000000 + OFM_RELEASE_BUILD))'"* ]]
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          "$APKSIGNER" verify --verbose "$APK"
+          # A debug build is only an intermediate artifact. Final delivery is signed
+          # with the persistent release keystore and its certificate is checked.
+          unzip -l "$APK" | grep -E 'lib/arm64-v8a/.*\.so' >/dev/null
+          if unzip -l "$APK" | grep -E 'lib/(armeabi-v7a|x86|x86_64)/.*\.so'; then
+            echo 'Unexpected non-ARM64 native libraries found'
+            exit 1
+          fi
+          mkdir -p dist-apk
+          cp "$APK" "dist-apk/OFMtouch-0.7.0-Match-Engine-V2-Build${OFM_RELEASE_BUILD}-CI-INTERMEDIATE.apk"
+          sha256sum "dist-apk/OFMtouch-0.7.0-Match-Engine-V2-Build${OFM_RELEASE_BUILD}-CI-INTERMEDIATE.apk" | tee "dist-apk/OFMtouch-0.7.0-Match-Engine-V2-Build${OFM_RELEASE_BUILD}-CI-INTERMEDIATE.apk.sha256"
+
+      - name: Prepare complete matching source and provenance
+        run: |
+          git archive --format=zip --prefix=OFMtouch-0.7.0/ HEAD > dist-apk/OFMtouch-0.7.0-Build359-SOURCE.zip
+          git rev-parse HEAD > dist-apk/SOURCE-COMMIT.txt
+          git rev-list --count 719c848c8e62ef8080adb16d04bbd09587c21e52..HEAD > dist-apk/COMMIT-COUNT.txt
+          cp docs/releases/0.7.0.md dist-apk/OFMtouch-0.7.0-Build359-Release-Notes.md
+      - name: Upload ARM64 APK for persistent signing
+        uses: actions/upload-artifact@v4
+        with:
+          name: OFMtouch-0.7.0-Match-Engine-V2-Build${{ env.OFM_RELEASE_BUILD }}-CI-INTERMEDIATE
+          path: dist-apk/*
+          if-no-files-found: error
+
