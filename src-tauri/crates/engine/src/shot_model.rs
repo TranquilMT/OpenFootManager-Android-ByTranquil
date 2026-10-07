@@ -21,4 +21,6 @@ mod tests {
     fn invalid_conversion_cannot_poison_a_match() { assert!(conversion(f64::NAN, f64::INFINITY, 0.0, 1.0).is_finite()); }
     #[test]
     fn xg_is_unconditional_probability() { assert!((expected_goals(0.4, 0.5) - 0.2).abs() < 1e-9); }
+    #[test]
+    fn xg_rejects_invalid_inputs() { assert_eq!(expected_goals(f64::NAN, 0.5), 0.0); }
 }
