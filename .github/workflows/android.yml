@@ -12,7 +12,7 @@ on:
       - release/0.6.6-startup-polish
       - release/0.6.7-economy-balance
       - release/0.7.0-season-economy
-      - feat/0.7.0-match-engine-v2
+      - release/0.7.0-match-engine-v2
 
 permissions:
   contents: write
