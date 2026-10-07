@@ -5,9 +5,12 @@ import { Activity, MessageSquareText, ChartNoAxesCombined, SlidersHorizontal, Sh
 const ISSUE_URL = "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new";
 
 const HIGHLIGHT_KEYS = [
-  { key: "phase69.prizes", Icon: Wallet },
-  { key: "phase69.promotion", Icon: Sparkles },
-  { key: "phase69.sponsors", Icon: Users },
+  { key: "phase70.release.engine", Icon: Activity },
+  { key: "phase70.release.commentary", Icon: MessageSquareText },
+  { key: "phase70.release.insights", Icon: ChartNoAxesCombined },
+  { key: "phase70.release.decisions", Icon: SlidersHorizontal },
+  { key: "phase70.release.reliability", Icon: ShieldCheck },
+  { key: "phase70.release.interface", Icon: Palette },
 ] as const;
 
 export function ReleaseNotes({ embedded = false }: { embedded?: boolean }) {
