@@ -151,8 +151,10 @@ export function getCommentary(
   const isHome = evt.side === "Home";
   const team = isHome ? snapshot.home_team.name : snapshot.away_team.name;
   const opponent = isHome ? snapshot.away_team.name : snapshot.home_team.name;
-  const player = getPlayerName(snapshot, evt.player_id);
-  const victim = getPlayerName(snapshot, evt.secondary_player_id);
+  const playerName = getPlayerName(snapshot, evt.player_id);
+  const victimName = getPlayerName(snapshot, evt.secondary_player_id);
+  const player = playerName && playerName !== evt.player_id ? playerName : team;
+  const victim = victimName && victimName !== evt.secondary_player_id ? victimName : opponent;
 
   const tokens: Record<string, string> = { team, opponent, player, victim };
   const baseKey = `match.commentary.${evt.event_type}`;
