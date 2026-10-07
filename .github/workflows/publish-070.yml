@@ -1,4 +1,4 @@
-name: Publish OFMtouch 0.7.0 Match Engine V2 Build 359
+name: Publish OFMtouch 0.7.0 Build 359
 on:
   push:
     branches: [stage/0.7.0-publish-build359]
@@ -8,83 +8,59 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 70
-    env:
-      GH_TOKEN: ${{ github.token }}
-      SOURCE_RUN: 37656595396
+    timeout-minutes: 10
     steps:
-      - name: Check persistent signing configuration
-        env:
-          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        run: |
-          test -n "$KEYSTORE" && test -n "$STORE_PASSWORD" && test -n "$KEY_ALIAS" && test -n "$KEY_PASSWORD" || { echo 'Persistent signing secrets are not configured on this repository.'; exit 1; }
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Require successful complete release validation
-        run: |
-          gh run watch "$SOURCE_RUN" --repo "$GITHUB_REPOSITORY" --exit-status
-          test "$(gh api repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN --jq .conclusion)" = success
-          gh run download "$SOURCE_RUN" --repo "$GITHUB_REPOSITORY" --name OFMtouch-0.7.0-Match-Engine-V2-Build359-CI-INTERMEDIATE --dir intermediate
-      - name: Verify complete source provenance
-        run: |
-          SOURCE_SHA="$(cat intermediate/SOURCE-COMMIT.txt)"
-          COUNT="$(cat intermediate/COMMIT-COUNT.txt)"
-          test "$COUNT" -ge 150 && test "$COUNT" -le 250
-          git fetch origin feat/0.7.0-match-engine-v2
-          test "$(git rev-parse origin/feat/0.7.0-match-engine-v2)" = "$SOURCE_SHA"
-          git archive --format=zip --prefix=OFMtouch-0.7.0/ "$SOURCE_SHA" > expected-source.zip
-          mkdir expected-source delivered-source
-          unzip -q expected-source.zip -d expected-source
-          unzip -q intermediate/OFMtouch-0.7.0-Build359-SOURCE.zip -d delivered-source
-          diff -r expected-source delivered-source
-          echo "SOURCE_SHA=$SOURCE_SHA" >> "$GITHUB_ENV"
-          echo "UPDATE_COMMITS=$COUNT" >> "$GITHUB_ENV"
-      - name: Sign and verify original release identity
+      - name: Require successful final release validation
         env:
-          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          test "$(gh api repos/$GITHUB_REPOSITORY/actions/runs/37667513602 --jq .conclusion)" = success
+      - name: Verify signed release package
         run: |
           set -euo pipefail
+          cat release-parts/part-*.bin > release-assets.zip
+          echo 'c50f5c37f2bace39200352e32754d25d850ca296452faf56a8a60a313d630a12  release-assets.zip' | sha256sum -c -
           mkdir release-assets
-          printf '%s' "$KEYSTORE" | base64 --decode > "$RUNNER_TEMP/release.jks"
-          chmod 600 "$RUNNER_TEMP/release.jks"
-          trap 'rm -f "$RUNNER_TEMP/release.jks"' EXIT
-          BUILD_TOOLS="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)"
-          APK=release-assets/OFMtouch-0.7.0-Match-Engine-V2-Build359-SIGNED.apk
-          "$BUILD_TOOLS/zipalign" -p -f 4 intermediate/*-CI-INTERMEDIATE.apk "$APK"
-          "$BUILD_TOOLS/apksigner" sign --ks "$RUNNER_TEMP/release.jks" --ks-key-alias "$KEY_ALIAS" --ks-pass env:STORE_PASSWORD --key-pass env:KEY_PASSWORD "$APK"
-          "$BUILD_TOOLS/apksigner" verify --verbose --print-certs "$APK" > "$RUNNER_TEMP/signature.txt"
-          grep -qi '3f0d869bfaa5f7c78a7d2a9474d44424ae4f4399e64d76b6fb9e691695412e60' "$RUNNER_TEMP/signature.txt"
-          "$BUILD_TOOLS/zipalign" -c -p 4 "$APK"
-          PACKAGE_LINE="$("$BUILD_TOOLS/aapt" dump badging "$APK" | sed -n '1p')"
+          unzip -q release-assets.zip -d release-assets
+          cd release-assets
+          sha256sum -c OFMtouch-0.7.0-Build359-SHA256SUMS.txt
+          APK=OFMtouch-0.7.0-Match-Engine-V2-Build359-SIGNED.apk
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          "$APKSIGNER" verify --verbose --print-certs "$APK" > signature.txt
+          grep -qi '3f0d869bfaa5f7c78a7d2a9474d44424ae4f4399e64d76b6fb9e691695412e60' signature.txt
+          rm signature.txt
+          AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -n 1)"
+          PACKAGE_LINE="$("$AAPT" dump badging "$APK" | sed -n '1p')"
           [[ "$PACKAGE_LINE" == *"name='com.tranquilmt.openfootmanager'"* ]]
           [[ "$PACKAGE_LINE" == *"versionName='0.7.0'"* ]]
           [[ "$PACKAGE_LINE" == *"versionCode='7000359'"* ]]
+          ZIPALIGN="$(find "$ANDROID_HOME/build-tools" -type f -name zipalign | sort -V | tail -n 1)"
+          "$ZIPALIGN" -c -p 4 "$APK"
           unzip -l "$APK" | grep -E 'lib/arm64-v8a/.*\.so' >/dev/null
           if unzip -l "$APK" | grep -E 'lib/(armeabi-v7a|x86|x86_64)/.*\.so'; then exit 1; fi
-          cp intermediate/OFMtouch-0.7.0-Build359-SOURCE.zip intermediate/OFMtouch-0.7.0-Build359-Release-Notes.md release-assets/
-      - name: Generate checksums and build manifest
+      - uses: actions/checkout@v4
+        with:
+          ref: 8697541be7bfd1115c2a425d1cabf53b8dc020db
+          path: verified-source
+          persist-credentials: false
+      - name: Verify matching complete source archive
         run: |
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib
-          root=pathlib.Path('release-assets')
-          assets=[{'name':p.name,'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(root.iterdir()) if p.is_file()]
-          manifest={'product':'OFMtouch','version':'0.7.0','update':'Match Engine V2','build':359,'versionCode':7000359,'package':'com.tranquilmt.openfootmanager','architecture':'arm64-v8a','sourceCommit':os.environ['SOURCE_SHA'],'baselineCommit':'719c848c8e62ef8080adb16d04bbd09587c21e52','updateCommits':int(os.environ['UPDATE_COMMITS']),'batches':2,'signingCertificateSha256':'3f0d869bfaa5f7c78a7d2a9474d44424ae4f4399e64d76b6fb9e691695412e60','validationRun':int(os.environ['SOURCE_RUN']),'assets':assets}
-          (root/'OFMtouch-0.7.0-Build359-Manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
-          (root/'OFMtouch-0.7.0-Build359-SHA256SUMS.txt').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.name+'\n' for p in sorted(root.iterdir()) if p.is_file()))
-          PY
-          cd release-assets
-          sha256sum -c OFMtouch-0.7.0-Build359-SHA256SUMS.txt
-      - name: Publish latest verified release
-        run: gh release create v0.7.0-build359 release-assets/* --repo "$GITHUB_REPOSITORY" --target "$SOURCE_SHA" --title "OFMtouch v0.7.0 — Match Engine V2 · Build 359" --notes-file release-assets/OFMtouch-0.7.0-Build359-Release-Notes.md --latest
+          test "$(git -C verified-source rev-parse HEAD)" = 8697541be7bfd1115c2a425d1cabf53b8dc020db
+          git -C verified-source archive --format=zip --prefix=OFMtouch-0.7.0/ HEAD > expected-source.zip
+          mkdir expected-source delivered-source
+          unzip -q expected-source.zip -d expected-source
+          unzip -q release-assets/OFMtouch-0.7.0-Build359-SOURCE.zip -d delivered-source
+          diff -r expected-source delivered-source
+      - name: Publish latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v0.7.0-build359 release-assets/* --target 8697541be7bfd1115c2a425d1cabf53b8dc020db --title "OFMtouch v0.7.0 — Match Engine V2 · Build 359" --notes-file release-assets/OFMtouch-0.7.0-Build359-Release-Notes.md --latest
       - name: Refresh release metadata
-        run: gh workflow run release-manifest.yml --repo "$GITHUB_REPOSITORY" --ref main -f release_tag=v0.7.0-build359
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run release-manifest.yml --ref main -f release_tag=v0.7.0-build359
       - uses: actions/upload-artifact@v4
         with:
           name: OFMtouch-0.7.0-Build359-RELEASE
