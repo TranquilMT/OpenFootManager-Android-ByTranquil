@@ -56,6 +56,7 @@ function hashEvent(evt: MatchEvent): number {
 function detailVariant(detail: EventDetail | null | undefined): string | null {
   if (!detail) return null;
   if (detail === "Woodwork") return "woodwork";
+  if (typeof detail === "string") return null;
   if ("Shot" in detail) {
     const map: Record<DangerBand, string> = {
       Speculative: "speculative",
