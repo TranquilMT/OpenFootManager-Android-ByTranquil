@@ -24,6 +24,7 @@ export interface MatchEvent {
   player_id: string | null;
   secondary_player_id: string | null;
   detail?: EventDetail | null;
+  shot?: { expected_goals: number; goalkeeper_id: string } | null;
 }
 
 export interface EnginePlayerData {
