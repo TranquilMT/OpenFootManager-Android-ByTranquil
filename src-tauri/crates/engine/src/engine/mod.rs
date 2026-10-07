@@ -192,8 +192,12 @@ fn simulate_minute<R: Rng>(ctx: &mut MatchContext, minute: u8, rng: &mut R) {
     // Deplete team condition ~0.18 over 90 minutes (floor at 0.70, but never increase
     // if condition is already below 0.70 at match start).
     let depletion = ctx.config.fatigue_per_minute / 100.0;
-    ctx.home_condition = (ctx.home_condition - depletion * shared::tactics_pressing_fatigue(&ctx.home.tactics)).max(0.70_f64.min(ctx.home_condition));
-    ctx.away_condition = (ctx.away_condition - depletion * shared::tactics_pressing_fatigue(&ctx.away.tactics)).max(0.70_f64.min(ctx.away_condition));
+    ctx.home_condition = (ctx.home_condition
+        - depletion * shared::tactics_pressing_fatigue(&ctx.home.tactics))
+    .max(0.70_f64.min(ctx.home_condition));
+    ctx.away_condition = (ctx.away_condition
+        - depletion * shared::tactics_pressing_fatigue(&ctx.away.tactics))
+    .max(0.70_f64.min(ctx.away_condition));
 
     let actions = rng.random_range(1..=3u8);
     for _ in 0..actions {

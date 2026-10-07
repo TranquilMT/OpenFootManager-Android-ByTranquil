@@ -328,7 +328,12 @@ fn resolve_shot<R: Rng>(ctx: &mut MatchContext, minute: u8, att_side: Side, rng:
 
     let accuracy = crate::shot_model::accuracy(ctx.config.shot_accuracy_base, shoot_rating);
     let shape = tactics_defensive_conversion_mod(&ctx.team(def_side).tactics);
-    let conversion = crate::shot_model::conversion(ctx.config.goal_conversion_base, shoot_rating, gk_rating, shape);
+    let conversion = crate::shot_model::conversion(
+        ctx.config.goal_conversion_base,
+        shoot_rating,
+        gk_rating,
+        shape,
+    );
     let xg = crate::shot_model::expected_goals(accuracy, conversion);
 
     if rng.random_range(0.0..1.0f64) > accuracy {
@@ -336,7 +341,7 @@ fn resolve_shot<R: Rng>(ctx: &mut MatchContext, minute: u8, att_side: Side, rng:
             ctx.emit(
                 MatchEvent::new(minute, EventType::ShotBlocked, att_side, zone)
                     .with_player(&shooter.id)
-                .with_shot(xg, &goalkeeper.id),
+                    .with_shot(xg, &goalkeeper.id),
             );
             // Blocked shot: ball stays in area, defender clears to midfield
             ctx.possession = def_side;
@@ -358,24 +363,39 @@ fn resolve_shot<R: Rng>(ctx: &mut MatchContext, minute: u8, att_side: Side, rng:
         return;
     }
 
-
-
     if rng.random_range(0.0..1.0f64) < conversion {
         ctx.emit(
             MatchEvent::new(minute, EventType::Goal, att_side, zone)
                 .with_player(&shooter.id)
                 .with_shot(xg, &goalkeeper.id)
                 .with_secondary(&assister.id)
-                .with_detail(EventDetail::Goal { context: crate::shot_model::goal_context(if att_side == Side::Home { ctx.home_score } else { ctx.away_score }, if att_side == Side::Home { ctx.away_score } else { ctx.home_score }) }),
+                .with_detail(EventDetail::Goal {
+                    context: crate::shot_model::goal_context(
+                        if att_side == Side::Home {
+                            ctx.home_score
+                        } else {
+                            ctx.away_score
+                        },
+                        if att_side == Side::Home {
+                            ctx.away_score
+                        } else {
+                            ctx.home_score
+                        },
+                    ),
+                }),
         );
         ctx.add_goal(att_side);
         ctx.possession = def_side;
         ctx.ball_zone = Zone::Midfield;
     } else {
         ctx.emit(
-            MatchEvent::new(minute, EventType::ShotSaved, att_side, zone).with_player(&shooter.id)
-                .with_shot(xg, &goalkeeper.id).with_secondary(&goalkeeper.id)
-                .with_detail(EventDetail::Save { quality: crate::shot_model::save_difficulty(xg) }),
+            MatchEvent::new(minute, EventType::ShotSaved, att_side, zone)
+                .with_player(&shooter.id)
+                .with_shot(xg, &goalkeeper.id)
+                .with_secondary(&goalkeeper.id)
+                .with_detail(EventDetail::Save {
+                    quality: crate::shot_model::save_difficulty(xg),
+                }),
         );
         // 40% of saves → corner (keeper parries wide), 60% → goal kick (keeper catches)
         if rng.random_range(0.0..1.0f64) < 0.40 {

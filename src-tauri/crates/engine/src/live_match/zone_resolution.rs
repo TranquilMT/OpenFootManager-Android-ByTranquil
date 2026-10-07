@@ -67,7 +67,11 @@ impl LiveMatchState {
                 .with_player(&passer.id);
             let evt2 = MatchEvent::new(minute, EventType::Interception, def_side, ball_zone)
                 .with_player(&interceptor.id);
-            let evt1 = if passer.composure < 55 && pass_skill < press { evt1.with_detail(EventDetail::DefensiveError) } else { evt1 };
+            let evt1 = if passer.composure < 55 && pass_skill < press {
+                evt1.with_detail(EventDetail::DefensiveError)
+            } else {
+                evt1
+            };
             self.events.push(evt1.clone());
             self.events.push(evt2.clone());
             events.push(evt1);
@@ -337,7 +341,12 @@ impl LiveMatchState {
 
         let accuracy = crate::shot_model::accuracy(self.config.shot_accuracy_base, shoot_rating);
         let shape = tactics_defensive_conversion_mod(&self.team_ref(def_side).tactics);
-        let conversion = crate::shot_model::conversion(self.config.goal_conversion_base, shoot_rating, gk_rating, shape);
+        let conversion = crate::shot_model::conversion(
+            self.config.goal_conversion_base,
+            shoot_rating,
+            gk_rating,
+            shape,
+        );
         let xg = crate::shot_model::expected_goals(accuracy, conversion);
 
         if rng.random_range(0.0..1.0f64) > accuracy {
@@ -347,7 +356,7 @@ impl LiveMatchState {
             if rng.random_range(0.0..1.0f64) < 0.4 {
                 let evt = MatchEvent::new(minute, EventType::ShotBlocked, att_side, zone)
                     .with_player(&shooter.id)
-                .with_shot(xg, &goalkeeper.id)
+                    .with_shot(xg, &goalkeeper.id)
                     .with_detail(detail);
                 self.events.push(evt.clone());
                 events.push(evt);
@@ -361,7 +370,7 @@ impl LiveMatchState {
                 };
                 let evt = MatchEvent::new(minute, EventType::ShotOffTarget, att_side, zone)
                     .with_player(&shooter.id)
-                .with_shot(xg, &goalkeeper.id)
+                    .with_shot(xg, &goalkeeper.id)
                     .with_detail(detail);
                 self.events.push(evt.clone());
                 events.push(evt);
@@ -373,8 +382,6 @@ impl LiveMatchState {
             }
             return events;
         }
-
-
 
         if rng.random_range(0.0..1.0f64) < conversion {
             let context = self.goal_context(att_side);

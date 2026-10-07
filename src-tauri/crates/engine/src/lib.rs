@@ -4,8 +4,8 @@ pub mod event;
 pub mod live_match;
 pub mod report;
 pub(crate) mod shared;
-pub mod types;
 pub(crate) mod shot_model;
+pub mod types;
 
 // Re-export key types for convenience
 pub use engine::simulate;

@@ -120,12 +120,16 @@ pub(super) fn resolve_penalty<R: Rng>(
 
     if rng.random_range(0.0..1.0f64) < conversion {
         ctx.emit(
-            MatchEvent::new(minute, EventType::PenaltyGoal, att_side, zone).with_player(&taker.id).with_shot(conversion, &gk.id),
+            MatchEvent::new(minute, EventType::PenaltyGoal, att_side, zone)
+                .with_player(&taker.id)
+                .with_shot(conversion, &gk.id),
         );
         ctx.add_goal(att_side);
     } else {
         ctx.emit(
-            MatchEvent::new(minute, EventType::PenaltyMiss, att_side, zone).with_player(&taker.id).with_shot(conversion, &gk.id),
+            MatchEvent::new(minute, EventType::PenaltyMiss, att_side, zone)
+                .with_player(&taker.id)
+                .with_shot(conversion, &gk.id),
         );
     }
 }

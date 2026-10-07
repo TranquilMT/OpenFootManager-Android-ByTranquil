@@ -103,7 +103,12 @@ impl LiveMatchState {
             self.possession = Side::Home;
             self.et_first_half_stoppage = rng.random_range(0..=2);
 
-            let evt = MatchEvent::new(self.current_minute, EventType::KickOff, Side::Home, Zone::Midfield);
+            let evt = MatchEvent::new(
+                self.current_minute,
+                EventType::KickOff,
+                Side::Home,
+                Zone::Midfield,
+            );
             self.events.push(evt.clone());
 
             MinuteResult {
@@ -237,19 +242,34 @@ impl LiveMatchState {
                 self.events.push(evt.clone());
                 events.push(evt);
             }
-            MatchPhase::SecondHalf if minute >= 90 + self.first_half_stoppage + self.second_half_stoppage => {
+            MatchPhase::SecondHalf
+                if minute >= 90 + self.first_half_stoppage + self.second_half_stoppage =>
+            {
                 self.phase = MatchPhase::FullTime;
                 let evt = MatchEvent::new(minute, EventType::FullTime, Side::Home, Zone::Midfield);
                 self.events.push(evt.clone());
                 events.push(evt);
             }
-            MatchPhase::ExtraTimeFirstHalf if minute >= 105 + self.first_half_stoppage + self.second_half_stoppage + self.et_first_half_stoppage => {
+            MatchPhase::ExtraTimeFirstHalf
+                if minute
+                    >= 105
+                        + self.first_half_stoppage
+                        + self.second_half_stoppage
+                        + self.et_first_half_stoppage =>
+            {
                 self.phase = MatchPhase::ExtraTimeHalfTime;
                 let evt = MatchEvent::new(minute, EventType::HalfTime, Side::Home, Zone::Midfield);
                 self.events.push(evt.clone());
                 events.push(evt);
             }
-            MatchPhase::ExtraTimeSecondHalf if minute >= 120 + self.first_half_stoppage + self.second_half_stoppage + self.et_first_half_stoppage + self.et_second_half_stoppage => {
+            MatchPhase::ExtraTimeSecondHalf
+                if minute
+                    >= 120
+                        + self.first_half_stoppage
+                        + self.second_half_stoppage
+                        + self.et_first_half_stoppage
+                        + self.et_second_half_stoppage =>
+            {
                 self.phase = MatchPhase::ExtraTimeEnd;
                 let evt = MatchEvent::new(minute, EventType::FullTime, Side::Home, Zone::Midfield);
                 self.events.push(evt.clone());

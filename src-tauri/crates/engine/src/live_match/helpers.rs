@@ -250,7 +250,6 @@ mod commentary_detail_tests {
         assert_eq!(danger_band(75.0), DangerBand::BigChance);
     }
 
-
     #[test]
     fn foul_severity_thresholds() {
         assert_eq!(foul_severity(20), FoulSeverity::Soft);

@@ -131,13 +131,15 @@ impl LiveMatchState {
             // opener/equaliser/... sub-variants. Brace/hat-trick is still detected on
             // the frontend via goal tally, which counts PenaltyGoal events.
             let evt = MatchEvent::new(minute, EventType::PenaltyGoal, att_side, zone)
-                .with_player(&taker.id).with_shot(conversion, &gk.id);
+                .with_player(&taker.id)
+                .with_shot(conversion, &gk.id);
             self.events.push(evt.clone());
             events.push(evt);
             self.add_goal(att_side);
         } else {
             let evt = MatchEvent::new(minute, EventType::PenaltyMiss, att_side, zone)
-                .with_player(&taker.id).with_shot(conversion, &gk.id);
+                .with_player(&taker.id)
+                .with_shot(conversion, &gk.id);
             self.events.push(evt.clone());
             events.push(evt);
         }
