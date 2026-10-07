@@ -21,12 +21,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Import focused tempo correction
+      - name: Import lint-clean engine layout correction
         run: |
-          git bundle verify checkpoints/final-tempo-recycling.bundle
-          git fetch checkpoints/final-tempo-recycling.bundle HEAD
+          git bundle verify checkpoints/final-layout-fix.bundle
+          git fetch checkpoints/final-layout-fix.bundle HEAD
           git checkout -B feat/0.7.0-match-engine-v2 FETCH_HEAD
-          test "$(git rev-parse HEAD)" = 6a60ab3324747bc258f5b07bfa73b5dfaea736c4
+          test "$(git rev-parse HEAD)" = 4e3fd57875e424ccde312c3a9426e40df67ed02d
           git push origin HEAD:refs/heads/feat/0.7.0-match-engine-v2
 
       - name: Setup Node
