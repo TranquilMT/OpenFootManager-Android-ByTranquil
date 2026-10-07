@@ -19,7 +19,7 @@ impl LiveMatchState {
         self.current_minute = 0;
         self.ball_zone = Zone::Midfield;
         self.possession = Side::Home;
-        self.first_half_stoppage = rng.random_range(0..=self.config.stoppage_time_max);
+        self.first_half_stoppage = rng.random_range(0..=self.config.stoppage_time_max.min(10));
 
         let evt = MatchEvent::new(0, EventType::KickOff, Side::Home, Zone::Midfield);
         self.events.push(evt.clone());
@@ -43,7 +43,7 @@ impl LiveMatchState {
         self.current_minute = start_min;
         self.ball_zone = Zone::Midfield;
         self.possession = Side::Away;
-        self.second_half_stoppage = rng.random_range(0..=self.config.stoppage_time_max);
+        self.second_half_stoppage = rng.random_range(0..=self.config.stoppage_time_max.min(10));
 
         let evt = MatchEvent::new(
             start_min,
