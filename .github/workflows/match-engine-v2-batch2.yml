@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: android-nightly-${{ github.ref }}
+  group: android-final-070-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
