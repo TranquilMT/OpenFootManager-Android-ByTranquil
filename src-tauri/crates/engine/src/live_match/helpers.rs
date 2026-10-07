@@ -275,6 +275,9 @@ mod commentary_detail_tests {
     #[test]
     fn dismissals_reduce_a_unit_instead_of_boosting_its_average() { let mut weak=make_test_player("weak",Position::Midfielder); weak.passing=20; let mut strong=make_test_player("strong",Position::Midfielder); strong.passing=90; let players=vec![weak,strong]; let mut unavailable=std::collections::HashSet::new(); let before=crate::shared::active_position_rating(&players,&unavailable,Position::Midfielder,|p|p.passing as f64,|_|1.0); unavailable.insert("weak".to_string()); assert!(crate::shared::active_position_rating(&players,&unavailable,Position::Midfielder,|p|p.passing as f64,|_|1.0)<before); }
 
+    #[test]
+    fn designated_penalty_taker_cannot_play_after_dismissal() { let mut s=make_test_state(); s.set_pieces_mut(Side::Home).penalty_taker=Some("home_f1".into()); s.sent_off.insert("home_f1".into()); let events=s.resolve_in_match_penalty(10,Side::Home,&mut rand::rng()); assert!(events.iter().filter(|e|e.shot.is_some()).all(|e|e.player_id.as_deref()!=Some("home_f1"))); }
+
     fn make_test_player(id: &str, pos: crate::types::Position) -> crate::types::PlayerData {
         crate::types::PlayerData {
             id: id.to_string(),
