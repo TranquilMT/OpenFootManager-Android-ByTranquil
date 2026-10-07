@@ -211,7 +211,7 @@ fn simulate_minute<R: Rng>(ctx: &mut MatchContext, minute: u8, rng: &mut R) {
         * shared::tactics_tempo_retention(&poss_tactics);
     let mid_def = resolution::effective_midfield(ctx, def_side)
         * shared::tactics_pressing_contest(&def_tactics);
-    let retain = mid_att / (mid_att + mid_def);
+    let retain = crate::shot_model::contest_probability(mid_att, mid_def);
     if rng.random_range(0.0..1.0f64) > retain {
         let rewin = shared::tactics_counter_press_rewin(&poss_tactics);
         if rewin > 0.0 && rng.random_range(0.0..1.0f64) < rewin {
