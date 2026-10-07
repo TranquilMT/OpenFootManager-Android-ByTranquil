@@ -254,7 +254,7 @@ fn find_best_bench_replacement<'a>(
         let mut role_candidates: Vec<&PlayerData> = bench
             .iter()
             .filter(|p| {
-                p.position == preferred_position && p.role == role && !sent_off.contains(&p.id)
+                p.position == preferred_position && p.role == role && !sent_off.contains(&p.id) && p.condition > 0
             })
             .collect();
         role_candidates.sort_by(|a, b| {
@@ -270,7 +270,7 @@ fn find_best_bench_replacement<'a>(
     // First try exact position match, sorted by overall
     let mut candidates: Vec<&PlayerData> = bench
         .iter()
-        .filter(|p| p.position == preferred_position && !sent_off.contains(&p.id))
+        .filter(|p| p.position == preferred_position && !sent_off.contains(&p.id) && p.condition > 0)
         .collect();
     candidates.sort_by(|a, b| {
         (b.overall() * (0.6 + 0.4 * b.condition as f64 / 100.0))
@@ -283,7 +283,7 @@ fn find_best_bench_replacement<'a>(
     }
 
     // Fallback: any bench player
-    let mut all: Vec<&PlayerData> = bench.iter().filter(|p| !sent_off.contains(&p.id) && (preferred_position == Position::Goalkeeper || p.position != Position::Goalkeeper)).collect();
+    let mut all: Vec<&PlayerData> = bench.iter().filter(|p| !sent_off.contains(&p.id) && p.condition > 0 && (preferred_position == Position::Goalkeeper || p.position != Position::Goalkeeper)).collect();
     all.sort_by(|a, b| {
         (b.overall() * (0.6 + 0.4 * b.condition as f64 / 100.0))
             .partial_cmp(&(a.overall() * (0.6 + 0.4 * a.condition as f64 / 100.0)))
