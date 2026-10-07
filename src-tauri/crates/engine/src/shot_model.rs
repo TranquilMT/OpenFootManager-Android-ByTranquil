@@ -4,6 +4,8 @@ fn finite_or(value: f64, fallback: f64) -> f64 { if value.is_finite() { value } 
 
 pub(crate) fn accuracy(base: f64, skill: f64) -> f64 { (finite_or(base, 0.35) + (finite_or(skill, 50.0) - 50.0) / 200.0).clamp(0.15, 0.85) }
 
+pub(crate) fn conversion(base: f64, shooter: f64, keeper: f64, shape: f64) -> f64 { (finite_or(base, 0.36) * finite_or(shape, 1.0).clamp(0.5, 1.5) + (finite_or(shooter, 50.0) - finite_or(keeper, 50.0)) / 150.0).clamp(0.10, 0.70) }
+
 #[cfg(test)]
 mod tests {
     use super::*;
