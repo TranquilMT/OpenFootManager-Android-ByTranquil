@@ -215,6 +215,9 @@ impl LiveMatchState {
                 continue;
             };
             team.players[idx].position = new_pos;
+            if !is_role_valid_for_position(team.players[idx].role,new_pos) {
+                team.players[idx].role=PlayerRole::Standard;
+            }
         }
     }
 }
