@@ -9,7 +9,7 @@ use crate::shared::{
 use crate::types::{Position, Side, Zone};
 
 use super::LiveMatchState;
-use super::helpers::{danger_band, foul_severity, save_quality};
+use super::helpers::{danger_band, foul_severity};
 
 // ---------------------------------------------------------------------------
 // Action resolution
