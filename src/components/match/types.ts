@@ -11,6 +11,7 @@ export type GoalContext = "Opener" | "Equaliser" | "Extends" | "Consolation";
 export type EventDetail =
   | { Shot: { danger: DangerBand } }
   | "Woodwork"
+  | "DefensiveError"
   | { Save: { quality: SaveQuality } }
   | { Foul: { severity: FoulSeverity } }
   | { Goal: { context: GoalContext } };
