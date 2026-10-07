@@ -281,6 +281,9 @@ mod commentary_detail_tests {
     #[test]
     fn emergency_keeper_uses_the_best_available_handling() { let mut s=make_test_state(); s.sent_off.insert("home_gk".into()); let best=s.home.players.iter_mut().find(|p|p.id=="home_d4").unwrap(); best.handling=99; best.reflexes=99; best.positioning=99; assert_eq!(s.pick_goalkeeper(Side::Home).id,"home_d4"); }
 
+    #[test]
+    fn dismissed_players_cannot_receive_duplicate_red_cards() { let mut s=make_test_state(); s.config.yellow_card_probability=1.0; s.config.red_card_probability=1.0; let mut rng=rand::rng(); s.maybe_card(10,Side::Home,"home_m1",crate::types::Zone::Midfield,&mut rng); s.maybe_card(11,Side::Home,"home_m1",crate::types::Zone::Midfield,&mut rng); assert_eq!(s.events.iter().filter(|e|e.event_type==crate::event::EventType::RedCard).count(),1); }
+
     fn make_test_player(id: &str, pos: crate::types::Position) -> crate::types::PlayerData {
         crate::types::PlayerData {
             id: id.to_string(),
