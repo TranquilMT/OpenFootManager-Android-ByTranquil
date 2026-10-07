@@ -23,4 +23,6 @@ mod tests {
     fn xg_is_unconditional_probability() { assert!((expected_goals(0.4, 0.5) - 0.2).abs() < 1e-9); }
     #[test]
     fn xg_rejects_invalid_inputs() { assert_eq!(expected_goals(f64::NAN, 0.5), 0.0); }
+    #[test]
+    fn empty_contest_has_fair_possession() { assert_eq!(contest_probability(0.0, 0.0), 0.5); }
 }
