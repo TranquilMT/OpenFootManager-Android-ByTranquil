@@ -7,4 +7,5 @@ describe("truthful match narratives", () => {
   it("distinguishes goals in the same minute", () => { const a = event("Goal", 10); const b = event("Goal", 10, "Home", "p2"); expect(eventContext(a, [a,b]).ownAfter).toBe(1); });
   it("accepts snapshot copies of an event", () => { const e = event("Goal", 10); expect(eventContext({...e}, [e, event("Goal", 20)]).ownAfter).toBe(1); });
   it("includes the current event when absent from snapshot", () => { const e = event("Goal", 10); expect(eventContext(e, []).ownAfter).toBe(1); });
+  it("counts in-match penalties as goals", () => { const a = event("PenaltyGoal", 10); const b = event("Goal", 20); expect(eventContext(b,[a,b]).ownAfter).toBe(2); });
 });
