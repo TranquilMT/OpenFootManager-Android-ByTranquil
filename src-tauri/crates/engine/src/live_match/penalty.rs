@@ -1,7 +1,7 @@
 use rand::{Rng, RngExt};
 
 use crate::event::{EventType, MatchEvent};
-use crate::types::{Position, Side, Zone};
+use crate::types::{Side, Zone};
 
 use super::{LiveMatchState, MinuteResult, PenaltyShootoutState};
 
