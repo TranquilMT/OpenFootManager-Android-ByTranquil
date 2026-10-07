@@ -28,7 +28,11 @@ jobs:
           git bundle verify /tmp/match-engine-v2.bundle
           git fetch /tmp/match-engine-v2.bundle HEAD
           git checkout -B feat/0.7.0-match-engine-v2 FETCH_HEAD
-          test "$(git rev-parse HEAD)" = 8755aac50834c03e33350d516698a3a272360592
+          test "$(git rev-parse HEAD)" = 3f2a97b22b0fa1fb68b5c8412e5ba618822543f3
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin feat/0.7.0-match-engine-v2
+          git merge -s ours -m "ci(release): reconcile authorized workflow with complete Match Engine V2 history" origin/feat/0.7.0-match-engine-v2
           git push origin HEAD:refs/heads/feat/0.7.0-match-engine-v2
 
       - name: Setup Node
