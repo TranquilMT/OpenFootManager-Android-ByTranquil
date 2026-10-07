@@ -1,4 +1,5 @@
 use ::engine::*;
+use ::engine::ai::{ai_decide,AiProfile};
 use rand::SeedableRng;
 use rand::rngs::StdRng;
 fn seeded_rng(seed: u64) -> StdRng {
