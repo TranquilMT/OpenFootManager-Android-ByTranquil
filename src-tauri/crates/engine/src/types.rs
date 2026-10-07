@@ -356,6 +356,24 @@ pub struct MatchConfig {
     pub injury_probability: f64,
 }
 
+impl MatchConfig {
+    /// Normalize external tuning before it reaches random draws or match clocks.
+    pub fn sanitized(&self) -> Self {
+        let defaults=Self::default();
+        let probability=|value:f64, fallback:f64| if value.is_finite() { value.clamp(0.0,1.0) } else { fallback };
+        Self {
+            shot_accuracy_base:probability(self.shot_accuracy_base,defaults.shot_accuracy_base),
+            goal_conversion_base:probability(self.goal_conversion_base,defaults.goal_conversion_base),
+            foul_probability:probability(self.foul_probability,defaults.foul_probability),
+            yellow_card_probability:probability(self.yellow_card_probability,defaults.yellow_card_probability),
+            red_card_probability:probability(self.red_card_probability,defaults.red_card_probability),
+            penalty_probability:probability(self.penalty_probability,defaults.penalty_probability),
+            injury_probability:probability(self.injury_probability,defaults.injury_probability),
+            ..self.clone()
+        }
+    }
+}
+
 impl Default for MatchConfig {
     fn default() -> Self {
         Self {
