@@ -47,7 +47,7 @@ export function EventFeed({
               <span className="text-gray-600 dark:text-gray-500 tabular-nums font-heading text-sm w-8 text-right flex-shrink-0 pt-0.5">
                 {evt.minute}'
               </span>
-              <span className="text-lg flex-shrink-0">{display.icon}</span>
+              <span aria-hidden="true" className={`text-lg flex-shrink-0 ${display.color}`}>{display.icon}</span>
               <div className="flex-1 min-w-0">
                 {commentary ? (
                   <>
