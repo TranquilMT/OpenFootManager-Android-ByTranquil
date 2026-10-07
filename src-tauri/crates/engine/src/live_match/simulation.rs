@@ -106,7 +106,7 @@ impl LiveMatchState {
             self.events.push(evt.clone());
 
             MinuteResult {
-                minute: 91,
+                minute: self.current_minute,
                 phase: MatchPhase::ExtraTimeFirstHalf,
                 events: vec![evt],
                 home_score: self.home_score,
