@@ -1,0 +1,42 @@
+name: Match Engine V2 Batch 1 Gate
+on:
+  push:
+    branches: [stage/0.7.0-batch1]
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Import complete development history
+        run: |
+          git bundle verify checkpoints/batch1.bundle
+          git fetch checkpoints/batch1.bundle HEAD
+          git checkout -B feat/0.7.0-match-engine-v2 FETCH_HEAD
+          test "$(git rev-parse HEAD)" = ac845ad41ab6f2555c36f7e5083b5fabd795707d
+          git push origin HEAD:refs/heads/feat/0.7.0-match-engine-v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@1.95.0
+        with:
+          components: clippy,rustfmt
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+          shared-key: android-polish
+          cache-on-failure: true
+      - name: Install desktop build prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libglib2.0-dev libgtk-3-dev libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev pkg-config
+      - run: npm ci
+      - run: npm test -- --maxWorkers=2
+      - run: npm run build
+      - run: cargo test --manifest-path src-tauri/Cargo.toml --workspace --all-targets --locked
+      - run: cargo clippy --manifest-path src-tauri/Cargo.toml --workspace --all-targets --locked
