@@ -396,6 +396,12 @@ pub(crate) fn tactics_tempo_progression(tactics: &TacticsConfig) -> f64 {
     }
 }
 
+/// Patient play can circulate a completed pass instead of forcing progression.
+/// Direct play returns zero, so it consumes no additional random draw.
+pub(crate) fn tactics_tempo_recycle(tactics:&TacticsConfig) -> f64 {
+    match tactics.tempo { Tempo::Patient=>0.25,Tempo::Direct=>0.0 }
+}
+
 /// Tempo's retention side: Patient circulates and holds possession longer.
 /// Applied to the possessing side's weight in the per-minute possession contest.
 pub(crate) fn tactics_tempo_retention(tactics: &TacticsConfig) -> f64 {
