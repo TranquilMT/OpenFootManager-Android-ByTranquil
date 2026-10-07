@@ -26,6 +26,10 @@ pub struct TeamStats {
     pub yellow_cards: u8,
     pub red_cards: u8,
     pub possession_ticks: u32,
+    #[serde(default)]
+    pub expected_goals: f64,
+    #[serde(default)]
+    pub woodwork: u16,
 }
 
 impl TeamStats {
