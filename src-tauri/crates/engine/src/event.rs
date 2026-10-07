@@ -158,6 +158,11 @@ impl MatchEvent {
         self
     }
 
+    pub fn with_shot(mut self, expected_goals: f64, goalkeeper_id: &str) -> Self {
+        self.shot = Some(ShotInfo { expected_goals: if expected_goals.is_finite() { expected_goals.clamp(0.0, 1.0) } else { 0.0 }, goalkeeper_id: goalkeeper_id.to_string() });
+        self
+    }
+
     pub fn is_goal(&self) -> bool {
         matches!(self.event_type, EventType::Goal | EventType::PenaltyGoal)
     }
