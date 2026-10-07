@@ -1,6 +1,6 @@
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { useTranslation } from "react-i18next";
-import { Sparkles, Wallet, Users, Heart, Bug } from "lucide-react";
+import { Activity, MessageSquareText, ChartNoAxesCombined, SlidersHorizontal, ShieldCheck, Palette, Heart, Bug } from "lucide-react";
 
 const ISSUE_URL = "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new";
 
