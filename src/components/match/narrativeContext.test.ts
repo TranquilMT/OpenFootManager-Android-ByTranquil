@@ -9,4 +9,5 @@ describe("truthful match narratives", () => {
   it("includes the current event when absent from snapshot", () => { const e = event("Goal", 10); expect(eventContext(e, []).ownAfter).toBe(1); });
   it("counts in-match penalties as goals", () => { const a = event("PenaltyGoal", 10); const b = event("Goal", 20); expect(eventContext(b,[a,b]).ownAfter).toBe(2); });
   it("excludes shootout kicks from the match score", () => { const a = event("ShootoutGoal", 10); const b = event("Goal",20); expect(eventContext(b,[a,b]).ownAfter).toBe(1); });
+  it("recognizes late equalisers", () => { const a=event("Goal",10,"Away"); const b=event("Goal",88); expect(narrativeKey(b,[a,b])).toBe("lateEqualiser"); });
 });
