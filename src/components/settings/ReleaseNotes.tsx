@@ -45,7 +45,7 @@ export function ReleaseNotes({ embedded = false }: { embedded?: boolean }) {
           aria-hidden="true"
           className="mt-0.5 size-5 shrink-0 text-primary-600 dark:text-primary-400"
         />
-        <p>{t("phase66.thanks")}</p>
+        <p>{t("phase70.release.thanks")}</p>
       </div>
       <p className="mt-1 text-sm font-semibold text-gray-700 dark:text-gray-200">
         {t("settings.patchSignature")}
