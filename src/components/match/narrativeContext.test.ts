@@ -11,4 +11,5 @@ describe("truthful match narratives", () => {
   it("excludes shootout kicks from the match score", () => { const a = event("ShootoutGoal", 10); const b = event("Goal",20); expect(eventContext(b,[a,b]).ownAfter).toBe(1); });
   it("recognizes late equalisers", () => { const a=event("Goal",10,"Away"); const b=event("Goal",88); expect(narrativeKey(b,[a,b])).toBe("lateEqualiser"); });
   it("does not call an early equaliser late", () => { const a=event("Goal",10,"Away"); const b=event("Goal",30); expect(narrativeKey(b,[a,b])).not.toBe("lateEqualiser"); });
+  it("recognizes a comeback lead", () => { const a=event("Goal",10,"Away"); const b=event("Goal",30); const c=event("Goal",60,"Home","p2"); expect(narrativeKey(c,[a,b,c])).toBe("comebackLead"); });
 });
