@@ -767,7 +767,7 @@ export default function MainMenu() {
                   onClick={() => setShowPatchHistory(true)}
                   className="group flex min-h-11 items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 text-gray-800 transition-colors hover:border-primary-500 dark:border-navy-600 dark:bg-navy-700 dark:text-gray-200"
                 >
-                  <ScrollText className="h-6 w-6 text-primary-500" />
+                  <MenuIcon icon={ScrollText} tone="primary" />
                   <span className="font-heading text-lg font-bold uppercase tracking-wide">
                     {t("settings.patchHistory")}
                   </span>
