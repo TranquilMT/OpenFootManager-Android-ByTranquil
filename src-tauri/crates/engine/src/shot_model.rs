@@ -37,4 +37,6 @@ mod tests {
     fn goal_context_identifies_first_goal() { assert_eq!(goal_context(0, 0), crate::event::GoalContext::Opener); }
     #[test]
     fn save_difficulty_follows_chance() { assert_eq!(save_difficulty(0.4), crate::event::SaveQuality::WorldClass); }
+    #[test]
+    fn routine_save_is_not_called_world_class() { assert_eq!(save_difficulty(0.05), crate::event::SaveQuality::Routine); }
 }
