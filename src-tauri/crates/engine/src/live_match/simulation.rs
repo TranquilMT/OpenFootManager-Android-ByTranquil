@@ -242,7 +242,7 @@ impl LiveMatchState {
                 self.events.push(evt.clone());
                 events.push(evt);
             }
-            MatchPhase::ExtraTimeFirstHalf if minute >= 105 + self.et_first_half_stoppage => {
+            MatchPhase::ExtraTimeFirstHalf if minute >= 105 + self.first_half_stoppage + self.second_half_stoppage + self.et_first_half_stoppage => {
                 self.phase = MatchPhase::ExtraTimeHalfTime;
                 let evt = MatchEvent::new(minute, EventType::HalfTime, Side::Home, Zone::Midfield);
                 self.events.push(evt.clone());
