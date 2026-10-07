@@ -2,6 +2,8 @@
 
 fn finite_or(value: f64, fallback: f64) -> f64 { if value.is_finite() { value } else { fallback } }
 
+pub(crate) fn accuracy(base: f64, skill: f64) -> f64 { (finite_or(base, 0.35) + (finite_or(skill, 50.0) - 50.0) / 200.0).clamp(0.15, 0.85) }
+
 #[cfg(test)]
 mod tests {
     use super::*;
