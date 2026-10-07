@@ -1,6 +1,6 @@
 use rand::Rng;
 
-use crate::event::{DangerBand, FoulSeverity, GoalContext, SaveQuality};
+use crate::event::{DangerBand, FoulSeverity, GoalContext};
 use crate::shared::{
     PlayStylePhase, PlayerSnap, home_mod, play_style_modifier, tactics_pressing_fatigue,
     tactics_pressing_press,
@@ -223,17 +223,6 @@ pub(super) fn danger_band(shoot_rating: f64) -> DangerBand {
     }
 }
 
-/// Map a keeper's effective rating to a save-quality band.
-pub(super) fn save_quality(gk_rating: f64) -> SaveQuality {
-    if gk_rating >= 68.0 {
-        SaveQuality::WorldClass
-    } else if gk_rating >= 50.0 {
-        SaveQuality::Strong
-    } else {
-        SaveQuality::Routine
-    }
-}
-
 /// Map a fouler's aggression (0-100) to a foul-severity band.
 pub(super) fn foul_severity(aggression: u8) -> FoulSeverity {
     if aggression >= 70 {
@@ -261,16 +250,6 @@ mod commentary_detail_tests {
         assert_eq!(danger_band(75.0), DangerBand::BigChance);
     }
 
-    #[test]
-    fn save_quality_thresholds() {
-        assert_eq!(save_quality(40.0), SaveQuality::Routine);
-        assert_eq!(save_quality(49.9), SaveQuality::Routine);
-        assert_eq!(save_quality(50.0), SaveQuality::Strong);
-        assert_eq!(save_quality(55.0), SaveQuality::Strong);
-        assert_eq!(save_quality(67.9), SaveQuality::Strong);
-        assert_eq!(save_quality(68.0), SaveQuality::WorldClass);
-        assert_eq!(save_quality(75.0), SaveQuality::WorldClass);
-    }
 
     #[test]
     fn foul_severity_thresholds() {
