@@ -264,6 +264,9 @@ mod commentary_detail_tests {
     #[test]
     fn dismissed_midfielders_stop_influencing_possession() { let home=crate::types::TeamData {id:"h".into(),name:"H".into(),formation:"4-4-2".into(),play_style:crate::types::PlayStyle::Balanced,players:vec![make_test_player("mid",Position::Midfielder)],tactics:crate::types::TacticsConfig::default()}; let mut state=LiveMatchState::new(home.clone(),home,crate::types::MatchConfig::default(),vec![],vec![],false); let before=state.effective_midfield(Side::Home); state.sent_off.insert("mid".into()); assert!(state.effective_midfield(Side::Home)<before); }
 
+    #[test]
+    fn tired_midfielders_cannot_press_at_full_strength() { let home=crate::types::TeamData {id:"h".into(),name:"H".into(),formation:"4-4-2".into(),play_style:crate::types::PlayStyle::Balanced,players:vec![make_test_player("mid",Position::Midfielder)],tactics:crate::types::TacticsConfig::default()}; let mut state=LiveMatchState::new(home.clone(),home,crate::types::MatchConfig::default(),vec![],vec![],false); let before=state.effective_press(Side::Home); state.player_conditions.insert("mid".into(),20.0); assert!(state.effective_press(Side::Home)<before); }
+
     fn make_test_player(id: &str, pos: crate::types::Position) -> crate::types::PlayerData {
         crate::types::PlayerData {
             id: id.to_string(),
