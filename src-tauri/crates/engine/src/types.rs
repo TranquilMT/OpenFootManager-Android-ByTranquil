@@ -469,4 +469,6 @@ fn negative_fatigue_cannot_restore_fitness() { assert_eq!(MatchConfig { fatigue_
 fn stoppage_limits_keep_the_clock_representable() { assert_eq!(MatchConfig { stoppage_time_max:255,..MatchConfig::default() }.sanitized().stoppage_time_max,10); }
 #[test]
 fn home_advantage_remains_finite() { assert!(MatchConfig { home_advantage:f64::NAN,..MatchConfig::default() }.sanitized().home_advantage.is_finite()); }
+#[test]
+fn default_configuration_is_unchanged() { let config=MatchConfig::default(); assert_eq!(serde_json::to_value(&config).unwrap(),serde_json::to_value(config.sanitized()).unwrap()); }
 }
