@@ -67,7 +67,6 @@ impl LiveMatchState {
     pub(super) fn start_et_second_half<R: Rng>(&mut self, rng: &mut R) -> MinuteResult {
         self.phase = MatchPhase::ExtraTimeSecondHalf;
         let start_min = self.current_minute;
-        self.current_minute = start_min;
         self.ball_zone = Zone::Midfield;
         self.possession = Side::Home;
         self.et_second_half_stoppage = rng.random_range(0..=2); // short stoppage in ET
