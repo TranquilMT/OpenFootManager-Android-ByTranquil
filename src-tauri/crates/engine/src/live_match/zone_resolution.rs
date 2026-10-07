@@ -391,8 +391,9 @@ impl LiveMatchState {
             let evt = MatchEvent::new(minute, EventType::ShotSaved, att_side, zone)
                 .with_player(&shooter.id)
                 .with_shot(xg, &goalkeeper.id)
+                .with_secondary(&goalkeeper.id)
                 .with_detail(EventDetail::Save {
-                    quality: save_quality(gk_rating),
+                    quality: crate::shot_model::save_difficulty(xg),
                 });
             self.events.push(evt.clone());
             events.push(evt);
