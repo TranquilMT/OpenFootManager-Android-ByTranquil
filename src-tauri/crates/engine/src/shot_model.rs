@@ -14,8 +14,8 @@ pub(crate) fn conversion(base: f64, shooter: f64, keeper: f64, shape: f64) -> f6
         .clamp(0.10, 0.70)
 }
 
-pub(crate) fn penalty_conversion(shooter:f64,keeper:f64) -> f64 {
-    (0.75+(finite_or(shooter,50.0)-finite_or(keeper,50.0))/300.0).clamp(0.55,0.92)
+pub(crate) fn penalty_conversion(shooter: f64, keeper: f64) -> f64 {
+    (0.75 + (finite_or(shooter, 50.0) - finite_or(keeper, 50.0)) / 300.0).clamp(0.55, 0.92)
 }
 
 pub(crate) fn expected_goals(accuracy: f64, conversion: f64) -> f64 {
@@ -60,9 +60,13 @@ pub(crate) fn save_difficulty(xg: f64) -> crate::event::SaveQuality {
 mod tests {
     use super::*;
     #[test]
-    fn penalty_probability_cannot_be_poisoned_by_invalid_skills() { assert!(penalty_conversion(f64::NAN,f64::INFINITY).is_finite()); }
+    fn penalty_probability_cannot_be_poisoned_by_invalid_skills() {
+        assert!(penalty_conversion(f64::NAN, f64::INFINITY).is_finite());
+    }
     #[test]
-    fn penalty_keeper_ability_reduces_conversion() { assert!(penalty_conversion(70.0,90.0)<penalty_conversion(70.0,30.0)); }
+    fn penalty_keeper_ability_reduces_conversion() {
+        assert!(penalty_conversion(70.0, 90.0) < penalty_conversion(70.0, 30.0));
+    }
     #[test]
     fn accuracy_rewards_finishing() {
         assert!(accuracy(0.35, 90.0) > accuracy(0.35, 30.0));

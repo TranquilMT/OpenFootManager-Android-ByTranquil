@@ -128,9 +128,26 @@ fn consider_substitution<R: Rng>(
     let experience_factor = profile.experience as f64 / 100.0;
 
     // A recorded injury takes precedence over routine fatigue or score changes.
-    if let Some(injured)=snap.events.iter().rev().filter(|e|e.side==side && e.event_type==crate::event::EventType::Injury).find_map(|e|e.player_id.as_ref().and_then(|id|team.players.iter().find(|p|p.id==*id && !snap.sent_off.contains(id))))
-        && let Some(replacement)=find_best_bench_replacement(bench,injured.position,&unavailable,None) {
-        return Some(MatchCommand::Substitute {side,player_off_id:injured.id.clone(),player_on_id:replacement.id.clone()});
+    if let Some(injured) = snap
+        .events
+        .iter()
+        .rev()
+        .filter(|e| e.side == side && e.event_type == crate::event::EventType::Injury)
+        .find_map(|e| {
+            e.player_id.as_ref().and_then(|id| {
+                team.players
+                    .iter()
+                    .find(|p| p.id == *id && !snap.sent_off.contains(id))
+            })
+        })
+        && let Some(replacement) =
+            find_best_bench_replacement(bench, injured.position, &unavailable, None)
+    {
+        return Some(MatchCommand::Substitute {
+            side,
+            player_off_id: injured.id.clone(),
+            player_on_id: replacement.id.clone(),
+        });
     }
 
     // --- Fatigue-based substitutions (after minute 55+) ---
@@ -254,7 +271,10 @@ fn find_best_bench_replacement<'a>(
         let mut role_candidates: Vec<&PlayerData> = bench
             .iter()
             .filter(|p| {
-                p.position == preferred_position && p.role == role && !sent_off.contains(&p.id) && p.condition > 0
+                p.position == preferred_position
+                    && p.role == role
+                    && !sent_off.contains(&p.id)
+                    && p.condition > 0
             })
             .collect();
         role_candidates.sort_by(|a, b| {
@@ -270,7 +290,9 @@ fn find_best_bench_replacement<'a>(
     // First try exact position match, sorted by overall
     let mut candidates: Vec<&PlayerData> = bench
         .iter()
-        .filter(|p| p.position == preferred_position && !sent_off.contains(&p.id) && p.condition > 0)
+        .filter(|p| {
+            p.position == preferred_position && !sent_off.contains(&p.id) && p.condition > 0
+        })
         .collect();
     candidates.sort_by(|a, b| {
         (b.overall() * (0.6 + 0.4 * b.condition as f64 / 100.0))
@@ -283,7 +305,15 @@ fn find_best_bench_replacement<'a>(
     }
 
     // Fallback: any bench player
-    let mut all: Vec<&PlayerData> = bench.iter().filter(|p| !sent_off.contains(&p.id) && p.condition > 0 && (preferred_position == Position::Goalkeeper || p.position != Position::Goalkeeper)).collect();
+    let mut all: Vec<&PlayerData> = bench
+        .iter()
+        .filter(|p| {
+            !sent_off.contains(&p.id)
+                && p.condition > 0
+                && (preferred_position == Position::Goalkeeper
+                    || p.position != Position::Goalkeeper)
+        })
+        .collect();
     all.sort_by(|a, b| {
         (b.overall() * (0.6 + 0.4 * b.condition as f64 / 100.0))
             .partial_cmp(&(a.overall() * (0.6 + 0.4 * a.condition as f64 / 100.0)))

@@ -1,6 +1,6 @@
-use crate::event::{EventType, MatchEvent};
-use crate::types::{Position, Side, Zone, PlayerRole};
 use super::is_role_valid_for_position;
+use crate::event::{EventType, MatchEvent};
+use crate::types::{PlayerRole, Position, Side, Zone};
 
 use super::{LiveMatchState, SubstitutionRecord};
 
@@ -63,8 +63,8 @@ impl LiveMatchState {
         // players are simulated where they actually play, not where they'd
         // naturally play.
         player_on.position = player_off.position;
-        if !is_role_valid_for_position(player_on.role,player_on.position) {
-            player_on.role=PlayerRole::Standard;
+        if !is_role_valid_for_position(player_on.role, player_on.position) {
+            player_on.role = PlayerRole::Standard;
         }
 
         // Initialize condition for incoming player
@@ -138,8 +138,8 @@ impl LiveMatchState {
         // last one — the lineup visibly "reorganized" after a swap. Keep the
         // vacated index and adopt the slot's position instead.
         player_on.position = player_off.position;
-        if !is_role_valid_for_position(player_on.role,player_on.position) {
-            player_on.role=PlayerRole::Standard;
+        if !is_role_valid_for_position(player_on.role, player_on.position) {
+            player_on.role = PlayerRole::Standard;
         }
 
         // Initialize condition for incoming player
@@ -216,8 +216,8 @@ impl LiveMatchState {
                 continue;
             };
             team.players[idx].position = new_pos;
-            if !is_role_valid_for_position(team.players[idx].role,new_pos) {
-                team.players[idx].role=PlayerRole::Standard;
+            if !is_role_valid_for_position(team.players[idx].role, new_pos) {
+                team.players[idx].role = PlayerRole::Standard;
             }
         }
     }

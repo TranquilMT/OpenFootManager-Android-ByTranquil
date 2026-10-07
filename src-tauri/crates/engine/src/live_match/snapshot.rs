@@ -20,7 +20,13 @@ impl LiveMatchState {
         let mut home_yellows = HashMap::new();
         let mut away_yellows = HashMap::new();
         for (pid, count) in &self.yellows {
-            if self.home.players.iter().chain(self.home_bench.iter()).any(|p| p.id == *pid) {
+            if self
+                .home
+                .players
+                .iter()
+                .chain(self.home_bench.iter())
+                .any(|p| p.id == *pid)
+            {
                 home_yellows.insert(pid.clone(), *count);
             } else {
                 away_yellows.insert(pid.clone(), *count);

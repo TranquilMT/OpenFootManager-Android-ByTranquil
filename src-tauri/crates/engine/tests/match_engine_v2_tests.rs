@@ -1,5 +1,5 @@
+use ::engine::ai::{AiProfile, ai_decide};
 use ::engine::*;
-use ::engine::ai::{ai_decide,AiProfile};
 use rand::SeedableRng;
 use rand::rngs::StdRng;
 fn seeded_rng(seed: u64) -> StdRng {
@@ -179,27 +179,133 @@ fn self_assists_do_not_inflate_player_statistics() {
 }
 
 #[test]
-fn booked_substitutes_stay_on_the_correct_team() { let mut s=LiveMatchState::new(make_team("h","H",65,PlayStyle::Balanced),make_team("a","A",65,PlayStyle::Balanced),MatchConfig { foul_probability:1.0,yellow_card_probability:1.0,red_card_probability:0.0,injury_probability:0.0,..MatchConfig::default() },vec![make_player("reserve","Reserve",Position::Midfielder,65)],vec![],false); let mut rng=seeded_rng(4); for _ in 0..30 { s.step_minute(&mut rng); let snap=s.snapshot(); if let Some(id)=snap.home_yellows.keys().find(|id| !snap.sent_off.contains(*id)).cloned() { s.apply_command(MatchCommand::Substitute {side:Side::Home,player_off_id:id.clone(),player_on_id:"reserve".into()}).unwrap(); let after=s.snapshot(); assert!(after.home_yellows.contains_key(&id)); assert!(!after.away_yellows.contains_key(&id)); return; } } panic!("seed must produce a home booking"); }
+fn booked_substitutes_stay_on_the_correct_team() {
+    let mut s = LiveMatchState::new(
+        make_team("h", "H", 65, PlayStyle::Balanced),
+        make_team("a", "A", 65, PlayStyle::Balanced),
+        MatchConfig {
+            foul_probability: 1.0,
+            yellow_card_probability: 1.0,
+            red_card_probability: 0.0,
+            injury_probability: 0.0,
+            ..MatchConfig::default()
+        },
+        vec![make_player("reserve", "Reserve", Position::Midfielder, 65)],
+        vec![],
+        false,
+    );
+    let mut rng = seeded_rng(4);
+    for _ in 0..30 {
+        s.step_minute(&mut rng);
+        let snap = s.snapshot();
+        if let Some(id) = snap
+            .home_yellows
+            .keys()
+            .find(|id| !snap.sent_off.contains(*id))
+            .cloned()
+        {
+            s.apply_command(MatchCommand::Substitute {
+                side: Side::Home,
+                player_off_id: id.clone(),
+                player_on_id: "reserve".into(),
+            })
+            .unwrap();
+            let after = s.snapshot();
+            assert!(after.home_yellows.contains_key(&id));
+            assert!(!after.away_yellows.contains_key(&id));
+            return;
+        }
+    }
+    panic!("seed must produce a home booking");
+}
 
 #[test]
-fn incoming_players_do_not_keep_an_invalid_slot_role() { let mut reserve=make_player("reserve","Reserve",Position::Forward,65); reserve.role=PlayerRole::PressingForward; let mut s=LiveMatchState::new(make_team("h","H",65,PlayStyle::Balanced),make_team("a","A",65,PlayStyle::Balanced),MatchConfig::default(),vec![reserve],vec![],false); s.step_minute(&mut seeded_rng(1)); s.apply_command(MatchCommand::Substitute{side:Side::Home,player_off_id:"h_def1".into(),player_on_id:"reserve".into()}).unwrap(); assert_eq!(s.snapshot().home_team.players.iter().find(|p| p.id=="reserve").unwrap().role,PlayerRole::Standard); }
+fn incoming_players_do_not_keep_an_invalid_slot_role() {
+    let mut reserve = make_player("reserve", "Reserve", Position::Forward, 65);
+    reserve.role = PlayerRole::PressingForward;
+    let mut s = LiveMatchState::new(
+        make_team("h", "H", 65, PlayStyle::Balanced),
+        make_team("a", "A", 65, PlayStyle::Balanced),
+        MatchConfig::default(),
+        vec![reserve],
+        vec![],
+        false,
+    );
+    s.step_minute(&mut seeded_rng(1));
+    s.apply_command(MatchCommand::Substitute {
+        side: Side::Home,
+        player_off_id: "h_def1".into(),
+        player_on_id: "reserve".into(),
+    })
+    .unwrap();
+    assert_eq!(
+        s.snapshot()
+            .home_team
+            .players
+            .iter()
+            .find(|p| p.id == "reserve")
+            .unwrap()
+            .role,
+        PlayerRole::Standard
+    );
+}
 
 #[test]
-fn ai_does_not_replace_tired_outfield_players_with_goalkeepers() { let mut home=make_team("h","H",65,PlayStyle::Balanced); for p in &mut home.players { p.condition=10; } let mut s=LiveMatchState::new(home,make_team("a","A",65,PlayStyle::Balanced),MatchConfig::default(),vec![make_player("reserve","Reserve",Position::Goalkeeper,90)],vec![],false); s.step_minute(&mut seeded_rng(1)); let commands=ai_decide(&s,Side::Home,&AiProfile::default(),&mut seeded_rng(2)); assert!(commands.iter().all(|c| !matches!(c,MatchCommand::Substitute{..}))); }
+fn ai_does_not_replace_tired_outfield_players_with_goalkeepers() {
+    let mut home = make_team("h", "H", 65, PlayStyle::Balanced);
+    for p in &mut home.players {
+        p.condition = 10;
+    }
+    let mut s = LiveMatchState::new(
+        home,
+        make_team("a", "A", 65, PlayStyle::Balanced),
+        MatchConfig::default(),
+        vec![make_player("reserve", "Reserve", Position::Goalkeeper, 90)],
+        vec![],
+        false,
+    );
+    s.step_minute(&mut seeded_rng(1));
+    let commands = ai_decide(&s, Side::Home, &AiProfile::default(), &mut seeded_rng(2));
+    assert!(
+        commands
+            .iter()
+            .all(|c| !matches!(c, MatchCommand::Substitute { .. }))
+    );
+}
 
 #[test]
 fn ai_prioritizes_recorded_injuries_before_tactical_changes() {
- let mut s=LiveMatchState::new(make_team("h","H",65,PlayStyle::Balanced),make_team("a","A",65,PlayStyle::Balanced),MatchConfig {foul_probability:1.0,injury_probability:1.0,yellow_card_probability:0.0,..MatchConfig::default()},vec![make_player("reserve","Reserve",Position::Forward,70)],vec![],false);
- let mut rng=seeded_rng(4);
- for _ in 0..30 {
-  s.step_minute(&mut rng);
-  let snap=s.snapshot();
-  if let Some(e)=snap.events.iter().rev().find(|e| e.side==Side::Home && e.event_type==EventType::Injury && e.player_id.as_ref().is_some_and(|id|snap.home_team.players.iter().any(|p|p.id==*id))) {
-   let injured=e.player_id.as_ref().unwrap();
-   let commands=ai_decide(&s,Side::Home,&AiProfile::default(),&mut seeded_rng(7));
-   assert!(commands.iter().any(|c|matches!(c,MatchCommand::Substitute{player_off_id,..} if player_off_id==injured)));
-   return;
-  }
- }
- panic!("seed must produce a home injury");
+    let mut s = LiveMatchState::new(
+        make_team("h", "H", 65, PlayStyle::Balanced),
+        make_team("a", "A", 65, PlayStyle::Balanced),
+        MatchConfig {
+            foul_probability: 1.0,
+            injury_probability: 1.0,
+            yellow_card_probability: 0.0,
+            ..MatchConfig::default()
+        },
+        vec![make_player("reserve", "Reserve", Position::Forward, 70)],
+        vec![],
+        false,
+    );
+    let mut rng = seeded_rng(4);
+    for _ in 0..30 {
+        s.step_minute(&mut rng);
+        let snap = s.snapshot();
+        if let Some(e) = snap.events.iter().rev().find(|e| {
+            e.side == Side::Home
+                && e.event_type == EventType::Injury
+                && e.player_id
+                    .as_ref()
+                    .is_some_and(|id| snap.home_team.players.iter().any(|p| p.id == *id))
+        }) {
+            let injured = e.player_id.as_ref().unwrap();
+            let commands = ai_decide(&s, Side::Home, &AiProfile::default(), &mut seeded_rng(7));
+            assert!(commands.iter().any(
+                |c| matches!(c,MatchCommand::Substitute{player_off_id,..} if player_off_id==injured)
+            ));
+            return;
+        }
+    }
+    panic!("seed must produce a home injury");
 }

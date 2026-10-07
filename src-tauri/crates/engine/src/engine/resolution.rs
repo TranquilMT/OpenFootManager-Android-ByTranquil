@@ -415,20 +415,34 @@ fn resolve_shot<R: Rng>(ctx: &mut MatchContext, minute: u8, att_side: Side, rng:
 // ---------------------------------------------------------------------------
 
 pub(super) fn effective_midfield(ctx: &MatchContext, side: Side) -> f64 {
-    let condition=match side {Side::Home=>ctx.home_condition,Side::Away=>ctx.away_condition};
-    let base = crate::shared::active_position_rating(&ctx.team(side).players,&ctx.sent_off,Position::Midfielder,
-        |p|(p.passing as f64+p.vision as f64+p.decisions as f64+p.stamina as f64)/4.0,
-        |_|condition);
+    let condition = match side {
+        Side::Home => ctx.home_condition,
+        Side::Away => ctx.away_condition,
+    };
+    let base = crate::shared::active_position_rating(
+        &ctx.team(side).players,
+        &ctx.sent_off,
+        Position::Midfielder,
+        |p| (p.passing as f64 + p.vision as f64 + p.decisions as f64 + p.stamina as f64) / 4.0,
+        |_| condition,
+    );
     let modifier = play_style_modifier(ctx.team(side).play_style, PlayStylePhase::Midfield, true);
     base * modifier * home_mod(side, ctx.config)
 }
 
 fn effective_press(ctx: &MatchContext, pressing_side: Side) -> f64 {
     let team = ctx.team(pressing_side);
-    let condition=match pressing_side {Side::Home=>ctx.home_condition,Side::Away=>ctx.away_condition};
-    let base = crate::shared::active_position_rating(&team.players,&ctx.sent_off,Position::Midfielder,
-        |p|(p.stamina as f64+p.tackling as f64+p.pace as f64)/3.0,
-        |_|condition);
+    let condition = match pressing_side {
+        Side::Home => ctx.home_condition,
+        Side::Away => ctx.away_condition,
+    };
+    let base = crate::shared::active_position_rating(
+        &team.players,
+        &ctx.sent_off,
+        Position::Midfielder,
+        |p| (p.stamina as f64 + p.tackling as f64 + p.pace as f64) / 3.0,
+        |_| condition,
+    );
     let modifier = play_style_modifier(team.play_style, PlayStylePhase::Press, true);
     base * modifier * tactics_pressing_press(&team.tactics) * home_mod(pressing_side, ctx.config)
 }

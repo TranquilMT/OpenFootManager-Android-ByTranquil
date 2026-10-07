@@ -256,7 +256,7 @@ impl LiveMatchState {
         away_bench: Vec<PlayerData>,
         allows_extra_time: bool,
     ) -> Self {
-        let config=config.sanitized();
+        let config = config.sanitized();
         // Initialize player conditions from their condition attribute
         let mut player_conditions = HashMap::new();
         for p in home.players.iter().chain(away.players.iter()) {

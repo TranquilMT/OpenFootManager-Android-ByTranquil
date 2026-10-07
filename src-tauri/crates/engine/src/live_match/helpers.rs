@@ -97,11 +97,27 @@ impl LiveMatchState {
     }
 
     pub(super) fn pick_goalkeeper(&self, side: Side) -> PlayerSnap {
-        self.team_ref(side).players.iter().filter(|p|!self.sent_off.contains(&p.id))
-            .max_by(|a,b| a.position.eq(&Position::Goalkeeper).cmp(&b.position.eq(&Position::Goalkeeper))
-                .then_with(||self.condition_adjusted_skill(&a.id,(a.handling as f64+a.reflexes as f64+a.positioning as f64)/3.0)
-                    .total_cmp(&self.condition_adjusted_skill(&b.id,(b.handling as f64+b.reflexes as f64+b.positioning as f64)/3.0))))
-            .map(PlayerSnap::from).unwrap_or_else(PlayerSnap::nobody)
+        self.team_ref(side)
+            .players
+            .iter()
+            .filter(|p| !self.sent_off.contains(&p.id))
+            .max_by(|a, b| {
+                a.position
+                    .eq(&Position::Goalkeeper)
+                    .cmp(&b.position.eq(&Position::Goalkeeper))
+                    .then_with(|| {
+                        self.condition_adjusted_skill(
+                            &a.id,
+                            (a.handling as f64 + a.reflexes as f64 + a.positioning as f64) / 3.0,
+                        )
+                        .total_cmp(&self.condition_adjusted_skill(
+                            &b.id,
+                            (b.handling as f64 + b.reflexes as f64 + b.positioning as f64) / 3.0,
+                        ))
+                    })
+            })
+            .map(PlayerSnap::from)
+            .unwrap_or_else(PlayerSnap::nobody)
     }
 
     // -----------------------------------------------------------------------
@@ -109,9 +125,13 @@ impl LiveMatchState {
     // -----------------------------------------------------------------------
 
     pub(super) fn effective_midfield(&self, side: Side) -> f64 {
-        let base = crate::shared::active_position_rating(&self.team_ref(side).players,&self.sent_off,Position::Midfielder,
-            |p|(p.passing as f64+p.vision as f64+p.decisions as f64+p.stamina as f64)/4.0,
-            |p|self.condition_adjusted_skill(&p.id,1.0));
+        let base = crate::shared::active_position_rating(
+            &self.team_ref(side).players,
+            &self.sent_off,
+            Position::Midfielder,
+            |p| (p.passing as f64 + p.vision as f64 + p.decisions as f64 + p.stamina as f64) / 4.0,
+            |p| self.condition_adjusted_skill(&p.id, 1.0),
+        );
         let modifier = play_style_modifier(
             self.team_ref(side).play_style,
             PlayStylePhase::Midfield,
@@ -122,9 +142,13 @@ impl LiveMatchState {
 
     pub(super) fn effective_press(&self, pressing_side: Side) -> f64 {
         let team = self.team_ref(pressing_side);
-        let base = crate::shared::active_position_rating(&team.players,&self.sent_off,Position::Midfielder,
-            |p|(p.stamina as f64+p.tackling as f64+p.pace as f64)/3.0,
-            |p|self.condition_adjusted_skill(&p.id,1.0));
+        let base = crate::shared::active_position_rating(
+            &team.players,
+            &self.sent_off,
+            Position::Midfielder,
+            |p| (p.stamina as f64 + p.tackling as f64 + p.pace as f64) / 3.0,
+            |p| self.condition_adjusted_skill(&p.id, 1.0),
+        );
         let modifier = play_style_modifier(team.play_style, PlayStylePhase::Press, true);
         base * modifier
             * tactics_pressing_press(&team.tactics)
@@ -239,25 +263,153 @@ mod commentary_detail_tests {
     }
 
     #[test]
-    fn dismissed_midfielders_stop_influencing_possession() { let home=crate::types::TeamData {id:"h".into(),name:"H".into(),formation:"4-4-2".into(),play_style:crate::types::PlayStyle::Balanced,players:vec![make_test_player("mid",Position::Midfielder)],tactics:crate::types::TacticsConfig::default()}; let mut state=LiveMatchState::new(home.clone(),home,crate::types::MatchConfig::default(),vec![],vec![],false); let before=state.effective_midfield(Side::Home); state.sent_off.insert("mid".into()); assert!(state.effective_midfield(Side::Home)<before); }
+    fn dismissed_midfielders_stop_influencing_possession() {
+        let home = crate::types::TeamData {
+            id: "h".into(),
+            name: "H".into(),
+            formation: "4-4-2".into(),
+            play_style: crate::types::PlayStyle::Balanced,
+            players: vec![make_test_player("mid", Position::Midfielder)],
+            tactics: crate::types::TacticsConfig::default(),
+        };
+        let mut state = LiveMatchState::new(
+            home.clone(),
+            home,
+            crate::types::MatchConfig::default(),
+            vec![],
+            vec![],
+            false,
+        );
+        let before = state.effective_midfield(Side::Home);
+        state.sent_off.insert("mid".into());
+        assert!(state.effective_midfield(Side::Home) < before);
+    }
 
     #[test]
-    fn tired_midfielders_cannot_press_at_full_strength() { let home=crate::types::TeamData {id:"h".into(),name:"H".into(),formation:"4-4-2".into(),play_style:crate::types::PlayStyle::Balanced,players:vec![make_test_player("mid",Position::Midfielder)],tactics:crate::types::TacticsConfig::default()}; let mut state=LiveMatchState::new(home.clone(),home,crate::types::MatchConfig::default(),vec![],vec![],false); let before=state.effective_press(Side::Home); state.player_conditions.insert("mid".into(),20.0); assert!(state.effective_press(Side::Home)<before); }
+    fn tired_midfielders_cannot_press_at_full_strength() {
+        let home = crate::types::TeamData {
+            id: "h".into(),
+            name: "H".into(),
+            formation: "4-4-2".into(),
+            play_style: crate::types::PlayStyle::Balanced,
+            players: vec![make_test_player("mid", Position::Midfielder)],
+            tactics: crate::types::TacticsConfig::default(),
+        };
+        let mut state = LiveMatchState::new(
+            home.clone(),
+            home,
+            crate::types::MatchConfig::default(),
+            vec![],
+            vec![],
+            false,
+        );
+        let before = state.effective_press(Side::Home);
+        state.player_conditions.insert("mid".into(), 20.0);
+        assert!(state.effective_press(Side::Home) < before);
+    }
 
     #[test]
-    fn missing_position_fallback_tracks_available_players() { let players=vec![make_test_player("p",Position::Defender)]; let mut unavailable=std::collections::HashSet::new(); unavailable.insert("p".to_string()); assert_eq!(crate::shared::active_position_rating(&players,&unavailable,Position::Midfielder,|p|p.passing as f64,|_|1.0),0.0); }
+    fn missing_position_fallback_tracks_available_players() {
+        let players = vec![make_test_player("p", Position::Defender)];
+        let mut unavailable = std::collections::HashSet::new();
+        unavailable.insert("p".to_string());
+        assert_eq!(
+            crate::shared::active_position_rating(
+                &players,
+                &unavailable,
+                Position::Midfielder,
+                |p| p.passing as f64,
+                |_| 1.0
+            ),
+            0.0
+        );
+    }
 
     #[test]
-    fn dismissals_reduce_a_unit_instead_of_boosting_its_average() { let mut weak=make_test_player("weak",Position::Midfielder); weak.passing=20; let mut strong=make_test_player("strong",Position::Midfielder); strong.passing=90; let players=vec![weak,strong]; let mut unavailable=std::collections::HashSet::new(); let before=crate::shared::active_position_rating(&players,&unavailable,Position::Midfielder,|p|p.passing as f64,|_|1.0); unavailable.insert("weak".to_string()); assert!(crate::shared::active_position_rating(&players,&unavailable,Position::Midfielder,|p|p.passing as f64,|_|1.0)<before); }
+    fn dismissals_reduce_a_unit_instead_of_boosting_its_average() {
+        let mut weak = make_test_player("weak", Position::Midfielder);
+        weak.passing = 20;
+        let mut strong = make_test_player("strong", Position::Midfielder);
+        strong.passing = 90;
+        let players = vec![weak, strong];
+        let mut unavailable = std::collections::HashSet::new();
+        let before = crate::shared::active_position_rating(
+            &players,
+            &unavailable,
+            Position::Midfielder,
+            |p| p.passing as f64,
+            |_| 1.0,
+        );
+        unavailable.insert("weak".to_string());
+        assert!(
+            crate::shared::active_position_rating(
+                &players,
+                &unavailable,
+                Position::Midfielder,
+                |p| p.passing as f64,
+                |_| 1.0
+            ) < before
+        );
+    }
 
     #[test]
-    fn designated_penalty_taker_cannot_play_after_dismissal() { let mut s=make_test_state(); s.set_pieces_mut(Side::Home).penalty_taker=Some("home_f1".into()); s.sent_off.insert("home_f1".into()); let events=s.resolve_in_match_penalty(10,Side::Home,&mut rand::rng()); assert!(events.iter().filter(|e|e.shot.is_some()).all(|e|e.player_id.as_deref()!=Some("home_f1"))); }
+    fn designated_penalty_taker_cannot_play_after_dismissal() {
+        let mut s = make_test_state();
+        s.set_pieces_mut(Side::Home).penalty_taker = Some("home_f1".into());
+        s.sent_off.insert("home_f1".into());
+        let events = s.resolve_in_match_penalty(10, Side::Home, &mut rand::rng());
+        assert!(
+            events
+                .iter()
+                .filter(|e| e.shot.is_some())
+                .all(|e| e.player_id.as_deref() != Some("home_f1"))
+        );
+    }
 
     #[test]
-    fn emergency_keeper_uses_the_best_available_handling() { let mut s=make_test_state(); s.sent_off.insert("home_gk".into()); let best=s.home.players.iter_mut().find(|p|p.id=="home_d4").unwrap(); best.handling=99; best.reflexes=99; best.positioning=99; assert_eq!(s.pick_goalkeeper(Side::Home).id,"home_d4"); }
+    fn emergency_keeper_uses_the_best_available_handling() {
+        let mut s = make_test_state();
+        s.sent_off.insert("home_gk".into());
+        let best = s
+            .home
+            .players
+            .iter_mut()
+            .find(|p| p.id == "home_d4")
+            .unwrap();
+        best.handling = 99;
+        best.reflexes = 99;
+        best.positioning = 99;
+        assert_eq!(s.pick_goalkeeper(Side::Home).id, "home_d4");
+    }
 
     #[test]
-    fn dismissed_players_cannot_receive_duplicate_red_cards() { let mut s=make_test_state(); s.config.yellow_card_probability=1.0; s.config.red_card_probability=1.0; let mut rng=rand::rng(); s.maybe_card(10,Side::Home,"home_m1",crate::types::Zone::Midfield,&mut rng); s.maybe_card(11,Side::Home,"home_m1",crate::types::Zone::Midfield,&mut rng); assert_eq!(s.events.iter().filter(|e|e.event_type==crate::event::EventType::RedCard).count(),1); }
+    fn dismissed_players_cannot_receive_duplicate_red_cards() {
+        let mut s = make_test_state();
+        s.config.yellow_card_probability = 1.0;
+        s.config.red_card_probability = 1.0;
+        let mut rng = rand::rng();
+        s.maybe_card(
+            10,
+            Side::Home,
+            "home_m1",
+            crate::types::Zone::Midfield,
+            &mut rng,
+        );
+        s.maybe_card(
+            11,
+            Side::Home,
+            "home_m1",
+            crate::types::Zone::Midfield,
+            &mut rng,
+        );
+        assert_eq!(
+            s.events
+                .iter()
+                .filter(|e| e.event_type == crate::event::EventType::RedCard)
+                .count(),
+            1
+        );
+    }
 
     fn make_test_player(id: &str, pos: crate::types::Position) -> crate::types::PlayerData {
         crate::types::PlayerData {

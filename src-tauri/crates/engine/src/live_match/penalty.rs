@@ -25,9 +25,15 @@ impl LiveMatchState {
         let taker = self.pick_penalty_taker(kicking_side, rng);
         let gk = self.pick_goalkeeper(kicking_side.opposite());
 
-        let shoot_skill=self.condition_adjusted_skill(&taker.id,(taker.shooting as f64+taker.composure as f64)/2.0);
-        let gk_skill=self.condition_adjusted_skill(&gk.id,(gk.reflexes as f64+gk.handling as f64+gk.positioning as f64)/3.0);
-        let conversion=crate::shot_model::penalty_conversion(shoot_skill,gk_skill);
+        let shoot_skill = self.condition_adjusted_skill(
+            &taker.id,
+            (taker.shooting as f64 + taker.composure as f64) / 2.0,
+        );
+        let gk_skill = self.condition_adjusted_skill(
+            &gk.id,
+            (gk.reflexes as f64 + gk.handling as f64 + gk.positioning as f64) / 3.0,
+        );
+        let conversion = crate::shot_model::penalty_conversion(shoot_skill, gk_skill);
 
         let zone = Zone::attacking_box(kicking_side);
 
@@ -104,12 +110,18 @@ impl LiveMatchState {
         let mut events = Vec::new();
 
         // Use designated penalty taker if set
-        let taker=self.pick_penalty_taker(att_side,rng);
-        let gk=self.pick_goalkeeper(att_side.opposite());
+        let taker = self.pick_penalty_taker(att_side, rng);
+        let gk = self.pick_goalkeeper(att_side.opposite());
 
-        let shoot_skill=self.condition_adjusted_skill(&taker.id,(taker.shooting as f64+taker.composure as f64)/2.0);
-        let gk_skill=self.condition_adjusted_skill(&gk.id,(gk.reflexes as f64+gk.handling as f64+gk.positioning as f64)/3.0);
-        let conversion=crate::shot_model::penalty_conversion(shoot_skill,gk_skill);
+        let shoot_skill = self.condition_adjusted_skill(
+            &taker.id,
+            (taker.shooting as f64 + taker.composure as f64) / 2.0,
+        );
+        let gk_skill = self.condition_adjusted_skill(
+            &gk.id,
+            (gk.reflexes as f64 + gk.handling as f64 + gk.positioning as f64) / 3.0,
+        );
+        let conversion = crate::shot_model::penalty_conversion(shoot_skill, gk_skill);
         let zone = Zone::attacking_box(att_side);
 
         if rng.random_range(0.0..1.0f64) < conversion {
