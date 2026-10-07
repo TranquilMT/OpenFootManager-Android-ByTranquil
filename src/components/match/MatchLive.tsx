@@ -217,7 +217,7 @@ export default function MatchLive({
   }, [importantEvents.length]);
 
   useSpokenCommentary(
-    importantEvents,
+    visibleEvents,
     snapshot,
     t,
     i18n.language,
