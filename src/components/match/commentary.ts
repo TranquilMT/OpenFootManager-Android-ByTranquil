@@ -116,7 +116,10 @@ function variantKey(evt: MatchEvent, snapshot: MatchSnapshot): string | null {
 
 /** Manual interpolation since the variant string is a value, not a key. */
 function interpolate(template: string, tokens: Record<string, string>): string {
-  return template.replace(/\{\{\s*-?\s*([\w.]+)(?:\s*,[^}]+)?\s*\}\}/g, (_, name: string) => tokens[name] ?? "").replace(/\{\{[^}]*\}\}/g, "").trim();
+  return template
+    .replace(/\{\{\s*-?\s*([\w.]+)(?:\s*,[^}]+)?\s*\}\}/g, (_, name: string) => tokens[name] ?? "")
+    .replace(/\{\{[^}]*\}\}/g, "")
+    .trim();
 }
 
 function pickLine(
@@ -131,7 +134,9 @@ function pickLine(
   for (const key of candidates) {
     const lines = t(`${key}.lines`, { returnObjects: true }) as Record<string, string> | string;
     if (!lines || typeof lines !== "object") continue;
-    const values = Object.values(lines).filter((value): value is string => typeof value === "string" && value.trim().length > 0);
+    const values = Object.values(lines).filter(
+      (value): value is string => typeof value === "string" && value.trim().length > 0,
+    );
     if (values.length === 0) continue;
     const template = values[hash % values.length];
     if (typeof template !== "string") continue;

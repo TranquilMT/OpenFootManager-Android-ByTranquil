@@ -47,7 +47,9 @@ export function EventFeed({
               <span className="text-gray-600 dark:text-gray-500 tabular-nums font-heading text-sm w-8 text-right flex-shrink-0 pt-0.5">
                 {evt.minute}'
               </span>
-              <span aria-hidden="true" className={`text-lg flex-shrink-0 ${display.color}`}>{display.icon}</span>
+              <span aria-hidden="true" className={`text-lg flex-shrink-0 ${display.color}`}>
+                {display.icon}
+              </span>
               <div className="flex-1 min-w-0">
                 {commentary ? (
                   <>
@@ -62,13 +64,15 @@ export function EventFeed({
                       </span>
                     </div>
                     <p className="text-sm text-gray-700 dark:text-gray-300">{commentary.line}</p>
-                    {evt.event_type === "Goal" && evt.secondary_player_id && evt.secondary_player_id !== evt.player_id && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {t("match.assist", {
-                          name: displayName(evt.secondary_player_id),
-                        })}
-                      </p>
-                    )}
+                    {evt.event_type === "Goal" &&
+                      evt.secondary_player_id &&
+                      evt.secondary_player_id !== evt.player_id && (
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {t("match.assist", {
+                            name: displayName(evt.secondary_player_id),
+                          })}
+                        </p>
+                      )}
                   </>
                 ) : (
                   <>
@@ -117,9 +121,17 @@ export function MatchStats({ snapshot }: { snapshot: MatchSnapshot }) {
   const homeMetrics = matchMetrics(snapshot.events, "Home");
   const awayMetrics = matchMetrics(snapshot.events, "Away");
   const stats = [
-    { label: t("phase70.metrics.xg"), home: homeMetrics.hasXg ? Number(homeMetrics.xg.toFixed(2)) : t("phase70.metrics.emptyXg"), away: awayMetrics.hasXg ? Number(awayMetrics.xg.toFixed(2)) : t("phase70.metrics.emptyXg") },
+    {
+      label: t("phase70.metrics.xg"),
+      home: homeMetrics.hasXg ? Number(homeMetrics.xg.toFixed(2)) : t("phase70.metrics.emptyXg"),
+      away: awayMetrics.hasXg ? Number(awayMetrics.xg.toFixed(2)) : t("phase70.metrics.emptyXg"),
+    },
     { label: t("phase70.metrics.saves"), home: homeMetrics.saves, away: awayMetrics.saves },
-    { label: t("phase70.metrics.woodwork"), home: homeMetrics.woodwork, away: awayMetrics.woodwork },
+    {
+      label: t("phase70.metrics.woodwork"),
+      home: homeMetrics.woodwork,
+      away: awayMetrics.woodwork,
+    },
     {
       label: t("match.possession"),
       home: `${snapshot.home_possession_pct.toFixed(0)}%`,
