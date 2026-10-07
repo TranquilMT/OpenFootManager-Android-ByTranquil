@@ -365,7 +365,8 @@ fn resolve_shot<R: Rng>(ctx: &mut MatchContext, minute: u8, att_side: Side, rng:
             MatchEvent::new(minute, EventType::Goal, att_side, zone)
                 .with_player(&shooter.id)
                 .with_shot(xg, &goalkeeper.id)
-                .with_secondary(&assister.id),
+                .with_secondary(&assister.id)
+                .with_detail(EventDetail::Goal { context: crate::shot_model::goal_context(if att_side == Side::Home { ctx.home_score } else { ctx.away_score }, if att_side == Side::Home { ctx.away_score } else { ctx.home_score }) }),
         );
         ctx.add_goal(att_side);
         ctx.possession = def_side;
