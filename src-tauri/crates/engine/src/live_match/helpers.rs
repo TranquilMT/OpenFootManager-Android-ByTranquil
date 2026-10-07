@@ -97,26 +97,11 @@ impl LiveMatchState {
     }
 
     pub(super) fn pick_goalkeeper(&self, side: Side) -> PlayerSnap {
-        let team = self.team_ref(side);
-        for p in &team.players {
-            if p.position == Position::Goalkeeper && !self.sent_off.contains(&p.id) {
-                return PlayerSnap::from(p);
-            }
-        }
-        // No goalkeeper available — pick first available
-        for p in &team.players {
-            if !self.sent_off.contains(&p.id) {
-                return PlayerSnap::from(p);
-            }
-        }
-        // Everyone is sent off, or there is nobody at all. `create_live_match`
-        // refuses a side with no players, so the latter should not reach here —
-        // but a blank name in an event is a bug worth reporting, and indexing
-        // an empty squad is a window that stops responding.
-        team.players
-            .first()
-            .map(PlayerSnap::from)
-            .unwrap_or_else(PlayerSnap::nobody)
+        self.team_ref(side).players.iter().filter(|p|!self.sent_off.contains(&p.id))
+            .max_by(|a,b| a.position.eq(&Position::Goalkeeper).cmp(&b.position.eq(&Position::Goalkeeper))
+                .then_with(||self.condition_adjusted_skill(&a.id,(a.handling as f64+a.reflexes as f64+a.positioning as f64)/3.0)
+                    .total_cmp(&self.condition_adjusted_skill(&b.id,(b.handling as f64+b.reflexes as f64+b.positioning as f64)/3.0))))
+            .map(PlayerSnap::from).unwrap_or_else(PlayerSnap::nobody)
     }
 
     // -----------------------------------------------------------------------
