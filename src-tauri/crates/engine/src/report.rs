@@ -226,7 +226,9 @@ impl MatchReport {
                         ps.shots += 1;
                         ps.shots_on_target += 1;
                     }
-                    if let Some(ref assist_id) = event.secondary_player_id {
+                    if let Some(ref assist_id) = event.secondary_player_id
+                        && assist_id != pid
+                    {
                         let ps = player_stats.entry(assist_id.clone()).or_default();
                         ps.assists += 1;
                     }
