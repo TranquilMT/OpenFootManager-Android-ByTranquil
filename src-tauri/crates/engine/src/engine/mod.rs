@@ -44,7 +44,7 @@ pub fn simulate_with_rng<R: Rng>(
     ctx.possession = Side::Home;
 
     // --- First half (minutes 1–45 + stoppage) ---
-    let first_half_stoppage = rng.random_range(0..=config.stoppage_time_max);
+    let first_half_stoppage = rng.random_range(0..=config.stoppage_time_max.min(10));
     let first_half_end = 45 + first_half_stoppage;
     for minute in 1..=first_half_end {
         simulate_minute(&mut ctx, minute, rng);
@@ -68,7 +68,7 @@ pub fn simulate_with_rng<R: Rng>(
     ));
 
     // --- Second half (minutes 46–90 + stoppage) ---
-    let second_half_stoppage = rng.random_range(0..=config.stoppage_time_max);
+    let second_half_stoppage = rng.random_range(0..=config.stoppage_time_max.min(10));
     let match_end = 90 + first_half_stoppage + second_half_stoppage;
     for minute in second_half_start..=match_end {
         simulate_minute(&mut ctx, minute, rng);
