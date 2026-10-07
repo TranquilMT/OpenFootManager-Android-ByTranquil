@@ -20,4 +20,5 @@ describe("truthful match narratives", () => {
   it("counts rolling pressure only in its window", () => { const a=event("ShotSaved",3); const b=event("Corner",20); expect(eventContext(b,[a,b]).recentShots).toBe(0); });
   it("pressure never leaks between teams", () => { const a=event("ShotSaved",19,"Away"); const b=event("Corner",20); expect(eventContext(b,[a,b]).recentShots).toBe(0); });
   it("recognizes late pressure from actual shots", () => { const events=[event("ShotSaved",80),event("ShotBlocked",81),event("Corner",82)]; expect(narrativeKey(events[2],events)).toBe("sustainedPressure"); });
+  it("identifies a first yellow without a prior booking", () => { const e=event("YellowCard",20); expect(narrativeKey(e,[e])).toBe("bookingRisk"); });
 });
