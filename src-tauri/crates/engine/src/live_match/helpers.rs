@@ -270,6 +270,9 @@ mod commentary_detail_tests {
     #[test]
     fn missing_position_fallback_tracks_available_players() { let players=vec![make_test_player("p",Position::Defender)]; let mut unavailable=std::collections::HashSet::new(); unavailable.insert("p".to_string()); assert_eq!(crate::shared::active_position_rating(&players,&unavailable,Position::Midfielder,|p|p.passing as f64,|_|1.0),0.0); }
 
+    #[test]
+    fn dismissals_reduce_a_unit_instead_of_boosting_its_average() { let mut weak=make_test_player("weak",Position::Midfielder); weak.passing=20; let mut strong=make_test_player("strong",Position::Midfielder); strong.passing=90; let players=vec![weak,strong]; let mut unavailable=std::collections::HashSet::new(); let before=crate::shared::active_position_rating(&players,&unavailable,Position::Midfielder,|p|p.passing as f64,|_|1.0); unavailable.insert("weak".to_string()); assert!(crate::shared::active_position_rating(&players,&unavailable,Position::Midfielder,|p|p.passing as f64,|_|1.0)<before); }
+
     fn make_test_player(id: &str, pos: crate::types::Position) -> crate::types::PlayerData {
         crate::types::PlayerData {
             id: id.to_string(),
