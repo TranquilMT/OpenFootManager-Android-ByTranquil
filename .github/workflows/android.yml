@@ -25,6 +25,8 @@ jobs:
   build-android:
     runs-on: ubuntu-latest
     timeout-minutes: 70
+    env:
+      OFM_RELEASE_BUILD: 359
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -89,7 +91,7 @@ jobs:
       - name: Frontend production build
         env:
           OFM_CHANNEL: stable
-          VITE_APP_BUILD_NUMBER: ${{ github.run_number }}
+          VITE_APP_BUILD_NUMBER: ${{ env.OFM_RELEASE_BUILD }}
         run: npm run build
 
       - name: Initialize Android project if needed
@@ -103,10 +105,10 @@ jobs:
           RUSTFLAGS: "-C debuginfo=0"
           NDK_HOME: ${{ env.ANDROID_NDK_HOME }}
           OFM_CHANNEL: stable
-          VITE_APP_BUILD_NUMBER: ${{ github.run_number }}
+          VITE_APP_BUILD_NUMBER: ${{ env.OFM_RELEASE_BUILD }}
         run: |
           # Keep every nightly installable over the previous v0.7.0 build.
-          export OFM_ANDROID_VERSION_CODE=$((7000000 + GITHUB_RUN_NUMBER))
+          export OFM_ANDROID_VERSION_CODE=$((7000000 + OFM_RELEASE_BUILD))
           node -e 'require("fs").writeFileSync("tauri.android.nightly.conf.json", JSON.stringify({bundle:{android:{versionCode:Number(process.env.OFM_ANDROID_VERSION_CODE)}}}))'
           npx tauri android build --debug --apk --target aarch64 --config tauri.android.nightly.conf.json
 
@@ -122,7 +124,7 @@ jobs:
           echo "$PACKAGE_LINE"
           [[ "$PACKAGE_LINE" == *"name='com.tranquilmt.openfootmanager'"* ]]
           [[ "$PACKAGE_LINE" == *"versionName='0.7.0'"* ]]
-          [[ "$PACKAGE_LINE" == *"versionCode='$((7000000 + GITHUB_RUN_NUMBER))'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionCode='$((7000000 + OFM_RELEASE_BUILD))'"* ]]
           APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
           "$APKSIGNER" verify --verbose "$APK"
           # A debug build is only an intermediate artifact. Final delivery is signed
@@ -133,13 +135,13 @@ jobs:
             exit 1
           fi
           mkdir -p dist-apk
-          cp "$APK" "dist-apk/OFMtouch-0.7.0-Match-Engine-V2-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk"
-          sha256sum "dist-apk/OFMtouch-0.7.0-Match-Engine-V2-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk" | tee "dist-apk/OFMtouch-0.7.0-Match-Engine-V2-Build${GITHUB_RUN_NUMBER}-CI-INTERMEDIATE.apk.sha256"
+          cp "$APK" "dist-apk/OFMtouch-0.7.0-Match-Engine-V2-Build${OFM_RELEASE_BUILD}-CI-INTERMEDIATE.apk"
+          sha256sum "dist-apk/OFMtouch-0.7.0-Match-Engine-V2-Build${OFM_RELEASE_BUILD}-CI-INTERMEDIATE.apk" | tee "dist-apk/OFMtouch-0.7.0-Match-Engine-V2-Build${OFM_RELEASE_BUILD}-CI-INTERMEDIATE.apk.sha256"
 
       - name: Upload ARM64 APK for persistent signing
         uses: actions/upload-artifact@v4
         with:
-          name: OFMtouch-0.7.0-Match-Engine-V2-Build${{ github.run_number }}-CI-INTERMEDIATE
+          name: OFMtouch-0.7.0-Match-Engine-V2-Build${{ env.OFM_RELEASE_BUILD }}-CI-INTERMEDIATE
           path: dist-apk/*
           if-no-files-found: error
 
