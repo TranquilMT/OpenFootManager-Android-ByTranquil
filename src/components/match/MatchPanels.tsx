@@ -62,7 +62,7 @@ export function EventFeed({
                       </span>
                     </div>
                     <p className="text-sm text-gray-700 dark:text-gray-300">{commentary.line}</p>
-                    {evt.event_type === "Goal" && evt.secondary_player_id && (
+                    {evt.event_type === "Goal" && evt.secondary_player_id && evt.secondary_player_id !== evt.player_id && (
                       <p className="text-xs text-gray-500 dark:text-gray-400">
                         {t("match.assist", {
                           name: displayName(evt.secondary_player_id),
