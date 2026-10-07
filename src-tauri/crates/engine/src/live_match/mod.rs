@@ -331,7 +331,9 @@ impl LiveMatchState {
                 Ok(())
             }
             MatchCommand::ChangePlayStyle { side, play_style } => {
+                let changed = self.team_ref(side).play_style != play_style;
                 self.team_mut(side).play_style = play_style;
+                if changed && self.phase != MatchPhase::PreKickOff { self.events.push(MatchEvent::new(self.current_minute, EventType::TacticalChange, side, Zone::Midfield)); }
                 Ok(())
             }
             MatchCommand::SetFreeKickTaker { side, player_id } => {
