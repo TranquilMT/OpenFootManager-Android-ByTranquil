@@ -369,6 +369,7 @@ impl MatchConfig {
             red_card_probability:probability(self.red_card_probability,defaults.red_card_probability),
             penalty_probability:probability(self.penalty_probability,defaults.penalty_probability),
             injury_probability:probability(self.injury_probability,defaults.injury_probability),
+            fatigue_per_minute:if self.fatigue_per_minute.is_finite() { self.fatigue_per_minute.clamp(0.0,5.0) } else { defaults.fatigue_per_minute },
             ..self.clone()
         }
     }
