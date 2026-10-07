@@ -27,4 +27,6 @@ mod tests {
     fn empty_contest_has_fair_possession() { assert_eq!(contest_probability(0.0, 0.0), 0.5); }
     #[test]
     fn contest_never_emits_nan() { assert_eq!(contest_probability(f64::NAN, 0.0), 0.5); }
+    #[test]
+    fn contest_rewards_superior_midfield() { assert!(contest_probability(80.0, 40.0) > 0.5); }
 }
