@@ -465,4 +465,6 @@ fn nonfinite_probabilities_use_defaults() { let config=MatchConfig { foul_probab
 fn probabilities_are_bounded() { let config=MatchConfig { yellow_card_probability:3.0, red_card_probability:-1.0, ..MatchConfig::default() }.sanitized(); assert_eq!(config.yellow_card_probability,1.0); assert_eq!(config.red_card_probability,0.0); }
 #[test]
 fn negative_fatigue_cannot_restore_fitness() { assert_eq!(MatchConfig { fatigue_per_minute:-1.0,..MatchConfig::default() }.sanitized().fatigue_per_minute,0.0); }
+#[test]
+fn stoppage_limits_keep_the_clock_representable() { assert_eq!(MatchConfig { stoppage_time_max:255,..MatchConfig::default() }.sanitized().stoppage_time_max,10); }
 }
