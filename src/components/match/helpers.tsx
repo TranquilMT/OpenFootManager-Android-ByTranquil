@@ -18,6 +18,8 @@ import {
   AlertTriangle,
   Zap,
   CircleDot,
+  SlidersHorizontal,
+  Goal,
 } from "lucide-react";
 
 export const EVENT_ICONS: Record<
