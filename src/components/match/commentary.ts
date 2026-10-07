@@ -32,6 +32,8 @@ const COMMENTARY_EVENTS = new Set([
   "HalfTime",
   "SecondHalfStart",
   "FullTime",
+  "TacticalChange",
+  "PassIntercepted",
 ]);
 
 export interface Commentary {
