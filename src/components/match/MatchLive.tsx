@@ -452,7 +452,7 @@ export default function MatchLive({
           </div>
 
           <div className="touch-scroll min-h-0 flex-1 overflow-auto p-3 sm:p-4">
-            {activePanel !== "lineups" && <MatchPulse snapshot={snapshot} />}
+            {activePanel !== "lineups" && <MatchPulse snapshot={snapshot} derby={homeFullTeam && awayFullTeam ? isLocalDerby(homeFullTeam, awayFullTeam) : false} />}
             {activePanel === "events" && (
               <EventFeed
                 events={visibleEvents}
