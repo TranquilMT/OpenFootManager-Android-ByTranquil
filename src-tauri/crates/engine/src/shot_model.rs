@@ -56,6 +56,8 @@ pub(crate) fn save_difficulty(xg: f64) -> crate::event::SaveQuality {
 mod tests {
     use super::*;
     #[test]
+    fn penalty_keeper_ability_reduces_conversion() { assert!(penalty_conversion(70.0,90.0)<penalty_conversion(70.0,30.0)); }
+    #[test]
     fn accuracy_rewards_finishing() {
         assert!(accuracy(0.35, 90.0) > accuracy(0.35, 30.0));
     }
