@@ -116,7 +116,7 @@ fn resolve_midfield<R: Rng>(
         * home_mod(att_side, ctx.config)
         * tactics_tempo_progression(&ctx.team(att_side).tactics);
     let def_eff = def_rating * def_mod * home_mod(def_side, ctx.config);
-    let success = att_eff / (att_eff + def_eff);
+    let success = crate::shot_model::contest_probability(att_eff, def_eff);
 
     if rng.random_range(0.0..1.0f64) < success {
         ctx.emit(
@@ -193,7 +193,7 @@ fn resolve_attacking_third<R: Rng>(
         * def_mod
         * home_mod(def_side, ctx.config)
         * tactics_shape_modifier(&ctx.team(def_side).tactics);
-    let success = att_eff / (att_eff + def_eff);
+    let success = crate::shot_model::contest_probability(att_eff, def_eff);
     let zone = Zone::attacking_third(att_side);
     let cross_prob = tactics_cross_probability(&ctx.team(att_side).tactics);
 
@@ -209,7 +209,7 @@ fn resolve_attacking_third<R: Rng>(
             let def_header = snap_player(ctx, def_side, Position::Defender, rng);
             let aerial_att = header.aerial as f64;
             let aerial_def = def_header.aerial as f64;
-            let aerial_win = aerial_att / (aerial_att + aerial_def);
+            let aerial_win = crate::shot_model::contest_probability(aerial_att, aerial_def);
             if rng.random_range(0.0..1.0f64) < aerial_win {
                 ctx.ball_zone = Zone::attacking_box(att_side);
                 resolve_shot(ctx, minute, att_side, rng);
