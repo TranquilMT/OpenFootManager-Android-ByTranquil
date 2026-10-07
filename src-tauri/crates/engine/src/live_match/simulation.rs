@@ -39,7 +39,7 @@ impl LiveMatchState {
     pub(super) fn start_second_half<R: Rng>(&mut self, rng: &mut R) -> MinuteResult {
         self.phase = MatchPhase::SecondHalf;
         // Second half starts after halftime; use at least minute 46 but never before current_minute
-        let start_min = self.current_minute.max(46);
+        let start_min = self.current_minute;
         self.current_minute = start_min;
         self.ball_zone = Zone::Midfield;
         self.possession = Side::Away;
