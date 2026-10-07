@@ -248,8 +248,8 @@ fn find_best_bench_replacement<'a>(
             })
             .collect();
         role_candidates.sort_by(|a, b| {
-            b.overall()
-                .partial_cmp(&a.overall())
+            (b.overall() * (0.6 + 0.4 * b.condition as f64 / 100.0))
+                .partial_cmp(&(a.overall() * (0.6 + 0.4 * a.condition as f64 / 100.0)))
                 .unwrap_or(std::cmp::Ordering::Equal)
         });
         if let Some(best) = role_candidates.first() {
