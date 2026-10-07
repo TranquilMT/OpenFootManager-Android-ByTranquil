@@ -117,7 +117,7 @@ impl LiveMatchState {
             * crate::shared::home_mod(att_side, &self.config)
             * tactics_tempo_progression(&self.team_ref(att_side).tactics);
         let def_eff = def_rating * def_mod * crate::shared::home_mod(def_side, &self.config);
-        let success = att_eff / (att_eff + def_eff);
+        let success = crate::shot_model::contest_probability(att_eff, def_eff);
 
         if rng.random_range(0.0..1.0f64) < success {
             let evt = MatchEvent::new(minute, EventType::PassCompleted, att_side, Zone::Midfield)
@@ -203,7 +203,7 @@ impl LiveMatchState {
             * def_mod
             * crate::shared::home_mod(def_side, &self.config)
             * tactics_shape_modifier(&self.team_ref(def_side).tactics);
-        let success = att_eff / (att_eff + def_eff);
+        let success = crate::shot_model::contest_probability(att_eff, def_eff);
         let zone = Zone::attacking_third(att_side);
         let cross_prob = tactics_cross_probability(&self.team_ref(att_side).tactics);
 
@@ -222,7 +222,7 @@ impl LiveMatchState {
                 let def_header = self.snap_player(def_side, Position::Defender, rng);
                 let aerial_att = header.aerial as f64;
                 let aerial_def = def_header.aerial as f64;
-                let aerial_win = aerial_att / (aerial_att + aerial_def);
+                let aerial_win = crate::shot_model::contest_probability(aerial_att, aerial_def);
                 if rng.random_range(0.0..1.0f64) < aerial_win {
                     self.ball_zone = Zone::attacking_box(att_side);
                     let shot_events = self.resolve_shot(minute, att_side, rng);
