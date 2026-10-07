@@ -499,6 +499,7 @@ impl LiveMatchState {
         rng: &mut R,
     ) -> Vec<MatchEvent> {
         let mut events = Vec::new();
+        if self.sent_off.contains(fouler_id) { return events; }
 
         let aggression_factor = self
             .team_ref(side)
