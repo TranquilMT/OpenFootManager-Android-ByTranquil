@@ -176,3 +176,6 @@ fn self_assists_do_not_inflate_player_statistics() {
     assert_eq!(report.player_stats["p"].assists, 0);
     assert!(report.goals[0].assist_id.is_none());
 }
+
+#[test]
+fn booked_substitutes_stay_on_the_correct_team() { let mut s=LiveMatchState::new(make_team("h","H",65,PlayStyle::Balanced),make_team("a","A",65,PlayStyle::Balanced),MatchConfig { foul_probability:1.0,yellow_card_probability:1.0,red_card_probability:0.0,injury_probability:0.0,..MatchConfig::default() },vec![make_player("reserve","Reserve",Position::Midfielder,65)],vec![],false); let mut rng=seeded_rng(4); for _ in 0..30 { s.step_minute(&mut rng); let snap=s.snapshot(); if let Some(id)=snap.home_yellows.keys().find(|id| !snap.sent_off.contains(*id)).cloned() { s.apply_command(MatchCommand::Substitute {side:Side::Home,player_off_id:id.clone(),player_on_id:"reserve".into()}).unwrap(); let after=s.snapshot(); assert!(after.home_yellows.contains_key(&id)); assert!(!after.away_yellows.contains_key(&id)); return; } } panic!("seed must produce a home booking"); }
