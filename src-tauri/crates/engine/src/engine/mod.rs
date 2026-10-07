@@ -31,6 +31,8 @@ pub fn simulate_with_rng<R: Rng>(
         return MatchReport::from_events(Vec::new(), 0, 0, 0);
     }
 
+    let safe_config=config.sanitized();
+    let config=&safe_config;
     let mut ctx = MatchContext::new(home, away, config);
 
     // Kick-off
