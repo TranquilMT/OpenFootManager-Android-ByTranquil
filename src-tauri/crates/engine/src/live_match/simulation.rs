@@ -236,7 +236,7 @@ impl LiveMatchState {
                 self.events.push(evt.clone());
                 events.push(evt);
             }
-            MatchPhase::SecondHalf if minute >= 90 + self.second_half_stoppage => {
+            MatchPhase::SecondHalf if minute >= 90 + self.first_half_stoppage + self.second_half_stoppage => {
                 self.phase = MatchPhase::FullTime;
                 let evt = MatchEvent::new(minute, EventType::FullTime, Side::Home, Zone::Midfield);
                 self.events.push(evt.clone());
