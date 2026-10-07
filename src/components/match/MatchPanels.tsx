@@ -114,7 +114,12 @@ export function MatchStats({ snapshot }: { snapshot: MatchSnapshot }) {
   const ct = (events: MatchEvent[], type: string) =>
     events.filter((e) => e.event_type === type).length;
 
+  const homeMetrics = matchMetrics(snapshot.events, "Home");
+  const awayMetrics = matchMetrics(snapshot.events, "Away");
   const stats = [
+    { label: t("phase70.metrics.xg"), home: homeMetrics.hasXg ? Number(homeMetrics.xg.toFixed(2)) : t("phase70.metrics.emptyXg"), away: awayMetrics.hasXg ? Number(awayMetrics.xg.toFixed(2)) : t("phase70.metrics.emptyXg") },
+    { label: t("phase70.metrics.saves"), home: homeMetrics.saves, away: awayMetrics.saves },
+    { label: t("phase70.metrics.woodwork"), home: homeMetrics.woodwork, away: awayMetrics.woodwork },
     {
       label: t("match.possession"),
       home: `${snapshot.home_possession_pct.toFixed(0)}%`,
