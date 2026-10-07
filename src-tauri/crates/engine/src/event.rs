@@ -84,6 +84,8 @@ pub enum EventDetail {
     },
     /// An off-target shot that strikes the frame before going out of play.
     Woodwork,
+    /// A buildup pass lost under pressure by a low-composure defender.
+    DefensiveError,
     Save {
         quality: SaveQuality,
     },
