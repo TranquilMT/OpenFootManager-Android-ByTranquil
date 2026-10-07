@@ -17,4 +17,5 @@ describe("truthful match narratives", () => {
   it("identifies a fourth goal milestone", () => { const events=[10,20,30,40].map(m=>event("Goal",m)); expect(narrativeKey(events[3],events)).toBe("fourGoals"); });
   it("tracks milestones separately by scorer", () => { const a=event("Goal",10); const b=event("Goal",20,"Home","p2"); expect(eventContext(b,[a,b]).playerGoals).toBe(1); });
   it("records score from the away perspective", () => { const a=event("Goal",10,"Home"); const b=event("Goal",20,"Away"); expect(eventContext(b,[a,b]).opponentBefore).toBe(1); });
+  it("counts rolling pressure only in its window", () => { const a=event("ShotSaved",3); const b=event("Corner",20); expect(eventContext(b,[a,b]).recentShots).toBe(0); });
 });
