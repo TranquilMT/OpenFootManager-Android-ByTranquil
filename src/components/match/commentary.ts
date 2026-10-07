@@ -96,17 +96,7 @@ function detailVariant(detail: EventDetail | null | undefined): string | null {
 
 /** Count goals scored by a player up to and including this event. */
 function goalTally(evt: MatchEvent, snapshot: MatchSnapshot): number {
-  if (!evt.player_id) return 0;
-  // `minute <=` (not an index/identity comparison) is intentional: the rendered
-  // event is not always reference-identical to the entry in snapshot.events, so
-  // indexOf would fail. The engine resolves at most one shot per minute, so a
-  // same-minute same-player double goal cannot occur and this cannot overcount.
-  return snapshot.events.filter(
-    (e) =>
-      (e.event_type === "Goal" || e.event_type === "PenaltyGoal") &&
-      e.player_id === evt.player_id &&
-      e.minute <= evt.minute,
-  ).length;
+  return evt.player_id ? eventContext(evt, snapshot.events).playerGoals : 0;
 }
 
 /**
