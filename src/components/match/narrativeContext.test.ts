@@ -18,4 +18,5 @@ describe("truthful match narratives", () => {
   it("tracks milestones separately by scorer", () => { const a=event("Goal",10); const b=event("Goal",20,"Home","p2"); expect(eventContext(b,[a,b]).playerGoals).toBe(1); });
   it("records score from the away perspective", () => { const a=event("Goal",10,"Home"); const b=event("Goal",20,"Away"); expect(eventContext(b,[a,b]).opponentBefore).toBe(1); });
   it("counts rolling pressure only in its window", () => { const a=event("ShotSaved",3); const b=event("Corner",20); expect(eventContext(b,[a,b]).recentShots).toBe(0); });
+  it("pressure never leaks between teams", () => { const a=event("ShotSaved",19,"Away"); const b=event("Corner",20); expect(eventContext(b,[a,b]).recentShots).toBe(0); });
 });
