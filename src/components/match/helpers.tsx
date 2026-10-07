@@ -26,6 +26,7 @@ export const EVENT_ICONS: Record<
   string,
   { icon: React.ReactNode; color: string; important: boolean }
 > = {
+  TacticalChange: { icon: <SlidersHorizontal className="size-4" />, color: "text-primary-600 dark:text-primary-400", important: true },
   Goal: {
     icon: <Circle className="w-4 h-4 fill-current" />,
     color: "text-accent-700 dark:text-accent-400",
