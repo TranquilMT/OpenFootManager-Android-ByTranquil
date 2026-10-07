@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import type { MatchSnapshot } from "./types";
 import { matchMetrics } from "./narrativeContext";
 
-export function MatchPulse({ snapshot }: { snapshot: MatchSnapshot }) {
+export function MatchPulse({ snapshot, derby = false }: { snapshot: MatchSnapshot; derby?: boolean }) {
   const { t } = useTranslation();
   const home = matchMetrics(snapshot.events, "Home");
   const away = matchMetrics(snapshot.events, "Away");
