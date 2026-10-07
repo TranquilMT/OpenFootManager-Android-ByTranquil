@@ -707,6 +707,7 @@ export default function MainMenu() {
             {/* Main Menu */}
             {menuState === "main" && (
               <div className="flex flex-col gap-3">
+                <EngineUpdateBanner onOpen={() => setShowPatchHistory(true)} />
                 <button
                   type="button"
                   onClick={() => setMenuState("create")}
