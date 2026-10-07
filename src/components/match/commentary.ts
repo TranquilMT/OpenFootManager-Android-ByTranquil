@@ -165,7 +165,7 @@ export function getCommentary(
   const result = pickLine(t, baseKey, variant, hash, tokens);
   if (!result) return null;
   const narrative = narrativeKey(evt, snapshot.events);
-  if (!narrative) return result;
+  if (!narrative || narrative === "defensiveError" || narrative === "tacticalChange") return result;
   const extra = t(`phase70.commentary.${narrative}`, { defaultValue: "", ...tokens });
   return extra ? { ...result, line: `${result.line} ${interpolate(extra, tokens)}` } : result;
 }
