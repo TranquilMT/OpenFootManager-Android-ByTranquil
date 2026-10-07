@@ -463,4 +463,6 @@ use super::MatchConfig;
 fn nonfinite_probabilities_use_defaults() { let config=MatchConfig { foul_probability:f64::NAN, injury_probability:f64::INFINITY, ..MatchConfig::default() }.sanitized(); assert_eq!(config.foul_probability,MatchConfig::default().foul_probability); assert_eq!(config.injury_probability,MatchConfig::default().injury_probability); }
 #[test]
 fn probabilities_are_bounded() { let config=MatchConfig { yellow_card_probability:3.0, red_card_probability:-1.0, ..MatchConfig::default() }.sanitized(); assert_eq!(config.yellow_card_probability,1.0); assert_eq!(config.red_card_probability,0.0); }
+#[test]
+fn negative_fatigue_cannot_restore_fitness() { assert_eq!(MatchConfig { fatigue_per_minute:-1.0,..MatchConfig::default() }.sanitized().fatigue_per_minute,0.0); }
 }
