@@ -1,7 +1,7 @@
 use rand::{Rng, RngExt};
 
 use crate::event::{EventType, MatchEvent};
-use crate::types::{Position, Side, Zone};
+use crate::types::{Side, Zone};
 
 use super::{LiveMatchState, MinuteResult, PenaltyShootoutState};
 
@@ -25,19 +25,15 @@ impl LiveMatchState {
         let taker = self.pick_penalty_taker(kicking_side, rng);
         let gk = self.pick_goalkeeper(kicking_side.opposite());
 
-        let shoot_skill = (taker.shooting as f64 + taker.composure as f64) / 2.0;
-        let gk_skill = (gk.reflexes as f64 + gk.handling as f64) / 2.0;
-
-        // Fatigue affects penalty accuracy in shootout
-        let taker_condition = self
-            .player_conditions
-            .get(&taker.id)
-            .copied()
-            .unwrap_or(50.0);
-        let fatigue_factor = (taker_condition / 100.0).clamp(0.7, 1.0);
-
-        let conversion = (0.75 + (shoot_skill - gk_skill) / 300.0) * fatigue_factor;
-        let conversion = conversion.clamp(0.55, 0.92);
+        let shoot_skill = self.condition_adjusted_skill(
+            &taker.id,
+            (taker.shooting as f64 + taker.composure as f64) / 2.0,
+        );
+        let gk_skill = self.condition_adjusted_skill(
+            &gk.id,
+            (gk.reflexes as f64 + gk.handling as f64 + gk.positioning as f64) / 3.0,
+        );
+        let conversion = crate::shot_model::penalty_conversion(shoot_skill, gk_skill);
 
         let zone = Zone::attacking_box(kicking_side);
 
@@ -114,15 +110,18 @@ impl LiveMatchState {
         let mut events = Vec::new();
 
         // Use designated penalty taker if set
-        let taker = match self.set_pieces_ref(att_side).penalty_taker.clone() {
-            Some(id) => self.snap_player_by_id(&id, att_side),
-            None => self.snap_player(att_side, Position::Forward, rng),
-        };
-        let gk = self.snap_player(att_side.opposite(), Position::Goalkeeper, rng);
+        let taker = self.pick_penalty_taker(att_side, rng);
+        let gk = self.pick_goalkeeper(att_side.opposite());
 
-        let shoot_skill = (taker.shooting as f64 + taker.decisions as f64) / 2.0;
-        let gk_skill = (gk.positioning as f64 + gk.decisions as f64) / 2.0;
-        let conversion = (0.75 + (shoot_skill - gk_skill) / 300.0).clamp(0.55, 0.92);
+        let shoot_skill = self.condition_adjusted_skill(
+            &taker.id,
+            (taker.shooting as f64 + taker.composure as f64) / 2.0,
+        );
+        let gk_skill = self.condition_adjusted_skill(
+            &gk.id,
+            (gk.reflexes as f64 + gk.handling as f64 + gk.positioning as f64) / 3.0,
+        );
+        let conversion = crate::shot_model::penalty_conversion(shoot_skill, gk_skill);
         let zone = Zone::attacking_box(att_side);
 
         if rng.random_range(0.0..1.0f64) < conversion {
@@ -131,13 +130,15 @@ impl LiveMatchState {
             // opener/equaliser/... sub-variants. Brace/hat-trick is still detected on
             // the frontend via goal tally, which counts PenaltyGoal events.
             let evt = MatchEvent::new(minute, EventType::PenaltyGoal, att_side, zone)
-                .with_player(&taker.id);
+                .with_player(&taker.id)
+                .with_shot(conversion, &gk.id);
             self.events.push(evt.clone());
             events.push(evt);
             self.add_goal(att_side);
         } else {
             let evt = MatchEvent::new(minute, EventType::PenaltyMiss, att_side, zone)
-                .with_player(&taker.id);
+                .with_player(&taker.id)
+                .with_shot(conversion, &gk.id);
             self.events.push(evt.clone());
             events.push(evt);
         }

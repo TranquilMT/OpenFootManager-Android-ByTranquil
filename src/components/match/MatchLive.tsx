@@ -14,7 +14,13 @@ import {
   FORMATIONS,
   isPersistableSpeed,
 } from "./types";
-import { getEventDisplay, getPlayerName, makeTeamFallback, phaseLabel } from "./helpers";
+import {
+  getEventDisplay,
+  getEventTypeLabel,
+  getPlayerName,
+  makeTeamFallback,
+  phaseLabel,
+} from "./helpers";
 import { Badge, TeamLogo } from "../ui";
 import { useSettingsStore } from "../../store/settingsStore";
 import { EventFeed, MatchStats, Lineups } from "./MatchPanels";
@@ -24,6 +30,8 @@ import {
   useSpokenCommentary,
 } from "./useSpokenCommentary";
 import MatchScreenLayout from "./MatchScreenLayout";
+import { isLocalDerby } from "./derbyContext";
+import { MatchPulse } from "./MatchPulse";
 import { SubPanel } from "./SubPanel";
 import {
   Play,
@@ -108,6 +116,10 @@ export default function MatchLive({
     return m;
   }, [gameState.players]);
 
+  const visibleEvents = useMemo(
+    () => snapshot.events.filter((event) => getEventDisplay(event).important),
+    [snapshot.events],
+  );
   const isFinished = snapshot.phase === "Finished";
 
   // Reads only `lastResult` for phase transitions, which is sound because step_many stops on
@@ -215,7 +227,7 @@ export default function MatchLive({
   }, [importantEvents.length]);
 
   useSpokenCommentary(
-    importantEvents,
+    visibleEvents,
     snapshot,
     t,
     i18n.language,
@@ -449,9 +461,17 @@ export default function MatchLive({
           </div>
 
           <div className="touch-scroll min-h-0 flex-1 overflow-auto p-3 sm:p-4">
+            {activePanel !== "lineups" && (
+              <MatchPulse
+                snapshot={snapshot}
+                derby={
+                  homeFullTeam && awayFullTeam ? isLocalDerby(homeFullTeam, awayFullTeam) : false
+                }
+              />
+            )}
             {activePanel === "events" && (
               <EventFeed
-                events={importantEvents}
+                events={visibleEvents}
                 snapshot={snapshot}
                 feedRef={eventFeedRef}
                 playerJerseyMap={playerJerseyMap}
@@ -610,7 +630,7 @@ export default function MatchLive({
               {t("match.keyEvents")}
             </h3>
             <div className="flex flex-col gap-1.5">
-              {importantEvents
+              {visibleEvents
                 .filter((e) =>
                   [
                     "Goal",
@@ -634,7 +654,8 @@ export default function MatchLive({
                       </span>
                       <span>{display.icon}</span>
                       <span className={`${display.color} font-medium truncate`}>
-                        {getPlayerName(snapshot, evt.player_id)}
+                        {getPlayerName(snapshot, evt.player_id) ||
+                          getEventTypeLabel(evt.event_type, t)}
                       </span>
                       <Badge variant={evt.side === "Home" ? "primary" : "accent"} size="sm">
                         {evt.side === "Home"
@@ -644,7 +665,7 @@ export default function MatchLive({
                     </div>
                   );
                 })}
-              {importantEvents.length === 0 && (
+              {visibleEvents.length === 0 && (
                 <p className="text-gray-600 dark:text-gray-500 text-xs">{t("match.noEventsYet")}</p>
               )}
             </div>

@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mais jogadores de destaque, incluindo raras estrelas de nível 96.",
     "patchMatches": "Mais reações, remates à trave e comentário por voz opcional.",
     "patchMobile": "Controlos móveis, caixa de entrada, seleções e início de carreira melhorados.",
-    "patchWelcome": "Bem-vindo ao OFMtouch! Novidades da v0.6.9",
+    "patchWelcome": "OFMtouch 0.7.0 — Motor de jogo V2",
     "patchPortraits": "20 rostos fictícios de origem tornam os retratos dos jogadores mais variados.",
     "patchWorld": "Um mundo de futebol maior abrange 29 nações, com clubes mais fortes nas Américas e na Ásia.",
     "patchTransfers": "As estratégias dos clubes orientam empréstimos e transferências, com ofertas concorrentes e controlo do orçamento.",
@@ -2292,7 +2292,8 @@
       "Corner": "Canto",
       "FreeKick": "Livre",
       "Foul": "Falta",
-      "PenaltyAwarded": "Penálti Assinalado"
+      "PenaltyAwarded": "Penálti Assinalado",
+      "TacticalChange": "ajusta o plano de jogo"
     },
     "commentary": {
       "Corner": {
@@ -2555,6 +2556,18 @@
           "0": "É isso — tempo final!",
           "1": "O árbitro encerra o encontro.",
           "2": "O apito final confirma o resultado."
+        }
+      },
+      "TacticalChange": {
+        "headline": "Motor de jogo V2",
+        "lines": {
+          "0": "{{team}} ajusta o plano de jogo."
+        }
+      },
+      "PassIntercepted": {
+        "headline": "Pressão ofensiva",
+        "lines": {
+          "0": "Um passe na construção falha sob pressão."
         }
       }
     },
@@ -4340,5 +4353,51 @@
     "prizes": "Os prémios de época acompanham as receitas da divisão.",
     "promotion": "A promoção restaura a capacidade do orçamento salarial após a despromoção.",
     "sponsors": "Os bónus dos patrocinadores usam a classificação correta da liga nacional."
+  },
+  "phase70": {
+    "commentary": {
+      "fourGoals": "Quatro golos de {{player}} neste jogo.",
+      "lateEqualiser": "Um empate tardio repõe a igualdade para {{team}}.",
+      "comebackLead": "{{team}} transformou uma desvantagem numa vantagem.",
+      "lateLead": "{{team}} passa para a frente no final do jogo.",
+      "goAhead": "{{team}} adianta-se num jogo que estava empatado.",
+      "stillBehind": "{{team}} continua em desvantagem apesar desse golo.",
+      "commandingLead": "{{team}} vence agora por pelo menos três golos.",
+      "woodwork": "O remate atinge a estrutura da baliza.",
+      "defensiveError": "Um passe na construção falha sob pressão.",
+      "tacticalChange": "{{team}} ajusta o plano de jogo.",
+      "bookingRisk": "{{player}} deve ter cuidado após essa advertência.",
+      "numericalDisadvantage": "{{team}} terá de jogar com menos jogadores.",
+      "injuryConcern": "{{team}} precisa de avaliar a lesão.",
+      "injuryChange": "A alteração segue-se à lesão de {{victim}}.",
+      "protectLead": "Entram pernas frescas enquanto {{team}} defende a vantagem.",
+      "chaseGame": "{{team}} muda jogadores enquanto tenta recuperar.",
+      "freshLegs": "Entram jogadores frescos para {{team}}.",
+      "sustainedPressure": "Vários remates recentes mostram a pressão contínua de {{team}}.",
+      "latePressure": "O tempo escasseia enquanto {{team}} procura um golo."
+    },
+    "metrics": {
+      "xg": "Golos esperados",
+      "woodwork": "Postes e barra",
+      "saves": "Defesas do guarda-redes",
+      "pulse": "Ritmo do jogo",
+      "shotsLast5": "Remates nos últimos 5 minutos",
+      "even": "Pressão equilibrada",
+      "pressure": "Pressão ofensiva",
+      "emptyXg": "Não registado",
+      "alerts": "Alertas do jogo",
+      "qualityHint": "Qualidade da oportunidade antes do resultado; uma probabilidade, não um golo garantido.",
+      "derby": "Dérbi local"
+    },
+    "release": {
+      "title": "Motor de jogo V2",
+      "engine": "A lógica partilhada de remates e penáltis considera a qualidade da ocasião, compostura, guarda-redes e fadiga.",
+      "commentary": "Comentários consoante o resultado incluem golos tardios, reviravoltas, marcos, pressão e substituições.",
+      "insights": "Novas vistas de golos esperados, postes, defesas e pressão recente explicam o jogo.",
+      "decisions": "Avisos táticos, substituições da IA que priorizam lesões e pressão ajustada à fadiga e às expulsões.",
+      "reliability": "Parâmetros mais seguros, guarda-redes de emergência, registos corretos de cartões e funções válidas após mudanças de formação ou de equipa.",
+      "interface": "Ícones de menu renovados e cartões de atualização compactos em todos os idiomas suportados.",
+      "thanks": "Obrigado por jogar, testar e partilhar opiniões. Os seus relatos ajudam a melhorar cada jogo."
+    }
   }
 }

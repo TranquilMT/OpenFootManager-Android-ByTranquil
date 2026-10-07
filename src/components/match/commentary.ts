@@ -9,6 +9,7 @@ import type {
   GoalContext,
 } from "./types";
 import { getPlayerName } from "./helpers";
+import { eventContext, narrativeKey } from "./narrativeContext";
 
 /** Event types that get the full headline + prose treatment. */
 const COMMENTARY_EVENTS = new Set([
@@ -31,6 +32,8 @@ const COMMENTARY_EVENTS = new Set([
   "HalfTime",
   "SecondHalfStart",
   "FullTime",
+  "TacticalChange",
+  "PassIntercepted",
 ]);
 
 export interface Commentary {
@@ -55,6 +58,7 @@ function hashEvent(evt: MatchEvent): number {
 function detailVariant(detail: EventDetail | null | undefined): string | null {
   if (!detail) return null;
   if (detail === "Woodwork") return "woodwork";
+  if (typeof detail === "string") return null;
   if ("Shot" in detail) {
     const map: Record<DangerBand, string> = {
       Speculative: "speculative",
@@ -94,17 +98,7 @@ function detailVariant(detail: EventDetail | null | undefined): string | null {
 
 /** Count goals scored by a player up to and including this event. */
 function goalTally(evt: MatchEvent, snapshot: MatchSnapshot): number {
-  if (!evt.player_id) return 0;
-  // `minute <=` (not an index/identity comparison) is intentional: the rendered
-  // event is not always reference-identical to the entry in snapshot.events, so
-  // indexOf would fail. The engine resolves at most one shot per minute, so a
-  // same-minute same-player double goal cannot occur and this cannot overcount.
-  return snapshot.events.filter(
-    (e) =>
-      (e.event_type === "Goal" || e.event_type === "PenaltyGoal") &&
-      e.player_id === evt.player_id &&
-      e.minute <= evt.minute,
-  ).length;
+  return evt.player_id ? eventContext(evt, snapshot.events).playerGoals : 0;
 }
 
 /**
@@ -116,13 +110,20 @@ function variantKey(evt: MatchEvent, snapshot: MatchSnapshot): string | null {
     const tally = goalTally(evt, snapshot);
     if (tally === 3) return "hattrick";
     if (tally === 2) return "brace";
+    // Extends describes the team's score, not a repeat goal by this player.
+    // The ordered narrative supplies the accurate lead or comeback context.
+    if (evt.detail && typeof evt.detail === "object" && "Goal" in evt.detail)
+      if (evt.detail.Goal.context === "Extends") return null;
   }
   return detailVariant(evt.detail);
 }
 
 /** Manual interpolation since the variant string is a value, not a key. */
 function interpolate(template: string, tokens: Record<string, string>): string {
-  return template.replace(/\{\{(\w+)\}\}/g, (_, name: string) => tokens[name] ?? "");
+  return template
+    .replace(/\{\{\s*-?\s*([\w.]+)(?:\s*,[^}]+)?\s*\}\}/g, (_, name: string) => tokens[name] ?? "")
+    .replace(/\{\{[^}]*\}\}/g, "")
+    .trim();
 }
 
 function pickLine(
@@ -137,7 +138,9 @@ function pickLine(
   for (const key of candidates) {
     const lines = t(`${key}.lines`, { returnObjects: true }) as Record<string, string> | string;
     if (!lines || typeof lines !== "object") continue;
-    const values = Object.values(lines);
+    const values = Object.values(lines).filter(
+      (value): value is string => typeof value === "string" && value.trim().length > 0,
+    );
     if (values.length === 0) continue;
     const template = values[hash % values.length];
     if (typeof template !== "string") continue;
@@ -153,17 +156,25 @@ export function getCommentary(
   t: TFunction,
 ): Commentary | null {
   if (!COMMENTARY_EVENTS.has(evt.event_type)) return null;
+  if (evt.event_type === "PassIntercepted" && evt.detail !== "DefensiveError") return null;
 
   const isHome = evt.side === "Home";
   const team = isHome ? snapshot.home_team.name : snapshot.away_team.name;
   const opponent = isHome ? snapshot.away_team.name : snapshot.home_team.name;
-  const player = getPlayerName(snapshot, evt.player_id);
-  const victim = getPlayerName(snapshot, evt.secondary_player_id);
+  const playerName = getPlayerName(snapshot, evt.player_id);
+  const victimName = getPlayerName(snapshot, evt.secondary_player_id);
+  const player = playerName && playerName !== evt.player_id ? playerName : team;
+  const victim = victimName && victimName !== evt.secondary_player_id ? victimName : opponent;
 
   const tokens: Record<string, string> = { team, opponent, player, victim };
   const baseKey = `match.commentary.${evt.event_type}`;
   const variant = variantKey(evt, snapshot);
   const hash = hashEvent(evt);
 
-  return pickLine(t, baseKey, variant, hash, tokens);
+  const result = pickLine(t, baseKey, variant, hash, tokens);
+  if (!result) return null;
+  const narrative = narrativeKey(evt, snapshot.events);
+  if (!narrative || narrative === "defensiveError" || narrative === "tacticalChange") return result;
+  const extra = t(`phase70.commentary.${narrative}`, { defaultValue: "", ...tokens });
+  return extra ? { ...result, line: `${result.line} ${interpolate(extra, tokens)}` } : result;
 }

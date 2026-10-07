@@ -14,6 +14,8 @@ import type { PackageInfo, PackageIssue } from "../components/menu/WorldSelect";
 import type { ManagerProfile } from "../components/menu/types";
 import { applyExtraTranslations } from "../lib/extraTranslations";
 import { GameBrand } from "../components/menu/GameBrand";
+import { EngineUpdateBanner } from "../components/menu/EngineUpdateBanner";
+import { MenuIcon } from "../components/menu/MenuIcon";
 import { MainMenuFooter } from "../components/menu/MainMenuFooter";
 import { resolveBackendError } from "../utils/backendI18n";
 import { prewarmManagerSquadPortraits } from "../services/portraitService";
@@ -705,13 +707,14 @@ export default function MainMenu() {
             {/* Main Menu */}
             {menuState === "main" && (
               <div className="flex flex-col gap-3">
+                <EngineUpdateBanner onOpen={() => setShowPatchHistory(true)} />
                 <button
                   type="button"
                   onClick={() => setMenuState("create")}
                   className="group flex items-center justify-between w-full p-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white rounded-xl transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-primary-500/20"
                 >
                   <div className="flex items-center gap-3">
-                    <PlusCircle className="w-6 h-6" />
+                    <MenuIcon icon={PlusCircle} tone="primary" />
                     <span className="font-heading font-bold text-lg uppercase tracking-wide">
                       {t("menu.newGame")}
                     </span>
@@ -725,7 +728,7 @@ export default function MainMenu() {
                   className="group flex items-center justify-between w-full p-4 bg-white dark:bg-navy-700 hover:bg-gray-50 dark:hover:bg-navy-600 text-gray-800 dark:text-gray-200 rounded-xl transition-all duration-300 border border-gray-200 dark:border-navy-600 hover:border-accent-400 dark:hover:border-accent-400 shadow-sm"
                 >
                   <div className="flex items-center gap-3">
-                    <FolderOpen className="w-6 h-6 text-accent-500 dark:text-accent-400" />
+                    <MenuIcon icon={FolderOpen} tone="accent" />
                     <span className="font-heading font-bold text-lg uppercase tracking-wide">
                       {t("menu.loadGame")}
                     </span>
@@ -739,7 +742,7 @@ export default function MainMenu() {
                   className="group flex items-center justify-between w-full p-4 bg-white dark:bg-navy-700 hover:bg-gray-50 dark:hover:bg-navy-600 text-gray-800 dark:text-gray-200 rounded-xl transition-all duration-300 border border-gray-200 dark:border-navy-600 hover:border-accent-400 dark:hover:border-accent-400 shadow-sm"
                 >
                   <div className="flex items-center gap-3">
-                    <Package className="w-6 h-6 text-accent-500 dark:text-accent-400" />
+                    <MenuIcon icon={Package} tone="accent" />
                     <span className="font-heading font-bold text-lg uppercase tracking-wide">
                       {t("menu.worldEditor")}
                     </span>
@@ -753,7 +756,7 @@ export default function MainMenu() {
                   className="group flex items-center justify-between w-full p-4 bg-white dark:bg-navy-700 hover:bg-gray-50 dark:hover:bg-navy-600 text-gray-800 dark:text-gray-200 rounded-xl transition-all duration-300 border border-gray-200 dark:border-navy-600 hover:border-gray-300 dark:hover:border-navy-600 shadow-sm"
                 >
                   <div className="flex items-center gap-3">
-                    <Settings className="w-6 h-6 text-gray-400 dark:text-gray-500" />
+                    <MenuIcon icon={Settings} tone="neutral" />
                     <span className="font-heading font-bold text-lg uppercase tracking-wide">
                       {t("menu.settings")}
                     </span>
@@ -766,7 +769,7 @@ export default function MainMenu() {
                   onClick={() => setShowPatchHistory(true)}
                   className="group flex min-h-11 items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 text-gray-800 transition-colors hover:border-primary-500 dark:border-navy-600 dark:bg-navy-700 dark:text-gray-200"
                 >
-                  <ScrollText className="h-6 w-6 text-primary-500" />
+                  <MenuIcon icon={ScrollText} tone="primary" />
                   <span className="font-heading text-lg font-bold uppercase tracking-wide">
                     {t("settings.patchHistory")}
                   </span>
@@ -780,7 +783,7 @@ export default function MainMenu() {
                   className="group flex items-center justify-between w-full p-4 bg-white dark:bg-navy-700 hover:bg-red-50 dark:hover:bg-red-500/10 text-gray-800 dark:text-gray-200 rounded-xl transition-all duration-300 border border-gray-200 dark:border-navy-600 hover:border-red-200 dark:hover:border-red-500/30 shadow-sm"
                 >
                   <div className="flex items-center gap-3">
-                    <Power className="w-6 h-6 text-red-500 dark:text-red-400" />
+                    <MenuIcon icon={Power} tone="danger" />
                     <span className="font-heading font-bold text-lg uppercase tracking-wide">
                       {t("menu.exitGame")}
                     </span>

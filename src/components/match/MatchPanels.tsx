@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import type { MatchSnapshot, MatchEvent, EnginePlayerData } from "./types";
 import { getEventDisplay, getEventTypeLabel, getPlayerName } from "./helpers";
 import { getCommentary } from "./commentary";
+import { matchMetrics } from "./narrativeContext";
 import { Badge } from "../ui";
 import { translatePositionAbbreviation } from "../squad/SquadTab.helpers";
 
@@ -46,7 +47,9 @@ export function EventFeed({
               <span className="text-gray-600 dark:text-gray-500 tabular-nums font-heading text-sm w-8 text-right flex-shrink-0 pt-0.5">
                 {evt.minute}'
               </span>
-              <span className="text-lg flex-shrink-0">{display.icon}</span>
+              <span aria-hidden="true" className={`text-lg flex-shrink-0 ${display.color}`}>
+                {display.icon}
+              </span>
               <div className="flex-1 min-w-0">
                 {commentary ? (
                   <>
@@ -61,13 +64,15 @@ export function EventFeed({
                       </span>
                     </div>
                     <p className="text-sm text-gray-700 dark:text-gray-300">{commentary.line}</p>
-                    {evt.event_type === "Goal" && evt.secondary_player_id && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {t("match.assist", {
-                          name: displayName(evt.secondary_player_id),
-                        })}
-                      </p>
-                    )}
+                    {evt.event_type === "Goal" &&
+                      evt.secondary_player_id &&
+                      evt.secondary_player_id !== evt.player_id && (
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {t("match.assist", {
+                            name: displayName(evt.secondary_player_id),
+                          })}
+                        </p>
+                      )}
                   </>
                 ) : (
                   <>
@@ -113,7 +118,20 @@ export function MatchStats({ snapshot }: { snapshot: MatchSnapshot }) {
   const ct = (events: MatchEvent[], type: string) =>
     events.filter((e) => e.event_type === type).length;
 
+  const homeMetrics = matchMetrics(snapshot.events, "Home");
+  const awayMetrics = matchMetrics(snapshot.events, "Away");
   const stats = [
+    {
+      label: t("phase70.metrics.xg"),
+      home: homeMetrics.hasXg ? Number(homeMetrics.xg.toFixed(2)) : t("phase70.metrics.emptyXg"),
+      away: awayMetrics.hasXg ? Number(awayMetrics.xg.toFixed(2)) : t("phase70.metrics.emptyXg"),
+    },
+    { label: t("phase70.metrics.saves"), home: homeMetrics.saves, away: awayMetrics.saves },
+    {
+      label: t("phase70.metrics.woodwork"),
+      home: homeMetrics.woodwork,
+      away: awayMetrics.woodwork,
+    },
     {
       label: t("match.possession"),
       home: `${snapshot.home_possession_pct.toFixed(0)}%`,
@@ -162,8 +180,8 @@ export function MatchStats({ snapshot }: { snapshot: MatchSnapshot }) {
       {stats.map((stat, i) => {
         const hv = typeof stat.home === "number" ? stat.home : 0;
         const av = typeof stat.away === "number" ? stat.away : 0;
-        const total = hv + av || 1;
-        const pct = stat.homePct ?? (hv / total) * 100;
+        const total = hv + av;
+        const pct = stat.homePct ?? (total > 0 ? (hv / total) * 100 : 50);
         return (
           <div key={i}>
             <div className="flex justify-between text-xs mb-1">

@@ -1,13 +1,25 @@
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { useTranslation } from "react-i18next";
-import { Sparkles, Wallet, Users, Heart, Bug } from "lucide-react";
+import {
+  Activity,
+  MessageSquareText,
+  ChartNoAxesCombined,
+  SlidersHorizontal,
+  ShieldCheck,
+  Palette,
+  Heart,
+  Bug,
+} from "lucide-react";
 
 const ISSUE_URL = "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new";
 
 const HIGHLIGHT_KEYS = [
-  { key: "phase69.prizes", Icon: Wallet },
-  { key: "phase69.promotion", Icon: Sparkles },
-  { key: "phase69.sponsors", Icon: Users },
+  { key: "phase70.release.engine", Icon: Activity },
+  { key: "phase70.release.commentary", Icon: MessageSquareText },
+  { key: "phase70.release.insights", Icon: ChartNoAxesCombined },
+  { key: "phase70.release.decisions", Icon: SlidersHorizontal },
+  { key: "phase70.release.reliability", Icon: ShieldCheck },
+  { key: "phase70.release.interface", Icon: Palette },
 ] as const;
 
 export function ReleaseNotes({ embedded = false }: { embedded?: boolean }) {
@@ -42,7 +54,7 @@ export function ReleaseNotes({ embedded = false }: { embedded?: boolean }) {
           aria-hidden="true"
           className="mt-0.5 size-5 shrink-0 text-primary-600 dark:text-primary-400"
         />
-        <p>{t("phase66.thanks")}</p>
+        <p>{t("phase70.release.thanks")}</p>
       </div>
       <p className="mt-1 text-sm font-semibold text-gray-700 dark:text-gray-200">
         {t("settings.patchSignature")}

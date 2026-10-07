@@ -9,7 +9,7 @@ use rand::Rng;
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet, VecDeque};
 
-use crate::event::MatchEvent;
+use crate::event::{EventType, MatchEvent};
 use crate::report::MatchReport;
 use crate::types::{MatchConfig, PlayStyle, PlayerData, PlayerRole, Side, TeamData, Zone};
 
@@ -256,6 +256,7 @@ impl LiveMatchState {
         away_bench: Vec<PlayerData>,
         allows_extra_time: bool,
     ) -> Self {
+        let config = config.sanitized();
         // Initialize player conditions from their condition attribute
         let mut player_conditions = HashMap::new();
         for p in home.players.iter().chain(away.players.iter()) {
@@ -325,11 +326,29 @@ impl LiveMatchState {
                 player_on_id,
             } => self.do_substitution(side, &player_off_id, &player_on_id),
             MatchCommand::ChangeFormation { side, formation } => {
+                let changed = self.team_ref(side).formation != formation;
                 self.apply_formation(side, &formation);
+                if changed && self.phase != MatchPhase::PreKickOff {
+                    self.events.push(MatchEvent::new(
+                        self.current_minute,
+                        EventType::TacticalChange,
+                        side,
+                        Zone::Midfield,
+                    ));
+                }
                 Ok(())
             }
             MatchCommand::ChangePlayStyle { side, play_style } => {
+                let changed = self.team_ref(side).play_style != play_style;
                 self.team_mut(side).play_style = play_style;
+                if changed && self.phase != MatchPhase::PreKickOff {
+                    self.events.push(MatchEvent::new(
+                        self.current_minute,
+                        EventType::TacticalChange,
+                        side,
+                        Zone::Midfield,
+                    ));
+                }
                 Ok(())
             }
             MatchCommand::SetFreeKickTaker { side, player_id } => {

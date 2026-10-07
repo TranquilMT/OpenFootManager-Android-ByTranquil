@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Activity } from "lucide-react";
 import { APP_VERSION } from "../../lib/appVersion";
 import { ReleaseNotes } from "../settings/ReleaseNotes";
 
@@ -59,6 +60,12 @@ export function WhatsNewModal() {
         }}
         className="max-h-[calc(100dvh-1.5rem)] w-full max-w-lg overflow-y-auto overscroll-contain rounded-2xl bg-white p-5 text-gray-900 shadow-2xl dark:bg-navy-800 dark:text-gray-100 sm:p-7"
       >
+        <div
+          aria-hidden="true"
+          className="mb-3 flex size-12 items-center justify-center rounded-2xl bg-primary-500/15 text-primary-600 dark:text-primary-400"
+        >
+          <Activity className="size-7" />
+        </div>
         <h2 id="ofm-whats-new-title" className="text-xl font-heading font-bold">
           {t("settings.patchWelcome")}
         </h2>

@@ -18,12 +18,19 @@ import {
   AlertTriangle,
   Zap,
   CircleDot,
+  SlidersHorizontal,
+  Goal,
 } from "lucide-react";
 
 export const EVENT_ICONS: Record<
   string,
   { icon: React.ReactNode; color: string; important: boolean }
 > = {
+  TacticalChange: {
+    icon: <SlidersHorizontal className="size-4" />,
+    color: "text-primary-600 dark:text-primary-400",
+    important: true,
+  },
   Goal: {
     icon: <Circle className="w-4 h-4 fill-current" />,
     color: "text-accent-700 dark:text-accent-400",
@@ -165,6 +172,25 @@ export function makeTeamFallback(teamName: string) {
 }
 
 export function getEventDisplay(evt: MatchEvent) {
+  if (evt.detail === "Woodwork")
+    return {
+      icon: <Goal className="size-4" />,
+      color: "text-accent-700 dark:text-accent-400",
+      important: true,
+    };
+  if (evt.detail === "DefensiveError")
+    return {
+      icon: <AlertTriangle className="size-4" />,
+      color: "text-yellow-700 dark:text-yellow-500",
+      important: true,
+    };
+  if (
+    evt.detail &&
+    typeof evt.detail === "object" &&
+    "Save" in evt.detail &&
+    evt.detail.Save.quality === "WorldClass"
+  )
+    return { ...EVENT_ICONS.ShotSaved, important: true };
   return EVENT_ICONS[evt.event_type] || DEFAULT_DISPLAY;
 }
 

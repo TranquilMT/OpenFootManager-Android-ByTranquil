@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mais craques, incluindo raras estrelas de nível 96 e candidatos ao acesso.",
     "patchMatches": "Mais reações, bolas na trave e narração por voz opcional.",
     "patchMobile": "Controles no celular, caixa de entrada, seleções e início de carreira melhorados.",
-    "patchWelcome": "Boas-vindas ao OFMtouch! Novidades da v0.6.9",
+    "patchWelcome": "OFMtouch 0.7.0 — Motor de partidas V2",
     "patchPortraits": "20 rostos fictícios de origem deixam os retratos dos jogadores mais variados.",
     "patchWorld": "Um mundo do futebol maior abrange 29 países, com clubes mais fortes nas Américas e na Ásia.",
     "patchTransfers": "As estratégias dos clubes orientam empréstimos e transferências, com ofertas concorrentes e controle do orçamento.",
@@ -2228,7 +2228,8 @@
       "Corner": "Escanteio",
       "FreeKick": "Falta",
       "Foul": "Falta",
-      "PenaltyAwarded": "Pênalti Marcado"
+      "PenaltyAwarded": "Pênalti Marcado",
+      "TacticalChange": "ajusta o plano de jogo"
     },
     "commentary": {
       "Corner": {
@@ -2491,6 +2492,18 @@
           "0": "É isso — fim de jogo!",
           "1": "O árbitro encerra a partida.",
           "2": "O apito final confirma o resultado."
+        }
+      },
+      "TacticalChange": {
+        "headline": "Motor de partidas V2",
+        "lines": {
+          "0": "{{team}} ajusta o plano de jogo."
+        }
+      },
+      "PassIntercepted": {
+        "headline": "Pressão ofensiva",
+        "lines": {
+          "0": "Um passe na saída de bola falha sob pressão."
         }
       }
     },
@@ -4340,5 +4353,51 @@
     "prizes": "Os prêmios da temporada acompanham as receitas da divisão.",
     "promotion": "O acesso recupera a capacidade do orçamento salarial após o rebaixamento.",
     "sponsors": "Os bônus dos patrocinadores usam a classificação correta da liga nacional."
+  },
+  "phase70": {
+    "commentary": {
+      "fourGoals": "Quatro gols de {{player}} nesta partida.",
+      "lateEqualiser": "Um empate no fim deixa {{team}} em igualdade.",
+      "comebackLead": "{{team}} transformou a desvantagem em vantagem.",
+      "lateLead": "{{team}} assume a liderança no fim do jogo.",
+      "goAhead": "{{team}} passa à frente em um jogo antes empatado.",
+      "stillBehind": "{{team}} continua atrás apesar desse gol.",
+      "commandingLead": "{{team}} agora vence por pelo menos três gols.",
+      "woodwork": "O chute atinge a trave ou o travessão.",
+      "defensiveError": "Um passe na saída de bola falha sob pressão.",
+      "tacticalChange": "{{team}} ajusta o plano de jogo.",
+      "bookingRisk": "{{player}} precisa ter cuidado após essa advertência.",
+      "numericalDisadvantage": "{{team}} terá que jogar com menos jogadores.",
+      "injuryConcern": "{{team}} precisa avaliar a lesão.",
+      "injuryChange": "A mudança vem após a lesão de {{victim}}.",
+      "protectLead": "Entram jogadores descansados enquanto {{team}} defende a vantagem.",
+      "chaseGame": "{{team}} muda jogadores para buscar a reação.",
+      "freshLegs": "Entram jogadores descansados para {{team}}.",
+      "sustainedPressure": "Vários chutes recentes mostram a pressão contínua de {{team}}.",
+      "latePressure": "O tempo está acabando enquanto {{team}} busca um gol."
+    },
+    "metrics": {
+      "xg": "Gols esperados",
+      "woodwork": "Traves e travessão",
+      "saves": "Defesas do goleiro",
+      "pulse": "Dinâmica da partida",
+      "shotsLast5": "Chutes nos últimos 5 minutos",
+      "even": "Pressão equilibrada",
+      "pressure": "Pressão ofensiva",
+      "emptyXg": "Não registrado",
+      "alerts": "Alertas da partida",
+      "qualityHint": "Qualidade da chance antes do resultado; uma probabilidade, não um gol garantido.",
+      "derby": "Clássico local"
+    },
+    "release": {
+      "title": "Motor de partidas V2",
+      "engine": "A lógica compartilhada de chutes e pênaltis considera a qualidade da chance, compostura, goleiro e fadiga.",
+      "commentary": "Comentários conforme o placar incluem gols no fim, viradas, marcos, pressão e substituições.",
+      "insights": "Novas telas de gols esperados, traves, defesas e pressão recente explicam a partida.",
+      "decisions": "Avisos táticos, substituições da IA que priorizam lesões e pressão ajustada à fadiga e às expulsões.",
+      "reliability": "Parâmetros mais seguros, goleiros de emergência, registros corretos de cartões e funções válidas após mudanças de formação ou escalação.",
+      "interface": "Ícones do menu renovados e cartões de atualização compactos em todos os idiomas disponíveis.",
+      "thanks": "Obrigado por jogar, testar e compartilhar opiniões. Seus relatos ajudam a melhorar cada partida."
+    }
   }
 }

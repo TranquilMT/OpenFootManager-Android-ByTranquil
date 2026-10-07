@@ -73,6 +73,9 @@ pub(super) fn maybe_card<R: Rng>(
     zone: Zone,
     rng: &mut R,
 ) {
+    if ctx.sent_off.contains(fouler_id) {
+        return;
+    }
     let aggression_factor = ctx
         .team(side)
         .players
@@ -113,19 +116,28 @@ pub(super) fn resolve_penalty<R: Rng>(
     let taker = snap_player(ctx, att_side, Position::Forward, rng);
     let gk = snap_player(ctx, att_side.opposite(), Position::Goalkeeper, rng);
 
-    let shoot_skill = (taker.shooting as f64 + taker.decisions as f64) / 2.0;
-    let gk_skill = (gk.positioning as f64 + gk.decisions as f64) / 2.0;
-    let conversion = (0.75 + (shoot_skill - gk_skill) / 300.0).clamp(0.55, 0.92);
+    let (att_condition, def_condition) = match att_side {
+        Side::Home => (ctx.home_condition, ctx.away_condition),
+        Side::Away => (ctx.away_condition, ctx.home_condition),
+    };
+    let shoot_skill = (taker.shooting as f64 + taker.composure as f64) / 2.0 * att_condition;
+    let gk_skill =
+        (gk.reflexes as f64 + gk.handling as f64 + gk.positioning as f64) / 3.0 * def_condition;
+    let conversion = crate::shot_model::penalty_conversion(shoot_skill, gk_skill);
     let zone = Zone::attacking_box(att_side);
 
     if rng.random_range(0.0..1.0f64) < conversion {
         ctx.emit(
-            MatchEvent::new(minute, EventType::PenaltyGoal, att_side, zone).with_player(&taker.id),
+            MatchEvent::new(minute, EventType::PenaltyGoal, att_side, zone)
+                .with_player(&taker.id)
+                .with_shot(conversion, &gk.id),
         );
         ctx.add_goal(att_side);
     } else {
         ctx.emit(
-            MatchEvent::new(minute, EventType::PenaltyMiss, att_side, zone).with_player(&taker.id),
+            MatchEvent::new(minute, EventType::PenaltyMiss, att_side, zone)
+                .with_player(&taker.id)
+                .with_shot(conversion, &gk.id),
         );
     }
 }

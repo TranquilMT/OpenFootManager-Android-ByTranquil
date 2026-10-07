@@ -1783,7 +1783,7 @@
     "patchPlayers": "Plus de talents, dont de rares stars notées 96 et de solides candidats à la montée.",
     "patchMatches": "Plus de réactions, des frappes sur les montants et un commentaire vocal facultatif.",
     "patchMobile": "Commandes mobiles, boîte de réception, sélections nationales et carrière améliorées.",
-    "patchWelcome": "Bienvenue dans OFMtouch ! Nouveautés de la v0.6.9",
+    "patchWelcome": "OFMtouch 0.7.0 — Moteur de match V2",
     "patchPortraits": "20 visages fictifs de référence diversifient les portraits des joueurs générés.",
     "patchWorld": "Un monde du football plus vaste couvre 29 nations, avec des clubs renforcés en Amérique et en Asie.",
     "patchTransfers": "La stratégie des clubs guide prêts et transferts, avec offres concurrentes et contrôle du budget.",
@@ -2292,7 +2292,8 @@
       "Corner": "Corner",
       "FreeKick": "Coup franc",
       "Foul": "Faute",
-      "PenaltyAwarded": "Penalty accordé"
+      "PenaltyAwarded": "Penalty accordé",
+      "TacticalChange": "adapte son plan de jeu"
     },
     "commentary": {
       "Corner": {
@@ -2555,6 +2556,18 @@
           "0": "Et voilà — c'est terminé !",
           "1": "L'arbitre siffle la fin du match.",
           "2": "Le coup de sifflet final confirme le résultat."
+        }
+      },
+      "TacticalChange": {
+        "headline": "Moteur de match V2",
+        "lines": {
+          "0": "{{team}} adapte son plan de jeu."
+        }
+      },
+      "PassIntercepted": {
+        "headline": "Pression offensive",
+        "lines": {
+          "0": "Une passe de relance échoue sous la pression."
         }
       }
     },
@@ -4340,5 +4353,51 @@
     "prizes": "Les primes de saison sont adaptées aux revenus de la division.",
     "promotion": "La montée restaure la capacité du budget salarial après une relégation.",
     "sponsors": "Les primes des sponsors utilisent le bon classement du championnat national."
+  },
+  "phase70": {
+    "commentary": {
+      "fourGoals": "Quatre buts pour {{player}} dans ce match.",
+      "lateEqualiser": "Une égalisation tardive remet {{team}} à hauteur.",
+      "comebackLead": "{{team}} a transformé son retard en avantage.",
+      "lateLead": "{{team}} prend l’avantage en fin de match.",
+      "goAhead": "{{team}} prend l’avantage dans un match jusque-là à égalité.",
+      "stillBehind": "{{team}} reste derrière malgré ce but.",
+      "commandingLead": "{{team}} mène désormais d’au moins trois buts.",
+      "woodwork": "Le tir touche le cadre du but.",
+      "defensiveError": "Une passe de relance échoue sous la pression.",
+      "tacticalChange": "{{team}} adapte son plan de jeu.",
+      "bookingRisk": "{{player}} doit rester prudent après cet avertissement.",
+      "numericalDisadvantage": "{{team}} devra composer avec moins de joueurs.",
+      "injuryConcern": "{{team}} doit évaluer la blessure.",
+      "injuryChange": "Le changement suit la blessure de {{victim}}.",
+      "protectLead": "Du sang neuf arrive alors que {{team}} défend son avance.",
+      "chaseGame": "{{team}} change de joueurs pour tenter de revenir.",
+      "freshLegs": "Des joueurs frais entrent pour {{team}}.",
+      "sustainedPressure": "Plusieurs tirs récents montrent la pression continue de {{team}}.",
+      "latePressure": "Le temps presse alors que {{team}} cherche un but."
+    },
+    "metrics": {
+      "xg": "Buts attendus",
+      "woodwork": "Poteaux et barre",
+      "saves": "Arrêts du gardien",
+      "pulse": "Dynamique du match",
+      "shotsLast5": "Tirs dans les 5 dernières minutes",
+      "even": "Pression équilibrée",
+      "pressure": "Pression offensive",
+      "emptyXg": "Non enregistré",
+      "alerts": "Alertes du match",
+      "qualityHint": "Qualité de l’occasion avant son résultat : une probabilité, pas un but promis.",
+      "derby": "Derby local"
+    },
+    "release": {
+      "title": "Moteur de match V2",
+      "engine": "Les tirs et penalties partagent une logique intégrant qualité des occasions, sang-froid, gardien et fatigue.",
+      "commentary": "Les commentaires suivent le score : buts tardifs, retours, étapes marquantes, pression et changements.",
+      "insights": "De nouvelles vues des buts attendus, du cadre, des arrêts et de la pression récente expliquent le match.",
+      "decisions": "Notifications tactiques, remplacements de l’IA donnant priorité aux blessures et pressing sensible à la fatigue et aux expulsions.",
+      "reliability": "Paramètres plus sûrs, gardiens de secours, suivi correct des cartons et rôles adaptés après changement de formation ou de composition.",
+      "interface": "Icônes du menu renouvelées et cartes de mise à jour compactes dans toutes les langues prises en charge.",
+      "thanks": "Merci de jouer, de tester et de partager vos retours. Vos signalements améliorent chaque match."
+    }
   }
 }

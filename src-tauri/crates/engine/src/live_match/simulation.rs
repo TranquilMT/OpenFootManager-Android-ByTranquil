@@ -19,7 +19,7 @@ impl LiveMatchState {
         self.current_minute = 0;
         self.ball_zone = Zone::Midfield;
         self.possession = Side::Home;
-        self.first_half_stoppage = rng.random_range(0..=self.config.stoppage_time_max);
+        self.first_half_stoppage = rng.random_range(0..=self.config.stoppage_time_max.min(10));
 
         let evt = MatchEvent::new(0, EventType::KickOff, Side::Home, Zone::Midfield);
         self.events.push(evt.clone());
@@ -39,11 +39,10 @@ impl LiveMatchState {
     pub(super) fn start_second_half<R: Rng>(&mut self, rng: &mut R) -> MinuteResult {
         self.phase = MatchPhase::SecondHalf;
         // Second half starts after halftime; use at least minute 46 but never before current_minute
-        let start_min = self.current_minute.max(46);
-        self.current_minute = start_min;
+        let start_min = self.current_minute;
         self.ball_zone = Zone::Midfield;
         self.possession = Side::Away;
-        self.second_half_stoppage = rng.random_range(0..=self.config.stoppage_time_max);
+        self.second_half_stoppage = rng.random_range(0..=self.config.stoppage_time_max.min(10));
 
         let evt = MatchEvent::new(
             start_min,
@@ -67,8 +66,7 @@ impl LiveMatchState {
 
     pub(super) fn start_et_second_half<R: Rng>(&mut self, rng: &mut R) -> MinuteResult {
         self.phase = MatchPhase::ExtraTimeSecondHalf;
-        let start_min = self.current_minute.max(106);
-        self.current_minute = start_min;
+        let start_min = self.current_minute;
         self.ball_zone = Zone::Midfield;
         self.possession = Side::Home;
         self.et_second_half_stoppage = rng.random_range(0..=2); // short stoppage in ET
@@ -97,16 +95,22 @@ impl LiveMatchState {
         if self.allows_extra_time && self.home_score == self.away_score {
             // Go to extra time
             self.phase = MatchPhase::ExtraTimeFirstHalf;
-            self.current_minute = 91;
+            // The kickoff marker does not consume a played minute.
+            // Keep elapsed time monotonic; the next action advances the clock.
             self.ball_zone = Zone::Midfield;
             self.possession = Side::Home;
             self.et_first_half_stoppage = rng.random_range(0..=2);
 
-            let evt = MatchEvent::new(91, EventType::KickOff, Side::Home, Zone::Midfield);
+            let evt = MatchEvent::new(
+                self.current_minute,
+                EventType::KickOff,
+                Side::Home,
+                Zone::Midfield,
+            );
             self.events.push(evt.clone());
 
             MinuteResult {
-                minute: 91,
+                minute: self.current_minute,
                 phase: MatchPhase::ExtraTimeFirstHalf,
                 events: vec![evt],
                 home_score: self.home_score,
@@ -187,7 +191,7 @@ impl LiveMatchState {
         let def_tactics = self.team_ref(def_side).tactics.clone();
         let mid_att = self.effective_midfield(poss_side) * tactics_tempo_retention(&poss_tactics);
         let mid_def = self.effective_midfield(def_side) * tactics_pressing_contest(&def_tactics);
-        let retain = mid_att / (mid_att + mid_def);
+        let retain = crate::shot_model::contest_probability(mid_att, mid_def);
         if rng.random_range(0.0..1.0f64) > retain {
             // Counter-press: the side losing the ball may win it straight back.
             let rewin = tactics_counter_press_rewin(&poss_tactics);
@@ -236,19 +240,34 @@ impl LiveMatchState {
                 self.events.push(evt.clone());
                 events.push(evt);
             }
-            MatchPhase::SecondHalf if minute >= 90 + self.second_half_stoppage => {
+            MatchPhase::SecondHalf
+                if minute >= 90 + self.first_half_stoppage + self.second_half_stoppage =>
+            {
                 self.phase = MatchPhase::FullTime;
                 let evt = MatchEvent::new(minute, EventType::FullTime, Side::Home, Zone::Midfield);
                 self.events.push(evt.clone());
                 events.push(evt);
             }
-            MatchPhase::ExtraTimeFirstHalf if minute >= 105 + self.et_first_half_stoppage => {
+            MatchPhase::ExtraTimeFirstHalf
+                if minute
+                    >= 105
+                        + self.first_half_stoppage
+                        + self.second_half_stoppage
+                        + self.et_first_half_stoppage =>
+            {
                 self.phase = MatchPhase::ExtraTimeHalfTime;
                 let evt = MatchEvent::new(minute, EventType::HalfTime, Side::Home, Zone::Midfield);
                 self.events.push(evt.clone());
                 events.push(evt);
             }
-            MatchPhase::ExtraTimeSecondHalf if minute >= 120 + self.et_second_half_stoppage => {
+            MatchPhase::ExtraTimeSecondHalf
+                if minute
+                    >= 120
+                        + self.first_half_stoppage
+                        + self.second_half_stoppage
+                        + self.et_first_half_stoppage
+                        + self.et_second_half_stoppage =>
+            {
                 self.phase = MatchPhase::ExtraTimeEnd;
                 let evt = MatchEvent::new(minute, EventType::FullTime, Side::Home, Zone::Midfield);
                 self.events.push(evt.clone());

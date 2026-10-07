@@ -31,6 +31,8 @@ pub fn simulate_with_rng<R: Rng>(
         return MatchReport::from_events(Vec::new(), 0, 0, 0);
     }
 
+    let safe_config = config.sanitized();
+    let config = &safe_config;
     let mut ctx = MatchContext::new(home, away, config);
 
     // Kick-off
@@ -44,7 +46,7 @@ pub fn simulate_with_rng<R: Rng>(
     ctx.possession = Side::Home;
 
     // --- First half (minutes 1–45 + stoppage) ---
-    let first_half_stoppage = rng.random_range(0..=config.stoppage_time_max);
+    let first_half_stoppage = rng.random_range(0..=config.stoppage_time_max.min(10));
     let first_half_end = 45 + first_half_stoppage;
     for minute in 1..=first_half_end {
         simulate_minute(&mut ctx, minute, rng);
@@ -68,7 +70,7 @@ pub fn simulate_with_rng<R: Rng>(
     ));
 
     // --- Second half (minutes 46–90 + stoppage) ---
-    let second_half_stoppage = rng.random_range(0..=config.stoppage_time_max);
+    let second_half_stoppage = rng.random_range(0..=config.stoppage_time_max.min(10));
     let match_end = 90 + first_half_stoppage + second_half_stoppage;
     for minute in second_half_start..=match_end {
         simulate_minute(&mut ctx, minute, rng);
@@ -192,8 +194,12 @@ fn simulate_minute<R: Rng>(ctx: &mut MatchContext, minute: u8, rng: &mut R) {
     // Deplete team condition ~0.18 over 90 minutes (floor at 0.70, but never increase
     // if condition is already below 0.70 at match start).
     let depletion = ctx.config.fatigue_per_minute / 100.0;
-    ctx.home_condition = (ctx.home_condition - depletion).max(0.70_f64.min(ctx.home_condition));
-    ctx.away_condition = (ctx.away_condition - depletion).max(0.70_f64.min(ctx.away_condition));
+    ctx.home_condition = (ctx.home_condition
+        - depletion * shared::tactics_pressing_fatigue(&ctx.home.tactics))
+    .max(0.70_f64.min(ctx.home_condition));
+    ctx.away_condition = (ctx.away_condition
+        - depletion * shared::tactics_pressing_fatigue(&ctx.away.tactics))
+    .max(0.70_f64.min(ctx.away_condition));
 
     let actions = rng.random_range(1..=3u8);
     for _ in 0..actions {
@@ -211,7 +217,7 @@ fn simulate_minute<R: Rng>(ctx: &mut MatchContext, minute: u8, rng: &mut R) {
         * shared::tactics_tempo_retention(&poss_tactics);
     let mid_def = resolution::effective_midfield(ctx, def_side)
         * shared::tactics_pressing_contest(&def_tactics);
-    let retain = mid_att / (mid_att + mid_def);
+    let retain = crate::shot_model::contest_probability(mid_att, mid_def);
     if rng.random_range(0.0..1.0f64) > retain {
         let rewin = shared::tactics_counter_press_rewin(&poss_tactics);
         if rewin > 0.0 && rng.random_range(0.0..1.0f64) < rewin {

@@ -339,6 +339,10 @@ pub struct CompactMatchReport {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct CompactTeamMatchStats {
+    #[serde(default)]
+    pub expected_goals: Option<f64>,
+    #[serde(default)]
+    pub woodwork: u16,
     pub possession_pct: u8,
     pub shots: u16,
     pub shots_on_target: u16,

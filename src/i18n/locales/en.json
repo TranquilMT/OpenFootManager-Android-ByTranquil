@@ -1783,7 +1783,7 @@
     "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
     "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
     "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
-    "patchWelcome": "Welcome to OFMtouch! Here's what's new in v0.6.9",
+    "patchWelcome": "OFMtouch 0.7.0 — Match Engine V2",
     "patchPortraits": "20 fictional source faces bring more variety to generated player portraits.",
     "patchWorld": "A larger football world spans 29 nations, with stronger clubs across the Americas and Asia.",
     "patchTransfers": "Club strategies guide loans and transfer approaches, with competing offers and budget checks.",
@@ -2326,7 +2326,8 @@
       "Corner": "Corner",
       "FreeKick": "Free Kick",
       "Foul": "Foul",
-      "PenaltyAwarded": "Penalty Awarded"
+      "PenaltyAwarded": "Penalty Awarded",
+      "TacticalChange": "adjust their match plan"
     },
     "commentary": {
       "Corner": {
@@ -2589,6 +2590,18 @@
           "0": "That's it — full time!",
           "1": "The referee brings the match to an end.",
           "2": "The final whistle sounds; the result is settled."
+        }
+      },
+      "TacticalChange": {
+        "headline": "Match Engine V2",
+        "lines": {
+          "0": "{{team}} adjust their match plan."
+        }
+      },
+      "PassIntercepted": {
+        "headline": "Attacking pressure",
+        "lines": {
+          "0": "A pressured buildup pass goes astray."
         }
       }
     },
@@ -4340,5 +4353,51 @@
     "prizes": "Season prizes scale with division income.",
     "promotion": "Promotion restores wage budget capacity after relegation.",
     "sponsors": "Sponsor bonuses use the correct domestic league standings."
+  },
+  "phase70": {
+    "commentary": {
+      "fourGoals": "Four goals for {{player}} in this match.",
+      "lateEqualiser": "A late equaliser brings {{team}} level.",
+      "comebackLead": "{{team}} have turned a deficit into a lead.",
+      "lateLead": "{{team}} take the lead late in the match.",
+      "goAhead": "{{team}} move ahead in a previously level game.",
+      "stillBehind": "{{team}} still trail despite that goal.",
+      "commandingLead": "{{team}} now lead by at least three goals.",
+      "woodwork": "The shot hits the frame of the goal.",
+      "defensiveError": "A pressured buildup pass goes astray.",
+      "tacticalChange": "{{team}} adjust their match plan.",
+      "bookingRisk": "{{player}} must be careful after that booking.",
+      "numericalDisadvantage": "{{team}} will have to cope with fewer players.",
+      "injuryConcern": "{{team}} need to assess the injury.",
+      "injuryChange": "The change follows an injury to {{victim}}.",
+      "protectLead": "Fresh legs arrive with {{team}} defending a lead.",
+      "chaseGame": "{{team}} change personnel while chasing the game.",
+      "freshLegs": "Fresh legs enter the match for {{team}}.",
+      "sustainedPressure": "Several recent shots show sustained pressure from {{team}}.",
+      "latePressure": "Time is running out as {{team}} search for a goal."
+    },
+    "metrics": {
+      "xg": "Expected goals",
+      "woodwork": "Woodwork",
+      "saves": "Goalkeeper saves",
+      "pulse": "Match pulse",
+      "shotsLast5": "Shots in last 5 minutes",
+      "even": "Even pressure",
+      "pressure": "Attacking pressure",
+      "emptyXg": "Not recorded",
+      "alerts": "Match alerts",
+      "qualityHint": "Chance quality before the outcome; a probability, not a promised goal.",
+      "derby": "Local derby"
+    },
+    "release": {
+      "title": "Match Engine V2",
+      "engine": "Shared shot and penalty logic uses chance quality, composure, goalkeeper ability and fatigue.",
+      "commentary": "Score-aware commentary covers late goals, comebacks, milestones, pressure and substitutions.",
+      "insights": "New expected-goals, woodwork, saves and recent-pressure views explain the match.",
+      "decisions": "Tactical notifications, injury-first AI substitutions and pressing that responds to fatigue and red cards.",
+      "reliability": "Safer match tuning, emergency keepers, correct booking records and valid roles after formation or lineup changes.",
+      "interface": "Refreshed menu icons and compact update cards, translated across every supported language.",
+      "thanks": "Thank you for playing, testing and sharing feedback. Your reports help improve every match."
+    }
   }
 }

@@ -13,7 +13,7 @@ function readBaseVersion(): string {
 }
 function readCommitSha(): string {
   // @ts-expect-error process is a nodejs global
-  const ciSha: string | undefined = process.env.GITHUB_SHA;
+  const ciSha: string | undefined = process.env.OFM_SOURCE_SHA ?? process.env.GITHUB_SHA;
   if (ciSha) return ciSha.slice(0, 7);
   try {
     return execFileSync("git", ["rev-parse", "--short=7", "HEAD"], {

@@ -9,7 +9,7 @@ use crate::shared::{
 use crate::types::{Position, Side, Zone};
 
 use super::LiveMatchState;
-use super::helpers::{danger_band, foul_severity, save_quality};
+use super::helpers::{danger_band, foul_severity};
 
 // ---------------------------------------------------------------------------
 // Action resolution
@@ -67,6 +67,11 @@ impl LiveMatchState {
                 .with_player(&passer.id);
             let evt2 = MatchEvent::new(minute, EventType::Interception, def_side, ball_zone)
                 .with_player(&interceptor.id);
+            let evt1 = if passer.composure < 55 && pass_skill < press {
+                evt1.with_detail(EventDetail::DefensiveError)
+            } else {
+                evt1
+            };
             self.events.push(evt1.clone());
             self.events.push(evt2.clone());
             events.push(evt1);
@@ -85,6 +90,14 @@ impl LiveMatchState {
     ) -> Vec<MatchEvent> {
         let mut events = Vec::new();
         let attacker = self.snap_player(att_side, Position::Midfielder, rng);
+        let recycle = crate::shared::tactics_tempo_recycle(&self.team_ref(att_side).tactics);
+        if recycle > 0.0 && rng.random_range(0.0..1.0f64) < recycle {
+            let evt = MatchEvent::new(minute, EventType::PassCompleted, att_side, Zone::Midfield)
+                .with_player(&attacker.id);
+            self.events.push(evt.clone());
+            events.push(evt);
+            return events;
+        }
         let defender = self.snap_player(def_side, Position::Midfielder, rng);
 
         let att_raw = (attacker.dribbling as f64
@@ -117,7 +130,7 @@ impl LiveMatchState {
             * crate::shared::home_mod(att_side, &self.config)
             * tactics_tempo_progression(&self.team_ref(att_side).tactics);
         let def_eff = def_rating * def_mod * crate::shared::home_mod(def_side, &self.config);
-        let success = att_eff / (att_eff + def_eff);
+        let success = crate::shot_model::contest_probability(att_eff, def_eff);
 
         if rng.random_range(0.0..1.0f64) < success {
             let evt = MatchEvent::new(minute, EventType::PassCompleted, att_side, Zone::Midfield)
@@ -203,7 +216,7 @@ impl LiveMatchState {
             * def_mod
             * crate::shared::home_mod(def_side, &self.config)
             * tactics_shape_modifier(&self.team_ref(def_side).tactics);
-        let success = att_eff / (att_eff + def_eff);
+        let success = crate::shot_model::contest_probability(att_eff, def_eff);
         let zone = Zone::attacking_third(att_side);
         let cross_prob = tactics_cross_probability(&self.team_ref(att_side).tactics);
 
@@ -222,7 +235,7 @@ impl LiveMatchState {
                 let def_header = self.snap_player(def_side, Position::Defender, rng);
                 let aerial_att = header.aerial as f64;
                 let aerial_def = def_header.aerial as f64;
-                let aerial_win = aerial_att / (aerial_att + aerial_def);
+                let aerial_win = crate::shot_model::contest_probability(aerial_att, aerial_def);
                 if rng.random_range(0.0..1.0f64) < aerial_win {
                     self.ball_zone = Zone::attacking_box(att_side);
                     let shot_events = self.resolve_shot(minute, att_side, rng);
@@ -334,8 +347,15 @@ impl LiveMatchState {
         let gk_rating = self.condition_adjusted_skill(&goalkeeper.id, gk_raw)
             * trait_bonus(&goalkeeper, TraitContext::Goalkeeping);
 
-        let accuracy =
-            (self.config.shot_accuracy_base + (shoot_rating - 50.0) / 200.0).clamp(0.15, 0.85);
+        let accuracy = crate::shot_model::accuracy(self.config.shot_accuracy_base, shoot_rating);
+        let shape = tactics_defensive_conversion_mod(&self.team_ref(def_side).tactics);
+        let conversion = crate::shot_model::conversion(
+            self.config.goal_conversion_base,
+            shoot_rating,
+            gk_rating,
+            shape,
+        );
+        let xg = crate::shot_model::expected_goals(accuracy, conversion);
 
         if rng.random_range(0.0..1.0f64) > accuracy {
             let detail = EventDetail::Shot {
@@ -344,6 +364,7 @@ impl LiveMatchState {
             if rng.random_range(0.0..1.0f64) < 0.4 {
                 let evt = MatchEvent::new(minute, EventType::ShotBlocked, att_side, zone)
                     .with_player(&shooter.id)
+                    .with_shot(xg, &goalkeeper.id)
                     .with_detail(detail);
                 self.events.push(evt.clone());
                 events.push(evt);
@@ -357,6 +378,7 @@ impl LiveMatchState {
                 };
                 let evt = MatchEvent::new(minute, EventType::ShotOffTarget, att_side, zone)
                     .with_player(&shooter.id)
+                    .with_shot(xg, &goalkeeper.id)
                     .with_detail(detail);
                 self.events.push(evt.clone());
                 events.push(evt);
@@ -369,15 +391,11 @@ impl LiveMatchState {
             return events;
         }
 
-        let def_line_mod = tactics_defensive_conversion_mod(&self.team_ref(def_side).tactics);
-        let conversion = (self.config.goal_conversion_base * def_line_mod
-            + (shoot_rating - gk_rating) / 150.0)
-            .clamp(0.10, 0.70);
-
         if rng.random_range(0.0..1.0f64) < conversion {
             let context = self.goal_context(att_side);
             let evt = MatchEvent::new(minute, EventType::Goal, att_side, zone)
                 .with_player(&shooter.id)
+                .with_shot(xg, &goalkeeper.id)
                 .with_secondary(&assister.id)
                 .with_detail(EventDetail::Goal { context });
             self.events.push(evt.clone());
@@ -388,8 +406,10 @@ impl LiveMatchState {
         } else {
             let evt = MatchEvent::new(minute, EventType::ShotSaved, att_side, zone)
                 .with_player(&shooter.id)
+                .with_shot(xg, &goalkeeper.id)
+                .with_secondary(&goalkeeper.id)
                 .with_detail(EventDetail::Save {
-                    quality: save_quality(gk_rating),
+                    quality: crate::shot_model::save_difficulty(xg),
                 });
             self.events.push(evt.clone());
             events.push(evt);
@@ -487,6 +507,9 @@ impl LiveMatchState {
         rng: &mut R,
     ) -> Vec<MatchEvent> {
         let mut events = Vec::new();
+        if self.sent_off.contains(fouler_id) {
+            return events;
+        }
 
         let aggression_factor = self
             .team_ref(side)

@@ -1783,7 +1783,7 @@
     "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
     "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
     "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
-    "patchWelcome": "Vítejte v OFMtouch! Novinky ve verzi v0.6.9",
+    "patchWelcome": "OFMtouch 0.7.0 — Zápasový engine V2",
     "patchPortraits": "20 fiktivních výchozích tváří přináší pestřejší portréty hráčů.",
     "patchWorld": "Fotbalový svět zahrnuje 29 zemí a silnější kluby v Americe a Asii.",
     "patchTransfers": "Strategie klubů řídí hostování a přestupy včetně konkurenčních nabídek a kontroly rozpočtu.",
@@ -2326,7 +2326,8 @@
       "Corner": "Rohový kop",
       "FreeKick": "Přímý kop",
       "Foul": "Faul",
-      "PenaltyAwarded": "Nařízená penalta"
+      "PenaltyAwarded": "Nařízená penalta",
+      "TacticalChange": "upravuje svůj herní plán"
     },
     "commentary": {
       "Corner": {
@@ -2589,6 +2590,18 @@
           "0": "A je to tady — konec zápasu!",
           "1": "Rozhodčí ukončil dnešní utkání.",
           "2": "Závěrečný hvizd potvrzuje výsledek."
+        }
+      },
+      "TacticalChange": {
+        "headline": "Zápasový engine V2",
+        "lines": {
+          "0": "{{team}} upravuje svůj herní plán."
+        }
+      },
+      "PassIntercepted": {
+        "headline": "Útočný tlak",
+        "lines": {
+          "0": "Přihrávka při rozehrávce pod tlakem se nepovedla."
         }
       }
     },
@@ -4340,5 +4353,51 @@
     "prizes": "Sezónní odměny odpovídají příjmům soutěže.",
     "promotion": "Postup obnovuje kapacitu mzdového rozpočtu po sestupu.",
     "sponsors": "Sponzorské bonusy používají správnou tabulku domácí ligy."
+  },
+  "phase70": {
+    "commentary": {
+      "fourGoals": "{{player}} vstřelil v tomto zápase čtyři góly.",
+      "lateEqualiser": "Pozdní vyrovnání vrací {{team}} do hry.",
+      "comebackLead": "{{team}} otočil nepříznivý stav a vede.",
+      "lateLead": "{{team}} se v závěru ujímá vedení.",
+      "goAhead": "{{team}} jde v dosud vyrovnaném zápase do vedení.",
+      "stillBehind": "{{team}} i po tomto gólu stále prohrává.",
+      "commandingLead": "{{team}} nyní vede nejméně o tři góly.",
+      "woodwork": "Střela zasahuje brankovou konstrukci.",
+      "defensiveError": "Přihrávka při rozehrávce pod tlakem se nepovedla.",
+      "tacticalChange": "{{team}} upravuje svůj herní plán.",
+      "bookingRisk": "{{player}} si po této kartě musí dát pozor.",
+      "numericalDisadvantage": "{{team}} se musí vypořádat s menším počtem hráčů.",
+      "injuryConcern": "{{team}} musí posoudit zranění.",
+      "injuryChange": "Střídání následuje po zranění hráče {{victim}}.",
+      "protectLead": "Čerstvé síly přicházejí, když {{team}} brání vedení.",
+      "chaseGame": "{{team}} střídá při snaze dotáhnout skóre.",
+      "freshLegs": "Za {{team}} přicházejí čerstvé síly.",
+      "sustainedPressure": "Několik nedávných střel ukazuje trvalý tlak týmu {{team}}.",
+      "latePressure": "Čas ubývá a {{team}} hledá cestu ke gólu."
+    },
+    "metrics": {
+      "xg": "Očekávané góly",
+      "woodwork": "Branková konstrukce",
+      "saves": "Zákroky brankáře",
+      "pulse": "Vývoj zápasu",
+      "shotsLast5": "Střely za posledních 5 minut",
+      "even": "Vyrovnaný tlak",
+      "pressure": "Útočný tlak",
+      "emptyXg": "Nezaznamenáno",
+      "alerts": "Upozornění ze zápasu",
+      "qualityHint": "Kvalita šance před výsledkem; pravděpodobnost, nikoli zaručený gól.",
+      "derby": "Místní derby"
+    },
+    "release": {
+      "title": "Zápasový engine V2",
+      "engine": "Sdílená logika střel a penalt zohledňuje kvalitu šance, klid, schopnosti brankáře a únavu.",
+      "commentary": "Komentář reaguje na skóre, pozdní góly, obraty, milníky, tlak a střídání.",
+      "insights": "Nové přehledy očekávaných gólů, konstrukce, zákroků a nedávného tlaku vysvětlují zápas.",
+      "decisions": "Taktická oznámení, střídání zraněných hráčů jako priorita AI a presink ovlivněný únavou a červenými kartami.",
+      "reliability": "Bezpečnější nastavení zápasu, náhradní brankáři, správné záznamy karet a platné role po změně formace či sestavy.",
+      "interface": "Vylepšené ikony menu a stručné karty aktualizací ve všech podporovaných jazycích.",
+      "thanks": "Děkujeme za hraní, testování a zpětnou vazbu. Vaše hlášení pomáhají zlepšit každý zápas."
+    }
   }
 }

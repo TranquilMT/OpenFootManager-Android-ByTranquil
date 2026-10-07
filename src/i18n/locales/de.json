@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "Willkommen bei OFMtouch! Neu in v0.6.9",
+    "patchWelcome": "OFMtouch 0.7.0 — Spielsimulation V2",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
@@ -2292,7 +2292,8 @@
       "Corner": "Ecke",
       "FreeKick": "Freistoß",
       "Foul": "Foul",
-      "PenaltyAwarded": "Elfmeter gegeben"
+      "PenaltyAwarded": "Elfmeter gegeben",
+      "TacticalChange": "passt den Spielplan an"
     },
     "commentary": {
       "Corner": {
@@ -2555,6 +2556,18 @@
           "0": "Das war's — Abpfiff!",
           "1": "Der Schiedsrichter beendet das Spiel.",
           "2": "Der Schlusspfiff besiegelt das Ergebnis."
+        }
+      },
+      "TacticalChange": {
+        "headline": "Spielsimulation V2",
+        "lines": {
+          "0": "{{team}} passt den Spielplan an."
+        }
+      },
+      "PassIntercepted": {
+        "headline": "Angriffsdruck",
+        "lines": {
+          "0": "Ein Pass im Spielaufbau geht unter Druck daneben."
         }
       }
     },
@@ -4340,5 +4353,51 @@
     "prizes": "Saisonprämien richten sich nach den Einnahmen der Liga.",
     "promotion": "Ein Aufstieg stellt die Gehaltsbudgetkapazität nach einem Abstieg wieder her.",
     "sponsors": "Sponsorenboni verwenden die korrekte Tabelle der nationalen Liga."
+  },
+  "phase70": {
+    "commentary": {
+      "fourGoals": "Vier Tore für {{player}} in diesem Spiel.",
+      "lateEqualiser": "Ein später Ausgleich bringt {{team}} wieder auf Augenhöhe.",
+      "comebackLead": "{{team}} hat einen Rückstand in eine Führung verwandelt.",
+      "lateLead": "{{team}} geht spät im Spiel in Führung.",
+      "goAhead": "{{team}} geht in einem zuvor ausgeglichenen Spiel in Führung.",
+      "stillBehind": "{{team}} liegt trotz dieses Tores weiter zurück.",
+      "commandingLead": "{{team}} führt jetzt mit mindestens drei Toren.",
+      "woodwork": "Der Schuss trifft das Torgestänge.",
+      "defensiveError": "Ein Pass im Spielaufbau geht unter Druck daneben.",
+      "tacticalChange": "{{team}} passt den Spielplan an.",
+      "bookingRisk": "{{player}} muss nach dieser Verwarnung vorsichtig sein.",
+      "numericalDisadvantage": "{{team}} muss mit weniger Spielern auskommen.",
+      "injuryConcern": "{{team}} muss die Verletzung beurteilen.",
+      "injuryChange": "Der Wechsel folgt auf die Verletzung von {{victim}}.",
+      "protectLead": "Frische Kräfte kommen, während {{team}} die Führung verteidigt.",
+      "chaseGame": "{{team}} wechselt beim Versuch, den Rückstand aufzuholen.",
+      "freshLegs": "Frische Kräfte kommen für {{team}} ins Spiel.",
+      "sustainedPressure": "Mehrere jüngste Schüsse zeigen anhaltenden Druck von {{team}}.",
+      "latePressure": "Die Zeit läuft ab, während {{team}} ein Tor sucht."
+    },
+    "metrics": {
+      "xg": "Erwartete Tore",
+      "woodwork": "Torgestänge",
+      "saves": "Torwartparaden",
+      "pulse": "Spielverlauf",
+      "shotsLast5": "Schüsse in den letzten 5 Minuten",
+      "even": "Ausgeglichener Druck",
+      "pressure": "Angriffsdruck",
+      "emptyXg": "Nicht erfasst",
+      "alerts": "Spielmeldungen",
+      "qualityHint": "Qualität der Chance vor dem Ergebnis; eine Wahrscheinlichkeit, kein versprochenes Tor.",
+      "derby": "Stadtderby"
+    },
+    "release": {
+      "title": "Spielsimulation V2",
+      "engine": "Gemeinsame Schuss- und Elfmeterlogik berücksichtigt Chancenqualität, Nervenstärke, Torwartfähigkeiten und Ermüdung.",
+      "commentary": "Spielstandsabhängige Kommentare beschreiben späte Tore, Aufholjagden, Meilensteine, Druck und Wechsel.",
+      "insights": "Neue Ansichten zu erwarteten Toren, Pfostentreffern, Paraden und aktuellem Druck erklären das Spiel.",
+      "decisions": "Taktikmeldungen, verletzungsorientierte KI-Wechsel und Pressing, das auf Ermüdung und Platzverweise reagiert.",
+      "reliability": "Sicherere Spielparameter, Notfalltorhüter, korrekte Kartenstatistiken und passende Rollen nach Formations- oder Aufstellungswechseln.",
+      "interface": "Überarbeitete Menüsymbole und kompakte Updatekarten in allen unterstützten Sprachen.",
+      "thanks": "Danke fürs Spielen, Testen und Teilen eurer Rückmeldungen. Eure Meldungen verbessern jedes Spiel."
+    }
   }
 }

@@ -396,6 +396,15 @@ pub(crate) fn tactics_tempo_progression(tactics: &TacticsConfig) -> f64 {
     }
 }
 
+/// Patient play can circulate a completed pass instead of forcing progression.
+/// Direct play returns zero, so it consumes no additional random draw.
+pub(crate) fn tactics_tempo_recycle(tactics: &TacticsConfig) -> f64 {
+    match tactics.tempo {
+        Tempo::Patient => 0.25,
+        Tempo::Direct => 0.0,
+    }
+}
+
 /// Tempo's retention side: Patient circulates and holds possession longer.
 /// Applied to the possessing side's weight in the per-minute possession contest.
 pub(crate) fn tactics_tempo_retention(tactics: &TacticsConfig) -> f64 {
@@ -477,6 +486,38 @@ pub(crate) fn home_mod(side: Side, config: &MatchConfig) -> f64 {
     }
 }
 
+/// Effective unit strength keeps dismissed slots in the denominator so a red
+/// card cannot improve a team's average by removing its weakest player.
+pub(crate) fn active_position_rating(
+    players: &[PlayerData],
+    unavailable: &std::collections::HashSet<String>,
+    position: Position,
+    attribute: fn(&PlayerData) -> f64,
+    condition_factor: impl Fn(&PlayerData) -> f64,
+) -> f64 {
+    let slots = players.iter().filter(|p| p.position == position).count();
+    let active = |p: &&PlayerData| !unavailable.contains(&p.id);
+    if slots == 0 {
+        if players.is_empty() {
+            return 0.0;
+        }
+        return 40.0
+            * players
+                .iter()
+                .filter(active)
+                .map(condition_factor)
+                .sum::<f64>()
+            / players.len() as f64;
+    }
+    players
+        .iter()
+        .filter(|p| p.position == position)
+        .filter(active)
+        .map(|p| attribute(p) * condition_factor(p))
+        .sum::<f64>()
+        / slots as f64
+}
+
 #[cfg(test)]
 mod phase_modifier_tests {
     use super::*;
@@ -505,6 +546,8 @@ mod phase_modifier_tests {
 
     #[test]
     fn tempo_directions() {
+        assert_eq!(tactics_tempo_recycle(&TacticsConfig::default()), 0.0);
+        assert!(tactics_tempo_recycle(&cfg(|c| c.tempo = Tempo::Patient)) > 0.0);
         // Direct is neutral; Patient progresses slower but retains more.
         assert!(tactics_tempo_progression(&cfg(|c| c.tempo = Tempo::Patient)) < 1.0);
         assert_eq!(

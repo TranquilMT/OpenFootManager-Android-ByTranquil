@@ -26,6 +26,10 @@ pub struct TeamStats {
     pub yellow_cards: u8,
     pub red_cards: u8,
     pub possession_ticks: u32,
+    #[serde(default)]
+    pub expected_goals: f64,
+    #[serde(default)]
+    pub woodwork: u16,
 }
 
 impl TeamStats {
@@ -58,6 +62,10 @@ pub struct PlayerMatchStats {
     pub red_cards: u8,
     /// Match rating 0.0–10.0, computed after the match.
     pub rating: f32,
+    #[serde(default)]
+    pub saves: u16,
+    #[serde(default)]
+    pub expected_goals: f64,
 }
 
 // ---------------------------------------------------------------------------
@@ -154,6 +162,23 @@ impl MatchReport {
                 Side::Away => &mut away_stats,
             };
 
+            if let Some(shot) = &event.shot {
+                stats.expected_goals += shot.expected_goals;
+                if let Some(pid) = &event.player_id {
+                    player_stats.entry(pid.clone()).or_default().expected_goals +=
+                        shot.expected_goals;
+                }
+                if event.event_type == EventType::ShotSaved && !shot.goalkeeper_id.is_empty() {
+                    player_stats
+                        .entry(shot.goalkeeper_id.clone())
+                        .or_default()
+                        .saves += 1;
+                }
+            }
+            if event.detail == Some(crate::event::EventDetail::Woodwork) {
+                stats.woodwork += 1;
+            }
+
             // Track set-piece window: reset on events that clear the opportunity
             match &event.event_type {
                 EventType::Corner => last_set_piece = Some((EventType::Corner, event.side)),
@@ -201,7 +226,10 @@ impl MatchReport {
                     goals.push(GoalDetail {
                         minute: event.minute,
                         scorer_id: pid.to_string(),
-                        assist_id: event.secondary_player_id.clone(),
+                        assist_id: event
+                            .secondary_player_id
+                            .clone()
+                            .filter(|assist| assist != pid),
                         goal_source: source,
                         side: event.side,
                     });
@@ -211,7 +239,9 @@ impl MatchReport {
                         ps.shots += 1;
                         ps.shots_on_target += 1;
                     }
-                    if let Some(ref assist_id) = event.secondary_player_id {
+                    if let Some(ref assist_id) = event.secondary_player_id
+                        && assist_id != pid
+                    {
                         let ps = player_stats.entry(assist_id.clone()).or_default();
                         ps.assists += 1;
                     }

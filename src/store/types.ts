@@ -582,6 +582,8 @@ export interface CompactMatchEventData {
 }
 
 export interface CompactTeamMatchStatsData {
+  expected_goals?: number | null;
+  woodwork?: number;
   possession_pct: number;
   shots: number;
   shots_on_target: number;

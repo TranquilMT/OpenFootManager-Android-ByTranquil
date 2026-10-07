@@ -16,6 +16,9 @@ pub struct MatchEvent {
     /// events that carry no extra colour.
     #[serde(default)]
     pub detail: Option<EventDetail>,
+    /// Pre-outcome chance probability; old event logs have no shot metadata.
+    #[serde(default)]
+    pub shot: Option<ShotInfo>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -68,6 +71,7 @@ pub enum EventType {
     Injury,
     GoalKick,
     Substitution,
+    TacticalChange,
 }
 
 /// Truthful, engine-derived qualifiers used to colour commentary.
@@ -80,6 +84,8 @@ pub enum EventDetail {
     },
     /// An off-target shot that strikes the frame before going out of play.
     Woodwork,
+    /// A buildup pass lost under pressure by a low-composure defender.
+    DefensiveError,
     Save {
         quality: SaveQuality,
     },
@@ -120,6 +126,12 @@ pub enum GoalContext {
     Consolation,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ShotInfo {
+    pub expected_goals: f64,
+    pub goalkeeper_id: String,
+}
+
 impl MatchEvent {
     pub fn new(minute: u8, event_type: EventType, side: Side, zone: Zone) -> Self {
         Self {
@@ -130,6 +142,7 @@ impl MatchEvent {
             player_id: None,
             secondary_player_id: None,
             detail: None,
+            shot: None,
         }
     }
 
@@ -145,6 +158,18 @@ impl MatchEvent {
 
     pub fn with_detail(mut self, detail: EventDetail) -> Self {
         self.detail = Some(detail);
+        self
+    }
+
+    pub fn with_shot(mut self, expected_goals: f64, goalkeeper_id: &str) -> Self {
+        self.shot = Some(ShotInfo {
+            expected_goals: if expected_goals.is_finite() {
+                expected_goals.clamp(0.0, 1.0)
+            } else {
+                0.0
+            },
+            goalkeeper_id: goalkeeper_id.to_string(),
+        });
         self
     }
 
@@ -179,5 +204,10 @@ mod tests {
                 context: GoalContext::Equaliser
             })
         );
+    }
+    #[test]
+    fn old_event_json_loads_without_shot_metadata() {
+        let event: MatchEvent = serde_json::from_str(r#"{"minute":10,"event_type":"Goal","side":"Home","zone":"AwayBox","player_id":"p1","secondary_player_id":null}"#).unwrap();
+        assert!(event.shot.is_none());
     }
 }

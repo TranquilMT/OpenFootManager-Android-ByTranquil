@@ -42,6 +42,20 @@ afterAll(async () => {
 });
 
 describe("getCommentary", () => {
+  it("never treats a team-score qualifier as a scorer milestone", () => {
+    const previous = goal(10, "another-scorer");
+    const equaliser = { ...goal(20, "p2"), side: "Away" as const };
+    for (let minute = 55; minute < 75; minute++) {
+      const current = goal(minute, "p1");
+      const result = getCommentary(
+        current,
+        snapshot([previous, equaliser, current]),
+        i18n.t.bind(i18n),
+      );
+      expect(result?.line.toLowerCase()).not.toMatch(/scores again|pulling clear/);
+    }
+  });
+
   it("returns null for non-key events", () => {
     const evt: MatchEvent = {
       minute: 5,

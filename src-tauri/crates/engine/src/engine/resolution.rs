@@ -86,6 +86,14 @@ fn resolve_midfield<R: Rng>(
     rng: &mut R,
 ) {
     let attacker = snap_player(ctx, att_side, Position::Midfielder, rng);
+    let recycle = crate::shared::tactics_tempo_recycle(&ctx.team(att_side).tactics);
+    if recycle > 0.0 && rng.random_range(0.0..1.0f64) < recycle {
+        ctx.emit(
+            MatchEvent::new(minute, EventType::PassCompleted, att_side, Zone::Midfield)
+                .with_player(&attacker.id),
+        );
+        return;
+    }
     let defender = snap_player(ctx, def_side, Position::Midfielder, rng);
 
     let att_rating = (attacker.dribbling as f64
@@ -116,7 +124,7 @@ fn resolve_midfield<R: Rng>(
         * home_mod(att_side, ctx.config)
         * tactics_tempo_progression(&ctx.team(att_side).tactics);
     let def_eff = def_rating * def_mod * home_mod(def_side, ctx.config);
-    let success = att_eff / (att_eff + def_eff);
+    let success = crate::shot_model::contest_probability(att_eff, def_eff);
 
     if rng.random_range(0.0..1.0f64) < success {
         ctx.emit(
@@ -193,7 +201,7 @@ fn resolve_attacking_third<R: Rng>(
         * def_mod
         * home_mod(def_side, ctx.config)
         * tactics_shape_modifier(&ctx.team(def_side).tactics);
-    let success = att_eff / (att_eff + def_eff);
+    let success = crate::shot_model::contest_probability(att_eff, def_eff);
     let zone = Zone::attacking_third(att_side);
     let cross_prob = tactics_cross_probability(&ctx.team(att_side).tactics);
 
@@ -209,7 +217,7 @@ fn resolve_attacking_third<R: Rng>(
             let def_header = snap_player(ctx, def_side, Position::Defender, rng);
             let aerial_att = header.aerial as f64;
             let aerial_def = def_header.aerial as f64;
-            let aerial_win = aerial_att / (aerial_att + aerial_def);
+            let aerial_win = crate::shot_model::contest_probability(aerial_att, aerial_def);
             if rng.random_range(0.0..1.0f64) < aerial_win {
                 ctx.ball_zone = Zone::attacking_box(att_side);
                 resolve_shot(ctx, minute, att_side, rng);
@@ -326,21 +334,30 @@ fn resolve_shot<R: Rng>(ctx: &mut MatchContext, minute: u8, att_side: Side, rng:
             * trait_bonus(&goalkeeper, TraitContext::Goalkeeping)
             * def_cond;
 
-    let accuracy =
-        (ctx.config.shot_accuracy_base + (shoot_rating - 50.0) / 200.0).clamp(0.15, 0.85);
+    let accuracy = crate::shot_model::accuracy(ctx.config.shot_accuracy_base, shoot_rating);
+    let shape = tactics_defensive_conversion_mod(&ctx.team(def_side).tactics);
+    let conversion = crate::shot_model::conversion(
+        ctx.config.goal_conversion_base,
+        shoot_rating,
+        gk_rating,
+        shape,
+    );
+    let xg = crate::shot_model::expected_goals(accuracy, conversion);
 
     if rng.random_range(0.0..1.0f64) > accuracy {
         if rng.random_range(0.0..1.0f64) < 0.4 {
             ctx.emit(
                 MatchEvent::new(minute, EventType::ShotBlocked, att_side, zone)
-                    .with_player(&shooter.id),
+                    .with_player(&shooter.id)
+                    .with_shot(xg, &goalkeeper.id),
             );
             // Blocked shot: ball stays in area, defender clears to midfield
             ctx.possession = def_side;
             ctx.ball_zone = Zone::Midfield;
         } else {
             let shot = MatchEvent::new(minute, EventType::ShotOffTarget, att_side, zone)
-                .with_player(&shooter.id);
+                .with_player(&shooter.id)
+                .with_shot(xg, &goalkeeper.id);
             let shot = if rng.random_range(0.0..1.0f64) < 0.12 {
                 shot.with_detail(EventDetail::Woodwork)
             } else {
@@ -354,23 +371,39 @@ fn resolve_shot<R: Rng>(ctx: &mut MatchContext, minute: u8, att_side: Side, rng:
         return;
     }
 
-    let def_line_mod = tactics_defensive_conversion_mod(&ctx.team(def_side).tactics);
-    let conversion = (ctx.config.goal_conversion_base * def_line_mod
-        + (shoot_rating - gk_rating) / 150.0)
-        .clamp(0.10, 0.70);
-
     if rng.random_range(0.0..1.0f64) < conversion {
         ctx.emit(
             MatchEvent::new(minute, EventType::Goal, att_side, zone)
                 .with_player(&shooter.id)
-                .with_secondary(&assister.id),
+                .with_shot(xg, &goalkeeper.id)
+                .with_secondary(&assister.id)
+                .with_detail(EventDetail::Goal {
+                    context: crate::shot_model::goal_context(
+                        if att_side == Side::Home {
+                            ctx.home_score
+                        } else {
+                            ctx.away_score
+                        },
+                        if att_side == Side::Home {
+                            ctx.away_score
+                        } else {
+                            ctx.home_score
+                        },
+                    ),
+                }),
         );
         ctx.add_goal(att_side);
         ctx.possession = def_side;
         ctx.ball_zone = Zone::Midfield;
     } else {
         ctx.emit(
-            MatchEvent::new(minute, EventType::ShotSaved, att_side, zone).with_player(&shooter.id),
+            MatchEvent::new(minute, EventType::ShotSaved, att_side, zone)
+                .with_player(&shooter.id)
+                .with_shot(xg, &goalkeeper.id)
+                .with_secondary(&goalkeeper.id)
+                .with_detail(EventDetail::Save {
+                    quality: crate::shot_model::save_difficulty(xg),
+                }),
         );
         // 40% of saves → corner (keeper parries wide), 60% → goal kick (keeper catches)
         if rng.random_range(0.0..1.0f64) < 0.40 {
@@ -390,16 +423,34 @@ fn resolve_shot<R: Rng>(ctx: &mut MatchContext, minute: u8, att_side: Side, rng:
 // ---------------------------------------------------------------------------
 
 pub(super) fn effective_midfield(ctx: &MatchContext, side: Side) -> f64 {
-    let base = ctx.team(side).midfield_rating();
+    let condition = match side {
+        Side::Home => ctx.home_condition,
+        Side::Away => ctx.away_condition,
+    };
+    let base = crate::shared::active_position_rating(
+        &ctx.team(side).players,
+        &ctx.sent_off,
+        Position::Midfielder,
+        |p| (p.passing as f64 + p.vision as f64 + p.decisions as f64 + p.stamina as f64) / 4.0,
+        |_| condition,
+    );
     let modifier = play_style_modifier(ctx.team(side).play_style, PlayStylePhase::Midfield, true);
     base * modifier * home_mod(side, ctx.config)
 }
 
 fn effective_press(ctx: &MatchContext, pressing_side: Side) -> f64 {
     let team = ctx.team(pressing_side);
-    let base = team.position_attr_avg(Position::Midfielder, |p| {
-        ((p.stamina as u16 + p.tackling as u16 + p.pace as u16) / 3) as u8
-    });
+    let condition = match pressing_side {
+        Side::Home => ctx.home_condition,
+        Side::Away => ctx.away_condition,
+    };
+    let base = crate::shared::active_position_rating(
+        &team.players,
+        &ctx.sent_off,
+        Position::Midfielder,
+        |p| (p.stamina as f64 + p.tackling as f64 + p.pace as f64) / 3.0,
+        |_| condition,
+    );
     let modifier = play_style_modifier(team.play_style, PlayStylePhase::Press, true);
     base * modifier * tactics_pressing_press(&team.tactics) * home_mod(pressing_side, ctx.config)
 }

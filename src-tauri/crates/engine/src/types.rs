@@ -356,6 +356,52 @@ pub struct MatchConfig {
     pub injury_probability: f64,
 }
 
+impl MatchConfig {
+    /// Normalize external tuning before it reaches random draws or match clocks.
+    pub fn sanitized(&self) -> Self {
+        let defaults = Self::default();
+        let probability = |value: f64, fallback: f64| {
+            if value.is_finite() {
+                value.clamp(0.0, 1.0)
+            } else {
+                fallback
+            }
+        };
+        Self {
+            shot_accuracy_base: probability(self.shot_accuracy_base, defaults.shot_accuracy_base),
+            goal_conversion_base: probability(
+                self.goal_conversion_base,
+                defaults.goal_conversion_base,
+            ),
+            foul_probability: probability(self.foul_probability, defaults.foul_probability),
+            yellow_card_probability: probability(
+                self.yellow_card_probability,
+                defaults.yellow_card_probability,
+            ),
+            red_card_probability: probability(
+                self.red_card_probability,
+                defaults.red_card_probability,
+            ),
+            penalty_probability: probability(
+                self.penalty_probability,
+                defaults.penalty_probability,
+            ),
+            injury_probability: probability(self.injury_probability, defaults.injury_probability),
+            fatigue_per_minute: if self.fatigue_per_minute.is_finite() {
+                self.fatigue_per_minute.clamp(0.0, 5.0)
+            } else {
+                defaults.fatigue_per_minute
+            },
+            home_advantage: if self.home_advantage.is_finite() {
+                self.home_advantage.clamp(0.5, 1.5)
+            } else {
+                defaults.home_advantage
+            },
+            stoppage_time_max: self.stoppage_time_max.min(10),
+        }
+    }
+}
+
 impl Default for MatchConfig {
     fn default() -> Self {
         Self {
@@ -453,5 +499,82 @@ impl Zone {
     /// Is this zone the attacking box for the given side?
     pub fn is_box_for(self, attacking_side: Side) -> bool {
         self == Zone::attacking_box(attacking_side)
+    }
+}
+
+#[cfg(test)]
+mod v2_configuration_tests {
+    use super::MatchConfig;
+    #[test]
+    fn nonfinite_probabilities_use_defaults() {
+        let config = MatchConfig {
+            foul_probability: f64::NAN,
+            injury_probability: f64::INFINITY,
+            ..MatchConfig::default()
+        }
+        .sanitized();
+        assert_eq!(
+            config.foul_probability,
+            MatchConfig::default().foul_probability
+        );
+        assert_eq!(
+            config.injury_probability,
+            MatchConfig::default().injury_probability
+        );
+    }
+    #[test]
+    fn probabilities_are_bounded() {
+        let config = MatchConfig {
+            yellow_card_probability: 3.0,
+            red_card_probability: -1.0,
+            ..MatchConfig::default()
+        }
+        .sanitized();
+        assert_eq!(config.yellow_card_probability, 1.0);
+        assert_eq!(config.red_card_probability, 0.0);
+    }
+    #[test]
+    fn negative_fatigue_cannot_restore_fitness() {
+        assert_eq!(
+            MatchConfig {
+                fatigue_per_minute: -1.0,
+                ..MatchConfig::default()
+            }
+            .sanitized()
+            .fatigue_per_minute,
+            0.0
+        );
+    }
+    #[test]
+    fn stoppage_limits_keep_the_clock_representable() {
+        assert_eq!(
+            MatchConfig {
+                stoppage_time_max: 255,
+                ..MatchConfig::default()
+            }
+            .sanitized()
+            .stoppage_time_max,
+            10
+        );
+    }
+    #[test]
+    fn home_advantage_remains_finite() {
+        assert!(
+            MatchConfig {
+                home_advantage: f64::NAN,
+                ..MatchConfig::default()
+            }
+            .sanitized()
+            .home_advantage
+            .is_finite()
+        );
+    }
+    #[test]
+    fn default_configuration_is_unchanged() {
+        let config = MatchConfig::default();
+        assert_eq!(
+            serde_json::to_value(&config).unwrap(),
+            serde_json::to_value(config.sanitized()).unwrap()
+        );
     }
 }
