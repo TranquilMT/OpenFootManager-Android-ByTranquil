@@ -17,4 +17,6 @@ mod tests {
     fn conversion_respects_defensive_shape() { assert!(conversion(0.36, 60.0, 60.0, 0.9) < conversion(0.36, 60.0, 60.0, 1.1)); }
     #[test]
     fn conversion_is_bounded() { assert_eq!(conversion(10.0, 999.0, 0.0, 10.0), 0.70); }
+    #[test]
+    fn invalid_conversion_cannot_poison_a_match() { assert!(conversion(f64::NAN, f64::INFINITY, 0.0, 1.0).is_finite()); }
 }
