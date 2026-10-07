@@ -1,5 +1,5 @@
 use crate::event::{EventType, MatchEvent};
-use crate::types::{Position, Side, Zone};
+use crate::types::{Position, Side, Zone, PlayerRole, is_role_valid_for_position};
 
 use super::{LiveMatchState, SubstitutionRecord};
 
