@@ -86,9 +86,12 @@ fn resolve_midfield<R: Rng>(
     rng: &mut R,
 ) {
     let attacker = snap_player(ctx, att_side, Position::Midfielder, rng);
-    let recycle=crate::shared::tactics_tempo_recycle(&ctx.team(att_side).tactics);
-    if recycle>0.0 && rng.random_range(0.0..1.0f64)<recycle {
-        ctx.emit(MatchEvent::new(minute,EventType::PassCompleted,att_side,Zone::Midfield).with_player(&attacker.id));
+    let recycle = crate::shared::tactics_tempo_recycle(&ctx.team(att_side).tactics);
+    if recycle > 0.0 && rng.random_range(0.0..1.0f64) < recycle {
+        ctx.emit(
+            MatchEvent::new(minute, EventType::PassCompleted, att_side, Zone::Midfield)
+                .with_player(&attacker.id),
+        );
         return;
     }
     let defender = snap_player(ctx, def_side, Position::Midfielder, rng);

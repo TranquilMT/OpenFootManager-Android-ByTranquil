@@ -398,8 +398,11 @@ pub(crate) fn tactics_tempo_progression(tactics: &TacticsConfig) -> f64 {
 
 /// Patient play can circulate a completed pass instead of forcing progression.
 /// Direct play returns zero, so it consumes no additional random draw.
-pub(crate) fn tactics_tempo_recycle(tactics:&TacticsConfig) -> f64 {
-    match tactics.tempo { Tempo::Patient=>0.25,Tempo::Direct=>0.0 }
+pub(crate) fn tactics_tempo_recycle(tactics: &TacticsConfig) -> f64 {
+    match tactics.tempo {
+        Tempo::Patient => 0.25,
+        Tempo::Direct => 0.0,
+    }
 }
 
 /// Tempo's retention side: Patient circulates and holds possession longer.
@@ -511,8 +514,8 @@ mod phase_modifier_tests {
 
     #[test]
     fn tempo_directions() {
-        assert_eq!(tactics_tempo_recycle(&TacticsConfig::default()),0.0);
-        assert!(tactics_tempo_recycle(&cfg(|c|c.tempo=Tempo::Patient))>0.0);
+        assert_eq!(tactics_tempo_recycle(&TacticsConfig::default()), 0.0);
+        assert!(tactics_tempo_recycle(&cfg(|c| c.tempo = Tempo::Patient)) > 0.0);
         // Direct is neutral; Patient progresses slower but retains more.
         assert!(tactics_tempo_progression(&cfg(|c| c.tempo = Tempo::Patient)) < 1.0);
         assert_eq!(

@@ -90,10 +90,12 @@ impl LiveMatchState {
     ) -> Vec<MatchEvent> {
         let mut events = Vec::new();
         let attacker = self.snap_player(att_side, Position::Midfielder, rng);
-        let recycle=crate::shared::tactics_tempo_recycle(&self.team_ref(att_side).tactics);
-        if recycle>0.0 && rng.random_range(0.0..1.0f64)<recycle {
-            let evt=MatchEvent::new(minute,EventType::PassCompleted,att_side,Zone::Midfield).with_player(&attacker.id);
-            self.events.push(evt.clone()); events.push(evt);
+        let recycle = crate::shared::tactics_tempo_recycle(&self.team_ref(att_side).tactics);
+        if recycle > 0.0 && rng.random_range(0.0..1.0f64) < recycle {
+            let evt = MatchEvent::new(minute, EventType::PassCompleted, att_side, Zone::Midfield)
+                .with_player(&attacker.id);
+            self.events.push(evt.clone());
+            events.push(evt);
             return events;
         }
         let defender = self.snap_player(def_side, Position::Midfielder, rng);
