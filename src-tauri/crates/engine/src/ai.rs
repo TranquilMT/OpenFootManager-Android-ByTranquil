@@ -125,7 +125,7 @@ fn consider_substitution<R: Rng>(
 
     // --- Fatigue-based substitutions (after minute 55+) ---
     let fatigue_threshold = if minute >= 75 {
-        55.0 - experience_factor * 10.0 // experienced managers sub earlier
+        55.0 + experience_factor * 10.0 // experienced managers sub earlier
     } else if minute >= 60 {
         45.0 - experience_factor * 8.0
     } else {
