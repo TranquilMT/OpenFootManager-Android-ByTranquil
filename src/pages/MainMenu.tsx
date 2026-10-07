@@ -781,7 +781,7 @@ export default function MainMenu() {
                   className="group flex items-center justify-between w-full p-4 bg-white dark:bg-navy-700 hover:bg-red-50 dark:hover:bg-red-500/10 text-gray-800 dark:text-gray-200 rounded-xl transition-all duration-300 border border-gray-200 dark:border-navy-600 hover:border-red-200 dark:hover:border-red-500/30 shadow-sm"
                 >
                   <div className="flex items-center gap-3">
-                    <Power className="w-6 h-6 text-red-500 dark:text-red-400" />
+                    <MenuIcon icon={Power} tone="danger" />
                     <span className="font-heading font-bold text-lg uppercase tracking-wide">
                       {t("menu.exitGame")}
                     </span>
