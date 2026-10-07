@@ -35,7 +35,7 @@ export function MatchPulse({ snapshot, derby = false }: { snapshot: MatchSnapsho
     >
       <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-gray-700 dark:text-gray-200">
         <Activity aria-hidden="true" className="size-4 text-primary-500" />
-        <span>{t("phase70.metrics.pulse")}</span>
+        <span>{t(derby ? "phase70.metrics.derby" : "phase70.metrics.pulse")}</span>
         <span className="ml-auto truncate text-primary-600 dark:text-primary-400">
           {leader ? `${t("phase70.metrics.pressure")}: ${leader}` : t("phase70.metrics.even")}
         </span>
