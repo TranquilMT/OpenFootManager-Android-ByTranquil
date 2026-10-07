@@ -62,6 +62,10 @@ pub struct PlayerMatchStats {
     pub red_cards: u8,
     /// Match rating 0.0–10.0, computed after the match.
     pub rating: f32,
+    #[serde(default)]
+    pub saves: u16,
+    #[serde(default)]
+    pub expected_goals: f64,
 }
 
 // ---------------------------------------------------------------------------
