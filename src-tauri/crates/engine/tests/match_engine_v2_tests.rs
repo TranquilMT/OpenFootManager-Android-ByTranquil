@@ -186,3 +186,20 @@ fn incoming_players_do_not_keep_an_invalid_slot_role() { let mut reserve=make_pl
 
 #[test]
 fn ai_does_not_replace_tired_outfield_players_with_goalkeepers() { let mut home=make_team("h","H",65,PlayStyle::Balanced); for p in &mut home.players { p.condition=10; } let mut s=LiveMatchState::new(home,make_team("a","A",65,PlayStyle::Balanced),MatchConfig::default(),vec![make_player("reserve","Reserve",Position::Goalkeeper,90)],vec![],false); s.step_minute(&mut seeded_rng(1)); let commands=ai_decide(&s,Side::Home,&AiProfile::default(),&mut seeded_rng(2)); assert!(commands.iter().all(|c| !matches!(c,MatchCommand::Substitute{..}))); }
+
+#[test]
+fn ai_prioritizes_recorded_injuries_before_tactical_changes() {
+ let mut s=LiveMatchState::new(make_team("h","H",65,PlayStyle::Balanced),make_team("a","A",65,PlayStyle::Balanced),MatchConfig {foul_probability:1.0,injury_probability:1.0,yellow_card_probability:0.0,..MatchConfig::default()},vec![make_player("reserve","Reserve",Position::Forward,70)],vec![],false);
+ let mut rng=seeded_rng(4);
+ for _ in 0..30 {
+  s.step_minute(&mut rng);
+  let snap=s.snapshot();
+  if let Some(e)=snap.events.iter().rev().find(|e| e.side==Side::Home && e.event_type==EventType::Injury && e.player_id.as_ref().is_some_and(|id|snap.home_team.players.iter().any(|p|p.id==*id))) {
+   let injured=e.player_id.as_ref().unwrap();
+   let commands=ai_decide(&s,Side::Home,&AiProfile::default(),&mut seeded_rng(7));
+   assert!(commands.iter().any(|c|matches!(c,MatchCommand::Substitute{player_off_id,..} if player_off_id==injured)));
+   return;
+  }
+ }
+ panic!("seed must produce a home injury");
+}
