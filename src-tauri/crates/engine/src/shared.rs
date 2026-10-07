@@ -587,7 +587,7 @@ pub(crate) fn active_position_rating(
     let active=|p:&&PlayerData| !unavailable.contains(&p.id);
     if slots==0 {
         if players.is_empty() { return 0.0; }
-        return 40.0*players.iter().filter(active).map(&condition_factor).sum::<f64>()/players.len() as f64;
+        return 40.0*players.iter().filter(active).map(condition_factor).sum::<f64>()/players.len() as f64;
     }
     players.iter().filter(|p|p.position==position).filter(active).map(|p|attribute(p)*condition_factor(p)).sum::<f64>()/slots as f64
 }
