@@ -168,8 +168,8 @@ export function MatchStats({ snapshot }: { snapshot: MatchSnapshot }) {
       {stats.map((stat, i) => {
         const hv = typeof stat.home === "number" ? stat.home : 0;
         const av = typeof stat.away === "number" ? stat.away : 0;
-        const total = hv + av || 1;
-        const pct = stat.homePct ?? (hv / total) * 100;
+        const total = hv + av;
+        const pct = stat.homePct ?? (total > 0 ? (hv / total) * 100 : 50);
         return (
           <div key={i}>
             <div className="flex justify-between text-xs mb-1">
