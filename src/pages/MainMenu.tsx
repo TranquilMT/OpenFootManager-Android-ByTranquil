@@ -14,6 +14,7 @@ import type { PackageInfo, PackageIssue } from "../components/menu/WorldSelect";
 import type { ManagerProfile } from "../components/menu/types";
 import { applyExtraTranslations } from "../lib/extraTranslations";
 import { GameBrand } from "../components/menu/GameBrand";
+import { EngineUpdateBanner } from "../components/menu/EngineUpdateBanner";
 import { MenuIcon } from "../components/menu/MenuIcon";
 import { MainMenuFooter } from "../components/menu/MainMenuFooter";
 import { resolveBackendError } from "../utils/backendI18n";
