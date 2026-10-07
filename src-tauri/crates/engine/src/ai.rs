@@ -263,8 +263,8 @@ fn find_best_bench_replacement<'a>(
         .filter(|p| p.position == preferred_position && !sent_off.contains(&p.id))
         .collect();
     candidates.sort_by(|a, b| {
-        b.overall()
-            .partial_cmp(&a.overall())
+        (b.overall() * (0.6 + 0.4 * b.condition as f64 / 100.0))
+            .partial_cmp(&(a.overall() * (0.6 + 0.4 * a.condition as f64 / 100.0)))
             .unwrap_or(std::cmp::Ordering::Equal)
     });
 
@@ -275,8 +275,8 @@ fn find_best_bench_replacement<'a>(
     // Fallback: any bench player
     let mut all: Vec<&PlayerData> = bench.iter().filter(|p| !sent_off.contains(&p.id)).collect();
     all.sort_by(|a, b| {
-        b.overall()
-            .partial_cmp(&a.overall())
+        (b.overall() * (0.6 + 0.4 * b.condition as f64 / 100.0))
+            .partial_cmp(&(a.overall() * (0.6 + 0.4 * a.condition as f64 / 100.0)))
             .unwrap_or(std::cmp::Ordering::Equal)
     });
     all.first().copied()
