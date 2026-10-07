@@ -11,4 +11,6 @@ mod tests {
     fn accuracy_keeps_weak_players_in_the_game() { assert_eq!(accuracy(-5.0, 0.0), 0.15); }
     #[test]
     fn invalid_accuracy_uses_safe_default() { assert!(accuracy(f64::NAN, f64::NAN).is_finite()); }
+    #[test]
+    fn keeper_quality_reduces_conversion() { assert!(conversion(0.36, 70.0, 30.0, 1.0) > conversion(0.36, 70.0, 90.0, 1.0)); }
 }
