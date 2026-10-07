@@ -116,7 +116,7 @@ function variantKey(evt: MatchEvent, snapshot: MatchSnapshot): string | null {
 
 /** Manual interpolation since the variant string is a value, not a key. */
 function interpolate(template: string, tokens: Record<string, string>): string {
-  return template.replace(/\{\{(\w+)\}\}/g, (_, name: string) => tokens[name] ?? "");
+  return template.replace(/\{\{\s*-?\s*([\w.]+)(?:\s*,[^}]+)?\s*\}\}/g, (_, name: string) => tokens[name] ?? "").replace(/\{\{[^}]*\}\}/g, "").trim();
 }
 
 function pickLine(
