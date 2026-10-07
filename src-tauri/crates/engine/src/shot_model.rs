@@ -31,4 +31,6 @@ mod tests {
     fn contest_rewards_superior_midfield() { assert!(contest_probability(80.0, 40.0) > 0.5); }
     #[test]
     fn goal_context_identifies_equaliser() { assert_eq!(goal_context(0, 1), crate::event::GoalContext::Equaliser); }
+    #[test]
+    fn goal_context_does_not_call_a_winner_consolation() { assert_eq!(goal_context(1, 1), crate::event::GoalContext::Extends); }
 }
