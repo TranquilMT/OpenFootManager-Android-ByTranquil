@@ -162,6 +162,13 @@ impl MatchReport {
                 Side::Away => &mut away_stats,
             };
 
+            if let Some(shot) = &event.shot {
+                stats.expected_goals += shot.expected_goals;
+                if let Some(pid) = &event.player_id { player_stats.entry(pid.clone()).or_default().expected_goals += shot.expected_goals; }
+                if event.event_type == EventType::ShotSaved && !shot.goalkeeper_id.is_empty() { player_stats.entry(shot.goalkeeper_id.clone()).or_default().saves += 1; }
+            }
+            if event.detail == Some(crate::event::EventDetail::Woodwork) { stats.woodwork += 1; }
+
             // Track set-piece window: reset on events that clear the opportunity
             match &event.event_type {
                 EventType::Corner => last_set_piece = Some((EventType::Corner, event.side)),
