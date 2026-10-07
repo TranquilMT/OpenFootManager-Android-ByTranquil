@@ -454,7 +454,7 @@ export default function MatchLive({
             {activePanel !== "lineups" && <MatchPulse snapshot={snapshot} />}
             {activePanel === "events" && (
               <EventFeed
-                events={importantEvents}
+                events={visibleEvents}
                 snapshot={snapshot}
                 feedRef={eventFeedRef}
                 playerJerseyMap={playerJerseyMap}
