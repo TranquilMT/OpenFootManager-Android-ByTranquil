@@ -110,6 +110,10 @@ function variantKey(evt: MatchEvent, snapshot: MatchSnapshot): string | null {
     const tally = goalTally(evt, snapshot);
     if (tally === 3) return "hattrick";
     if (tally === 2) return "brace";
+    // Extends describes the team's score, not a repeat goal by this player.
+    // The ordered narrative supplies the accurate lead or comeback context.
+    if (evt.detail && typeof evt.detail === "object" && "Goal" in evt.detail)
+      if (evt.detail.Goal.context === "Extends") return null;
   }
   return detailVariant(evt.detail);
 }

@@ -100,7 +100,7 @@ Your job extends beyond the next result.
 - 🥅 Woodwork, goalkeeper saves and expected-goals totals appear beside the action and after full time.
 - 📊 The new Match Pulse shows recent attacking pressure and shots in the last five minutes.
 - 🗣️ Commentary follows the score: late equalisers, late leads, comeback leads and commanding advantages.
-- 🌟 Player narratives cover braces, hat-tricks and four-goal matches without counting later or same-minute goals too early.
+- 🌟 Player narratives cover braces, hat-tricks and four-goal matches without counting later or same-minute goals too early or treating team-score changes as repeat goals by the scorer.
 - 🔄 Substitution context distinguishes recent injuries, fresh legs, protecting a lead and chasing a result.
 - 🟨 Booking risk, numerical disadvantage and injury concerns are connected to recorded match events.
 - 🧠 Formation and playing-style decisions appear immediately in the match feed and retained fixture summaries.
