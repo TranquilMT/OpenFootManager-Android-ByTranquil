@@ -102,7 +102,7 @@ impl LiveMatchState {
             self.possession = Side::Home;
             self.et_first_half_stoppage = rng.random_range(0..=2);
 
-            let evt = MatchEvent::new(91, EventType::KickOff, Side::Home, Zone::Midfield);
+            let evt = MatchEvent::new(self.current_minute, EventType::KickOff, Side::Home, Zone::Midfield);
             self.events.push(evt.clone());
 
             MinuteResult {
