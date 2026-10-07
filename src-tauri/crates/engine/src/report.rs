@@ -216,7 +216,7 @@ impl MatchReport {
                     goals.push(GoalDetail {
                         minute: event.minute,
                         scorer_id: pid.to_string(),
-                        assist_id: event.secondary_player_id.clone(),
+                        assist_id: event.secondary_player_id.clone().filter(|assist| assist != pid),
                         goal_source: source,
                         side: event.side,
                     });
