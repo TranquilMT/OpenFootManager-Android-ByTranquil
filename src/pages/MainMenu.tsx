@@ -726,7 +726,7 @@ export default function MainMenu() {
                   className="group flex items-center justify-between w-full p-4 bg-white dark:bg-navy-700 hover:bg-gray-50 dark:hover:bg-navy-600 text-gray-800 dark:text-gray-200 rounded-xl transition-all duration-300 border border-gray-200 dark:border-navy-600 hover:border-accent-400 dark:hover:border-accent-400 shadow-sm"
                 >
                   <div className="flex items-center gap-3">
-                    <FolderOpen className="w-6 h-6 text-accent-500 dark:text-accent-400" />
+                    <MenuIcon icon={FolderOpen} tone="accent" />
                     <span className="font-heading font-bold text-lg uppercase tracking-wide">
                       {t("menu.loadGame")}
                     </span>
