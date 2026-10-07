@@ -455,3 +455,8 @@ impl Zone {
         self == Zone::attacking_box(attacking_side)
     }
 }
+
+#[cfg(test)]
+mod v2_configuration_tests {
+use super::MatchConfig;
+}
