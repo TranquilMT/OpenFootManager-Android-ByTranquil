@@ -25,4 +25,6 @@ mod tests {
     fn xg_rejects_invalid_inputs() { assert_eq!(expected_goals(f64::NAN, 0.5), 0.0); }
     #[test]
     fn empty_contest_has_fair_possession() { assert_eq!(contest_probability(0.0, 0.0), 0.5); }
+    #[test]
+    fn contest_never_emits_nan() { assert_eq!(contest_probability(f64::NAN, 0.0), 0.5); }
 }
