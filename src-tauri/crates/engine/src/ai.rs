@@ -157,7 +157,7 @@ fn consider_substitution<R: Rng>(
     if let Some((tired_player, _)) = worst_player {
         // Find best replacement from bench with same position
         if let Some(replacement) =
-            find_best_bench_replacement(bench, tired_player.position, &snap.sent_off, None)
+            find_best_bench_replacement(bench, tired_player.position, &unavailable, None)
         {
             return Some(MatchCommand::Substitute {
                 side,
@@ -193,7 +193,7 @@ fn consider_substitution<R: Rng>(
                 && let Some(attacker_on) = find_best_bench_replacement(
                     bench,
                     Position::Forward,
-                    &snap.sent_off,
+                    &unavailable,
                     preferred_role,
                 )
             {
@@ -219,7 +219,7 @@ fn consider_substitution<R: Rng>(
 
             if let Some(player_off) = forwards.first()
                 && let Some(defender_on) =
-                    find_best_bench_replacement(bench, Position::Defender, &snap.sent_off, None)
+                    find_best_bench_replacement(bench, Position::Defender, &unavailable, None)
             {
                 return Some(MatchCommand::Substitute {
                     side,
