@@ -486,6 +486,38 @@ pub(crate) fn home_mod(side: Side, config: &MatchConfig) -> f64 {
     }
 }
 
+/// Effective unit strength keeps dismissed slots in the denominator so a red
+/// card cannot improve a team's average by removing its weakest player.
+pub(crate) fn active_position_rating(
+    players: &[PlayerData],
+    unavailable: &std::collections::HashSet<String>,
+    position: Position,
+    attribute: fn(&PlayerData) -> f64,
+    condition_factor: impl Fn(&PlayerData) -> f64,
+) -> f64 {
+    let slots = players.iter().filter(|p| p.position == position).count();
+    let active = |p: &&PlayerData| !unavailable.contains(&p.id);
+    if slots == 0 {
+        if players.is_empty() {
+            return 0.0;
+        }
+        return 40.0
+            * players
+                .iter()
+                .filter(active)
+                .map(condition_factor)
+                .sum::<f64>()
+            / players.len() as f64;
+    }
+    players
+        .iter()
+        .filter(|p| p.position == position)
+        .filter(active)
+        .map(|p| attribute(p) * condition_factor(p))
+        .sum::<f64>()
+        / slots as f64
+}
+
 #[cfg(test)]
 mod phase_modifier_tests {
     use super::*;
@@ -583,36 +615,4 @@ mod phase_modifier_tests {
         let fast = tactics_break_speed_counter(&cfg(|c| c.break_speed = BreakSpeed::Fast));
         assert!(0.0 < fast && fast < 1.0);
     }
-}
-
-/// Effective unit strength keeps dismissed slots in the denominator so a red
-/// card cannot improve a team's average by removing its weakest player.
-pub(crate) fn active_position_rating(
-    players: &[PlayerData],
-    unavailable: &std::collections::HashSet<String>,
-    position: Position,
-    attribute: fn(&PlayerData) -> f64,
-    condition_factor: impl Fn(&PlayerData) -> f64,
-) -> f64 {
-    let slots = players.iter().filter(|p| p.position == position).count();
-    let active = |p: &&PlayerData| !unavailable.contains(&p.id);
-    if slots == 0 {
-        if players.is_empty() {
-            return 0.0;
-        }
-        return 40.0
-            * players
-                .iter()
-                .filter(active)
-                .map(condition_factor)
-                .sum::<f64>()
-            / players.len() as f64;
-    }
-    players
-        .iter()
-        .filter(|p| p.position == position)
-        .filter(active)
-        .map(|p| attribute(p) * condition_factor(p))
-        .sum::<f64>()
-        / slots as f64
 }
