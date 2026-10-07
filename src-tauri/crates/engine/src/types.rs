@@ -371,6 +371,7 @@ impl MatchConfig {
             injury_probability:probability(self.injury_probability,defaults.injury_probability),
             fatigue_per_minute:if self.fatigue_per_minute.is_finite() { self.fatigue_per_minute.clamp(0.0,5.0) } else { defaults.fatigue_per_minute },
             home_advantage:if self.home_advantage.is_finite() { self.home_advantage.clamp(0.5,1.5) } else { defaults.home_advantage },
+            stoppage_time_max:self.stoppage_time_max.min(10),
             ..self.clone()
         }
     }
