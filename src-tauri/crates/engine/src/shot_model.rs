@@ -33,4 +33,6 @@ mod tests {
     fn goal_context_identifies_equaliser() { assert_eq!(goal_context(0, 1), crate::event::GoalContext::Equaliser); }
     #[test]
     fn goal_context_does_not_call_a_winner_consolation() { assert_eq!(goal_context(1, 1), crate::event::GoalContext::Extends); }
+    #[test]
+    fn goal_context_identifies_first_goal() { assert_eq!(goal_context(0, 0), crate::event::GoalContext::Opener); }
 }
