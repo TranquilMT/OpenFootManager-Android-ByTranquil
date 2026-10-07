@@ -10,6 +10,8 @@ pub(crate) fn expected_goals(accuracy: f64, conversion: f64) -> f64 { finite_or(
 
 pub(crate) fn contest_probability(attack: f64, defense: f64) -> f64 { let attack = finite_or(attack, 0.0).max(0.0); let defense = finite_or(defense, 0.0).max(0.0); if attack + defense <= f64::EPSILON { 0.5 } else { attack / (attack + defense) } }
 
+pub(crate) fn goal_context(own: u8, opponent: u8) -> crate::event::GoalContext { use crate::event::GoalContext; if own == 0 && opponent == 0 { GoalContext::Opener } else if own.saturating_add(1) == opponent { GoalContext::Equaliser } else if own >= opponent { GoalContext::Extends } else { GoalContext::Consolation } }
+
 #[cfg(test)]
 mod tests {
     use super::*;
