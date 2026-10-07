@@ -109,6 +109,7 @@ export default function MatchLive({
     return m;
   }, [gameState.players]);
 
+  const visibleEvents = useMemo(() => snapshot.events.filter((event) => getEventDisplay(event).important), [snapshot.events]);
   const isFinished = snapshot.phase === "Finished";
 
   // Reads only `lastResult` for phase transitions, which is sound because step_many stops on
