@@ -134,7 +134,9 @@ impl LiveMatchState {
     // -----------------------------------------------------------------------
 
     pub(super) fn effective_midfield(&self, side: Side) -> f64 {
-        let base = self.team_ref(side).midfield_rating();
+        let base = crate::shared::active_position_rating(&self.team_ref(side).players,&self.sent_off,Position::Midfielder,
+            |p|(p.passing as f64+p.vision as f64+p.decisions as f64+p.stamina as f64)/4.0,
+            |p|self.condition_adjusted_skill(&p.id,1.0));
         let modifier = play_style_modifier(
             self.team_ref(side).play_style,
             PlayStylePhase::Midfield,
