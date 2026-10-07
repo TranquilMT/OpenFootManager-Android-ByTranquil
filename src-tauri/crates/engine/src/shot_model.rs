@@ -19,4 +19,6 @@ mod tests {
     fn conversion_is_bounded() { assert_eq!(conversion(10.0, 999.0, 0.0, 10.0), 0.70); }
     #[test]
     fn invalid_conversion_cannot_poison_a_match() { assert!(conversion(f64::NAN, f64::INFINITY, 0.0, 1.0).is_finite()); }
+    #[test]
+    fn xg_is_unconditional_probability() { assert!((expected_goals(0.4, 0.5) - 0.2).abs() < 1e-9); }
 }
