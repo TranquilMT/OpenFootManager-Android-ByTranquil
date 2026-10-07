@@ -107,7 +107,13 @@ Your job extends beyond the next result.
 - ⚠️ Verified defensive buildup errors, frame hits and difficult saves receive clearer event icons and prominence.
 - 🏙️ Local derby labels use matching club cities and countries rather than guessing from club names.
 - 🤖 Opposing managers avoid players who cannot return and weigh replacement fitness more carefully.
-- 💨 Background matches apply the energy cost of pressing, improving consistency with live matches.
+- 💨 Live and background midfield strength and pressing respond to current fatigue and dismissals; losing a player cannot improve a unit’s average.
+- 🚑 AI managers prioritize recorded injuries and preserve reserve goalkeepers when covering outfield fatigue.
+- 🧤 Emergency goalkeeper selection weighs actual available handling, reflexes and positioning.
+- 🎯 Penalties share a bounded conversion model using composure, keeper ability and fatigue, including shootouts.
+- 🟨 Substituted home players retain their correct booking records, and dismissed players cannot receive duplicate red-card events.
+- 🧩 Formation changes and incoming substitutes retain valid roles for their actual match slots.
+- 🛡️ Match configuration validates probabilities, home advantage, fatigue and clock limits before simulation.
 - ⏱️ Fixed clock rewinds and missing action minutes around half-time and extra-time restarts.
 - 📝 Fixture history retains new chance-quality and woodwork totals while older careers continue to load.
 - 🛠️ Fixed self-assists, malformed commentary variants, unresolved placeholders and zero-strength possession calculations.
