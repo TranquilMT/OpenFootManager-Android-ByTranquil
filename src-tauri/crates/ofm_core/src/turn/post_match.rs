@@ -12,6 +12,8 @@ use domain::stats::{PlayerMatchStatsRecord, StatsState, TeamMatchStatsRecord};
 fn compact_team_stats(stats: &engine::TeamStats, possession_pct: u8) -> CompactTeamMatchStats {
     CompactTeamMatchStats {
         possession_pct,
+        expected_goals: Some(stats.expected_goals),
+        woodwork: stats.woodwork,
         shots: stats.shots,
         shots_on_target: stats.shots_on_target,
         fouls: stats.fouls,
