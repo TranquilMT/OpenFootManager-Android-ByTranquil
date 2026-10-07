@@ -49,7 +49,10 @@ export function eventContext(evt: MatchEvent, events: MatchEvent[]) {
     ).length,
     injuryChange: before.some(
       (e) =>
-        e.event_type === "Injury" && e.side === evt.side && e.player_id === evt.secondary_player_id && e.minute >= evt.minute - 10,
+        e.event_type === "Injury" &&
+        e.side === evt.side &&
+        e.player_id === evt.secondary_player_id &&
+        e.minute >= evt.minute - 10,
     ),
   };
 }
