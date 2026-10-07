@@ -1783,7 +1783,7 @@
     "patchPlayers": "新增更多优秀球员，包括稀有的96分球星和升级热门球队。",
     "patchMatches": "比赛解说更加丰富，加入门框射门和可选语音解说。",
     "patchMobile": "改进移动端操作、收件箱、国家队与生涯创建。",
-    "patchWelcome": "欢迎来到 OFMtouch！v0.6.9 更新内容",
+    "patchWelcome": "OFMtouch 0.7.0 — 比赛引擎第二版",
     "patchPortraits": "20 张虚构原始人脸让生成球员的肖像更加多样。",
     "patchWorld": "足球世界扩展至 29 个国家，美洲和亚洲的俱乐部实力也得到提升。",
     "patchTransfers": "俱乐部策略会影响租借和转会，包括竞争报价与预算检查。",
@@ -2292,7 +2292,8 @@
       "Corner": "角球",
       "FreeKick": "任意球",
       "Foul": "犯规",
-      "PenaltyAwarded": "判罚点球"
+      "PenaltyAwarded": "判罚点球",
+      "TacticalChange": "调整比赛计划。"
     },
     "commentary": {
       "Corner": {
@@ -2555,6 +2556,18 @@
           "0": "就是这样——全场结束！",
           "1": "裁判吹响终场哨声。",
           "2": "终场哨响，比赛结果尘埃落定。"
+        }
+      },
+      "TacticalChange": {
+        "headline": "比赛引擎第二版",
+        "lines": {
+          "0": "{{team}}调整比赛计划。"
+        }
+      },
+      "PassIntercepted": {
+        "headline": "进攻压力",
+        "lines": {
+          "0": "受压迫的后场传球出现失误。"
         }
       }
     },
@@ -4340,5 +4353,51 @@
     "prizes": "赛季奖金根据联赛级别的收入调整。",
     "promotion": "升级后恢复此前降级削减的工资预算额度。",
     "sponsors": "赞助奖金使用正确的国内联赛排名。"
+  },
+  "phase70": {
+    "commentary": {
+      "fourGoals": "{{player}}在本场比赛已进四球。",
+      "lateEqualiser": "{{team}}在比赛末段扳平比分。",
+      "comebackLead": "{{team}}从落后变为领先。",
+      "lateLead": "{{team}}在比赛末段取得领先。",
+      "goAhead": "{{team}}打破平局取得领先。",
+      "stillBehind": "尽管进球，{{team}}仍然落后。",
+      "commandingLead": "{{team}}目前领先至少三球。",
+      "woodwork": "射门击中了门框。",
+      "defensiveError": "受压迫的后场传球出现失误。",
+      "tacticalChange": "{{team}}调整比赛计划。",
+      "bookingRisk": "吃到这张牌后，{{player}}必须小心。",
+      "numericalDisadvantage": "{{team}}将以更少的球员应战。",
+      "injuryConcern": "{{team}}需要评估伤势。",
+      "injuryChange": "这次换人发生在{{victim}}受伤之后。",
+      "protectLead": "{{team}}在保持领先时换上体力充沛的球员。",
+      "chaseGame": "{{team}}换人以寻求追回比分。",
+      "freshLegs": "{{team}}换上体力充沛的球员。",
+      "sustainedPressure": "近期多次射门显示{{team}}持续施压。",
+      "latePressure": "{{team}}寻求进球，但时间所剩无几。"
+    },
+    "metrics": {
+      "xg": "预期进球",
+      "woodwork": "击中门框",
+      "saves": "门将扑救",
+      "pulse": "比赛走势",
+      "shotsLast5": "最近5分钟射门",
+      "even": "压力均衡",
+      "pressure": "进攻压力",
+      "emptyXg": "未记录",
+      "alerts": "比赛提醒",
+      "qualityHint": "机会在结果发生前的质量：只是概率，并不保证进球。",
+      "derby": "同城德比"
+    },
+    "release": {
+      "title": "比赛引擎第二版",
+      "engine": "射门与点球采用统一逻辑，综合机会质量、镇定、门将能力和疲劳。",
+      "commentary": "解说根据比分描述末段进球、逆转、里程碑、施压与换人。",
+      "insights": "新增预期进球、门框、扑救和近期施压视图，帮助理解比赛。",
+      "decisions": "战术通知、优先处理伤病的 AI 换人，以及随疲劳和红牌调整的逼抢。",
+      "reliability": "更稳健的比赛参数、应急门将、准确的牌罚记录，以及阵型或阵容变化后的合理角色。",
+      "interface": "更新菜单图标与紧凑更新卡片，覆盖所有支持的语言。",
+      "thanks": "感谢参与游戏、测试并分享反馈。您的报告帮助改善每场比赛。"
+    }
   }
 }

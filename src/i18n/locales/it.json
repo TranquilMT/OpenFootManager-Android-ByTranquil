@@ -1802,7 +1802,7 @@
     "patchPlayers": "Più giocatori di spicco, incluse rare stelle da 96 e squadre in lotta per la promozione.",
     "patchMatches": "Più reazioni, tiri sui legni e telecronaca vocale facoltativa.",
     "patchMobile": "Comandi mobili, posta, nazionali e inizio carriera migliorati.",
-    "patchWelcome": "Benvenuto in OFMtouch! Novità della v0.6.9",
+    "patchWelcome": "OFMtouch 0.7.0 — Motore partita V2",
     "patchPortraits": "20 volti fittizi di partenza rendono più vari i ritratti dei giocatori generati.",
     "patchWorld": "Un mondo calcistico più ampio copre 29 nazioni, con club più forti nelle Americhe e in Asia.",
     "patchTransfers": "Le strategie dei club guidano prestiti e trasferimenti, con offerte concorrenti e controlli sul budget.",
@@ -2311,7 +2311,8 @@
       "Corner": "Calcio d'angolo",
       "FreeKick": "Punizione",
       "Foul": "Fallo",
-      "PenaltyAwarded": "Rigore Assegnato"
+      "PenaltyAwarded": "Rigore Assegnato",
+      "TacticalChange": "modifica il piano di gioco"
     },
     "commentary": {
       "Corner": {
@@ -2574,6 +2575,18 @@
           "0": "È tutto — fischio finale!",
           "1": "L'arbitro pone fine all'incontro.",
           "2": "Il fischio finale conferma il risultato."
+        }
+      },
+      "TacticalChange": {
+        "headline": "Motore partita V2",
+        "lines": {
+          "0": "{{team}} modifica il piano di gioco."
+        }
+      },
+      "PassIntercepted": {
+        "headline": "Pressione offensiva",
+        "lines": {
+          "0": "Un passaggio in costruzione sbagliato sotto pressione."
         }
       }
     },
@@ -4340,5 +4353,51 @@
     "prizes": "I premi stagionali sono proporzionati alle entrate della divisione.",
     "promotion": "La promozione ripristina la capacità del budget stipendi dopo una retrocessione.",
     "sponsors": "I bonus degli sponsor usano la classifica corretta del campionato nazionale."
+  },
+  "phase70": {
+    "commentary": {
+      "fourGoals": "Quattro gol per {{player}} in questa partita.",
+      "lateEqualiser": "Un pareggio nel finale riporta {{team}} in parità.",
+      "comebackLead": "{{team}} ha trasformato uno svantaggio in un vantaggio.",
+      "lateLead": "{{team}} passa in vantaggio nel finale.",
+      "goAhead": "{{team}} passa avanti in una partita prima in parità.",
+      "stillBehind": "{{team}} resta sotto nonostante questo gol.",
+      "commandingLead": "{{team}} ora conduce con almeno tre gol di scarto.",
+      "woodwork": "Il tiro colpisce il telaio della porta.",
+      "defensiveError": "Un passaggio in costruzione sbagliato sotto pressione.",
+      "tacticalChange": "{{team}} modifica il piano di gioco.",
+      "bookingRisk": "{{player}} deve fare attenzione dopo questa ammonizione.",
+      "numericalDisadvantage": "{{team}} dovrà giocare con meno uomini.",
+      "injuryConcern": "{{team}} deve valutare l’infortunio.",
+      "injuryChange": "Il cambio segue l’infortunio di {{victim}}.",
+      "protectLead": "Entrano forze fresche mentre {{team}} difende il vantaggio.",
+      "chaseGame": "{{team}} cambia giocatori per cercare di rimontare.",
+      "freshLegs": "Entrano forze fresche per {{team}}.",
+      "sustainedPressure": "Diversi tiri recenti mostrano la pressione continua di {{team}}.",
+      "latePressure": "Il tempo stringe mentre {{team}} cerca un gol."
+    },
+    "metrics": {
+      "xg": "Gol attesi",
+      "woodwork": "Pali e traversa",
+      "saves": "Parate del portiere",
+      "pulse": "Andamento della partita",
+      "shotsLast5": "Tiri negli ultimi 5 minuti",
+      "even": "Pressione equilibrata",
+      "pressure": "Pressione offensiva",
+      "emptyXg": "Non registrato",
+      "alerts": "Avvisi della partita",
+      "qualityHint": "Qualità dell’occasione prima del risultato: una probabilità, non un gol promesso.",
+      "derby": "Derby cittadino"
+    },
+    "release": {
+      "title": "Motore partita V2",
+      "engine": "La logica comune di tiri e rigori considera qualità delle occasioni, freddezza, abilità del portiere e fatica.",
+      "commentary": "Commenti legati al punteggio raccontano gol nel finale, rimonte, traguardi, pressione e cambi.",
+      "insights": "Nuove viste di gol attesi, legni, parate e pressione recente spiegano la partita.",
+      "decisions": "Notifiche tattiche, sostituzioni dell’IA che danno priorità agli infortuni e pressing adattato a fatica ed espulsioni.",
+      "reliability": "Parametri più sicuri, portieri d’emergenza, registri corretti dei cartellini e ruoli validi dopo cambi di modulo o formazione.",
+      "interface": "Icone del menu rinnovate e schede aggiornamento compatte in tutte le lingue supportate.",
+      "thanks": "Grazie per giocare, testare e condividere suggerimenti. Le vostre segnalazioni migliorano ogni partita."
+    }
   }
 }
