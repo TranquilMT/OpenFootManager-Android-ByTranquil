@@ -8,6 +8,8 @@ pub(crate) fn conversion(base: f64, shooter: f64, keeper: f64, shape: f64) -> f6
 
 pub(crate) fn expected_goals(accuracy: f64, conversion: f64) -> f64 { finite_or(accuracy, 0.0).clamp(0.0, 1.0) * finite_or(conversion, 0.0).clamp(0.0, 1.0) }
 
+pub(crate) fn contest_probability(attack: f64, defense: f64) -> f64 { let attack = finite_or(attack, 0.0).max(0.0); let defense = finite_or(defense, 0.0).max(0.0); if attack + defense <= f64::EPSILON { 0.5 } else { attack / (attack + defense) } }
+
 #[cfg(test)]
 mod tests {
     use super::*;
