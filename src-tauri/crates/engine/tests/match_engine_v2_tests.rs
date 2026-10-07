@@ -182,3 +182,6 @@ fn booked_substitutes_stay_on_the_correct_team() { let mut s=LiveMatchState::new
 
 #[test]
 fn incoming_players_do_not_keep_an_invalid_slot_role() { let mut reserve=make_player("reserve","Reserve",Position::Forward,65); reserve.role=PlayerRole::PressingForward; let mut s=LiveMatchState::new(make_team("h","H",65,PlayStyle::Balanced),make_team("a","A",65,PlayStyle::Balanced),MatchConfig::default(),vec![reserve],vec![],false); s.step_minute(&mut seeded_rng(1)); s.apply_command(MatchCommand::Substitute{side:Side::Home,player_off_id:"h_def1".into(),player_on_id:"reserve".into()}).unwrap(); assert_eq!(s.snapshot().home_team.players.iter().find(|p| p.id=="reserve").unwrap().role,PlayerRole::Standard); }
+
+#[test]
+fn ai_does_not_replace_tired_outfield_players_with_goalkeepers() { let mut home=make_team("h","H",65,PlayStyle::Balanced); for p in &mut home.players { p.condition=10; } let mut s=LiveMatchState::new(home,make_team("a","A",65,PlayStyle::Balanced),MatchConfig::default(),vec![make_player("reserve","Reserve",Position::Goalkeeper,90)],vec![],false); s.step_minute(&mut seeded_rng(1)); let commands=ai_decide(&s,Side::Home,&AiProfile::default(),&mut seeded_rng(2)); assert!(commands.iter().all(|c| !matches!(c,MatchCommand::Substitute{..}))); }
