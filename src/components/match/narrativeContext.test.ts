@@ -14,4 +14,5 @@ describe("truthful match narratives", () => {
   it("recognizes a comeback lead", () => { const a=event("Goal",10,"Away"); const b=event("Goal",30); const c=event("Goal",60,"Home","p2"); expect(narrativeKey(c,[a,b,c])).toBe("comebackLead"); });
   it("does not invent a comeback from a level match", () => { const e=event("Goal",60); expect(narrativeKey(e,[e])).not.toBe("comebackLead"); });
   it("describes a late lead without promising victory", () => { const e=event("Goal",89); expect(narrativeKey(e,[e])).toBe("lateLead"); });
+  it("identifies a fourth goal milestone", () => { const events=[10,20,30,40].map(m=>event("Goal",m)); expect(narrativeKey(events[3],events)).toBe("fourGoals"); });
 });
