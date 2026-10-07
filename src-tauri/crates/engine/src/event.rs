@@ -71,6 +71,7 @@ pub enum EventType {
     Injury,
     GoalKick,
     Substitution,
+    TacticalChange,
 }
 
 /// Truthful, engine-derived qualifiers used to colour commentary.
