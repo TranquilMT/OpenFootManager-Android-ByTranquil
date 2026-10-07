@@ -123,6 +123,12 @@ pub enum GoalContext {
     Consolation,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ShotInfo {
+    pub expected_goals: f64,
+    pub goalkeeper_id: String,
+}
+
 impl MatchEvent {
     pub fn new(minute: u8, event_type: EventType, side: Side, zone: Zone) -> Self {
         Self {
