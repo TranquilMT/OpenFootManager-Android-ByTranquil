@@ -27,4 +27,5 @@ describe("truthful match narratives", () => {
   it("recognizes late protective changes only with a lead", () => { const a=event("Goal",10);const b=event("Substitution",85);expect(narrativeKey(b,[a,b])).toBe("protectLead"); });
   it("keeps structural kickoff text neutral", () => { const e=event("KickOff",0);expect(narrativeKey(e,[e])).toBeNull(); });
   it("marks goalframe shots truthfully", () => { const e=event("ShotOffTarget",20);e.detail="Woodwork";expect(narrativeKey(e,[e])).toBe("woodwork"); });
+  it("xg totals omit shootout kicks", () => { const a=event("ShootoutGoal",90);a.shot={expected_goals:0.8,goalkeeper_id:"gk"};expect(matchMetrics([a],"Home").xg).toBe(0); });
 });
