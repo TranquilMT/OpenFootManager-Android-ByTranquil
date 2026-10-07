@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import type { MatchSnapshot, MatchEvent, EnginePlayerData } from "./types";
 import { getEventDisplay, getEventTypeLabel, getPlayerName } from "./helpers";
 import { getCommentary } from "./commentary";
+import { matchMetrics } from "./narrativeContext";
 import { Badge } from "../ui";
 import { translatePositionAbbreviation } from "../squad/SquadTab.helpers";
 
