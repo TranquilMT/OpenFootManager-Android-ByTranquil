@@ -505,6 +505,8 @@ mod phase_modifier_tests {
 
     #[test]
     fn tempo_directions() {
+        assert_eq!(tactics_tempo_recycle(&TacticsConfig::default()),0.0);
+        assert!(tactics_tempo_recycle(&cfg(|c|c.tempo=Tempo::Patient))>0.0);
         // Direct is neutral; Patient progresses slower but retains more.
         assert!(tactics_tempo_progression(&cfg(|c| c.tempo = Tempo::Patient)) < 1.0);
         assert_eq!(
