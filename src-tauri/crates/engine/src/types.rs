@@ -459,4 +459,6 @@ impl Zone {
 #[cfg(test)]
 mod v2_configuration_tests {
 use super::MatchConfig;
+#[test]
+fn nonfinite_probabilities_use_defaults() { let config=MatchConfig { foul_probability:f64::NAN, injury_probability:f64::INFINITY, ..MatchConfig::default() }.sanitized(); assert_eq!(config.foul_probability,MatchConfig::default().foul_probability); assert_eq!(config.injury_probability,MatchConfig::default().injury_probability); }
 }
