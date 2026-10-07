@@ -147,6 +147,7 @@ export function getCommentary(
   t: TFunction,
 ): Commentary | null {
   if (!COMMENTARY_EVENTS.has(evt.event_type)) return null;
+  if (evt.event_type === "PassIntercepted" && evt.detail !== "DefensiveError") return null;
 
   const isHome = evt.side === "Home";
   const team = isHome ? snapshot.home_team.name : snapshot.away_team.name;
