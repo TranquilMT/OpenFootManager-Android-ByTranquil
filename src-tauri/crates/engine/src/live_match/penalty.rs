@@ -114,11 +114,8 @@ impl LiveMatchState {
         let mut events = Vec::new();
 
         // Use designated penalty taker if set
-        let taker = match self.set_pieces_ref(att_side).penalty_taker.clone() {
-            Some(id) => self.snap_player_by_id(&id, att_side),
-            None => self.snap_player(att_side, Position::Forward, rng),
-        };
-        let gk = self.snap_player(att_side.opposite(), Position::Goalkeeper, rng);
+        let taker=self.pick_penalty_taker(att_side,rng);
+        let gk=self.pick_goalkeeper(att_side.opposite());
 
         let shoot_skill = (taker.shooting as f64 + taker.decisions as f64) / 2.0;
         let gk_skill = (gk.positioning as f64 + gk.decisions as f64) / 2.0;
