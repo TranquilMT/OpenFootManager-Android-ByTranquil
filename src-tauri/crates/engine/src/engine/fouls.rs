@@ -73,6 +73,7 @@ pub(super) fn maybe_card<R: Rng>(
     zone: Zone,
     rng: &mut R,
 ) {
+    if ctx.sent_off.contains(fouler_id) { return; }
     let aggression_factor = ctx
         .team(side)
         .players
