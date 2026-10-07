@@ -131,7 +131,7 @@ function pickLine(
   for (const key of candidates) {
     const lines = t(`${key}.lines`, { returnObjects: true }) as Record<string, string> | string;
     if (!lines || typeof lines !== "object") continue;
-    const values = Object.values(lines);
+    const values = Object.values(lines).filter((value): value is string => typeof value === "string" && value.trim().length > 0);
     if (values.length === 0) continue;
     const template = values[hash % values.length];
     if (typeof template !== "string") continue;
