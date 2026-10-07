@@ -278,6 +278,9 @@ mod commentary_detail_tests {
     #[test]
     fn designated_penalty_taker_cannot_play_after_dismissal() { let mut s=make_test_state(); s.set_pieces_mut(Side::Home).penalty_taker=Some("home_f1".into()); s.sent_off.insert("home_f1".into()); let events=s.resolve_in_match_penalty(10,Side::Home,&mut rand::rng()); assert!(events.iter().filter(|e|e.shot.is_some()).all(|e|e.player_id.as_deref()!=Some("home_f1"))); }
 
+    #[test]
+    fn emergency_keeper_uses_the_best_available_handling() { let mut s=make_test_state(); s.sent_off.insert("home_gk".into()); let best=s.home.players.iter_mut().find(|p|p.id=="home_d4").unwrap(); best.handling=99; best.reflexes=99; best.positioning=99; assert_eq!(s.pick_goalkeeper(Side::Home).id,"home_d4"); }
+
     fn make_test_player(id: &str, pos: crate::types::Position) -> crate::types::PlayerData {
         crate::types::PlayerData {
             id: id.to_string(),
