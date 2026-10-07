@@ -67,6 +67,7 @@ impl LiveMatchState {
                 .with_player(&passer.id);
             let evt2 = MatchEvent::new(minute, EventType::Interception, def_side, ball_zone)
                 .with_player(&interceptor.id);
+            let evt1 = if passer.composure < 55 && pass_skill < press { evt1.with_detail(EventDetail::DefensiveError) } else { evt1 };
             self.events.push(evt1.clone());
             self.events.push(evt2.clone());
             events.push(evt1);
