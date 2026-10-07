@@ -25,19 +25,9 @@ impl LiveMatchState {
         let taker = self.pick_penalty_taker(kicking_side, rng);
         let gk = self.pick_goalkeeper(kicking_side.opposite());
 
-        let shoot_skill = (taker.shooting as f64 + taker.composure as f64) / 2.0;
-        let gk_skill = (gk.reflexes as f64 + gk.handling as f64) / 2.0;
-
-        // Fatigue affects penalty accuracy in shootout
-        let taker_condition = self
-            .player_conditions
-            .get(&taker.id)
-            .copied()
-            .unwrap_or(50.0);
-        let fatigue_factor = (taker_condition / 100.0).clamp(0.7, 1.0);
-
-        let conversion = (0.75 + (shoot_skill - gk_skill) / 300.0) * fatigue_factor;
-        let conversion = conversion.clamp(0.55, 0.92);
+        let shoot_skill=self.condition_adjusted_skill(&taker.id,(taker.shooting as f64+taker.composure as f64)/2.0);
+        let gk_skill=self.condition_adjusted_skill(&gk.id,(gk.reflexes as f64+gk.handling as f64+gk.positioning as f64)/3.0);
+        let conversion=crate::shot_model::penalty_conversion(shoot_skill,gk_skill);
 
         let zone = Zone::attacking_box(kicking_side);
 
