@@ -21,4 +21,5 @@ describe("truthful match narratives", () => {
   it("pressure never leaks between teams", () => { const a=event("ShotSaved",19,"Away"); const b=event("Corner",20); expect(eventContext(b,[a,b]).recentShots).toBe(0); });
   it("recognizes late pressure from actual shots", () => { const events=[event("ShotSaved",80),event("ShotBlocked",81),event("Corner",82)]; expect(narrativeKey(events[2],events)).toBe("sustainedPressure"); });
   it("identifies a first yellow without a prior booking", () => { const e=event("YellowCard",20); expect(narrativeKey(e,[e])).toBe("bookingRisk"); });
+  it("identifies a dismissal without miscounting goals", () => { const e=event("RedCard",20); expect(narrativeKey(e,[e])).toBe("numericalDisadvantage"); });
 });
