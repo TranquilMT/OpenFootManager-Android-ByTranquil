@@ -373,7 +373,7 @@ impl MatchReport {
             &mut player_stats,
         );
 
-        let total_poss = home_possession_ticks + away_possession_ticks;
+        let total_poss = home_possession_ticks as u64 + away_possession_ticks as u64;
         let home_possession = if total_poss > 0 {
             home_possession_ticks as f64 / total_poss as f64 * 100.0
         } else {

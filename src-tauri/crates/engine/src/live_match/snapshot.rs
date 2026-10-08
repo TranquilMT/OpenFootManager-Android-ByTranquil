@@ -9,7 +9,7 @@ use super::{LiveMatchState, MatchPhase, MatchSnapshot, PenaltyShootoutSnapshot};
 impl LiveMatchState {
     /// Get a full snapshot of the current match state for the UI.
     pub fn snapshot(&self) -> MatchSnapshot {
-        let total_poss = self.home_possession_ticks + self.away_possession_ticks;
+        let total_poss = self.home_possession_ticks as u64 + self.away_possession_ticks as u64;
         let home_pct = if total_poss > 0 {
             self.home_possession_ticks as f64 / total_poss as f64 * 100.0
         } else {
