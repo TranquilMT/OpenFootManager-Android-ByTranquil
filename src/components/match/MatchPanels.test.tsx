@@ -45,4 +45,10 @@ describe("integrated match panels", () => {
     expect(screen.getByText("common.positions.Midfielder")).toBeInTheDocument();
     expect(screen.queryByText("Midfielders")).not.toBeInTheDocument();
   });
+  it("shows assigned shirt numbers beside starters and reserves", () => {
+    const snap = snapshot(); snap.home_bench = [player("reserve")];
+    render(<Lineups snapshot={snap} playerJerseyMap={new Map([["p1", 8], ["reserve", 12]])} />);
+    expect(screen.getByText("#8")).toBeInTheDocument();
+    expect(screen.getByText("#12")).toBeInTheDocument();
+  });
 });

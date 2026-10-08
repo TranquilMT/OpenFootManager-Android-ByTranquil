@@ -541,7 +541,7 @@ export default function MatchLive({
               />
             )}
             {activePanel === "stats" && <MatchStats snapshot={snapshot} />}
-            {activePanel === "lineups" && <Lineups snapshot={snapshot} />}
+            {activePanel === "lineups" && <Lineups snapshot={snapshot} playerJerseyMap={playerJerseyMap} />}
           </div>
         </div>
 

@@ -206,7 +206,7 @@ export function MatchStats({ snapshot }: { snapshot: MatchSnapshot }) {
   );
 }
 
-export function Lineups({ snapshot }: { snapshot: MatchSnapshot }) {
+export function Lineups({ snapshot, playerJerseyMap }: { snapshot: MatchSnapshot; playerJerseyMap?: Map<string, number> }) {
   const { t } = useTranslation();
   const renderTeam = (
     team: MatchSnapshot["home_team"],
@@ -256,6 +256,7 @@ export function Lineups({ snapshot }: { snapshot: MatchSnapshot }) {
                       className={`font-medium flex-1 truncate ${isOff ? "line-through text-gray-600 dark:text-gray-500" : "text-gray-700 dark:text-gray-300"}`}
                     >
                       {p.name}
+                    {playerJerseyMap?.has(p.id) && <span className="ml-1 text-gray-500 dark:text-gray-400">#{playerJerseyMap.get(p.id)}</span>}
                     </span>
                     {yc > 0 && (
                       <span className="w-3 h-4 rounded-sm bg-yellow-400 text-navy-900 text-[8px] flex items-center justify-center font-bold">
@@ -297,6 +298,7 @@ export function Lineups({ snapshot }: { snapshot: MatchSnapshot }) {
                   {wasSubbedOff && <span className="text-red-400 text-[10px]">▼</span>}
                   <span className="text-gray-600 dark:text-gray-400 font-medium flex-1 truncate">
                     {p.name}
+                    {playerJerseyMap?.has(p.id) && <span className="ml-1 text-gray-500 dark:text-gray-400">#{playerJerseyMap.get(p.id)}</span>}
                   </span>
                   <Badge variant="neutral" size="sm">
                     {translatePositionAbbreviation(t, p.position)}
