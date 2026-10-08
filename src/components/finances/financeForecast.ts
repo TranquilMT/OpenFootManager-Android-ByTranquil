@@ -36,6 +36,11 @@ export function projectClubCash({
     projectedWages += wageChange;
   };
   for (const player of players) {
+    if (player.team_id === teamId && !player.active_loan && player.contract_end) {
+      const expiryDays = getDaysUntil(player.contract_end.slice(0, 10), today.slice(0, 10));
+      const leavesBeforeExpiry = player.transfer_offers.some((offer) => offer.status === "PendingRegistration" && offer.from_team_id !== teamId && getDaysUntil((offer.registration_date ?? offer.date).slice(0, 10), today.slice(0, 10)) <= expiryDays);
+      if (!leavesBeforeExpiry) apply(`expiry:${player.id}`, player.contract_end, 0, -annualAmountToWeeklyCommitment(getPlayerAnnualWageCommitment(player, teamId)));
+    }
     for (const offer of player.transfer_offers) {
       if (offer.status !== "PendingRegistration") continue;
       if (offer.from_team_id === teamId && player.team_id !== teamId) {

@@ -58,4 +58,8 @@ describe("cash and committed wage forecast", () => {
       }),
     ).toEqual({ cash: 9600, weeklyWages: 1000, transferNet: 0 });
   });
+  it("stops paying owned players after known contract expiry", () => {
+    const player = { ...createGameState().players[0], team_id: "team-1", wage: 52000, contract_end: "2026-08-08", transfer_offers: [] };
+    expect(projectClubCash({ cash: 100000, weeklyNet: -1000, weeklyWages: 1000, teamId: "team-1", today: "2026-08-01", weeks: 4, players: [player] })).toEqual({ cash: 99000, weeklyWages: 0, transferNet: 0 });
+  });
 });
