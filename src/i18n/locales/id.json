@@ -1783,7 +1783,7 @@
     "patchPlayers": "Lebih banyak pemain unggulan, termasuk bintang langka berperingkat 96.",
     "patchMatches": "Lebih banyak reaksi, tembakan membentur tiang, dan komentar suara opsional.",
     "patchMobile": "Kontrol seluler, kotak masuk, tim nasional, dan awal karier ditingkatkan.",
-    "patchWelcome": "OFMtouch 0.7.0 — Mesin Pertandingan V2",
+    "patchWelcome": "OFMtouch 0.7.1 — Mesin Pertandingan V2",
     "patchPortraits": "20 wajah fiktif sumber membuat potret pemain hasil generasi lebih beragam.",
     "patchWorld": "Dunia sepak bola yang lebih luas mencakup 29 negara, dengan klub lebih kuat di Amerika dan Asia.",
     "patchTransfers": "Strategi klub memandu pinjaman dan transfer, dengan tawaran bersaing serta pemeriksaan anggaran.",
@@ -4399,5 +4399,11 @@
       "interface": "Ikon menu diperbarui dan kartu pembaruan ringkas diterjemahkan ke semua bahasa yang didukung.",
       "thanks": "Terima kasih telah bermain, menguji, dan memberikan masukan. Laporan Anda membantu meningkatkan setiap pertandingan."
     }
+  },
+  "phase71": {
+    "menu": "Riwayat patch menjadi satu-satunya pintasan menu untuk pembaruan terkini dan sebelumnya.",
+    "penalties": "Penendang penalti cadangan dipilih berdasarkan ketenangan dan kelelahan; pilihan yang ditetapkan tetap diutamakan.",
+    "safety": "Pemain cadangan yang diusir tidak dapat masuk. Kondisi impor dan nilai penguasaan bola berlebih ditangani dengan aman.",
+    "formations": "Formasi dengan bagian tidak valid atau angka berlebih ditolak tanpa crash."
   }
 }

@@ -1,25 +1,14 @@
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { useTranslation } from "react-i18next";
-import {
-  Activity,
-  MessageSquareText,
-  ChartNoAxesCombined,
-  SlidersHorizontal,
-  ShieldCheck,
-  Palette,
-  Heart,
-  Bug,
-} from "lucide-react";
+import { Activity, SlidersHorizontal, ShieldCheck, Palette, Heart, Bug } from "lucide-react";
 
 const ISSUE_URL = "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new";
 
 const HIGHLIGHT_KEYS = [
-  { key: "phase70.release.engine", Icon: Activity },
-  { key: "phase70.release.commentary", Icon: MessageSquareText },
-  { key: "phase70.release.insights", Icon: ChartNoAxesCombined },
-  { key: "phase70.release.decisions", Icon: SlidersHorizontal },
-  { key: "phase70.release.reliability", Icon: ShieldCheck },
-  { key: "phase70.release.interface", Icon: Palette },
+  { key: "phase71.menu", Icon: Palette },
+  { key: "phase71.penalties", Icon: SlidersHorizontal },
+  { key: "phase71.safety", Icon: ShieldCheck },
+  { key: "phase71.formations", Icon: Activity },
 ] as const;
 
 export function ReleaseNotes({ embedded = false }: { embedded?: boolean }) {

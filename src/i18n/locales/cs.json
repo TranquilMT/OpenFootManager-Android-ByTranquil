@@ -1783,7 +1783,7 @@
     "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
     "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
     "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
-    "patchWelcome": "OFMtouch 0.7.0 — Zápasový engine V2",
+    "patchWelcome": "OFMtouch 0.7.1 — Zápasový engine V2",
     "patchPortraits": "20 fiktivních výchozích tváří přináší pestřejší portréty hráčů.",
     "patchWorld": "Fotbalový svět zahrnuje 29 zemí a silnější kluby v Americe a Asii.",
     "patchTransfers": "Strategie klubů řídí hostování a přestupy včetně konkurenčních nabídek a kontroly rozpočtu.",
@@ -4399,5 +4399,11 @@
       "interface": "Vylepšené ikony menu a stručné karty aktualizací ve všech podporovaných jazycích.",
       "thanks": "Děkujeme za hraní, testování a zpětnou vazbu. Vaše hlášení pomáhají zlepšit každý zápas."
     }
+  },
+  "phase71": {
+    "menu": "Historie aktualizací je jediným odkazem v nabídce na současné i předchozí změny.",
+    "penalties": "Náhradní exekutor penalty se vybírá podle klidu a únavy; určený hráč má přednost.",
+    "safety": "Vyloučení náhradníci nemohou nastoupit. Importovaná kondice a příliš vysoké hodnoty držení míče se zpracují bezpečně.",
+    "formations": "Formace s neplatnými částmi nebo příliš vysokými čísly se odmítnou bez pádu."
   }
 }

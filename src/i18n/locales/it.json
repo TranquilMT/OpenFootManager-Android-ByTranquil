@@ -1802,7 +1802,7 @@
     "patchPlayers": "Più giocatori di spicco, incluse rare stelle da 96 e squadre in lotta per la promozione.",
     "patchMatches": "Più reazioni, tiri sui legni e telecronaca vocale facoltativa.",
     "patchMobile": "Comandi mobili, posta, nazionali e inizio carriera migliorati.",
-    "patchWelcome": "OFMtouch 0.7.0 — Motore partita V2",
+    "patchWelcome": "OFMtouch 0.7.1 — Motore partita V2",
     "patchPortraits": "20 volti fittizi di partenza rendono più vari i ritratti dei giocatori generati.",
     "patchWorld": "Un mondo calcistico più ampio copre 29 nazioni, con club più forti nelle Americhe e in Asia.",
     "patchTransfers": "Le strategie dei club guidano prestiti e trasferimenti, con offerte concorrenti e controlli sul budget.",
@@ -4399,5 +4399,11 @@
       "interface": "Icone del menu rinnovate e schede aggiornamento compatte in tutte le lingue supportate.",
       "thanks": "Grazie per giocare, testare e condividere suggerimenti. Le vostre segnalazioni migliorano ogni partita."
     }
+  },
+  "phase71": {
+    "menu": "Cronologia patch è l’unico collegamento nel menu alle novità attuali e precedenti.",
+    "penalties": "I rigoristi di riserva considerano freddezza e fatica; il rigorista designato resta prioritario.",
+    "safety": "Le riserve espulse non possono entrare. Condizione importata e valori di possesso eccessivi restano sicuri.",
+    "formations": "I moduli con segmenti non validi o valori eccessivi vengono rifiutati senza arresti."
   }
 }

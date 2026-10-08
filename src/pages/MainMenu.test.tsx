@@ -269,7 +269,9 @@ async function searchAndSelectNationality(
 
 describe("MainMenu", () => {
   it("offers patch history without a duplicate current-update menu card", async () => {
-    await act(async () => { render(<MainMenu />); });
+    await act(async () => {
+      render(<MainMenu />);
+    });
     expect(screen.getAllByRole("button", { name: "settings.patchHistory" })).toHaveLength(1);
     expect(screen.queryByRole("button", { name: /phase70.release.title/ })).not.toBeInTheDocument();
   });

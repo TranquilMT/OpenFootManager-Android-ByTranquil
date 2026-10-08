@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "OFMtouch 0.7.0 — Spielsimulation V2",
+    "patchWelcome": "OFMtouch 0.7.1 — Spielsimulation V2",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
@@ -4399,5 +4399,11 @@
       "interface": "Überarbeitete Menüsymbole und kompakte Updatekarten in allen unterstützten Sprachen.",
       "thanks": "Danke fürs Spielen, Testen und Teilen eurer Rückmeldungen. Eure Meldungen verbessern jedes Spiel."
     }
+  },
+  "phase71": {
+    "menu": "Der Patchverlauf ist der einzige Menülink zu aktuellen und früheren Änderungen.",
+    "penalties": "Ersatz-Elfmeterschützen werden nach Nervenstärke und Ermüdung gewählt; der festgelegte Schütze bleibt bevorzugt.",
+    "safety": "Verwiesene Ersatzspieler dürfen nicht eingewechselt werden. Importierte Kondition und überhöhte Ballbesitzwerte bleiben sicher.",
+    "formations": "Ungültige Formationsabschnitte und übergroße Zahlen werden ohne Absturz abgewiesen."
   }
 }

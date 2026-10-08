@@ -50,7 +50,11 @@ impl LiveMatchState {
             .copied()
             .unwrap_or(50.0);
         // At 100% condition: full skill. At 50%: ~80% skill. At 0%: ~60% skill.
-        let condition = if condition.is_finite() { condition.clamp(0.0, 100.0) } else { 50.0 };
+        let condition = if condition.is_finite() {
+            condition.clamp(0.0, 100.0)
+        } else {
+            50.0
+        };
         let factor = 0.6 + 0.4 * (condition / 100.0);
         base_skill * factor
     }
@@ -420,7 +424,8 @@ mod commentary_detail_tests {
     #[test]
     fn dismissed_bench_player_cannot_enter_or_consume_a_substitution() {
         let mut s = make_test_state();
-        s.home_bench.push(make_test_player("reserve", Position::Forward));
+        s.home_bench
+            .push(make_test_player("reserve", Position::Forward));
         s.sent_off.insert("reserve".into());
         let before = s.home.players.clone();
         assert!(s.do_substitution(Side::Home, "home_f1", "reserve").is_err());
@@ -446,16 +451,37 @@ mod commentary_detail_tests {
     #[test]
     fn fallback_penalty_taker_accounts_for_composure_and_fatigue() {
         let mut s = make_test_state();
-        for p in &mut s.home.players { p.shooting = 30; p.composure = 30; }
-        let tired = s.home.players.iter_mut().find(|p| p.id == "home_f1").unwrap();
-        tired.shooting = 99; tired.composure = 20;
-        let fresh = s.home.players.iter_mut().find(|p| p.id == "home_m1").unwrap();
-        fresh.shooting = 80; fresh.composure = 90;
+        for p in &mut s.home.players {
+            p.shooting = 30;
+            p.composure = 30;
+        }
+        let tired = s
+            .home
+            .players
+            .iter_mut()
+            .find(|p| p.id == "home_f1")
+            .unwrap();
+        tired.shooting = 99;
+        tired.composure = 20;
+        let fresh = s
+            .home
+            .players
+            .iter_mut()
+            .find(|p| p.id == "home_m1")
+            .unwrap();
+        fresh.shooting = 80;
+        fresh.composure = 90;
         s.player_conditions.insert("home_f1".into(), 10.0);
         s.player_conditions.insert("home_m1".into(), 100.0);
-        assert_eq!(s.pick_penalty_taker(Side::Home, &mut rand::rng()).id, "home_m1");
+        assert_eq!(
+            s.pick_penalty_taker(Side::Home, &mut rand::rng()).id,
+            "home_m1"
+        );
         s.set_pieces_mut(Side::Home).penalty_taker = Some("home_f1".into());
-        assert_eq!(s.pick_penalty_taker(Side::Home, &mut rand::rng()).id, "home_f1");
+        assert_eq!(
+            s.pick_penalty_taker(Side::Home, &mut rand::rng()).id,
+            "home_f1"
+        );
     }
 
     fn make_test_player(id: &str, pos: crate::types::Position) -> crate::types::PlayerData {

@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mais jogadores de destaque, incluindo raras estrelas de nível 96.",
     "patchMatches": "Mais reações, remates à trave e comentário por voz opcional.",
     "patchMobile": "Controlos móveis, caixa de entrada, seleções e início de carreira melhorados.",
-    "patchWelcome": "OFMtouch 0.7.0 — Motor de jogo V2",
+    "patchWelcome": "OFMtouch 0.7.1 — Motor de jogo V2",
     "patchPortraits": "20 rostos fictícios de origem tornam os retratos dos jogadores mais variados.",
     "patchWorld": "Um mundo de futebol maior abrange 29 nações, com clubes mais fortes nas Américas e na Ásia.",
     "patchTransfers": "As estratégias dos clubes orientam empréstimos e transferências, com ofertas concorrentes e controlo do orçamento.",
@@ -4399,5 +4399,11 @@
       "interface": "Ícones de menu renovados e cartões de atualização compactos em todos os idiomas suportados.",
       "thanks": "Obrigado por jogar, testar e partilhar opiniões. Os seus relatos ajudam a melhorar cada jogo."
     }
+  },
+  "phase71": {
+    "menu": "O histórico de atualizações é o único atalho do menu para novidades atuais e anteriores.",
+    "penalties": "O cobrador alternativo de penáltis considera compostura e fadiga; o designado mantém prioridade.",
+    "safety": "Suplentes expulsos não podem entrar. Condição importada e valores de posse excessivos são tratados com segurança.",
+    "formations": "Formações com segmentos inválidos ou números excessivos são rejeitadas sem falhas."
   }
 }

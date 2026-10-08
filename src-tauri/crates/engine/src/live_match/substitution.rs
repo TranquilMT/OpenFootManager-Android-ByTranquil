@@ -163,8 +163,13 @@ impl LiveMatchState {
 
     /// Parse a formation string like "4-4-2" into (defenders, midfielders, forwards).
     pub(super) fn parse_formation(formation: &str) -> (usize, usize, usize) {
-        let parts = formation.split('-').map(str::parse::<usize>).collect::<Result<Vec<_>, _>>();
-        let Ok(parts) = parts else { return (4, 4, 2); };
+        let parts = formation
+            .split('-')
+            .map(str::parse::<usize>)
+            .collect::<Result<Vec<_>, _>>();
+        let Ok(parts) = parts else {
+            return (4, 4, 2);
+        };
         if !matches!(parts.len(), 3 | 4)
             || parts.iter().any(|&n| n == 0 || n > 10)
             || parts.iter().sum::<usize>() != 10

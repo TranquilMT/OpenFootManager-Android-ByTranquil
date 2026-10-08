@@ -1783,7 +1783,7 @@
     "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
     "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
     "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
-    "patchWelcome": "OFMtouch 0.7.0 — Match Engine V2",
+    "patchWelcome": "OFMtouch 0.7.1 — Match Engine V2",
     "patchPortraits": "20 fictional source faces bring more variety to generated player portraits.",
     "patchWorld": "A larger football world spans 29 nations, with stronger clubs across the Americas and Asia.",
     "patchTransfers": "Club strategies guide loans and transfer approaches, with competing offers and budget checks.",
@@ -4399,5 +4399,11 @@
       "interface": "Refreshed menu icons and compact update cards, translated across every supported language.",
       "thanks": "Thank you for playing, testing and sharing feedback. Your reports help improve every match."
     }
+  },
+  "phase71": {
+    "menu": "Patch History is the single main-menu shortcut for current and previous updates.",
+    "penalties": "Fallback penalty takers use composure and current fatigue; your designated taker remains preferred.",
+    "safety": "Dismissed reserves cannot enter a match. Imported condition and oversized possession ratings remain safe.",
+    "formations": "Formation parsing rejects invalid segments and oversized shapes without crashing."
   }
 }
