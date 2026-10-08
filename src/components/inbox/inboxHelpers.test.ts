@@ -9,6 +9,7 @@ import {
   isNavigateAction,
   isChooseOptionAction,
   isPlayerEventMessage,
+  isOfferReviewNavigation,
   sortInboxMessages,
   UNREAD_FILTER,
 } from "./inboxHelpers";
@@ -192,5 +193,10 @@ describe("inboxHelpers", () => {
     expect(getNavigationTarget("/manager#notes?tab=Transfers").tab).toBe("Manager");
     expect(getNavigationTarget("https://example.test/?tab=Transfers").tab).toBe("Home");
     expect(getNavigationTarget("//example.test/player/p1?tab=Transfers").tab).toBe("Home");
+  });
+  it("recognises direct transfer review routes using the shared navigation parser", () => {
+    expect(isOfferReviewNavigation("transfer_offer_p1", { NavigateTo: { route: "/transfers" } })).toBe(true);
+    expect(isOfferReviewNavigation("loan_offer_p1", { NavigateTo: { route: "/dashboard?tab=transfers#offer" } })).toBe(true);
+    expect(isOfferReviewNavigation("transfer_offer_p1", { NavigateTo: { route: "https://example.test/?tab=Transfers" } })).toBe(false);
   });
 });

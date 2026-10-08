@@ -305,7 +305,7 @@ export function isOfferReviewNavigation(
 ): boolean {
   return (
     isNavigateAction(actionType) &&
-    /[?&]tab=Transfers(?:&|$)/i.test(actionType.NavigateTo.route) &&
+    getNavigationTarget(actionType.NavigateTo.route).tab === "Transfers" &&
     /^(?:loan_offer_|transfer_offer_|transfer_interest_)/.test(messageId)
   );
 }
