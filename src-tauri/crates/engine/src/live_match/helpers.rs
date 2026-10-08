@@ -37,7 +37,11 @@ impl LiveMatchState {
             let depletion =
                 fatigue_rate * (1.0 - stamina_factor * 0.5) * (1.3 - fitness_factor * 0.6);
             if let Some(cond) = self.player_conditions.get_mut(&p.id) {
-                let current = if cond.is_finite() { cond.clamp(0.0, 100.0) } else { 50.0 };
+                let current = if cond.is_finite() {
+                    cond.clamp(0.0, 100.0)
+                } else {
+                    50.0
+                };
                 // The fatigue floor must never heal an already exhausted player.
                 *cond = (current - depletion).max(current.min(5.0));
             }

@@ -333,7 +333,7 @@ impl LiveMatchState {
                 } else {
                     self.do_substitution(side, &player_off_id, &player_on_id)
                 }
-            },
+            }
             MatchCommand::ChangeFormation { side, formation } => {
                 let previous = self.team_ref(side).formation.clone();
                 self.apply_formation(side, &formation);

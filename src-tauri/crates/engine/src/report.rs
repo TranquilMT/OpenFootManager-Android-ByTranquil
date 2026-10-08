@@ -159,7 +159,10 @@ impl MatchReport {
 
         for event in &events {
             // Set-piece resolutions are synchronous within one simulated minute.
-            if last_set_piece.as_ref().is_some_and(|(_, _, minute)| *minute != event.minute) {
+            if last_set_piece
+                .as_ref()
+                .is_some_and(|(_, _, minute)| *minute != event.minute)
+            {
                 last_set_piece = None;
             }
             if pending_penalty.is_some_and(|(_, minute)| minute != event.minute) {
@@ -174,11 +177,12 @@ impl MatchReport {
                 // Deserialized event logs bypass MatchEvent::with_shot validation.
                 let xg = if shot.expected_goals.is_finite() {
                     shot.expected_goals.clamp(0.0, 1.0)
-                } else { 0.0 };
+                } else {
+                    0.0
+                };
                 stats.expected_goals += xg;
                 if let Some(pid) = &event.player_id {
-                    player_stats.entry(pid.clone()).or_default().expected_goals +=
-                        xg;
+                    player_stats.entry(pid.clone()).or_default().expected_goals += xg;
                 }
                 if event.event_type == EventType::ShotSaved && !shot.goalkeeper_id.is_empty() {
                     player_stats
@@ -193,7 +197,9 @@ impl MatchReport {
 
             // Track set-piece window: reset on events that clear the opportunity
             match &event.event_type {
-                EventType::Corner => last_set_piece = Some((EventType::Corner, event.side, event.minute)),
+                EventType::Corner => {
+                    last_set_piece = Some((EventType::Corner, event.side, event.minute))
+                }
                 EventType::FreeKick => {
                     // Only dangerous free kicks count: the taking side must be in their attacking
                     // third (opponent's defensive third). A free kick in HomeDefense is only
@@ -204,7 +210,9 @@ impl MatchReport {
                     };
                     last_set_piece = if event.zone == dangerous_zone {
                         Some((EventType::FreeKick, event.side, event.minute))
-                    } else { None };
+                    } else {
+                        None
+                    };
                 }
                 // Defensive events clear the set-piece window
                 EventType::ShotOffTarget
@@ -252,7 +260,8 @@ impl MatchReport {
                         ps.shots_on_target += 1;
                     }
                     if let Some(ref assist_id) = event.secondary_player_id
-                        && !assist_id.is_empty() && assist_id != pid
+                        && !assist_id.is_empty()
+                        && assist_id != pid
                     {
                         let ps = player_stats.entry(assist_id.clone()).or_default();
                         ps.assists += 1;
@@ -354,11 +363,15 @@ impl MatchReport {
                 EventType::YellowCard | EventType::SecondYellow => {
                     stats.yellow_cards += 1;
                     let dismissed = event.event_type == EventType::SecondYellow;
-                    if dismissed { stats.red_cards += 1; }
+                    if dismissed {
+                        stats.red_cards += 1;
+                    }
                     if !pid.is_empty() {
                         let ps = player_stats.entry(pid.to_string()).or_default();
                         ps.yellow_cards += 1;
-                        if dismissed { ps.red_cards += 1; }
+                        if dismissed {
+                            ps.red_cards += 1;
+                        }
                     }
                 }
                 EventType::RedCard => {
@@ -424,12 +437,16 @@ fn populate_minutes_played(
 ) {
     // Entry times make a substitute's later exit relative to when they came on.
     // Final lineups contain entrants, so identify them before assuming minute zero.
-    let entrants: std::collections::HashSet<&str> = events.iter()
+    let entrants: std::collections::HashSet<&str> = events
+        .iter()
         .filter(|event| event.event_type == EventType::Substitution)
-        .filter_map(|event| event.player_id.as_deref()).collect();
-    let mut entered: HashMap<String, u8> = tracked_player_ids.iter()
+        .filter_map(|event| event.player_id.as_deref())
+        .collect();
+    let mut entered: HashMap<String, u8> = tracked_player_ids
+        .iter()
         .filter(|id| !entrants.contains(id.as_str()))
-        .map(|id| (id.clone(), 0)).collect();
+        .map(|id| (id.clone(), 0))
+        .collect();
     let mut minutes_by_player: HashMap<String, u8> = HashMap::new();
     for event in events {
         let minute = event.minute.min(total_minutes);
@@ -446,7 +463,8 @@ fn populate_minutes_played(
             EventType::RedCard | EventType::SecondYellow => {
                 if let Some(id) = &event.player_id {
                     let start = entered.remove(id).unwrap_or(0);
-                    minutes_by_player.entry(id.clone())
+                    minutes_by_player
+                        .entry(id.clone())
                         .or_insert(minute.saturating_sub(start));
                 }
             }

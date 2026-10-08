@@ -108,23 +108,33 @@ fn make_live_match(allows_extra_time: bool) -> LiveMatchState {
     )
 }
 
-
 #[test]
 fn refinement_substitute_minutes_after_exit() {
     let substitution = |minute, incoming: &str, outgoing: &str| {
         MatchEvent::new(minute, EventType::Substitution, Side::Home, Zone::Midfield)
-            .with_player(incoming).with_secondary(outgoing)
+            .with_player(incoming)
+            .with_secondary(outgoing)
     };
-    let dismissal = MatchEvent::new(80, EventType::RedCard, Side::Home, Zone::Midfield)
-        .with_player("sub");
+    let dismissal =
+        MatchEvent::new(80, EventType::RedCard, Side::Home, Zone::Midfield).with_player("sub");
     let report = MatchReport::from_events_with_players(
-        vec![substitution(60, "sub", "starter"), dismissal], 50, 50, 90, vec!["starter".into()],
+        vec![substitution(60, "sub", "starter"), dismissal],
+        50,
+        50,
+        90,
+        vec!["starter".into()],
     );
     assert_eq!(report.player_stats["sub"].minutes_played, 20);
     assert_eq!(report.player_stats["starter"].minutes_played, 60);
     let report = MatchReport::from_events_with_players(
-        vec![substitution(60, "sub", "starter"), substitution(80, "next", "sub")],
-        50, 50, 90, vec!["next".into()],
+        vec![
+            substitution(60, "sub", "starter"),
+            substitution(80, "next", "sub"),
+        ],
+        50,
+        50,
+        90,
+        vec!["next".into()],
     );
     assert_eq!(report.player_stats["sub"].minutes_played, 20);
     assert_eq!(report.player_stats["next"].minutes_played, 10);
@@ -143,7 +153,8 @@ fn refinement_large_possession_counters() {
 #[test]
 fn refinement_imported_shot_probability() {
     let mut invalid = MatchEvent::new(12, EventType::ShotOffTarget, Side::Home, Zone::AwayDefense)
-        .with_player("shooter").with_shot(0.2, "keeper");
+        .with_player("shooter")
+        .with_shot(0.2, "keeper");
     invalid.shot.as_mut().unwrap().expected_goals = f64::NAN;
     let mut excessive = invalid.clone();
     excessive.shot.as_mut().unwrap().expected_goals = 5.0;
@@ -155,7 +166,8 @@ fn refinement_imported_shot_probability() {
 #[test]
 fn refinement_empty_assist_identity() {
     let goal = MatchEvent::new(12, EventType::Goal, Side::Home, Zone::AwayDefense)
-        .with_player("scorer").with_secondary("");
+        .with_player("scorer")
+        .with_secondary("");
     let report = MatchReport::from_events(vec![goal], 50, 50, 90);
     assert_eq!(report.goals[0].assist_id, None);
     assert!(!report.player_stats.contains_key(""));
@@ -164,7 +176,8 @@ fn refinement_empty_assist_identity() {
 #[test]
 fn refinement_expired_set_piece_source() {
     let corner = MatchEvent::new(12, EventType::Corner, Side::Home, Zone::AwayDefense);
-    let goal = MatchEvent::new(20, EventType::Goal, Side::Home, Zone::AwayDefense).with_player("scorer");
+    let goal =
+        MatchEvent::new(20, EventType::Goal, Side::Home, Zone::AwayDefense).with_player("scorer");
     let report = MatchReport::from_events(vec![corner, goal], 50, 50, 90);
     assert_eq!(report.goals[0].goal_source, GoalSource::OpenPlay);
 }
@@ -173,7 +186,8 @@ fn refinement_expired_set_piece_source() {
 fn refinement_harmless_free_kick_resets_source() {
     let corner = MatchEvent::new(12, EventType::Corner, Side::Home, Zone::AwayDefense);
     let free_kick = MatchEvent::new(12, EventType::FreeKick, Side::Home, Zone::HomeDefense);
-    let goal = MatchEvent::new(12, EventType::Goal, Side::Home, Zone::AwayDefense).with_player("scorer");
+    let goal =
+        MatchEvent::new(12, EventType::Goal, Side::Home, Zone::AwayDefense).with_player("scorer");
     let report = MatchReport::from_events(vec![corner, free_kick, goal], 50, 50, 90);
     assert_eq!(report.goals[0].goal_source, GoalSource::OpenPlay);
 }
@@ -203,9 +217,13 @@ fn refinement_snapshot_condition_bounds() {
 #[test]
 fn refinement_pre_kickoff_substitution_accounting() {
     let mut state = make_live_match(false);
-    state.apply_command(MatchCommand::Substitute {
-        side: Side::Home, player_off_id: "home_fwd1".into(), player_on_id: "home_sub_fwd1".into(),
-    }).unwrap();
+    state
+        .apply_command(MatchCommand::Substitute {
+            side: Side::Home,
+            player_off_id: "home_fwd1".into(),
+            player_on_id: "home_sub_fwd1".into(),
+        })
+        .unwrap();
     assert_eq!(state.home_subs_made, 0);
     assert!(state.substitutions.is_empty());
     assert!(state.events.is_empty());
@@ -217,18 +235,34 @@ fn refinement_dismissed_pre_match_swap_is_atomic() {
     let mut state = make_live_match(false);
     state.sent_off.insert("home_sub_fwd1".into());
     let before = serde_json::to_value(state.snapshot()).unwrap();
-    assert!(state.apply_command(MatchCommand::PreMatchSwap {
-        side: Side::Home, player_off_id: "home_fwd1".into(), player_on_id: "home_sub_fwd1".into(),
-    }).is_err());
+    assert!(
+        state
+            .apply_command(MatchCommand::PreMatchSwap {
+                side: Side::Home,
+                player_off_id: "home_fwd1".into(),
+                player_on_id: "home_sub_fwd1".into(),
+            })
+            .is_err()
+    );
     assert_eq!(serde_json::to_value(state.snapshot()).unwrap(), before);
 }
 
 #[test]
 fn refinement_invalid_formation_matches_applied_shape() {
     let mut state = make_live_match(false);
-    state.apply_command(MatchCommand::ChangeFormation { side: Side::Home, formation: "3-nope-5-2".into() }).unwrap();
+    state
+        .apply_command(MatchCommand::ChangeFormation {
+            side: Side::Home,
+            formation: "3-nope-5-2".into(),
+        })
+        .unwrap();
     assert_eq!(state.snapshot().home_team.formation, "4-4-2");
-    state.apply_command(MatchCommand::ChangeFormation { side: Side::Home, formation: "4-2-3-1".into() }).unwrap();
+    state
+        .apply_command(MatchCommand::ChangeFormation {
+            side: Side::Home,
+            formation: "4-2-3-1".into(),
+        })
+        .unwrap();
     assert_eq!(state.snapshot().home_team.formation, "4-2-3-1");
 }
 
@@ -243,15 +277,28 @@ fn refinement_effective_rating_condition_cap() {
 fn refinement_overall_attribute_scale() {
     let player = make_player("p", "Player", Position::Forward, 255);
     assert_eq!(player.overall(), 100.0);
-    assert_eq!(make_player("normal", "Normal", Position::Forward, 70).overall(), 70.0);
+    assert_eq!(
+        make_player("normal", "Normal", Position::Forward, 70).overall(),
+        70.0
+    );
 }
 
 #[test]
 fn refinement_all_dismissed_player_selection() {
     let mut state = make_live_match(false);
-    for player in &state.home.players { state.sent_off.insert(player.id.clone()); }
+    for player in &state.home.players {
+        state.sent_off.insert(player.id.clone());
+    }
     let mut rng = StdRng::seed_from_u64(1);
-    assert!(crate::shared::snap_from_squad(&state.home.players, &state.sent_off, Position::Forward, &mut rng).is_none());
+    assert!(
+        crate::shared::snap_from_squad(
+            &state.home.players,
+            &state.sent_off,
+            Position::Forward,
+            &mut rng
+        )
+        .is_none()
+    );
 }
 
 #[test]
@@ -268,8 +315,10 @@ fn refinement_penalty_award_counted_once() {
 
 #[test]
 fn refinement_second_yellow_counts_dismissal() {
-    let first = MatchEvent::new(12, EventType::YellowCard, Side::Home, Zone::Midfield).with_player("p");
-    let second = MatchEvent::new(30, EventType::SecondYellow, Side::Home, Zone::Midfield).with_player("p");
+    let first =
+        MatchEvent::new(12, EventType::YellowCard, Side::Home, Zone::Midfield).with_player("p");
+    let second =
+        MatchEvent::new(30, EventType::SecondYellow, Side::Home, Zone::Midfield).with_player("p");
     let report = MatchReport::from_events(vec![first, second], 50, 50, 90);
     assert_eq!(report.home_stats.yellow_cards, 2);
     assert_eq!(report.home_stats.red_cards, 1);
