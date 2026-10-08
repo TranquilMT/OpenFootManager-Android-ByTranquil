@@ -157,6 +157,11 @@ export function MatchStats({ snapshot }: { snapshot: MatchSnapshot }) {
       away: ct(awayEvents, "Corner"),
     },
     {
+      label: t("match.eventTypes.RedCard"),
+      home: ct(homeEvents, "RedCard") + ct(homeEvents, "SecondYellow"),
+      away: ct(awayEvents, "RedCard") + ct(awayEvents, "SecondYellow"),
+    },
+    {
       label: t("match.yellowCards"),
       home: ct(homeEvents, "YellowCard") + ct(homeEvents, "SecondYellow"),
       away: ct(awayEvents, "YellowCard") + ct(awayEvents, "SecondYellow"),

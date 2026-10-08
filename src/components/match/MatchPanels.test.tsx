@@ -26,4 +26,9 @@ describe("integrated match panels", () => {
     render(<MatchStats snapshot={snap} />);
     expect(row("match.yellowCards").firstElementChild).toHaveTextContent("2");
   });
+  it("shows direct and second-yellow dismissals in the statistics", () => {
+    render(<MatchStats snapshot={snapshot([event("RedCard"), event("SecondYellow", "Away")])} />);
+    expect(row("match.eventTypes.RedCard").firstElementChild).toHaveTextContent("1");
+    expect(row("match.eventTypes.RedCard").lastElementChild).toHaveTextContent("1");
+  });
 });
