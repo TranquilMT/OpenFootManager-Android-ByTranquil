@@ -155,11 +155,15 @@ impl MatchReport {
         // Tracks (event_type, side) so a set piece earned by one team doesn't
         // accidentally attribute a goal scored by the other.
         let mut last_set_piece: Option<(EventType, Side, u8)> = None;
+        let mut pending_penalty: Option<(Side, u8)> = None;
 
         for event in &events {
             // Set-piece resolutions are synchronous within one simulated minute.
             if last_set_piece.as_ref().is_some_and(|(_, _, minute)| *minute != event.minute) {
                 last_set_piece = None;
+            }
+            if pending_penalty.is_some_and(|(_, minute)| minute != event.minute) {
+                pending_penalty = None;
             }
             let stats = match event.side {
                 Side::Home => &mut home_stats,
@@ -258,7 +262,9 @@ impl MatchReport {
                     stats.goals += 1;
                     stats.shots += 1;
                     stats.shots_on_target += 1;
-                    stats.penalties += 1;
+                    if pending_penalty.take() != Some((event.side, event.minute)) {
+                        stats.penalties += 1;
+                    }
                     last_set_piece = None;
                     goals.push(GoalDetail {
                         minute: event.minute,
@@ -276,7 +282,9 @@ impl MatchReport {
                 }
                 EventType::PenaltyMiss => {
                     stats.shots += 1;
-                    stats.penalties += 1;
+                    if pending_penalty.take() != Some((event.side, event.minute)) {
+                        stats.penalties += 1;
+                    }
                     if !pid.is_empty() {
                         let ps = player_stats.entry(pid.to_string()).or_default();
                         ps.shots += 1;
@@ -365,6 +373,7 @@ impl MatchReport {
                 }
                 EventType::PenaltyAwarded => {
                     stats.penalties += 1;
+                    pending_penalty = Some((event.side, event.minute));
                 }
                 // Shootout kicks are intentionally excluded from goals,
                 // GoalDetails, and player stats — the shootout is scored
