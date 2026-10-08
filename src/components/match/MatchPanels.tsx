@@ -39,7 +39,7 @@ export function EventFeed({
       {events.length === 0 ? (
         <div className="flex items-center justify-center h-40 text-gray-600 dark:text-gray-500">
           <p className="font-heading text-sm uppercase tracking-wider">
-            {t("match.waitingKickoff")}
+            {t(snapshot.phase === "PreKickOff" ? "match.waitingKickoff" : "match.noEventsYet")}
           </p>
         </div>
       ) : (

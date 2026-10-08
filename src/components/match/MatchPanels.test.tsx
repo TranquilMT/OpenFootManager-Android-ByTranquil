@@ -73,4 +73,9 @@ describe("integrated match panels", () => {
     const details = screen.getAllByText("match.viewDetails").map((node) => node.closest("details")!);
     expect(details[0].open).toBe(false); expect(details[1].open).toBe(true);
   });
+  it("does not label an empty filtered timeline as waiting for kickoff", () => {
+    render(<EventFeed events={[]} snapshot={snapshot([event("Goal")])} />);
+    expect(screen.getByText("match.noEventsYet")).toBeInTheDocument();
+    expect(screen.queryByText("match.waitingKickoff")).not.toBeInTheDocument();
+  });
 });
