@@ -138,18 +138,8 @@ export function MatchStats({ snapshot }: { snapshot: MatchSnapshot }) {
     },
     {
       label: t("match.shots"),
-      home:
-        ct(homeEvents, "Goal") +
-        ct(homeEvents, "PenaltyGoal") +
-        ct(homeEvents, "ShotSaved") +
-        ct(homeEvents, "ShotOffTarget") +
-        ct(homeEvents, "ShotBlocked"),
-      away:
-        ct(awayEvents, "Goal") +
-        ct(awayEvents, "PenaltyGoal") +
-        ct(awayEvents, "ShotSaved") +
-        ct(awayEvents, "ShotOffTarget") +
-        ct(awayEvents, "ShotBlocked"),
+      home: homeMetrics.shots,
+      away: awayMetrics.shots,
     },
     {
       label: t("match.shotsOnTarget"),
