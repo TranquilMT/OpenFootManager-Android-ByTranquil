@@ -265,3 +265,13 @@ fn refinement_penalty_award_counted_once() {
         assert_eq!(legacy.home_stats.penalties, 1);
     }
 }
+
+#[test]
+fn refinement_second_yellow_counts_dismissal() {
+    let first = MatchEvent::new(12, EventType::YellowCard, Side::Home, Zone::Midfield).with_player("p");
+    let second = MatchEvent::new(30, EventType::SecondYellow, Side::Home, Zone::Midfield).with_player("p");
+    let report = MatchReport::from_events(vec![first, second], 50, 50, 90);
+    assert_eq!(report.home_stats.yellow_cards, 2);
+    assert_eq!(report.home_stats.red_cards, 1);
+    assert_eq!(report.player_stats["p"].red_cards, 1);
+}
