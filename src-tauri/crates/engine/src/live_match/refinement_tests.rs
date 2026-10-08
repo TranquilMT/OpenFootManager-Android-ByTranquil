@@ -199,3 +199,15 @@ fn refinement_snapshot_condition_bounds() {
     state.player_conditions.insert("home_gk".into(), f64::NAN);
     assert_eq!(state.snapshot().home_team.players[0].condition, 50);
 }
+
+#[test]
+fn refinement_pre_kickoff_substitution_accounting() {
+    let mut state = make_live_match(false);
+    state.apply_command(MatchCommand::Substitute {
+        side: Side::Home, player_off_id: "home_fwd1".into(), player_on_id: "home_sub_fwd1".into(),
+    }).unwrap();
+    assert_eq!(state.home_subs_made, 0);
+    assert!(state.substitutions.is_empty());
+    assert!(state.events.is_empty());
+    assert_eq!(state.home.players[9].id, "home_sub_fwd1");
+}
