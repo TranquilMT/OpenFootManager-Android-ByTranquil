@@ -238,3 +238,10 @@ fn refinement_effective_rating_condition_cap() {
     player.condition = 255;
     assert_eq!(player.effective_overall(), 70.0);
 }
+
+#[test]
+fn refinement_overall_attribute_scale() {
+    let player = make_player("p", "Player", Position::Forward, 255);
+    assert_eq!(player.overall(), 100.0);
+    assert_eq!(make_player("normal", "Normal", Position::Forward, 70).overall(), 70.0);
+}
