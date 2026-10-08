@@ -23,5 +23,5 @@ export function monitoredLoans(players: PlayerData[], teamId: string) {
         },
       ];
     })
-    .sort((a, b) => a.loan.end_date.localeCompare(b.loan.end_date));
+    .sort((a, b) => a.loan.end_date.localeCompare(b.loan.end_date) || a.player.id.localeCompare(b.player.id));
 }

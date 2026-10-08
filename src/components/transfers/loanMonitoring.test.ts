@@ -61,4 +61,10 @@ describe("club loan monitoring", () => {
     const player = { ...base, active_loan: { parent_team_id: "team-1", loan_team_id: "other", start_date: "2026-08-01", end_date: "2027-06-01", wage_contribution_pct: 50 } };
     expect(monitoredLoans([player, { ...player }], "team-1")).toHaveLength(1);
   });
+  it("keeps equal return-date ordering stable across world input order", () => {
+    const base = createGameState().players[0];
+    const loan = { parent_team_id: "team-1", loan_team_id: "other", start_date: "2026-08-01", end_date: "2027-06-01", wage_contribution_pct: 50 };
+    const players = [{ ...base, id: "z-player", active_loan: loan }, { ...base, id: "a-player", active_loan: loan }];
+    expect(monitoredLoans(players, "team-1").map((row) => row.player.id)).toEqual(["a-player", "z-player"]);
+  });
 });
