@@ -411,6 +411,47 @@ mod commentary_detail_tests {
         );
     }
 
+    #[test]
+    fn dismissed_bench_player_cannot_enter_or_consume_a_substitution() {
+        let mut s = make_test_state();
+        s.home_bench.push(make_test_player("reserve", Position::Forward));
+        s.sent_off.insert("reserve".into());
+        let before = s.home.players.clone();
+        assert!(s.do_substitution(Side::Home, "home_f1", "reserve").is_err());
+        assert_eq!(s.home_subs_made, 0);
+        assert_eq!(s.home.players.len(), before.len());
+        assert!(s.home.players.iter().any(|p| p.id == "home_f1"));
+        assert_eq!(s.home_bench[0].id, "reserve");
+        assert!(s.substitutions.is_empty());
+        assert!(s.events.is_empty());
+    }
+
+    #[test]
+    fn imported_condition_cannot_boost_or_poison_match_skills() {
+        let mut s = make_test_state();
+        for condition in [150.0, f64::INFINITY, f64::NAN, -50.0] {
+            s.player_conditions.insert("home_f1".into(), condition);
+            let skill = s.condition_adjusted_skill("home_f1", 80.0);
+            assert!(skill.is_finite());
+            assert!((48.0..=80.0).contains(&skill));
+        }
+    }
+
+    #[test]
+    fn fallback_penalty_taker_accounts_for_composure_and_fatigue() {
+        let mut s = make_test_state();
+        for p in &mut s.home.players { p.shooting = 30; p.composure = 30; }
+        let tired = s.home.players.iter_mut().find(|p| p.id == "home_f1").unwrap();
+        tired.shooting = 99; tired.composure = 20;
+        let fresh = s.home.players.iter_mut().find(|p| p.id == "home_m1").unwrap();
+        fresh.shooting = 80; fresh.composure = 90;
+        s.player_conditions.insert("home_f1".into(), 10.0);
+        s.player_conditions.insert("home_m1".into(), 100.0);
+        assert_eq!(s.pick_penalty_taker(Side::Home, &mut rand::rng()).id, "home_m1");
+        s.set_pieces_mut(Side::Home).penalty_taker = Some("home_f1".into());
+        assert_eq!(s.pick_penalty_taker(Side::Home, &mut rand::rng()).id, "home_f1");
+    }
+
     fn make_test_player(id: &str, pos: crate::types::Position) -> crate::types::PlayerData {
         crate::types::PlayerData {
             id: id.to_string(),

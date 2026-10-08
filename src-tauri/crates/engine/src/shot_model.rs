@@ -60,6 +60,14 @@ pub(crate) fn save_difficulty(xg: f64) -> crate::event::SaveQuality {
 mod tests {
     use super::*;
     #[test]
+    fn possession_contest_preserves_ratios_without_overflow() {
+        assert_eq!(contest_probability(f64::MAX, f64::MAX), 0.5);
+        assert!((contest_probability(f64::MAX, f64::MAX / 2.0) - 2.0 / 3.0).abs() < 1e-9);
+        assert_eq!(contest_probability(0.0, 40.0), 0.0);
+        assert_eq!(contest_probability(40.0, 0.0), 1.0);
+    }
+
+    #[test]
     fn penalty_probability_cannot_be_poisoned_by_invalid_skills() {
         assert!(penalty_conversion(f64::NAN, f64::INFINITY).is_finite());
     }
