@@ -190,3 +190,12 @@ fn refinement_fatigue_cannot_restore_condition() {
     state.deplete_stamina_tick();
     assert!(state.player_conditions["home_gk"] <= 1.0);
 }
+
+#[test]
+fn refinement_snapshot_condition_bounds() {
+    let mut state = make_live_match(false);
+    state.player_conditions.insert("home_gk".into(), 255.0);
+    assert_eq!(state.snapshot().home_team.players[0].condition, 100);
+    state.player_conditions.insert("home_gk".into(), f64::NAN);
+    assert_eq!(state.snapshot().home_team.players[0].condition, 50);
+}
