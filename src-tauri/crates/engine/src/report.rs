@@ -163,10 +163,14 @@ impl MatchReport {
             };
 
             if let Some(shot) = &event.shot {
-                stats.expected_goals += shot.expected_goals;
+                // Deserialized event logs bypass MatchEvent::with_shot validation.
+                let xg = if shot.expected_goals.is_finite() {
+                    shot.expected_goals.clamp(0.0, 1.0)
+                } else { 0.0 };
+                stats.expected_goals += xg;
                 if let Some(pid) = &event.player_id {
                     player_stats.entry(pid.clone()).or_default().expected_goals +=
-                        shot.expected_goals;
+                        xg;
                 }
                 if event.event_type == EventType::ShotSaved && !shot.goalkeeper_id.is_empty() {
                     player_stats
