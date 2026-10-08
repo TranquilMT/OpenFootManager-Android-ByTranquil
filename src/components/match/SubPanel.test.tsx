@@ -238,4 +238,24 @@ describe("SubPanel", () => {
     expect(screen.getAllByText("Bench One").length).toBeGreaterThan(0);
     expect(screen.getByRole("button", { name: "Confirm substitution" })).toBeInTheDocument();
   });
+
+  it("invalidates a prepared swap when the selected replacement is dismissed", () => {
+    const props = createProps();
+    const view = render(<SubPanel {...props} />);
+    fireEvent.click(screen.getByTestId("recommended-sub-starter-1-bench-1"));
+    view.rerender(<SubPanel {...props} snapshot={{ ...props.snapshot, sent_off: ["bench-1"] }} />);
+    const confirm = screen.queryByRole("button", { name: "Confirm substitution" });
+    if (confirm) fireEvent.click(confirm);
+    expect(props.onSubstitute).not.toHaveBeenCalled();
+  });
+
+  it("does not recommend using the reserve goalkeeper in an outfield role", () => {
+    const props = createProps();
+    props.snapshot.home_bench = [
+      makePlayer({ id: "keeper", position: "Goalkeeper", ovr: 99, condition: 100 }),
+    ];
+    render(<SubPanel {...props} />);
+    expect(screen.queryByTestId("recommended-sub-starter-1-keeper")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("recommended-sub-starter-2-keeper")).not.toBeInTheDocument();
+  });
 });

@@ -214,7 +214,9 @@ export function buildRecommendedSubstitutions(
       .filter((offPlayer) => !usedOffIds.has(offPlayer.id))
       .map((offPlayer) => {
         const eligibleBench = availableBench.filter(
-          (benchPlayer) => !usedOnIds.has(benchPlayer.id),
+          (benchPlayer) =>
+            !usedOnIds.has(benchPlayer.id) &&
+            (offPlayer.position === "Goalkeeper" || benchPlayer.position !== "Goalkeeper"),
         );
         const yellowCount = yellows[offPlayer.id] ?? 0;
         const onPlayer = [...eligibleBench].sort((leftPlayer, rightPlayer) => {

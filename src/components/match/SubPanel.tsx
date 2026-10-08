@@ -72,7 +72,9 @@ export function SubPanel({
     snapshot.substitutions.filter((s) => s.side === side).map((s) => s.player_on_id),
   );
   const availableBench = getAvailableMatchBench(snapshot, side);
-  const selectedPlayer = selectedOff ? team.players.find((p) => p.id === selectedOff) : null;
+  const selectedPlayer = selectedOff
+    ? team.players.find((p) => p.id === selectedOff && !snapshot.sent_off.includes(p.id))
+    : null;
   const comparedPlayer = selectedBench ? availableBench.find((p) => p.id === selectedBench) : null;
 
   const scenario = getMatchScenario(snapshot, side);
@@ -119,8 +121,14 @@ export function SubPanel({
   };
 
   const handleConfirmSubstitution = () => {
-    if (!selectedOff || !selectedBench) return;
-    onSubstitute(selectedOff, selectedBench);
+    if (
+      !selectedPlayer ||
+      !comparedPlayer ||
+      snapshot.phase === "Finished" ||
+      subsMade >= snapshot.max_subs
+    )
+      return;
+    onSubstitute(selectedPlayer.id, comparedPlayer.id);
   };
 
   const handleApplyRecommendation = (offId: string, onId: string) => {
