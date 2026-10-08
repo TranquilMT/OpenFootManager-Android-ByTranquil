@@ -50,6 +50,7 @@ impl LiveMatchState {
             .copied()
             .unwrap_or(50.0);
         // At 100% condition: full skill. At 50%: ~80% skill. At 0%: ~60% skill.
+        let condition = if condition.is_finite() { condition.clamp(0.0, 100.0) } else { 50.0 };
         let factor = 0.6 + 0.4 * (condition / 100.0);
         base_skill * factor
     }
