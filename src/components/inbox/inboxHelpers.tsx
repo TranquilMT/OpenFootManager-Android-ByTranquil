@@ -141,8 +141,7 @@ export function getFilteredMessages(
       message.actions.some(
         (action) =>
           !action.resolved &&
-          typeof action.action_type === "object" &&
-          ("ChooseOption" in action.action_type ||
+          (isChooseOptionAction(action.action_type) ||
             isOfferReviewNavigation(message.id, action.action_type)),
       ),
     );
@@ -290,7 +289,14 @@ export function renderMessageBodyLine(line: string, index: number): JSX.Element 
 export function isNavigateAction(
   actionType: MessageAction["action_type"],
 ): actionType is NavigateActionType {
-  return typeof actionType === "object" && "NavigateTo" in actionType;
+  return (
+    typeof actionType === "object" &&
+    actionType !== null &&
+    "NavigateTo" in actionType &&
+    actionType.NavigateTo !== null &&
+    typeof actionType.NavigateTo === "object" &&
+    typeof actionType.NavigateTo.route === "string"
+  );
 }
 
 export function isOfferReviewNavigation(
@@ -307,35 +313,50 @@ export function isOfferReviewNavigation(
 export function isChooseOptionAction(
   actionType: MessageAction["action_type"],
 ): actionType is ChooseOptionActionType {
-  return typeof actionType === "object" && "ChooseOption" in actionType;
+  return (
+    typeof actionType === "object" &&
+    actionType !== null &&
+    "ChooseOption" in actionType &&
+    actionType.ChooseOption !== null &&
+    typeof actionType.ChooseOption === "object" &&
+    Array.isArray(actionType.ChooseOption.options)
+  );
 }
 
 export function getNavigationTarget(route: string): NavigationTarget {
-  const teamMatch = route.match(/^\/team\/(.+)$/);
+  const path = route.split(/[?#]/)[0];
+  const decodeId = (value: string) => {
+    try {
+      return decodeURIComponent(value);
+    } catch {
+      return value;
+    }
+  };
+  const teamMatch = path.match(/^\/team\/([^/]+)\/?$/);
 
   if (teamMatch) {
     return {
       tab: "__selectTeam",
-      context: { messageId: teamMatch[1] },
+      context: { messageId: decodeId(teamMatch[1]) },
       shouldResolveAction: false,
     };
   }
 
-  const playerMatch = route.match(/^\/player\/(.+)$/);
+  const playerMatch = path.match(/^\/player\/([^/]+)\/?$/);
 
   if (playerMatch) {
     return {
       tab: "__selectPlayer",
-      context: { messageId: playerMatch[1] },
+      context: { messageId: decodeId(playerMatch[1]) },
       shouldResolveAction: false,
     };
   }
 
-  const tabMatch = route.match(/[?&]tab=([^&]+)/i);
+  const tabMatch = route.match(/[?&]tab=([^&#]+)/i);
 
   if (tabMatch) {
     return {
-      tab: tabMatch[1],
+      tab: ROUTE_TAB_MAP[decodeId(tabMatch[1]).toLowerCase()] ?? "Home",
       shouldResolveAction: false,
     };
   }

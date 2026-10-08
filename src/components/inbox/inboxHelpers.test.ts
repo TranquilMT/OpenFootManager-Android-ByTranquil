@@ -6,6 +6,8 @@ import {
   DECISIONS_FILTER,
   sortDecisionMessages,
   getNavigationTarget,
+  isNavigateAction,
+  isChooseOptionAction,
   isPlayerEventMessage,
   sortInboxMessages,
   UNREAD_FILTER,
@@ -34,6 +36,35 @@ function createMessage(overrides: Partial<MessageData> = {}): MessageData {
 }
 
 describe("inboxHelpers", () => {
+  it("rejects malformed legacy action payloads without throwing", () => {
+    for (const value of [
+      null,
+      { NavigateTo: null },
+      { NavigateTo: { route: 1 } },
+      { ChooseOption: null },
+    ]) {
+      const action = value as unknown as MessageData["actions"][number]["action_type"];
+      expect(isNavigateAction(action)).toBe(false);
+      expect(isChooseOptionAction(action)).toBe(false);
+      expect(
+        getFilteredMessages(
+          [
+            createMessage({
+              actions: [{ id: "a", label: "a", resolved: false, action_type: action }],
+            }),
+          ],
+          DECISIONS_FILTER,
+        ),
+      ).toEqual([]);
+    }
+  });
+  it("parses profile identifiers independently from query and fragment data", () => {
+    expect(getNavigationTarget("/player/player%2099?source=inbox#details").context).toEqual({
+      messageId: "player 99",
+    });
+    expect(getNavigationTarget("/dashboard?tab=Squad#details").tab).toBe("Squad");
+    expect(getNavigationTarget("/dashboard?tab=NotATab").tab).toBe("Home");
+  });
   it("keeps read but unresolved decisions and prioritises urgent choices", () => {
     const choice = {
       id: "choose",
