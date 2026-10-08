@@ -554,7 +554,7 @@ describe("InboxTab", (): void => {
     expect(mockedInvoke).not.toHaveBeenCalledWith("resolve_message_action", expect.anything());
   });
 
-  it("navigates to a dashboard tab and still resolves the action", async (): Promise<void> => {
+  it("opens a dashboard tab without completing the football decision", async (): Promise<void> => {
     const onGameUpdate = vi.fn();
     const onNavigate = vi.fn();
     const resolvedGameState = createGameState([createMessage({ id: "m1", read: true })]);
@@ -578,14 +578,10 @@ describe("InboxTab", (): void => {
 
     await waitFor((): void => {
       expect(onNavigate).toHaveBeenCalledWith("Squad", undefined);
-      expect(mockedInvoke).toHaveBeenCalledWith("resolve_message_action", {
-        messageId: "m1",
-        actionId: "action-1",
-        optionId: null,
-      });
+      expect(mockedInvoke).not.toHaveBeenCalledWith("resolve_message_action", expect.anything());
     });
 
-    expect(onGameUpdate).toHaveBeenCalledWith(resolvedGameState);
+    expect(onGameUpdate).not.toHaveBeenCalled();
   });
 
   it.each(["loan_offer_1", "transfer_offer_1"])(

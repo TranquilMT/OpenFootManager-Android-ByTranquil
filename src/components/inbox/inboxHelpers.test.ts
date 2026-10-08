@@ -134,12 +134,12 @@ describe("inboxHelpers", () => {
 
     expect(getNavigationTarget("/dashboard?tab=Squad")).toEqual({
       tab: "Squad",
-      shouldResolveAction: true,
+      shouldResolveAction: false,
     });
 
     expect(getNavigationTarget("/transfers")).toEqual({
       tab: "Transfers",
-      shouldResolveAction: true,
+      shouldResolveAction: false,
     });
   });
 

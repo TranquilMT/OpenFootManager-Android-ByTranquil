@@ -336,7 +336,7 @@ export function getNavigationTarget(route: string): NavigationTarget {
   if (tabMatch) {
     return {
       tab: tabMatch[1],
-      shouldResolveAction: true,
+      shouldResolveAction: false,
     };
   }
 
@@ -344,7 +344,7 @@ export function getNavigationTarget(route: string): NavigationTarget {
 
   return {
     tab: ROUTE_TAB_MAP[simpleRoute] ?? "Home",
-    shouldResolveAction: true,
+    shouldResolveAction: false,
   };
 }
 
