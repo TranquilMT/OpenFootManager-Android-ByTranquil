@@ -3,6 +3,7 @@ import type { MatchEvent } from "./types";
 export const EVENT_FILTERS = [
   { id: "all", key: "common.all" },
   { id: "goals", key: "match.eventTypes.Goal" },
+  { id: "shots", key: "match.shots" },
   { id: "cards", key: "match.cards" },
   { id: "injuries", key: "match.eventTypes.Injury" },
   { id: "substitutions", key: "match.substitutions" },
@@ -11,6 +12,7 @@ export const EVENT_FILTERS = [
 export type EventFilter = (typeof EVENT_FILTERS)[number]["id"];
 const TYPES: Record<Exclude<EventFilter, "all">, ReadonlySet<string>> = {
   goals: new Set(["Goal", "PenaltyGoal"]),
+  shots: new Set(["ShotSaved", "ShotOnTarget", "ShotOffTarget", "ShotBlocked", "PenaltyMiss", "Goal", "PenaltyGoal"]),
   cards: new Set(["YellowCard", "SecondYellow", "RedCard"]),
   injuries: new Set(["Injury"]),
   substitutions: new Set(["Substitution"]),

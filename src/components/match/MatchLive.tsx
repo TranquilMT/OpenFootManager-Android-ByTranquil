@@ -128,8 +128,8 @@ export default function MatchLive({
   );
   const isFinished = snapshot.phase === "Finished";
   const filteredEvents = useMemo(
-    () => filterMatchEvents(visibleEvents, eventFilter),
-    [visibleEvents, eventFilter],
+    () => filterMatchEvents(eventFilter === "all" ? visibleEvents : snapshot.events, eventFilter),
+    [visibleEvents, snapshot.events, eventFilter],
   );
   const liveFeed = useLiveFeedScroll(filteredEvents.length, activePanel === "events");
 
@@ -505,7 +505,7 @@ export default function MatchLive({
 
           {activePanel === "events" && (
             <MatchEventFilters
-              events={visibleEvents}
+              events={snapshot.events}
               value={eventFilter}
               onChange={setEventFilter}
             />
