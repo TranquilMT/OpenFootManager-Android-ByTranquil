@@ -25,16 +25,12 @@ export default function MatchScreenLayout({
 }: MatchScreenLayoutProps) {
   return (
     <div
-      className="flex min-h-[100dvh] flex-col overflow-x-hidden bg-gray-100 text-gray-900 transition-colors duration-300 dark:bg-navy-900 dark:text-white"
-      style={{
-        paddingTop: "env(safe-area-inset-top,0px)",
-        paddingBottom: "env(safe-area-inset-bottom,0px)",
-      }}
+      className="flex min-h-[100dvh] flex-col overflow-x-hidden bg-gray-100 text-gray-900 transition-colors duration-300 dark:bg-navy-900 dark:text-white pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] pl-[env(safe-area-inset-left,0px)] pr-[env(safe-area-inset-right,0px)]"
     >
       {header && (
         <header
           className={joinClasses(
-            "sticky top-0 z-30 shrink-0 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur dark:border-navy-700 dark:bg-navy-900/95 sm:static sm:bg-transparent sm:shadow-none sm:backdrop-blur-none",
+            "sticky top-0 z-30 shrink-0 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur dark:border-navy-700 dark:bg-navy-900/95",
             headerClassName,
           )}
         >
