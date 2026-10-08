@@ -156,7 +156,7 @@ impl PlayerData {
 
     /// Effective rating accounting for current condition (0-100).
     pub fn effective_overall(&self) -> f64 {
-        self.overall() * (self.condition as f64 / 100.0)
+        self.overall() * (self.condition.min(100) as f64 / 100.0)
     }
 }
 
