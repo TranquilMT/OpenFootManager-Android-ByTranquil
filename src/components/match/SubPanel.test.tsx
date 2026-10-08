@@ -145,6 +145,34 @@ describe("SubPanel", () => {
     onClose: vi.fn(),
   });
 
+  it("names the decision dialog and supports Escape with focus restoration", () => {
+    const props = createProps();
+    const opener = document.createElement("button");
+    document.body.appendChild(opener);
+    opener.focus();
+    const view = render(<SubPanel {...props} />);
+    const dialog = screen.getByRole("dialog", { name: "match.substitutionsTitle" });
+    expect(dialog).toHaveAttribute("aria-modal", "true");
+    expect(screen.getByRole("button", { name: "common.close" })).toHaveFocus();
+    fireEvent.keyDown(dialog, { key: "Escape" });
+    expect(props.onClose).toHaveBeenCalledOnce();
+    view.unmount();
+    expect(opener).toHaveFocus();
+    opener.remove();
+  });
+
+  it("keeps keyboard navigation inside the decision panel", () => {
+    render(<SubPanel {...createProps()} />);
+    const close = screen.getByRole("button", { name: "common.close" });
+    close.focus();
+    fireEvent.keyDown(close, { key: "Tab", shiftKey: true });
+    const dialog = screen.getByRole("dialog");
+    expect(dialog.contains(document.activeElement)).toBe(true);
+    expect(close).not.toHaveFocus();
+    fireEvent.keyDown(document.activeElement!, { key: "Tab" });
+    expect(close).toHaveFocus();
+  });
+
   it("shows a disabled bench context menu action until a player is selected to come off", () => {
     const props = createProps();
 

@@ -1,6 +1,6 @@
 import type { TacticsPhaseSettings } from "../../store/types";
 import { PhaseBlueprintPanel } from "../tactics/PhaseBlueprintPanel";
-import { useState, type KeyboardEvent } from "react";
+import { useState, useEffect, useRef, type KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { type MatchSnapshot, FORMATIONS, PLAY_STYLES } from "./types";
 import { getPlayerName } from "./helpers";
@@ -68,6 +68,38 @@ export function SubPanel({
   pending?: boolean;
 }) {
   const { t } = useTranslation();
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+  useEffect(() => {
+    const previousFocus = document.activeElement;
+    closeRef.current?.focus();
+    const handleKey = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onCloseRef.current();
+      }
+      if (event.key !== "Tab") return;
+      const controls = Array.from(dialogRef.current?.querySelectorAll<HTMLElement>(
+        'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex="0"]',
+      ) ?? []).filter((element) => !element.closest('[hidden], [aria-hidden="true"]'));
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (event.shiftKey && (document.activeElement === first || !dialogRef.current?.contains(document.activeElement))) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && (document.activeElement === last || !dialogRef.current?.contains(document.activeElement))) {
+        event.preventDefault();
+        first?.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => {
+      document.removeEventListener("keydown", handleKey);
+      if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus();
+    };
+  }, []);
   const [selectedOff, setSelectedOff] = useState<string | null>(null);
   const [selectedBench, setSelectedBench] = useState<string | null>(null);
 
@@ -166,7 +198,11 @@ export function SubPanel({
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-navy-800 rounded-2xl border border-gray-200 dark:border-navy-600 shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden transition-colors duration-300"
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={t("match.substitutionsTitle")}
+        className="bg-white dark:bg-navy-800 rounded-2xl border border-gray-200 dark:border-navy-600 shadow-2xl w-full max-w-5xl max-h-[90dvh] flex flex-col overflow-hidden transition-colors duration-300"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -182,8 +218,10 @@ export function SubPanel({
           </div>
           <button
             type="button"
+            ref={closeRef}
+            aria-label={t("common.close")}
             onClick={onClose}
-            className="rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-navy-600 dark:hover:text-white"
+            className="min-h-11 min-w-11 rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-navy-600 dark:hover:text-white"
           >
             <span className="font-heading text-sm">✕</span>
           </button>
