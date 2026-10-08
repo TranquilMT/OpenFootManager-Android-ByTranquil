@@ -102,6 +102,18 @@ export function EventFeed({
                     )}
                   </>
                 )}
+                <details className="mt-2 rounded-lg border border-gray-200 dark:border-navy-600">
+                  <summary className="min-h-11 cursor-pointer px-3 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300">{t("match.viewDetails")}</summary>
+                  <div className="space-y-1 px-3 pb-3 text-xs text-gray-600 dark:text-gray-300">
+                    <p>{getEventTypeLabel(evt.event_type, t)}</p>
+                    {evt.player_id && <p>{displayName(evt.player_id)}</p>}
+                    {evt.secondary_player_id && <p>{displayName(evt.secondary_player_id)}</p>}
+                    {evt.shot && Number.isFinite(evt.shot.expected_goals) && (
+                      <p>{t("phase70.metrics.xg")}: <span>{Math.max(0, Math.min(1, evt.shot.expected_goals)).toFixed(2)}</span></p>
+                    )}
+                    {evt.shot?.goalkeeper_id && <p>{displayName(evt.shot.goalkeeper_id)}</p>}
+                  </div>
+                </details>
               </div>
             </div>
           );

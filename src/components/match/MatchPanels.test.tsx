@@ -56,4 +56,12 @@ describe("integrated match panels", () => {
     render(<Lineups snapshot={snap} />);
     expect(screen.getByText("reserve").closest('[aria-disabled="true"]')).not.toBeNull();
   });
+  it("offers expandable recorded participants and shot quality", () => {
+    const shot = { ...event("ShotSaved"), shot: { expected_goals: 0.35, goalkeeper_id: "keeper" } };
+    const snap = snapshot([shot]); snap.away_team.players = [player("keeper")];
+    render(<EventFeed events={[shot]} snapshot={snap} showCommentary={false} />);
+    expect(screen.getByText("match.viewDetails").closest("details")).not.toBeNull();
+    expect(screen.getByText("0.35")).toBeInTheDocument();
+    expect(screen.getByText("keeper")).toBeInTheDocument();
+  });
 });
