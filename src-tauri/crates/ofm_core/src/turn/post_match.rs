@@ -5,7 +5,7 @@ use domain::league::{
     MatchResult,
 };
 use domain::player::{
-    Injury, PlayerIssue, PlayerIssueCategory, PlayerPromiseKind, Position as DomainPosition,
+    PlayerIssue, PlayerIssueCategory, PlayerPromiseKind, Position as DomainPosition,
 };
 use domain::stats::{PlayerMatchStatsRecord, StatsState, TeamMatchStatsRecord};
 
@@ -106,6 +106,7 @@ pub fn apply_match_report_with_capture<F>(
     {
         return;
     }
+    let fixture_id = fixture.id.clone();
     // Convert engine GoalDetails → domain GoalEvents
     let home_scorers: Vec<GoalEvent> = report
         .goals
@@ -190,7 +191,7 @@ pub fn apply_match_report_with_capture<F>(
             .collect::<Vec<_>>();
         crate::achievements::credit_youth_minutes(game, &played);
     }
-    apply_match_injuries(game, report, home_team_id, away_team_id);
+    apply_match_injuries(game, report, home_team_id, away_team_id, &fixture_id);
     resolve_post_match_promises(game, report, home_team_id, away_team_id);
 
     // Deplete stamina for players who played, scaled by minutes on pitch
@@ -346,9 +347,20 @@ pub fn apply_match_report_with_capture<F>(
     game.sync_user_manager_record();
 }
 
-fn apply_match_injuries(game: &mut Game, report: &engine::MatchReport, home: &str, away: &str) {
+fn apply_match_injuries(
+    game: &mut Game,
+    report: &engine::MatchReport,
+    home: &str,
+    away: &str,
+    fixture_id: &str,
+) {
+    let mut rng = rand::rng();
+    let mut diagnosed = std::collections::HashSet::new();
     for event in &report.events {
         if event.event_type != engine::EventType::Injury {
+            continue;
+        }
+        if !diagnosed.insert(event.player_id.clone()) {
             continue;
         }
         let expected_team = match event.side {
@@ -361,34 +373,23 @@ fn apply_match_injuries(game: &mut Game, report: &engine::MatchReport, home: &st
         }) else {
             continue;
         };
-        let days = 3 + u32::from(event.minute % 12);
+        let injury = crate::player_wear::diagnose_match_injury(&mut rng);
         if player
             .injury
             .as_ref()
-            .is_none_or(|current| current.days_remaining < days)
+            .is_none_or(|current| current.days_remaining < injury.days_remaining)
         {
-            player.injury = Some(Injury {
-                name: "Muscle strain".to_string(),
-                days_remaining: days,
-            });
             if game.manager.team_id.as_deref() == Some(expected_team) {
-                game.messages.push(
-                    domain::message::InboxMessage::new(
-                        format!("match_injury_{}_{}_{}", player.id, game.clock.current_date, event.minute),
-                        format!("Injury — {}", player.match_name),
-                        format!("{} sustained a muscle strain during the match. The medical team expects approximately {} days of recovery.", player.match_name, days),
-                        "Head physio".to_string(),
-                        game.clock.current_date.to_rfc3339(),
-                    )
-                    .with_category(domain::message::MessageCategory::Injury)
-                    .with_priority(domain::message::MessagePriority::High)
-                    .with_context(domain::message::MessageContext {
-                        player_id: Some(player.id.clone()),
-                        team_id: Some(expected_team.to_string()),
-                        ..Default::default()
-                    }),
-                );
+                game.messages.push(messages::match_injury_message(
+                    fixture_id,
+                    &player.id,
+                    &player.match_name,
+                    expected_team,
+                    &injury,
+                    &game.clock.current_date.to_rfc3339(),
+                ));
             }
+            player.injury = Some(injury);
         }
     }
 }
@@ -830,5 +831,70 @@ mod tests {
         apply_match_report(&mut game, usize::MAX, "home", "away", &report);
         assert!(game.messages.is_empty());
         assert!(game.league.unwrap().fixtures.is_empty());
+    }
+    fn injured_game_and_report() -> (Game, engine::MatchReport) {
+        let mut game = empty_game();
+        game.manager.hire("home".into());
+        let attributes = serde_json::from_value(serde_json::json!({
+            "pace":70,"stamina":70,"strength":70,"passing":70,"shooting":70,
+            "tackling":70,"dribbling":70,"defending":70,"positioning":70,"vision":70,"decisions":70
+        }))
+        .unwrap();
+        let mut player = domain::player::Player::new(
+            "p".into(),
+            "Player".into(),
+            "Test Player".into(),
+            "2000-01-01".into(),
+            "England".into(),
+            DomainPosition::Midfielder,
+            attributes,
+        );
+        player.team_id = Some("home".into());
+        game.players.push(player);
+        let event = engine::MatchEvent::new(
+            30,
+            engine::EventType::Injury,
+            engine::Side::Home,
+            engine::Zone::Midfield,
+        )
+        .with_player("p");
+        (
+            game,
+            engine::MatchReport::from_events(vec![event.clone(), event], 1, 1, 90),
+        )
+    }
+
+    #[test]
+    fn match_medical_report_uses_translated_diagnosis_and_fixture_context() {
+        let (mut game, report) = injured_game_and_report();
+        apply_match_injuries(&mut game, &report, "home", "away", "fixture");
+        assert_eq!(
+            game.messages.len(),
+            1,
+            "duplicate injury events must produce one diagnosis"
+        );
+        let injury = game.players[0].injury.as_ref().unwrap();
+        assert!(crate::player_wear::MATCH_INJURY_NAMES.contains(&injury.name.as_str()));
+        let message = &game.messages[0];
+        assert_eq!(message.body_key.as_deref(), Some("be.msg.matchInjury.body"));
+        assert_eq!(message.i18n_params["injury"], injury.name);
+        assert_eq!(
+            message.i18n_params["days"],
+            injury.days_remaining.to_string()
+        );
+        assert_eq!(message.context.fixture_id.as_deref(), Some("fixture"));
+        assert_eq!(message.context.player_id.as_deref(), Some("p"));
+    }
+
+    #[test]
+    fn match_injury_does_not_replace_a_more_serious_existing_injury() {
+        let (mut game, report) = injured_game_and_report();
+        game.players[0].injury = Some(domain::player::Injury {
+            name: "Existing injury".into(),
+            days_remaining: 100,
+        });
+        apply_match_injuries(&mut game, &report, "home", "away", "fixture");
+        assert_eq!(game.players[0].injury.as_ref().unwrap().days_remaining, 100);
+        assert!(game.messages.is_empty());
     }
 }

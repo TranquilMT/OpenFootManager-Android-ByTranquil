@@ -1,5 +1,5 @@
 mod match_messages;
-pub use match_messages::{match_result_message, pre_match_message};
+pub use match_messages::{match_injury_message, match_result_message, pre_match_message};
 
 use domain::message::*;
 use rand::RngExt;

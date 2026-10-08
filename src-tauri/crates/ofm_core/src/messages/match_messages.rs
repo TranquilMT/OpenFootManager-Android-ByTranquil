@@ -151,3 +151,39 @@ pub fn match_result_message(
     )
     .with_sender_i18n("be.sender.matchReporter", "be.role.pressOfficer")
 }
+
+/// Medical report linked to its fixture and player; all display text is translated.
+pub fn match_injury_message(
+    fixture_id: &str,
+    player_id: &str,
+    player_name: &str,
+    team_id: &str,
+    injury: &domain::player::Injury,
+    date: &str,
+) -> InboxMessage {
+    InboxMessage::new(
+        format!("match_injury_{fixture_id}_{player_id}"),
+        String::new(),
+        String::new(),
+        String::new(),
+        date.to_string(),
+    )
+    .with_category(MessageCategory::Injury)
+    .with_priority(MessagePriority::High)
+    .with_context(MessageContext {
+        fixture_id: Some(fixture_id.to_string()),
+        player_id: Some(player_id.to_string()),
+        team_id: Some(team_id.to_string()),
+        ..Default::default()
+    })
+    .with_i18n(
+        "be.msg.matchInjury.subject",
+        "be.msg.matchInjury.body",
+        params(&[
+            ("player", player_name),
+            ("injury", &injury.name),
+            ("days", &injury.days_remaining.to_string()),
+        ]),
+    )
+    .with_sender_i18n("be.sender.headPhysio", "be.role.headPhysio")
+}
