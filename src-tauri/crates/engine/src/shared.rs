@@ -153,8 +153,8 @@ pub(crate) fn snap_from_squad<R: Rng>(
     if !pool.is_empty() {
         return Some(PlayerSnap::from(pool[rng.random_range(0..pool.len())]));
     }
-    // Everyone available has been sent off: anyone on the teamsheet will do.
-    players.first().map(PlayerSnap::from)
+    // No legal participant remains; never resurrect a dismissed player.
+    None
 }
 
 pub(crate) fn trait_bonus(snap: &PlayerSnap, context: TraitContext) -> f64 {

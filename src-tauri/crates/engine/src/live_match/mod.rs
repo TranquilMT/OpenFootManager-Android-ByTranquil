@@ -1,3 +1,6 @@
+#[cfg(test)]
+mod refinement_tests;
+
 mod helpers;
 mod penalty;
 mod simulation;
@@ -324,10 +327,17 @@ impl LiveMatchState {
                 side,
                 player_off_id,
                 player_on_id,
-            } => self.do_substitution(side, &player_off_id, &player_on_id),
+            } => {
+                if self.phase == MatchPhase::PreKickOff {
+                    self.do_pre_match_swap(side, &player_off_id, &player_on_id)
+                } else {
+                    self.do_substitution(side, &player_off_id, &player_on_id)
+                }
+            }
             MatchCommand::ChangeFormation { side, formation } => {
-                let changed = self.team_ref(side).formation != formation;
+                let previous = self.team_ref(side).formation.clone();
                 self.apply_formation(side, &formation);
+                let changed = self.team_ref(side).formation != previous;
                 if changed && self.phase != MatchPhase::PreKickOff {
                     self.events.push(MatchEvent::new(
                         self.current_minute,

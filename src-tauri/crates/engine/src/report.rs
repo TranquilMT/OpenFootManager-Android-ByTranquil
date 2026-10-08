@@ -154,19 +154,35 @@ impl MatchReport {
         // State machine to determine goal source from preceding set-piece event.
         // Tracks (event_type, side) so a set piece earned by one team doesn't
         // accidentally attribute a goal scored by the other.
-        let mut last_set_piece: Option<(EventType, Side)> = None;
+        let mut last_set_piece: Option<(EventType, Side, u8)> = None;
+        let mut pending_penalty: Option<(Side, u8)> = None;
 
         for event in &events {
+            // Set-piece resolutions are synchronous within one simulated minute.
+            if last_set_piece
+                .as_ref()
+                .is_some_and(|(_, _, minute)| *minute != event.minute)
+            {
+                last_set_piece = None;
+            }
+            if pending_penalty.is_some_and(|(_, minute)| minute != event.minute) {
+                pending_penalty = None;
+            }
             let stats = match event.side {
                 Side::Home => &mut home_stats,
                 Side::Away => &mut away_stats,
             };
 
             if let Some(shot) = &event.shot {
-                stats.expected_goals += shot.expected_goals;
+                // Deserialized event logs bypass MatchEvent::with_shot validation.
+                let xg = if shot.expected_goals.is_finite() {
+                    shot.expected_goals.clamp(0.0, 1.0)
+                } else {
+                    0.0
+                };
+                stats.expected_goals += xg;
                 if let Some(pid) = &event.player_id {
-                    player_stats.entry(pid.clone()).or_default().expected_goals +=
-                        shot.expected_goals;
+                    player_stats.entry(pid.clone()).or_default().expected_goals += xg;
                 }
                 if event.event_type == EventType::ShotSaved && !shot.goalkeeper_id.is_empty() {
                     player_stats
@@ -181,7 +197,9 @@ impl MatchReport {
 
             // Track set-piece window: reset on events that clear the opportunity
             match &event.event_type {
-                EventType::Corner => last_set_piece = Some((EventType::Corner, event.side)),
+                EventType::Corner => {
+                    last_set_piece = Some((EventType::Corner, event.side, event.minute))
+                }
                 EventType::FreeKick => {
                     // Only dangerous free kicks count: the taking side must be in their attacking
                     // third (opponent's defensive third). A free kick in HomeDefense is only
@@ -190,9 +208,11 @@ impl MatchReport {
                         Side::Home => Zone::AwayDefense,
                         Side::Away => Zone::HomeDefense,
                     };
-                    if event.zone == dangerous_zone {
-                        last_set_piece = Some((EventType::FreeKick, event.side));
-                    }
+                    last_set_piece = if event.zone == dangerous_zone {
+                        Some((EventType::FreeKick, event.side, event.minute))
+                    } else {
+                        None
+                    };
                 }
                 // Defensive events clear the set-piece window
                 EventType::ShotOffTarget
@@ -215,10 +235,10 @@ impl MatchReport {
                     stats.shots += 1;
                     stats.shots_on_target += 1;
                     let source = match last_set_piece.take() {
-                        Some((EventType::Corner, sp_side)) if sp_side == event.side => {
+                        Some((EventType::Corner, sp_side, _)) if sp_side == event.side => {
                             GoalSource::Corner
                         }
-                        Some((EventType::FreeKick, sp_side)) if sp_side == event.side => {
+                        Some((EventType::FreeKick, sp_side, _)) if sp_side == event.side => {
                             GoalSource::FreeKick
                         }
                         _ => GoalSource::OpenPlay,
@@ -229,7 +249,7 @@ impl MatchReport {
                         assist_id: event
                             .secondary_player_id
                             .clone()
-                            .filter(|assist| assist != pid),
+                            .filter(|assist| !assist.is_empty() && assist != pid),
                         goal_source: source,
                         side: event.side,
                     });
@@ -240,6 +260,7 @@ impl MatchReport {
                         ps.shots_on_target += 1;
                     }
                     if let Some(ref assist_id) = event.secondary_player_id
+                        && !assist_id.is_empty()
                         && assist_id != pid
                     {
                         let ps = player_stats.entry(assist_id.clone()).or_default();
@@ -250,7 +271,9 @@ impl MatchReport {
                     stats.goals += 1;
                     stats.shots += 1;
                     stats.shots_on_target += 1;
-                    stats.penalties += 1;
+                    if pending_penalty.take() != Some((event.side, event.minute)) {
+                        stats.penalties += 1;
+                    }
                     last_set_piece = None;
                     goals.push(GoalDetail {
                         minute: event.minute,
@@ -268,7 +291,9 @@ impl MatchReport {
                 }
                 EventType::PenaltyMiss => {
                     stats.shots += 1;
-                    stats.penalties += 1;
+                    if pending_penalty.take() != Some((event.side, event.minute)) {
+                        stats.penalties += 1;
+                    }
                     if !pid.is_empty() {
                         let ps = player_stats.entry(pid.to_string()).or_default();
                         ps.shots += 1;
@@ -337,9 +362,16 @@ impl MatchReport {
                 }
                 EventType::YellowCard | EventType::SecondYellow => {
                     stats.yellow_cards += 1;
+                    let dismissed = event.event_type == EventType::SecondYellow;
+                    if dismissed {
+                        stats.red_cards += 1;
+                    }
                     if !pid.is_empty() {
                         let ps = player_stats.entry(pid.to_string()).or_default();
                         ps.yellow_cards += 1;
+                        if dismissed {
+                            ps.red_cards += 1;
+                        }
                     }
                 }
                 EventType::RedCard => {
@@ -357,6 +389,7 @@ impl MatchReport {
                 }
                 EventType::PenaltyAwarded => {
                     stats.penalties += 1;
+                    pending_penalty = Some((event.side, event.minute));
                 }
                 // Shootout kicks are intentionally excluded from goals,
                 // GoalDetails, and player stats — the shootout is scored
@@ -373,7 +406,7 @@ impl MatchReport {
             &mut player_stats,
         );
 
-        let total_poss = home_possession_ticks + away_possession_ticks;
+        let total_poss = home_possession_ticks as u64 + away_possession_ticks as u64;
         let home_possession = if total_poss > 0 {
             home_possession_ticks as f64 / total_poss as f64 * 100.0
         } else {
@@ -402,41 +435,47 @@ fn populate_minutes_played(
     tracked_player_ids: &[String],
     player_stats: &mut HashMap<String, PlayerMatchStats>,
 ) {
-    let mut minutes_by_player: HashMap<String, u8> = tracked_player_ids
+    // Entry times make a substitute's later exit relative to when they came on.
+    // Final lineups contain entrants, so identify them before assuming minute zero.
+    let entrants: std::collections::HashSet<&str> = events
         .iter()
-        .cloned()
-        .map(|player_id| (player_id, total_minutes))
+        .filter(|event| event.event_type == EventType::Substitution)
+        .filter_map(|event| event.player_id.as_deref())
         .collect();
-
+    let mut entered: HashMap<String, u8> = tracked_player_ids
+        .iter()
+        .filter(|id| !entrants.contains(id.as_str()))
+        .map(|id| (id.clone(), 0))
+        .collect();
+    let mut minutes_by_player: HashMap<String, u8> = HashMap::new();
     for event in events {
+        let minute = event.minute.min(total_minutes);
         match event.event_type {
             EventType::Substitution => {
-                if let Some(ref player_off_id) = event.secondary_player_id {
-                    minutes_by_player
-                        .insert(player_off_id.clone(), event.minute.min(total_minutes));
+                if let Some(id) = &event.secondary_player_id {
+                    let start = entered.remove(id).unwrap_or(0);
+                    minutes_by_player.insert(id.clone(), minute.saturating_sub(start));
                 }
-                if let Some(ref player_on_id) = event.player_id {
-                    minutes_by_player.insert(
-                        player_on_id.clone(),
-                        total_minutes.saturating_sub(event.minute),
-                    );
+                if let Some(id) = &event.player_id {
+                    entered.insert(id.clone(), minute);
                 }
             }
             EventType::RedCard | EventType::SecondYellow => {
-                if let Some(ref player_id) = event.player_id {
-                    let dismissed_at = event.minute.min(total_minutes);
+                if let Some(id) = &event.player_id {
+                    let start = entered.remove(id).unwrap_or(0);
                     minutes_by_player
-                        .entry(player_id.clone())
-                        .and_modify(|minutes| *minutes = (*minutes).min(dismissed_at))
-                        .or_insert(dismissed_at);
+                        .entry(id.clone())
+                        .or_insert(minute.saturating_sub(start));
                 }
             }
             _ => {}
         }
     }
-
-    for (player_id, minutes_played) in minutes_by_player {
-        player_stats.entry(player_id).or_default().minutes_played = minutes_played;
+    for (id, start) in entered {
+        minutes_by_player.insert(id, total_minutes.saturating_sub(start));
+    }
+    for (id, minutes) in minutes_by_player {
+        player_stats.entry(id).or_default().minutes_played = minutes;
     }
 }
 

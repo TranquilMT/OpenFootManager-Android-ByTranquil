@@ -30,14 +30,20 @@ impl LiveMatchState {
             if self.sent_off.contains(&p.id) {
                 continue;
             }
-            let stamina_factor = p.stamina as f64 / 100.0;
-            let fitness_factor = p.fitness as f64 / 100.0;
+            let stamina_factor = p.stamina.min(100) as f64 / 100.0;
+            let fitness_factor = p.fitness.min(100) as f64 / 100.0;
             // Higher stamina → less depletion; higher fitness → less depletion.
             // Fitness scales the base depletion more aggressively (unfit players tire much faster).
             let depletion =
                 fatigue_rate * (1.0 - stamina_factor * 0.5) * (1.3 - fitness_factor * 0.6);
             if let Some(cond) = self.player_conditions.get_mut(&p.id) {
-                *cond = (*cond - depletion).max(5.0);
+                let current = if cond.is_finite() {
+                    cond.clamp(0.0, 100.0)
+                } else {
+                    50.0
+                };
+                // The fatigue floor must never heal an already exhausted player.
+                *cond = (current - depletion).max(current.min(5.0));
             }
         }
     }
