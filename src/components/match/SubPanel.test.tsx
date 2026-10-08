@@ -300,4 +300,9 @@ describe("SubPanel", () => {
     snap.home_bench = [makePlayer({ id: "forward", position: "Forward", ovr: 99, condition: 100 }), makePlayer({ id: "reserve-keeper", position: "Goalkeeper", ovr: 30, condition: 70 })];
     expect(buildRecommendedSubstitutions(snap, "Home")[0].onId).toBe("reserve-keeper");
   });
+  it("excludes injured bench players from both picker and recommendations", () => {
+    const snap = createSnapshot(); snap.events = [{ minute: 20, event_type: "Injury", side: "Home", player_id: "bench-1", secondary_player_id: null, zone: "Midfield" }];
+    expect(getAvailableMatchBench(snap, "Home").map((player) => player.id)).not.toContain("bench-1");
+    expect(buildRecommendedSubstitutions(snap, "Home").map((rec) => rec.onId)).not.toContain("bench-1");
+  });
 });
