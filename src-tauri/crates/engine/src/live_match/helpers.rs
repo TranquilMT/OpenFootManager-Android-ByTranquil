@@ -50,6 +50,11 @@ impl LiveMatchState {
             .copied()
             .unwrap_or(50.0);
         // At 100% condition: full skill. At 50%: ~80% skill. At 0%: ~60% skill.
+        let condition = if condition.is_finite() {
+            condition.clamp(0.0, 100.0)
+        } else {
+            50.0
+        };
         let factor = 0.6 + 0.4 * (condition / 100.0);
         base_skill * factor
     }
@@ -81,14 +86,19 @@ impl LiveMatchState {
                 return PlayerSnap::from(p);
             }
         }
-        // Fallback: pick the forward with highest shooting
+        // Fallback uses the same composure and fatigue inputs as penalty resolution.
         let team = self.team_ref(side);
         let mut candidates: Vec<&PlayerData> = team
             .players
             .iter()
             .filter(|p| !self.sent_off.contains(&p.id))
             .collect();
-        candidates.sort_by_key(|p| std::cmp::Reverse(p.shooting));
+        candidates.sort_by(|a, b| {
+            let skill = |p: &&PlayerData| {
+                self.condition_adjusted_skill(&p.id, (p.shooting as f64 + p.composure as f64) / 2.0)
+            };
+            skill(b).total_cmp(&skill(a)).then_with(|| a.id.cmp(&b.id))
+        });
         if let Some(p) = candidates.first() {
             PlayerSnap::from(p)
         } else {
@@ -408,6 +418,69 @@ mod commentary_detail_tests {
                 .filter(|e| e.event_type == crate::event::EventType::RedCard)
                 .count(),
             1
+        );
+    }
+
+    #[test]
+    fn dismissed_bench_player_cannot_enter_or_consume_a_substitution() {
+        let mut s = make_test_state();
+        s.home_bench
+            .push(make_test_player("reserve", Position::Forward));
+        s.sent_off.insert("reserve".into());
+        let before = s.home.players.clone();
+        assert!(s.do_substitution(Side::Home, "home_f1", "reserve").is_err());
+        assert_eq!(s.home_subs_made, 0);
+        assert_eq!(s.home.players.len(), before.len());
+        assert!(s.home.players.iter().any(|p| p.id == "home_f1"));
+        assert_eq!(s.home_bench[0].id, "reserve");
+        assert!(s.substitutions.is_empty());
+        assert!(s.events.is_empty());
+    }
+
+    #[test]
+    fn imported_condition_cannot_boost_or_poison_match_skills() {
+        let mut s = make_test_state();
+        for condition in [150.0, f64::INFINITY, f64::NAN, -50.0] {
+            s.player_conditions.insert("home_f1".into(), condition);
+            let skill = s.condition_adjusted_skill("home_f1", 80.0);
+            assert!(skill.is_finite());
+            assert!((48.0..=80.0).contains(&skill));
+        }
+    }
+
+    #[test]
+    fn fallback_penalty_taker_accounts_for_composure_and_fatigue() {
+        let mut s = make_test_state();
+        for p in &mut s.home.players {
+            p.shooting = 30;
+            p.composure = 30;
+        }
+        let tired = s
+            .home
+            .players
+            .iter_mut()
+            .find(|p| p.id == "home_f1")
+            .unwrap();
+        tired.shooting = 99;
+        tired.composure = 20;
+        let fresh = s
+            .home
+            .players
+            .iter_mut()
+            .find(|p| p.id == "home_m1")
+            .unwrap();
+        fresh.shooting = 80;
+        fresh.composure = 90;
+        s.player_conditions.insert("home_f1".into(), 10.0);
+        s.player_conditions.insert("home_m1".into(), 100.0);
+        assert_eq!(
+            s.pick_penalty_taker(Side::Home, &mut rand::rng()).id,
+            "home_m1"
+        );
+        s.set_pieces_mut(Side::Home).penalty_taker = Some("home_f1".into());
+        assert_eq!(
+            s.pick_penalty_taker(Side::Home, &mut rand::rng()).id,
+            "home_f1"
         );
     }
 
