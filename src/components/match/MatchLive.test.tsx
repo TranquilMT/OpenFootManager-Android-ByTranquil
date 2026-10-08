@@ -155,18 +155,93 @@ describe("live match decisions", () => {
     const old = Object.getOwnPropertyDescriptor(document, "hidden");
     Object.defineProperty(document, "hidden", { configurable: true, value: true });
     vi.mocked(invoke).mockResolvedValue([]);
-    const view = render(<MatchLive snapshot={snapshot} gameState={{ teams: [], players: [] } as unknown as GameStateData} userSide="Home" isSpectator={false} importantEvents={[]} onSnapshotUpdate={vi.fn()} onImportantEvent={vi.fn()} onHalfTime={vi.fn()} onFullTime={vi.fn()} />);
+    const view = render(
+      <MatchLive
+        snapshot={snapshot}
+        gameState={{ teams: [], players: [] } as unknown as GameStateData}
+        userSide="Home"
+        isSpectator={false}
+        importantEvents={[]}
+        onSnapshotUpdate={vi.fn()}
+        onImportantEvent={vi.fn()}
+        onHalfTime={vi.fn()}
+        onFullTime={vi.fn()}
+      />,
+    );
     try {
-      await act(async () => { await vi.advanceTimersByTimeAsync(10000); });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(10000);
+      });
       expect(invoke).not.toHaveBeenCalled();
       Object.defineProperty(document, "hidden", { configurable: true, value: false });
-      act(() => { document.dispatchEvent(new Event("visibilitychange")); });
-      await act(async () => { await vi.advanceTimersByTimeAsync(2000); });
+      act(() => {
+        document.dispatchEvent(new Event("visibilitychange"));
+      });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(2000);
+      });
       expect(invoke).toHaveBeenCalledExactlyOnceWith("step_live_match", { minutes: 1 });
     } finally {
       view.unmount();
-      if (old) Object.defineProperty(document, "hidden", old); else Reflect.deleteProperty(document, "hidden");
+      if (old) Object.defineProperty(document, "hidden", old);
+      else Reflect.deleteProperty(document, "hidden");
       vi.useRealTimers();
     }
+  });
+  it("provides keyboard-selectable event tabs and selected speed state", () => {
+    render(
+      <MatchLive
+        snapshot={snapshot}
+        gameState={{ teams: [], players: [] } as unknown as GameStateData}
+        userSide="Home"
+        isSpectator={false}
+        importantEvents={[]}
+        onSnapshotUpdate={vi.fn()}
+        onImportantEvent={vi.fn()}
+        onHalfTime={vi.fn()}
+        onFullTime={vi.fn()}
+      />,
+    );
+    const events = screen.getByRole("tab", { name: "match.events" });
+    expect(events).toHaveAttribute("aria-selected", "true");
+    fireEvent.keyDown(events, { key: "ArrowRight" });
+    const stats = screen.getByRole("tab", { name: "match.stats" });
+    expect(stats).toHaveAttribute("aria-selected", "true");
+    expect(stats).toHaveFocus();
+    expect(screen.getByRole("tabpanel")).toHaveAttribute("aria-labelledby", stats.id);
+    expect(screen.getByRole("button", { name: "match.slow" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    fireEvent.keyDown(stats, { key: "End" });
+    expect(screen.getByRole("tab", { name: "match.lineups" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+  });
+  it("keeps the all-events view consistent with its filter count", () => {
+    const shot = {
+      minute: 30,
+      event_type: "ShotOffTarget",
+      side: "Home" as const,
+      player_id: null,
+      secondary_player_id: null,
+      zone: "Midfield",
+    };
+    render(
+      <MatchLive
+        snapshot={{ ...snapshot, events: [shot] }}
+        gameState={{ teams: [], players: [] } as unknown as GameStateData}
+        userSide="Home"
+        isSpectator={false}
+        importantEvents={[]}
+        onSnapshotUpdate={vi.fn()}
+        onImportantEvent={vi.fn()}
+        onHalfTime={vi.fn()}
+        onFullTime={vi.fn()}
+      />,
+    );
+    expect(screen.getByRole("button", { name: "common.all (1)" })).toBeInTheDocument();
+    expect(screen.getByText("match.viewDetails")).toBeInTheDocument();
   });
 });

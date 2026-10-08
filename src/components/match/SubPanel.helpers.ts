@@ -35,7 +35,9 @@ export function getAvailableMatchBench(snapshot: MatchSnapshot, side: "Home" | "
   const { team, bench } = getTeamState(snapshot, side);
   const unavailable = new Set([
     ...snapshot.sent_off,
-    ...snapshot.events.filter((event) => event.side === side && event.event_type === "Injury" && event.player_id).map((event) => event.player_id as string),
+    ...snapshot.events
+      .filter((event) => event.side === side && event.event_type === "Injury" && event.player_id)
+      .map((event) => event.player_id as string),
     ...team.players.map((player) => player.id),
     ...snapshot.substitutions
       .filter((sub) => sub.side === side)
@@ -202,7 +204,11 @@ export function buildRecommendedSubstitutions(
     return [];
   }
 
-  const injuredIds = new Set(snapshot.events.filter((event) => event.side === side && event.event_type === "Injury").map((event) => event.player_id));
+  const injuredIds = new Set(
+    snapshot.events
+      .filter((event) => event.side === side && event.event_type === "Injury")
+      .map((event) => event.player_id),
+  );
   const usedOffIds = new Set<string>();
   const usedOnIds = new Set<string>();
   const recommendations: Array<RecommendedSubstitution & { score: number }> = [];
@@ -220,9 +226,10 @@ export function buildRecommendedSubstitutions(
             !usedOnIds.has(benchPlayer.id) &&
             (offPlayer.position === "Goalkeeper" || benchPlayer.position !== "Goalkeeper"),
         );
-        const keeperBench = offPlayer.position === "Goalkeeper"
-          ? eligibleBench.filter((player) => player.position === "Goalkeeper")
-          : [];
+        const keeperBench =
+          offPlayer.position === "Goalkeeper"
+            ? eligibleBench.filter((player) => player.position === "Goalkeeper")
+            : [];
         const replacementPool = keeperBench.length > 0 ? keeperBench : eligibleBench;
         const yellowCount = yellows[offPlayer.id] ?? 0;
         const onPlayer = [...replacementPool].sort((leftPlayer, rightPlayer) => {
@@ -265,7 +272,10 @@ export function buildRecommendedSubstitutions(
           recommendation != null,
       )
       .sort((leftRecommendation, rightRecommendation) => {
-        return rightRecommendation.score - leftRecommendation.score || leftRecommendation.offId.localeCompare(rightRecommendation.offId);
+        return (
+          rightRecommendation.score - leftRecommendation.score ||
+          leftRecommendation.offId.localeCompare(rightRecommendation.offId)
+        );
       })[0];
 
     if (!nextRecommendation) {

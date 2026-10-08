@@ -111,13 +111,18 @@ export function EventFeed({
                   </>
                 )}
                 <details className="mt-2 rounded-lg border border-gray-200 dark:border-navy-600">
-                  <summary className="min-h-11 cursor-pointer px-3 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300">{t("match.viewDetails")}</summary>
+                  <summary className="min-h-11 cursor-pointer px-3 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300">
+                    {t("match.viewDetails")}
+                  </summary>
                   <div className="space-y-1 px-3 pb-3 text-xs text-gray-600 dark:text-gray-300">
                     <p>{getEventTypeLabel(evt.event_type, t)}</p>
                     {evt.player_id && <p>{displayName(evt.player_id)}</p>}
                     {evt.secondary_player_id && <p>{displayName(evt.secondary_player_id)}</p>}
                     {evt.shot && Number.isFinite(evt.shot.expected_goals) && (
-                      <p>{t("phase70.metrics.xg")}: <span>{Math.max(0, Math.min(1, evt.shot.expected_goals)).toFixed(2)}</span></p>
+                      <p>
+                        {t("phase70.metrics.xg")}:{" "}
+                        <span>{Math.max(0, Math.min(1, evt.shot.expected_goals)).toFixed(2)}</span>
+                      </p>
                     )}
                     {evt.shot?.goalkeeper_id && <p>{displayName(evt.shot.goalkeeper_id)}</p>}
                   </div>
@@ -227,7 +232,13 @@ export function MatchStats({ snapshot }: { snapshot: MatchSnapshot }) {
   );
 }
 
-export function Lineups({ snapshot, playerJerseyMap }: { snapshot: MatchSnapshot; playerJerseyMap?: Map<string, number> }) {
+export function Lineups({
+  snapshot,
+  playerJerseyMap,
+}: {
+  snapshot: MatchSnapshot;
+  playerJerseyMap?: Map<string, number>;
+}) {
   const { t } = useTranslation();
   const renderTeam = (
     team: MatchSnapshot["home_team"],
@@ -266,7 +277,9 @@ export function Lineups({ snapshot, playerJerseyMap }: { snapshot: MatchSnapshot
                 const isOff = sentOff.includes(p.id);
                 const yc = yellows[p.id] || 0;
                 const isSubOn = subbedOnIds.has(p.id);
-                const condition = Number.isFinite(p.condition) ? Math.max(0, Math.min(100, p.condition)) : 0;
+                const condition = Number.isFinite(p.condition)
+                  ? Math.max(0, Math.min(100, p.condition))
+                  : 0;
                 const condColor = condBgColor(condition);
                 return (
                   <div
@@ -278,7 +291,11 @@ export function Lineups({ snapshot, playerJerseyMap }: { snapshot: MatchSnapshot
                       className={`font-medium flex-1 truncate ${isOff ? "line-through text-gray-600 dark:text-gray-500" : "text-gray-700 dark:text-gray-300"}`}
                     >
                       {p.name}
-                    {playerJerseyMap?.has(p.id) && <span className="ml-1 text-gray-500 dark:text-gray-400">#{playerJerseyMap.get(p.id)}</span>}
+                      {playerJerseyMap?.has(p.id) && (
+                        <span className="ml-1 text-gray-500 dark:text-gray-400">
+                          #{playerJerseyMap.get(p.id)}
+                        </span>
+                      )}
                     </span>
                     {yc > 0 && (
                       <span className="w-3 h-4 rounded-sm bg-yellow-400 text-navy-900 text-[8px] flex items-center justify-center font-bold">
@@ -294,7 +311,11 @@ export function Lineups({ snapshot, playerJerseyMap }: { snapshot: MatchSnapshot
                         />
                       </div>
                       <span className="text-gray-500 dark:text-gray-400 tabular-nums text-[10px] w-6 text-right">
-                        {Math.round(Number.isFinite(p.condition) ? Math.max(0, Math.min(100, p.condition)) : 0)}
+                        {Math.round(
+                          Number.isFinite(p.condition)
+                            ? Math.max(0, Math.min(100, p.condition))
+                            : 0,
+                        )}
                       </span>
                     </div>
                   </div>
@@ -318,17 +339,29 @@ export function Lineups({ snapshot, playerJerseyMap }: { snapshot: MatchSnapshot
                   aria-disabled={!availableIds.has(p.id)}
                   className={`flex items-center gap-2 py-1 px-2 rounded text-xs ${!availableIds.has(p.id) ? "opacity-50" : ""}`}
                 >
-                  {sentOff.includes(p.id) && <span aria-label={t("match.eventTypes.RedCard")} className="h-4 w-3 rounded-sm bg-red-500" />}
+                  {sentOff.includes(p.id) && (
+                    <span
+                      role="img"
+                      aria-label={t("match.eventTypes.RedCard")}
+                      className="h-4 w-3 rounded-sm bg-red-500"
+                    />
+                  )}
                   {wasSubbedOff && <span className="text-red-400 text-[10px]">▼</span>}
                   <span className="text-gray-600 dark:text-gray-400 font-medium flex-1 truncate">
                     {p.name}
-                    {playerJerseyMap?.has(p.id) && <span className="ml-1 text-gray-500 dark:text-gray-400">#{playerJerseyMap.get(p.id)}</span>}
+                    {playerJerseyMap?.has(p.id) && (
+                      <span className="ml-1 text-gray-500 dark:text-gray-400">
+                        #{playerJerseyMap.get(p.id)}
+                      </span>
+                    )}
                   </span>
                   <Badge variant="neutral" size="sm">
                     {translatePositionAbbreviation(t, p.position)}
                   </Badge>
                   <span className="text-gray-500 dark:text-gray-400 tabular-nums text-[10px] w-6 text-right">
-                    {Math.round(Number.isFinite(p.condition) ? Math.max(0, Math.min(100, p.condition)) : 0)}
+                    {Math.round(
+                      Number.isFinite(p.condition) ? Math.max(0, Math.min(100, p.condition)) : 0,
+                    )}
                   </span>
                 </div>
               );

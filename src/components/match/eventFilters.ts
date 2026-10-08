@@ -13,7 +13,15 @@ export const EVENT_FILTERS = [
 export type EventFilter = (typeof EVENT_FILTERS)[number]["id"];
 const TYPES: Record<Exclude<EventFilter, "all">, ReadonlySet<string>> = {
   goals: new Set(["Goal", "PenaltyGoal"]),
-  shots: new Set(["ShotSaved", "ShotOnTarget", "ShotOffTarget", "ShotBlocked", "PenaltyMiss", "Goal", "PenaltyGoal"]),
+  shots: new Set([
+    "ShotSaved",
+    "ShotOnTarget",
+    "ShotOffTarget",
+    "ShotBlocked",
+    "PenaltyMiss",
+    "Goal",
+    "PenaltyGoal",
+  ]),
   cards: new Set(["YellowCard", "SecondYellow", "RedCard"]),
   fouls: new Set(["Foul"]),
   injuries: new Set(["Injury"]),

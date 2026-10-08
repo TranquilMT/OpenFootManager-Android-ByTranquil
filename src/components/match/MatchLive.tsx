@@ -61,7 +61,8 @@ import {
   VolumeX,
 } from "lucide-react";
 
-type ActivePanel = "events" | "stats" | "lineups";
+const ACTIVE_PANELS = ["events", "stats", "lineups"] as const;
+type ActivePanel = (typeof ACTIVE_PANELS)[number];
 
 interface MatchLiveProps {
   snapshot: MatchSnapshot;
@@ -131,7 +132,7 @@ export default function MatchLive({
   );
   const isFinished = snapshot.phase === "Finished";
   const filteredEvents = useMemo(
-    () => filterMatchEvents(eventFilter === "all" ? visibleEvents : snapshot.events, eventFilter),
+    () => filterMatchEvents(snapshot.events, eventFilter),
     [visibleEvents, snapshot.events, eventFilter],
   );
   const liveFeed = useLiveFeedScroll(filteredEvents.length, activePanel === "events");
@@ -214,7 +215,14 @@ export default function MatchLive({
       timerRef.current = null;
     }
 
-    if (matchVisible && isRunning && speed !== "paused" && !isFinished && !showSubPanel && !matchCommandPending) {
+    if (
+      matchVisible &&
+      isRunning &&
+      speed !== "paused" &&
+      !isFinished &&
+      !showSubPanel &&
+      !matchCommandPending
+    ) {
       timerRef.current = setTimeout(async () => {
         await stepMatch(MINUTES_PER_TICK[speed]);
       }, SPEED_MS[speed]);
@@ -458,7 +466,11 @@ export default function MatchLive({
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
         {/* Left Panel: Event Feed + Stats */}
         <div className="flex-1 flex flex-col">
-          <div className="touch-x flex overflow-x-auto bg-white dark:bg-navy-800 border-b border-gray-200 dark:border-navy-700 transition-colors duration-300">
+          <div
+            role="tablist"
+            aria-label={t("match.matchDetails")}
+            className="touch-x flex overflow-x-auto bg-white dark:bg-navy-800 border-b border-gray-200 dark:border-navy-700 transition-colors duration-300"
+          >
             {[
               {
                 id: "events" as ActivePanel,
@@ -479,6 +491,30 @@ export default function MatchLive({
               <button
                 type="button"
                 key={tab.id}
+                role="tab"
+                id={`match-tab-${tab.id}`}
+                aria-selected={activePanel === tab.id}
+                aria-controls={`match-panel-${tab.id}`}
+                tabIndex={activePanel === tab.id ? 0 : -1}
+                onKeyDown={(event) => {
+                  const index = ACTIVE_PANELS.indexOf(tab.id);
+                  const next =
+                    event.key === "ArrowRight"
+                      ? (index + 1) % ACTIVE_PANELS.length
+                      : event.key === "ArrowLeft"
+                        ? (index + ACTIVE_PANELS.length - 1) % ACTIVE_PANELS.length
+                        : event.key === "Home"
+                          ? 0
+                          : event.key === "End"
+                            ? ACTIVE_PANELS.length - 1
+                            : null;
+                  if (next == null) return;
+                  event.preventDefault();
+                  setActivePanel(ACTIVE_PANELS[next]);
+                  event.currentTarget.parentElement
+                    ?.querySelector<HTMLButtonElement>(`#match-tab-${ACTIVE_PANELS[next]}`)
+                    ?.focus();
+                }}
                 onClick={() => setActivePanel(tab.id)}
                 className={`flex min-h-11 shrink-0 items-center gap-2 px-4 py-3 sm:px-5 font-heading font-bold text-xs uppercase tracking-wider transition-colors border-b-2 ${
                   activePanel === tab.id
@@ -524,6 +560,9 @@ export default function MatchLive({
             </button>
           )}
           <div
+            role="tabpanel"
+            id={`match-panel-${activePanel}`}
+            aria-labelledby={`match-tab-${activePanel}`}
             ref={liveFeed.feedRef}
             onScroll={liveFeed.onScroll}
             className="touch-scroll min-h-0 flex-1 overflow-auto p-3 sm:p-4"
@@ -545,7 +584,9 @@ export default function MatchLive({
               />
             )}
             {activePanel === "stats" && <MatchStats snapshot={snapshot} />}
-            {activePanel === "lineups" && <Lineups snapshot={snapshot} playerJerseyMap={playerJerseyMap} />}
+            {activePanel === "lineups" && (
+              <Lineups snapshot={snapshot} playerJerseyMap={playerJerseyMap} />
+            )}
           </div>
         </div>
 
@@ -587,6 +628,7 @@ export default function MatchLive({
                 <button
                   type="button"
                   key={s.id}
+                  aria-pressed={speed === s.id}
                   disabled={isFinished || matchCommandPending}
                   onClick={() => {
                     setSpeed(s.id);

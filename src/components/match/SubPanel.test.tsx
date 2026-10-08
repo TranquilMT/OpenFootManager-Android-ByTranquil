@@ -170,7 +170,9 @@ describe("SubPanel", () => {
     const dialog = screen.getByRole("dialog");
     expect(dialog.contains(document.activeElement)).toBe(true);
     expect(close).not.toHaveFocus();
-    fireEvent.keyDown(document.activeElement!, { key: "Tab" });
+    const focused = document.activeElement;
+    if (!focused) throw new Error("Missing focused control");
+    fireEvent.keyDown(focused, { key: "Tab" });
     expect(close).toHaveFocus();
   });
 
@@ -297,25 +299,58 @@ describe("SubPanel", () => {
   it("prefers a reserve goalkeeper to stronger outfield cover for a keeper change", () => {
     const snap = createSnapshot();
     snap.home_team.players = [makePlayer({ id: "keeper", position: "Goalkeeper", condition: 30 })];
-    snap.home_bench = [makePlayer({ id: "forward", position: "Forward", ovr: 99, condition: 100 }), makePlayer({ id: "reserve-keeper", position: "Goalkeeper", ovr: 30, condition: 70 })];
+    snap.home_bench = [
+      makePlayer({ id: "forward", position: "Forward", ovr: 99, condition: 100 }),
+      makePlayer({ id: "reserve-keeper", position: "Goalkeeper", ovr: 30, condition: 70 }),
+    ];
     expect(buildRecommendedSubstitutions(snap, "Home")[0].onId).toBe("reserve-keeper");
   });
   it("excludes injured bench players from both picker and recommendations", () => {
-    const snap = createSnapshot(); snap.events = [{ minute: 20, event_type: "Injury", side: "Home", player_id: "bench-1", secondary_player_id: null, zone: "Midfield" }];
-    expect(getAvailableMatchBench(snap, "Home").map((player) => player.id)).not.toContain("bench-1");
-    expect(buildRecommendedSubstitutions(snap, "Home").map((rec) => rec.onId)).not.toContain("bench-1");
+    const snap = createSnapshot();
+    snap.events = [
+      {
+        minute: 20,
+        event_type: "Injury",
+        side: "Home",
+        player_id: "bench-1",
+        secondary_player_id: null,
+        zone: "Midfield",
+      },
+    ];
+    expect(getAvailableMatchBench(snap, "Home").map((player) => player.id)).not.toContain(
+      "bench-1",
+    );
+    expect(buildRecommendedSubstitutions(snap, "Home").map((rec) => rec.onId)).not.toContain(
+      "bench-1",
+    );
   });
   it("prioritises a recorded injury over routine fitness recommendations", () => {
-    const snap = createSnapshot(); snap.max_subs = 1;
-    snap.home_team.players[0].condition = 10; snap.home_team.players[1].condition = 100;
-    snap.events = [{ minute: 31, event_type: "Injury", side: "Home", player_id: "starter-2", secondary_player_id: null, zone: "Midfield" }];
+    const snap = createSnapshot();
+    snap.max_subs = 1;
+    snap.home_team.players[0].condition = 10;
+    snap.home_team.players[1].condition = 100;
+    snap.events = [
+      {
+        minute: 31,
+        event_type: "Injury",
+        side: "Home",
+        player_id: "starter-2",
+        secondary_player_id: null,
+        zone: "Midfield",
+      },
+    ];
     expect(buildRecommendedSubstitutions(snap, "Home")[0].offId).toBe("starter-2");
   });
   it("produces stable recommendations when equally suitable reserves change list order", () => {
-    const snap = createSnapshot(); snap.max_subs = 1;
+    const snap = createSnapshot();
+    snap.max_subs = 1;
     snap.home_team.players = [makePlayer({ id: "starter", condition: 20 })];
-    snap.home_bench = [makePlayer({ id: "z-reserve", condition: 100 }), makePlayer({ id: "a-reserve", condition: 100 })];
-    const before = buildRecommendedSubstitutions(snap, "Home"); snap.home_bench.reverse();
+    snap.home_bench = [
+      makePlayer({ id: "z-reserve", condition: 100 }),
+      makePlayer({ id: "a-reserve", condition: 100 }),
+    ];
+    const before = buildRecommendedSubstitutions(snap, "Home");
+    snap.home_bench.reverse();
     expect(buildRecommendedSubstitutions(snap, "Home")).toEqual(before);
   });
 });

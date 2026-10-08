@@ -45,11 +45,25 @@ describe("match event filters", () => {
     expect(events).toHaveLength(9);
   });
   it("filters recorded shots without importing shootout kicks", () => {
-    const shots = ["ShotSaved", "PenaltyMiss", "ShotBlocked", "ShotOnTarget", "ShotOffTarget", "Goal", "PenaltyGoal", "ShootoutGoal"].map((type) => ({ ...events[0], event_type: type }));
-    expect(filterMatchEvents(shots, "shots").map((e) => e.event_type)).toEqual(shots.slice(0, 7).map((e) => e.event_type));
+    const shots = [
+      "ShotSaved",
+      "PenaltyMiss",
+      "ShotBlocked",
+      "ShotOnTarget",
+      "ShotOffTarget",
+      "Goal",
+      "PenaltyGoal",
+      "ShootoutGoal",
+    ].map((type) => ({ ...events[0], event_type: type }));
+    expect(filterMatchEvents(shots, "shots").map((e) => e.event_type)).toEqual(
+      shots.slice(0, 7).map((e) => e.event_type),
+    );
   });
   it("offers a separate foul filter without conflating awards and bookings", () => {
-    const fouls = ["Foul", "FreeKick", "YellowCard", "PenaltyAwarded"].map((type) => ({ ...events[0], event_type: type }));
+    const fouls = ["Foul", "FreeKick", "YellowCard", "PenaltyAwarded"].map((type) => ({
+      ...events[0],
+      event_type: type,
+    }));
     expect(filterMatchEvents(fouls, "fouls").map((e) => e.event_type)).toEqual(["Foul"]);
   });
 });
