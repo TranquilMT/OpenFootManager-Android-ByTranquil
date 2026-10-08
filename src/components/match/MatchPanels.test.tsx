@@ -20,4 +20,10 @@ describe("integrated match panels", () => {
     render(<MatchStats snapshot={snapshot([event("ShotOnTarget")])} />);
     expect(row("match.shotsOnTarget").firstElementChild).toHaveTextContent("1");
   });
+  it("counts each booking including second-yellow dismissals", () => {
+    const snap = snapshot([event("YellowCard"), event("SecondYellow")]);
+    snap.home_yellows = { p1: 2 };
+    render(<MatchStats snapshot={snap} />);
+    expect(row("match.yellowCards").firstElementChild).toHaveTextContent("2");
+  });
 });

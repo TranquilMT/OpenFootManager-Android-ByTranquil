@@ -158,8 +158,8 @@ export function MatchStats({ snapshot }: { snapshot: MatchSnapshot }) {
     },
     {
       label: t("match.yellowCards"),
-      home: Object.keys(snapshot.home_yellows).length,
-      away: Object.keys(snapshot.away_yellows).length,
+      home: ct(homeEvents, "YellowCard") + ct(homeEvents, "SecondYellow"),
+      away: ct(awayEvents, "YellowCard") + ct(awayEvents, "SecondYellow"),
     },
   ];
 
