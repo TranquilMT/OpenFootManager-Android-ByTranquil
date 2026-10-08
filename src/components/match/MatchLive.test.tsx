@@ -107,6 +107,26 @@ describe("live match decisions", () => {
       command: { ChangeTacticalInstruction: { side: "Home", instruction: { Tempo: "Patient" } } },
     });
   });
+  it("opens engine-backed tactical instructions directly from the match header", () => {
+    render(
+      <MatchLive
+        snapshot={snapshot}
+        gameState={{ teams: [], players: [] } as unknown as GameStateData}
+        userSide="Home"
+        isSpectator={false}
+        importantEvents={[]}
+        onSnapshotUpdate={vi.fn()}
+        onImportantEvent={vi.fn()}
+        onHalfTime={vi.fn()}
+        onFullTime={vi.fn()}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "dashboard.tactics" }));
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(
+      screen.getByRole("combobox", { name: "tactics.phaseSettings.tempo" }),
+    ).toBeInTheDocument();
+  });
   it("disables simulation and tactical controls after full time", () => {
     render(
       <MatchLive
@@ -130,5 +150,4 @@ describe("live match decisions", () => {
       expect(button).toBeDisabled();
     }
   });
-
 });

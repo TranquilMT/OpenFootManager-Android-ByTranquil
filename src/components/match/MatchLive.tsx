@@ -405,6 +405,7 @@ export default function MatchLive({
                 userSide === "Home" ? snapshot.home_team.play_style : snapshot.away_team.play_style
               }
               onSubstitutions={() => setShowSubPanel(true)}
+              onTactics={() => setShowSubPanel(true)}
               onPlayStyle={(style) => {
                 void handlePlayStyleChange(style);
               }}
@@ -605,7 +606,7 @@ export default function MatchLive({
               <button
                 type="button"
                 disabled={isFinished || matchCommandPending}
-                  onClick={() => stepMatch(1)}
+                onClick={() => stepMatch(1)}
                 className="mt-2 flex min-h-11 w-full items-center justify-center gap-2 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-navy-700 dark:hover:bg-navy-600 rounded-lg text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 transition-colors"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -623,7 +624,7 @@ export default function MatchLive({
               <button
                 type="button"
                 disabled={isFinished || matchCommandPending}
-                  onClick={() => setShowSubPanel(!showSubPanel)}
+                onClick={() => setShowSubPanel(!showSubPanel)}
                 className="flex min-h-11 items-center gap-2 px-3 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-navy-700 dark:hover:bg-navy-600 rounded-lg text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 transition-colors"
               >
                 <RefreshCw className="w-4 h-4" />
@@ -646,7 +647,7 @@ export default function MatchLive({
                         type="button"
                         key={f}
                         disabled={isFinished || matchCommandPending}
-                  onClick={() => handleFormationChange(f)}
+                        onClick={() => handleFormationChange(f)}
                         className={`min-h-11 rounded px-2 py-1 text-xs font-heading transition-colors ${cur === f ? "bg-primary-500/20 text-primary-500 dark:text-primary-400 ring-1 ring-primary-500/50" : "bg-gray-100 text-gray-600 hover:text-gray-900 dark:bg-navy-700 dark:text-gray-400 dark:hover:text-gray-300"}`}
                       >
                         {f}
@@ -677,7 +678,7 @@ export default function MatchLive({
                         type="button"
                         key={s.id}
                         disabled={isFinished || matchCommandPending}
-                  onClick={() => handlePlayStyleChange(s.id)}
+                        onClick={() => handlePlayStyleChange(s.id)}
                         className={`flex min-h-11 items-center gap-1 rounded px-2 py-1 text-xs font-heading transition-colors ${cur === s.id ? "bg-primary-500/20 text-primary-500 dark:text-primary-400 ring-1 ring-primary-500/50" : "bg-gray-100 text-gray-600 hover:text-gray-900 dark:bg-navy-700 dark:text-gray-400 dark:hover:text-gray-300"}`}
                       >
                         {s.icon}

@@ -6,11 +6,13 @@ export default function MatchdayQuickActions({
   playStyle,
   onSubstitutions,
   onPlayStyle,
+  onTactics,
 }: {
   disabled: boolean;
   playStyle: string;
   onSubstitutions: () => void;
   onPlayStyle: (style: string) => void;
+  onTactics?: () => void;
 }) {
   const { t } = useTranslation();
   return (
@@ -27,6 +29,19 @@ export default function MatchdayQuickActions({
       >
         {t("match.subs")}
       </Button>
+      {onTactics && (
+        <Button
+          type="button"
+          size="sm"
+          variant="outline"
+          className="min-h-11"
+          disabled={disabled}
+          onClick={onTactics}
+          aria-haspopup="dialog"
+        >
+          {t("dashboard.tactics")}
+        </Button>
+      )}
       {["Balanced", "Defensive", "Attacking"].map((style) => (
         <Button
           key={style}

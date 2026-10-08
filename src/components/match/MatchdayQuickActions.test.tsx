@@ -24,6 +24,20 @@ describe("matchday shortcuts", () => {
       "true",
     );
   });
+  it("opens shared tactical controls from the match header", () => {
+    const tactics = vi.fn();
+    render(
+      <MatchdayQuickActions
+        disabled={false}
+        playStyle="Balanced"
+        onSubstitutions={vi.fn()}
+        onPlayStyle={vi.fn()}
+        onTactics={tactics}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "dashboard.tactics" }));
+    expect(tactics).toHaveBeenCalledOnce();
+  });
   it("blocks quick actions after full time or while a command is pending", () => {
     const style = vi.fn();
     render(
