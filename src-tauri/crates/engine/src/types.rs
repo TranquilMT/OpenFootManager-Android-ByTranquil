@@ -140,17 +140,17 @@ fn default_fitness() -> u8 {
 impl PlayerData {
     /// Overall rating (simple mean of core 11 attributes).
     pub fn overall(&self) -> f64 {
-        (self.pace as f64
-            + self.stamina as f64
-            + self.strength as f64
-            + self.passing as f64
-            + self.shooting as f64
-            + self.tackling as f64
-            + self.dribbling as f64
-            + self.defending as f64
-            + self.positioning as f64
-            + self.vision as f64
-            + self.decisions as f64)
+        (self.pace.min(100) as f64
+            + self.stamina.min(100) as f64
+            + self.strength.min(100) as f64
+            + self.passing.min(100) as f64
+            + self.shooting.min(100) as f64
+            + self.tackling.min(100) as f64
+            + self.dribbling.min(100) as f64
+            + self.defending.min(100) as f64
+            + self.positioning.min(100) as f64
+            + self.vision.min(100) as f64
+            + self.decisions.min(100) as f64)
             / 11.0
     }
 
