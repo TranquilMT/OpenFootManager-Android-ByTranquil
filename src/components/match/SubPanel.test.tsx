@@ -311,4 +311,11 @@ describe("SubPanel", () => {
     snap.events = [{ minute: 31, event_type: "Injury", side: "Home", player_id: "starter-2", secondary_player_id: null, zone: "Midfield" }];
     expect(buildRecommendedSubstitutions(snap, "Home")[0].offId).toBe("starter-2");
   });
+  it("produces stable recommendations when equally suitable reserves change list order", () => {
+    const snap = createSnapshot(); snap.max_subs = 1;
+    snap.home_team.players = [makePlayer({ id: "starter", condition: 20 })];
+    snap.home_bench = [makePlayer({ id: "z-reserve", condition: 100 }), makePlayer({ id: "a-reserve", condition: 100 })];
+    const before = buildRecommendedSubstitutions(snap, "Home"); snap.home_bench.reverse();
+    expect(buildRecommendedSubstitutions(snap, "Home")).toEqual(before);
+  });
 });

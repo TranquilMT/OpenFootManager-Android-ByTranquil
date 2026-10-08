@@ -230,7 +230,8 @@ export function buildRecommendedSubstitutions(
             buildBenchPriority(rightPlayer, offPlayer, scenario.id) -
               buildBenchPriority(leftPlayer, offPlayer, scenario.id) ||
             rightPlayer.condition - leftPlayer.condition ||
-            rightPlayer.ovr - leftPlayer.ovr
+            rightPlayer.ovr - leftPlayer.ovr ||
+            leftPlayer.id.localeCompare(rightPlayer.id)
           );
         })[0];
 
@@ -264,7 +265,7 @@ export function buildRecommendedSubstitutions(
           recommendation != null,
       )
       .sort((leftRecommendation, rightRecommendation) => {
-        return rightRecommendation.score - leftRecommendation.score;
+        return rightRecommendation.score - leftRecommendation.score || leftRecommendation.offId.localeCompare(rightRecommendation.offId);
       })[0];
 
     if (!nextRecommendation) {
