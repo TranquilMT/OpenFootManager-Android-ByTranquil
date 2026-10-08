@@ -113,6 +113,9 @@ impl LiveMatchState {
         player_off_id: &str,
         player_on_id: &str,
     ) -> Result<(), String> {
+        if self.sent_off.contains(player_off_id) || self.sent_off.contains(player_on_id) {
+            return Err("be.error.liveMatch.cannotSubstituteSentOffPlayer".into());
+        }
         let team = self.team_mut(side);
         let off_idx = team
             .players
