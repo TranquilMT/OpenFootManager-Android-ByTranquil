@@ -93,11 +93,16 @@ pub fn apply_match_report_with_capture<F>(
 {
     // Live-match callbacks may be retried after persistence. A finished fixture
     // must never credit standings, career stats, finances or player stats twice.
-    if game
+    let Some(fixture) = game
         .league
         .as_ref()
         .and_then(|league| league.fixtures.get(fixture_index))
-        .is_some_and(|fixture| fixture.status == FixtureStatus::Completed)
+    else {
+        return;
+    };
+    if fixture.status == FixtureStatus::Completed
+        || fixture.home_team_id != home_team_id
+        || fixture.away_team_id != away_team_id
     {
         return;
     }
@@ -790,5 +795,40 @@ fn deplete_match_stamina(game: &mut Game, team_id: &str, report: &engine::MatchR
             // identically to club fixtures.
             crate::player_wear::apply_match_wear(player, minutes, &mut rand::rng());
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::clock::GameClock;
+    use chrono::{TimeZone, Utc};
+    use domain::manager::Manager;
+
+    fn empty_game() -> Game {
+        Game::new(
+            GameClock::new(Utc.with_ymd_and_hms(2026, 10, 8, 12, 0, 0).unwrap()),
+            Manager::new(
+                "m".into(),
+                "Test".into(),
+                "Manager".into(),
+                "1980-01-01".into(),
+                "England".into(),
+            ),
+            vec![],
+            vec![],
+            vec![],
+            vec![],
+        )
+    }
+
+    #[test]
+    fn invalid_fixture_reports_are_ignored_without_panicking() {
+        let mut game = empty_game();
+        game.league = Some(domain::league::League::default());
+        let report = engine::MatchReport::from_events(vec![], 1, 1, 90);
+        apply_match_report(&mut game, usize::MAX, "home", "away", &report);
+        assert!(game.messages.is_empty());
+        assert!(game.league.unwrap().fixtures.is_empty());
     }
 }
