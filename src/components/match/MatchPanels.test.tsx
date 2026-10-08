@@ -51,4 +51,9 @@ describe("integrated match panels", () => {
     expect(screen.getByText("#8")).toBeInTheDocument();
     expect(screen.getByText("#12")).toBeInTheDocument();
   });
+  it("marks dismissed reserves as unavailable rather than showing an ordinary bench row", () => {
+    const snap = snapshot(); snap.home_bench = [player("reserve")]; snap.sent_off = ["reserve"];
+    render(<Lineups snapshot={snap} />);
+    expect(screen.getByText("reserve").closest('[aria-disabled="true"]')).not.toBeNull();
+  });
 });

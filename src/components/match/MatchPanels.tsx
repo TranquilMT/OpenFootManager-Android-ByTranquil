@@ -4,6 +4,7 @@ import { getEventDisplay, getEventTypeLabel, getPlayerName } from "./helpers";
 import { getCommentary } from "./commentary";
 import { matchMetrics } from "./narrativeContext";
 import { Badge } from "../ui";
+import { getAvailableMatchBench } from "./SubPanel.helpers";
 import { condBgColor } from "../../lib/playerConditionDisplay";
 import { translatePositionAbbreviation, translatePositionLabel } from "../squad/SquadTab.helpers";
 
@@ -215,6 +216,7 @@ export function Lineups({ snapshot, playerJerseyMap }: { snapshot: MatchSnapshot
     yellows: Record<string, number>,
     sentOff: string[],
   ) => {
+    const availableIds = new Set(getAvailableMatchBench(snapshot, side).map((player) => player.id));
     const positions = ["Goalkeeper", "Defender", "Midfielder", "Forward"];
     const subbedOnIds = new Set(
       snapshot.substitutions.filter((s) => s.side === side).map((s) => s.player_on_id),
@@ -293,8 +295,10 @@ export function Lineups({ snapshot, playerJerseyMap }: { snapshot: MatchSnapshot
               return (
                 <div
                   key={p.id}
-                  className={`flex items-center gap-2 py-1 px-2 rounded text-xs ${wasSubbedOff ? "opacity-50" : ""}`}
+                  aria-disabled={!availableIds.has(p.id)}
+                  className={`flex items-center gap-2 py-1 px-2 rounded text-xs ${!availableIds.has(p.id) ? "opacity-50" : ""}`}
                 >
+                  {sentOff.includes(p.id) && <span aria-label={t("match.eventTypes.RedCard")} className="h-4 w-3 rounded-sm bg-red-500" />}
                   {wasSubbedOff && <span className="text-red-400 text-[10px]">▼</span>}
                   <span className="text-gray-600 dark:text-gray-400 font-medium flex-1 truncate">
                     {p.name}
