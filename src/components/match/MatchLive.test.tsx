@@ -107,4 +107,28 @@ describe("live match decisions", () => {
       command: { ChangeTacticalInstruction: { side: "Home", instruction: { Tempo: "Patient" } } },
     });
   });
+  it("disables simulation and tactical controls after full time", () => {
+    render(
+      <MatchLive
+        snapshot={{ ...snapshot, phase: "Finished" }}
+        gameState={{ teams: [], players: [] } as unknown as GameStateData}
+        userSide="Home"
+        isSpectator={false}
+        importantEvents={[]}
+        onSnapshotUpdate={vi.fn()}
+        onImportantEvent={vi.fn()}
+        onHalfTime={vi.fn()}
+        onFullTime={vi.fn()}
+      />,
+    );
+    expect(screen.getByRole("button", { name: "match.fast" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "4-4-2" })).toBeDisabled();
+    for (const button of screen.getAllByRole("button", { name: "common.playStyles.Attacking" })) {
+      expect(button).toBeDisabled();
+    }
+    for (const button of screen.getAllByRole("button", { name: /^match.subs(?: \(|$)/ })) {
+      expect(button).toBeDisabled();
+    }
+  });
+
 });
