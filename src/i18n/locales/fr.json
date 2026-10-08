@@ -2619,7 +2619,8 @@
     "continue": "Continuer",
     "notableUpset": "Résultat surprise",
     "pts": "pts",
-    "jumpToLive": "Revenir au commentaire en direct"
+    "jumpToLive": "Revenir au commentaire en direct",
+    "cards": "Cartons"
   },
   "endOfSeason": {
     "seasonComplete": "Saison Terminée",

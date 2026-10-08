@@ -2619,7 +2619,8 @@
     "continue": "继续",
     "notableUpset": "重大爆冷",
     "pts": "分",
-    "jumpToLive": "返回实时解说"
+    "jumpToLive": "返回实时解说",
+    "cards": "罚牌"
   },
   "endOfSeason": {
     "seasonComplete": "赛季结束",

@@ -2619,7 +2619,8 @@
     "continue": "Continue",
     "notableUpset": "Notable Upset",
     "pts": "pts",
-    "jumpToLive": "Return to live commentary"
+    "jumpToLive": "Return to live commentary",
+    "cards": "Cards"
   },
   "endOfSeason": {
     "seasonComplete": "Season Complete",

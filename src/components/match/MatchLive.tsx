@@ -1,5 +1,7 @@
 import { MatchOperationGate } from "./matchOperationGate";
 import { useLiveFeedScroll } from "./useLiveFeedScroll";
+import { filterMatchEvents, type EventFilter } from "./eventFilters";
+import { MatchEventFilters } from "./MatchEventFilters";
 import MatchdayQuickActions from "./MatchdayQuickActions";
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { invoke } from "@tauri-apps/api/core";
@@ -93,6 +95,7 @@ export default function MatchLive({
       : "normal");
   const [speed, setSpeed] = useState<SimSpeed>(initialSpeed);
   const [activePanel, setActivePanel] = useState<ActivePanel>("events");
+  const [eventFilter, setEventFilter] = useState<EventFilter>("all");
   const [isRunning, setIsRunning] = useState(true);
   const [matchCommandPending, setMatchCommandPending] = useState(false);
   const operationGate = useRef(new MatchOperationGate());
@@ -120,7 +123,11 @@ export default function MatchLive({
     [snapshot.events],
   );
   const isFinished = snapshot.phase === "Finished";
-  const liveFeed = useLiveFeedScroll(visibleEvents.length, activePanel === "events");
+  const filteredEvents = useMemo(
+    () => filterMatchEvents(visibleEvents, eventFilter),
+    [visibleEvents, eventFilter],
+  );
+  const liveFeed = useLiveFeedScroll(filteredEvents.length, activePanel === "events");
 
   // Reads only `lastResult` for phase transitions, which is sound because step_many stops on
   // entering any phase that needs the manager — so a half time, shootout or finish is always the
@@ -453,6 +460,13 @@ export default function MatchLive({
             )}
           </div>
 
+          {activePanel === "events" && (
+            <MatchEventFilters
+              events={visibleEvents}
+              value={eventFilter}
+              onChange={setEventFilter}
+            />
+          )}
           {activePanel === "events" && !liveFeed.following && (
             <button
               type="button"
@@ -477,7 +491,7 @@ export default function MatchLive({
             )}
             {activePanel === "events" && (
               <EventFeed
-                events={visibleEvents}
+                events={filteredEvents}
                 snapshot={snapshot}
                 playerJerseyMap={playerJerseyMap}
                 showCommentary={settings.show_match_commentary}
