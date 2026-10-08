@@ -1,1 +1,0 @@
-Real database pipeline checkpoint complete.
