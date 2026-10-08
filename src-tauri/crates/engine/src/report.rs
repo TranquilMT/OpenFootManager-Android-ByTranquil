@@ -154,9 +154,13 @@ impl MatchReport {
         // State machine to determine goal source from preceding set-piece event.
         // Tracks (event_type, side) so a set piece earned by one team doesn't
         // accidentally attribute a goal scored by the other.
-        let mut last_set_piece: Option<(EventType, Side)> = None;
+        let mut last_set_piece: Option<(EventType, Side, u8)> = None;
 
         for event in &events {
+            // Set-piece resolutions are synchronous within one simulated minute.
+            if last_set_piece.as_ref().is_some_and(|(_, _, minute)| *minute != event.minute) {
+                last_set_piece = None;
+            }
             let stats = match event.side {
                 Side::Home => &mut home_stats,
                 Side::Away => &mut away_stats,
@@ -185,7 +189,7 @@ impl MatchReport {
 
             // Track set-piece window: reset on events that clear the opportunity
             match &event.event_type {
-                EventType::Corner => last_set_piece = Some((EventType::Corner, event.side)),
+                EventType::Corner => last_set_piece = Some((EventType::Corner, event.side, event.minute)),
                 EventType::FreeKick => {
                     // Only dangerous free kicks count: the taking side must be in their attacking
                     // third (opponent's defensive third). A free kick in HomeDefense is only
@@ -195,7 +199,7 @@ impl MatchReport {
                         Side::Away => Zone::HomeDefense,
                     };
                     if event.zone == dangerous_zone {
-                        last_set_piece = Some((EventType::FreeKick, event.side));
+                        last_set_piece = Some((EventType::FreeKick, event.side, event.minute));
                     }
                 }
                 // Defensive events clear the set-piece window
@@ -219,10 +223,10 @@ impl MatchReport {
                     stats.shots += 1;
                     stats.shots_on_target += 1;
                     let source = match last_set_piece.take() {
-                        Some((EventType::Corner, sp_side)) if sp_side == event.side => {
+                        Some((EventType::Corner, sp_side, _)) if sp_side == event.side => {
                             GoalSource::Corner
                         }
-                        Some((EventType::FreeKick, sp_side)) if sp_side == event.side => {
+                        Some((EventType::FreeKick, sp_side, _)) if sp_side == event.side => {
                             GoalSource::FreeKick
                         }
                         _ => GoalSource::OpenPlay,
