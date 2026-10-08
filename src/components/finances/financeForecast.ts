@@ -58,7 +58,7 @@ export function projectClubCash({
           `transfer:${offer.id}`,
           offer.registration_date ?? offer.date,
           -offer.fee,
-          annualAmountToWeeklyCommitment(offer.wage_offered || player.wage),
+          annualAmountToWeeklyCommitment(offer.wage_offered ?? player.wage),
         );
       } else if (player.team_id === teamId && offer.from_team_id !== teamId) {
         apply(
