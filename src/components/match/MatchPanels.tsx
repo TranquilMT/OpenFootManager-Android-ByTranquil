@@ -5,7 +5,7 @@ import { getCommentary } from "./commentary";
 import { matchMetrics } from "./narrativeContext";
 import { Badge } from "../ui";
 import { condBgColor } from "../../lib/playerConditionDisplay";
-import { translatePositionAbbreviation } from "../squad/SquadTab.helpers";
+import { translatePositionAbbreviation, translatePositionLabel } from "../squad/SquadTab.helpers";
 
 export function EventFeed({
   events,
@@ -238,7 +238,7 @@ export function Lineups({ snapshot }: { snapshot: MatchSnapshot }) {
           return (
             <div key={pos} className="mb-3">
               <p className="text-[10px] font-heading uppercase tracking-widest text-gray-600 dark:text-gray-500 mb-1">
-                {pos}s
+                {translatePositionLabel(t, pos)}
               </p>
               {players.map((p) => {
                 const isOff = sentOff.includes(p.id);

@@ -40,4 +40,9 @@ describe("integrated match panels", () => {
     expect(screen.getByText("0")).toBeInTheDocument();
     expect(view.container.querySelector('[style="width: 72%;"]')).toHaveClass("bg-amber-500");
   });
+  it("translates positional group headings", () => {
+    render(<Lineups snapshot={snapshot()} />);
+    expect(screen.getByText("common.positions.Midfielder")).toBeInTheDocument();
+    expect(screen.queryByText("Midfielders")).not.toBeInTheDocument();
+  });
 });
