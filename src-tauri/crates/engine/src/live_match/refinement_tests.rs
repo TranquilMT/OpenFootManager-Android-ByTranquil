@@ -245,3 +245,11 @@ fn refinement_overall_attribute_scale() {
     assert_eq!(player.overall(), 100.0);
     assert_eq!(make_player("normal", "Normal", Position::Forward, 70).overall(), 70.0);
 }
+
+#[test]
+fn refinement_all_dismissed_player_selection() {
+    let mut state = make_live_match(false);
+    for player in &state.home.players { state.sent_off.insert(player.id.clone()); }
+    let mut rng = StdRng::seed_from_u64(1);
+    assert!(crate::shared::snap_from_squad(&state.home.players, &state.sent_off, Position::Forward, &mut rng).is_none());
+}
