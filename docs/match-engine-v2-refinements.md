@@ -1,7 +1,7 @@
 # Match Engine V2 — Further Refinements
 
-This batch builds on 0.7.1 Build 360. It contains 14 targeted engine fixes and
-14 corresponding regression-test commits, plus validation and documentation.
+This batch builds on 0.7.1 Build 360. It contains 16 targeted engine fixes and
+16 corresponding regression-test commits, plus validation and documentation.
 
 - Substitute minutes now run from entry to exit, including a later red card or second substitution.
 - Large possession totals remain accurate in reports and live snapshots.
@@ -18,7 +18,10 @@ This batch builds on 0.7.1 Build 360. It contains 14 targeted engine fixes and
 - Overall ratings respect the 0–100 attribute scale.
 - Player selection never restores a dismissed participant when the active pool is empty.
 
+- Awarded penalties count once, with compatibility for older logs containing only outcomes.
+- Second yellow cards count as dismissals in team and player statistics.
+
 The refinement workflow first runs the new regressions against the released
-0.7.1 baseline, expecting all 14 to fail. It then runs all engine tests and
+0.7.1 baseline, expecting all 16 to fail. It then runs all engine tests and
 strict engine lint against the fixed source, alongside frontend and full Rust
 workspace verification. No saved-game schema or package identity changes.

@@ -36,7 +36,7 @@ jobs:
           set -e
           cat baseline-regressions.log
           test "$result" -eq 101
-          grep -F 'test result: FAILED. 0 passed; 14 failed;' baseline-regressions.log
+          grep -F 'test result: FAILED. 0 passed; 16 failed;' baseline-regressions.log
       - name: Format engine changes with the pinned compiler
         run: |
           cargo fmt --manifest-path src-tauri/Cargo.toml -p engine
