@@ -179,4 +179,9 @@ describe("inboxHelpers", () => {
     expect(isPlayerEventMessage("contract_concern_p2")).toBe(true);
     expect(isPlayerEventMessage("plain_message")).toBe(false);
   });
+  it("rejects malformed individual choice options before rendering decision controls", () => {
+    for (const option of [null, {}, { id: "x", label: 1, description: "d" }, { id: "x", label: "l", description: null }]) {
+      expect(isChooseOptionAction({ ChooseOption: { options: [option] } } as unknown as MessageData["actions"][number]["action_type"])).toBe(false);
+    }
+  });
 });
