@@ -15,6 +15,7 @@ import { translatePositionAbbreviation } from "../squad/SquadTab.helpers";
 import InboxDelegatedRenewalReport from "./InboxDelegatedRenewalReport";
 import {
   getActionButtonClassName,
+  getMessageActions,
   getCategoryColor,
   getCategoryIcon,
   isChooseOptionAction,
@@ -63,6 +64,7 @@ export default function InboxMessageDetailPane({
     setPendingSwitch(null);
   }, [selectedMessage?.id]);
 
+  const actions = getMessageActions(selectedMessage);
   const currentClubName = currentTeamName ?? "";
   const hasYouthProspects = Boolean(selectedMessage?.context?.youth_prospects?.length);
   const linkedPlayerId = selectedMessage?.context?.player_id ?? null;
@@ -213,7 +215,7 @@ export default function InboxMessageDetailPane({
               {selectedMessage.context?.youth_prospects?.length ? (
                 <div className="grid gap-3">
                   {selectedMessage.context.youth_prospects.map((prospect) => {
-                    const action = selectedMessage.actions.find(
+                    const action = actions.find(
                       (candidate) => candidate.id === `prospect:${prospect.id}`,
                     );
                     const chooseOptionActionType =
@@ -392,9 +394,9 @@ export default function InboxMessageDetailPane({
             </div>
           ) : null}
 
-          {selectedMessage.actions.length > 0 && !hasYouthProspects ? (
+          {actions.length > 0 && !hasYouthProspects ? (
             <div className="mt-6">
-              {selectedMessage.actions.map((action) => {
+              {actions.map((action) => {
                 const repeatableReview = isOfferReviewNavigation(
                   selectedMessage.id,
                   action.action_type,

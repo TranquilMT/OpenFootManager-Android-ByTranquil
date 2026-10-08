@@ -53,18 +53,55 @@ describe("club loan monitoring", () => {
   });
   it("keeps malformed current statistics from producing invalid loan totals", () => {
     const base = createGameState().players[0];
-    const player = { ...base, active_loan: { parent_team_id: "team-1", loan_team_id: "other", start_date: "2026-08-01", end_date: "2027-06-01", wage_contribution_pct: 50, loan_start_minutes: 0, loan_start_appearances: 0 }, stats: { ...base.stats, minutes_played: NaN, appearances: Infinity } };
-    expect(monitoredLoans([player], "team-1")[0]).toMatchObject({ minutes: 0, appearances: 0, hasBaseline: false });
+    const player = {
+      ...base,
+      active_loan: {
+        parent_team_id: "team-1",
+        loan_team_id: "other",
+        start_date: "2026-08-01",
+        end_date: "2027-06-01",
+        wage_contribution_pct: 50,
+        loan_start_minutes: 0,
+        loan_start_appearances: 0,
+      },
+      stats: { ...base.stats, minutes_played: NaN, appearances: Infinity },
+    };
+    expect(monitoredLoans([player], "team-1")[0]).toMatchObject({
+      minutes: 0,
+      appearances: 0,
+      hasBaseline: false,
+    });
   });
   it("does not duplicate the same player in imported loan monitoring lists", () => {
     const base = createGameState().players[0];
-    const player = { ...base, active_loan: { parent_team_id: "team-1", loan_team_id: "other", start_date: "2026-08-01", end_date: "2027-06-01", wage_contribution_pct: 50 } };
+    const player = {
+      ...base,
+      active_loan: {
+        parent_team_id: "team-1",
+        loan_team_id: "other",
+        start_date: "2026-08-01",
+        end_date: "2027-06-01",
+        wage_contribution_pct: 50,
+      },
+    };
     expect(monitoredLoans([player, { ...player }], "team-1")).toHaveLength(1);
   });
   it("keeps equal return-date ordering stable across world input order", () => {
     const base = createGameState().players[0];
-    const loan = { parent_team_id: "team-1", loan_team_id: "other", start_date: "2026-08-01", end_date: "2027-06-01", wage_contribution_pct: 50 };
-    const players = [{ ...base, id: "z-player", active_loan: loan }, { ...base, id: "a-player", active_loan: loan }];
-    expect(monitoredLoans(players, "team-1").map((row) => row.player.id)).toEqual(["a-player", "z-player"]);
+    const loan = {
+      parent_team_id: "team-1",
+      loan_team_id: "other",
+      start_date: "2026-08-01",
+      end_date: "2027-06-01",
+      wage_contribution_pct: 50,
+    };
+    const players = [
+      { ...base, id: "z-player", active_loan: loan },
+      { ...base, id: "a-player", active_loan: loan },
+    ];
+    expect(monitoredLoans(players, "team-1").map((row) => row.player.id)).toEqual([
+      "a-player",
+      "z-player",
+    ]);
   });
 });

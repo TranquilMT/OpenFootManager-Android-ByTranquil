@@ -244,14 +244,38 @@ describe("robust financial inputs", () => {
     expect(getPlayerAnnualWageCommitment(createPlayer({ wage: Infinity }), "team-1")).toBe(0);
   });
   it("keeps invalid staff wages from contaminating annual payroll", () => {
-    expect(getAnnualWageBill([], [createStaff({ wage: NaN }), createStaff({ id: "valid", wage: 52000 })], "team-1")).toBe(52000);
+    expect(
+      getAnnualWageBill(
+        [],
+        [createStaff({ wage: NaN }), createStaff({ id: "valid", wage: 52000 })],
+        "team-1",
+      ),
+    ).toBe(52000);
   });
   it("keeps invalid recurring receipts and costs out of cash-flow projections", () => {
-    const team = createTeam({ sponsorship: { base_value: Infinity } as TeamData["sponsorship"], economy: { version: 1, annual_operating_income: NaN, annual_operating_cost: Infinity } });
-    expect(getTeamFinanceSnapshot(team, [createPlayer({ wage: 52000 })])).toMatchObject({ weeklyRecurringIncome: 0, weeklyOperatingCost: 0, projectedWeeklyNet: -1000 });
+    const team = createTeam({
+      sponsorship: { base_value: Infinity } as TeamData["sponsorship"],
+      economy: { version: 1, annual_operating_income: NaN, annual_operating_cost: Infinity },
+    });
+    expect(getTeamFinanceSnapshot(team, [createPlayer({ wage: 52000 })])).toMatchObject({
+      weeklyRecurringIncome: 0,
+      weeklyOperatingCost: 0,
+      projectedWeeklyNet: -1000,
+    });
   });
   it("does not start a marketing cooldown from future-dated ledger entries", () => {
-    const team = createTeam({ financial_ledger: [{ id: "future", date: "2026-09-01", amount: 0, kind: "CommercialCampaign" }] as TeamData["financial_ledger"] });
-    expect(getTeamFinanceSnapshot(team, [], [], "2026-08-01").marketingCampaignCooldownDaysRemaining).toBe(0);
+    const team = createTeam({
+      financial_ledger: [
+        {
+          description: "Future campaign",
+          date: "2026-09-01",
+          amount: 0,
+          kind: "CommercialCampaign",
+        },
+      ],
+    });
+    expect(
+      getTeamFinanceSnapshot(team, [], [], "2026-08-01").marketingCampaignCooldownDaysRemaining,
+    ).toBe(0);
   });
 });

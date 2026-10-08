@@ -26,7 +26,10 @@ export default function LoanMonitoringCard({
         <ul className="grid gap-3 sm:grid-cols-2">
           {loans.map(({ player, loan, appearances, minutes, hasBaseline }) => {
             const report = developmentReport(player, gameState.league?.season ?? 0);
-            const unused = hasBaseline && minutes === 0 && getDaysUntil(today, loan.start_date.slice(0, 10)) >= 14;
+            const unused =
+              hasBaseline &&
+              minutes === 0 &&
+              getDaysUntil(today, loan.start_date.slice(0, 10)) >= 14;
             return (
               <li
                 key={player.id}

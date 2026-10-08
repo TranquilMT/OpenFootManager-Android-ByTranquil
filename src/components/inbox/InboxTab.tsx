@@ -23,6 +23,7 @@ import {
   DECISIONS_FILTER,
   sortDecisionMessages,
   getFilteredMessages,
+  getMessageActions,
   getNavigationTarget,
   isOfferReviewNavigation,
   isNavigateAction,
@@ -71,7 +72,13 @@ export default function InboxTab({
   }, [clockDate]);
 
   const messages = fetchedMessages ?? gameState?.messages ?? EMPTY_MESSAGES;
-  const allMessages = useMemo(() => messages.map(resolveMessage), [messages]);
+  const allMessages = useMemo(
+    () =>
+      messages.map((message) =>
+        resolveMessage({ ...message, actions: getMessageActions(message) }),
+      ),
+    [messages],
+  );
   const [selectedMessageId, setSelectedMessageId] = useState<string | null>(
     initialMessageId ?? null,
   );
@@ -157,7 +164,9 @@ export default function InboxTab({
     if (pendingActionsRef.current.has(pendingKey)) return;
     setActionError(null);
     const message = allMessages.find((currentMessage) => currentMessage.id === messageId);
-    const action = message?.actions.find((currentAction) => currentAction.id === actionId);
+    const action = getMessageActions(message).find(
+      (currentAction) => currentAction.id === actionId,
+    );
 
     if (action && isNavigateAction(action.action_type)) {
       const navigationTarget = getNavigationTarget(action.action_type.NavigateTo.route);

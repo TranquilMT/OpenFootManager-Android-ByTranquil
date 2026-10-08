@@ -1378,4 +1378,19 @@ describe("InboxTab", (): void => {
     expect(screen.getByRole("button", { name: "Shortlist" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Discard" })).toBeInTheDocument();
   });
+  it("opens a legacy message whose action list is missing without crashing", () => {
+    const message = createMessage({
+      id: "legacy",
+      read: true,
+      actions: null as unknown as MessageData["actions"],
+    });
+    render(
+      <InboxTab
+        gameState={createGameState([message])}
+        initialMessageId="legacy"
+        onGameUpdate={vi.fn()}
+      />,
+    );
+    expect(screen.getByText("Test Body")).toBeInTheDocument();
+  });
 });

@@ -621,7 +621,7 @@ describe("TransfersTab", (): void => {
     });
 
     expect(onGameUpdate).toHaveBeenCalledWith(updatedState);
-    expect(screen.getByText("Negotiation pulse")).toBeInTheDocument();
+    expect(await screen.findByText("Negotiation pulse")).toBeInTheDocument();
     expect(screen.getByText("They want more before shaking hands.")).toBeInTheDocument();
     expect(
       screen.getByText(

@@ -181,12 +181,30 @@ describe("inboxHelpers", () => {
     expect(isPlayerEventMessage("plain_message")).toBe(false);
   });
   it("rejects malformed individual choice options before rendering decision controls", () => {
-    for (const option of [null, {}, { id: "x", label: 1, description: "d" }, { id: "x", label: "l", description: null }]) {
-      expect(isChooseOptionAction({ ChooseOption: { options: [option] } } as unknown as MessageData["actions"][number]["action_type"])).toBe(false);
+    for (const option of [
+      null,
+      {},
+      { id: "x", label: 1, description: "d" },
+      { id: "x", label: "l", description: null },
+    ]) {
+      expect(
+        isChooseOptionAction({
+          ChooseOption: { options: [option] },
+        } as unknown as MessageData["actions"][number]["action_type"]),
+      ).toBe(false);
     }
   });
   it("rejects ambiguous duplicate identifiers in decision options", () => {
-    expect(isChooseOptionAction({ ChooseOption: { options: [{ id: "same", label: "Yes", description: "" }, { id: "same", label: "No", description: "" }] } })).toBe(false);
+    expect(
+      isChooseOptionAction({
+        ChooseOption: {
+          options: [
+            { id: "same", label: "Yes", description: "" },
+            { id: "same", label: "No", description: "" },
+          ],
+        },
+      }),
+    ).toBe(false);
   });
   it("normalises internal navigation and ignores external or fragment-only destinations", () => {
     expect(getNavigationTarget(" /player/p1 ").tab).toBe("__selectPlayer");
@@ -195,8 +213,33 @@ describe("inboxHelpers", () => {
     expect(getNavigationTarget("//example.test/player/p1?tab=Transfers").tab).toBe("Home");
   });
   it("recognises direct transfer review routes using the shared navigation parser", () => {
-    expect(isOfferReviewNavigation("transfer_offer_p1", { NavigateTo: { route: "/transfers" } })).toBe(true);
-    expect(isOfferReviewNavigation("loan_offer_p1", { NavigateTo: { route: "/dashboard?tab=transfers#offer" } })).toBe(true);
-    expect(isOfferReviewNavigation("transfer_offer_p1", { NavigateTo: { route: "https://example.test/?tab=Transfers" } })).toBe(false);
+    expect(
+      isOfferReviewNavigation("transfer_offer_p1", { NavigateTo: { route: "/transfers" } }),
+    ).toBe(true);
+    expect(
+      isOfferReviewNavigation("loan_offer_p1", {
+        NavigateTo: { route: "/dashboard?tab=transfers#offer" },
+      }),
+    ).toBe(true);
+    expect(
+      isOfferReviewNavigation("transfer_offer_p1", {
+        NavigateTo: { route: "https://example.test/?tab=Transfers" },
+      }),
+    ).toBe(false);
+  });
+  it("handles missing or malformed legacy action lists when selecting decisions", () => {
+    for (const actions of [
+      null,
+      undefined,
+      [null],
+      [{ id: "bad", label: null, resolved: false }],
+    ]) {
+      expect(
+        getFilteredMessages(
+          [createMessage({ actions: actions as unknown as MessageData["actions"] })],
+          DECISIONS_FILTER,
+        ),
+      ).toEqual([]);
+    }
   });
 });

@@ -132,13 +132,38 @@ export function getFilterButtonClassName(isActive: boolean, extraClasses = ""): 
   return `${className} ${FILTER_BUTTON_INACTIVE_CLASS}`;
 }
 
+/** Validate saved action records once for filtering, rendering and command lookup. */
+export function getMessageActions(message?: Pick<MessageData, "actions"> | null): MessageAction[] {
+  if (!message || !Array.isArray(message.actions)) return [];
+  const seen = new Set<string>();
+  return message.actions.filter((action) => {
+    if (
+      !action ||
+      typeof action !== "object" ||
+      typeof action.id !== "string" ||
+      !action.id.trim() ||
+      typeof action.label !== "string" ||
+      typeof action.resolved !== "boolean" ||
+      seen.has(action.id)
+    )
+      return false;
+    const supported =
+      action.action_type === "Acknowledge" ||
+      action.action_type === "Dismiss" ||
+      isNavigateAction(action.action_type) ||
+      isChooseOptionAction(action.action_type);
+    if (supported) seen.add(action.id);
+    return supported;
+  });
+}
+
 export function getFilteredMessages(
   messages: MessageData[],
   categoryFilter: string | null,
 ): MessageData[] {
   if (categoryFilter === DECISIONS_FILTER) {
     return messages.filter((message) =>
-      message.actions.some(
+      getMessageActions(message).some(
         (action) =>
           !action.resolved &&
           (isChooseOptionAction(action.action_type) ||
@@ -320,14 +345,24 @@ export function isChooseOptionAction(
     actionType.ChooseOption !== null &&
     typeof actionType.ChooseOption === "object" &&
     Array.isArray(actionType.ChooseOption.options) &&
-    new Set(actionType.ChooseOption.options.map((option) => option?.id)).size === actionType.ChooseOption.options.length &&
-    actionType.ChooseOption.options.every((option) => option !== null && typeof option === "object" && typeof option.id === "string" && option.id.trim().length > 0 && typeof option.label === "string" && typeof option.description === "string")
+    new Set(actionType.ChooseOption.options.map((option) => option?.id)).size ===
+      actionType.ChooseOption.options.length &&
+    actionType.ChooseOption.options.every(
+      (option) =>
+        option !== null &&
+        typeof option === "object" &&
+        typeof option.id === "string" &&
+        option.id.trim().length > 0 &&
+        typeof option.label === "string" &&
+        typeof option.description === "string",
+    )
   );
 }
 
 export function getNavigationTarget(route: string): NavigationTarget {
   const input = route.trim().split("#")[0];
-  if (/^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(input)) return { tab: "Home", shouldResolveAction: false };
+  if (/^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(input))
+    return { tab: "Home", shouldResolveAction: false };
   const path = input.split("?")[0];
   const decodeId = (value: string) => {
     try {
