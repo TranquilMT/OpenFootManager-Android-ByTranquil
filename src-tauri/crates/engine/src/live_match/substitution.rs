@@ -25,7 +25,7 @@ impl LiveMatchState {
         }
 
         // Cannot substitute a player who has been sent off
-        if self.sent_off.contains(player_off_id) {
+        if self.sent_off.contains(player_off_id) || self.sent_off.contains(player_on_id) {
             return Err("be.error.liveMatch.cannotSubstituteSentOffPlayer".into());
         }
 
