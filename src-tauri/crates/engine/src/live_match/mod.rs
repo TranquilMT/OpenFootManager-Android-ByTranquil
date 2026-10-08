@@ -335,8 +335,9 @@ impl LiveMatchState {
                 }
             },
             MatchCommand::ChangeFormation { side, formation } => {
-                let changed = self.team_ref(side).formation != formation;
+                let previous = self.team_ref(side).formation.clone();
                 self.apply_formation(side, &formation);
+                let changed = self.team_ref(side).formation != previous;
                 if changed && self.phase != MatchPhase::PreKickOff {
                     self.events.push(MatchEvent::new(
                         self.current_minute,

@@ -191,7 +191,13 @@ impl LiveMatchState {
     pub(super) fn apply_formation(&mut self, side: Side, formation: &str) {
         let (num_def, num_mid, num_fwd) = Self::parse_formation(formation);
         let team = self.team_mut(side);
-        team.formation = formation.to_string();
+        // The display and saved tactics must describe the shape actually applied.
+        let valid = formation.split('-').map(str::parse::<usize>)
+            .collect::<Result<Vec<_>, _>>().is_ok_and(|parts| {
+                matches!(parts.len(), 3 | 4) && parts.iter().all(|&n| (1..=10).contains(&n))
+                    && parts.iter().sum::<usize>() == 10
+            });
+        team.formation = if valid { formation.to_string() } else { "4-4-2".into() };
 
         // Collect outfield players (skip GK) sorted by defensive-ness
         // (defenders first, then midfielders, then forwards) using a simple
