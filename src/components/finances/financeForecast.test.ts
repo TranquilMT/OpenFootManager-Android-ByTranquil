@@ -62,4 +62,10 @@ describe("cash and committed wage forecast", () => {
     const player = { ...createGameState().players[0], team_id: "team-1", wage: 52000, contract_end: "2026-08-08", transfer_offers: [] };
     expect(projectClubCash({ cash: 100000, weeklyNet: -1000, weeklyWages: 1000, teamId: "team-1", today: "2026-08-01", weeks: 4, players: [player] })).toEqual({ cash: 99000, weeklyWages: 0, transferNet: 0 });
   });
+  it("restores outgoing loan wages and releases incoming loan wages on return", () => {
+    const player = { ...createGameState().players[0], team_id: "other", wage: 52000, transfer_offers: [], active_loan: { parent_team_id: "team-1", loan_team_id: "other", start_date: "2026-07-01", end_date: "2026-08-08", wage_contribution_pct: 60 } };
+    const common = { cash: 100000, today: "2026-08-01", weeks: 4, players: [player] };
+    expect(projectClubCash({ ...common, weeklyNet: -400, weeklyWages: 400, teamId: "team-1" })).toMatchObject({ cash: 96600, weeklyWages: 1000 });
+    expect(projectClubCash({ ...common, weeklyNet: -600, weeklyWages: 600, teamId: "other" })).toMatchObject({ cash: 99400, weeklyWages: 0 });
+  });
 });

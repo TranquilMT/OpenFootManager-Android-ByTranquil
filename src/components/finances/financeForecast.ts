@@ -41,6 +41,15 @@ export function projectClubCash({
       const leavesBeforeExpiry = player.transfer_offers.some((offer) => offer.status === "PendingRegistration" && offer.from_team_id !== teamId && getDaysUntil((offer.registration_date ?? offer.date).slice(0, 10), today.slice(0, 10)) <= expiryDays);
       if (!leavesBeforeExpiry) apply(`expiry:${player.id}`, player.contract_end, 0, -annualAmountToWeeklyCommitment(getPlayerAnnualWageCommitment(player, teamId)));
     }
+    const loan = player.active_loan;
+    if (loan && (loan.parent_team_id === teamId || loan.loan_team_id === teamId)) {
+      const contractDays = player.contract_end ? getDaysUntil(player.contract_end.slice(0, 10), today.slice(0, 10)) : Infinity;
+      const returnDays = getDaysUntil(loan.end_date.slice(0, 10), today.slice(0, 10));
+      const currentWage = annualAmountToWeeklyCommitment(getPlayerAnnualWageCommitment(player, teamId));
+      const afterReturnWage = loan.parent_team_id === teamId ? annualAmountToWeeklyCommitment(player.wage) : 0;
+      if (returnDays < contractDays) apply(`return:${player.id}`, loan.end_date, 0, afterReturnWage - currentWage);
+      if (player.contract_end) apply(`expiry:${player.id}`, player.contract_end, 0, -(returnDays < contractDays ? afterReturnWage : currentWage));
+    }
     for (const offer of player.transfer_offers) {
       if (offer.status !== "PendingRegistration") continue;
       if (offer.from_team_id === teamId && player.team_id !== teamId) {
