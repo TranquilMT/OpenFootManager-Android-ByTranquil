@@ -163,14 +163,18 @@ impl LiveMatchState {
 
     /// Parse a formation string like "4-4-2" into (defenders, midfielders, forwards).
     pub(super) fn parse_formation(formation: &str) -> (usize, usize, usize) {
-        let parts: Vec<usize> = formation
-            .split('-')
-            .filter_map(|s| s.parse().ok())
-            .collect();
-        match parts.len() {
-            3 => (parts[0], parts[1], parts[2]),
-            4 => (parts[0], parts[1] + parts[2], parts[3]), // e.g. 4-2-3-1
-            _ => (4, 4, 2),                                 // fallback
+        let parts = formation.split('-').map(str::parse::<usize>).collect::<Result<Vec<_>, _>>();
+        let Ok(parts) = parts else { return (4, 4, 2); };
+        if !matches!(parts.len(), 3 | 4)
+            || parts.iter().any(|&n| n == 0 || n > 10)
+            || parts.iter().sum::<usize>() != 10
+        {
+            return (4, 4, 2);
+        }
+        match parts.as_slice() {
+            [def, mid, fwd] => (*def, *mid, *fwd),
+            [def, holding, attacking, fwd] => (*def, holding + attacking, *fwd),
+            _ => (4, 4, 2),
         }
     }
 
@@ -220,5 +224,28 @@ impl LiveMatchState {
                 team.players[idx].role = PlayerRole::Standard;
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod formation_input_tests {
+    use super::LiveMatchState;
+
+    #[test]
+    fn malformed_formation_cannot_silently_drop_a_segment() {
+        assert_eq!(LiveMatchState::parse_formation("3-nope-5-2"), (4, 4, 2));
+    }
+
+    #[test]
+    fn oversized_formation_falls_back_without_integer_overflow() {
+        let input = format!("4-{}-{}-2", usize::MAX, usize::MAX);
+        assert_eq!(LiveMatchState::parse_formation(&input), (4, 4, 2));
+        assert_eq!(LiveMatchState::parse_formation("40-40-20"), (4, 4, 2));
+    }
+
+    #[test]
+    fn supported_three_and_four_line_shapes_remain_valid() {
+        assert_eq!(LiveMatchState::parse_formation("3-5-2"), (3, 5, 2));
+        assert_eq!(LiveMatchState::parse_formation("4-2-3-1"), (4, 5, 1));
     }
 }
