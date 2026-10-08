@@ -305,4 +305,10 @@ describe("SubPanel", () => {
     expect(getAvailableMatchBench(snap, "Home").map((player) => player.id)).not.toContain("bench-1");
     expect(buildRecommendedSubstitutions(snap, "Home").map((rec) => rec.onId)).not.toContain("bench-1");
   });
+  it("prioritises a recorded injury over routine fitness recommendations", () => {
+    const snap = createSnapshot(); snap.max_subs = 1;
+    snap.home_team.players[0].condition = 10; snap.home_team.players[1].condition = 100;
+    snap.events = [{ minute: 31, event_type: "Injury", side: "Home", player_id: "starter-2", secondary_player_id: null, zone: "Midfield" }];
+    expect(buildRecommendedSubstitutions(snap, "Home")[0].offId).toBe("starter-2");
+  });
 });

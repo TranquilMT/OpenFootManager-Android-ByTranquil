@@ -202,6 +202,7 @@ export function buildRecommendedSubstitutions(
     return [];
   }
 
+  const injuredIds = new Set(snapshot.events.filter((event) => event.side === side && event.event_type === "Injury").map((event) => event.player_id));
   const usedOffIds = new Set<string>();
   const usedOnIds = new Set<string>();
   const recommendations: Array<RecommendedSubstitution & { score: number }> = [];
@@ -253,6 +254,7 @@ export function buildRecommendedSubstitutions(
           onId: onPlayer.id,
           reasons,
           score:
+            (injuredIds.has(offPlayer.id) ? 1000 : 0) +
             buildOffPriority(offPlayer, yellowCount, scenario.id) +
             buildBenchPriority(onPlayer, offPlayer, scenario.id),
         };
