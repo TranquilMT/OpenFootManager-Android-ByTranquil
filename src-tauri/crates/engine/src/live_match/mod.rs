@@ -1,6 +1,61 @@
 #[cfg(test)]
 mod refinement_tests;
 
+#[cfg(test)]
+mod instruction_tests {
+    use super::*;
+    use crate::types::{TacticalInstruction, TacticsConfig, Tempo};
+
+    fn state() -> LiveMatchState {
+        let team = |id: &str| TeamData {
+            id: id.into(),
+            name: id.into(),
+            formation: "4-4-2".into(),
+            play_style: PlayStyle::Balanced,
+            tactics: TacticsConfig::default(),
+            players: vec![],
+        };
+        LiveMatchState::new(
+            team("home"),
+            team("away"),
+            MatchConfig::default(),
+            vec![],
+            vec![],
+            false,
+        )
+    }
+    #[test]
+    fn live_instruction_changes_are_side_specific_and_emit_only_real_changes() {
+        let mut state = state();
+        state.phase = MatchPhase::FirstHalf;
+        let command = MatchCommand::ChangeTacticalInstruction {
+            side: Side::Home,
+            instruction: TacticalInstruction::Tempo(Tempo::Patient),
+        };
+        state.apply_command(command.clone()).unwrap();
+        state.apply_command(command).unwrap();
+        assert_eq!(state.home.tactics.tempo, Tempo::Patient);
+        assert_eq!(state.away.tactics.tempo, Tempo::Direct);
+        assert_eq!(state.events.len(), 1);
+        assert_eq!(state.events[0].event_type, EventType::TacticalChange);
+    }
+    #[test]
+    fn live_instructions_are_rejected_after_full_time_without_state_changes() {
+        let mut state = state();
+        state.phase = MatchPhase::Finished;
+        assert!(
+            state
+                .apply_command(MatchCommand::ChangeTacticalInstruction {
+                    side: Side::Home,
+                    instruction: TacticalInstruction::Tempo(Tempo::Patient)
+                })
+                .is_err()
+        );
+        assert_eq!(state.home.tactics.tempo, Tempo::Direct);
+        assert!(state.events.is_empty());
+    }
+}
+
 mod helpers;
 mod penalty;
 mod simulation;
@@ -14,7 +69,9 @@ use std::collections::{HashMap, HashSet, VecDeque};
 
 use crate::event::{EventType, MatchEvent};
 use crate::report::MatchReport;
-use crate::types::{MatchConfig, PlayStyle, PlayerData, PlayerRole, Side, TeamData, Zone};
+use crate::types::{
+    MatchConfig, PlayStyle, PlayerData, PlayerRole, Side, TacticalInstruction, TeamData, Zone,
+};
 
 // ---------------------------------------------------------------------------
 // MatchPhase — tracks where we are in the match lifecycle
@@ -53,6 +110,10 @@ pub enum MatchCommand {
     ChangePlayStyle {
         side: Side,
         play_style: PlayStyle,
+    },
+    ChangeTacticalInstruction {
+        side: Side,
+        instruction: TacticalInstruction,
     },
     SetFreeKickTaker {
         side: Side,
@@ -351,6 +412,18 @@ impl LiveMatchState {
             MatchCommand::ChangePlayStyle { side, play_style } => {
                 let changed = self.team_ref(side).play_style != play_style;
                 self.team_mut(side).play_style = play_style;
+                if changed && self.phase != MatchPhase::PreKickOff {
+                    self.events.push(MatchEvent::new(
+                        self.current_minute,
+                        EventType::TacticalChange,
+                        side,
+                        Zone::Midfield,
+                    ));
+                }
+                Ok(())
+            }
+            MatchCommand::ChangeTacticalInstruction { side, instruction } => {
+                let changed = self.team_mut(side).tactics.apply_instruction(instruction);
                 if changed && self.phase != MatchPhase::PreKickOff {
                     self.events.push(MatchEvent::new(
                         self.current_minute,
