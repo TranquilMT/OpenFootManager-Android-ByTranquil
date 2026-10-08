@@ -14,7 +14,6 @@ import type { PackageInfo, PackageIssue } from "../components/menu/WorldSelect";
 import type { ManagerProfile } from "../components/menu/types";
 import { applyExtraTranslations } from "../lib/extraTranslations";
 import { GameBrand } from "../components/menu/GameBrand";
-import { EngineUpdateBanner } from "../components/menu/EngineUpdateBanner";
 import { MenuIcon } from "../components/menu/MenuIcon";
 import { MainMenuFooter } from "../components/menu/MainMenuFooter";
 import { resolveBackendError } from "../utils/backendI18n";
@@ -707,7 +706,6 @@ export default function MainMenu() {
             {/* Main Menu */}
             {menuState === "main" && (
               <div className="flex flex-col gap-3">
-                <EngineUpdateBanner onOpen={() => setShowPatchHistory(true)} />
                 <button
                   type="button"
                   onClick={() => setMenuState("create")}
