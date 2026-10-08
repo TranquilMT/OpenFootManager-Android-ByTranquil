@@ -260,4 +260,9 @@ describe("SubPanel", () => {
     expect(screen.queryByTestId("recommended-sub-starter-1-keeper")).not.toBeInTheDocument();
     expect(screen.queryByTestId("recommended-sub-starter-2-keeper")).not.toBeInTheDocument();
   });
+  it("disables formation and style while another decision is pending", () => {
+    render(<SubPanel {...createProps()} pending />);
+    expect(screen.getByRole("combobox", { name: "tactics.formation" })).toBeDisabled();
+    expect(screen.getByRole("combobox", { name: "tactics.playStyle" })).toBeDisabled();
+  });
 });

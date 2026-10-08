@@ -111,7 +111,7 @@ export function SubPanel({
   };
 
   const handleSelectOffPlayer = (playerId: string) => {
-    if (subsMade >= snapshot.max_subs || snapshot.phase === "Finished") return;
+    if (pending || subsMade >= snapshot.max_subs || snapshot.phase === "Finished") return;
     setSelectedOff((cur) => {
       if (cur === playerId) {
         setSelectedBench(null);
@@ -123,12 +123,14 @@ export function SubPanel({
   };
 
   const handleSelectBenchPlayer = (playerId: string) => {
-    if (!selectedOff || subsMade >= snapshot.max_subs || snapshot.phase === "Finished") return;
+    if (pending || !selectedOff || subsMade >= snapshot.max_subs || snapshot.phase === "Finished")
+      return;
     setSelectedBench((cur) => (cur === playerId ? null : playerId));
   };
 
   const handleConfirmSubstitution = () => {
     if (
+      pending ||
       !selectedPlayer ||
       !comparedPlayer ||
       snapshot.phase === "Finished" ||
@@ -139,6 +141,7 @@ export function SubPanel({
   };
 
   const handleApplyRecommendation = (offId: string, onId: string) => {
+    if (pending || snapshot.phase === "Finished") return;
     setSelectedOff(offId);
     setSelectedBench(onId);
   };
@@ -245,6 +248,7 @@ export function SubPanel({
               <Select
                 value={FORMATIONS.includes(team.formation) ? team.formation : FORMATIONS[0]}
                 onChange={(e) => onFormationChange(e.target.value)}
+                disabled={pending || snapshot.phase === "Finished"}
                 aria-label={t("tactics.formation")}
                 selectSize="xs"
               >
@@ -257,6 +261,7 @@ export function SubPanel({
               <Select
                 value={team.play_style}
                 onChange={(e) => onPlayStyleChange(e.target.value)}
+                disabled={pending || snapshot.phase === "Finished"}
                 aria-label={t("tactics.playStyle")}
                 selectSize="xs"
               >
@@ -594,6 +599,7 @@ export function SubPanel({
                     </button>
                     <button
                       type="button"
+                      disabled={pending || snapshot.phase === "Finished"}
                       onClick={handleConfirmSubstitution}
                       className="rounded-lg bg-green-500 px-3 py-1.5 font-heading text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-green-400"
                     >
