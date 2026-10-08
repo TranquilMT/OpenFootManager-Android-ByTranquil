@@ -1,4 +1,5 @@
 import { MatchOperationGate } from "./matchOperationGate";
+import { useLiveFeedScroll } from "./useLiveFeedScroll";
 import MatchdayQuickActions from "./MatchdayQuickActions";
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { invoke } from "@tauri-apps/api/core";
@@ -75,7 +76,6 @@ export default function MatchLive({
   gameState,
   userSide,
   isSpectator,
-  importantEvents,
   preferredSpeed,
   onPreferredSpeedChange,
   onSnapshotUpdate,
@@ -99,7 +99,6 @@ export default function MatchLive({
   const [showSubPanel, setShowSubPanel] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(settings.spoken_match_commentary);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const eventFeedRef = useRef<HTMLDivElement>(null);
   // Track phases we've already signaled to avoid double-firing
   const signaledRef = useRef<Set<string>>(new Set());
 
@@ -121,6 +120,7 @@ export default function MatchLive({
     [snapshot.events],
   );
   const isFinished = snapshot.phase === "Finished";
+  const liveFeed = useLiveFeedScroll(visibleEvents.length, activePanel === "events");
 
   // Reads only `lastResult` for phase transitions, which is sound because step_many stops on
   // entering any phase that needs the manager — so a half time, shootout or finish is always the
@@ -218,13 +218,6 @@ export default function MatchLive({
     showSubPanel,
     matchCommandPending,
   ]);
-
-  // Auto-scroll event feed
-  useEffect(() => {
-    if (eventFeedRef.current) {
-      eventFeedRef.current.scrollTop = eventFeedRef.current.scrollHeight;
-    }
-  }, [importantEvents.length]);
 
   useSpokenCommentary(
     visibleEvents,
@@ -460,7 +453,20 @@ export default function MatchLive({
             )}
           </div>
 
-          <div className="touch-scroll min-h-0 flex-1 overflow-auto p-3 sm:p-4">
+          {activePanel === "events" && !liveFeed.following && (
+            <button
+              type="button"
+              onClick={liveFeed.jumpToLive}
+              className="min-h-11 bg-primary-50 px-4 text-sm font-semibold text-primary-600 dark:bg-navy-800 dark:text-primary-400"
+            >
+              {t("match.jumpToLive")}
+            </button>
+          )}
+          <div
+            ref={liveFeed.feedRef}
+            onScroll={liveFeed.onScroll}
+            className="touch-scroll min-h-0 flex-1 overflow-auto p-3 sm:p-4"
+          >
             {activePanel !== "lineups" && (
               <MatchPulse
                 snapshot={snapshot}
@@ -473,7 +479,6 @@ export default function MatchLive({
               <EventFeed
                 events={visibleEvents}
                 snapshot={snapshot}
-                feedRef={eventFeedRef}
                 playerJerseyMap={playerJerseyMap}
                 showCommentary={settings.show_match_commentary}
               />

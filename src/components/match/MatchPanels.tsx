@@ -9,13 +9,11 @@ import { translatePositionAbbreviation } from "../squad/SquadTab.helpers";
 export function EventFeed({
   events,
   snapshot,
-  feedRef,
   playerJerseyMap,
   showCommentary = true,
 }: {
   events: MatchEvent[];
   snapshot: MatchSnapshot;
-  feedRef: React.RefObject<HTMLDivElement | null>;
   playerJerseyMap?: Map<string, number>;
   showCommentary?: boolean;
 }) {
@@ -27,7 +25,7 @@ export function EventFeed({
   }
   const { t } = useTranslation();
   return (
-    <div ref={feedRef} className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1">
       {events.length === 0 ? (
         <div className="flex items-center justify-center h-40 text-gray-600 dark:text-gray-500">
           <p className="font-heading text-sm uppercase tracking-wider">
