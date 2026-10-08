@@ -214,6 +214,8 @@ describe("SubPanel", () => {
     props.snapshot.home_subs_made = props.snapshot.max_subs;
     render(<SubPanel {...props} />);
     expect(screen.queryByTestId("recommended-sub-starter-1-bench-1")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("recommended-plan-cta"));
+    expect(props.onPlayStyleChange).toHaveBeenCalledWith("Balanced");
   });
 
   it("applies formation from quick tactical tweaks", () => {
