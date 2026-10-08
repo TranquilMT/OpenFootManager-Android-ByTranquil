@@ -327,7 +327,13 @@ impl LiveMatchState {
                 side,
                 player_off_id,
                 player_on_id,
-            } => self.do_substitution(side, &player_off_id, &player_on_id),
+            } => {
+                if self.phase == MatchPhase::PreKickOff {
+                    self.do_pre_match_swap(side, &player_off_id, &player_on_id)
+                } else {
+                    self.do_substitution(side, &player_off_id, &player_on_id)
+                }
+            },
             MatchCommand::ChangeFormation { side, formation } => {
                 let changed = self.team_ref(side).formation != formation;
                 self.apply_formation(side, &formation);
