@@ -139,3 +139,15 @@ fn refinement_large_possession_counters() {
     state.away_possession_ticks = u32::MAX;
     assert_eq!(state.snapshot().home_possession_pct, 50.0);
 }
+
+#[test]
+fn refinement_imported_shot_probability() {
+    let mut invalid = MatchEvent::new(12, EventType::ShotOffTarget, Side::Home, Zone::AwayDefense)
+        .with_player("shooter").with_shot(0.2, "keeper");
+    invalid.shot.as_mut().unwrap().expected_goals = f64::NAN;
+    let mut excessive = invalid.clone();
+    excessive.shot.as_mut().unwrap().expected_goals = 5.0;
+    let report = MatchReport::from_events(vec![invalid, excessive], 50, 50, 90);
+    assert_eq!(report.home_stats.expected_goals, 1.0);
+    assert_eq!(report.player_stats["shooter"].expected_goals, 1.0);
+}
