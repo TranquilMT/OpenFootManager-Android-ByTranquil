@@ -30,6 +30,24 @@ function getTeamState(snapshot: MatchSnapshot, side: "Home" | "Away") {
   };
 }
 
+/** Shared by the bench picker and recommendations; unavailable players never appear as options. */
+export function getAvailableMatchBench(snapshot: MatchSnapshot, side: "Home" | "Away") {
+  const { team, bench } = getTeamState(snapshot, side);
+  const unavailable = new Set([
+    ...snapshot.sent_off,
+    ...team.players.map((player) => player.id),
+    ...snapshot.substitutions
+      .filter((sub) => sub.side === side)
+      .flatMap((sub) => [sub.player_off_id, sub.player_on_id]),
+  ]);
+  const seen = new Set<string>();
+  return bench.filter((player) => {
+    if (!player.id || unavailable.has(player.id) || seen.has(player.id)) return false;
+    seen.add(player.id);
+    return true;
+  });
+}
+
 function getScoreDelta(snapshot: MatchSnapshot, side: "Home" | "Away"): number {
   return side === "Home"
     ? snapshot.home_score - snapshot.away_score
@@ -170,23 +188,14 @@ export function buildRecommendedSubstitutions(
   snapshot: MatchSnapshot,
   side: "Home" | "Away",
 ): RecommendedSubstitution[] {
-  const { team, bench, yellows } = getTeamState(snapshot, side);
+  const { team, yellows } = getTeamState(snapshot, side);
+  const subsMade = side === "Home" ? snapshot.home_subs_made : snapshot.away_subs_made;
+  const remaining = Math.max(0, snapshot.max_subs - subsMade);
+  if (snapshot.phase === "Finished" || remaining === 0) return [];
   const scenario = getMatchScenario(snapshot, side);
-  const subbedOnIds = new Set(
-    snapshot.substitutions
-      .filter((substitution) => substitution.side === side)
-      .map((substitution) => substitution.player_on_id),
-  );
-  const subbedOffIds = new Set(
-    snapshot.substitutions
-      .filter((substitution) => substitution.side === side)
-      .map((substitution) => substitution.player_off_id),
-  );
 
   const activePlayers = team.players.filter((player) => !snapshot.sent_off.includes(player.id));
-  const availableBench = bench.filter(
-    (player) => !subbedOffIds.has(player.id) && !subbedOnIds.has(player.id),
-  );
+  const availableBench = getAvailableMatchBench(snapshot, side);
 
   if (availableBench.length === 0) {
     return [];
@@ -197,7 +206,7 @@ export function buildRecommendedSubstitutions(
   const recommendations: Array<RecommendedSubstitution & { score: number }> = [];
 
   while (
-    recommendations.length < 3 &&
+    recommendations.length < Math.min(3, remaining) &&
     usedOffIds.size < activePlayers.length &&
     usedOnIds.size < availableBench.length
   ) {

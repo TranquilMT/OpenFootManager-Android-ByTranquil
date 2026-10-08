@@ -19,6 +19,7 @@ import { translatePositionAbbreviation } from "../squad/SquadTab.helpers";
 import {
   buildRecommendedSubstitutions,
   getMatchScenario,
+  getAvailableMatchBench,
   type MatchScenarioId,
 } from "./SubPanel.helpers";
 
@@ -65,16 +66,12 @@ export function SubPanel({
   const [selectedBench, setSelectedBench] = useState<string | null>(null);
 
   const team = side === "Home" ? snapshot.home_team : snapshot.away_team;
-  const bench = side === "Home" ? snapshot.home_bench : snapshot.away_bench;
   const subsMade = side === "Home" ? snapshot.home_subs_made : snapshot.away_subs_made;
 
   const subbedOnIds = new Set(
     snapshot.substitutions.filter((s) => s.side === side).map((s) => s.player_on_id),
   );
-  const subbedOffIds = new Set(
-    snapshot.substitutions.filter((s) => s.side === side).map((s) => s.player_off_id),
-  );
-  const availableBench = bench.filter((p) => !subbedOffIds.has(p.id) && !subbedOnIds.has(p.id));
+  const availableBench = getAvailableMatchBench(snapshot, side);
   const selectedPlayer = selectedOff ? team.players.find((p) => p.id === selectedOff) : null;
   const comparedPlayer = selectedBench ? availableBench.find((p) => p.id === selectedBench) : null;
 

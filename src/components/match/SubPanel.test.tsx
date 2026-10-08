@@ -201,6 +201,21 @@ describe("SubPanel", () => {
     expect(props.onPlayStyleChange).toHaveBeenCalledWith("Balanced");
   });
 
+  it("never offers a dismissed bench player", () => {
+    const props = createProps();
+    props.snapshot.sent_off = ["bench-1"];
+    render(<SubPanel {...props} />);
+    expect(screen.queryByTestId("sub-panel-bench-bench-1")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("recommended-sub-starter-1-bench-1")).not.toBeInTheDocument();
+  });
+
+  it("does not recommend swaps after the substitution allowance is exhausted", () => {
+    const props = createProps();
+    props.snapshot.home_subs_made = props.snapshot.max_subs;
+    render(<SubPanel {...props} />);
+    expect(screen.queryByTestId("recommended-sub-starter-1-bench-1")).not.toBeInTheDocument();
+  });
+
   it("applies formation from quick tactical tweaks", () => {
     const props = createProps();
 
