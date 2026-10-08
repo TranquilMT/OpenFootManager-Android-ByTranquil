@@ -42,7 +42,9 @@ impl LiveMatchState {
             .chain(away_team.players.iter_mut())
         {
             if let Some(&cond) = self.player_conditions.get(&p.id) {
-                p.condition = cond.round() as u8;
+                p.condition = if cond.is_finite() {
+                    cond.clamp(0.0, 100.0).round() as u8
+                } else { 50 };
             }
         }
 
