@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { invoke } from "@tauri-apps/api/core";
 import MatchLive from "./MatchLive";
 import type { GameStateData } from "../../store/gameStore";
@@ -64,6 +64,7 @@ const snapshot = {
 } as unknown as MatchSnapshot;
 
 describe("live match decisions", () => {
+  beforeEach(() => vi.mocked(invoke).mockReset());
   it("shows a rejected tactical decision instead of silently logging it", async () => {
     vi.mocked(invoke).mockRejectedValueOnce(new Error("rejected"));
     render(
@@ -81,5 +82,29 @@ describe("live match decisions", () => {
     );
     fireEvent.click(screen.getAllByRole("button", { name: "common.playStyles.Attacking" })[0]);
     expect(await screen.findByRole("alert")).toHaveTextContent("Decision rejected");
+  });
+  it("sends a single live tempo instruction and applies the returned snapshot", async () => {
+    const onSnapshotUpdate = vi.fn();
+    vi.mocked(invoke).mockResolvedValueOnce(snapshot);
+    render(
+      <MatchLive
+        snapshot={snapshot}
+        gameState={{ teams: [], players: [] } as unknown as GameStateData}
+        userSide="Home"
+        isSpectator={false}
+        importantEvents={[]}
+        onSnapshotUpdate={onSnapshotUpdate}
+        onImportantEvent={vi.fn()}
+        onHalfTime={vi.fn()}
+        onFullTime={vi.fn()}
+      />,
+    );
+    fireEvent.click(screen.getAllByRole("button", { name: /match.subs/ })[0]);
+    fireEvent.click(screen.getByRole("combobox", { name: "tactics.phaseSettings.tempo" }));
+    fireEvent.click(screen.getByRole("option", { name: "tactics.phaseSettings.tempo_Patient" }));
+    await waitFor(() => expect(onSnapshotUpdate).toHaveBeenCalledWith(snapshot));
+    expect(invoke).toHaveBeenLastCalledWith("apply_match_command", {
+      command: { ChangeTacticalInstruction: { side: "Home", instruction: { Tempo: "Patient" } } },
+    });
   });
 });

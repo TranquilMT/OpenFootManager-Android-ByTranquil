@@ -1,3 +1,5 @@
+import type { TacticsPhaseSettings } from "../../store/types";
+import { buildTacticalInstructions } from "../tactics/tacticalInstructions";
 import { MatchOperationGate } from "./matchOperationGate";
 import { useLiveFeedScroll } from "./useLiveFeedScroll";
 import { filterMatchEvents, type EventFilter } from "./eventFilters";
@@ -280,6 +282,25 @@ export default function MatchLive({
           command: { ChangePlayStyle: { side: userSide, play_style: playStyle } },
         });
         onSnapshotUpdate(snap);
+      } catch (err) {
+        setMatchError(resolveBackendError(err) || t("match.actionFailed"));
+      }
+    }, setMatchCommandPending);
+  };
+
+  const handleTacticsPhaseChange = async (patch: Partial<TacticsPhaseSettings>) => {
+    if (!userSide || isSpectator || isFinished) return;
+    const instructions = buildTacticalInstructions(patch);
+    if (instructions.length === 0) return;
+    setMatchError(null);
+    await operationGate.current.runCommand(async () => {
+      try {
+        for (const instruction of instructions) {
+          const snap = await invoke<MatchSnapshot>("apply_match_command", {
+            command: { ChangeTacticalInstruction: { side: userSide, instruction } },
+          });
+          onSnapshotUpdate(snap);
+        }
       } catch (err) {
         setMatchError(resolveBackendError(err) || t("match.actionFailed"));
       }
@@ -721,6 +742,8 @@ export default function MatchLive({
           onSubstitute={handleSubstitution}
           onFormationChange={handleFormationChange}
           onPlayStyleChange={handlePlayStyleChange}
+          onTacticsPhaseChange={handleTacticsPhaseChange}
+          pending={matchCommandPending}
           onClose={() => setShowSubPanel(false)}
         />
       )}

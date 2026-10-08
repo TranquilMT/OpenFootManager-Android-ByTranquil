@@ -1,6 +1,7 @@
 // Shared types for match simulation components — mirrors Rust engine types
 
 import type { TFunction } from "i18next";
+import type { TacticsPhaseSettings } from "../../store/types";
 
 export type DangerBand = "Speculative" | "Decent" | "BigChance";
 export type SaveQuality = "Routine" | "Strong" | "WorldClass";
@@ -61,6 +62,7 @@ export interface EngineTeamData {
   name: string;
   formation: string;
   play_style: string;
+  tactics?: TacticsPhaseSettings;
   players: EnginePlayerData[];
 }
 

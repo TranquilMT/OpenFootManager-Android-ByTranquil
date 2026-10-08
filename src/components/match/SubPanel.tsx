@@ -1,3 +1,5 @@
+import type { TacticsPhaseSettings } from "../../store/types";
+import { PhaseBlueprintPanel } from "../tactics/PhaseBlueprintPanel";
 import { useState, type KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { type MatchSnapshot, FORMATIONS, PLAY_STYLES } from "./types";
@@ -53,6 +55,8 @@ export function SubPanel({
   onFormationChange,
   onPlayStyleChange,
   onClose,
+  onTacticsPhaseChange,
+  pending = false,
 }: {
   snapshot: MatchSnapshot;
   side: "Home" | "Away";
@@ -60,6 +64,8 @@ export function SubPanel({
   onFormationChange: (formation: string) => void;
   onPlayStyleChange: (playStyle: string) => void;
   onClose: () => void;
+  onTacticsPhaseChange?: (patch: Partial<TacticsPhaseSettings>) => void;
+  pending?: boolean;
 }) {
   const { t } = useTranslation();
   const [selectedOff, setSelectedOff] = useState<string | null>(null);
@@ -262,6 +268,16 @@ export function SubPanel({
               </Select>
             </div>
           </div>
+
+          {onTacticsPhaseChange && (
+            <div className="max-h-64 shrink-0 overflow-y-auto border-b border-gray-200 dark:border-navy-700">
+              <PhaseBlueprintPanel
+                tacticsPhase={team.tactics}
+                onTacticsPhaseChange={onTacticsPhaseChange}
+                disabled={pending || snapshot.phase === "Finished"}
+              />
+            </div>
+          )}
 
           {/* Main body: two columns */}
           <div className="flex min-h-0 flex-1 overflow-hidden">
