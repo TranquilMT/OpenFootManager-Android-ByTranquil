@@ -1,3 +1,6 @@
+#[cfg(test)]
+mod refinement_tests;
+
 mod helpers;
 mod penalty;
 mod simulation;
