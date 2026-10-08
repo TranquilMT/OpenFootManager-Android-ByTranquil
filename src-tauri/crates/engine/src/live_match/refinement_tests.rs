@@ -151,3 +151,12 @@ fn refinement_imported_shot_probability() {
     assert_eq!(report.home_stats.expected_goals, 1.0);
     assert_eq!(report.player_stats["shooter"].expected_goals, 1.0);
 }
+
+#[test]
+fn refinement_empty_assist_identity() {
+    let goal = MatchEvent::new(12, EventType::Goal, Side::Home, Zone::AwayDefense)
+        .with_player("scorer").with_secondary("");
+    let report = MatchReport::from_events(vec![goal], 50, 50, 90);
+    assert_eq!(report.goals[0].assist_id, None);
+    assert!(!report.player_stats.contains_key(""));
+}
