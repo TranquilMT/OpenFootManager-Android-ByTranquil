@@ -5,6 +5,7 @@ import { useLiveFeedScroll } from "./useLiveFeedScroll";
 import { filterMatchEvents, type EventFilter } from "./eventFilters";
 import { MatchEventFilters } from "./MatchEventFilters";
 import { resolveBackendError } from "../../utils/backendI18n";
+import { useMatchVisibility } from "./useMatchVisibility";
 import { formatMatchMinute } from "./matchClock";
 import MatchdayQuickActions from "./MatchdayQuickActions";
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
@@ -92,6 +93,7 @@ export default function MatchLive({
 }: MatchLiveProps) {
   const { t, i18n } = useTranslation();
   const { settings, updateSettings } = useSettingsStore();
+  const matchVisible = useMatchVisibility();
   const initialSpeed: SimSpeed =
     preferredSpeed ??
     (settings.match_speed === "slow" || settings.match_speed === "fast"
@@ -212,7 +214,7 @@ export default function MatchLive({
       timerRef.current = null;
     }
 
-    if (isRunning && speed !== "paused" && !isFinished && !showSubPanel && !matchCommandPending) {
+    if (matchVisible && isRunning && speed !== "paused" && !isFinished && !showSubPanel && !matchCommandPending) {
       timerRef.current = setTimeout(async () => {
         await stepMatch(MINUTES_PER_TICK[speed]);
       }, SPEED_MS[speed]);
@@ -222,6 +224,7 @@ export default function MatchLive({
       if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, [
+    matchVisible,
     isRunning,
     speed,
     snapshot.current_minute,
@@ -318,14 +321,14 @@ export default function MatchLive({
           <div className="flex items-center justify-between gap-4">
             {/* Live indicator */}
             <div className="flex items-center gap-2">
-              {isRunning && (
+              {isRunning && matchVisible && !isFinished && (
                 <span className="relative flex h-2.5 w-2.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500" />
                 </span>
               )}
               <span className="text-xs font-heading uppercase tracking-widest text-gray-500 dark:text-gray-400">
-                {isRunning ? t("match.live") : t("match.paused")}
+                {isRunning && matchVisible && !isFinished ? t("match.live") : t("match.paused")}
               </span>
             </div>
 

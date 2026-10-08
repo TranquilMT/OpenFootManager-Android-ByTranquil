@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { invoke } from "@tauri-apps/api/core";
 import MatchLive from "./MatchLive";
@@ -148,6 +148,25 @@ describe("live match decisions", () => {
     }
     for (const button of screen.getAllByRole("button", { name: /^match.subs(?: \(|$)/ })) {
       expect(button).toBeDisabled();
+    }
+  });
+  it("suspends automatic steps while backgrounded and resumes at the selected speed", async () => {
+    vi.useFakeTimers();
+    const old = Object.getOwnPropertyDescriptor(document, "hidden");
+    Object.defineProperty(document, "hidden", { configurable: true, value: true });
+    vi.mocked(invoke).mockResolvedValue([]);
+    const view = render(<MatchLive snapshot={snapshot} gameState={{ teams: [], players: [] } as unknown as GameStateData} userSide="Home" isSpectator={false} importantEvents={[]} onSnapshotUpdate={vi.fn()} onImportantEvent={vi.fn()} onHalfTime={vi.fn()} onFullTime={vi.fn()} />);
+    try {
+      await act(async () => { await vi.advanceTimersByTimeAsync(10000); });
+      expect(invoke).not.toHaveBeenCalled();
+      Object.defineProperty(document, "hidden", { configurable: true, value: false });
+      act(() => { document.dispatchEvent(new Event("visibilitychange")); });
+      await act(async () => { await vi.advanceTimersByTimeAsync(2000); });
+      expect(invoke).toHaveBeenCalledExactlyOnceWith("step_live_match", { minutes: 1 });
+    } finally {
+      view.unmount();
+      if (old) Object.defineProperty(document, "hidden", old); else Reflect.deleteProperty(document, "hidden");
+      vi.useRealTimers();
     }
   });
 });
