@@ -9,7 +9,7 @@ export function monitoredLoans(players: PlayerData[], teamId: string) {
         !loan ||
         (loan.parent_team_id !== teamId && loan.loan_team_id !== teamId)
       ) return [];
-      const hasBaseline = Number.isFinite(loan.loan_start_appearances) && Number.isFinite(loan.loan_start_minutes);
+      const hasBaseline = Number.isFinite(loan.loan_start_appearances) && Number.isFinite(loan.loan_start_minutes) && Number.isFinite(player.stats.appearances) && Number.isFinite(player.stats.minutes_played);
       return [
         {
           player,
