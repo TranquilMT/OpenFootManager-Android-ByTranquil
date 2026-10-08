@@ -64,4 +64,13 @@ describe("integrated match panels", () => {
     expect(screen.getByText("0.35")).toBeInTheDocument();
     expect(screen.getByText("keeper")).toBeInTheDocument();
   });
+  it("keeps expanded details attached to their event when earlier rows are inserted", () => {
+    const goal = event("Goal"); const snap = snapshot([goal]);
+    const view = render(<EventFeed events={[goal]} snapshot={snap} showCommentary={false} />);
+    const original = screen.getByText("match.viewDetails").closest("details")!;
+    original.open = true;
+    view.rerender(<EventFeed events={[{ ...event("YellowCard"), minute: 10 }, goal]} snapshot={snap} showCommentary={false} />);
+    const details = screen.getAllByText("match.viewDetails").map((node) => node.closest("details")!);
+    expect(details[0].open).toBe(false); expect(details[1].open).toBe(true);
+  });
 });
