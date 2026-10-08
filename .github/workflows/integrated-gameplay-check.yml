@@ -43,6 +43,7 @@ jobs:
         with:
           workspaces: src-tauri
           shared-key: integrated-gameplay
+          cache-on-failure: true
       - name: Workspace unit and integration tests
         run: cargo test --manifest-path src-tauri/Cargo.toml --workspace --all-targets --locked
       - name: Workspace lint

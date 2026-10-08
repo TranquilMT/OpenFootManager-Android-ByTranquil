@@ -883,14 +883,23 @@ fn match_injury_persists_and_does_not_shorten_existing_injury() {
     );
     turn::apply_match_report(&mut game, 0, "team1", "team2", &report);
     let injured = game.players.iter().find(|p| p.id == "t1_fwd0").unwrap();
-    assert_eq!(injured.injury.as_ref().unwrap().name, "Muscle strain");
-    assert!(
-        game.messages
-            .iter()
-            .any(|m| m.category == domain::message::MessageCategory::Injury
-                && m.context.player_id.as_deref() == Some("t1_fwd0")
-                && m.body.contains("muscle strain"))
+    let injury = injured.injury.as_ref().unwrap();
+    assert!(ofm_core::player_wear::MATCH_INJURY_NAMES.contains(&injury.name.as_str()));
+    let medical = game
+        .messages
+        .iter()
+        .find(|message| {
+            message.category == domain::message::MessageCategory::Injury
+                && message.context.player_id.as_deref() == Some("t1_fwd0")
+        })
+        .expect("managed match injuries create a medical report");
+    assert_eq!(medical.body_key.as_deref(), Some("be.msg.matchInjury.body"));
+    assert_eq!(medical.i18n_params.get("injury"), Some(&injury.name));
+    assert_eq!(
+        medical.i18n_params.get("days"),
+        Some(&injury.days_remaining.to_string())
     );
+    assert!(medical.context.fixture_id.is_some());
     assert!(injured.injury.as_ref().unwrap().days_remaining >= 3);
     let saved = serde_json::to_string(&game).unwrap();
     let mut restored: Game = serde_json::from_str(&saved).unwrap();
