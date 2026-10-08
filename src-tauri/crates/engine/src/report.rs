@@ -353,9 +353,12 @@ impl MatchReport {
                 }
                 EventType::YellowCard | EventType::SecondYellow => {
                     stats.yellow_cards += 1;
+                    let dismissed = event.event_type == EventType::SecondYellow;
+                    if dismissed { stats.red_cards += 1; }
                     if !pid.is_empty() {
                         let ps = player_stats.entry(pid.to_string()).or_default();
                         ps.yellow_cards += 1;
+                        if dismissed { ps.red_cards += 1; }
                     }
                 }
                 EventType::RedCard => {
