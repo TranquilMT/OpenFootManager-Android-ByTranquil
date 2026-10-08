@@ -17,6 +17,18 @@ pub const MATCH_INJURY_NAMES: [&str; 5] = [
     "common.injuries.calfStrain",
 ];
 
+/// A medical estimate for a recorded match injury. Duration depends on the
+/// diagnosis rather than the match minute; names reuse translated injury keys.
+pub fn diagnose_match_injury(rng: &mut impl Rng) -> Injury {
+    let index = rng.random_range(0..MATCH_INJURY_NAMES.len());
+    let ranges = [(5, 12), (7, 21), (5, 10), (5, 14), (7, 18)];
+    let (minimum, maximum) = ranges[index];
+    Injury {
+        name: MATCH_INJURY_NAMES[index].to_string(),
+        days_remaining: rng.random_range(minimum..=maximum),
+    }
+}
+
 /// Deplete a player's short-term condition based on minutes played and stamina,
 /// and gradually sharpen match fitness for players with significant minutes.
 ///
@@ -72,12 +84,7 @@ pub fn roll_match_injury(player: &mut Player, rng: &mut impl Rng) -> bool {
         return false;
     }
 
-    let days = rng.random_range(5..=21);
-    let name = MATCH_INJURY_NAMES[rng.random_range(0..MATCH_INJURY_NAMES.len())];
-    player.injury = Some(Injury {
-        name: name.to_string(),
-        days_remaining: days,
-    });
+    player.injury = Some(diagnose_match_injury(rng));
     true
 }
 
@@ -87,6 +94,23 @@ mod tests {
     use domain::player::{Player, PlayerAttributes, Position};
     use rand::SeedableRng;
     use rand::rngs::StdRng;
+
+    #[test]
+    fn event_diagnoses_use_translated_names_and_injury_specific_recovery_ranges() {
+        let mut rng = StdRng::seed_from_u64(73);
+        let mut names = std::collections::HashSet::new();
+        for _ in 0..200 {
+            let injury = diagnose_match_injury(&mut rng);
+            let index = MATCH_INJURY_NAMES
+                .iter()
+                .position(|name| *name == injury.name)
+                .unwrap();
+            let ranges = [(5, 12), (7, 21), (5, 10), (5, 14), (7, 18)];
+            assert!((ranges[index].0..=ranges[index].1).contains(&injury.days_remaining));
+            names.insert(injury.name);
+        }
+        assert_eq!(names.len(), MATCH_INJURY_NAMES.len());
+    }
 
     fn attrs(stamina: u8) -> PlayerAttributes {
         PlayerAttributes {
