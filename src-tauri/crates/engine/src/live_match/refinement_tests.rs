@@ -177,3 +177,16 @@ fn refinement_harmless_free_kick_resets_source() {
     let report = MatchReport::from_events(vec![corner, free_kick, goal], 50, 50, 90);
     assert_eq!(report.goals[0].goal_source, GoalSource::OpenPlay);
 }
+
+#[test]
+fn refinement_fatigue_cannot_restore_condition() {
+    let mut state = make_live_match(false);
+    state.home.players[0].stamina = 100;
+    state.home.players[0].fitness = 255;
+    state.player_conditions.insert("home_gk".into(), 30.0);
+    state.deplete_stamina_tick();
+    assert!(state.player_conditions["home_gk"] <= 30.0);
+    state.player_conditions.insert("home_gk".into(), 1.0);
+    state.deplete_stamina_tick();
+    assert!(state.player_conditions["home_gk"] <= 1.0);
+}
