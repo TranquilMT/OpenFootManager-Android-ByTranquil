@@ -233,7 +233,7 @@ impl MatchReport {
                         assist_id: event
                             .secondary_player_id
                             .clone()
-                            .filter(|assist| assist != pid),
+                            .filter(|assist| !assist.is_empty() && assist != pid),
                         goal_source: source,
                         side: event.side,
                     });
@@ -244,7 +244,7 @@ impl MatchReport {
                         ps.shots_on_target += 1;
                     }
                     if let Some(ref assist_id) = event.secondary_player_id
-                        && assist_id != pid
+                        && !assist_id.is_empty() && assist_id != pid
                     {
                         let ps = player_stats.entry(assist_id.clone()).or_default();
                         ps.assists += 1;
