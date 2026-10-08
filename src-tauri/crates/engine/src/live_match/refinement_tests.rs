@@ -1,5 +1,5 @@
 use super::*;
-use crate::{GoalSource, Position};
+use crate::{GoalSource, Position, TacticsConfig};
 use rand::{SeedableRng, rngs::StdRng};
 
 fn make_player(id: &str, name: &str, pos: Position, skill: u8) -> PlayerData {
