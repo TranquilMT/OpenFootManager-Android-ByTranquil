@@ -72,7 +72,7 @@ export function projectClubCash({
     for (const offer of player.loan_offers ?? []) {
       if (offer.status !== "PendingRegistration") continue;
       const contribution = annualAmountToWeeklyCommitment(
-        Math.floor((player.wage * offer.wage_contribution_pct) / 100),
+        Math.floor((Math.max(0, player.wage) * (Number.isFinite(offer.wage_contribution_pct) ? Math.max(0, Math.min(100, offer.wage_contribution_pct)) : 0)) / 100),
       );
       const wageChange = offer.from_team_id === teamId ? contribution : offer.parent_team_id === teamId ? -contribution : 0;
       if (wageChange !== 0 && apply(`loan:${offer.id}`, offer.start_date, 0, wageChange)) {

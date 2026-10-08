@@ -76,4 +76,8 @@ describe("cash and committed wage forecast", () => {
     const player = { ...createGameState().players[0], wage: 52000, team_id: "seller", transfer_offers: [{ id: "free-wage", from_team_id: "team-1", fee: 0, wage_offered: 0, status: "PendingRegistration" as const, date: "2026-08-01", last_manager_fee: null, negotiation_round: 0, suggested_counter_fee: null }] };
     expect(projectClubCash({ cash: 100000, weeklyNet: 0, weeklyWages: 0, teamId: "team-1", today: "2026-08-01", weeks: 4, players: [player] })).toMatchObject({ cash: 100000, weeklyWages: 0 });
   });
+  it("bounds agreed loan wage contributions to the actual salary", () => {
+    const player = { ...createGameState().players[0], wage: 52000, team_id: "seller", transfer_offers: [], loan_offers: [{ id: "high-share", parent_team_id: "seller", from_team_id: "team-1", start_date: "2026-08-01", end_date: "2027-08-01", wage_contribution_pct: 150, status: "PendingRegistration" as const, date: "2026-08-01" }] };
+    expect(projectClubCash({ cash: 100000, weeklyNet: 0, weeklyWages: 0, teamId: "team-1", today: "2026-08-01", weeks: 4, players: [player] })).toMatchObject({ cash: 96000, weeklyWages: 1000 });
+  });
 });
