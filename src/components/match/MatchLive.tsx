@@ -237,7 +237,7 @@ export default function MatchLive({
   // Apply substitution
   const handleSubstitution = async (playerOffId: string, playerOnId: string) => {
     if (!userSide || isSpectator || isFinished) return;
-    await operationGate.current.run(async () => {
+    await operationGate.current.runCommand(async () => {
       try {
         const snap = await invoke<MatchSnapshot>("apply_match_command", {
           command: {
@@ -254,7 +254,7 @@ export default function MatchLive({
 
   const handleFormationChange = async (formation: string) => {
     if (!userSide || isSpectator || isFinished) return;
-    await operationGate.current.run(async () => {
+    await operationGate.current.runCommand(async () => {
       try {
         const snap = await invoke<MatchSnapshot>("apply_match_command", {
           command: { ChangeFormation: { side: userSide, formation } },
@@ -268,7 +268,7 @@ export default function MatchLive({
 
   const handlePlayStyleChange = async (playStyle: string) => {
     if (!userSide || isSpectator || isFinished) return;
-    await operationGate.current.run(async () => {
+    await operationGate.current.runCommand(async () => {
       try {
         const snap = await invoke<MatchSnapshot>("apply_match_command", {
           command: { ChangePlayStyle: { side: userSide, play_style: playStyle } },
