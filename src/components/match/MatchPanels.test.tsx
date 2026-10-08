@@ -16,4 +16,8 @@ describe("integrated match panels", () => {
     render(<MatchStats snapshot={snapshot([event("PenaltyMiss"), event("ShootoutGoal")])} />);
     expect(row("match.shots").firstElementChild).toHaveTextContent("1");
   });
+  it("includes recorded on-target shots consistently with the pulse", () => {
+    render(<MatchStats snapshot={snapshot([event("ShotOnTarget")])} />);
+    expect(row("match.shotsOnTarget").firstElementChild).toHaveTextContent("1");
+  });
 });

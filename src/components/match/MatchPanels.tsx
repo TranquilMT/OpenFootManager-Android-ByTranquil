@@ -143,8 +143,8 @@ export function MatchStats({ snapshot }: { snapshot: MatchSnapshot }) {
     },
     {
       label: t("match.shotsOnTarget"),
-      home: ct(homeEvents, "Goal") + ct(homeEvents, "PenaltyGoal") + ct(homeEvents, "ShotSaved"),
-      away: ct(awayEvents, "Goal") + ct(awayEvents, "PenaltyGoal") + ct(awayEvents, "ShotSaved"),
+      home: homeMetrics.onTarget,
+      away: awayMetrics.onTarget,
     },
     {
       label: t("match.fouls"),
