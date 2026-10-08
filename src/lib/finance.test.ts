@@ -243,4 +243,7 @@ describe("robust financial inputs", () => {
     expect(getAnnualWageBill(players, [], "team-1")).toBe(52000);
     expect(getPlayerAnnualWageCommitment(createPlayer({ wage: Infinity }), "team-1")).toBe(0);
   });
+  it("keeps invalid staff wages from contaminating annual payroll", () => {
+    expect(getAnnualWageBill([], [createStaff({ wage: NaN }), createStaff({ id: "valid", wage: 52000 })], "team-1")).toBe(52000);
+  });
 });

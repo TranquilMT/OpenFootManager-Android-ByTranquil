@@ -79,7 +79,7 @@ export function getAnnualWageBill(
       return sum;
     }
 
-    return sum + Math.max(0, staffMember.wage);
+    return sum + (Number.isFinite(staffMember.wage) ? Math.max(0, staffMember.wage) : 0);
   }, 0);
 
   return playerWages + staffWages;
