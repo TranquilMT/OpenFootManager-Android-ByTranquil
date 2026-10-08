@@ -160,3 +160,11 @@ fn refinement_empty_assist_identity() {
     assert_eq!(report.goals[0].assist_id, None);
     assert!(!report.player_stats.contains_key(""));
 }
+
+#[test]
+fn refinement_expired_set_piece_source() {
+    let corner = MatchEvent::new(12, EventType::Corner, Side::Home, Zone::AwayDefense);
+    let goal = MatchEvent::new(20, EventType::Goal, Side::Home, Zone::AwayDefense).with_player("scorer");
+    let report = MatchReport::from_events(vec![corner, goal], 50, 50, 90);
+    assert_eq!(report.goals[0].goal_source, GoalSource::OpenPlay);
+}
