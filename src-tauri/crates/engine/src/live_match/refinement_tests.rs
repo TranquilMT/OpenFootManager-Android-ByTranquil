@@ -253,3 +253,15 @@ fn refinement_all_dismissed_player_selection() {
     let mut rng = StdRng::seed_from_u64(1);
     assert!(crate::shared::snap_from_squad(&state.home.players, &state.sent_off, Position::Forward, &mut rng).is_none());
 }
+
+#[test]
+fn refinement_penalty_award_counted_once() {
+    for outcome in [EventType::PenaltyGoal, EventType::PenaltyMiss] {
+        let award = MatchEvent::new(12, EventType::PenaltyAwarded, Side::Home, Zone::AwayDefense);
+        let kick = MatchEvent::new(12, outcome, Side::Home, Zone::AwayDefense).with_player("taker");
+        let report = MatchReport::from_events(vec![award, kick.clone()], 50, 50, 90);
+        assert_eq!(report.home_stats.penalties, 1);
+        let legacy = MatchReport::from_events(vec![kick], 50, 50, 90);
+        assert_eq!(legacy.home_stats.penalties, 1);
+    }
+}
