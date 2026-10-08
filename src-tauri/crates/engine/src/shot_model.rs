@@ -28,6 +28,10 @@ pub(crate) fn contest_probability(attack: f64, defense: f64) -> f64 {
     if attack + defense <= f64::EPSILON {
         0.5
     } else {
+        // Scale first so large finite strengths cannot overflow the denominator.
+        let scale = attack.max(defense);
+        let attack = attack / scale;
+        let defense = defense / scale;
         attack / (attack + defense)
     }
 }
