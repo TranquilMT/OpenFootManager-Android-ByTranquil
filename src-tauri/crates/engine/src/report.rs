@@ -402,41 +402,42 @@ fn populate_minutes_played(
     tracked_player_ids: &[String],
     player_stats: &mut HashMap<String, PlayerMatchStats>,
 ) {
-    let mut minutes_by_player: HashMap<String, u8> = tracked_player_ids
-        .iter()
-        .cloned()
-        .map(|player_id| (player_id, total_minutes))
-        .collect();
-
+    // Entry times make a substitute's later exit relative to when they came on.
+    // Final lineups contain entrants, so identify them before assuming minute zero.
+    let entrants: std::collections::HashSet<&str> = events.iter()
+        .filter(|event| event.event_type == EventType::Substitution)
+        .filter_map(|event| event.player_id.as_deref()).collect();
+    let mut entered: HashMap<String, u8> = tracked_player_ids.iter()
+        .filter(|id| !entrants.contains(id.as_str()))
+        .map(|id| (id.clone(), 0)).collect();
+    let mut minutes_by_player: HashMap<String, u8> = HashMap::new();
     for event in events {
+        let minute = event.minute.min(total_minutes);
         match event.event_type {
             EventType::Substitution => {
-                if let Some(ref player_off_id) = event.secondary_player_id {
-                    minutes_by_player
-                        .insert(player_off_id.clone(), event.minute.min(total_minutes));
+                if let Some(id) = &event.secondary_player_id {
+                    let start = entered.remove(id).unwrap_or(0);
+                    minutes_by_player.insert(id.clone(), minute.saturating_sub(start));
                 }
-                if let Some(ref player_on_id) = event.player_id {
-                    minutes_by_player.insert(
-                        player_on_id.clone(),
-                        total_minutes.saturating_sub(event.minute),
-                    );
+                if let Some(id) = &event.player_id {
+                    entered.insert(id.clone(), minute);
                 }
             }
             EventType::RedCard | EventType::SecondYellow => {
-                if let Some(ref player_id) = event.player_id {
-                    let dismissed_at = event.minute.min(total_minutes);
-                    minutes_by_player
-                        .entry(player_id.clone())
-                        .and_modify(|minutes| *minutes = (*minutes).min(dismissed_at))
-                        .or_insert(dismissed_at);
+                if let Some(id) = &event.player_id {
+                    let start = entered.remove(id).unwrap_or(0);
+                    minutes_by_player.entry(id.clone())
+                        .or_insert(minute.saturating_sub(start));
                 }
             }
             _ => {}
         }
     }
-
-    for (player_id, minutes_played) in minutes_by_player {
-        player_stats.entry(player_id).or_default().minutes_played = minutes_played;
+    for (id, start) in entered {
+        minutes_by_player.insert(id, total_minutes.saturating_sub(start));
+    }
+    for (id, minutes) in minutes_by_player {
+        player_stats.entry(id).or_default().minutes_played = minutes;
     }
 }
 
