@@ -129,3 +129,13 @@ fn refinement_substitute_minutes_after_exit() {
     assert_eq!(report.player_stats["sub"].minutes_played, 20);
     assert_eq!(report.player_stats["next"].minutes_played, 10);
 }
+
+#[test]
+fn refinement_large_possession_counters() {
+    let report = MatchReport::from_events(vec![], u32::MAX, u32::MAX, 90);
+    assert_eq!(report.home_possession, 50.0);
+    let mut state = make_live_match(false);
+    state.home_possession_ticks = u32::MAX;
+    state.away_possession_ticks = u32::MAX;
+    assert_eq!(state.snapshot().home_possession_pct, 50.0);
+}
