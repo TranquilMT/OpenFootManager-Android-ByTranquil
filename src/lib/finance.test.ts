@@ -250,4 +250,8 @@ describe("robust financial inputs", () => {
     const team = createTeam({ sponsorship: { base_value: Infinity } as TeamData["sponsorship"], economy: { version: 1, annual_operating_income: NaN, annual_operating_cost: Infinity } });
     expect(getTeamFinanceSnapshot(team, [createPlayer({ wage: 52000 })])).toMatchObject({ weeklyRecurringIncome: 0, weeklyOperatingCost: 0, projectedWeeklyNet: -1000 });
   });
+  it("does not start a marketing cooldown from future-dated ledger entries", () => {
+    const team = createTeam({ financial_ledger: [{ id: "future", date: "2026-09-01", amount: 0, kind: "CommercialCampaign" }] as TeamData["financial_ledger"] });
+    expect(getTeamFinanceSnapshot(team, [], [], "2026-08-01").marketingCampaignCooldownDaysRemaining).toBe(0);
+  });
 });

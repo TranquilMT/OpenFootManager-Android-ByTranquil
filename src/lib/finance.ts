@@ -178,7 +178,7 @@ function getMarketingCampaignCooldownDaysRemaining(team: TeamData, currentDate?:
   const lastCampaign = (team.financial_ledger ?? [])
     .filter((entry) => entry.kind === "CommercialCampaign")
     .map((entry) => parseIsoDate(entry.date))
-    .filter((entry): entry is Date => entry !== null)
+    .filter((entry): entry is Date => entry !== null && entry.getTime() <= today.getTime())
     .sort((left, right) => right.getTime() - left.getTime())[0];
 
   if (!lastCampaign) {
