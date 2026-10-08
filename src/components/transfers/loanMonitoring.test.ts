@@ -56,4 +56,9 @@ describe("club loan monitoring", () => {
     const player = { ...base, active_loan: { parent_team_id: "team-1", loan_team_id: "other", start_date: "2026-08-01", end_date: "2027-06-01", wage_contribution_pct: 50, loan_start_minutes: 0, loan_start_appearances: 0 }, stats: { ...base.stats, minutes_played: NaN, appearances: Infinity } };
     expect(monitoredLoans([player], "team-1")[0]).toMatchObject({ minutes: 0, appearances: 0, hasBaseline: false });
   });
+  it("does not duplicate the same player in imported loan monitoring lists", () => {
+    const base = createGameState().players[0];
+    const player = { ...base, active_loan: { parent_team_id: "team-1", loan_team_id: "other", start_date: "2026-08-01", end_date: "2027-06-01", wage_contribution_pct: 50 } };
+    expect(monitoredLoans([player, { ...player }], "team-1")).toHaveLength(1);
+  });
 });

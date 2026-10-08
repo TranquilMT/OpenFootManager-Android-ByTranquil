@@ -1,14 +1,17 @@
 import type { PlayerData } from "../../store/types";
 
 export function monitoredLoans(players: PlayerData[], teamId: string) {
+  const seen = new Set<string>();
   return players
     .flatMap((player) => {
       const loan = player.active_loan;
       if (
+        seen.has(player.id) ||
         player.retired ||
         !loan ||
         (loan.parent_team_id !== teamId && loan.loan_team_id !== teamId)
       ) return [];
+      seen.add(player.id);
       const hasBaseline = Number.isFinite(loan.loan_start_appearances) && Number.isFinite(loan.loan_start_minutes) && Number.isFinite(player.stats.appearances) && Number.isFinite(player.stats.minutes_played);
       return [
         {
