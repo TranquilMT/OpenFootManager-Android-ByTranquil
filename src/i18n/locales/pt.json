@@ -3505,6 +3505,10 @@
       "loanBuyOptionExercised": {
         "subject": "Opção de compra exercida: {{player}}",
         "body": "A opção de compra de {{player}} foi exercida por {{fee}}. O empréstimo passa agora a transferência definitiva."
+      },
+      "matchInjury": {
+        "subject": "Lesão — {{player}} ({{injury}})",
+        "body": "{{player}} sofreu uma lesão durante o jogo: {{injury}}. Recuperação prevista: {{days}} dias. A equipa médica acompanhará a evolução."
       }
     },
     "news": {

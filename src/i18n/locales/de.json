@@ -3505,6 +3505,10 @@
       "loanBuyOptionExercised": {
         "subject": "Kaufoption gezogen: {{player}}",
         "body": "Die Kaufoption für {{player}} wurde für {{fee}} gezogen. Aus der Leihe wird nun ein fester Transfer."
+      },
+      "matchInjury": {
+        "subject": "Verletzung — {{player}} ({{injury}})",
+        "body": "{{player}} hat sich im Spiel verletzt: {{injury}}. Geschätzte Genesungszeit: {{days}} Tage. Das medizinische Team verfolgt den Heilungsverlauf."
       }
     },
     "news": {

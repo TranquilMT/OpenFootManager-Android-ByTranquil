@@ -3505,6 +3505,10 @@
       "loanBuyOptionExercised": {
         "subject": "Loan Buy Option Exercised: {{player}}",
         "body": "The purchase option for {{player}} has been exercised for {{fee}}. The loan is now a permanent transfer."
+      },
+      "matchInjury": {
+        "subject": "Injury — {{player}} ({{injury}})",
+        "body": "{{player}} sustained an injury during the match: {{injury}}. Estimated recovery: {{days}} days. The medical team will monitor progress."
       }
     },
     "news": {

@@ -3505,6 +3505,10 @@
       "loanBuyOptionExercised": {
         "subject": "Opzione di riscatto esercitata: {{player}}",
         "body": "L'opzione di riscatto per {{player}} è stata esercitata per {{fee}}. Il prestito diventa ora un trasferimento definitivo."
+      },
+      "matchInjury": {
+        "subject": "Infortunio — {{player}} ({{injury}})",
+        "body": "{{player}} ha subito un infortunio durante la partita: {{injury}}. Recupero stimato: {{days}} giorni. Lo staff medico monitorerà i progressi."
       }
     },
     "news": {

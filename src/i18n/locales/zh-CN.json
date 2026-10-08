@@ -3505,6 +3505,10 @@
       "loanBuyOptionExercised": {
         "subject": "已执行买断选项:{{player}}",
         "body": "{{player}}的买断选项已按{{fee}}执行。这笔租借现已转为永久转会。"
+      },
+      "matchInjury": {
+        "subject": "伤病——{{player}}({{injury}})",
+        "body": "{{player}}在比赛中受伤：{{injury}}。预计恢复时间为{{days}}天。医疗团队将持续观察恢复情况。"
       }
     },
     "news": {

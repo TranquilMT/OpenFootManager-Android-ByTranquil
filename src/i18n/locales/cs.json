@@ -3505,6 +3505,10 @@
       "loanBuyOptionExercised": {
         "subject": "Uplatněna opce na odkup z hostování: {{player}}",
         "body": "Opce na odkup hráče {{player}} byla uplatněna za částku {{fee}}. Hostování se nyní mění v trvalý přestup."
+      },
+      "matchInjury": {
+        "subject": "Zranění — {{player}} ({{injury}})",
+        "body": "{{player}} utrpěl během utkání zranění: {{injury}}. Odhadovaná doba zotavení: {{days}} dní. Zdravotnický tým bude sledovat průběh léčby."
       }
     },
     "news": {

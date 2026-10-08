@@ -3505,6 +3505,10 @@
       "loanBuyOptionExercised": {
         "subject": "Opsi Pembelian Pinjaman Dilakukan: {{player}}",
         "body": "Opsi pembelian untuk {{player}} telah dilakukan sebesar {{fee}}. Pinjaman ini kini menjadi transfer permanen."
+      },
+      "matchInjury": {
+        "subject": "Cedera — {{player}} ({{injury}})",
+        "body": "{{player}} mengalami cedera saat pertandingan: {{injury}}. Perkiraan pemulihan: {{days}} hari. Tim medis akan memantau perkembangannya."
       }
     },
     "news": {

@@ -3505,6 +3505,10 @@
       "loanBuyOptionExercised": {
         "subject": "Kiralamada Satın Alma Opsiyonu Kullanıldı: {{player}}",
         "body": "{{player}} için satın alma opsiyonu {{fee}} bedelle kullanıldı. Kiralama artık kalıcı bir transfere dönüştü."
+      },
+      "matchInjury": {
+        "subject": "Sakatlık — {{player}} ({{injury}})",
+        "body": "{{player}} maç sırasında sakatlandı: {{injury}}. Tahmini iyileşme süresi: {{days}} gün. Sağlık ekibi iyileşme sürecini takip edecek."
       }
     },
     "news": {

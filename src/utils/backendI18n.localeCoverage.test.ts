@@ -28,6 +28,8 @@ const LOCALES: Record<string, LocaleTree> = {
 };
 
 const REQUIRED_KEYS = [
+  "be.msg.matchInjury.subject",
+  "be.msg.matchInjury.body",
   "be.sender.assistantManager",
   "be.role.assistantManager",
   "be.msg.delegatedRenewals.subject",
