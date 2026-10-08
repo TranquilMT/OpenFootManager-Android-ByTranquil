@@ -82,14 +82,19 @@ impl LiveMatchState {
                 return PlayerSnap::from(p);
             }
         }
-        // Fallback: pick the forward with highest shooting
+        // Fallback uses the same composure and fatigue inputs as penalty resolution.
         let team = self.team_ref(side);
         let mut candidates: Vec<&PlayerData> = team
             .players
             .iter()
             .filter(|p| !self.sent_off.contains(&p.id))
             .collect();
-        candidates.sort_by_key(|p| std::cmp::Reverse(p.shooting));
+        candidates.sort_by(|a, b| {
+            let skill = |p: &&PlayerData| {
+                self.condition_adjusted_skill(&p.id, (p.shooting as f64 + p.composure as f64) / 2.0)
+            };
+            skill(b).total_cmp(&skill(a)).then_with(|| a.id.cmp(&b.id))
+        });
         if let Some(p) = candidates.first() {
             PlayerSnap::from(p)
         } else {
