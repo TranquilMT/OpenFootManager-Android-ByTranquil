@@ -5,6 +5,7 @@ import { useLiveFeedScroll } from "./useLiveFeedScroll";
 import { filterMatchEvents, type EventFilter } from "./eventFilters";
 import { MatchEventFilters } from "./MatchEventFilters";
 import { resolveBackendError } from "../../utils/backendI18n";
+import { formatMatchMinute } from "./matchClock";
 import MatchdayQuickActions from "./MatchdayQuickActions";
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { invoke } from "@tauri-apps/api/core";
@@ -360,7 +361,7 @@ export default function MatchLive({
                     {phaseLabel(snapshot.phase, t)}
                   </span>
                   <span className="text-2xl font-heading font-bold text-gray-500 dark:text-gray-400">
-                    {snapshot.current_minute}'
+                    {formatMatchMinute(snapshot.phase, snapshot.current_minute)}'
                   </span>
                 </div>
                 <span className="text-4xl font-heading font-bold text-gray-900 dark:text-white tabular-nums">
@@ -393,7 +394,7 @@ export default function MatchLive({
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400" />
               <span className="text-sm font-heading text-gray-500 dark:text-gray-400 tabular-nums w-8">
-                {snapshot.current_minute}'
+                {formatMatchMinute(snapshot.phase, snapshot.current_minute)}'
               </span>
             </div>
           </div>
