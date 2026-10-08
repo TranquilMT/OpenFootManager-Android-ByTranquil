@@ -211,3 +211,14 @@ fn refinement_pre_kickoff_substitution_accounting() {
     assert!(state.events.is_empty());
     assert_eq!(state.home.players[9].id, "home_sub_fwd1");
 }
+
+#[test]
+fn refinement_dismissed_pre_match_swap_is_atomic() {
+    let mut state = make_live_match(false);
+    state.sent_off.insert("home_sub_fwd1".into());
+    let before = serde_json::to_value(state.snapshot()).unwrap();
+    assert!(state.apply_command(MatchCommand::PreMatchSwap {
+        side: Side::Home, player_off_id: "home_fwd1".into(), player_on_id: "home_sub_fwd1".into(),
+    }).is_err());
+    assert_eq!(serde_json::to_value(state.snapshot()).unwrap(), before);
+}
