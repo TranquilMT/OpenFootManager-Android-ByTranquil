@@ -218,8 +218,12 @@ export function buildRecommendedSubstitutions(
             !usedOnIds.has(benchPlayer.id) &&
             (offPlayer.position === "Goalkeeper" || benchPlayer.position !== "Goalkeeper"),
         );
+        const keeperBench = offPlayer.position === "Goalkeeper"
+          ? eligibleBench.filter((player) => player.position === "Goalkeeper")
+          : [];
+        const replacementPool = keeperBench.length > 0 ? keeperBench : eligibleBench;
         const yellowCount = yellows[offPlayer.id] ?? 0;
-        const onPlayer = [...eligibleBench].sort((leftPlayer, rightPlayer) => {
+        const onPlayer = [...replacementPool].sort((leftPlayer, rightPlayer) => {
           return (
             buildBenchPriority(rightPlayer, offPlayer, scenario.id) -
               buildBenchPriority(leftPlayer, offPlayer, scenario.id) ||

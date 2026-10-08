@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { SubPanel } from "./SubPanel";
+import { buildRecommendedSubstitutions, getAvailableMatchBench } from "./SubPanel.helpers";
 import type { EnginePlayerData, EngineTeamData, MatchSnapshot } from "./types";
 
 vi.mock("react-i18next", () => ({
@@ -292,5 +293,11 @@ describe("SubPanel", () => {
     render(<SubPanel {...createProps()} pending />);
     expect(screen.getByRole("combobox", { name: "tactics.formation" })).toBeDisabled();
     expect(screen.getByRole("combobox", { name: "tactics.playStyle" })).toBeDisabled();
+  });
+  it("prefers a reserve goalkeeper to stronger outfield cover for a keeper change", () => {
+    const snap = createSnapshot();
+    snap.home_team.players = [makePlayer({ id: "keeper", position: "Goalkeeper", condition: 30 })];
+    snap.home_bench = [makePlayer({ id: "forward", position: "Forward", ovr: 99, condition: 100 }), makePlayer({ id: "reserve-keeper", position: "Goalkeeper", ovr: 30, condition: 70 })];
+    expect(buildRecommendedSubstitutions(snap, "Home")[0].onId).toBe("reserve-keeper");
   });
 });
