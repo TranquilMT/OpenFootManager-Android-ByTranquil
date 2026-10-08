@@ -31,4 +31,13 @@ describe("integrated match panels", () => {
     expect(row("match.eventTypes.RedCard").firstElementChild).toHaveTextContent("1");
     expect(row("match.eventTypes.RedCard").lastElementChild).toHaveTextContent("1");
   });
+  it("bounds displayed player condition and uses shared colour thresholds", () => {
+    const snap = snapshot(); snap.home_team.players = [player("p1", 150), player("p2", -20), player("p3", 72)];
+    const view = render(<Lineups snapshot={snap} />);
+    expect(screen.queryByText("150")).not.toBeInTheDocument();
+    expect(screen.queryByText("-20")).not.toBeInTheDocument();
+    expect(screen.getByText("100")).toBeInTheDocument();
+    expect(screen.getByText("0")).toBeInTheDocument();
+    expect(view.container.querySelector('[style="width: 72%;"]')).toHaveClass("bg-amber-500");
+  });
 });

@@ -4,6 +4,7 @@ import { getEventDisplay, getEventTypeLabel, getPlayerName } from "./helpers";
 import { getCommentary } from "./commentary";
 import { matchMetrics } from "./narrativeContext";
 import { Badge } from "../ui";
+import { condBgColor } from "../../lib/playerConditionDisplay";
 import { translatePositionAbbreviation } from "../squad/SquadTab.helpers";
 
 export function EventFeed({
@@ -243,12 +244,8 @@ export function Lineups({ snapshot }: { snapshot: MatchSnapshot }) {
                 const isOff = sentOff.includes(p.id);
                 const yc = yellows[p.id] || 0;
                 const isSubOn = subbedOnIds.has(p.id);
-                const condColor =
-                  p.condition >= 70
-                    ? "bg-primary-500"
-                    : p.condition >= 40
-                      ? "bg-yellow-500"
-                      : "bg-red-500";
+                const condition = Number.isFinite(p.condition) ? Math.max(0, Math.min(100, p.condition)) : 0;
+                const condColor = condBgColor(condition);
                 return (
                   <div
                     key={p.id}
@@ -270,11 +267,11 @@ export function Lineups({ snapshot }: { snapshot: MatchSnapshot }) {
                       <div className="flex-1 h-1.5 bg-gray-300 dark:bg-navy-600 rounded-full overflow-hidden transition-colors duration-300">
                         <div
                           className={`h-full ${condColor} rounded-full transition-all`}
-                          style={{ width: `${p.condition}%` }}
+                          style={{ width: `${condition}%` }}
                         />
                       </div>
                       <span className="text-gray-500 dark:text-gray-400 tabular-nums text-[10px] w-6 text-right">
-                        {Math.round(p.condition)}
+                        {Math.round(Number.isFinite(p.condition) ? Math.max(0, Math.min(100, p.condition)) : 0)}
                       </span>
                     </div>
                   </div>
@@ -305,7 +302,7 @@ export function Lineups({ snapshot }: { snapshot: MatchSnapshot }) {
                     {translatePositionAbbreviation(t, p.position)}
                   </Badge>
                   <span className="text-gray-500 dark:text-gray-400 tabular-nums text-[10px] w-6 text-right">
-                    {Math.round(p.condition)}
+                    {Math.round(Number.isFinite(p.condition) ? Math.max(0, Math.min(100, p.condition)) : 0)}
                   </span>
                 </div>
               );
