@@ -1,0 +1,68 @@
+name: Publish OFMtouch 0.7.2 Build 361
+on:
+  push:
+    branches: [stage/0.7.2-publish-build361]
+permissions:
+  contents: write
+  actions: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Require successful final release validation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          test "$(gh api repos/$GITHUB_REPOSITORY/actions/runs/37755723594 --jq .conclusion)" = success
+      - name: Verify signed release package
+        run: |
+          set -euo pipefail
+          cat release-parts/part-*.bin > release-assets.zip
+          echo 'fe2210032a89b4caa513dfe73b81552ba817d6d36f6088b4ab40327a31580d87  release-assets.zip' | sha256sum -c -
+          mkdir release-assets
+          unzip -q release-assets.zip -d release-assets
+          cd release-assets
+          sha256sum -c OFMtouch-0.7.2-Build361-SHA256SUMS.txt
+          APK=OFMtouch-0.7.2-Match-Engine-V2-Build361-SIGNED.apk
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          "$APKSIGNER" verify --verbose --print-certs "$APK" > signature.txt
+          grep -qi '3f0d869bfaa5f7c78a7d2a9474d44424ae4f4399e64d76b6fb9e691695412e60' signature.txt
+          rm signature.txt
+          AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -n 1)"
+          PACKAGE_LINE="$("$AAPT" dump badging "$APK" | sed -n '1p')"
+          [[ "$PACKAGE_LINE" == *"name='com.tranquilmt.openfootmanager'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionName='0.7.2'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionCode='7200361'"* ]]
+          ZIPALIGN="$(find "$ANDROID_HOME/build-tools" -type f -name zipalign | sort -V | tail -n 1)"
+          "$ZIPALIGN" -c -p 4 "$APK"
+          unzip -l "$APK" | grep -E 'lib/arm64-v8a/.*\.so' >/dev/null
+          if unzip -l "$APK" | grep -E 'lib/(armeabi-v7a|x86|x86_64)/.*\.so'; then exit 1; fi
+      - uses: actions/checkout@v4
+        with:
+          ref: 9b6b8154214456cd6a4a75b83175cee35eccff87
+          path: verified-source
+          persist-credentials: false
+      - name: Verify matching complete source archive
+        run: |
+          test "$(git -C verified-source rev-parse HEAD)" = 9b6b8154214456cd6a4a75b83175cee35eccff87
+          git -C verified-source archive --format=zip --prefix=OFMtouch-0.7.2/ HEAD > expected-source.zip
+          mkdir expected-source delivered-source
+          unzip -q expected-source.zip -d expected-source
+          unzip -q release-assets/OFMtouch-0.7.2-Build361-SOURCE.zip -d delivered-source
+          diff -r expected-source delivered-source
+      - name: Publish latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v0.7.2-build361 release-assets/* --target 9b6b8154214456cd6a4a75b83175cee35eccff87 --title "OFMtouch v0.7.2 — Match Engine V2 · Build 361" --notes-file release-assets/OFMtouch-0.7.2-Build361-Release-Notes.md --latest
+      - name: Refresh release metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run release-manifest.yml --ref main -f release_tag=v0.7.2-build361
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OFMtouch-0.7.2-Build361-RELEASE
+          path: release-assets/*
+          if-no-files-found: error
