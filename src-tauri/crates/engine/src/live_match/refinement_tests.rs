@@ -222,3 +222,12 @@ fn refinement_dismissed_pre_match_swap_is_atomic() {
     }).is_err());
     assert_eq!(serde_json::to_value(state.snapshot()).unwrap(), before);
 }
+
+#[test]
+fn refinement_invalid_formation_matches_applied_shape() {
+    let mut state = make_live_match(false);
+    state.apply_command(MatchCommand::ChangeFormation { side: Side::Home, formation: "3-nope-5-2".into() }).unwrap();
+    assert_eq!(state.snapshot().home_team.formation, "4-4-2");
+    state.apply_command(MatchCommand::ChangeFormation { side: Side::Home, formation: "4-2-3-1".into() }).unwrap();
+    assert_eq!(state.snapshot().home_team.formation, "4-2-3-1");
+}
