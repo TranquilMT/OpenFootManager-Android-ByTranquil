@@ -68,4 +68,8 @@ describe("cash and committed wage forecast", () => {
     expect(projectClubCash({ ...common, weeklyNet: -400, weeklyWages: 400, teamId: "team-1" })).toMatchObject({ cash: 96600, weeklyWages: 1000 });
     expect(projectClubCash({ ...common, weeklyNet: -600, weeklyWages: 600, teamId: "other" })).toMatchObject({ cash: 99400, weeklyWages: 0 });
   });
+  it("ends pending loan contributions within the forecast horizon", () => {
+    const player = { ...createGameState().players[0], wage: 52000, team_id: "seller", transfer_offers: [], loan_offers: [{ id: "short-loan", parent_team_id: "seller", from_team_id: "team-1", start_date: "2026-08-08", end_date: "2026-08-15", wage_contribution_pct: 50, status: "PendingRegistration" as const, date: "2026-08-01" }] };
+    expect(projectClubCash({ cash: 100000, weeklyNet: 0, weeklyWages: 0, teamId: "team-1", today: "2026-08-01", weeks: 4, players: [player] })).toMatchObject({ cash: 99500, weeklyWages: 0 });
+  });
 });

@@ -27,13 +27,14 @@ export function projectClubCash({
   let transferNet = 0;
   const credited = new Set<string>();
   const apply = (id: string, date: string, fee: number, wageChange: number) => {
-    if (credited.has(id)) return;
+    if (credited.has(id)) return false;
     credited.add(id);
     const days = Math.max(0, getDaysUntil(date.slice(0, 10), today.slice(0, 10)));
-    if (!Number.isFinite(days) || days > weeks * 7) return;
+    if (!Number.isFinite(days) || days > weeks * 7) return false;
     transferNet += fee;
     projectedCash += fee - wageChange * (weeks - days / 7);
     projectedWages += wageChange;
+    return true;
   };
   for (const player of players) {
     if (player.team_id === teamId && !player.active_loan && player.contract_end) {
@@ -73,10 +74,12 @@ export function projectClubCash({
       const contribution = annualAmountToWeeklyCommitment(
         Math.floor((player.wage * offer.wage_contribution_pct) / 100),
       );
-      if (offer.from_team_id === teamId)
-        apply(`loan:${offer.id}`, offer.start_date, 0, contribution);
-      else if (offer.parent_team_id === teamId)
-        apply(`loan:${offer.id}`, offer.start_date, 0, -contribution);
+      const wageChange = offer.from_team_id === teamId ? contribution : offer.parent_team_id === teamId ? -contribution : 0;
+      if (wageChange !== 0 && apply(`loan:${offer.id}`, offer.start_date, 0, wageChange)) {
+        const startDays = getDaysUntil(offer.start_date.slice(0, 10), today.slice(0, 10));
+        const endDays = getDaysUntil(offer.end_date.slice(0, 10), today.slice(0, 10));
+        if (endDays >= startDays) apply(`loan-end:${offer.id}`, offer.end_date, 0, -wageChange);
+      }
     }
   }
   return { cash: Math.round(projectedCash), weeklyWages: Math.max(0, projectedWages), transferNet };
