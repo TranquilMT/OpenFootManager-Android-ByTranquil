@@ -232,3 +232,10 @@ it("converts report wages to weekly pay while keeping budgets annual", () => {
   expect(weeklyWageMessageParams(saved)).toEqual({ wage: "100000", budget: "25000000" });
   expect(saved.wage).toBe("5200000");
 });
+
+describe("robust financial inputs", () => {
+  it("rejects invalid annual amounts before converting them to weekly commitments", () => {
+    expect(annualAmountToWeeklyCommitment(NaN)).toBe(0);
+    expect(annualAmountToWeeklyCommitment(Infinity)).toBe(0);
+  });
+});

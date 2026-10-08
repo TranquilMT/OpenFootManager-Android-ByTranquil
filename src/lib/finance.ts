@@ -29,7 +29,7 @@ const HEALTH_PRIORITY: Record<FinanceHealthLevel, number> = {
 };
 
 export function annualAmountToWeeklyCommitment(amount: number): number {
-  return Math.floor(Math.max(0, amount) / 52);
+  return Number.isFinite(amount) ? Math.floor(Math.max(0, amount) / 52) : 0;
 }
 
 function clampPercent(value: number): number {
