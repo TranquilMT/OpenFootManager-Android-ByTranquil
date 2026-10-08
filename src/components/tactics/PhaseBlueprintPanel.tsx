@@ -2,6 +2,7 @@ import type { JSX } from "react";
 import { useTranslation } from "react-i18next";
 import type { TacticsPhaseSettings } from "../../store/types";
 import { Select } from "../ui";
+import { DEFAULT_TACTICS_PHASE } from "./tacticalInstructions";
 
 const WITH_BALL_FIELDS = [
   ["build_up_style", "buildUpStyle", ["Short", "Mixed", "Long"]] as const,
@@ -33,21 +34,26 @@ function PhaseButtonGroup({
   onTacticsPhaseChange,
   options,
   tacticsPhase,
+  disabled = false,
 }: {
   field: keyof TacticsPhaseSettings;
   labelKey: string;
   onTacticsPhaseChange: (patch: Partial<TacticsPhaseSettings>) => void;
   options: readonly string[];
   tacticsPhase?: TacticsPhaseSettings;
+  disabled?: boolean;
 }): JSX.Element {
   const { t } = useTranslation();
-  const currentValue = (tacticsPhase?.[field] ?? options[0]) as string;
+  const currentValue = tacticsPhase?.[field] ?? DEFAULT_TACTICS_PHASE[field];
   return (
     <div className="flex items-center gap-2">
       <span className="w-20 shrink-0 text-[11px] text-gray-500 dark:text-gray-400">
         {t(`tactics.phaseSettings.${labelKey}`)}
       </span>
       <Select
+        aria-label={t(`tactics.phaseSettings.${labelKey}`)}
+        disabled={disabled}
+        className="min-h-11"
         selectSize="sm"
         variant="subtle"
         fullWidth
@@ -75,8 +81,10 @@ function PhaseButtonGroup({
 export function PhaseBlueprintPanel({
   tacticsPhase,
   onTacticsPhaseChange,
+  disabled = false,
 }: {
   tacticsPhase?: TacticsPhaseSettings;
+  disabled?: boolean;
   onTacticsPhaseChange: (patch: Partial<TacticsPhaseSettings>) => void;
 }): JSX.Element {
   const { t } = useTranslation();
@@ -91,6 +99,7 @@ export function PhaseBlueprintPanel({
             <PhaseButtonGroup
               key={field}
               field={field}
+              disabled={disabled}
               labelKey={fieldLabelKey}
               onTacticsPhaseChange={onTacticsPhaseChange}
               options={options}
