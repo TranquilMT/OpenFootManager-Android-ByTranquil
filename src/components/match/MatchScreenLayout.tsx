@@ -24,9 +24,7 @@ export default function MatchScreenLayout({
   themeToggleClassName,
 }: MatchScreenLayoutProps) {
   return (
-    <div
-      className="flex min-h-[100dvh] flex-col overflow-x-hidden bg-gray-100 text-gray-900 transition-colors duration-300 dark:bg-navy-900 dark:text-white pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] pl-[env(safe-area-inset-left,0px)] pr-[env(safe-area-inset-right,0px)]"
-    >
+    <div className="flex min-h-[100dvh] flex-col overflow-x-hidden bg-gray-100 text-gray-900 transition-colors duration-300 dark:bg-navy-900 dark:text-white pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] pl-[env(safe-area-inset-left,0px)] pr-[env(safe-area-inset-right,0px)]">
       {header && (
         <header
           className={joinClasses(

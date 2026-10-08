@@ -5,7 +5,9 @@ vi.mock("../ui", () => ({ ThemeToggle: () => <button type="button">Theme</button
 
 describe("mobile match layout", () => {
   it("protects all four safe areas and keeps the score header sticky at every width", () => {
-    const { container } = render(<MatchScreenLayout header="Score">Match content</MatchScreenLayout>);
+    const { container } = render(
+      <MatchScreenLayout header="Score">Match content</MatchScreenLayout>,
+    );
     const root = container.firstElementChild as HTMLElement;
     expect(root).toHaveClass(
       "pl-[env(safe-area-inset-left,0px)]",

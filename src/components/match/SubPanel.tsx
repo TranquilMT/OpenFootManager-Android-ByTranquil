@@ -81,15 +81,23 @@ export function SubPanel({
         onCloseRef.current();
       }
       if (event.key !== "Tab") return;
-      const controls = Array.from(dialogRef.current?.querySelectorAll<HTMLElement>(
-        'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex="0"]',
-      ) ?? []).filter((element) => !element.closest('[hidden], [aria-hidden="true"]'));
+      const controls = Array.from(
+        dialogRef.current?.querySelectorAll<HTMLElement>(
+          'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex="0"]',
+        ) ?? [],
+      ).filter((element) => !element.closest('[hidden], [aria-hidden="true"]'));
       const first = controls[0];
       const last = controls[controls.length - 1];
-      if (event.shiftKey && (document.activeElement === first || !dialogRef.current?.contains(document.activeElement))) {
+      if (
+        event.shiftKey &&
+        (document.activeElement === first || !dialogRef.current?.contains(document.activeElement))
+      ) {
         event.preventDefault();
         last?.focus();
-      } else if (!event.shiftKey && (document.activeElement === last || !dialogRef.current?.contains(document.activeElement))) {
+      } else if (
+        !event.shiftKey &&
+        (document.activeElement === last || !dialogRef.current?.contains(document.activeElement))
+      ) {
         event.preventDefault();
         first?.focus();
       }
