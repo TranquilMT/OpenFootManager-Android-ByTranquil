@@ -1802,7 +1802,7 @@
     "patchPlayers": "Più giocatori di spicco, incluse rare stelle da 96 e squadre in lotta per la promozione.",
     "patchMatches": "Più reazioni, tiri sui legni e telecronaca vocale facoltativa.",
     "patchMobile": "Comandi mobili, posta, nazionali e inizio carriera migliorati.",
-    "patchWelcome": "OFMtouch 0.7.1 — Motore partita V2",
+    "patchWelcome": "OFMtouch 0.7.2 — Motore partita V2",
     "patchPortraits": "20 volti fittizi di partenza rendono più vari i ritratti dei giocatori generati.",
     "patchWorld": "Un mondo calcistico più ampio copre 29 nazioni, con club più forti nelle Americhe e in Asia.",
     "patchTransfers": "Le strategie dei club guidano prestiti e trasferimenti, con offerte concorrenti e controlli sul budget.",
@@ -4405,5 +4405,11 @@
     "penalties": "I rigoristi di riserva considerano freddezza e fatica; il rigorista designato resta prioritario.",
     "safety": "Le riserve espulse non possono entrare. Condizione importata e valori di possesso eccessivi restano sicuri.",
     "formations": "I moduli con segmenti non validi o valori eccessivi vengono rifiutati senza arresti."
+  },
+  "phase72": {
+    "minutes": "I minuti dei sostituti sono corretti anche dopo ulteriori cambi o espulsioni; i cambi prima del calcio d’inizio preservano quelli disponibili.",
+    "stats": "I rigori contano una sola volta, il secondo giallo risulta come espulsione e i gol distinguono i calci piazzati attuali dal gioco aperto.",
+    "fatigue": "La fatica non ripristina la condizione di un giocatore esausto. Condizione e valutazioni importate restano entro i limiti previsti.",
+    "tactics": "Le etichette dei moduli corrispondono alla disposizione applicata. Possesso e gol attesi restano affidabili con valori importati o molto elevati."
   }
 }
