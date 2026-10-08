@@ -2620,7 +2620,8 @@
     "notableUpset": "Velké překvapení",
     "pts": "b.",
     "jumpToLive": "Zpět k živému komentáři",
-    "cards": "Karty"
+    "cards": "Karty",
+    "actionFailed": "Akci v utkání se nepodařilo dokončit. Zkus to znovu."
   },
   "endOfSeason": {
     "seasonComplete": "Sezóna dokončena",

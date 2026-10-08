@@ -2620,7 +2620,8 @@
     "notableUpset": "重大爆冷",
     "pts": "分",
     "jumpToLive": "返回实时解说",
-    "cards": "罚牌"
+    "cards": "罚牌",
+    "actionFailed": "无法完成比赛操作，请重试。"
   },
   "endOfSeason": {
     "seasonComplete": "赛季结束",

@@ -2620,7 +2620,8 @@
     "notableUpset": "Dikkat Çeken Sürpriz",
     "pts": "P",
     "jumpToLive": "Canlı anlatıma dön",
-    "cards": "Kartlar"
+    "cards": "Kartlar",
+    "actionFailed": "Maç işlemi tamamlanamadı. Lütfen tekrar dene."
   },
   "endOfSeason": {
     "seasonComplete": "Sezon Tamamlandı",

@@ -2,6 +2,7 @@ import { MatchOperationGate } from "./matchOperationGate";
 import { useLiveFeedScroll } from "./useLiveFeedScroll";
 import { filterMatchEvents, type EventFilter } from "./eventFilters";
 import { MatchEventFilters } from "./MatchEventFilters";
+import { resolveBackendError } from "../../utils/backendI18n";
 import MatchdayQuickActions from "./MatchdayQuickActions";
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { invoke } from "@tauri-apps/api/core";
@@ -98,6 +99,7 @@ export default function MatchLive({
   const [eventFilter, setEventFilter] = useState<EventFilter>("all");
   const [isRunning, setIsRunning] = useState(true);
   const [matchCommandPending, setMatchCommandPending] = useState(false);
+  const [matchError, setMatchError] = useState<string | null>(null);
   const operationGate = useRef(new MatchOperationGate());
   const [showSubPanel, setShowSubPanel] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(settings.spoken_match_commentary);
@@ -191,12 +193,13 @@ export default function MatchLive({
             }
           }
         } catch (err) {
-          console.error("Failed to step match:", err);
+          setMatchError(resolveBackendError(err) || t("match.actionFailed"));
           setIsRunning(false);
+          setSpeed("paused");
         }
       }, setMatchCommandPending);
     },
-    [onSnapshotUpdate, onImportantEvent, onHalfTime, onFullTime, onPenaltyShootout],
+    [onSnapshotUpdate, onImportantEvent, onHalfTime, onFullTime, onPenaltyShootout, t],
   );
 
   // Auto-step timer
@@ -237,6 +240,7 @@ export default function MatchLive({
   // Apply substitution
   const handleSubstitution = async (playerOffId: string, playerOnId: string) => {
     if (!userSide || isSpectator || isFinished) return;
+    setMatchError(null);
     await operationGate.current.runCommand(async () => {
       try {
         const snap = await invoke<MatchSnapshot>("apply_match_command", {
@@ -247,13 +251,14 @@ export default function MatchLive({
         onSnapshotUpdate(snap);
         setShowSubPanel(false);
       } catch (err) {
-        console.error("Substitution failed:", err);
+        setMatchError(resolveBackendError(err) || t("match.actionFailed"));
       }
     }, setMatchCommandPending);
   };
 
   const handleFormationChange = async (formation: string) => {
     if (!userSide || isSpectator || isFinished) return;
+    setMatchError(null);
     await operationGate.current.runCommand(async () => {
       try {
         const snap = await invoke<MatchSnapshot>("apply_match_command", {
@@ -261,13 +266,14 @@ export default function MatchLive({
         });
         onSnapshotUpdate(snap);
       } catch (err) {
-        console.error("Formation change failed:", err);
+        setMatchError(resolveBackendError(err) || t("match.actionFailed"));
       }
     }, setMatchCommandPending);
   };
 
   const handlePlayStyleChange = async (playStyle: string) => {
     if (!userSide || isSpectator || isFinished) return;
+    setMatchError(null);
     await operationGate.current.runCommand(async () => {
       try {
         const snap = await invoke<MatchSnapshot>("apply_match_command", {
@@ -275,7 +281,7 @@ export default function MatchLive({
         });
         onSnapshotUpdate(snap);
       } catch (err) {
-        console.error("Play style change failed:", err);
+        setMatchError(resolveBackendError(err) || t("match.actionFailed"));
       }
     }, setMatchCommandPending);
   };
@@ -408,6 +414,21 @@ export default function MatchLive({
       }
     >
       {/* Main Content */}
+      {matchError && (
+        <div
+          role="alert"
+          className="flex items-center justify-between gap-3 border-b border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-800 dark:bg-navy-800 dark:text-red-400"
+        >
+          <p>{matchError}</p>
+          <button
+            type="button"
+            onClick={() => setMatchError(null)}
+            className="min-h-11 shrink-0 rounded-lg px-3 font-semibold"
+          >
+            {t("common.close")}
+          </button>
+        </div>
+      )}
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
         {/* Left Panel: Event Feed + Stats */}
         <div className="flex-1 flex flex-col">

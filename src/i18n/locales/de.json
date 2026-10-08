@@ -2620,7 +2620,8 @@
     "notableUpset": "Überraschungsergebnis",
     "pts": "Pkt.",
     "jumpToLive": "Zurück zum Live-Kommentar",
-    "cards": "Karten"
+    "cards": "Karten",
+    "actionFailed": "Die Spielaktion konnte nicht abgeschlossen werden. Bitte versuche es erneut."
   },
   "endOfSeason": {
     "seasonComplete": "Saison beendet",

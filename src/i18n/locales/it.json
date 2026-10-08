@@ -2639,7 +2639,8 @@
     "notableUpset": "Sorpresa del turno",
     "pts": "pts.",
     "jumpToLive": "Torna alla cronaca in diretta",
-    "cards": "Cartellini"
+    "cards": "Cartellini",
+    "actionFailed": "Impossibile completare l’azione della partita. Riprova."
   },
   "notifications": {
     "attentionRequired": "Attenzione Richiesta",

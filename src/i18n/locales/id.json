@@ -2620,7 +2620,8 @@
     "notableUpset": "Kejutan Menonjol",
     "pts": "poin",
     "jumpToLive": "Kembali ke komentar langsung",
-    "cards": "Kartu"
+    "cards": "Kartu",
+    "actionFailed": "Tindakan pertandingan tidak dapat diselesaikan. Silakan coba lagi."
   },
   "endOfSeason": {
     "seasonComplete": "Musim Selesai",

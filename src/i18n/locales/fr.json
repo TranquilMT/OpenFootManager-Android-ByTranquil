@@ -2620,7 +2620,8 @@
     "notableUpset": "Résultat surprise",
     "pts": "pts",
     "jumpToLive": "Revenir au commentaire en direct",
-    "cards": "Cartons"
+    "cards": "Cartons",
+    "actionFailed": "Impossible de terminer cette action du match. Réessayez."
   },
   "endOfSeason": {
     "seasonComplete": "Saison Terminée",

@@ -2620,7 +2620,8 @@
     "notableUpset": "Sorpresa notable",
     "pts": "pts.",
     "jumpToLive": "Volver a los comentarios en directo",
-    "cards": "Tarjetas"
+    "cards": "Tarjetas",
+    "actionFailed": "No se pudo completar la acción del partido. Inténtalo de nuevo."
   },
   "endOfSeason": {
     "seasonComplete": "Temporada Completa",

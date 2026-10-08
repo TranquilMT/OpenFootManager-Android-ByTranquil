@@ -2620,7 +2620,8 @@
     "notableUpset": "Notable Upset",
     "pts": "pts",
     "jumpToLive": "Return to live commentary",
-    "cards": "Cards"
+    "cards": "Cards",
+    "actionFailed": "Unable to complete the match action. Please try again."
   },
   "endOfSeason": {
     "seasonComplete": "Season Complete",

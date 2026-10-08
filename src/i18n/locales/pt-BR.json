@@ -2556,7 +2556,8 @@
     "notableUpset": "Grande surpresa",
     "pts": "pts",
     "jumpToLive": "Voltar à narração ao vivo",
-    "cards": "Cartões"
+    "cards": "Cartões",
+    "actionFailed": "Não foi possível concluir a ação da partida. Tente novamente."
   },
   "endOfSeason": {
     "seasonComplete": "Temporada Encerrada",
