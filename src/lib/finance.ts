@@ -41,7 +41,7 @@ function clampPercent(value: number): number {
 }
 
 export function getPlayerAnnualWageCommitment(player: PlayerData, teamId?: string | null): number {
-  const annualWage = Math.max(0, player.wage);
+  const annualWage = Number.isFinite(player.wage) ? Math.max(0, player.wage) : 0;
 
   if (!teamId) {
     return annualWage;

@@ -238,4 +238,9 @@ describe("robust financial inputs", () => {
     expect(annualAmountToWeeklyCommitment(NaN)).toBe(0);
     expect(annualAmountToWeeklyCommitment(Infinity)).toBe(0);
   });
+  it("isolates invalid player wages from otherwise valid club payroll", () => {
+    const players = [createPlayer({ wage: NaN }), createPlayer({ id: "valid", wage: 52000 })];
+    expect(getAnnualWageBill(players, [], "team-1")).toBe(52000);
+    expect(getPlayerAnnualWageCommitment(createPlayer({ wage: Infinity }), "team-1")).toBe(0);
+  });
 });
