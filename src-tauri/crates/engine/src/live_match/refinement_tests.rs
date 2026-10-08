@@ -168,3 +168,12 @@ fn refinement_expired_set_piece_source() {
     let report = MatchReport::from_events(vec![corner, goal], 50, 50, 90);
     assert_eq!(report.goals[0].goal_source, GoalSource::OpenPlay);
 }
+
+#[test]
+fn refinement_harmless_free_kick_resets_source() {
+    let corner = MatchEvent::new(12, EventType::Corner, Side::Home, Zone::AwayDefense);
+    let free_kick = MatchEvent::new(12, EventType::FreeKick, Side::Home, Zone::HomeDefense);
+    let goal = MatchEvent::new(12, EventType::Goal, Side::Home, Zone::AwayDefense).with_player("scorer");
+    let report = MatchReport::from_events(vec![corner, free_kick, goal], 50, 50, 90);
+    assert_eq!(report.goals[0].goal_source, GoalSource::OpenPlay);
+}
