@@ -198,9 +198,9 @@ impl MatchReport {
                         Side::Home => Zone::AwayDefense,
                         Side::Away => Zone::HomeDefense,
                     };
-                    if event.zone == dangerous_zone {
-                        last_set_piece = Some((EventType::FreeKick, event.side, event.minute));
-                    }
+                    last_set_piece = if event.zone == dangerous_zone {
+                        Some((EventType::FreeKick, event.side, event.minute))
+                    } else { None };
                 }
                 // Defensive events clear the set-piece window
                 EventType::ShotOffTarget
