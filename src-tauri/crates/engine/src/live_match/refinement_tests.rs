@@ -231,3 +231,10 @@ fn refinement_invalid_formation_matches_applied_shape() {
     state.apply_command(MatchCommand::ChangeFormation { side: Side::Home, formation: "4-2-3-1".into() }).unwrap();
     assert_eq!(state.snapshot().home_team.formation, "4-2-3-1");
 }
+
+#[test]
+fn refinement_effective_rating_condition_cap() {
+    let mut player = make_player("p", "Player", Position::Forward, 70);
+    player.condition = 255;
+    assert_eq!(player.effective_overall(), 70.0);
+}
