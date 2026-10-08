@@ -187,4 +187,10 @@ describe("inboxHelpers", () => {
   it("rejects ambiguous duplicate identifiers in decision options", () => {
     expect(isChooseOptionAction({ ChooseOption: { options: [{ id: "same", label: "Yes", description: "" }, { id: "same", label: "No", description: "" }] } })).toBe(false);
   });
+  it("normalises internal navigation and ignores external or fragment-only destinations", () => {
+    expect(getNavigationTarget(" /player/p1 ").tab).toBe("__selectPlayer");
+    expect(getNavigationTarget("/manager#notes?tab=Transfers").tab).toBe("Manager");
+    expect(getNavigationTarget("https://example.test/?tab=Transfers").tab).toBe("Home");
+    expect(getNavigationTarget("//example.test/player/p1?tab=Transfers").tab).toBe("Home");
+  });
 });

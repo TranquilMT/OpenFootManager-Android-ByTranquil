@@ -326,7 +326,9 @@ export function isChooseOptionAction(
 }
 
 export function getNavigationTarget(route: string): NavigationTarget {
-  const path = route.split(/[?#]/)[0];
+  const input = route.trim().split("#")[0];
+  if (/^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(input)) return { tab: "Home", shouldResolveAction: false };
+  const path = input.split("?")[0];
   const decodeId = (value: string) => {
     try {
       return decodeURIComponent(value);
@@ -354,7 +356,7 @@ export function getNavigationTarget(route: string): NavigationTarget {
     };
   }
 
-  const tabMatch = route.match(/[?&]tab=([^&#]+)/i);
+  const tabMatch = input.match(/[?&]tab=([^&#]+)/i);
 
   if (tabMatch) {
     return {
@@ -363,7 +365,7 @@ export function getNavigationTarget(route: string): NavigationTarget {
     };
   }
 
-  const simpleRoute = route.replace(/^\/+/, "").split(/[/?#]/)[0].toLowerCase();
+  const simpleRoute = input.replace(/^\/+/, "").split(/[/?#]/)[0].toLowerCase();
 
   return {
     tab: ROUTE_TAB_MAP[simpleRoute] ?? "Home",
