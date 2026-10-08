@@ -28,9 +28,9 @@ export function projectClubCash({
   const credited = new Set<string>();
   const apply = (id: string, date: string, fee: number, wageChange: number) => {
     if (credited.has(id)) return false;
-    credited.add(id);
     const days = Math.max(0, getDaysUntil(date.slice(0, 10), today.slice(0, 10)));
     if (!Number.isFinite(days) || days > weeks * 7) return false;
+    credited.add(id);
     transferNet += fee;
     projectedCash += fee - wageChange * (weeks - days / 7);
     projectedWages += wageChange;
