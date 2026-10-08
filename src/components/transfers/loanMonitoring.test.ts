@@ -29,7 +29,7 @@ describe("club loan monitoring", () => {
       monitoredLoans(players, "team-1").map((row) => [row.player.id, row.appearances, row.minutes]),
     ).toEqual([["out", 3, 210]]);
   });
-  it("handles legacy loans without start counters", () => {
+  it("does not attribute unrelated career totals to legacy loans without start counters", () => {
     const base = createGameState().players[0];
     const loan = {
       parent_team_id: "other",
@@ -49,6 +49,6 @@ describe("club loan monitoring", () => {
         ],
         "team-1",
       )[0],
-    ).toMatchObject({ minutes: 35, appearances: 1 });
+    ).toMatchObject({ minutes: 0, appearances: 0, hasBaseline: false });
   });
 });

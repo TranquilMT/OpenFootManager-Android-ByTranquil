@@ -24,9 +24,9 @@ export default function LoanMonitoringCard({
       <CardHeader>{t("phase64.loanWatch")}</CardHeader>
       <CardBody>
         <ul className="grid gap-3 sm:grid-cols-2">
-          {loans.map(({ player, loan, appearances, minutes }) => {
+          {loans.map(({ player, loan, appearances, minutes, hasBaseline }) => {
             const report = developmentReport(player, gameState.league?.season ?? 0);
-            const unused = minutes === 0 && getDaysUntil(today, loan.start_date.slice(0, 10)) >= 14;
+            const unused = hasBaseline && minutes === 0 && getDaysUntil(today, loan.start_date.slice(0, 10)) >= 14;
             return (
               <li
                 key={player.id}
@@ -46,7 +46,7 @@ export default function LoanMonitoringCard({
                 <p className="text-gray-600 dark:text-gray-300">
                   {getTeamName(gameState.teams, loan.loan_team_id)}
                 </p>
-                <p>{t("phase64.loanSeasonStats", { appearances, minutes })}</p>
+                <p>{hasBaseline ? t("phase64.loanSeasonStats", { appearances, minutes }) : "—"}</p>
                 <p>
                   {t("phase64.loanReturnDate", {
                     date: formatDate(loan.end_date, i18n.language),

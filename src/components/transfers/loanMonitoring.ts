@@ -8,14 +8,15 @@ export function monitoredLoans(players: PlayerData[], teamId: string) {
         player.retired ||
         !loan ||
         (loan.parent_team_id !== teamId && loan.loan_team_id !== teamId)
-      )
-        return [];
+      ) return [];
+      const hasBaseline = Number.isFinite(loan.loan_start_appearances) && Number.isFinite(loan.loan_start_minutes);
       return [
         {
           player,
           loan,
-          appearances: Math.max(0, player.stats.appearances - (loan.loan_start_appearances ?? 0)),
-          minutes: Math.max(0, player.stats.minutes_played - (loan.loan_start_minutes ?? 0)),
+          hasBaseline,
+          appearances: hasBaseline ? Math.max(0, player.stats.appearances - (loan.loan_start_appearances ?? 0)) : 0,
+          minutes: hasBaseline ? Math.max(0, player.stats.minutes_played - (loan.loan_start_minutes ?? 0)) : 0,
         },
       ];
     })
