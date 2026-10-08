@@ -1783,7 +1783,7 @@
     "patchPlayers": "Plus de talents, dont de rares stars notées 96 et de solides candidats à la montée.",
     "patchMatches": "Plus de réactions, des frappes sur les montants et un commentaire vocal facultatif.",
     "patchMobile": "Commandes mobiles, boîte de réception, sélections nationales et carrière améliorées.",
-    "patchWelcome": "OFMtouch 0.7.1 — Moteur de match V2",
+    "patchWelcome": "OFMtouch 0.7.2 — Moteur de match V2",
     "patchPortraits": "20 visages fictifs de référence diversifient les portraits des joueurs générés.",
     "patchWorld": "Un monde du football plus vaste couvre 29 nations, avec des clubs renforcés en Amérique et en Asie.",
     "patchTransfers": "La stratégie des clubs guide prêts et transferts, avec offres concurrentes et contrôle du budget.",
@@ -4405,5 +4405,11 @@
     "penalties": "Le tireur de penalty de remplacement est choisi selon son sang-froid et sa fatigue ; le tireur désigné reste prioritaire.",
     "safety": "Les remplaçants expulsés ne peuvent pas entrer. Les valeurs de condition importées et de possession excessives restent sûres.",
     "formations": "Les formations contenant des segments invalides ou des valeurs excessives sont rejetées sans plantage."
+  },
+  "phase72": {
+    "minutes": "Les minutes des remplaçants restent correctes après un nouveau changement ou une expulsion ; les échanges avant le coup d’envoi préservent les remplacements disponibles.",
+    "stats": "Les penalties comptent une seule fois, le deuxième jaune apparaît comme une expulsion et les buts distinguent les coups de pied arrêtés actuels du jeu ouvert.",
+    "fatigue": "La fatigue ne restaure pas la condition d’un joueur épuisé. La condition et les notes importées respectent leurs limites.",
+    "tactics": "Les noms des formations correspondent au dispositif appliqué. Possession et buts attendus restent fiables avec des valeurs importées ou très élevées."
   }
 }

@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "OFMtouch 0.7.1 — Spielsimulation V2",
+    "patchWelcome": "OFMtouch 0.7.2 — Spielsimulation V2",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
@@ -4405,5 +4405,11 @@
     "penalties": "Ersatz-Elfmeterschützen werden nach Nervenstärke und Ermüdung gewählt; der festgelegte Schütze bleibt bevorzugt.",
     "safety": "Verwiesene Ersatzspieler dürfen nicht eingewechselt werden. Importierte Kondition und überhöhte Ballbesitzwerte bleiben sicher.",
     "formations": "Ungültige Formationsabschnitte und übergroße Zahlen werden ohne Absturz abgewiesen."
+  },
+  "phase72": {
+    "minutes": "Die Spielminuten von Ersatzspielern stimmen auch nach weiteren Wechseln oder Platzverweisen; Änderungen vor dem Anpfiff erhalten das Wechselkontingent.",
+    "stats": "Elfmeter zählen nur einmal, die zweite gelbe Karte wird als Platzverweis erfasst und Torberichte unterscheiden aktuelle Standards vom offenen Spiel.",
+    "fatigue": "Ermüdung stellt die Kondition erschöpfter Spieler nicht wieder her. Live-Kondition und importierte Bewertungen bleiben innerhalb ihrer Grenzen.",
+    "tactics": "Formationsnamen entsprechen der angewendeten Aufstellung. Ballbesitz und erwartete Tore bleiben auch bei importierten oder sehr hohen Werten zuverlässig."
   }
 }

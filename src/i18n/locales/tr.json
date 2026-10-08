@@ -1783,7 +1783,7 @@
     "patchPlayers": "Nadir 96 puanlı yıldızlar dahil daha fazla öne çıkan oyuncu.",
     "patchMatches": "Daha fazla maç tepkisi, direğe çarpan şutlar ve isteğe bağlı sesli anlatım.",
     "patchMobile": "Mobil kontroller, gelen kutusu, millî takımlar ve kariyer başlangıcı iyileştirildi.",
-    "patchWelcome": "OFMtouch 0.7.1 — Maç Motoru V2",
+    "patchWelcome": "OFMtouch 0.7.2 — Maç Motoru V2",
     "patchPortraits": "20 kurgusal kaynak yüz, üretilen oyuncu portrelerini daha çeşitli kılıyor.",
     "patchWorld": "Futbol dünyası 29 ülkeyi kapsıyor; Amerika ve Asya kulüpleri güçlendirildi.",
     "patchTransfers": "Kulüp stratejileri kiralık ve bonservisli transferleri, rakip teklifleri ve bütçe kontrollerini yönlendiriyor.",
@@ -4405,5 +4405,11 @@
     "penalties": "Yedek penaltıcı soğukkanlılık ve yorgunluğa göre seçilir; belirlenen oyuncu öncelikli kalır.",
     "safety": "İhraç edilen yedekler oyuna giremez. İçe aktarılan kondisyon ve aşırı topa sahip olma değerleri güvenle işlenir.",
     "formations": "Geçersiz bölümler veya aşırı sayılar içeren dizilişler çökmeden reddedilir."
+  },
+  "phase72": {
+    "minutes": "Yedeklerin süreleri sonraki değişiklik veya ihraçlardan sonra doğru hesaplanır; maç öncesi değişimler oyuncu değişikliği hakkını korur.",
+    "stats": "Penaltılar bir kez sayılır, ikinci sarı kart ihraç olarak kaydedilir ve gol raporları mevcut duran topları açık oyundan ayırır.",
+    "fatigue": "Yorgunluk, tükenmiş oyuncunun kondisyonunu yenilemez. Canlı kondisyon ve içe aktarılan puanlar geçerli sınırlar içinde kalır.",
+    "tactics": "Diziliş adları uygulanan yerleşimle eşleşir. Topa sahip olma ve beklenen gol toplamları, içe aktarılan veya çok büyük değerlerde güvenilir kalır."
   }
 }

@@ -1,4 +1,4 @@
-name: OFMtouch Android Nightly 0.7.1 Match Engine V2
+name: OFMtouch Android Nightly 0.7.2 Match Engine V2
 
 on:
   workflow_dispatch:
@@ -11,7 +11,8 @@ on:
       - phase6-gameplay-polish
       - release/0.6.6-startup-polish
       - release/0.6.7-economy-balance
-      - release/0.7.1-season-economy
+      - release/0.7.2-season-economy
+      - fix/0.7.1-match-engine-polish
 
 permissions:
   contents: write
@@ -25,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 70
     env:
-      OFM_RELEASE_BUILD: 360
+      OFM_RELEASE_BUILD: 361
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -106,8 +107,8 @@ jobs:
           OFM_CHANNEL: stable
           VITE_APP_BUILD_NUMBER: ${{ env.OFM_RELEASE_BUILD }}
         run: |
-          # Keep every nightly installable over the previous v0.7.1 build.
-          export OFM_ANDROID_VERSION_CODE=$((7100000 + OFM_RELEASE_BUILD))
+          # Keep every nightly installable over the previous v0.7.2 build.
+          export OFM_ANDROID_VERSION_CODE=$((7200000 + OFM_RELEASE_BUILD))
           node -e 'require("fs").writeFileSync("tauri.android.nightly.conf.json", JSON.stringify({bundle:{android:{versionCode:Number(process.env.OFM_ANDROID_VERSION_CODE)}}}))'
           npx tauri android build --debug --apk --target aarch64 --config tauri.android.nightly.conf.json
 
@@ -122,8 +123,8 @@ jobs:
           PACKAGE_LINE="$("$AAPT" dump badging "$APK" | sed -n '1p')"
           echo "$PACKAGE_LINE"
           [[ "$PACKAGE_LINE" == *"name='com.tranquilmt.openfootmanager'"* ]]
-          [[ "$PACKAGE_LINE" == *"versionName='0.7.1'"* ]]
-          [[ "$PACKAGE_LINE" == *"versionCode='$((7100000 + OFM_RELEASE_BUILD))'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionName='0.7.2'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionCode='$((7200000 + OFM_RELEASE_BUILD))'"* ]]
           APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
           "$APKSIGNER" verify --verbose "$APK"
           # A debug build is only an intermediate artifact. Final delivery is signed
@@ -134,19 +135,19 @@ jobs:
             exit 1
           fi
           mkdir -p dist-apk
-          cp "$APK" "dist-apk/OFMtouch-0.7.1-Match-Engine-V2-Build${OFM_RELEASE_BUILD}-CI-INTERMEDIATE.apk"
-          sha256sum "dist-apk/OFMtouch-0.7.1-Match-Engine-V2-Build${OFM_RELEASE_BUILD}-CI-INTERMEDIATE.apk" | tee "dist-apk/OFMtouch-0.7.1-Match-Engine-V2-Build${OFM_RELEASE_BUILD}-CI-INTERMEDIATE.apk.sha256"
+          cp "$APK" "dist-apk/OFMtouch-0.7.2-Match-Engine-V2-Build${OFM_RELEASE_BUILD}-CI-INTERMEDIATE.apk"
+          sha256sum "dist-apk/OFMtouch-0.7.2-Match-Engine-V2-Build${OFM_RELEASE_BUILD}-CI-INTERMEDIATE.apk" | tee "dist-apk/OFMtouch-0.7.2-Match-Engine-V2-Build${OFM_RELEASE_BUILD}-CI-INTERMEDIATE.apk.sha256"
 
       - name: Archive exact source and notes
         run: |
-          git archive --format=zip --prefix=OFMtouch-0.7.1/ HEAD > dist-apk/OFMtouch-0.7.1-Build360-SOURCE.zip
+          git archive --format=zip --prefix=OFMtouch-0.7.2/ HEAD > dist-apk/OFMtouch-0.7.2-Build361-SOURCE.zip
           git rev-parse HEAD > dist-apk/SOURCE-COMMIT.txt
-          cp docs/releases/0.7.1.md dist-apk/OFMtouch-0.7.1-Build360-Release-Notes.md
+          cp docs/releases/0.7.2.md dist-apk/OFMtouch-0.7.2-Build361-Release-Notes.md
 
       - name: Upload ARM64 APK for persistent signing
         uses: actions/upload-artifact@v4
         with:
-          name: OFMtouch-0.7.1-Match-Engine-V2-Build${{ env.OFM_RELEASE_BUILD }}-CI-INTERMEDIATE
+          name: OFMtouch-0.7.2-Match-Engine-V2-Build${{ env.OFM_RELEASE_BUILD }}-CI-INTERMEDIATE
           path: dist-apk/*
           if-no-files-found: error
 

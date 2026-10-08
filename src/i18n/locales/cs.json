@@ -1783,7 +1783,7 @@
     "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
     "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
     "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
-    "patchWelcome": "OFMtouch 0.7.1 — Zápasový engine V2",
+    "patchWelcome": "OFMtouch 0.7.2 — Zápasový engine V2",
     "patchPortraits": "20 fiktivních výchozích tváří přináší pestřejší portréty hráčů.",
     "patchWorld": "Fotbalový svět zahrnuje 29 zemí a silnější kluby v Americe a Asii.",
     "patchTransfers": "Strategie klubů řídí hostování a přestupy včetně konkurenčních nabídek a kontroly rozpočtu.",
@@ -4405,5 +4405,11 @@
     "penalties": "Náhradní exekutor penalty se vybírá podle klidu a únavy; určený hráč má přednost.",
     "safety": "Vyloučení náhradníci nemohou nastoupit. Importovaná kondice a příliš vysoké hodnoty držení míče se zpracují bezpečně.",
     "formations": "Formace s neplatnými částmi nebo příliš vysokými čísly se odmítnou bez pádu."
+  },
+  "phase72": {
+    "minutes": "Minuty náhradníků se počítají správně i po dalším střídání nebo vyloučení; změny před výkopem zachovávají dostupná střídání.",
+    "stats": "Penalty se počítají jen jednou, druhá žlutá se zaznamenává jako vyloučení a góly rozlišují aktuální standardní situace od hry.",
+    "fatigue": "Únava neobnovuje kondici vyčerpaného hráče. Živá kondice a importovaná hodnocení zůstávají v příslušných mezích.",
+    "tactics": "Názvy formací odpovídají použitému rozestavení. Držení míče a očekávané góly zůstávají spolehlivé i při importovaných nebo velmi vysokých hodnotách."
   }
 }

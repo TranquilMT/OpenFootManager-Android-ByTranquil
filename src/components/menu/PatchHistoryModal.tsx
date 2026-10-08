@@ -4,6 +4,10 @@ import { ReleaseNotes } from "../settings/ReleaseNotes";
 
 const HISTORY = [
   {
+    version: "0.7.1",
+    keys: ["phase71.menu", "phase71.penalties", "phase71.safety", "phase71.formations"],
+  },
+  {
     version: "0.7.0",
     keys: [
       "phase70.release.engine",
