@@ -236,7 +236,7 @@ pub enum BreakSpeed {
     Fast,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub struct TacticsConfig {
     pub pressing_intensity: PressingIntensity,
     pub defensive_line: DefensiveLine,
@@ -254,6 +254,65 @@ pub struct TacticsConfig {
     pub counter_press_duration: CounterPressDuration,
     #[serde(default)]
     pub break_speed: BreakSpeed,
+}
+
+/// A single tactical dial change. Patches prevent queued decisions from
+/// overwriting other instructions applied since the frontend snapshot.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum TacticalInstruction {
+    Tempo(Tempo),
+    PressingIntensity(PressingIntensity),
+    DefensiveLine(DefensiveLine),
+    Width(TacticsPitchWidth),
+    BuildUpStyle(TacticsBuildUpStyle),
+    MarkingStyle(MarkingStyle),
+    DefensiveShape(DefensiveShape),
+    CounterPressDuration(CounterPressDuration),
+    BreakSpeed(BreakSpeed),
+}
+
+impl TacticsConfig {
+    pub fn apply_instruction(&mut self, instruction: TacticalInstruction) -> bool {
+        let previous = self.clone();
+        match instruction {
+            TacticalInstruction::Tempo(value) => self.tempo = value,
+            TacticalInstruction::PressingIntensity(value) => self.pressing_intensity = value,
+            TacticalInstruction::DefensiveLine(value) => self.defensive_line = value,
+            TacticalInstruction::Width(value) => self.width = value,
+            TacticalInstruction::BuildUpStyle(value) => self.build_up_style = value,
+            TacticalInstruction::MarkingStyle(value) => self.marking_style = value,
+            TacticalInstruction::DefensiveShape(value) => self.defensive_shape = value,
+            TacticalInstruction::CounterPressDuration(value) => self.counter_press_duration = value,
+            TacticalInstruction::BreakSpeed(value) => self.break_speed = value,
+        }
+        *self != previous
+    }
+}
+
+#[cfg(test)]
+mod instruction_tests {
+    use super::*;
+
+    #[test]
+    fn tactical_instruction_updates_preserve_unrelated_settings_and_detect_noops() {
+        let mut tactics = TacticsConfig::default();
+        assert!(tactics.apply_instruction(TacticalInstruction::Tempo(Tempo::Patient)));
+        assert!(
+            tactics.apply_instruction(TacticalInstruction::PressingIntensity(
+                PressingIntensity::Aggressive
+            ))
+        );
+        assert_eq!(tactics.tempo, Tempo::Patient);
+        assert_eq!(tactics.width, TacticsPitchWidth::Normal);
+        assert!(!tactics.apply_instruction(TacticalInstruction::Tempo(Tempo::Patient)));
+    }
+
+    #[test]
+    fn tactical_instruction_payloads_reject_unknown_values() {
+        let valid: TacticalInstruction = serde_json::from_str(r#"{"Tempo":"Patient"}"#).unwrap();
+        assert_eq!(valid, TacticalInstruction::Tempo(Tempo::Patient));
+        assert!(serde_json::from_str::<TacticalInstruction>(r#"{"Tempo":"Maximum"}"#).is_err());
+    }
 }
 
 // ---------------------------------------------------------------------------
