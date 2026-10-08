@@ -184,4 +184,7 @@ describe("inboxHelpers", () => {
       expect(isChooseOptionAction({ ChooseOption: { options: [option] } } as unknown as MessageData["actions"][number]["action_type"])).toBe(false);
     }
   });
+  it("rejects ambiguous duplicate identifiers in decision options", () => {
+    expect(isChooseOptionAction({ ChooseOption: { options: [{ id: "same", label: "Yes", description: "" }, { id: "same", label: "No", description: "" }] } })).toBe(false);
+  });
 });

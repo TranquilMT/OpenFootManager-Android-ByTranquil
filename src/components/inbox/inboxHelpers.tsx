@@ -320,6 +320,7 @@ export function isChooseOptionAction(
     actionType.ChooseOption !== null &&
     typeof actionType.ChooseOption === "object" &&
     Array.isArray(actionType.ChooseOption.options) &&
+    new Set(actionType.ChooseOption.options.map((option) => option?.id)).size === actionType.ChooseOption.options.length &&
     actionType.ChooseOption.options.every((option) => option !== null && typeof option === "object" && typeof option.id === "string" && option.id.trim().length > 0 && typeof option.label === "string" && typeof option.description === "string")
   );
 }
