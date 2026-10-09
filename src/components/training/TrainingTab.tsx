@@ -133,6 +133,7 @@ export default function TrainingTab({ gameState, onGameUpdate }: TrainingTabProp
     try {
       const updated = await setTraining(focus, intensity);
       onGameUpdate?.(updated);
+      if (teamId) setFetchedSquad(updated.players.filter((player) => player.team_id === teamId));
     } catch (error) {
       console.error("Failed to set training:", error);
     } finally {
@@ -145,6 +146,7 @@ export default function TrainingTab({ gameState, onGameUpdate }: TrainingTabProp
     try {
       const updated = await setTrainingSchedule(schedule);
       onGameUpdate?.(updated);
+      if (teamId) setFetchedSquad(updated.players.filter((player) => player.team_id === teamId));
     } catch (error) {
       console.error("Failed to set schedule:", error);
     } finally {

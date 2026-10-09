@@ -275,4 +275,16 @@ describe("TrainingTab", () => {
   });
 
 
+
+  it("refreshes the squad cache after changing team training", async () => {
+    const state = createGameState(true);
+    const updated = {...state, players: [createPlayer({condition:42})]};
+    invokeMock.mockImplementation(async (command:string)=>command === "get_squad" ? state.players : updated);
+    render(<TrainingTab gameState={state} onGameUpdate={vi.fn()}/>);
+    await waitFor(()=>expect(invokeMock).toHaveBeenCalledWith("get_squad", {teamId:"team-1"}));
+    fireEvent.click(screen.getByRole("button", {name:/Intense.label/i}));
+    await waitFor(()=>expect(screen.getAllByText("42%").length).toBeGreaterThan(0));
+  });
+
+
 });
