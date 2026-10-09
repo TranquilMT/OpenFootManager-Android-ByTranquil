@@ -57,4 +57,14 @@ describe("individual monthly training goal", () => {
   });
 
 
+
+  it("finishes a partial rating target at the potential ceiling", () => {
+    const player = { ...createGameState().players[0], ovr: 68, potential: 68,
+      training_focus: "Technical", development_history: [
+        { date: "2026-08-01", season: 2026, ovr: 67.5, minutes_played: 0, focus: "Technical" },
+      ] };
+    expect(individualMonthlyGoal(player)).toMatchObject({target: 68, progress: 100, status: "complete"});
+  });
+
+
 });

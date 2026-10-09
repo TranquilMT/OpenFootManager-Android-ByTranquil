@@ -12,7 +12,7 @@ export function individualMonthlyGoal(player: PlayerData) {
   const atCeiling = Boolean(baseline && baseline.ovr >= ceiling);
   const progress = isNew
     ? 0
-    : Math.max(0, Math.min(100, (current - (baseline?.ovr ?? current)) * 100));
+    : Math.max(0, Math.min(100, ((current - (baseline?.ovr ?? current)) / Math.max(Number.EPSILON, target - (baseline?.ovr ?? current))) * 100));
   const status = isNew
     ? ("new" as const)
     : atCeiling
