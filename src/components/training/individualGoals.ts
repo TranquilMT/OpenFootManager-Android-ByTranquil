@@ -7,8 +7,8 @@ export function individualMonthlyGoal(player: PlayerData) {
   const baseline = latestDevelopmentReview(history);
   const current = getPlayerOvr(player);
   const ceiling = player.potential && player.potential > 0 ? player.potential : 99;
-  const target = Math.min(ceiling, (baseline?.ovr ?? current) + 1);
   const isNew = !baseline || baseline.focus !== player.training_focus;
+  const target = Math.min(ceiling, (isNew ? current : baseline.ovr) + 1);
   const atCeiling = Boolean(baseline && baseline.ovr >= ceiling);
   const progress = isNew
     ? 0

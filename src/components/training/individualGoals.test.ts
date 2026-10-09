@@ -47,4 +47,14 @@ describe("individual monthly training goal", () => {
   });
 
 
+
+  it("starts a changed focus target from current ability", () => {
+    const player = { ...createGameState().players[0], ovr: 73, potential: 80,
+      training_focus: "Technical", development_history: [
+        { date: "2026-08-01", season: 2026, ovr: 67, minutes_played: 0, focus: "Physical" },
+      ] };
+    expect(individualMonthlyGoal(player)).toMatchObject({target: 74, status: "new", progress: 0});
+  });
+
+
 });
