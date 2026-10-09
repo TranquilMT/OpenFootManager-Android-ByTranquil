@@ -14,7 +14,8 @@ import {
   Button,
   PlayerAvatar,
 } from "../ui";
-import { calcAge, positionBadgeVariant } from "../../lib/helpers";
+import { positionBadgeVariant } from "../../lib/helpers";
+import { calcAgeOnDate } from "../../lib/valueFormatting";
 import { canDelegateToYouthAcademy, isYouthAcademyPlayer } from "../../lib/playerSquad";
 import { TraitList } from "../TraitBadge";
 import { useTranslation } from "react-i18next";
@@ -127,16 +128,16 @@ export default function YouthAcademyTab({
     .filter((player) => isYouthAcademyPlayer(player))
     .map((p) => ({
       ...p,
-      age: calcAge(p.date_of_birth),
+      age: calcAgeOnDate(p.date_of_birth, clockDate),
       ovr: p.ovr ?? 0,
       potential: p.potential ?? 1,
     }))
     .sort((a, b) => b.potential - a.potential);
   const eligibleSeniorPlayers = roster
-    .filter((player) => canDelegateToYouthAcademy(player))
+    .filter((player) => canDelegateToYouthAcademy(player, clockDate))
     .map((player) => ({
       ...player,
-      age: calcAge(player.date_of_birth),
+      age: calcAgeOnDate(player.date_of_birth, clockDate),
     }))
     .sort((left, right) => left.age - right.age || left.full_name.localeCompare(right.full_name));
   const youthMatchHelpers = eligibleSeniorPlayers.filter((player) => !player.injury).length;

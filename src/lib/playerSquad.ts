@@ -1,6 +1,7 @@
 import type { PlayerData } from "../store/gameStore";
 import type { PlayerSquadRole } from "../store/types";
 import { calcAge } from "./helpers";
+import { calcAgeOnDate } from "./valueFormatting";
 
 export function getPlayerSquadRole(player: Pick<PlayerData, "squad_role">): PlayerSquadRole {
   return player.squad_role === "Youth" ? "Youth" : "Senior";
@@ -16,6 +17,8 @@ export function isSeniorSquadPlayer(player: Pick<PlayerData, "squad_role">): boo
 
 export function canDelegateToYouthAcademy(
   player: Pick<PlayerData, "date_of_birth" | "squad_role">,
+  asOfDate?: string,
 ): boolean {
-  return isSeniorSquadPlayer(player) && calcAge(player.date_of_birth) <= 21;
+  return isSeniorSquadPlayer(player)
+    && (asOfDate ? calcAgeOnDate(player.date_of_birth, asOfDate) : calcAge(player.date_of_birth)) <= 21;
 }
