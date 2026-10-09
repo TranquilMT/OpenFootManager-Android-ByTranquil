@@ -67,4 +67,11 @@ describe("individual monthly training goal", () => {
   });
 
 
+
+  it("does not set a target beyond the maximum rating", () => {
+    const player = { ...createGameState().players[0], ovr: 99, potential: 120, training_focus: "Technical" };
+    expect(individualMonthlyGoal(player).target).toBe(99);
+  });
+
+
 });
