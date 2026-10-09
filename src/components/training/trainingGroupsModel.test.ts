@@ -152,4 +152,12 @@ describe("trainingGroupsModel", () => {
   });
 
 
+
+  it("breaks equal name and position ties by player identity", () => {
+    const roster = [createPlayer({id:"b"}), createPlayer({id:"a"})];
+    expect(sortTrainingRoster(roster).map(player=>player.id)).toEqual(["a","b"]);
+    expect(roster.map(player=>player.id)).toEqual(["b","a"]);
+  });
+
+
 });
