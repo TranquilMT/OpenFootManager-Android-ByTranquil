@@ -4,7 +4,7 @@ import { latestDevelopmentReview } from "../../lib/developmentHistory";
 
 export function developmentReport(player: PlayerData, season: number) {
   const history = player.development_history ?? [];
-  const baseline = latestDevelopmentReview(history);
+  const baseline = latestDevelopmentReview(history.filter((review) => review.season <= season));
   return {
     date: baseline?.date ?? null,
     growth: baseline ? getPlayerOvr(player) - baseline.ovr : null,

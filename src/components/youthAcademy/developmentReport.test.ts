@@ -36,4 +36,14 @@ describe("academy development report", () => {
       ).minutes,
     ).toBe(30);
   });
+
+  it("ignores review snapshots from a season after the report", () => {
+    const player = { ...createGameState().players[0], ovr: 70, development_history: [
+      { date: "2027-08-01", season: 2027, ovr: 74, minutes_played: 0, focus: null },
+      { date: "2026-08-01", season: 2026, ovr: 68, minutes_played: 0, focus: null },
+    ] };
+    expect(developmentReport(player, 2026)).toMatchObject({date: "2026-08-01", growth: 2});
+  });
+
+
 });
