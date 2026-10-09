@@ -140,24 +140,28 @@ describe("trainingGroupsModel", () => {
     expect(reassignPlayerTrainingGroup(groups, "p1", "removed-group")).toEqual(groups);
   });
 
-
   it("keeps specialised defensive roles ahead of midfield and attack", () => {
     const roster = [
-      createPlayer({id:"striker", position:"Striker", natural_position:"Striker"}),
-      createPlayer({id:"mid", position:"CentralMidfielder", natural_position:"CentralMidfielder"}),
-      createPlayer({id:"back", position:"CenterBack", natural_position:"CenterBack"}),
-      createPlayer({id:"keeper", position:"Goalkeeper", natural_position:"Goalkeeper"}),
+      createPlayer({ id: "striker", position: "Striker", natural_position: "Striker" }),
+      createPlayer({
+        id: "mid",
+        position: "CentralMidfielder",
+        natural_position: "CentralMidfielder",
+      }),
+      createPlayer({ id: "back", position: "CenterBack", natural_position: "CenterBack" }),
+      createPlayer({ id: "keeper", position: "Goalkeeper", natural_position: "Goalkeeper" }),
     ];
-    expect(sortTrainingRoster(roster).map(player => player.id)).toEqual(["keeper","back","mid","striker"]);
+    expect(sortTrainingRoster(roster).map((player) => player.id)).toEqual([
+      "keeper",
+      "back",
+      "mid",
+      "striker",
+    ]);
   });
-
-
 
   it("breaks equal name and position ties by player identity", () => {
-    const roster = [createPlayer({id:"b"}), createPlayer({id:"a"})];
-    expect(sortTrainingRoster(roster).map(player=>player.id)).toEqual(["a","b"]);
-    expect(roster.map(player=>player.id)).toEqual(["b","a"]);
+    const roster = [createPlayer({ id: "b" }), createPlayer({ id: "a" })];
+    expect(sortTrainingRoster(roster).map((player) => player.id)).toEqual(["a", "b"]);
+    expect(roster.map((player) => player.id)).toEqual(["b", "a"]);
   });
-
-
 });

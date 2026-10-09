@@ -221,44 +221,75 @@ describe("TrainingGroupsCard", () => {
   });
 
   it("allows individual training before creating any custom groups", () => {
-    render(<TrainingGroupsCard team={createTeam()} roster={[createPlayer()]} isSaving={false} setIsSaving={vi.fn()}
-trainingFocusIds={["Physical", "Technical", "Recovery"]} trainingFocusIcons={{}} />);
+    render(
+      <TrainingGroupsCard
+        team={createTeam()}
+        roster={[createPlayer()]}
+        isSaving={false}
+        setIsSaving={vi.fn()}
+        trainingFocusIds={["Physical", "Technical", "Recovery"]}
+        trainingFocusIcons={{}}
+      />,
+    );
     expect(screen.getAllByRole("combobox").length).toBeGreaterThan(0);
   });
 
-
-
   it("saves a renamed group on blur rather than each keystroke", async () => {
     setTrainingGroupsMock.mockResolvedValue(createGameState(createTeam()));
-    render(<TrainingGroupsCard onGameUpdate={vi.fn()} team={createTeam({training_groups:[{id:"g", name:"Group", focus:"Physical", player_ids:[]}]})}
- roster={[]} isSaving={false} setIsSaving={vi.fn()} trainingFocusIds={["Physical"]} trainingFocusIcons={{}} />);
+    render(
+      <TrainingGroupsCard
+        onGameUpdate={vi.fn()}
+        team={createTeam({
+          training_groups: [{ id: "g", name: "Group", focus: "Physical", player_ids: [] }],
+        })}
+        roster={[]}
+        isSaving={false}
+        setIsSaving={vi.fn()}
+        trainingFocusIds={["Physical"]}
+        trainingFocusIcons={{}}
+      />,
+    );
     const input = screen.getByRole("textbox");
-    fireEvent.change(input, {target:{value:"New name"}});
+    fireEvent.change(input, { target: { value: "New name" } });
     expect(setTrainingGroupsMock).not.toHaveBeenCalled();
     expect(input).toHaveValue("New name");
     fireEvent.focusOut(input);
-    await waitFor(()=>expect(setTrainingGroupsMock).toHaveBeenCalledWith([
-      {id:"g",name:"New name",focus:"Physical",player_ids:[]}
-    ]));
+    await waitFor(() =>
+      expect(setTrainingGroupsMock).toHaveBeenCalledWith([
+        { id: "g", name: "New name", focus: "Physical", player_ids: [] },
+      ]),
+    );
   });
 
-
-
   it("disables group name edits while a mutation is pending", () => {
-    render(<TrainingGroupsCard team={createTeam({training_groups:[{id:"g",name:"Group",focus:"Physical",player_ids:[]}]})}
-      roster={[]} isSaving={true} setIsSaving={vi.fn()} trainingFocusIds={["Physical"]} trainingFocusIcons={{}} />);
+    render(
+      <TrainingGroupsCard
+        team={createTeam({
+          training_groups: [{ id: "g", name: "Group", focus: "Physical", player_ids: [] }],
+        })}
+        roster={[]}
+        isSaving={true}
+        setIsSaving={vi.fn()}
+        trainingFocusIds={["Physical"]}
+        trainingFocusIcons={{}}
+      />,
+    );
     expect(screen.getByRole("textbox")).toBeDisabled();
   });
 
-
-
   it("still saves a group when no update observer is provided", async () => {
     setTrainingGroupsMock.mockResolvedValue(createGameState(createTeam()));
-    render(<TrainingGroupsCard team={createTeam()} roster={[]} isSaving={false}
-      setIsSaving={vi.fn()} trainingFocusIds={["Physical"]} trainingFocusIcons={{}} />);
-    fireEvent.click(screen.getByRole("button", {name: /Add Group/i}));
-    await waitFor(()=>expect(setTrainingGroupsMock).toHaveBeenCalledTimes(1));
+    render(
+      <TrainingGroupsCard
+        team={createTeam()}
+        roster={[]}
+        isSaving={false}
+        setIsSaving={vi.fn()}
+        trainingFocusIds={["Physical"]}
+        trainingFocusIcons={{}}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: /Add Group/i }));
+    await waitFor(() => expect(setTrainingGroupsMock).toHaveBeenCalledTimes(1));
   });
-
-
 });

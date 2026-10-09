@@ -40,17 +40,31 @@ export function sortTrainingRoster(roster: PlayerData[]): PlayerData[] {
   const positionOrder: Record<string, number> = {
     Goalkeeper: 1,
     Defender: 2,
-    RightBack: 2, CenterBack: 2, LeftBack: 2, RightWingBack: 2, LeftWingBack: 2,
+    RightBack: 2,
+    CenterBack: 2,
+    LeftBack: 2,
+    RightWingBack: 2,
+    LeftWingBack: 2,
     Midfielder: 3,
-    DefensiveMidfielder: 3, CentralMidfielder: 3, AttackingMidfielder: 3, RightMidfielder: 3, LeftMidfielder: 3,
+    DefensiveMidfielder: 3,
+    CentralMidfielder: 3,
+    AttackingMidfielder: 3,
+    RightMidfielder: 3,
+    LeftMidfielder: 3,
     Forward: 4,
-    RightWinger: 4, LeftWinger: 4, Striker: 4,
+    RightWinger: 4,
+    LeftWinger: 4,
+    Striker: 4,
   };
 
   return [...roster].sort((left, right) => {
     const leftOrder = positionOrder[left.natural_position || left.position] || 99;
     const rightOrder = positionOrder[right.natural_position || right.position] || 99;
 
-    return leftOrder - rightOrder || left.match_name.localeCompare(right.match_name) || left.id.localeCompare(right.id);
+    return (
+      leftOrder - rightOrder ||
+      left.match_name.localeCompare(right.match_name) ||
+      left.id.localeCompare(right.id)
+    );
   });
 }

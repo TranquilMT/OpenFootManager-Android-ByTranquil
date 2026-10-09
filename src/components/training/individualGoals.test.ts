@@ -38,67 +38,97 @@ describe("individual monthly training goal", () => {
   });
 
   it("uses the newest review when stored history is out of order", () => {
-    const player = { ...createGameState().players[0], ovr: 70, potential: 80,
-      training_focus: "Technical", development_history: [
+    const player = {
+      ...createGameState().players[0],
+      ovr: 70,
+      potential: 80,
+      training_focus: "Technical",
+      development_history: [
         { date: "2026-09-01", season: 2026, ovr: 70, minutes_played: 100, focus: "Technical" },
         { date: "2026-08-01", season: 2026, ovr: 67, minutes_played: 0, focus: "Technical" },
-      ] };
-    expect(individualMonthlyGoal(player)).toMatchObject({date: "2026-09-01", target: 71, progress: 0});
+      ],
+    };
+    expect(individualMonthlyGoal(player)).toMatchObject({
+      date: "2026-09-01",
+      target: 71,
+      progress: 0,
+    });
   });
-
-
 
   it("starts a changed focus target from current ability", () => {
-    const player = { ...createGameState().players[0], ovr: 73, potential: 80,
-      training_focus: "Technical", development_history: [
+    const player = {
+      ...createGameState().players[0],
+      ovr: 73,
+      potential: 80,
+      training_focus: "Technical",
+      development_history: [
         { date: "2026-08-01", season: 2026, ovr: 67, minutes_played: 0, focus: "Physical" },
-      ] };
-    expect(individualMonthlyGoal(player)).toMatchObject({target: 74, status: "new", progress: 0});
+      ],
+    };
+    expect(individualMonthlyGoal(player)).toMatchObject({ target: 74, status: "new", progress: 0 });
   });
-
-
 
   it("finishes a partial rating target at the potential ceiling", () => {
-    const player = { ...createGameState().players[0], ovr: 68, potential: 68,
-      training_focus: "Technical", development_history: [
+    const player = {
+      ...createGameState().players[0],
+      ovr: 68,
+      potential: 68,
+      training_focus: "Technical",
+      development_history: [
         { date: "2026-08-01", season: 2026, ovr: 67.5, minutes_played: 0, focus: "Technical" },
-      ] };
-    expect(individualMonthlyGoal(player)).toMatchObject({target: 68, progress: 100, status: "complete"});
+      ],
+    };
+    expect(individualMonthlyGoal(player)).toMatchObject({
+      target: 68,
+      progress: 100,
+      status: "complete",
+    });
   });
 
-
-
   it("does not set a target beyond the maximum rating", () => {
-    const player = { ...createGameState().players[0], ovr: 99, potential: 120, training_focus: "Technical" };
+    const player = {
+      ...createGameState().players[0],
+      ovr: 99,
+      potential: 120,
+      training_focus: "Technical",
+    };
     expect(individualMonthlyGoal(player).target).toBe(99);
   });
 
-
-
-
-
-
-
   it("ignores malformed review dates and rating baselines", () => {
-    const player = { ...createGameState().players[0], ovr: 70, potential: 80,
-      training_focus: "Technical", development_history: [
+    const player = {
+      ...createGameState().players[0],
+      ovr: 70,
+      potential: 80,
+      training_focus: "Technical",
+      development_history: [
         { date: "2026-08-01", season: 2026, ovr: 69, minutes_played: 0, focus: "Technical" },
         { date: "invalid", season: 2026, ovr: 67, minutes_played: 0, focus: "Technical" },
         { date: "2026-09-01", season: 2026, ovr: NaN, minutes_played: 0, focus: "Technical" },
         { date: "2026-02-30", season: 2026, ovr: 67, minutes_played: 0, focus: "Technical" },
-      ] };
-    expect(individualMonthlyGoal(player)).toMatchObject({date: "2026-08-01", target: 70, progress: 100});
+      ],
+    };
+    expect(individualMonthlyGoal(player)).toMatchObject({
+      date: "2026-08-01",
+      target: 70,
+      progress: 100,
+    });
   });
-
-
 
   it("does not report a ceiling after a player loses ability", () => {
-    const player = { ...createGameState().players[0], ovr: 67, potential: 68,
-      training_focus: "Technical", development_history: [
+    const player = {
+      ...createGameState().players[0],
+      ovr: 67,
+      potential: 68,
+      training_focus: "Technical",
+      development_history: [
         { date: "2026-08-01", season: 2026, ovr: 68, minutes_played: 0, focus: "Technical" },
-      ] };
-    expect(individualMonthlyGoal(player)).toMatchObject({target: 68, status: "ongoing", progress: 0});
+      ],
+    };
+    expect(individualMonthlyGoal(player)).toMatchObject({
+      target: 68,
+      status: "ongoing",
+      progress: 0,
+    });
   });
-
-
 });

@@ -155,13 +155,16 @@ export default function TrainingTab({ gameState, onGameUpdate }: TrainingTabProp
   };
 
   const activeFocusAttrs = TRAINING_FOCUS_ATTRS[currentFocus] || [];
-  const staffAdvice = roster.length === 0 ? null : getTrainingStaffAdvice(t, {
-    criticalCount,
-    avgCondition,
-    exhaustedCount,
-    currentSchedule,
-    currentFocus,
-  });
+  const staffAdvice =
+    roster.length === 0
+      ? null
+      : getTrainingStaffAdvice(t, {
+          criticalCount,
+          avgCondition,
+          exhaustedCount,
+          currentSchedule,
+          currentFocus,
+        });
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">

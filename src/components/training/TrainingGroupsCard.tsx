@@ -124,7 +124,9 @@ export default function TrainingGroupsCard({
                     type="text"
                     value={draftNames[g.id] ?? g.name}
                     disabled={isSaving}
-                    onChange={(e) => setDraftNames((drafts) => ({...drafts, [g.id]: e.target.value}))}
+                    onChange={(e) =>
+                      setDraftNames((drafts) => ({ ...drafts, [g.id]: e.target.value }))
+                    }
                     onBlur={(e) => {
                       if (e.target.value !== g.name) updateGroupName(g.id, e.target.value);
                     }}

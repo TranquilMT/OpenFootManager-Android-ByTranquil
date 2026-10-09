@@ -19,6 +19,8 @@ export function canDelegateToYouthAcademy(
   player: Pick<PlayerData, "date_of_birth" | "squad_role">,
   asOfDate?: string,
 ): boolean {
-  return isSeniorSquadPlayer(player)
-    && (asOfDate ? calcAgeOnDate(player.date_of_birth, asOfDate) : calcAge(player.date_of_birth)) <= 21;
+  return (
+    isSeniorSquadPlayer(player) &&
+    (asOfDate ? calcAgeOnDate(player.date_of_birth, asOfDate) : calcAge(player.date_of_birth)) <= 21
+  );
 }

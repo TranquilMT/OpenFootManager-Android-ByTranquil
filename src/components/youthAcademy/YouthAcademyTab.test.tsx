@@ -522,16 +522,32 @@ describe("YouthAcademyTab", () => {
   });
 
   it("uses the career clock to exclude seniors who have aged out", async () => {
-    const state = createGameState([createPlayer({date_of_birth:"2008-01-01"})]);
+    const state = createGameState([createPlayer({ date_of_birth: "2008-01-01" })]);
     state.clock.current_date = "2035-08-10T00:00:00Z";
-    mockedInvoke.mockImplementation(async (command:string)=>{
-      if(command === "get_squad") return state.players;
-      if(command === "get_staff") return makeEmptyStaffSlice();
+    mockedInvoke.mockImplementation(async (command: string) => {
+      if (command === "get_squad") return state.players;
+      if (command === "get_staff") return makeEmptyStaffSlice();
       return state;
     });
-    render(<YouthAcademyTab gameState={state}/>);
-    await waitFor(()=>expect(screen.getByText("No eligible under-21 senior players are available right now.")).toBeInTheDocument());
+    render(<YouthAcademyTab gameState={state} />);
+    await waitFor(() =>
+      expect(
+        screen.getByText("No eligible under-21 senior players are available right now."),
+      ).toBeInTheDocument(),
+    );
   });
 
-
+  it("shows no remaining growth when ability exceeds potential", async () => {
+    const state = createGameState([createPlayer({ squad_role: "Youth", ovr: 80, potential: 75 })]);
+    mockedInvoke.mockImplementation(async (command: string) => {
+      if (command === "get_squad") return state.players;
+      if (command === "get_staff") return makeEmptyStaffSlice();
+      return state;
+    });
+    render(<YouthAcademyTab gameState={state} />);
+    await waitFor(() =>
+      expect(within(screen.getByRole("table")).getByText("+0")).toBeInTheDocument(),
+    );
+    expect(screen.queryByText("+-5")).not.toBeInTheDocument();
+  });
 });

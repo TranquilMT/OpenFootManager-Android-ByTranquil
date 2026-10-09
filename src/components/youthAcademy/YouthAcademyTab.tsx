@@ -445,7 +445,7 @@ export default function YouthAcademyTab({
               <div className="divide-y divide-gray-100 dark:divide-navy-600 md:hidden">
                 {youthPlayers.map((player) => {
                   const potLabel = getPotentialLabel(player.potential, t),
-                    growthRoom = player.potential - player.ovr,
+                    growthRoom = Math.max(0, player.potential - player.ovr),
                     contextItems = [
                       buildViewProfileMenuItem(t, () => onSelectPlayer?.(player.id)),
                       buildPromoteToSeniorSquadMenuItem(t, () => {
@@ -561,7 +561,7 @@ export default function YouthAcademyTab({
                 <tbody className="divide-y divide-gray-100 dark:divide-navy-600">
                   {youthPlayers.map((player) => {
                     const potLabel = getPotentialLabel(player.potential, t);
-                    const growthRoom = player.potential - player.ovr;
+                    const growthRoom = Math.max(0, player.potential - player.ovr);
                     const contextItems = [
                       buildViewProfileMenuItem(t, () => onSelectPlayer?.(player.id)),
                       buildPromoteToSeniorSquadMenuItem(t, () => {
