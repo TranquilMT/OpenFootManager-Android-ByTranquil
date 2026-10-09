@@ -18,6 +18,10 @@ export function reassignPlayerTrainingGroup(
   playerId: string,
   groupId: string,
 ): TrainingGroupData[] {
+  if (groupId && !groups.some((group) => group.id === groupId)) {
+    return groups;
+  }
+
   let nextGroups = groups.map((group) => ({
     ...group,
     player_ids: group.player_ids.filter((id) => id !== playerId),

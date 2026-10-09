@@ -135,4 +135,9 @@ describe("trainingGroupsModel", () => {
       "fwd",
     ]);
   });
+  it("preserves assignments when the selected group no longer exists", () => {
+    const groups = [createGroup({ player_ids: ["p1"] })];
+    expect(reassignPlayerTrainingGroup(groups, "p1", "removed-group")).toEqual(groups);
+  });
+
 });
