@@ -91,4 +91,14 @@ describe("individual monthly training goal", () => {
   });
 
 
+
+  it("does not report a ceiling after a player loses ability", () => {
+    const player = { ...createGameState().players[0], ovr: 67, potential: 68,
+      training_focus: "Technical", development_history: [
+        { date: "2026-08-01", season: 2026, ovr: 68, minutes_played: 0, focus: "Technical" },
+      ] };
+    expect(individualMonthlyGoal(player)).toMatchObject({target: 68, status: "ongoing", progress: 0});
+  });
+
+
 });
