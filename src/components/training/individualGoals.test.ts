@@ -74,4 +74,21 @@ describe("individual monthly training goal", () => {
   });
 
 
+
+
+
+
+
+  it("ignores malformed review dates and rating baselines", () => {
+    const player = { ...createGameState().players[0], ovr: 70, potential: 80,
+      training_focus: "Technical", development_history: [
+        { date: "2026-08-01", season: 2026, ovr: 69, minutes_played: 0, focus: "Technical" },
+        { date: "invalid", season: 2026, ovr: 67, minutes_played: 0, focus: "Technical" },
+        { date: "2026-09-01", season: 2026, ovr: NaN, minutes_played: 0, focus: "Technical" },
+        { date: "2026-02-30", season: 2026, ovr: 67, minutes_played: 0, focus: "Technical" },
+      ] };
+    expect(individualMonthlyGoal(player)).toMatchObject({date: "2026-08-01", target: 70, progress: 100});
+  });
+
+
 });
