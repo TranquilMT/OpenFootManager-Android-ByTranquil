@@ -46,4 +46,14 @@ describe("academy development report", () => {
   });
 
 
+
+  it("does not display nonfinite or negative playing-time records", () => {
+    const player = { ...createGameState().players[0], stats: {...createGameState().players[0].stats, minutes_played: NaN},
+      development_history: [{date: "2026-08-01", season: 2026, ovr: 67, minutes_played: 100, focus: null}] };
+    expect(developmentReport(player, 2026).minutes).toBeNull();
+    expect(developmentReport({...player, stats: {...player.stats, minutes_played: 200},
+      development_history: [{...player.development_history[0], minutes_played: -1}]}, 2026).minutes).toBeNull();
+  });
+
+
 });
