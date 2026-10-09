@@ -252,4 +252,17 @@ describe("TrainingTab", () => {
       expect(screen.queryByText(/Critical advice/)).not.toBeInTheDocument();
     });
   });
+
+  it("does not train or count retired first-team players", async () => {
+    const state = createGameState(true);
+    state.players = [createPlayer({id:"active",condition:80}),
+      createPlayer({id:"retired",retired:true,condition:10,match_name:"Retired Player"})];
+    invokeMock.mockImplementation(async (command: string)=>command === "get_squad" ? state.players : state);
+    render(<TrainingTab gameState={state}/>);
+    await waitFor(()=>expect(invokeMock).toHaveBeenCalledWith("get_squad", {teamId:"team-1"}));
+    expect(screen.queryByText("Retired Player")).not.toBeInTheDocument();
+    expect(screen.queryByText("Staff warning")).not.toBeInTheDocument();
+  });
+
+
 });

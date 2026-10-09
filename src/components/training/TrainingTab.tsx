@@ -112,7 +112,7 @@ export default function TrainingTab({ gameState, onGameUpdate }: TrainingTabProp
 
   const allSquadPlayers =
     fetchedSquad ?? gameState?.players.filter((p) => p.team_id === teamId) ?? [];
-  const roster = allSquadPlayers.filter(isSeniorSquadPlayer);
+  const roster = allSquadPlayers.filter((player) => isSeniorSquadPlayer(player) && !player.retired);
   const avgCondition =
     roster.length > 0
       ? Math.round(roster.reduce((sum, player) => sum + player.condition, 0) / roster.length)
