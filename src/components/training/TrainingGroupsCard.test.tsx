@@ -251,4 +251,14 @@ trainingFocusIds={["Physical", "Technical", "Recovery"]} trainingFocusIcons={{}}
   });
 
 
+
+  it("still saves a group when no update observer is provided", async () => {
+    setTrainingGroupsMock.mockResolvedValue(createGameState(createTeam()));
+    render(<TrainingGroupsCard team={createTeam()} roster={[]} isSaving={false}
+      setIsSaving={vi.fn()} trainingFocusIds={["Physical"]} trainingFocusIcons={{}} />);
+    fireEvent.click(screen.getByRole("button", {name: /Add Group/i}));
+    await waitFor(()=>expect(setTrainingGroupsMock).toHaveBeenCalledTimes(1));
+  });
+
+
 });

@@ -42,7 +42,8 @@ export default function TrainingGroupsCard({
     async (next: TrainingGroup[]) => {
       setIsSaving(true);
       try {
-        onGameUpdate?.(await setTrainingGroups(next));
+        const updated = await setTrainingGroups(next);
+        onGameUpdate?.(updated);
       } catch (e) {
         console.error("Failed to save training groups:", e);
       } finally {
@@ -72,7 +73,8 @@ export default function TrainingGroupsCard({
   const setPlayerFocus = async (id: string, focus: string) => {
     setIsSaving(true);
     try {
-      onGameUpdate?.(await setPlayerTrainingFocus(id, focus || null));
+      const updated = await setPlayerTrainingFocus(id, focus || null);
+      onGameUpdate?.(updated);
     } catch (e) {
       console.error("Failed to set player training focus:", e);
     } finally {
