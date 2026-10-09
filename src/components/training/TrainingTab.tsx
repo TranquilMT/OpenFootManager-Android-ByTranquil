@@ -153,7 +153,7 @@ export default function TrainingTab({ gameState, onGameUpdate }: TrainingTabProp
   };
 
   const activeFocusAttrs = TRAINING_FOCUS_ATTRS[currentFocus] || [];
-  const staffAdvice = getTrainingStaffAdvice(t, {
+  const staffAdvice = roster.length === 0 ? null : getTrainingStaffAdvice(t, {
     criticalCount,
     avgCondition,
     exhaustedCount,

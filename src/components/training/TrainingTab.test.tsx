@@ -265,4 +265,14 @@ describe("TrainingTab", () => {
   });
 
 
+
+  it("does not claim exhaustion when the senior squad is empty", async () => {
+    const state = createGameState(true); state.players = [];
+    invokeMock.mockImplementation(async (command:string)=>command === "get_squad" ? [] : state);
+    render(<TrainingTab gameState={state}/>);
+    await waitFor(()=>expect(invokeMock).toHaveBeenCalledWith("get_squad", {teamId:"team-1"}));
+    expect(screen.queryByText("Staff warning")).not.toBeInTheDocument();
+  });
+
+
 });
