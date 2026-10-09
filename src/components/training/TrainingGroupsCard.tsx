@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Plus, Trash2, Users } from "lucide-react";
 import type { GameStateData, PlayerData, TeamData } from "../../store/gameStore";
@@ -37,6 +37,7 @@ export default function TrainingGroupsCard({
   const { t } = useTranslation(),
     groups: TrainingGroup[] = team?.training_groups ?? [],
     teamFocus = team?.training_focus || "Physical";
+  const [draftNames, setDraftNames] = useState<Record<string, string>>({});
   const saveGroups = useCallback(
     async (next: TrainingGroup[]) => {
       setIsSaving(true);
@@ -119,8 +120,11 @@ export default function TrainingGroupsCard({
                   </span>
                   <input
                     type="text"
-                    value={g.name}
-                    onChange={(e) => updateGroupName(g.id, e.target.value)}
+                    value={draftNames[g.id] ?? g.name}
+                    onChange={(e) => setDraftNames((drafts) => ({...drafts, [g.id]: e.target.value}))}
+                    onBlur={(e) => {
+                      if (e.target.value !== g.name) updateGroupName(g.id, e.target.value);
+                    }}
                     className="min-w-0 flex-1 bg-transparent text-base font-heading font-bold uppercase tracking-wider text-gray-800 outline-none dark:text-gray-200 sm:text-xs"
                   />
                   <span className="text-xs tabular-nums text-gray-400">{g.player_ids.length}</span>

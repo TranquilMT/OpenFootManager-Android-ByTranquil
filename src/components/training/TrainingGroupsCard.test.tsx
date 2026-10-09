@@ -227,4 +227,20 @@ trainingFocusIds={["Physical", "Technical", "Recovery"]} trainingFocusIcons={{}}
   });
 
 
+
+  it("saves a renamed group on blur rather than each keystroke", async () => {
+    setTrainingGroupsMock.mockResolvedValue(createGameState(createTeam()));
+    render(<TrainingGroupsCard onGameUpdate={vi.fn()} team={createTeam({training_groups:[{id:"g", name:"Group", focus:"Physical", player_ids:[]}]})}
+ roster={[]} isSaving={false} setIsSaving={vi.fn()} trainingFocusIds={["Physical"]} trainingFocusIcons={{}} />);
+    const input = screen.getByRole("textbox");
+    fireEvent.change(input, {target:{value:"New name"}});
+    expect(setTrainingGroupsMock).not.toHaveBeenCalled();
+    expect(input).toHaveValue("New name");
+    fireEvent.focusOut(input);
+    await waitFor(()=>expect(setTrainingGroupsMock).toHaveBeenCalledWith([
+      {id:"g",name:"New name",focus:"Physical",player_ids:[]}
+    ]));
+  });
+
+
 });
