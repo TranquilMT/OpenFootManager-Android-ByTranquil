@@ -219,4 +219,12 @@ describe("TrainingGroupsCard", () => {
       expect(setIsSaving).toHaveBeenCalledWith(false);
     });
   });
+
+  it("allows individual training before creating any custom groups", () => {
+    render(<TrainingGroupsCard team={createTeam()} roster={[createPlayer()]} isSaving={false} setIsSaving={vi.fn()}
+trainingFocusIds={["Physical", "Technical", "Recovery"]} trainingFocusIcons={{}} />);
+    expect(screen.getAllByRole("combobox").length).toBeGreaterThan(0);
+  });
+
+
 });

@@ -155,7 +155,7 @@ export default function TrainingGroupsCard({
             {t("training.groups.noGroups")}
           </p>
         )}
-        {groups.length > 0 ? (
+        {roster.length > 0 ? (
           <>
             <div className="space-y-2 md:hidden">
               {sorted.map((player) => {
