@@ -243,4 +243,12 @@ trainingFocusIds={["Physical", "Technical", "Recovery"]} trainingFocusIcons={{}}
   });
 
 
+
+  it("disables group name edits while a mutation is pending", () => {
+    render(<TrainingGroupsCard team={createTeam({training_groups:[{id:"g",name:"Group",focus:"Physical",player_ids:[]}]})}
+      roster={[]} isSaving={true} setIsSaving={vi.fn()} trainingFocusIds={["Physical"]} trainingFocusIcons={{}} />);
+    expect(screen.getByRole("textbox")).toBeDisabled();
+  });
+
+
 });
