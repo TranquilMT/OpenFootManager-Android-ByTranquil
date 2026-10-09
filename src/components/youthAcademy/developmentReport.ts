@@ -1,9 +1,10 @@
 import type { PlayerData } from "../../store/types";
 import { getPlayerOvr } from "../../lib/helpers";
+import { latestDevelopmentReview } from "../../lib/developmentHistory";
 
 export function developmentReport(player: PlayerData, season: number) {
   const history = player.development_history ?? [];
-  const baseline = history[history.length - 1];
+  const baseline = latestDevelopmentReview(history);
   return {
     date: baseline?.date ?? null,
     growth: baseline ? getPlayerOvr(player) - baseline.ovr : null,

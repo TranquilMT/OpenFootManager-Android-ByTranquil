@@ -36,4 +36,15 @@ describe("individual monthly training goal", () => {
     expect(individualMonthlyGoal(player).status).toBe("new");
     expect(individualMonthlyGoal({ ...player, training_focus: "Physical" }).status).toBe("ceiling");
   });
+
+  it("uses the newest review when stored history is out of order", () => {
+    const player = { ...createGameState().players[0], ovr: 70, potential: 80,
+      training_focus: "Technical", development_history: [
+        { date: "2026-09-01", season: 2026, ovr: 70, minutes_played: 100, focus: "Technical" },
+        { date: "2026-08-01", season: 2026, ovr: 67, minutes_played: 0, focus: "Technical" },
+      ] };
+    expect(individualMonthlyGoal(player)).toMatchObject({date: "2026-09-01", target: 71, progress: 0});
+  });
+
+
 });
