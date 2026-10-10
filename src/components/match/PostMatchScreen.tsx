@@ -369,7 +369,7 @@ export default function PostMatchScreen({
       {/* Tab Bar */}
       <div className="bg-white dark:bg-navy-800 border-b border-gray-200 dark:border-navy-700 transition-colors duration-300">
         <div className="px-6">
-          <div className="flex gap-1" role="tablist">
+          <div className="flex gap-1 overflow-x-auto touch-pan-x" role="tablist">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -378,8 +378,26 @@ export default function PostMatchScreen({
                 role="tab"
                 aria-selected={activeTab === tab.id}
                 aria-controls={`tabpanel-${tab.id}`}
+                tabIndex={activeTab === tab.id ? 0 : -1}
+                onKeyDown={(event) => {
+                  const index = tabs.findIndex((item) => item.id === tab.id);
+                  const nextIndex =
+                    event.key === "ArrowRight"
+                      ? (index + 1) % tabs.length
+                      : event.key === "ArrowLeft"
+                        ? (index - 1 + tabs.length) % tabs.length
+                        : event.key === "Home"
+                          ? 0
+                          : event.key === "End"
+                            ? tabs.length - 1
+                            : null;
+                  if (nextIndex === null) return;
+                  event.preventDefault();
+                  setActiveTab(tabs[nextIndex].id);
+                  document.getElementById(`tab-${tabs[nextIndex].id}`)?.focus();
+                }}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-5 py-3 text-sm font-heading font-bold uppercase tracking-wider border-b-2 transition-colors ${
+                className={`flex min-h-11 shrink-0 items-center gap-2 whitespace-nowrap px-5 py-3 text-sm font-heading font-bold uppercase tracking-wider border-b-2 transition-colors ${
                   activeTab === tab.id
                     ? "border-primary-500 text-primary-600 dark:text-primary-400"
                     : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"

@@ -408,6 +408,32 @@ function makeGameState() {
 }
 
 describe("PostMatchScreen", (): void => {
+  it("navigates full-time review tabs with arrow and Home/End keys", () => {
+    render(
+      <ThemeProvider>
+        <PostMatchScreen
+          snapshot={makeSnapshot()}
+          gameState={makeGameState()}
+          userSide="Home"
+          isSpectator={false}
+          importantEvents={[]}
+          onContinue={() => {}}
+          onFinish={() => {}}
+        />
+      </ThemeProvider>,
+    );
+    const tabs = screen.getAllByRole("tab");
+    tabs[0].focus();
+    fireEvent.keyDown(tabs[0], { key: "End" });
+    expect(tabs[tabs.length - 1]).toHaveFocus();
+    expect(tabs[tabs.length - 1]).toHaveAttribute("aria-selected", "true");
+    fireEvent.keyDown(tabs[tabs.length - 1], { key: "ArrowRight" });
+    expect(tabs[0]).toHaveFocus();
+    fireEvent.keyDown(tabs[0], { key: "ArrowLeft" });
+    expect(tabs[tabs.length - 1]).toHaveFocus();
+    fireEvent.keyDown(tabs[tabs.length - 1], { key: "Home" });
+    expect(tabs[0]).toHaveFocus();
+  });
   it("retains the live player performance tables in the full-time review", () => {
     render(
       <ThemeProvider>
