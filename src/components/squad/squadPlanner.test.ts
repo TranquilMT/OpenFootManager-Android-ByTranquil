@@ -54,4 +54,14 @@ describe("six-month squad plan", () => {
  });
 
 
+
+ it("separates loan returns from parent-club contract expiry",()=>{
+  const base={...createGameState().players[0],contract_end:"2026-09-01"};
+  const player={...base,active_loan:{parent_team_id:"parent",loan_team_id:base.team_id!,start_date:"2026-07-01",end_date:"2026-09-01",wage_contribution_pct:100}};
+  const plan=buildSquadPlan([player],"4-4-2","2026-07-10");
+  expect(plan.expiring).toEqual([]);
+  expect(plan.returningLoans).toHaveLength(1);
+ });
+
+
 });
