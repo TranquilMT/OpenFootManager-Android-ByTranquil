@@ -789,4 +789,12 @@ describe("isSeasonComplete with unplayed season", () => {
  });
 
 
+
+ it("does not declare a complete schedule when a fixture has no usable date",()=>{
+  const league=makeFullScheduledLeague();
+  league.fixtures[0].date="2026-02-30";
+  expect(hasFullLeagueSchedule(league)).toBe(false);
+ });
+
+
 });
