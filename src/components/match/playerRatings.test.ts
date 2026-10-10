@@ -26,6 +26,12 @@ const snapshot = (events: MatchEvent[] = []) =>
     ],
   }) as unknown as MatchSnapshot;
 describe("recorded post-match player ratings", () => {
+  it("keeps imported tackle records consistent with player statistics", () => {
+    expect(
+      playerMatchRatings(snapshot([event("TackleWon")]), "Home").find((row) => row.id === "starter")
+        ?.rating,
+    ).toBe(6.2);
+  });
   it("credits a decided shootout win without counting shootout goals", () => {
     const snap = snapshot([event("ShootoutGoal", "starter")]);
     snap.penalty_shootout = { home_scored: 5, away_scored: 4 } as NonNullable<

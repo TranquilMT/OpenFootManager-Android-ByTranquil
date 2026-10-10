@@ -31,7 +31,7 @@ export function playerMatchRatings(snapshot: MatchSnapshot, side: "Home" | "Away
       ratings[evt.player_id] = (ratings[evt.player_id] ?? 6) - 0.1;
     else if (evt.event_type === "PassCompleted")
       ratings[evt.player_id] = (ratings[evt.player_id] ?? 6) + 0.02;
-    else if (evt.event_type === "Tackle" || evt.event_type === "Interception")
+    else if (["Tackle", "TackleWon", "Interception"].includes(evt.event_type))
       ratings[evt.player_id] = (ratings[evt.player_id] ?? 6) + 0.15;
     else if (evt.event_type === "Foul")
       ratings[evt.player_id] = (ratings[evt.player_id] ?? 6) - 0.2;
