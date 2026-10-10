@@ -148,7 +148,7 @@ export default function MatchLive({
     () => filterMatchEvents(snapshot.events, eventFilter),
     [visibleEvents, snapshot.events, eventFilter],
   );
-  const liveFeed = useLiveFeedScroll(filteredEvents.length, activePanel === "events");
+  const liveFeed = useLiveFeedScroll(filteredEvents.length, activePanel === "events", eventFilter);
 
   // Reads only `lastResult` for phase transitions, which is sound because step_many stops on
   // entering any phase that needs the manager — so a half time, shootout or finish is always the

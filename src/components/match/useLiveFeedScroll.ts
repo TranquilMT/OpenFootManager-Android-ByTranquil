@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 /** Follow the scroll container, while allowing the manager to read older events. */
-export function useLiveFeedScroll(eventCount: number, enabled: boolean) {
+export function useLiveFeedScroll(eventCount: number, enabled: boolean, streamKey = "all") {
   const feedRef = useRef<HTMLDivElement>(null);
   const [following, setFollowing] = useState(true);
+  useEffect(() => { setFollowing(true); }, [streamKey]);
   const jumpToLive = useCallback(() => {
     const element = feedRef.current;
     if (element) element.scrollTop = element.scrollHeight;
@@ -20,6 +21,6 @@ export function useLiveFeedScroll(eventCount: number, enabled: boolean) {
       const element = feedRef.current;
       if (element) element.scrollTop = element.scrollHeight;
     }
-  }, [eventCount, enabled, following]);
+  }, [eventCount, enabled, following, streamKey]);
   return { feedRef, following, onScroll, jumpToLive };
 }
