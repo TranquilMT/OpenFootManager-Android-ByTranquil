@@ -408,6 +408,24 @@ function makeGameState() {
 }
 
 describe("PostMatchScreen", (): void => {
+  it("retains the live player performance tables in the full-time review", () => {
+    render(
+      <ThemeProvider>
+        <PostMatchScreen
+          snapshot={makeSnapshot()}
+          gameState={makeGameState()}
+          userSide="Home"
+          isSpectator={false}
+          importantEvents={[]}
+          onContinue={() => {}}
+          onFinish={() => {}}
+        />
+      </ThemeProvider>,
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "match.playerRatings" }));
+    expect(screen.getByRole("table", { name: "Alpha FC" })).toBeInTheDocument();
+    expect(screen.getByRole("table", { name: "Beta FC" })).toBeInTheDocument();
+  });
   it("renders the Team Talk tab by default for a manager", (): void => {
     render(
       <ThemeProvider>

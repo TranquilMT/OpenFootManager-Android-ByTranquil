@@ -1,3 +1,4 @@
+import { PlayerMatchPerformance } from "./PlayerMatchPerformance";
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { useTranslation } from "react-i18next";
@@ -665,8 +666,11 @@ export default function PostMatchScreen({
             role="tabpanel"
             aria-labelledby="tab-playerRatings"
             hidden={activeTab !== "playerRatings"}
-            className="grid grid-cols-2 gap-6"
+            className="grid grid-cols-1 gap-6 md:grid-cols-2"
           >
+            <div className="min-w-0 md:col-span-2">
+              <PlayerMatchPerformance snapshot={snapshot} />
+            </div>
             {(["Home", "Away"] as const).map((side) => (
               <PlayerRatingsPanel
                 key={side}
