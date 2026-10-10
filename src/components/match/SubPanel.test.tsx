@@ -377,4 +377,13 @@ describe("SubPanel", () => {
   });
 
 
+
+  it("locks recommendation chips during a pending command", () => {
+    render(<SubPanel {...createProps()} pending />);
+    const chips = screen.getAllByTestId(/^recommended-sub-/);
+    expect(chips.length).toBeGreaterThan(0);
+    for (const chip of chips) expect(chip).toBeDisabled();
+  });
+
+
 });
