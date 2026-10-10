@@ -20,6 +20,8 @@ export function matchAlerts(snapshot: MatchSnapshot, side: "Home" | "Away"): Mat
     (latest, event, index) =>
       event.side === side &&
       event.event_type === "TacticalChange" &&
+      Number.isFinite(event.minute) &&
+      event.minute >= 0 &&
       event.minute <= snapshot.current_minute
         ? index
         : latest,

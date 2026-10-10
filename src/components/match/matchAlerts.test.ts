@@ -30,6 +30,13 @@ const snap = (events: MatchEvent[]) =>
     substitutions: [],
   }) as unknown as MatchSnapshot;
 describe("actionable match alerts", () => {
+  it("does not let a malformed tactical timestamp clear a dismissal", () => {
+    const snapshot = snap([
+      event("RedCard", "dismissed", 30),
+      event("TacticalChange", "manager", -1),
+    ]);
+    expect(matchAlerts(snapshot, "Home")).toHaveLength(1);
+  });
   it("shows only current injuries for active players on the manager's side", () => {
     const snapshot = snap([
       event("Injury"),
