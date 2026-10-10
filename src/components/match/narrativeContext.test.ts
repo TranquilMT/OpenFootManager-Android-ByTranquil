@@ -15,6 +15,10 @@ const event = (
   zone: "Midfield",
 });
 describe("truthful match narratives", () => {
+  it("future goals cannot grant a current scorer milestone", () => {
+    const goal = event("Goal", 30);
+    expect(eventContext(goal, [event("Goal", 90), goal]).playerGoals).toBe(1);
+  });
   it("unordered future goals cannot change the current score narrative", () => {
     const goal = event("Goal", 30);
     expect(eventContext(goal, [event("Goal", 90), goal]).ownBefore).toBe(0);

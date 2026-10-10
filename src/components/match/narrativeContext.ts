@@ -47,7 +47,13 @@ export function eventContext(evt: MatchEvent, events: MatchEvent[]) {
     trailed,
     ownAfter: ownBefore + (GOALS.has(evt.event_type) ? 1 : 0),
     playerGoals: prefix.filter(
-      (e) => GOALS.has(e.event_type) && e.player_id === evt.player_id && e.side === evt.side,
+      (e) =>
+        GOALS.has(e.event_type) &&
+        e.player_id === evt.player_id &&
+        e.side === evt.side &&
+        Number.isFinite(e.minute) &&
+        e.minute >= 0 &&
+        e.minute <= evt.minute,
     ).length,
     recentShots: before.filter(
       (e) =>
