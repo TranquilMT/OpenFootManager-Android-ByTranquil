@@ -26,4 +26,10 @@ describe("expected playing-time promise deadline", () => {
     expect(expectedPromiseDeadline(matches, "ours", "2026-08-10", 1, true)).toBeNull();
     expect(expectedPromiseDeadline(matches, "ours", "2026-08-10", 2, false)).toBeNull();
   });
+
+ it("includes a fixture on the current calendar day",()=>{
+  expect(expectedPromiseDeadline([fixture("one","2026-08-10")],"ours","2026-08-10T15:00:00Z",1,false)).toBe("2026-08-10");
+ });
+
+
 });
