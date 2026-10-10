@@ -393,4 +393,15 @@ describe("SubPanel", () => {
   });
 
 
+
+ it("locks shared decision controls during a penalty shootout",()=>{
+  const props=createProps();props.snapshot.phase="PenaltyShootout";
+  render(<SubPanel {...props}/>);
+  expect(screen.getByRole("combobox",{name:"tactics.formation"})).toBeDisabled();
+  expect(screen.getByRole("combobox",{name:"tactics.playStyle"})).toBeDisabled();
+  fireEvent.click(screen.getByTestId("sub-panel-off-starter-1"));
+  expect(screen.getByTestId("sub-panel-off-starter-1")).toHaveAttribute("aria-pressed","false");
+ });
+
+
 });

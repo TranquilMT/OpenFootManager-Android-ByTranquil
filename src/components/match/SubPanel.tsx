@@ -111,6 +111,7 @@ export function SubPanel({
   const [selectedOff, setSelectedOff] = useState<string | null>(null);
   const [selectedBench, setSelectedBench] = useState<string | null>(null);
 
+  const decisionClosed = snapshot.phase === "Finished" || snapshot.phase === "PenaltyShootout";
   const team = side === "Home" ? snapshot.home_team : snapshot.away_team;
   const subsMade = side === "Home" ? snapshot.home_subs_made : snapshot.away_subs_made;
 
@@ -151,7 +152,7 @@ export function SubPanel({
   };
 
   const handleSelectOffPlayer = (playerId: string) => {
-    if (pending || subsMade >= snapshot.max_subs || snapshot.phase === "Finished") return;
+    if (pending || subsMade >= snapshot.max_subs || decisionClosed) return;
     setSelectedOff((cur) => {
       if (cur === playerId) {
         setSelectedBench(null);
@@ -163,7 +164,7 @@ export function SubPanel({
   };
 
   const handleSelectBenchPlayer = (playerId: string) => {
-    if (pending || !selectedOff || subsMade >= snapshot.max_subs || snapshot.phase === "Finished")
+    if (pending || !selectedOff || subsMade >= snapshot.max_subs || decisionClosed)
       return;
     setSelectedBench((cur) => (cur === playerId ? null : playerId));
   };
@@ -173,7 +174,7 @@ export function SubPanel({
       pending ||
       !selectedPlayer ||
       !comparedPlayer ||
-      snapshot.phase === "Finished" ||
+      decisionClosed ||
       subsMade >= snapshot.max_subs
     )
       return;
@@ -181,7 +182,7 @@ export function SubPanel({
   };
 
   const handleApplyRecommendation = (offId: string, onId: string) => {
-    if (pending || snapshot.phase === "Finished") return;
+    if (pending || decisionClosed) return;
     setSelectedOff(offId);
     setSelectedBench(onId);
   };
@@ -257,7 +258,7 @@ export function SubPanel({
               <button
                 type="button"
                 data-testid="recommended-plan-cta"
-                disabled={pending || snapshot.phase === "Finished" || snapshot.phase === "PenaltyShootout"}
+                disabled={pending || decisionClosed}
                 onClick={() => onPlayStyleChange(scenario.recommendedPlayStyle)}
                 className="rounded-full border border-primary-500/25 bg-primary-500/12 px-2 py-0.5 font-heading text-[10px] font-bold uppercase tracking-widest text-primary-500 transition-colors hover:bg-primary-500/20 dark:text-primary-300"
               >
@@ -297,7 +298,7 @@ export function SubPanel({
               <Select
                 value={FORMATIONS.includes(team.formation) ? team.formation : FORMATIONS[0]}
                 onChange={(e) => onFormationChange(e.target.value)}
-                disabled={pending || snapshot.phase === "Finished"}
+                disabled={pending || decisionClosed}
                 aria-label={t("tactics.formation")}
                 selectSize="xs"
               >
@@ -310,7 +311,7 @@ export function SubPanel({
               <Select
                 value={team.play_style}
                 onChange={(e) => onPlayStyleChange(e.target.value)}
-                disabled={pending || snapshot.phase === "Finished"}
+                disabled={pending || decisionClosed}
                 aria-label={t("tactics.playStyle")}
                 selectSize="xs"
               >
@@ -328,7 +329,7 @@ export function SubPanel({
               <PhaseBlueprintPanel
                 tacticsPhase={team.tactics}
                 onTacticsPhaseChange={onTacticsPhaseChange}
-                disabled={pending || snapshot.phase === "Finished"}
+                disabled={pending || decisionClosed}
               />
             </div>
           )}
@@ -648,7 +649,7 @@ export function SubPanel({
                     </button>
                     <button
                       type="button"
-                      disabled={pending || snapshot.phase === "Finished"}
+                      disabled={pending || decisionClosed}
                       onClick={handleConfirmSubstitution}
                       className="rounded-lg bg-green-500 px-3 py-1.5 font-heading text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-green-400"
                     >
