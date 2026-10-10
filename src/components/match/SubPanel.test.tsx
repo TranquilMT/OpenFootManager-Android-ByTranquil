@@ -2,7 +2,11 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { SubPanel } from "./SubPanel";
-import { buildRecommendedSubstitutions, getAvailableMatchBench } from "./SubPanel.helpers";
+import {
+  buildRecommendedSubstitutions,
+  buildRecommendationReasons,
+  getAvailableMatchBench,
+} from "./SubPanel.helpers";
 import type { EnginePlayerData, EngineTeamData, MatchSnapshot } from "./types";
 
 vi.mock("react-i18next", () => ({
@@ -137,6 +141,24 @@ function createSnapshot(): MatchSnapshot {
 }
 
 describe("SubPanel", () => {
+  it("recognises defensive and attacking cover from specific positions", () => {
+    const base = {
+      benchPlayer: makePlayer({ position: "RightBack" }),
+      offPlayer: makePlayer({ position: "Striker" }),
+      yellowCount: 0,
+    };
+    expect(buildRecommendationReasons({ ...base, scenario: "protect-lead" })).toContain(
+      "defensive-cover",
+    );
+    expect(
+      buildRecommendationReasons({
+        ...base,
+        benchPlayer: base.offPlayer,
+        offPlayer: base.benchPlayer,
+        scenario: "chase-goal",
+      }),
+    ).toContain("attacking-boost");
+  });
   it("prepared substitutions disable when the allowance is exhausted", () => {
     const snapshot = createSnapshot();
     const props = {

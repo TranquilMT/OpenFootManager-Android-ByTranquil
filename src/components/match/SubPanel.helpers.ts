@@ -1,3 +1,4 @@
+import { normalisePosition } from "../squad/SquadTab.helpers";
 import type { EnginePlayerData, MatchSnapshot } from "./types";
 
 export type MatchScenarioId = "steady" | "protect-lead" | "find-winner" | "chase-goal";
@@ -97,11 +98,11 @@ function getPositionPriority(position: string, scenario: MatchScenarioId): numbe
   };
 
   if (scenario === "protect-lead") {
-    return defensiveOrder[position] ?? 0;
+    return defensiveOrder[normalisePosition(position)] ?? 0;
   }
 
   if (scenario === "chase-goal" || scenario === "find-winner") {
-    return attackingOrder[position] ?? 0;
+    return attackingOrder[normalisePosition(position)] ?? 0;
   }
 
   return 0;
