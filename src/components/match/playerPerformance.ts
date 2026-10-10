@@ -5,7 +5,7 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
   const events = snapshot.events.filter((event) => Number.isFinite(event.minute) && event.minute >= 0 && event.minute <= snapshot.current_minute);
   const team = side === "Home" ? snapshot.home_team : snapshot.away_team;
   const bench = side === "Home" ? snapshot.home_bench : snapshot.away_bench;
-  const substitutions = snapshot.substitutions.filter((sub) => sub.side === side && Number.isFinite(sub.minute) && sub.minute >= 0 && sub.minute <= snapshot.current_minute);
+  const substitutions = snapshot.substitutions.filter((sub) => sub.side === side && Number.isFinite(sub.minute) && sub.minute >= 0 && sub.minute <= snapshot.current_minute).sort((a,b) => a.minute - b.minute);
   const used = new Set(
     substitutions
       .flatMap((sub) => [sub.player_on_id, sub.player_off_id]),

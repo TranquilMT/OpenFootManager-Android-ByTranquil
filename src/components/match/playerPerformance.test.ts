@@ -95,4 +95,11 @@ describe("recorded player match performance", () => {
     snap.substitutions = [{side:"Home", minute:80, player_off_id:"scorer", player_on_id:"unused"}];
     expect(playerMatchPerformance(snap,"Home").some(row => row.id === "unused")).toBe(false);
   });
+  it("uses the earliest entry when imported substitution records are unordered", () => {
+    const snap = snapshot();
+    snap.substitutions = [
+      {side:"Home",minute:65,player_off_id:"keeper",player_on_id:"helper"},
+      {side:"Home",minute:55,player_off_id:"scorer",player_on_id:"helper"}];
+    expect(playerMatchPerformance(snap,"Home").find(row => row.id === "helper")?.minutes).toBe(20);
+  });
 });
