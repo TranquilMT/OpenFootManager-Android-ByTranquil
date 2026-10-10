@@ -47,9 +47,10 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
             : earliest,
         Infinity,
       );
-      const firstKick = events.find((event) =>
+      const kicks = events.filter((event) =>
         ["ShootoutGoal", "ShootoutMiss"].includes(event.event_type),
-      )?.minute;
+      );
+      const firstKick = kicks.length ? Math.min(...kicks.map((event) => event.minute)) : null;
       const playedClock =
         firstKick == null ? snapshot.current_minute : Math.min(snapshot.current_minute, firstKick);
       const end = Math.min(playedClock, left ?? Infinity, dismissed ?? Infinity);

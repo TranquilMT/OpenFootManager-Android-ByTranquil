@@ -22,6 +22,14 @@ const snapshot = (events: MatchEvent[] = []) =>
     sent_off: [],
   }) as unknown as MatchSnapshot;
 describe("recorded player match performance", () => {
+  it("unordered shootout kicks use the earliest recorded transition", () => {
+    const snap = snapshot([
+      event("ShootoutMiss", "helper", null, "Home", 124),
+      event("ShootoutGoal", "scorer", null, "Home", 120),
+    ]);
+    snap.current_minute = 124;
+    expect(playerMatchPerformance(snap, "Home")[0].minutes).toBe(120);
+  });
   it("counts match goals, valid assists and attempts without shootout inflation", () => {
     const snap = snapshot([
       event("Goal", "scorer", "helper"),
