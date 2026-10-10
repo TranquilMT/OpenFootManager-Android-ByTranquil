@@ -153,4 +153,11 @@ describe("truthful match narratives", () => {
     e.shot = { expected_goals: NaN, goalkeeper_id: "gk" };
     expect(matchMetrics([e], "Home").xg).toBe(0);
   });
+
+  it("does not assign a four-goal haul to unrecorded scorers", () => {
+    const events = [10,20,30,40].map(m=>({...event("Goal",m),player_id:null}));
+    expect(narrativeKey(events[3],events)).not.toBe("fourGoals");
+  });
+
+
 });

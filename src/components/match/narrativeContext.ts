@@ -60,7 +60,7 @@ export function eventContext(evt: MatchEvent, events: MatchEvent[]) {
 export function narrativeKey(evt: MatchEvent, events: MatchEvent[]): string | null {
   const c = eventContext(evt, events);
   if (GOALS.has(evt.event_type)) {
-    if (c.playerGoals === 4) return "fourGoals";
+    if (evt.player_id && c.playerGoals === 4) return "fourGoals";
     if (c.ownAfter === c.opponentBefore && evt.minute >= 80) return "lateEqualiser";
     if (c.ownBefore === c.opponentBefore && c.trailed) return "comebackLead";
     if (c.ownBefore === c.opponentBefore && evt.minute >= 85) return "lateLead";
