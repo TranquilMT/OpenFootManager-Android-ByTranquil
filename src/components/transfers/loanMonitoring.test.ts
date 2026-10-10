@@ -114,4 +114,12 @@ describe("club loan monitoring", () => {
       expect(monitoredLoans([player], "team-1")[0]).toMatchObject({ hasBaseline: false, appearances: 0, minutes: 0 });
     }
   });
+  it("does not show trustworthy zero usage after career counters roll back", () => {
+    const base = createGameState().players[0];
+    const player = { ...base, active_loan: { parent_team_id: "team-1", loan_team_id: "other",
+      start_date: "2026-08-01", end_date: "2027-06-01", wage_contribution_pct: 50,
+      loan_start_appearances: 10, loan_start_minutes: 900 },
+      stats: { ...base.stats, appearances: 1, minutes_played: 90 } };
+    expect(monitoredLoans([player], "team-1")[0].hasBaseline).toBe(false);
+  });
 });
