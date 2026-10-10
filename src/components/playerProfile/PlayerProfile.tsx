@@ -272,7 +272,7 @@ export default function PlayerProfile({
       ) : null}
 
       {/* Injury banner */}
-      {player.injury ? <PlayerProfileInjuryBanner injury={player.injury} t={t} /> : null}
+      {player.injury ? <PlayerProfileInjuryBanner injury={player.injury} currentDate={gameState.clock.current_date} t={t} /> : null}
 
       {isOwnClub && onGameUpdate && (
         <div className="mb-4 flex flex-col items-stretch gap-2 rounded-xl border border-gray-200 bg-white px-3 py-3 dark:border-navy-600 dark:bg-navy-800 sm:flex-row sm:items-center sm:gap-3 sm:px-4">

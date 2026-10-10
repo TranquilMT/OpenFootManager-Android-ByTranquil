@@ -4418,5 +4418,8 @@
     "stats": "Penaltılar bir kez sayılır, ikinci sarı kart ihraç olarak kaydedilir ve gol raporları mevcut duran topları açık oyundan ayırır.",
     "fatigue": "Yorgunluk, tükenmiş oyuncunun kondisyonunu yenilemez. Canlı kondisyon ve içe aktarılan puanlar geçerli sınırlar içinde kalır.",
     "tactics": "Diziliş adları uygulanan yerleşimle eşleşir. Topa sahip olma ve beklenen gol toplamları, içe aktarılan veya çok büyük değerlerde güvenilir kalır."
+  },
+  "phase73": {
+    "expectedRecovery": "Tahmini dönüş: {{date}}"
   }
 }

@@ -1,3 +1,4 @@
+import { estimatedRecoveryDate } from "../../lib/recoveryEstimate";
 import { AlertTriangle } from "lucide-react";
 import { resolvePlayerInjuryName } from "./PlayerProfile.helpers";
 import { Card, CardBody } from "../ui";
@@ -11,9 +12,11 @@ interface PlayerProfileInjuryBannerProps {
     days_remaining: number;
   };
   t: TranslateFn;
+  currentDate: string;
 }
 
-export default function PlayerProfileInjuryBanner({ injury, t }: PlayerProfileInjuryBannerProps) {
+export default function PlayerProfileInjuryBanner({ injury, t, currentDate }: PlayerProfileInjuryBannerProps) {
+  const recoveryDate = estimatedRecoveryDate(currentDate, injury.days_remaining);
   return (
     <Card accent="danger" className="mb-5">
       <CardBody>
@@ -30,6 +33,7 @@ export default function PlayerProfileInjuryBanner({ injury, t }: PlayerProfileIn
                 count: injury.days_remaining,
               })}
             </p>
+            {recoveryDate && <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t("phase73.expectedRecovery", {date: recoveryDate})}</p>}
           </div>
         </div>
       </CardBody>

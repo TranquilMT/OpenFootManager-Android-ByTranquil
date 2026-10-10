@@ -4418,5 +4418,8 @@
     "stats": "Elfmeter zählen nur einmal, die zweite gelbe Karte wird als Platzverweis erfasst und Torberichte unterscheiden aktuelle Standards vom offenen Spiel.",
     "fatigue": "Ermüdung stellt die Kondition erschöpfter Spieler nicht wieder her. Live-Kondition und importierte Bewertungen bleiben innerhalb ihrer Grenzen.",
     "tactics": "Formationsnamen entsprechen der angewendeten Aufstellung. Ballbesitz und erwartete Tore bleiben auch bei importierten oder sehr hohen Werten zuverlässig."
+  },
+  "phase73": {
+    "expectedRecovery": "Voraussichtliche Rückkehr: {{date}}"
   }
 }

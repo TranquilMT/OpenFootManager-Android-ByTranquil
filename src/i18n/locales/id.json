@@ -4418,5 +4418,8 @@
     "stats": "Penalti dihitung sekali, kartu kuning kedua tercatat sebagai pengusiran, dan laporan gol membedakan bola mati saat ini dari permainan terbuka.",
     "fatigue": "Kelelahan tidak memulihkan kondisi pemain yang kehabisan tenaga. Kondisi langsung dan rating impor tetap dalam batas yang semestinya.",
     "tactics": "Nama formasi sesuai dengan susunan yang diterapkan. Penguasaan bola dan gol yang diharapkan tetap akurat dengan nilai impor atau sangat besar."
+  },
+  "phase73": {
+    "expectedRecovery": "Perkiraan kembali: {{date}}"
   }
 }

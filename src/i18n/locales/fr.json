@@ -4418,5 +4418,8 @@
     "stats": "Les penalties comptent une seule fois, le deuxième jaune apparaît comme une expulsion et les buts distinguent les coups de pied arrêtés actuels du jeu ouvert.",
     "fatigue": "La fatigue ne restaure pas la condition d’un joueur épuisé. La condition et les notes importées respectent leurs limites.",
     "tactics": "Les noms des formations correspondent au dispositif appliqué. Possession et buts attendus restent fiables avec des valeurs importées ou très élevées."
+  },
+  "phase73": {
+    "expectedRecovery": "Retour estimé : {{date}}"
   }
 }

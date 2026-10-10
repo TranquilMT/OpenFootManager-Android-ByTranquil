@@ -4418,5 +4418,8 @@
     "stats": "Os pênaltis contam apenas uma vez, o segundo amarelo aparece como expulsão e os relatórios distinguem as bolas paradas atuais do jogo corrido.",
     "fatigue": "A fadiga não recupera a condição de jogadores esgotados. A condição e as avaliações importadas respeitam seus limites.",
     "tactics": "Os nomes das formações correspondem ao esquema aplicado. A posse e os gols esperados permanecem confiáveis com valores importados ou muito elevados."
+  },
+  "phase73": {
+    "expectedRecovery": "Retorno estimado: {{date}}"
   }
 }

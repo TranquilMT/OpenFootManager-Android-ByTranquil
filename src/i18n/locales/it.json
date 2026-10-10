@@ -4418,5 +4418,8 @@
     "stats": "I rigori contano una sola volta, il secondo giallo risulta come espulsione e i gol distinguono i calci piazzati attuali dal gioco aperto.",
     "fatigue": "La fatica non ripristina la condizione di un giocatore esausto. Condizione e valutazioni importate restano entro i limiti previsti.",
     "tactics": "Le etichette dei moduli corrispondono alla disposizione applicata. Possesso e gol attesi restano affidabili con valori importati o molto elevati."
+  },
+  "phase73": {
+    "expectedRecovery": "Rientro previsto: {{date}}"
   }
 }

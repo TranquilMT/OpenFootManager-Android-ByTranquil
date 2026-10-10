@@ -4418,5 +4418,8 @@
     "stats": "Penalty se počítají jen jednou, druhá žlutá se zaznamenává jako vyloučení a góly rozlišují aktuální standardní situace od hry.",
     "fatigue": "Únava neobnovuje kondici vyčerpaného hráče. Živá kondice a importovaná hodnocení zůstávají v příslušných mezích.",
     "tactics": "Názvy formací odpovídají použitému rozestavení. Držení míče a očekávané góly zůstávají spolehlivé i při importovaných nebo velmi vysokých hodnotách."
+  },
+  "phase73": {
+    "expectedRecovery": "Odhadovaný návrat: {{date}}"
   }
 }

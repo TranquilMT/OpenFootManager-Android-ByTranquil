@@ -4418,5 +4418,8 @@
     "stats": "Los penaltis cuentan una sola vez, la segunda amarilla aparece como expulsión y los informes distinguen el balón parado actual del juego abierto.",
     "fatigue": "La fatiga no recupera la condición de un jugador agotado. La condición y las valoraciones importadas respetan sus límites.",
     "tactics": "Los nombres de las formaciones coinciden con el esquema aplicado. La posesión y los goles esperados siguen siendo fiables con valores importados o muy altos."
+  },
+  "phase73": {
+    "expectedRecovery": "Regreso estimado: {{date}}"
   }
 }

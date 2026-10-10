@@ -4418,5 +4418,8 @@
     "stats": "Penalties count once, second yellow cards appear as dismissals, and goal reports distinguish current set pieces from open play.",
     "fatigue": "Fatigue cannot restore an exhausted player’s condition. Live condition and imported ratings stay within their intended limits.",
     "tactics": "Formation labels match the shape applied. Possession and expected-goals totals remain reliable with imported or unusually large values."
+  },
+  "phase73": {
+    "expectedRecovery": "Estimated return: {{date}}"
   }
 }
