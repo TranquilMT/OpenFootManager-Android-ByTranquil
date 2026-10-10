@@ -141,6 +141,18 @@ function createSnapshot(): MatchSnapshot {
 }
 
 describe("SubPanel", () => {
+  it("unbounded keeper attributes cannot dominate emergency cover", () => {
+    const snapshot = createSnapshot();
+    snapshot.max_subs = 1;
+    snapshot.home_team.players = [
+      makePlayer({ id: "keeper", position: "Goalkeeper", condition: 20 }),
+    ];
+    snapshot.home_bench = [
+      makePlayer({ id: "invalid", condition: 90, handling: Infinity, reflexes: 500 }),
+      makePlayer({ id: "cover", condition: 90, handling: 80, reflexes: 80 }),
+    ];
+    expect(buildRecommendedSubstitutions(snapshot, "Home")[0]?.onId).toBe("cover");
+  });
   it("invalid booking counters cannot hide the most fatigued starter", () => {
     const snapshot = createSnapshot();
     snapshot.max_subs = 1;
