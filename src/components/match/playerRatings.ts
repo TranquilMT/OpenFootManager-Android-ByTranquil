@@ -49,7 +49,24 @@ export function playerMatchRatings(snapshot: MatchSnapshot, side: "Home" | "Away
       if (evt.event_type === "Goal") ratings[evt.secondary_player_id] += 0.7;
     }
   });
+  const ownScore = side === "Home" ? snapshot.home_score : snapshot.away_score;
+  const opponentScore = side === "Home" ? snapshot.away_score : snapshot.home_score;
+  const ownPens =
+    side === "Home"
+      ? snapshot.penalty_shootout?.home_scored
+      : snapshot.penalty_shootout?.away_scored;
+  const opponentPens =
+    side === "Home"
+      ? snapshot.penalty_shootout?.away_scored
+      : snapshot.penalty_shootout?.home_scored;
+  const wonShootout =
+    ownScore === opponentScore &&
+    snapshot.phase === "Finished" &&
+    ownPens !== undefined &&
+    opponentPens !== undefined &&
+    ownPens > opponentPens;
   const won =
+    wonShootout ||
     (side === "Home" && snapshot.home_score > snapshot.away_score) ||
     (side === "Away" && snapshot.away_score > snapshot.home_score);
   if (won)

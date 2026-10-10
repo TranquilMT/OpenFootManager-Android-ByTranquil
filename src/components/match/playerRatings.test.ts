@@ -26,6 +26,13 @@ const snapshot = (events: MatchEvent[] = []) =>
     ],
   }) as unknown as MatchSnapshot;
 describe("recorded post-match player ratings", () => {
+  it("credits a decided shootout win without counting shootout goals", () => {
+    const snap = snapshot([event("ShootoutGoal", "starter")]);
+    snap.penalty_shootout = { home_scored: 5, away_scored: 4 } as NonNullable<
+      MatchSnapshot["penalty_shootout"]
+    >;
+    expect(playerMatchRatings(snap, "Home").find((row) => row.id === "starter")?.rating).toBe(6.5);
+  });
   it("keeps a heavily penalised rating at its floor instead of resetting zero", () => {
     const events = Array.from({ length: 13 }, () => event("YellowCard"));
     expect(
