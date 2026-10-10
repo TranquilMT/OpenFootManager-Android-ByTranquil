@@ -9,6 +9,8 @@ export function monitoredLoans(players: PlayerData[], teamId: string) {
         seen.has(player.id) ||
         player.retired ||
         !loan ||
+        !teamId || !player.id || !loan.parent_team_id || !loan.loan_team_id ||
+        loan.parent_team_id === loan.loan_team_id ||
         (loan.parent_team_id !== teamId && loan.loan_team_id !== teamId)
       )
         return [];

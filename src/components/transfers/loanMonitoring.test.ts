@@ -122,4 +122,10 @@ describe("club loan monitoring", () => {
       stats: { ...base.stats, appearances: 1, minutes_played: 90 } };
     expect(monitoredLoans([player], "team-1")[0].hasBaseline).toBe(false);
   });
+  it("omits invalid loans which send a player back to the same club", () => {
+    const base = createGameState().players[0];
+    const player = { ...base, active_loan: { parent_team_id: "team-1", loan_team_id: "team-1",
+      start_date: "2026-08-01", end_date: "2027-06-01", wage_contribution_pct: 50 } };
+    expect(monitoredLoans([player], "team-1")).toEqual([]);
+  });
 });
