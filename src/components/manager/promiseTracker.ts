@@ -25,6 +25,6 @@ export function expectedPromiseDeadline(
         )
         .map((fixture) => [fixture.id, fixture]),
     ).values(),
-  ).sort((a, b) => a.date.localeCompare(b.date));
+  ).sort((a, b) => Date.parse(a.date) - Date.parse(b.date) || a.id.localeCompare(b.id));
   return scheduled[matchesRemaining - 1]?.date ?? null;
 }

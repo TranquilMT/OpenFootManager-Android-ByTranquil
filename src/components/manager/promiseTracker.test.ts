@@ -32,4 +32,15 @@ describe("expected playing-time promise deadline", () => {
  });
 
 
+
+
+
+
+
+ it("projects the first actual kickoff when timestamp offsets differ",()=>{
+  const fixtures=[fixture("later","2026-08-12T00:00:00-05:00"),fixture("earlier","2026-08-12T02:00:00Z")];
+  expect(expectedPromiseDeadline(fixtures,"ours","2026-08-10",1,false)).toBe("2026-08-12T02:00:00Z");
+ });
+
+
 });
