@@ -765,4 +765,12 @@ describe("isSeasonComplete with unplayed season", () => {
  });
 
 
+
+ it("does not accept a full-count schedule containing a self-match",()=>{
+  const league=makeFullScheduledLeague();
+  league.fixtures[0].away_team_id=league.fixtures[0].home_team_id;
+  expect(hasFullLeagueSchedule(league)).toBe(false);
+ });
+
+
 });

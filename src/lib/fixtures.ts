@@ -64,7 +64,8 @@ export function hasFullLeagueSchedule(league: LeagueData): boolean {
     return false;
   }
 
-  return getCompetitiveFixtures(league.fixtures).length === expectedCount;
+  const fixtures = getCompetitiveFixtures(league.fixtures);
+  return fixtures.length === expectedCount && fixtures.every(fixture=>fixture.home_team_id!==fixture.away_team_id);
 }
 
 export function isSeasonComplete(league: LeagueData | null | undefined): boolean {
