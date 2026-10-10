@@ -59,7 +59,18 @@ export function getAvailableMatchBench(snapshot: MatchSnapshot, side: "Home" | "
   ]);
   const seen = new Set<string>();
   return bench.filter((player) => {
-    if (!player.id || unavailable.has(player.id) || seen.has(player.id)) return false;
+    if (
+      !player.id ||
+      unavailable.has(player.id) ||
+      seen.has(player.id) ||
+      !Number.isFinite(player.condition) ||
+      player.condition <= 0 ||
+      player.condition > 100 ||
+      !Number.isFinite(player.ovr) ||
+      player.ovr < 0 ||
+      player.ovr > 100
+    )
+      return false;
     seen.add(player.id);
     return true;
   });

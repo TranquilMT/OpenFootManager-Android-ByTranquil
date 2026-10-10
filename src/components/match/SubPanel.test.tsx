@@ -137,6 +137,13 @@ function createSnapshot(): MatchSnapshot {
 }
 
 describe("SubPanel", () => {
+  it("invalid bench fitness is not recommended for a substitution", () => {
+    const snapshot = createSnapshot();
+    snapshot.home_bench[0].condition = NaN;
+    expect(getAvailableMatchBench(snapshot, "Home").map((player) => player.id)).not.toContain(
+      "bench-1",
+    );
+  });
   it("future injuries do not prioritise a healthy starter", () => {
     const snapshot = createSnapshot();
     snapshot.home_team.players[0].condition = 100;
