@@ -30,6 +30,6 @@ describe("live player performance panel", () => {
       within(row)
         .getAllByRole("cell")
         .map((cell) => cell.textContent),
-    ).toEqual(["30", "1", "0", "1", "1", "0", "0", "0", "0", "0"]);
+    ).toEqual(["30", "1", "0", "1", "1", "0", "0", "0", "0", "0", "0"]);
   });
 });

@@ -22,6 +22,14 @@ const snapshot = (events: MatchEvent[] = []) =>
     sent_off: [],
   }) as unknown as MatchSnapshot;
 describe("recorded player match performance", () => {
+  it("reports interceptions separately from completed tackles", () => {
+    expect(
+      playerMatchPerformance(
+        snapshot([event("Interception", "scorer"), event("Tackle", "scorer")]),
+        "Home",
+      ).find((row) => row.id === "scorer"),
+    ).toMatchObject({ tackles: 1, interceptions: 1 });
+  });
   it("counts the tackle event emitted by both match engines", () => {
     expect(
       playerMatchPerformance(snapshot([event("Tackle", "scorer")]), "Home").find(

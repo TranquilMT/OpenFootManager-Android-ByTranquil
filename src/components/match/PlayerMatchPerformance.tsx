@@ -9,6 +9,7 @@ const columns = [
   { key: "onTarget", label: "playerProfile.shotsOnTarget" },
   { key: "passes", label: "playerProfile.passes" },
   { key: "tackles", label: "playerProfile.tacklesWon" },
+  { key: "interceptions", label: "playerProfile.interceptions" },
   { key: "saves", label: "phase70.metrics.saves" },
   { key: "yellows", label: "playerProfile.yellows" },
   { key: "reds", label: "playerProfile.reds" },
