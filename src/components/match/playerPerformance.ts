@@ -2,6 +2,7 @@ import type { MatchSnapshot } from "./types";
 import { matchMetrics } from "./narrativeContext";
 
 export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "Away") {
+  const events = snapshot.events.filter((event) => Number.isFinite(event.minute) && event.minute >= 0 && event.minute <= snapshot.current_minute);
   const team = side === "Home" ? snapshot.home_team : snapshot.away_team;
   const bench = side === "Home" ? snapshot.home_bench : snapshot.away_bench;
   const used = new Set(
@@ -9,7 +10,7 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
       .filter((sub) => sub.side === side)
       .flatMap((sub) => [sub.player_on_id, sub.player_off_id]),
   );
-  for (const event of snapshot.events) {
+  for (const event of events) {
     if (
       event.side === side &&
       event.player_id &&
@@ -27,7 +28,7 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
       return true;
     })
     .map((player) => {
-      const own = snapshot.events.filter(
+      const own = events.filter(
         (event) => event.side === side && event.player_id === player.id,
       );
       const metrics = matchMetrics(own, side);
@@ -37,7 +38,7 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
       const dismissed = own.find((event) =>
         ["RedCard", "SecondYellow"].includes(event.event_type),
       )?.minute;
-      const firstKick = snapshot.events.find((event) =>
+      const firstKick = events.find((event) =>
         ["ShootoutGoal", "ShootoutMiss"].includes(event.event_type),
       )?.minute;
       const playedClock =
@@ -49,7 +50,7 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
         name: player.name,
         minutes,
         goals: own.filter((event) => ["Goal", "PenaltyGoal"].includes(event.event_type)).length,
-        assists: snapshot.events.filter(
+        assists: events.filter(
           (event) =>
             event.side === side &&
             event.event_type === "Goal" &&
@@ -60,7 +61,7 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
         onTarget: metrics.onTarget,
         passes: own.filter((event) => event.event_type === "PassCompleted").length,
         tackles: own.filter((event) => event.event_type === "TackleWon").length,
-        saves: snapshot.events.filter(
+        saves: events.filter(
           (event) =>
             event.side !== side &&
             event.event_type === "ShotSaved" &&

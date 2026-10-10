@@ -72,4 +72,12 @@ describe("recorded player match performance", () => {
       120,
     );
   });
+  it("does not display events recorded beyond the current live minute", () => {
+    const snap = snapshot([event("Goal", "scorer", "helper", "Home", 80),
+      event("ShotSaved", "opponent", "keeper", "Away", 81)]);
+    const rows = playerMatchPerformance(snap, "Home");
+    expect(rows.find((row) => row.id === "scorer")?.goals).toBe(0);
+    expect(rows.find((row) => row.id === "helper")?.assists).toBe(0);
+    expect(rows.find((row) => row.id === "keeper")?.saves).toBe(0);
+  });
 });
