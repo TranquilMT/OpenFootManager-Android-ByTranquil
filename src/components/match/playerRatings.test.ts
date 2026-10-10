@@ -26,6 +26,12 @@ const snapshot = (events: MatchEvent[] = []) =>
     ],
   }) as unknown as MatchSnapshot;
 describe("recorded post-match player ratings", () => {
+  it("keeps a heavily penalised rating at its floor instead of resetting zero", () => {
+    const events = Array.from({ length: 13 }, () => event("YellowCard"));
+    expect(
+      playerMatchRatings(snapshot(events), "Home").find((row) => row.id === "starter")?.rating,
+    ).toBe(1);
+  });
   it("rating ties use stable identities rather than snapshot roster order", () => {
     const first = snapshot();
     const second = {

@@ -24,23 +24,23 @@ export function playerMatchRatings(snapshot: MatchSnapshot, side: "Home" | "Away
     if (evt.side !== side || !evt.player_id) return;
     if (!ratings[evt.player_id] && ratings[evt.player_id] !== 0) return;
     if (evt.event_type === "Goal" || evt.event_type === "PenaltyGoal")
-      ratings[evt.player_id] = (ratings[evt.player_id] || 6) + 1.2;
+      ratings[evt.player_id] = (ratings[evt.player_id] ?? 6) + 1.2;
     else if (evt.event_type === "ShotSaved" || evt.event_type === "ShotOnTarget")
-      ratings[evt.player_id] = (ratings[evt.player_id] || 6) + 0.2;
+      ratings[evt.player_id] = (ratings[evt.player_id] ?? 6) + 0.2;
     else if (evt.event_type === "ShotOffTarget")
-      ratings[evt.player_id] = (ratings[evt.player_id] || 6) - 0.1;
+      ratings[evt.player_id] = (ratings[evt.player_id] ?? 6) - 0.1;
     else if (evt.event_type === "PassCompleted")
-      ratings[evt.player_id] = (ratings[evt.player_id] || 6) + 0.02;
+      ratings[evt.player_id] = (ratings[evt.player_id] ?? 6) + 0.02;
     else if (evt.event_type === "Tackle" || evt.event_type === "Interception")
-      ratings[evt.player_id] = (ratings[evt.player_id] || 6) + 0.15;
+      ratings[evt.player_id] = (ratings[evt.player_id] ?? 6) + 0.15;
     else if (evt.event_type === "Foul")
-      ratings[evt.player_id] = (ratings[evt.player_id] || 6) - 0.2;
+      ratings[evt.player_id] = (ratings[evt.player_id] ?? 6) - 0.2;
     else if (evt.event_type === "SecondYellow")
-      ratings[evt.player_id] = (ratings[evt.player_id] || 6) - 2;
+      ratings[evt.player_id] = (ratings[evt.player_id] ?? 6) - 2;
     else if (evt.event_type === "YellowCard")
-      ratings[evt.player_id] = (ratings[evt.player_id] || 6) - 0.5;
+      ratings[evt.player_id] = (ratings[evt.player_id] ?? 6) - 0.5;
     else if (evt.event_type === "RedCard")
-      ratings[evt.player_id] = (ratings[evt.player_id] || 6) - 1.5;
+      ratings[evt.player_id] = (ratings[evt.player_id] ?? 6) - 1.5;
     if (
       evt.secondary_player_id &&
       evt.secondary_player_id !== evt.player_id &&
