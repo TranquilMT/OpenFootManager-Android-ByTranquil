@@ -4420,6 +4420,7 @@
     "tactics": "Formationsnamen entsprechen der angewendeten Aufstellung. Ballbesitz und erwartete Tore bleiben auch bei importierten oder sehr hohen Werten zuverlässig."
   },
   "phase73": {
-    "expectedRecovery": "Voraussichtliche Rückkehr: {{date}}"
+    "expectedRecovery": "Voraussichtliche Rückkehr: {{date}}",
+    "fixtureCongestion": "{{count}} Spiele in den nächsten {{days}} Tagen. Kürzester Abstand: {{gap}} Tage. Erwäge Rotation und leichteres Training."
   }
 }

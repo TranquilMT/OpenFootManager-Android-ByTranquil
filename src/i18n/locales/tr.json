@@ -4420,6 +4420,7 @@
     "tactics": "Diziliş adları uygulanan yerleşimle eşleşir. Topa sahip olma ve beklenen gol toplamları, içe aktarılan veya çok büyük değerlerde güvenilir kalır."
   },
   "phase73": {
-    "expectedRecovery": "Tahmini dönüş: {{date}}"
+    "expectedRecovery": "Tahmini dönüş: {{date}}",
+    "fixtureCongestion": "Önümüzdeki {{days}} günde {{count}} maç. En kısa aralık: {{gap}} gün. Kadro rotasyonu ve daha hafif antrenman düşünün."
   }
 }

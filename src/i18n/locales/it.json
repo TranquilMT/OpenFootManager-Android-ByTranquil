@@ -4420,6 +4420,7 @@
     "tactics": "Le etichette dei moduli corrispondono alla disposizione applicata. Possesso e gol attesi restano affidabili con valori importati o molto elevati."
   },
   "phase73": {
-    "expectedRecovery": "Rientro previsto: {{date}}"
+    "expectedRecovery": "Rientro previsto: {{date}}",
+    "fixtureCongestion": "{{count}} partite nei prossimi {{days}} giorni. Intervallo minimo: {{gap}} giorni. Valuta la rotazione e un allenamento più leggero."
   }
 }

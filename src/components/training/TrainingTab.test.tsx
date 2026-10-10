@@ -290,4 +290,16 @@ describe("TrainingTab", () => {
     fireEvent.click(screen.getByRole("button", { name: /Intense.label/i }));
     await waitFor(() => expect(screen.getAllByText("42%").length).toBeGreaterThan(0));
   });
+
+ it("shows congestion guidance for closely scheduled club fixtures",async()=>{
+  const state=createGameState(true);
+  state.league={fixtures:[
+   {id:"a",date:"2026-08-12",home_team_id:"team-1",away_team_id:"other",status:"Scheduled"},
+   {id:"b",date:"2026-08-14",home_team_id:"team-1",away_team_id:"other",status:"Scheduled"},
+  ]} as unknown as NonNullable<GameStateData["league"]>;
+  render(<TrainingTab gameState={state}/>);
+  expect(screen.getByText("phase73.fixtureCongestion")).toBeInTheDocument();
+ });
+
+
 });

@@ -4420,6 +4420,7 @@
     "tactics": "Názvy formací odpovídají použitému rozestavení. Držení míče a očekávané góly zůstávají spolehlivé i při importovaných nebo velmi vysokých hodnotách."
   },
   "phase73": {
-    "expectedRecovery": "Odhadovaný návrat: {{date}}"
+    "expectedRecovery": "Odhadovaný návrat: {{date}}",
+    "fixtureCongestion": "{{count}} zápasů během příštích {{days}} dnů. Nejkratší rozestup: {{gap}} dnů. Zvažte rotaci sestavy a lehčí trénink."
   }
 }

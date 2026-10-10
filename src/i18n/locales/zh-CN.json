@@ -4420,6 +4420,7 @@
     "tactics": "阵型名称与实际站位一致。即使导入数值或数值非常大，控球率和预期进球总数仍保持可靠。"
   },
   "phase73": {
-    "expectedRecovery": "预计复出：{{date}}"
+    "expectedRecovery": "预计复出：{{date}}",
+    "fixtureCongestion": "未来 {{days}} 天有 {{count}} 场比赛。最短间隔：{{gap}} 天。建议轮换阵容并降低训练强度。"
   }
 }

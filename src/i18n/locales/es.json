@@ -4420,6 +4420,7 @@
     "tactics": "Los nombres de las formaciones coinciden con el esquema aplicado. La posesión y los goles esperados siguen siendo fiables con valores importados o muy altos."
   },
   "phase73": {
-    "expectedRecovery": "Regreso estimado: {{date}}"
+    "expectedRecovery": "Regreso estimado: {{date}}",
+    "fixtureCongestion": "{{count}} partidos en los próximos {{days}} días. Intervalo mínimo: {{gap}} días. Considera rotar la plantilla y reducir el entrenamiento."
   }
 }

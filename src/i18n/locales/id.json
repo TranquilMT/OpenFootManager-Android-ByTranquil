@@ -4420,6 +4420,7 @@
     "tactics": "Nama formasi sesuai dengan susunan yang diterapkan. Penguasaan bola dan gol yang diharapkan tetap akurat dengan nilai impor atau sangat besar."
   },
   "phase73": {
-    "expectedRecovery": "Perkiraan kembali: {{date}}"
+    "expectedRecovery": "Perkiraan kembali: {{date}}",
+    "fixtureCongestion": "{{count}} pertandingan dalam {{days}} hari mendatang. Jeda terpendek: {{gap}} hari. Pertimbangkan rotasi pemain dan latihan lebih ringan."
   }
 }

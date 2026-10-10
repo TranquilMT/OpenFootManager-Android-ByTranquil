@@ -4420,6 +4420,7 @@
     "tactics": "Formation labels match the shape applied. Possession and expected-goals totals remain reliable with imported or unusually large values."
   },
   "phase73": {
-    "expectedRecovery": "Estimated return: {{date}}"
+    "expectedRecovery": "Estimated return: {{date}}",
+    "fixtureCongestion": "{{count}} fixtures in the next {{days}} days. Shortest gap: {{gap}} days. Consider squad rotation and lighter training."
   }
 }

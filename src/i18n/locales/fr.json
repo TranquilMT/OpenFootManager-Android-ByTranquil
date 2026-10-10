@@ -4420,6 +4420,7 @@
     "tactics": "Les noms des formations correspondent au dispositif appliqué. Possession et buts attendus restent fiables avec des valeurs importées ou très élevées."
   },
   "phase73": {
-    "expectedRecovery": "Retour estimé : {{date}}"
+    "expectedRecovery": "Retour estimé : {{date}}",
+    "fixtureCongestion": "{{count}} matchs dans les {{days}} prochains jours. Intervalle minimal : {{gap}} jours. Envisagez une rotation et un entraînement allégé."
   }
 }
