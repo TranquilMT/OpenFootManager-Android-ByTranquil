@@ -4258,7 +4258,7 @@
     "promisePaused": "Tenggat ditunda selama cedera",
     "promiseUnscheduled": "Tenggat menunggu jadwal pertandingan",
     "squadPlan": "Rencana skuad enam bulan",
-    "squadPlanHint": "Jika kontrak yang habis dalam 180 hari tidak diperpanjang, skuad senior tersisa {{count}} pemain. Cakupan posisi yang diproyeksikan ditampilkan di bawah.",
+    "squadPlanHint": "Setelah kontrak dan pinjaman masuk berakhir dalam 180 hari, perkiraan skuad senior: {{count}}. Cakupan posisi di bawah.",
     "noExpiringContracts": "Tidak ada kontrak senior yang habis dalam 180 hari.",
     "youthReviews": "Laporan perkembangan pemain muda",
     "promotionReady": "Pertimbangkan promosi ke tim senior",
@@ -4421,6 +4421,7 @@
   },
   "phase73": {
     "expectedRecovery": "Perkiraan kembali: {{date}}",
-    "fixtureCongestion": "{{count}} pertandingan dalam {{days}} hari mendatang. Jeda terpendek: {{gap}} hari. Pertimbangkan rotasi pemain dan latihan lebih ringan."
+    "fixtureCongestion": "{{count}} pertandingan dalam {{days}} hari mendatang. Jeda terpendek: {{gap}} hari. Pertimbangkan rotasi pemain dan latihan lebih ringan.",
+    "loanReturns": "Pengembalian pinjaman dalam 180 hari"
   }
 }

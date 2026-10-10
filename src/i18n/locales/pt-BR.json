@@ -4258,7 +4258,7 @@
     "promisePaused": "Prazo suspenso durante a lesão",
     "promiseUnscheduled": "O prazo aguarda jogos agendados",
     "squadPlan": "Plano do elenco para seis meses",
-    "squadPlanHint": "Sem renovar os contratos que terminam em 180 dias, o elenco profissional terá {{count}} jogadores. A cobertura prevista está abaixo.",
+    "squadPlanHint": "Após os términos de contratos e empréstimos em 180 dias, elenco principal previsto: {{count}}. Cobertura das posições abaixo.",
     "noExpiringContracts": "Nenhum contrato profissional termina em 180 dias.",
     "youthReviews": "Relatórios de desenvolvimento da base",
     "promotionReady": "Considerar promoção ao time profissional",
@@ -4421,6 +4421,7 @@
   },
   "phase73": {
     "expectedRecovery": "Retorno estimado: {{date}}",
-    "fixtureCongestion": "{{count}} jogos nos próximos {{days}} dias. Intervalo mínimo: {{gap}} dias. Considere rodar o elenco e reduzir a carga de treino."
+    "fixtureCongestion": "{{count}} jogos nos próximos {{days}} dias. Intervalo mínimo: {{gap}} dias. Considere rodar o elenco e reduzir a carga de treino.",
+    "loanReturns": "Retornos de empréstimos em 180 dias"
   }
 }

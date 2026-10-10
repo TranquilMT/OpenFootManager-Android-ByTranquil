@@ -4258,7 +4258,7 @@
     "promisePaused": "Frist während der Verletzung ausgesetzt",
     "promiseUnscheduled": "Frist wartet auf angesetzte Spiele",
     "squadPlan": "Kaderplan für sechs Monate",
-    "squadPlanHint": "Ohne Verlängerung der in 180 Tagen auslaufenden Verträge verbleiben {{count}} Profis. Die erwartete Rollenabdeckung steht unten.",
+    "squadPlanHint": "Nach Vertragsenden und Leihenden in 180 Tagen beträgt der geplante Profikader {{count}} Spieler. Positionsabdeckung siehe unten.",
     "noExpiringContracts": "Kein Profivertrag läuft innerhalb von 180 Tagen aus.",
     "youthReviews": "Entwicklungsberichte der Jugend",
     "promotionReady": "Beförderung zu den Profis erwägen",
@@ -4421,6 +4421,7 @@
   },
   "phase73": {
     "expectedRecovery": "Voraussichtliche Rückkehr: {{date}}",
-    "fixtureCongestion": "{{count}} Spiele in den nächsten {{days}} Tagen. Kürzester Abstand: {{gap}} Tage. Erwäge Rotation und leichteres Training."
+    "fixtureCongestion": "{{count}} Spiele in den nächsten {{days}} Tagen. Kürzester Abstand: {{gap}} Tage. Erwäge Rotation und leichteres Training.",
+    "loanReturns": "Leihrückkehr innerhalb von 180 Tagen"
   }
 }

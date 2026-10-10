@@ -4258,7 +4258,7 @@
     "promisePaused": "Termín je během zranění pozastaven",
     "promiseUnscheduled": "Termín čeká na naplánované zápasy",
     "squadPlan": "Plán kádru na šest měsíců",
-    "squadPlanHint": "Bez prodloužení smluv končících do 180 dnů zbude v prvním týmu {{count}} hráčů. Předpokládané pokrytí rolí je níže.",
+    "squadPlanHint": "Po vypršení smluv a hostování do 180 dnů má plánovaný seniorský kádr {{count}} hráčů. Pokrytí pozic je uvedeno níže.",
     "noExpiringContracts": "Žádná smlouva prvního týmu nekončí do 180 dnů.",
     "youthReviews": "Zprávy o vývoji mládeže",
     "promotionReady": "Zvážit povýšení do prvního týmu",
@@ -4421,6 +4421,7 @@
   },
   "phase73": {
     "expectedRecovery": "Odhadovaný návrat: {{date}}",
-    "fixtureCongestion": "{{count}} zápasů během příštích {{days}} dnů. Nejkratší rozestup: {{gap}} dnů. Zvažte rotaci sestavy a lehčí trénink."
+    "fixtureCongestion": "{{count}} zápasů během příštích {{days}} dnů. Nejkratší rozestup: {{gap}} dnů. Zvažte rotaci sestavy a lehčí trénink.",
+    "loanReturns": "Návraty z hostování do 180 dnů"
   }
 }

@@ -4258,7 +4258,7 @@
     "promisePaused": "Deadline paused while injured",
     "promiseUnscheduled": "Deadline awaits scheduled fixtures",
     "squadPlan": "Six-month squad plan",
-    "squadPlanHint": "If contracts due within 180 days are not renewed, senior squad size: {{count}}. Projected role coverage is shown below.",
+    "squadPlanHint": "After contracts due within 180 days and incoming loan returns, projected senior squad size: {{count}}. Role coverage is shown below.",
     "noExpiringContracts": "No senior contracts expire within 180 days.",
     "youthReviews": "Youth development reviews",
     "promotionReady": "Consider senior promotion",
@@ -4421,6 +4421,7 @@
   },
   "phase73": {
     "expectedRecovery": "Estimated return: {{date}}",
-    "fixtureCongestion": "{{count}} fixtures in the next {{days}} days. Shortest gap: {{gap}} days. Consider squad rotation and lighter training."
+    "fixtureCongestion": "{{count}} fixtures in the next {{days}} days. Shortest gap: {{gap}} days. Consider squad rotation and lighter training.",
+    "loanReturns": "Loan returns within 180 days"
   }
 }

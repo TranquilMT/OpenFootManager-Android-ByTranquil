@@ -4258,7 +4258,7 @@
     "promisePaused": "Prazo suspenso durante a lesão",
     "promiseUnscheduled": "O prazo aguarda jogos agendados",
     "squadPlan": "Plano do plantel a seis meses",
-    "squadPlanHint": "Sem renovar os contratos que terminam em 180 dias, o plantel sénior terá {{count}} jogadores. A cobertura prevista está abaixo.",
+    "squadPlanHint": "Após as expirações de contratos e empréstimos em 180 dias, plantel sénior previsto: {{count}}. Cobertura das posições abaixo.",
     "noExpiringContracts": "Nenhum contrato sénior termina em 180 dias.",
     "youthReviews": "Relatórios de desenvolvimento juvenil",
     "promotionReady": "Considerar promoção à equipa sénior",
@@ -4421,6 +4421,7 @@
   },
   "phase73": {
     "expectedRecovery": "Regresso estimado: {{date}}",
-    "fixtureCongestion": "{{count}} jogos nos próximos {{days}} dias. Intervalo mínimo: {{gap}} dias. Considere a rotação do plantel e treinos mais leves."
+    "fixtureCongestion": "{{count}} jogos nos próximos {{days}} dias. Intervalo mínimo: {{gap}} dias. Considere a rotação do plantel e treinos mais leves.",
+    "loanReturns": "Regressos de empréstimos em 180 dias"
   }
 }

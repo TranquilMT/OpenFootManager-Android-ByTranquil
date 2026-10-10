@@ -4258,7 +4258,7 @@
     "promisePaused": "Scadenza sospesa durante l’infortunio",
     "promiseUnscheduled": "Scadenza in attesa delle partite programmate",
     "squadPlan": "Piano rosa per sei mesi",
-    "squadPlanHint": "Senza rinnovare i contratti in scadenza entro 180 giorni, la prima squadra avrà {{count}} giocatori. La copertura prevista è indicata sotto.",
+    "squadPlanHint": "Dopo le scadenze di contratti e prestiti entro 180 giorni, rosa senior prevista: {{count}}. Copertura dei ruoli sotto.",
     "noExpiringContracts": "Nessun contratto della prima squadra scade entro 180 giorni.",
     "youthReviews": "Rapporti sullo sviluppo giovanile",
     "promotionReady": "Valuta la promozione in prima squadra",
@@ -4421,6 +4421,7 @@
   },
   "phase73": {
     "expectedRecovery": "Rientro previsto: {{date}}",
-    "fixtureCongestion": "{{count}} partite nei prossimi {{days}} giorni. Intervallo minimo: {{gap}} giorni. Valuta la rotazione e un allenamento più leggero."
+    "fixtureCongestion": "{{count}} partite nei prossimi {{days}} giorni. Intervallo minimo: {{gap}} giorni. Valuta la rotazione e un allenamento più leggero.",
+    "loanReturns": "Rientri dai prestiti entro 180 giorni"
   }
 }

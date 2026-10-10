@@ -4258,7 +4258,7 @@
     "promisePaused": "Sakatlık sırasında süre durdurulur",
     "promiseUnscheduled": "Son tarih maç programını bekliyor",
     "squadPlan": "Altı aylık kadro planı",
-    "squadPlanHint": "180 gün içinde bitecek sözleşmeler yenilenmezse A takımda {{count}} oyuncu kalır. Öngörülen mevki derinliği aşağıdadır.",
+    "squadPlanHint": "180 gün içinde bitecek sözleşmeler ve kiralıklar sonrası tahmini A takım büyüklüğü: {{count}}. Pozisyon kapsamı aşağıda.",
     "noExpiringContracts": "180 gün içinde sona erecek A takım sözleşmesi yok.",
     "youthReviews": "Genç oyuncu gelişim raporları",
     "promotionReady": "A takıma yükseltmeyi değerlendir",
@@ -4421,6 +4421,7 @@
   },
   "phase73": {
     "expectedRecovery": "Tahmini dönüş: {{date}}",
-    "fixtureCongestion": "Önümüzdeki {{days}} günde {{count}} maç. En kısa aralık: {{gap}} gün. Kadro rotasyonu ve daha hafif antrenman düşünün."
+    "fixtureCongestion": "Önümüzdeki {{days}} günde {{count}} maç. En kısa aralık: {{gap}} gün. Kadro rotasyonu ve daha hafif antrenman düşünün.",
+    "loanReturns": "180 gün içinde bitecek kiralıklar"
   }
 }

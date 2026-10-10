@@ -4258,7 +4258,7 @@
     "promisePaused": "受伤期间暂停期限",
     "promiseUnscheduled": "等待安排比赛后确定期限",
     "squadPlan": "六个月阵容规划",
-    "squadPlanHint": "若不续签180天内到期的合同，一线队将剩余 {{count}} 人。下方显示预计位置储备。",
+    "squadPlanHint": "计入 180 天内合同到期及租借球员离队后，一线队预计人数：{{count}}。位置覆盖情况如下。",
     "noExpiringContracts": "没有一线队合同将在180天内到期。",
     "youthReviews": "青训发展报告",
     "promotionReady": "可考虑提拔至一线队",
@@ -4421,6 +4421,7 @@
   },
   "phase73": {
     "expectedRecovery": "预计复出：{{date}}",
-    "fixtureCongestion": "未来 {{days}} 天有 {{count}} 场比赛。最短间隔：{{gap}} 天。建议轮换阵容并降低训练强度。"
+    "fixtureCongestion": "未来 {{days}} 天有 {{count}} 场比赛。最短间隔：{{gap}} 天。建议轮换阵容并降低训练强度。",
+    "loanReturns": "180 天内租借到期"
   }
 }
