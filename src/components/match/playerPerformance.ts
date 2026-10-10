@@ -5,6 +5,9 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
  const team = side === "Home" ? snapshot.home_team : snapshot.away_team;
  const bench = side === "Home" ? snapshot.home_bench : snapshot.away_bench;
  const used = new Set(snapshot.substitutions.filter(sub=>sub.side===side).flatMap(sub=>[sub.player_on_id,sub.player_off_id]));
+ for(const event of snapshot.events) {
+  if(event.side===side && event.player_id && ["RedCard","SecondYellow"].includes(event.event_type)) used.add(event.player_id);
+ }
  const active = new Set(team.players.map(player=>player.id));
  const seen = new Set<string>();
  return [...team.players,...bench].filter(player=>{
@@ -13,7 +16,13 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
  }).map(player=>{
   const own = snapshot.events.filter(event=>event.side===side && event.player_id===player.id);
   const metrics = matchMetrics(own,side);
-  return {id:player.id,name:player.name,goals:own.filter(event=>["Goal","PenaltyGoal"].includes(event.event_type)).length,
+  const substitutions = snapshot.substitutions.filter(sub=>sub.side===side);
+  const entered = substitutions.find(sub=>sub.player_on_id===player.id)?.minute ?? 0;
+  const left = substitutions.find(sub=>sub.player_off_id===player.id)?.minute;
+  const dismissed = own.find(event=>["RedCard","SecondYellow"].includes(event.event_type))?.minute;
+  const end = Math.min(snapshot.current_minute, left ?? Infinity, dismissed ?? Infinity);
+  const minutes = Math.max(0, end-entered);
+  return {id:player.id,name:player.name,minutes,goals:own.filter(event=>["Goal","PenaltyGoal"].includes(event.event_type)).length,
    assists:snapshot.events.filter(event=>event.side===side && event.event_type==="Goal" && event.secondary_player_id===player.id && event.player_id!==player.id).length,
    shots:metrics.shots,onTarget:metrics.onTarget,
    passes:own.filter(event=>event.event_type==="PassCompleted").length,

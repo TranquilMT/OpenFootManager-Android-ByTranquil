@@ -17,4 +17,19 @@ describe("recorded player match performance",()=>{
    expect(rows.find(row=>row.id==="keeper")?.assists).toBe(0);
    expect(rows.some(row=>row.id==="unused")).toBe(false);
  });
+
+ it("stops minutes at a dismissal and accounts for substitutes later replaced",()=>{
+  const snap=snapshot([event("SecondYellow","scorer",null,"Home",55)]);
+  snap.home_team.players=[player("helper")];
+  snap.home_bench=[player("scorer"),player("keeper"),player("unused")];
+  snap.substitutions=[{side:"Home",minute:60,player_off_id:"keeper",player_on_id:"helper"},
+    {side:"Home",minute:70,player_off_id:"helper",player_on_id:"unused"}];
+  const rows=playerMatchPerformance(snap,"Home");
+  expect(rows.find(row=>row.id==="scorer")?.minutes).toBe(55);
+  expect(rows.find(row=>row.id==="keeper")?.minutes).toBe(60);
+  expect(rows.find(row=>row.id==="helper")?.minutes).toBe(10);
+  expect(rows.find(row=>row.id==="unused")?.minutes).toBe(5);
+ });
+
+
 });
