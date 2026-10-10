@@ -386,4 +386,11 @@ describe("SubPanel", () => {
   });
 
 
+
+  it("explains recommendation reasons in the chip tooltip", () => {
+    render(<SubPanel {...createProps()}/>);
+    expect(screen.getAllByTestId(/^recommended-sub-/)[0]).toHaveAttribute("title", expect.stringContaining("match.subRecommendationReasons"));
+  });
+
+
 });
