@@ -5,10 +5,10 @@ import { Activity, SlidersHorizontal, ShieldCheck, Palette, Heart, Bug } from "l
 const ISSUE_URL = "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new";
 
 const HIGHLIGHT_KEYS = [
-  { key: "phase72.minutes", Icon: Palette },
-  { key: "phase72.stats", Icon: SlidersHorizontal },
-  { key: "phase72.fatigue", Icon: ShieldCheck },
-  { key: "phase72.tactics", Icon: Activity },
+  { key: "phase73.release.match", Icon: Palette },
+  { key: "phase73.release.squad", Icon: SlidersHorizontal },
+  { key: "phase73.release.finance", Icon: ShieldCheck },
+  { key: "phase73.release.reliability", Icon: Activity },
 ] as const;
 
 export function ReleaseNotes({ embedded = false }: { embedded?: boolean }) {

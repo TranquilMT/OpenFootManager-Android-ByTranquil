@@ -13,8 +13,7 @@ export function MatchEventFilters({
 }) {
   const { t } = useTranslation();
   return (
-    <div
-      role="group"
+    <fieldset
       aria-label={t("match.events")}
       className="touch-x flex shrink-0 gap-2 overflow-x-auto border-b border-gray-200 px-3 py-1 dark:border-navy-700"
     >
@@ -29,6 +28,6 @@ export function MatchEventFilters({
           {t(filter.key)} ({filterMatchEvents(events, filter.id).length})
         </button>
       ))}
-    </div>
+    </fieldset>
   );
 }

@@ -1783,7 +1783,7 @@
     "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
     "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
     "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
-    "patchWelcome": "OFMtouch 0.7.2 — Zápasový engine V2",
+    "patchWelcome": "OFMtouch 0.7.3 — Propojené herní systémy",
     "patchPortraits": "20 fiktivních výchozích tváří přináší pestřejší portréty hráčů.",
     "patchWorld": "Fotbalový svět zahrnuje 29 zemí a silnější kluby v Americe a Asii.",
     "patchTransfers": "Strategie klubů řídí hostování a přestupy včetně konkurenčních nabídek a kontroly rozpočtu.",
@@ -4422,6 +4422,12 @@
   "phase73": {
     "expectedRecovery": "Odhadovaný návrat: {{date}}",
     "fixtureCongestion": "{{count}} zápasů během příštích {{days}} dnů. Nejkratší rozestup: {{gap}} dnů. Zvažte rotaci sestavy a lehčí trénink.",
-    "loanReturns": "Návraty z hostování do 180 dnů"
+    "loanReturns": "Návraty z hostování do 180 dnů",
+    "release": {
+      "match": "Živé statistiky hráčů a hodnocení po zápase, přehlednější upozornění a chytřejší střídání.",
+      "squad": "Plánujte hostování, smlouvy a nabitý program s jasnější dostupností a daty návratu.",
+      "finance": "Spolehlivější prognózy hotovosti, odhady mezd a obchodní plánování.",
+      "reliability": "Bezpečnější zápasové příkazy, historie událostí a importovaná data s rozšířenými regresními testy."
+    }
   }
 }

@@ -1802,7 +1802,7 @@
     "patchPlayers": "Più giocatori di spicco, incluse rare stelle da 96 e squadre in lotta per la promozione.",
     "patchMatches": "Più reazioni, tiri sui legni e telecronaca vocale facoltativa.",
     "patchMobile": "Comandi mobili, posta, nazionali e inizio carriera migliorati.",
-    "patchWelcome": "OFMtouch 0.7.2 — Motore partita V2",
+    "patchWelcome": "OFMtouch 0.7.3 — Sistemi di gioco integrati",
     "patchPortraits": "20 volti fittizi di partenza rendono più vari i ritratti dei giocatori generati.",
     "patchWorld": "Un mondo calcistico più ampio copre 29 nazioni, con club più forti nelle Americhe e in Asia.",
     "patchTransfers": "Le strategie dei club guidano prestiti e trasferimenti, con offerte concorrenti e controlli sul budget.",
@@ -4422,6 +4422,12 @@
   "phase73": {
     "expectedRecovery": "Rientro previsto: {{date}}",
     "fixtureCongestion": "{{count}} partite nei prossimi {{days}} giorni. Intervallo minimo: {{gap}} giorni. Valuta la rotazione e un allenamento più leggero.",
-    "loanReturns": "Rientri dai prestiti entro 180 giorni"
+    "loanReturns": "Rientri dai prestiti entro 180 giorni",
+    "release": {
+      "match": "Statistiche dei giocatori in diretta e voti finali, avvisi più chiari e sostituzioni più intelligenti.",
+      "squad": "Pianifica prestiti, contratti e calendari intensi con disponibilità e date di recupero più chiare.",
+      "finance": "Previsioni di cassa, stime degli stipendi e pianificazione commerciale più affidabili.",
+      "reliability": "Comandi di partita, cronologia degli eventi e dati importati più sicuri, con test di regressione ampliati."
+    }
   }
 }

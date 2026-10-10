@@ -1783,7 +1783,7 @@
     "patchPlayers": "新增更多优秀球员，包括稀有的96分球星和升级热门球队。",
     "patchMatches": "比赛解说更加丰富，加入门框射门和可选语音解说。",
     "patchMobile": "改进移动端操作、收件箱、国家队与生涯创建。",
-    "patchWelcome": "OFMtouch 0.7.2 — 比赛引擎第二版",
+    "patchWelcome": "OFMtouch 0.7.3 — 整合游戏系统",
     "patchPortraits": "20 张虚构原始人脸让生成球员的肖像更加多样。",
     "patchWorld": "足球世界扩展至 29 个国家，美洲和亚洲的俱乐部实力也得到提升。",
     "patchTransfers": "俱乐部策略会影响租借和转会，包括竞争报价与预算检查。",
@@ -4422,6 +4422,12 @@
   "phase73": {
     "expectedRecovery": "预计复出：{{date}}",
     "fixtureCongestion": "未来 {{days}} 天有 {{count}} 场比赛。最短间隔：{{gap}} 天。建议轮换阵容并降低训练强度。",
-    "loanReturns": "180 天内租借到期"
+    "loanReturns": "180 天内租借到期",
+    "release": {
+      "match": "实时球员统计与赛后评分、更清晰的提醒以及更合理的换人建议。",
+      "squad": "通过更清晰的可用状态和康复日期，规划租借、合同和密集赛程。",
+      "finance": "更可靠的现金预测、工资估算和商业规划。",
+      "reliability": "更安全的比赛指令、事件记录和导入数据，并增加回归测试覆盖。"
+    }
   }
 }

@@ -2,10 +2,19 @@ import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { PatchHistoryModal } from "./PatchHistoryModal";
 
+vi.mock("../../lib/appVersion", () => ({ APP_VERSION: "0.7.3" }));
+
 vi.mock("react-i18next", () => ({ useTranslation: () => ({ t: (key: string) => key }) }));
 vi.mock("@tauri-apps/plugin-opener", () => ({ openUrl: vi.fn() }));
 
 describe("PatchHistoryModal", () => {
+  it("preserves 0.7.2 notes when the current update changes", () => {
+    render(<PatchHistoryModal onClose={vi.fn()} />);
+    const heading = screen.getByRole("heading", { name: "v0.7.2" });
+    expect(
+      within(heading.nextElementSibling as HTMLElement).getByText("phase72.minutes"),
+    ).toBeInTheDocument();
+  });
   it("keeps released highlights attached to their own version", () => {
     render(<PatchHistoryModal onClose={vi.fn()} />);
     expect(screen.getByRole("heading", { name: "v0.6.4" })).toBeTruthy();

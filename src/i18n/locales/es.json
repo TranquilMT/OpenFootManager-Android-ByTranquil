@@ -1783,7 +1783,7 @@
     "patchPlayers": "Más jugadores destacados, incluidas raras estrellas de 96 y aspirantes al ascenso.",
     "patchMatches": "Más reacciones, tiros al palo y narración de voz opcional.",
     "patchMobile": "Mejoras en controles móviles, bandeja de entrada, selecciones y carrera.",
-    "patchWelcome": "OFMtouch 0.7.2 — Motor de partidos V2",
+    "patchWelcome": "OFMtouch 0.7.3 — Sistemas de juego integrados",
     "patchPortraits": "20 rostros ficticios de origen aportan más variedad a los retratos de los jugadores.",
     "patchWorld": "Un mundo futbolístico más amplio abarca 29 países, con clubes más fuertes en América y Asia.",
     "patchTransfers": "Las estrategias de los clubes guían cesiones y fichajes, con ofertas rivales y controles del presupuesto.",
@@ -4422,6 +4422,12 @@
   "phase73": {
     "expectedRecovery": "Regreso estimado: {{date}}",
     "fixtureCongestion": "{{count}} partidos en los próximos {{days}} días. Intervalo mínimo: {{gap}} días. Considera rotar la plantilla y reducir el entrenamiento.",
-    "loanReturns": "Regresos de cesión en 180 días"
+    "loanReturns": "Regresos de cesión en 180 días",
+    "release": {
+      "match": "Estadísticas de jugadores en directo y valoraciones finales, alertas más claras y mejores sustituciones.",
+      "squad": "Planifica cesiones, contratos y calendarios exigentes con disponibilidad y fechas de recuperación más claras.",
+      "finance": "Previsiones de efectivo, estimaciones salariales y planificación comercial más fiables.",
+      "reliability": "Órdenes de partido, historial de eventos y datos importados más seguros, con más pruebas de regresión."
+    }
   }
 }

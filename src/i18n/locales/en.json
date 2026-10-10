@@ -1783,7 +1783,7 @@
     "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
     "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
     "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
-    "patchWelcome": "OFMtouch 0.7.2 — Match Engine V2",
+    "patchWelcome": "OFMtouch 0.7.3 — Integrated Gameplay",
     "patchPortraits": "20 fictional source faces bring more variety to generated player portraits.",
     "patchWorld": "A larger football world spans 29 nations, with stronger clubs across the Americas and Asia.",
     "patchTransfers": "Club strategies guide loans and transfer approaches, with competing offers and budget checks.",
@@ -4422,6 +4422,12 @@
   "phase73": {
     "expectedRecovery": "Estimated return: {{date}}",
     "fixtureCongestion": "{{count}} fixtures in the next {{days}} days. Shortest gap: {{gap}} days. Consider squad rotation and lighter training.",
-    "loanReturns": "Loan returns within 180 days"
+    "loanReturns": "Loan returns within 180 days",
+    "release": {
+      "match": "Live player statistics and full-time ratings, clearer alerts and smarter substitutions.",
+      "squad": "Plan loans, contracts and fixture congestion with clearer availability and recovery dates.",
+      "finance": "More reliable cash forecasts, wage estimates and commercial planning.",
+      "reliability": "Safer match commands, event history and imported data, with expanded regression coverage."
+    }
   }
 }

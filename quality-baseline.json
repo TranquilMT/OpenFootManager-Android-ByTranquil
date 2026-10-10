@@ -1,7 +1,7 @@
 {
   "oversizedAggregate": {
-    "rust": 63342,
-    "ts": 35604
+    "rust": 63351,
+    "ts": 36773
   },
   "allowedOversized": {
     "src-tauri/crates/db/src/repositories/player_repo.rs": 1091,
@@ -29,7 +29,7 @@
     "src-tauri/crates/ofm_core/tests/random_events_tests.rs": 1240,
     "src-tauri/crates/ofm_core/tests/training_tests.rs": 1139,
     "src-tauri/crates/ofm_core/tests/transfers_tests.rs": 3845,
-    "src-tauri/crates/ofm_core/tests/turn_tests.rs": 2076,
+    "src-tauri/crates/ofm_core/tests/turn_tests.rs": 2085,
     "src-tauri/crates/ofm-cli/src/main.rs": 1118,
     "src-tauri/src/commands/live_match.rs": 1110,
     "src-tauri/src/commands/package_editor.rs": 1392,
@@ -44,14 +44,15 @@
     "src/components/finances/FinancesTab.test.tsx": 931,
     "src/components/finances/FinancesTab.tsx": 1002,
     "src/components/home/HomeTab.helpers.test.ts": 704,
-    "src/components/inbox/InboxMessageDetailPane.tsx": 530,
-    "src/components/inbox/InboxTab.test.tsx": 1386,
-    "src/components/match/MatchLive.tsx": 690,
-    "src/components/match/PostMatchScreen.test.tsx": 709,
-    "src/components/match/PostMatchScreen.tsx": 800,
+    "src/components/inbox/InboxMessageDetailPane.tsx": 532,
+    "src/components/inbox/InboxTab.test.tsx": 1397,
+    "src/components/match/MatchLive.tsx": 860,
+    "src/components/match/PostMatchScreen.test.tsx": 789,
+    "src/components/match/PostMatchScreen.tsx": 817,
     "src/components/match/PreMatchSetup.tsx": 711,
     "src/components/match/RoundDigestScreen.tsx": 603,
-    "src/components/match/SubPanel.tsx": 633,
+    "src/components/match/SubPanel.test.tsx": 651,
+    "src/components/match/SubPanel.tsx": 721,
     "src/components/menu/PackageEditor/CompetitionForm.tsx": 591,
     "src/components/menu/PackageEditor/sampleData.ts": 578,
     "src/components/news/NewsTab.tsx": 593,
@@ -69,10 +70,10 @@
     "src/components/transfers/TransfersTab.model.test.ts": 540,
     "src/components/transfers/TransfersTab.test.tsx": 1607,
     "src/components/transfers/TransfersTab.tsx": 2095,
-    "src/components/youthAcademy/YouthAcademyTab.test.tsx": 524,
-    "src/components/youthAcademy/YouthAcademyTab.tsx": 702,
+    "src/components/youthAcademy/YouthAcademyTab.test.tsx": 573,
+    "src/components/youthAcademy/YouthAcademyTab.tsx": 703,
     "src/hooks/useEntityEditor.test.ts": 791,
-    "src/lib/helpers.test.ts": 752,
+    "src/lib/helpers.test.ts": 852,
     "src/pages/Dashboard.tsx": 626,
     "src/pages/MainMenu.test.tsx": 1048,
     "src/pages/MainMenu.tsx": 899,
@@ -95,10 +96,10 @@
   },
   "lintDebt": {
     "a11y/noLabelWithoutControl": 34,
-    "a11y/noStaticElementInteractions": 20,
+    "a11y/noStaticElementInteractions": 19,
     "a11y/useKeyWithClickEvents": 21,
     "a11y/useSemanticElements": 11,
-    "style/noNonNullAssertion": 65
+    "style/noNonNullAssertion": 64
   },
   "deadCode": {
     "unusedFiles": 0,
@@ -108,6 +109,6 @@
   },
   "antiPatterns": {
     "fullGameClones": 55,
-    "crossFeatureSquadImports": 41
+    "crossFeatureSquadImports": 42
   }
 }

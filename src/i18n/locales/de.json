@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "OFMtouch 0.7.2 — Spielsimulation V2",
+    "patchWelcome": "OFMtouch 0.7.3 — Integrierte Spielsysteme",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
@@ -4422,6 +4422,12 @@
   "phase73": {
     "expectedRecovery": "Voraussichtliche Rückkehr: {{date}}",
     "fixtureCongestion": "{{count}} Spiele in den nächsten {{days}} Tagen. Kürzester Abstand: {{gap}} Tage. Erwäge Rotation und leichteres Training.",
-    "loanReturns": "Leihrückkehr innerhalb von 180 Tagen"
+    "loanReturns": "Leihrückkehr innerhalb von 180 Tagen",
+    "release": {
+      "match": "Live-Spielerstatistiken und Bewertungen nach dem Spiel, klarere Hinweise und bessere Wechsel.",
+      "squad": "Plane Leihen, Verträge und enge Spielpläne mit klarerer Verfügbarkeit und Rückkehrterminen.",
+      "finance": "Zuverlässigere Finanzprognosen, Gehaltsschätzungen und Geschäftsplanung.",
+      "reliability": "Sicherere Spielbefehle, Ereignisverläufe und importierte Daten mit erweiterten Regressionstests."
+    }
   }
 }

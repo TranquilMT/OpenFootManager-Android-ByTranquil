@@ -398,7 +398,7 @@ describe("RoundDigestScreen", () => {
     const gameStateWithReport = {
       ...makeGameState(),
       league: {
-        ...makeGameState().league!,
+        ...makeGameState().league,
         fixtures: [
           {
             id: "fix2",

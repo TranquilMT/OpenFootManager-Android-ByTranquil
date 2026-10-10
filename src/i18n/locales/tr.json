@@ -1783,7 +1783,7 @@
     "patchPlayers": "Nadir 96 puanlı yıldızlar dahil daha fazla öne çıkan oyuncu.",
     "patchMatches": "Daha fazla maç tepkisi, direğe çarpan şutlar ve isteğe bağlı sesli anlatım.",
     "patchMobile": "Mobil kontroller, gelen kutusu, millî takımlar ve kariyer başlangıcı iyileştirildi.",
-    "patchWelcome": "OFMtouch 0.7.2 — Maç Motoru V2",
+    "patchWelcome": "OFMtouch 0.7.3 — Bütünleşik Oyun Sistemleri",
     "patchPortraits": "20 kurgusal kaynak yüz, üretilen oyuncu portrelerini daha çeşitli kılıyor.",
     "patchWorld": "Futbol dünyası 29 ülkeyi kapsıyor; Amerika ve Asya kulüpleri güçlendirildi.",
     "patchTransfers": "Kulüp stratejileri kiralık ve bonservisli transferleri, rakip teklifleri ve bütçe kontrollerini yönlendiriyor.",
@@ -4422,6 +4422,12 @@
   "phase73": {
     "expectedRecovery": "Tahmini dönüş: {{date}}",
     "fixtureCongestion": "Önümüzdeki {{days}} günde {{count}} maç. En kısa aralık: {{gap}} gün. Kadro rotasyonu ve daha hafif antrenman düşünün.",
-    "loanReturns": "180 gün içinde bitecek kiralıklar"
+    "loanReturns": "180 gün içinde bitecek kiralıklar",
+    "release": {
+      "match": "Canlı oyuncu istatistikleri ve maç sonu puanları, daha açık uyarılar ve daha akıllı oyuncu değişiklikleri.",
+      "squad": "Daha açık uygunluk ve iyileşme tarihleriyle kiralamaları, sözleşmeleri ve yoğun fikstürü planlayın.",
+      "finance": "Daha güvenilir nakit tahminleri, maaş hesaplamaları ve ticari planlama.",
+      "reliability": "Genişletilmiş regresyon testleriyle daha güvenli maç komutları, olay geçmişi ve içe aktarılan veriler."
+    }
   }
 }

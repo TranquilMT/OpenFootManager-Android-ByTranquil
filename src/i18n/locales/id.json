@@ -1783,7 +1783,7 @@
     "patchPlayers": "Lebih banyak pemain unggulan, termasuk bintang langka berperingkat 96.",
     "patchMatches": "Lebih banyak reaksi, tembakan membentur tiang, dan komentar suara opsional.",
     "patchMobile": "Kontrol seluler, kotak masuk, tim nasional, dan awal karier ditingkatkan.",
-    "patchWelcome": "OFMtouch 0.7.2 — Mesin Pertandingan V2",
+    "patchWelcome": "OFMtouch 0.7.3 — Sistem Permainan Terpadu",
     "patchPortraits": "20 wajah fiktif sumber membuat potret pemain hasil generasi lebih beragam.",
     "patchWorld": "Dunia sepak bola yang lebih luas mencakup 29 negara, dengan klub lebih kuat di Amerika dan Asia.",
     "patchTransfers": "Strategi klub memandu pinjaman dan transfer, dengan tawaran bersaing serta pemeriksaan anggaran.",
@@ -4422,6 +4422,12 @@
   "phase73": {
     "expectedRecovery": "Perkiraan kembali: {{date}}",
     "fixtureCongestion": "{{count}} pertandingan dalam {{days}} hari mendatang. Jeda terpendek: {{gap}} hari. Pertimbangkan rotasi pemain dan latihan lebih ringan.",
-    "loanReturns": "Pengembalian pinjaman dalam 180 hari"
+    "loanReturns": "Pengembalian pinjaman dalam 180 hari",
+    "release": {
+      "match": "Statistik pemain langsung dan penilaian akhir laga, peringatan lebih jelas serta pergantian lebih cerdas.",
+      "squad": "Rencanakan pinjaman, kontrak dan jadwal padat dengan ketersediaan serta tanggal pemulihan yang lebih jelas.",
+      "finance": "Proyeksi kas, perkiraan gaji dan perencanaan komersial yang lebih andal.",
+      "reliability": "Perintah pertandingan, riwayat kejadian dan data impor yang lebih aman dengan pengujian regresi lebih luas."
+    }
   }
 }

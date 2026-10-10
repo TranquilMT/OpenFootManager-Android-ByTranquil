@@ -51,7 +51,7 @@ describe("six-month squad plan", () => {
     const base = { ...createGameState().players[0], contract_end: "2028-01-01" };
     const loan = {
       parent_team_id: "parent",
-      loan_team_id: base.team_id!,
+      loan_team_id: base.team_id ?? "team1",
       start_date: "2026-07-01",
       end_date: "2026-09-01",
       wage_contribution_pct: 100,
@@ -67,7 +67,7 @@ describe("six-month squad plan", () => {
       ...base,
       active_loan: {
         parent_team_id: "parent",
-        loan_team_id: base.team_id!,
+        loan_team_id: base.team_id ?? "team1",
         start_date: "2026-07-01",
         end_date: "2026-09-01",
         wage_contribution_pct: 100,
