@@ -125,7 +125,7 @@ export default function YouthAcademyTab({
 
   const roster = fetchedSquad ?? gameState?.players.filter((p) => p.team_id === teamId) ?? [];
   const youthPlayers = roster
-    .filter((player) => isYouthAcademyPlayer(player))
+    .filter((player) => !player.retired && isYouthAcademyPlayer(player))
     .map((p) => ({
       ...p,
       age: calcAgeOnDate(p.date_of_birth, clockDate),
