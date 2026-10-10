@@ -551,17 +551,22 @@ describe("YouthAcademyTab", () => {
     expect(screen.queryByText("+-5")).not.toBeInTheDocument();
   });
 
- it("does not list retired academy players as available prospects",async()=>{
-  const state=createGameState([createPlayer({id:"retired",full_name:"Retired Prospect",squad_role:"Youth",retired:true})]);
-  mockedInvoke.mockImplementation(async(command:string)=>{
-   if(command==="get_squad")return state.players;
-   if(command==="get_staff")return makeEmptyStaffSlice();
-   return state;
+  it("does not list retired academy players as available prospects", async () => {
+    const state = createGameState([
+      createPlayer({
+        id: "retired",
+        full_name: "Retired Prospect",
+        squad_role: "Youth",
+        retired: true,
+      }),
+    ]);
+    mockedInvoke.mockImplementation(async (command: string) => {
+      if (command === "get_squad") return state.players;
+      if (command === "get_staff") return makeEmptyStaffSlice();
+      return state;
+    });
+    render(<YouthAcademyTab gameState={state} />);
+    await waitFor(() => expect(screen.getByText("No youth players")).toBeInTheDocument());
+    expect(screen.queryByText("Retired Prospect")).not.toBeInTheDocument();
   });
-  render(<YouthAcademyTab gameState={state}/>);
-  await waitFor(()=>expect(screen.getByText("No youth players")).toBeInTheDocument());
-  expect(screen.queryByText("Retired Prospect")).not.toBeInTheDocument();
- });
-
-
 });

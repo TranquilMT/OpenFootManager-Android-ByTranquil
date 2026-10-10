@@ -39,9 +39,12 @@ describe("playerSquad", () => {
     ).toBe(false);
   });
 
- it("does not delegate retired senior players",()=>{
-  expect(canDelegateToYouthAcademy({date_of_birth:"2008-01-01",squad_role:"Senior",retired:true},"2026-08-10")).toBe(false);
- });
-
-
+  it("does not delegate retired senior players", () => {
+    expect(
+      canDelegateToYouthAcademy(
+        { date_of_birth: "2008-01-01", squad_role: "Senior", retired: true },
+        "2026-08-10",
+      ),
+    ).toBe(false);
+  });
 });

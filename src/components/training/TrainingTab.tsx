@@ -126,7 +126,11 @@ export default function TrainingTab({ gameState, onGameUpdate }: TrainingTabProp
   const exhaustedCount = roster.filter((player) => player.condition < 40).length;
   const criticalCount = roster.filter((player) => player.condition < 25).length;
 
-  const congestion = fixtureCongestion(gameState ? getAllFixturesAcrossCompetitions(gameState) : [], teamId ?? "", clockDate);
+  const congestion = fixtureCongestion(
+    gameState ? getAllFixturesAcrossCompetitions(gameState) : [],
+    teamId ?? "",
+    clockDate,
+  );
   const todayWeekday = getWeekdayFromDate(clockDate);
   const trainingDays = SCHEDULE_TRAINING_DAYS[currentSchedule] || SCHEDULE_TRAINING_DAYS.Balanced;
   const isTodayTraining = trainingDays.includes(todayWeekday);
@@ -172,7 +176,15 @@ export default function TrainingTab({ gameState, onGameUpdate }: TrainingTabProp
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
       <div className="lg:col-span-2 flex flex-col gap-5">
-        {congestion.congested && <p className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-200">{t("phase73.fixtureCongestion", {count: congestion.count, days: congestion.days, gap: congestion.minGap ?? 0})}</p>}
+        {congestion.congested && (
+          <p className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-200">
+            {t("phase73.fixtureCongestion", {
+              count: congestion.count,
+              days: congestion.days,
+              gap: congestion.minGap ?? 0,
+            })}
+          </p>
+        )}
         {staffAdvice ? (
           <div
             className={`flex items-start gap-3 p-4 rounded-xl border-2 ${

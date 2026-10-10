@@ -15,7 +15,11 @@ interface PlayerProfileInjuryBannerProps {
   currentDate: string;
 }
 
-export default function PlayerProfileInjuryBanner({ injury, t, currentDate }: PlayerProfileInjuryBannerProps) {
+export default function PlayerProfileInjuryBanner({
+  injury,
+  t,
+  currentDate,
+}: PlayerProfileInjuryBannerProps) {
   const recoveryDate = estimatedRecoveryDate(currentDate, injury.days_remaining);
   return (
     <Card accent="danger" className="mb-5">
@@ -33,7 +37,11 @@ export default function PlayerProfileInjuryBanner({ injury, t, currentDate }: Pl
                 count: injury.days_remaining,
               })}
             </p>
-            {recoveryDate && <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{t("phase73.expectedRecovery", {date: recoveryDate})}</p>}
+            {recoveryDate && (
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                {t("phase73.expectedRecovery", { date: recoveryDate })}
+              </p>
+            )}
           </div>
         </div>
       </CardBody>

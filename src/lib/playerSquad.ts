@@ -20,7 +20,8 @@ export function canDelegateToYouthAcademy(
   asOfDate?: string,
 ): boolean {
   return (
-    !player.retired && isSeniorSquadPlayer(player) &&
+    !player.retired &&
+    isSeniorSquadPlayer(player) &&
     (asOfDate ? calcAgeOnDate(player.date_of_birth, asOfDate) : calcAge(player.date_of_birth)) <= 21
   );
 }

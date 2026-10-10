@@ -1,3 +1,4 @@
+import { getUserCompetition } from "./fixtures";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
   getTeamName,
@@ -749,52 +750,61 @@ describe("isSeasonComplete with unplayed season", () => {
     expect(isSeasonComplete(league)).toBe(false);
   });
 
- it("skips undated fixtures instead of hiding the next playable match",()=>{
-  const fixtures=[makeFixture({id:"bad",date:"",home_team_id:"team_1"}),makeFixture({id:"valid",date:"2026-08-12",home_team_id:"team_1"})];
-  expect(findNextFixture(fixtures,"team_1")?.id).toBe("valid");
- });
+  it("skips undated fixtures instead of hiding the next playable match", () => {
+    const fixtures = [
+      makeFixture({ id: "bad", date: "", home_team_id: "team_1" }),
+      makeFixture({ id: "valid", date: "2026-08-12", home_team_id: "team_1" }),
+    ];
+    expect(findNextFixture(fixtures, "team_1")?.id).toBe("valid");
+  });
 
+  it("orders timestamp fixtures by actual kickoff rather than offset spelling", () => {
+    const fixtures = [
+      makeFixture({ id: "later", date: "2026-08-12T00:00:00-05:00", home_team_id: "team_1" }),
+      makeFixture({ id: "earlier", date: "2026-08-12T02:00:00Z", home_team_id: "team_1" }),
+    ];
+    expect(findNextFixture(fixtures, "team_1")?.id).toBe("earlier");
+  });
 
+  it("does not accept a full-count schedule containing a self-match", () => {
+    const league = makeFullScheduledLeague();
+    league.fixtures[0].away_team_id = league.fixtures[0].home_team_id;
+    expect(hasFullLeagueSchedule(league)).toBe(false);
+  });
 
- it("orders timestamp fixtures by actual kickoff rather than offset spelling",()=>{
-  const fixtures=[
-   makeFixture({id:"later",date:"2026-08-12T00:00:00-05:00",home_team_id:"team_1"}),
-   makeFixture({id:"earlier",date:"2026-08-12T02:00:00Z",home_team_id:"team_1"}),
-  ];
-  expect(findNextFixture(fixtures,"team_1")?.id).toBe("earlier");
- });
+  it("does not complete a league using fixtures involving an unrelated club", () => {
+    const league = makeFullScheduledLeague();
+    league.fixtures[0].home_team_id = "foreign";
+    expect(hasFullLeagueSchedule(league)).toBe(false);
+  });
 
+  it("does not accept duplicated fixture identities as a complete schedule", () => {
+    const league = makeFullScheduledLeague();
+    league.fixtures[1].id = league.fixtures[0].id;
+    expect(hasFullLeagueSchedule(league)).toBe(false);
+  });
 
+  it("does not declare a complete schedule when a fixture has no usable date", () => {
+    const league = makeFullScheduledLeague();
+    league.fixtures[0].date = "2026-02-30";
+    expect(hasFullLeagueSchedule(league)).toBe(false);
+  });
 
- it("does not accept a full-count schedule containing a self-match",()=>{
-  const league=makeFullScheduledLeague();
-  league.fixtures[0].away_team_id=league.fixtures[0].home_team_id;
-  expect(hasFullLeagueSchedule(league)).toBe(false);
- });
-
-
-
- it("does not complete a league using fixtures involving an unrelated club",()=>{
-  const league=makeFullScheduledLeague();
-  league.fixtures[0].home_team_id="foreign";
-  expect(hasFullLeagueSchedule(league)).toBe(false);
- });
-
-
-
- it("does not accept duplicated fixture identities as a complete schedule",()=>{
-  const league=makeFullScheduledLeague();
-  league.fixtures[1].id=league.fixtures[0].id;
-  expect(hasFullLeagueSchedule(league)).toBe(false);
- });
-
-
-
- it("does not declare a complete schedule when a fixture has no usable date",()=>{
-  const league=makeFullScheduledLeague();
-  league.fixtures[0].date="2026-02-30";
-  expect(hasFullLeagueSchedule(league)).toBe(false);
- });
-
-
+  it("uses the manager's legacy league before an active cup as table source", () => {
+    const legacy = makeFullScheduledLeague();
+    const cup = {
+      ...legacy,
+      id: "cup",
+      kind: "DomesticCup",
+      scope: "Domestic",
+      fixtures: [],
+      participant_ids: ["team_1"],
+    } as unknown as typeof legacy;
+    const state = {
+      manager: { team_id: "team_1" },
+      competitions: [cup],
+      league: legacy,
+    } as unknown as GameStateData;
+    expect(getUserCompetition(state)?.id).toBe(legacy.id);
+  });
 });

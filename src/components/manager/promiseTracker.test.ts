@@ -27,20 +27,25 @@ describe("expected playing-time promise deadline", () => {
     expect(expectedPromiseDeadline(matches, "ours", "2026-08-10", 2, false)).toBeNull();
   });
 
- it("includes a fixture on the current calendar day",()=>{
-  expect(expectedPromiseDeadline([fixture("one","2026-08-10")],"ours","2026-08-10T15:00:00Z",1,false)).toBe("2026-08-10");
- });
+  it("includes a fixture on the current calendar day", () => {
+    expect(
+      expectedPromiseDeadline(
+        [fixture("one", "2026-08-10")],
+        "ours",
+        "2026-08-10T15:00:00Z",
+        1,
+        false,
+      ),
+    ).toBe("2026-08-10");
+  });
 
-
-
-
-
-
-
- it("projects the first actual kickoff when timestamp offsets differ",()=>{
-  const fixtures=[fixture("later","2026-08-12T00:00:00-05:00"),fixture("earlier","2026-08-12T02:00:00Z")];
-  expect(expectedPromiseDeadline(fixtures,"ours","2026-08-10",1,false)).toBe("2026-08-12T02:00:00Z");
- });
-
-
+  it("projects the first actual kickoff when timestamp offsets differ", () => {
+    const fixtures = [
+      fixture("later", "2026-08-12T00:00:00-05:00"),
+      fixture("earlier", "2026-08-12T02:00:00Z"),
+    ];
+    expect(expectedPromiseDeadline(fixtures, "ours", "2026-08-10", 1, false)).toBe(
+      "2026-08-12T02:00:00Z",
+    );
+  });
 });
