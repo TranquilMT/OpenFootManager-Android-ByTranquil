@@ -160,4 +160,12 @@ describe("truthful match narratives", () => {
   });
 
 
+
+  it("ignores future-clock shots in imported event prefixes", () => {
+    const shot = event("ShotSaved",80);
+    const corner = event("Corner",70);
+    expect(eventContext(corner,[shot,corner]).recentShots).toBe(0);
+  });
+
+
 });
