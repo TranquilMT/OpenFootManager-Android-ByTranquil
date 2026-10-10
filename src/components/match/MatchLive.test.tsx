@@ -245,14 +245,22 @@ describe("live match decisions", () => {
     expect(screen.getByText("match.viewDetails")).toBeInTheDocument();
   });
 
- it("opens the recorded player statistics panel through its live match tab",()=>{
-  render(<MatchLive snapshot={snapshot} gameState={{teams:[],players:[]} as unknown as GameStateData}
-   userSide="Home" isSpectator={false} importantEvents={[]} onSnapshotUpdate={vi.fn()}
-   onImportantEvent={vi.fn()} onHalfTime={vi.fn()} onFullTime={vi.fn()}/>);
-  fireEvent.click(screen.getByRole("tab",{name:"match.player match.stats"}));
-  expect(screen.getByRole("table",{name:"Home FC"})).toBeInTheDocument();
-  expect(screen.getByRole("tabpanel")).toHaveAttribute("aria-labelledby","match-tab-players");
- });
-
-
+  it("opens the recorded player statistics panel through its live match tab", () => {
+    render(
+      <MatchLive
+        snapshot={snapshot}
+        gameState={{ teams: [], players: [] } as unknown as GameStateData}
+        userSide="Home"
+        isSpectator={false}
+        importantEvents={[]}
+        onSnapshotUpdate={vi.fn()}
+        onImportantEvent={vi.fn()}
+        onHalfTime={vi.fn()}
+        onFullTime={vi.fn()}
+      />,
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "match.player match.stats" }));
+    expect(screen.getByRole("table", { name: "Home FC" })).toBeInTheDocument();
+    expect(screen.getByRole("tabpanel")).toHaveAttribute("aria-labelledby", "match-tab-players");
+  });
 });

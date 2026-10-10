@@ -164,8 +164,7 @@ export function SubPanel({
   };
 
   const handleSelectBenchPlayer = (playerId: string) => {
-    if (pending || !selectedOff || subsMade >= snapshot.max_subs || decisionClosed)
-      return;
+    if (pending || !selectedOff || subsMade >= snapshot.max_subs || decisionClosed) return;
     setSelectedBench((cur) => (cur === playerId ? null : playerId));
   };
 
@@ -276,7 +275,17 @@ export function SubPanel({
                     type="button"
                     data-testid={`recommended-sub-${rec.offId}-${rec.onId}`}
                     disabled={pending}
-                    title={rec.reasons.map((reason) => t(`match.subRecommendationReasons.${reason}`)).join(", ")}
+                    title={[
+                      ...(snapshot.events.some(
+                        (event) =>
+                          event.side === side &&
+                          event.event_type === "Injury" &&
+                          event.player_id === rec.offId,
+                      )
+                        ? [t("match.eventTypes.Injury")]
+                        : []),
+                      ...rec.reasons.map((reason) => t(`match.subRecommendationReasons.${reason}`)),
+                    ].join(", ")}
                     onClick={() => handleApplyRecommendation(rec.offId, rec.onId)}
                     className="flex items-center gap-1 rounded-full border border-gray-200 bg-white px-2 py-0.5 font-heading text-[10px] font-bold transition-colors hover:border-primary-400 hover:bg-primary-50 dark:border-navy-600 dark:bg-navy-800 dark:hover:bg-navy-700"
                   >

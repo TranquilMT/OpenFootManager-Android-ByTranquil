@@ -356,27 +356,36 @@ describe("SubPanel", () => {
 
   it("offers injury cover even when the reserve is weaker and has another role", () => {
     const snap = createSnapshot();
-    snap.home_team.players = [makePlayer({id:"injured",position:"Midfielder",condition:100,ovr:90})];
-    snap.home_bench = [makePlayer({id:"cover",position:"Defender",condition:80,ovr:50})];
-    snap.events = [{minute:30,event_type:"Injury",side:"Home",zone:"Midfield",player_id:"injured",secondary_player_id:null}];
-    expect(buildRecommendedSubstitutions(snap,"Home")[0]).toMatchObject({offId:"injured",onId:"cover"});
+    snap.home_team.players = [
+      makePlayer({ id: "injured", position: "Midfielder", condition: 100, ovr: 90 }),
+    ];
+    snap.home_bench = [makePlayer({ id: "cover", position: "Defender", condition: 80, ovr: 50 })];
+    snap.events = [
+      {
+        minute: 30,
+        event_type: "Injury",
+        side: "Home",
+        zone: "Midfield",
+        player_id: "injured",
+        secondary_player_id: null,
+      },
+    ];
+    expect(buildRecommendedSubstitutions(snap, "Home")[0]).toMatchObject({
+      offId: "injured",
+      onId: "cover",
+    });
   });
-
-
 
   it("does not recommend substitutions once a penalty shootout has started", () => {
-    const snap = createSnapshot(); snap.phase = "PenaltyShootout";
-    expect(buildRecommendedSubstitutions(snap,"Home")).toEqual([]);
+    const snap = createSnapshot();
+    snap.phase = "PenaltyShootout";
+    expect(buildRecommendedSubstitutions(snap, "Home")).toEqual([]);
   });
-
-
 
   it("disables the recommended tactical plan during a pending command", () => {
     render(<SubPanel {...createProps()} pending />);
     expect(screen.getByTestId("recommended-plan-cta")).toBeDisabled();
   });
-
-
 
   it("locks recommendation chips during a pending command", () => {
     render(<SubPanel {...createProps()} pending />);
@@ -385,23 +394,46 @@ describe("SubPanel", () => {
     for (const chip of chips) expect(chip).toBeDisabled();
   });
 
-
-
   it("explains recommendation reasons in the chip tooltip", () => {
-    render(<SubPanel {...createProps()}/>);
-    expect(screen.getAllByTestId(/^recommended-sub-/)[0]).toHaveAttribute("title", expect.stringContaining("match.subRecommendationReasons"));
+    render(<SubPanel {...createProps()} />);
+    expect(screen.getAllByTestId(/^recommended-sub-/)[0]).toHaveAttribute(
+      "title",
+      expect.stringContaining("match.subRecommendationReasons"),
+    );
   });
 
+  it("locks shared decision controls during a penalty shootout", () => {
+    const props = createProps();
+    props.snapshot.phase = "PenaltyShootout";
+    render(<SubPanel {...props} />);
+    expect(screen.getByRole("combobox", { name: "tactics.formation" })).toBeDisabled();
+    expect(screen.getByRole("combobox", { name: "tactics.playStyle" })).toBeDisabled();
+    fireEvent.click(screen.getByTestId("sub-panel-off-starter-1"));
+    expect(screen.getByTestId("sub-panel-off-starter-1")).toHaveAttribute("aria-pressed", "false");
+  });
 
-
- it("locks shared decision controls during a penalty shootout",()=>{
-  const props=createProps();props.snapshot.phase="PenaltyShootout";
-  render(<SubPanel {...props}/>);
-  expect(screen.getByRole("combobox",{name:"tactics.formation"})).toBeDisabled();
-  expect(screen.getByRole("combobox",{name:"tactics.playStyle"})).toBeDisabled();
-  fireEvent.click(screen.getByTestId("sub-panel-off-starter-1"));
-  expect(screen.getByTestId("sub-panel-off-starter-1")).toHaveAttribute("aria-pressed","false");
- });
-
-
+  it("explains injury replacements without inventing a fitness or quality gain", () => {
+    const props = createProps();
+    props.snapshot.home_team.players = [
+      makePlayer({ id: "injured", position: "Midfielder", condition: 100, ovr: 90 }),
+    ];
+    props.snapshot.home_bench = [
+      makePlayer({ id: "cover", position: "Defender", condition: 80, ovr: 50 }),
+    ];
+    props.snapshot.events = [
+      {
+        minute: 30,
+        event_type: "Injury",
+        side: "Home",
+        zone: "Midfield",
+        player_id: "injured",
+        secondary_player_id: null,
+      },
+    ];
+    render(<SubPanel {...props} />);
+    expect(screen.getByTestId("recommended-sub-injured-cover")).toHaveAttribute(
+      "title",
+      "match.eventTypes.Injury",
+    );
+  });
 });

@@ -488,7 +488,11 @@ export default function MatchLive({
                 label: t("match.lineups"),
                 icon: <Users className="w-4 h-4" />,
               },
-              {id: "players" as ActivePanel, label: `${t("match.player")} ${t("match.stats")}`, icon: <BarChart3 className="w-4 h-4"/>},
+              {
+                id: "players" as ActivePanel,
+                label: `${t("match.player")} ${t("match.stats")}`,
+                icon: <BarChart3 className="w-4 h-4" />,
+              },
             ].map((tab) => (
               <button
                 type="button"
@@ -586,7 +590,9 @@ export default function MatchLive({
               />
             )}
             {activePanel === "stats" && <MatchStats snapshot={snapshot} />}
-            {activePanel === "players" && <PlayerMatchPerformance snapshot={snapshot} playerJerseyMap={playerJerseyMap}/>}
+            {activePanel === "players" && (
+              <PlayerMatchPerformance snapshot={snapshot} playerJerseyMap={playerJerseyMap} />
+            )}
             {activePanel === "lineups" && (
               <Lineups snapshot={snapshot} playerJerseyMap={playerJerseyMap} />
             )}

@@ -155,33 +155,25 @@ describe("truthful match narratives", () => {
   });
 
   it("does not assign a four-goal haul to unrecorded scorers", () => {
-    const events = [10,20,30,40].map(m=>({...event("Goal",m),player_id:null}));
-    expect(narrativeKey(events[3],events)).not.toBe("fourGoals");
+    const events = [10, 20, 30, 40].map((m) => ({ ...event("Goal", m), player_id: null }));
+    expect(narrativeKey(events[3], events)).not.toBe("fourGoals");
   });
-
-
 
   it("ignores future-clock shots in imported event prefixes", () => {
-    const shot = event("ShotSaved",80);
-    const corner = event("Corner",70);
-    expect(eventContext(corner,[shot,corner]).recentShots).toBe(0);
+    const shot = event("ShotSaved", 80);
+    const corner = event("Corner", 70);
+    expect(eventContext(corner, [shot, corner]).recentShots).toBe(0);
   });
-
-
 
   it("does not link an unattributed injury to an unspecified substitution", () => {
-    const injury = {...event("Injury",30),player_id:null};
-    const sub = event("Substitution",31);
-    expect(eventContext(sub,[injury,sub]).injuryChange).toBe(false);
+    const injury = { ...event("Injury", 30), player_id: null };
+    const sub = event("Substitution", 31);
+    expect(eventContext(sub, [injury, sub]).injuryChange).toBe(false);
   });
-
-
 
   it("matches a copied event to its recorded shot rather than another same-minute attempt", () => {
-    const a = {...event("ShotSaved",30),shot:{expected_goals:0.1,goalkeeper_id:"gk"}};
-    const b = {...a,shot:{expected_goals:0.5,goalkeeper_id:"gk"}};
-    expect(eventContext({...b},[a,b]).recentShots).toBe(1);
+    const a = { ...event("ShotSaved", 30), shot: { expected_goals: 0.1, goalkeeper_id: "gk" } };
+    const b = { ...a, shot: { expected_goals: 0.5, goalkeeper_id: "gk" } };
+    expect(eventContext({ ...b }, [a, b]).recentShots).toBe(1);
   });
-
-
 });

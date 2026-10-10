@@ -2,7 +2,10 @@
 export function formatMatchMinute(phase: string, minute: number): string {
   const value = Number.isFinite(minute) ? Math.max(0, Math.floor(minute)) : 0;
   const boundaries: Record<string, number> = {
-    HalfTime: 45, FullTime: 90, ExtraTimeHalfTime: 105, ExtraTimeEnd: 120,
+    HalfTime: 45,
+    FullTime: 90,
+    ExtraTimeHalfTime: 105,
+    ExtraTimeEnd: 120,
     FirstHalf: 45,
     SecondHalf: 90,
     ExtraTimeFirstHalf: 105,

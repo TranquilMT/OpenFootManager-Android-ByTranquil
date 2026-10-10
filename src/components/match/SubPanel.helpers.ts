@@ -194,7 +194,8 @@ export function buildRecommendedSubstitutions(
   const { team, yellows } = getTeamState(snapshot, side);
   const subsMade = side === "Home" ? snapshot.home_subs_made : snapshot.away_subs_made;
   const remaining = Math.max(0, snapshot.max_subs - subsMade);
-  if (snapshot.phase === "Finished" || snapshot.phase === "PenaltyShootout" || remaining === 0) return [];
+  if (snapshot.phase === "Finished" || snapshot.phase === "PenaltyShootout" || remaining === 0)
+    return [];
   const scenario = getMatchScenario(snapshot, side);
 
   const activePlayers = team.players.filter((player) => !snapshot.sent_off.includes(player.id));
