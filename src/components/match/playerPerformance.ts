@@ -5,9 +5,9 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
   const events = snapshot.events.filter((event) => Number.isFinite(event.minute) && event.minute >= 0 && event.minute <= snapshot.current_minute);
   const team = side === "Home" ? snapshot.home_team : snapshot.away_team;
   const bench = side === "Home" ? snapshot.home_bench : snapshot.away_bench;
+  const substitutions = snapshot.substitutions.filter((sub) => sub.side === side && Number.isFinite(sub.minute) && sub.minute >= 0 && sub.minute <= snapshot.current_minute);
   const used = new Set(
-    snapshot.substitutions
-      .filter((sub) => sub.side === side)
+    substitutions
       .flatMap((sub) => [sub.player_on_id, sub.player_off_id]),
   );
   for (const event of events) {
@@ -32,7 +32,6 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
         (event) => event.side === side && event.player_id === player.id,
       );
       const metrics = matchMetrics(own, side);
-      const substitutions = snapshot.substitutions.filter((sub) => sub.side === side);
       const entered = substitutions.find((sub) => sub.player_on_id === player.id)?.minute ?? 0;
       const left = substitutions.find((sub) => sub.player_off_id === player.id)?.minute;
       const dismissed = own.reduce((earliest, event) =>

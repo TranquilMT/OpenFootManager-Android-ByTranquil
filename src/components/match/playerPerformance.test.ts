@@ -90,4 +90,9 @@ describe("recorded player match performance", () => {
       event("SecondYellow", "scorer", null, "Home", 55)]);
     expect(playerMatchPerformance(snap, "Home").find((row) => row.id === "scorer")?.minutes).toBe(55);
   });
+  it("does not show a reserve before their recorded substitution takes place", () => {
+    const snap = snapshot();
+    snap.substitutions = [{side:"Home", minute:80, player_off_id:"scorer", player_on_id:"unused"}];
+    expect(playerMatchPerformance(snap,"Home").some(row => row.id === "unused")).toBe(false);
+  });
 });
