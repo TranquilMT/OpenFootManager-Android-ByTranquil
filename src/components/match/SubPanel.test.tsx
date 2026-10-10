@@ -141,6 +141,17 @@ function createSnapshot(): MatchSnapshot {
 }
 
 describe("SubPanel", () => {
+  it("emergency goalkeeper cover uses handling and reflexes", () => {
+    const snapshot = createSnapshot();
+    snapshot.home_team.players = [
+      makePlayer({ id: "starter-1", position: "Goalkeeper", condition: 20 }),
+    ];
+    snapshot.home_bench = [
+      makePlayer({ id: "star", ovr: 95, condition: 90, handling: 10, reflexes: 10 }),
+      makePlayer({ id: "cover", ovr: 65, condition: 90, handling: 80, reflexes: 75 }),
+    ];
+    expect(buildRecommendedSubstitutions(snapshot, "Home")[0]?.onId).toBe("cover");
+  });
   it("prefers an adjacent defensive role over an unrelated midfield replacement", () => {
     const snapshot = createSnapshot();
     snapshot.home_team.players = [

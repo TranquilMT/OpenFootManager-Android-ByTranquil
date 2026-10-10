@@ -136,7 +136,9 @@ function buildBenchPriority(
   const qualityBonus = candidate.ovr * 0.7;
   const scenarioBonus = getPositionPriority(candidate.position, scenario) * 6;
 
-  return exactRoleBonus + fitnessBonus + qualityBonus + scenarioBonus;
+  const keeperCover =
+    offPlayer.position === "Goalkeeper" ? (candidate.handling + candidate.reflexes) * 0.4 : 0;
+  return exactRoleBonus + fitnessBonus + qualityBonus + scenarioBonus + keeperCover;
 }
 
 export function getMatchScenario(snapshot: MatchSnapshot, side: "Home" | "Away"): MatchScenario {
