@@ -16,22 +16,20 @@ export function matchAlerts(snapshot: MatchSnapshot, side: "Home" | "Away"): Mat
       event.minute >= 0 &&
       event.minute <= snapshot.current_minute,
   );
-  const latestTactics = snapshot.events.reduce(
-    (latest, event, index) =>
-      event.side === side &&
-      event.event_type === "TacticalChange" &&
-      Number.isFinite(event.minute) &&
-      event.minute >= 0 &&
-      event.minute <= snapshot.current_minute
-        ? index
-        : latest,
-    -1,
-  );
   const dismissals: MatchAlert[] = events
     .filter(
       (event) =>
         ["RedCard", "SecondYellow"].includes(event.event_type) &&
-        snapshot.events.indexOf(event) > latestTactics,
+        !snapshot.events.some(
+          (response, index) =>
+            response.side === side &&
+            response.event_type === "TacticalChange" &&
+            Number.isFinite(response.minute) &&
+            response.minute >= 0 &&
+            response.minute <= snapshot.current_minute &&
+            (response.minute > event.minute ||
+              (response.minute === event.minute && index > snapshot.events.indexOf(event))),
+        ),
     )
     .map((event) => ({ event, action: "tactics", priority: 3 }));
   const injuries: MatchAlert[] = events

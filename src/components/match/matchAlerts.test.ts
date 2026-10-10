@@ -30,6 +30,20 @@ const snap = (events: MatchEvent[]) =>
     substitutions: [],
   }) as unknown as MatchSnapshot;
 describe("actionable match alerts", () => {
+  it("uses match chronology when tactical records arrive out of order", () => {
+    expect(
+      matchAlerts(
+        snap([event("TacticalChange", "manager", 35), event("RedCard", "dismissed", 30)]),
+        "Home",
+      ),
+    ).toEqual([]);
+    expect(
+      matchAlerts(
+        snap([event("RedCard", "dismissed", 30), event("TacticalChange", "manager", 15)]),
+        "Home",
+      ),
+    ).toHaveLength(1);
+  });
   it("does not let a malformed tactical timestamp clear a dismissal", () => {
     const snapshot = snap([
       event("RedCard", "dismissed", 30),
