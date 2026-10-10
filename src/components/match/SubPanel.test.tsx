@@ -141,6 +141,16 @@ function createSnapshot(): MatchSnapshot {
 }
 
 describe("SubPanel", () => {
+  it("explains exact positional cover across imported position aliases", () => {
+    expect(
+      buildRecommendationReasons({
+        benchPlayer: makePlayer({ position: "CB" }),
+        offPlayer: makePlayer({ position: "CenterBack" }),
+        scenario: "steady",
+        yellowCount: 0,
+      }),
+    ).toContain("role-match");
+  });
   it("unbounded keeper attributes cannot dominate emergency cover", () => {
     const snapshot = createSnapshot();
     snapshot.max_subs = 1;

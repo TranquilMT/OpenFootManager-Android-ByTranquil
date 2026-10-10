@@ -1,4 +1,4 @@
-import { normalisePosition } from "../squad/SquadTab.helpers";
+import { canonicalPosition, normalisePosition } from "../squad/SquadTab.helpers";
 import type { EnginePlayerData, MatchSnapshot } from "./types";
 
 export type MatchScenarioId = "steady" | "protect-lead" | "find-winner" | "chase-goal";
@@ -130,7 +130,7 @@ function buildBenchPriority(
   scenario: MatchScenarioId,
 ): number {
   const exactRoleBonus =
-    candidate.position === offPlayer.position
+    canonicalPosition(candidate.position) === canonicalPosition(offPlayer.position)
       ? 24
       : normalisePosition(candidate.position) === normalisePosition(offPlayer.position)
         ? 12
@@ -204,7 +204,7 @@ export function buildRecommendationReasons(options: {
     reasons.push("upgrade");
   }
 
-  if (benchPlayer.position === offPlayer.position) {
+  if (canonicalPosition(benchPlayer.position) === canonicalPosition(offPlayer.position)) {
     reasons.push("role-match");
   }
 
