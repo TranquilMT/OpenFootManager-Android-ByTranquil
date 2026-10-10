@@ -85,4 +85,9 @@ describe("recorded player match performance", () => {
     goal.player_id = null;
     expect(playerMatchPerformance(snapshot([goal]), "Home").find((row) => row.id === "helper")?.assists).toBe(0);
   });
+  it("uses the first dismissal chronologically when recorded events are reordered", () => {
+    const snap = snapshot([event("RedCard", "scorer", null, "Home", 65),
+      event("SecondYellow", "scorer", null, "Home", 55)]);
+    expect(playerMatchPerformance(snap, "Home").find((row) => row.id === "scorer")?.minutes).toBe(55);
+  });
 });

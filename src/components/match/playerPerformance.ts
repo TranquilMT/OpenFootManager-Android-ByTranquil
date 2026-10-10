@@ -35,9 +35,9 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
       const substitutions = snapshot.substitutions.filter((sub) => sub.side === side);
       const entered = substitutions.find((sub) => sub.player_on_id === player.id)?.minute ?? 0;
       const left = substitutions.find((sub) => sub.player_off_id === player.id)?.minute;
-      const dismissed = own.find((event) =>
-        ["RedCard", "SecondYellow"].includes(event.event_type),
-      )?.minute;
+      const dismissed = own.reduce((earliest, event) =>
+        ["RedCard", "SecondYellow"].includes(event.event_type)
+          ? Math.min(earliest, event.minute) : earliest, Infinity);
       const firstKick = events.find((event) =>
         ["ShootoutGoal", "ShootoutMiss"].includes(event.event_type),
       )?.minute;
