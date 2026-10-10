@@ -15,6 +15,10 @@ const event = (
   zone: "Midfield",
 });
 describe("truthful match narratives", () => {
+  it("unordered future goals cannot change the current score narrative", () => {
+    const goal = event("Goal", 30);
+    expect(eventContext(goal, [event("Goal", 90), goal]).ownBefore).toBe(0);
+  });
   it("future injury records cannot explain an earlier substitution", () => {
     const injury = event("Injury", 60);
     const sub = { ...event("Substitution", 30), secondary_player_id: "p1" };

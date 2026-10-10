@@ -27,7 +27,11 @@ export function eventContext(evt: MatchEvent, events: MatchEvent[]) {
     );
   const prefix =
     index >= 0 ? events.slice(0, index + 1) : [...events.filter((e) => e.minute < evt.minute), evt];
-  const before = prefix.slice(0, -1);
+  const before = prefix
+    .slice(0, -1)
+    .filter(
+      (event) => Number.isFinite(event.minute) && event.minute >= 0 && event.minute <= evt.minute,
+    );
   let ownBefore = 0;
   let opponentBefore = 0;
   let trailed = false;
