@@ -137,6 +137,24 @@ function createSnapshot(): MatchSnapshot {
 }
 
 describe("SubPanel", () => {
+  it("keeps reserves available until their recorded injury occurs", () => {
+    const snapshot = createSnapshot();
+    snapshot.events.push({
+      event_type: "Injury",
+      player_id: "bench-1",
+      secondary_player_id: null,
+      minute: 40,
+      side: "Home",
+      zone: "Midfield",
+    });
+    expect(getAvailableMatchBench(snapshot, "Home").map((player) => player.id)).toContain(
+      "bench-1",
+    );
+    snapshot.current_minute = 40;
+    expect(getAvailableMatchBench(snapshot, "Home").map((player) => player.id)).not.toContain(
+      "bench-1",
+    );
+  });
   it("preselects the injured player supplied by an actionable alert", () => {
     render(
       <SubPanel

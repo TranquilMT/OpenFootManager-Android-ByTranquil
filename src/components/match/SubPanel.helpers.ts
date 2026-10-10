@@ -36,7 +36,15 @@ export function getAvailableMatchBench(snapshot: MatchSnapshot, side: "Home" | "
   const unavailable = new Set([
     ...snapshot.sent_off,
     ...snapshot.events
-      .filter((event) => event.side === side && event.event_type === "Injury" && event.player_id)
+      .filter(
+        (event) =>
+          event.side === side &&
+          event.event_type === "Injury" &&
+          event.player_id &&
+          Number.isFinite(event.minute) &&
+          event.minute >= 0 &&
+          event.minute <= snapshot.current_minute,
+      )
       .map((event) => event.player_id as string),
     ...team.players.map((player) => player.id),
     ...snapshot.substitutions
