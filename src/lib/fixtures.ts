@@ -54,7 +54,7 @@ export function findNextFixture(fixtures: FixtureData[], teamId: string): Fixtur
 }
 
 export function expectedFixtureCount(teamCount: number): number | null {
-  if (teamCount >= 2) {
+  if (Number.isSafeInteger(teamCount) && teamCount >= 2) {
     // Double round robin; odd-sized leagues reach the same total via byes.
     return teamCount * (teamCount - 1);
   }

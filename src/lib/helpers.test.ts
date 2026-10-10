@@ -232,6 +232,10 @@ describe("findNextFixture", () => {
 });
 
 describe("season helpers", () => {
+  it("fractional league sizes cannot produce a plausible fixture count", () => {
+    expect(expectedFixtureCount(2.5)).toBeNull();
+    expect(expectedFixtureCount(Infinity)).toBeNull();
+  });
   it("computes the expected double round-robin fixture count for any league size", () => {
     expect(expectedFixtureCount(16)).toBe(240);
     expect(expectedFixtureCount(4)).toBe(12);
