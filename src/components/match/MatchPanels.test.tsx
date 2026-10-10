@@ -125,4 +125,16 @@ describe("integrated match panels", () => {
     expect(screen.getByText("match.noEventsYet")).toBeInTheDocument();
     expect(screen.queryByText("match.waitingKickoff")).not.toBeInTheDocument();
   });
+
+  it("does not reuse React keys when the same event object appears twice", () => {
+    const error = vi.spyOn(console, "error").mockImplementation(()=>{});
+    try {
+      const goal = event("Goal");
+      render(<EventFeed events={[goal, goal]} snapshot={snapshot([goal,goal])} showCommentary={false}/>);
+      expect(error).not.toHaveBeenCalled();
+      expect(screen.getAllByText("match.viewDetails")).toHaveLength(2);
+    } finally {error.mockRestore();}
+  });
+
+
 });

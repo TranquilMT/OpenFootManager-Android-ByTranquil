@@ -27,13 +27,12 @@ export function EventFeed({
   }
   const { t } = useTranslation();
   const occurrenceCounts = new Map<string, number>();
-  const eventOccurrences = new Map<MatchEvent, number>();
-  for (const event of events) {
+  const eventKeys = events.map((event) => {
     const identity = JSON.stringify(event);
     const occurrence = occurrenceCounts.get(identity) ?? 0;
-    eventOccurrences.set(event, occurrence);
     occurrenceCounts.set(identity, occurrence + 1);
-  }
+    return `${identity}:${occurrence}`;
+  });
   return (
     <div className="flex flex-col gap-1">
       {events.length === 0 ? (
@@ -43,13 +42,13 @@ export function EventFeed({
           </p>
         </div>
       ) : (
-        events.map((evt) => {
+        events.map((evt, index) => {
           const display = getEventDisplay(evt);
           const isHome = evt.side === "Home";
           const commentary = showCommentary ? getCommentary(evt, snapshot, t) : null;
           return (
             <div
-              key={`${JSON.stringify(evt)}:${eventOccurrences.get(evt) ?? 0}`}
+              key={eventKeys[index]}
               className={`flex items-start gap-3 px-3 py-2 rounded-lg transition-colors ${display.important ? "bg-white dark:bg-navy-800/80 border border-gray-200 dark:border-navy-700 shadow-sm" : "opacity-60"}`}
             >
               <span className="text-gray-600 dark:text-gray-500 tabular-nums font-heading text-sm w-8 text-right flex-shrink-0 pt-0.5">
