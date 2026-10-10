@@ -781,4 +781,12 @@ describe("isSeasonComplete with unplayed season", () => {
  });
 
 
+
+ it("does not accept duplicated fixture identities as a complete schedule",()=>{
+  const league=makeFullScheduledLeague();
+  league.fixtures[1].id=league.fixtures[0].id;
+  expect(hasFullLeagueSchedule(league)).toBe(false);
+ });
+
+
 });
