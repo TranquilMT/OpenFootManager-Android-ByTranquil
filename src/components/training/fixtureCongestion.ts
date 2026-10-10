@@ -15,6 +15,7 @@ export function fixtureCongestion(
       if (
         !teamId ||
         fixture.status !== "Scheduled" ||
+        fixture.home_team_id === fixture.away_team_id ||
         !date ||
         seen.has(fixture.id) ||
         (fixture.home_team_id !== teamId && fixture.away_team_id !== teamId)
