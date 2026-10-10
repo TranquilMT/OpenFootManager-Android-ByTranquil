@@ -370,4 +370,11 @@ describe("SubPanel", () => {
   });
 
 
+
+  it("disables the recommended tactical plan during a pending command", () => {
+    render(<SubPanel {...createProps()} pending />);
+    expect(screen.getByTestId("recommended-plan-cta")).toBeDisabled();
+  });
+
+
 });

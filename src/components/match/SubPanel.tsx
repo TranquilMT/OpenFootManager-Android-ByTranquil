@@ -257,6 +257,7 @@ export function SubPanel({
               <button
                 type="button"
                 data-testid="recommended-plan-cta"
+                disabled={pending || snapshot.phase === "Finished" || snapshot.phase === "PenaltyShootout"}
                 onClick={() => onPlayStyleChange(scenario.recommendedPlayStyle)}
                 className="rounded-full border border-primary-500/25 bg-primary-500/12 px-2 py-0.5 font-heading text-[10px] font-bold uppercase tracking-widest text-primary-500 transition-colors hover:bg-primary-500/20 dark:text-primary-300"
               >
