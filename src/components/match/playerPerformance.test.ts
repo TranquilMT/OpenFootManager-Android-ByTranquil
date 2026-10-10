@@ -22,6 +22,13 @@ const snapshot = (events: MatchEvent[] = []) =>
     sent_off: [],
   }) as unknown as MatchSnapshot;
 describe("recorded player match performance", () => {
+  it("counts the tackle event emitted by both match engines", () => {
+    expect(
+      playerMatchPerformance(snapshot([event("Tackle", "scorer")]), "Home").find(
+        (row) => row.id === "scorer",
+      )?.tackles,
+    ).toBe(1);
+  });
   it("invalid self-substitutions cannot credit reserve participation", () => {
     const snap = snapshot();
     snap.substitutions = [

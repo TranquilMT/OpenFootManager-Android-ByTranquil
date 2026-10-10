@@ -74,7 +74,7 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
         shots: metrics.shots,
         onTarget: metrics.onTarget,
         passes: own.filter((event) => event.event_type === "PassCompleted").length,
-        tackles: own.filter((event) => event.event_type === "TackleWon").length,
+        tackles: own.filter((event) => ["Tackle", "TackleWon"].includes(event.event_type)).length,
         saves: events.filter(
           (event) =>
             event.side !== side &&
