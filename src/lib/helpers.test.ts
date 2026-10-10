@@ -773,4 +773,12 @@ describe("isSeasonComplete with unplayed season", () => {
  });
 
 
+
+ it("does not complete a league using fixtures involving an unrelated club",()=>{
+  const league=makeFullScheduledLeague();
+  league.fixtures[0].home_team_id="foreign";
+  expect(hasFullLeagueSchedule(league)).toBe(false);
+ });
+
+
 });
