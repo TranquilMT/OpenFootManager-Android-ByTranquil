@@ -26,6 +26,13 @@ const snapshot = (events: MatchEvent[] = []) =>
     ],
   }) as unknown as MatchSnapshot;
 describe("recorded post-match player ratings", () => {
+  it("future records cannot increase report ratings", () => {
+    expect(
+      playerMatchRatings(snapshot([event("Goal", "starter", null, "Home", 100)]), "Home").find(
+        (row) => row.id === "starter",
+      )?.rating,
+    ).toBe(6);
+  });
   it("second yellows include the dismissal consequence", () => {
     expect(
       playerMatchRatings(snapshot([event("SecondYellow")]), "Home").find(
