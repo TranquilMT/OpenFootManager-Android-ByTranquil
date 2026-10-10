@@ -137,6 +137,21 @@ function createSnapshot(): MatchSnapshot {
 }
 
 describe("SubPanel", () => {
+  it("prepared substitutions disable when the allowance is exhausted", () => {
+    const snapshot = createSnapshot();
+    const props = {
+      snapshot,
+      side: "Home" as const,
+      onSubstitute: vi.fn(),
+      onFormationChange: vi.fn(),
+      onPlayStyleChange: vi.fn(),
+      onClose: vi.fn(),
+    };
+    const view = render(<SubPanel {...props} />);
+    fireEvent.click(screen.getByTestId("recommended-sub-starter-1-bench-1"));
+    view.rerender(<SubPanel {...props} snapshot={{ ...snapshot, home_subs_made: 5 }} />);
+    expect(screen.getByRole("button", { name: "Confirm substitution" })).toBeDisabled();
+  });
   it("invalid substitution allowances cannot produce recommendations", () => {
     const snapshot = createSnapshot();
     snapshot.max_subs = NaN;

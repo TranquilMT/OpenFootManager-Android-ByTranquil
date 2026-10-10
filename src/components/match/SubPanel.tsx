@@ -660,7 +660,7 @@ export function SubPanel({
                     </button>
                     <button
                       type="button"
-                      disabled={pending || decisionClosed}
+                      disabled={pending || decisionClosed || subsMade >= snapshot.max_subs}
                       onClick={handleConfirmSubstitution}
                       className="rounded-lg bg-green-500 px-3 py-1.5 font-heading text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-green-400"
                     >
