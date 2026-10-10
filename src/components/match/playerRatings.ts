@@ -15,6 +15,10 @@ export function playerMatchRatings(snapshot: MatchSnapshot, side: "Home" | "Away
     ratings[p.id] = 6.0;
   });
   snapshot.events.forEach((evt) => {
+    if (evt.side !== side && evt.event_type === "ShotSaved") {
+      const keeperId = evt.shot?.goalkeeper_id || evt.secondary_player_id;
+      if (keeperId && ratings[keeperId] !== undefined) ratings[keeperId] += 0.2;
+    }
     if (evt.side !== side || !evt.player_id) return;
     if (!ratings[evt.player_id] && ratings[evt.player_id] !== 0) return;
     if (evt.event_type === "Goal" || evt.event_type === "PenaltyGoal")
