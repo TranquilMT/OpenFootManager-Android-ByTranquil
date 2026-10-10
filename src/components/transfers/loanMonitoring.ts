@@ -14,10 +14,10 @@ export function monitoredLoans(players: PlayerData[], teamId: string) {
         return [];
       seen.add(player.id);
       const hasBaseline =
-        Number.isFinite(loan.loan_start_appearances) &&
-        Number.isFinite(loan.loan_start_minutes) &&
-        Number.isFinite(player.stats.appearances) &&
-        Number.isFinite(player.stats.minutes_played);
+        Number.isSafeInteger(loan.loan_start_appearances) && (loan.loan_start_appearances ?? -1) >= 0 &&
+        Number.isSafeInteger(loan.loan_start_minutes) && (loan.loan_start_minutes ?? -1) >= 0 &&
+        Number.isSafeInteger(player.stats.appearances) && player.stats.appearances >= 0 &&
+        Number.isSafeInteger(player.stats.minutes_played) && player.stats.minutes_played >= 0;
       return [
         {
           player,
