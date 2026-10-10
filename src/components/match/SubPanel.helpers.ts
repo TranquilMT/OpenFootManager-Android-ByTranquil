@@ -243,7 +243,17 @@ export function buildRecommendedSubstitutions(
     return [];
   const scenario = getMatchScenario(snapshot, side);
 
-  const activePlayers = team.players.filter((player) => !snapshot.sent_off.includes(player.id));
+  const activePlayers = team.players.filter(
+    (player) =>
+      !snapshot.sent_off.includes(player.id) &&
+      Boolean(player.id) &&
+      Number.isFinite(player.condition) &&
+      player.condition >= 0 &&
+      player.condition <= 100 &&
+      Number.isFinite(player.ovr) &&
+      player.ovr >= 0 &&
+      player.ovr <= 100,
+  );
   const availableBench = getAvailableMatchBench(snapshot, side);
 
   if (availableBench.length === 0) {

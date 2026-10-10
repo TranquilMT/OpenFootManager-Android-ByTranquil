@@ -141,6 +141,16 @@ function createSnapshot(): MatchSnapshot {
 }
 
 describe("SubPanel", () => {
+  it("excludes unusable active-player data from replacement rankings", () => {
+    const snapshot = createSnapshot();
+    snapshot.home_team.players = [
+      makePlayer({ id: "invalid", condition: Number.NaN }),
+      makePlayer({ id: "valid", condition: 30 }),
+    ];
+    expect(buildRecommendedSubstitutions(snapshot, "Home").map((item) => item.offId)).not.toContain(
+      "invalid",
+    );
+  });
   it("does not consume a reserve for an imported self-substitution", () => {
     const snapshot = createSnapshot();
     snapshot.substitutions = [
