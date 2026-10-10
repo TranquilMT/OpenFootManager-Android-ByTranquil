@@ -214,7 +214,7 @@ describe("live match decisions", () => {
       "true",
     );
     fireEvent.keyDown(stats, { key: "End" });
-    expect(screen.getByRole("tab", { name: "match.lineups" })).toHaveAttribute(
+    expect(screen.getByRole("tab", { name: "match.player match.stats" })).toHaveAttribute(
       "aria-selected",
       "true",
     );
@@ -244,4 +244,15 @@ describe("live match decisions", () => {
     expect(screen.getByRole("button", { name: "common.all (1)" })).toBeInTheDocument();
     expect(screen.getByText("match.viewDetails")).toBeInTheDocument();
   });
+
+ it("opens the recorded player statistics panel through its live match tab",()=>{
+  render(<MatchLive snapshot={snapshot} gameState={{teams:[],players:[]} as unknown as GameStateData}
+   userSide="Home" isSpectator={false} importantEvents={[]} onSnapshotUpdate={vi.fn()}
+   onImportantEvent={vi.fn()} onHalfTime={vi.fn()} onFullTime={vi.fn()}/>);
+  fireEvent.click(screen.getByRole("tab",{name:"match.player match.stats"}));
+  expect(screen.getByRole("table",{name:"Home FC"})).toBeInTheDocument();
+  expect(screen.getByRole("tabpanel")).toHaveAttribute("aria-labelledby","match-tab-players");
+ });
+
+
 });

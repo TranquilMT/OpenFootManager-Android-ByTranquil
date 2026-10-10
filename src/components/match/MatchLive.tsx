@@ -7,6 +7,7 @@ import { MatchEventFilters } from "./MatchEventFilters";
 import { resolveBackendError } from "../../utils/backendI18n";
 import { useMatchVisibility } from "./useMatchVisibility";
 import { formatMatchMinute } from "./matchClock";
+import { PlayerMatchPerformance } from "./PlayerMatchPerformance";
 import MatchdayQuickActions from "./MatchdayQuickActions";
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { invoke } from "@tauri-apps/api/core";
@@ -61,7 +62,7 @@ import {
   VolumeX,
 } from "lucide-react";
 
-const ACTIVE_PANELS = ["events", "stats", "lineups"] as const;
+const ACTIVE_PANELS = ["events", "stats", "lineups", "players"] as const;
 type ActivePanel = (typeof ACTIVE_PANELS)[number];
 
 interface MatchLiveProps {
@@ -487,6 +488,7 @@ export default function MatchLive({
                 label: t("match.lineups"),
                 icon: <Users className="w-4 h-4" />,
               },
+              {id: "players" as ActivePanel, label: `${t("match.player")} ${t("match.stats")}`, icon: <BarChart3 className="w-4 h-4"/>},
             ].map((tab) => (
               <button
                 type="button"
@@ -584,6 +586,7 @@ export default function MatchLive({
               />
             )}
             {activePanel === "stats" && <MatchStats snapshot={snapshot} />}
+            {activePanel === "players" && <PlayerMatchPerformance snapshot={snapshot} playerJerseyMap={playerJerseyMap}/>}
             {activePanel === "lineups" && (
               <Lineups snapshot={snapshot} playerJerseyMap={playerJerseyMap} />
             )}
