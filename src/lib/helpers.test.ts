@@ -755,4 +755,14 @@ describe("isSeasonComplete with unplayed season", () => {
  });
 
 
+
+ it("orders timestamp fixtures by actual kickoff rather than offset spelling",()=>{
+  const fixtures=[
+   makeFixture({id:"later",date:"2026-08-12T00:00:00-05:00",home_team_id:"team_1"}),
+   makeFixture({id:"earlier",date:"2026-08-12T02:00:00Z",home_team_id:"team_1"}),
+  ];
+  expect(findNextFixture(fixtures,"team_1")?.id).toBe("earlier");
+ });
+
+
 });

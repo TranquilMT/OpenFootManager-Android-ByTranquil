@@ -34,8 +34,10 @@ export function findNextFixture(fixtures: FixtureData[], teamId: string): Fixtur
       return fixture;
     }
 
-    if (fixture.date !== nextFixture.date) {
-      return fixture.date < nextFixture.date ? fixture : nextFixture;
+    const time = Date.parse(fixture.date);
+    const nextTime = Date.parse(nextFixture.date);
+    if (time !== nextTime) {
+      return time < nextTime ? fixture : nextFixture;
     }
 
     if (fixture.matchday !== nextFixture.matchday) {
