@@ -7,6 +7,13 @@ export interface MatchAlert {
 export function matchAlerts(snapshot: MatchSnapshot, side: "Home" | "Away"): MatchAlert[] {
   if (["Finished", "PenaltyShootout"].includes(snapshot.phase)) return [];
   const team = side === "Home" ? snapshot.home_team : snapshot.away_team;
+  const subsMade = side === "Home" ? snapshot.home_subs_made : snapshot.away_subs_made;
+  const canSubstitute =
+    Number.isSafeInteger(snapshot.max_subs) &&
+    Number.isSafeInteger(subsMade) &&
+    subsMade >= 0 &&
+    subsMade < snapshot.max_subs;
+  const playerAction: MatchAlert["action"] = canSubstitute ? "substitution" : "tactics";
   const active = new Set(team.players.map((player) => player.id));
   const events = snapshot.events.filter(
     (event) =>
@@ -39,7 +46,7 @@ export function matchAlerts(snapshot: MatchSnapshot, side: "Home" | "Away"): Mat
         active.has(event.player_id ?? "") &&
         !snapshot.sent_off.includes(event.player_id ?? ""),
     )
-    .map((event) => ({ event, action: "substitution" as const, priority: 2 }));
+    .map((event) => ({ event, action: playerAction, priority: 2 }));
   const bookings: MatchAlert[] = events
     .filter(
       (event) =>
@@ -47,7 +54,7 @@ export function matchAlerts(snapshot: MatchSnapshot, side: "Home" | "Away"): Mat
         active.has(event.player_id ?? "") &&
         !snapshot.sent_off.includes(event.player_id ?? ""),
     )
-    .map((event) => ({ event, action: "substitution", priority: 1 }));
+    .map((event) => ({ event, action: playerAction, priority: 1 }));
   const seen = new Set<string>();
   return [...dismissals, ...injuries, ...bookings]
     .sort((a, b) => b.priority - a.priority || b.event.minute - a.event.minute)

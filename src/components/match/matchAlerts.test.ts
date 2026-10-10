@@ -28,8 +28,24 @@ const snap = (events: MatchEvent[]) =>
     events,
     sent_off: [],
     substitutions: [],
+    max_subs: 5,
+    home_subs_made: 0,
+    away_subs_made: 0,
   }) as unknown as MatchSnapshot;
 describe("actionable match alerts", () => {
+  it("routes player concerns to tactics after the substitution allowance is exhausted", () => {
+    const snapshot = snap([event("Injury"), event("YellowCard", "booked")]);
+    snapshot.home_subs_made = snapshot.max_subs;
+    expect(matchAlerts(snapshot, "Home").map((alert) => alert.action)).toEqual([
+      "tactics",
+      "tactics",
+    ]);
+    snapshot.home_subs_made = 4;
+    expect(matchAlerts(snapshot, "Home").map((alert) => alert.action)).toEqual([
+      "substitution",
+      "substitution",
+    ]);
+  });
   it("uses match chronology when tactical records arrive out of order", () => {
     expect(
       matchAlerts(
