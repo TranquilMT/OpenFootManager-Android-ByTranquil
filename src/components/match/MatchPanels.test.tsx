@@ -137,4 +137,12 @@ describe("integrated match panels", () => {
   });
 
 
+
+  it("does not show a scorer as their own assist when commentary is off", () => {
+    const goal = {...event("Goal"), secondary_player_id:"p1"};
+    render(<EventFeed events={[goal]} snapshot={snapshot([goal])} showCommentary={false}/>);
+    expect(screen.queryByText(/match.assist/)).not.toBeInTheDocument();
+  });
+
+
 });
