@@ -11,8 +11,12 @@ export function MatchPulse({
   derby?: boolean;
 }) {
   const { t } = useTranslation();
-  const home = matchMetrics(snapshot.events, "Home");
-  const away = matchMetrics(snapshot.events, "Away");
+  const reachedEvents = snapshot.events.filter(
+    (event) =>
+      Number.isFinite(event.minute) && event.minute >= 0 && event.minute <= snapshot.current_minute,
+  );
+  const home = matchMetrics(reachedEvents, "Home");
+  const away = matchMetrics(reachedEvents, "Away");
   const recent = snapshot.events.filter(
     (e) => e.minute > snapshot.current_minute - 5 && e.minute <= snapshot.current_minute,
   );

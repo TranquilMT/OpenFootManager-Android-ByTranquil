@@ -20,6 +20,11 @@ const snapshot = (events: MatchEvent[]): MatchSnapshot =>
     away_team: { name: "Away FC" },
   }) as MatchSnapshot;
 describe("Match Pulse integration", () => {
+  it("live pulse cannot show chance quality from future events", () => {
+    render(<MatchPulse snapshot={snapshot([event(90, "Home", 0.75)])} />);
+    expect(screen.queryByText("0.75")).not.toBeInTheDocument();
+    expect(screen.getAllByText("—")).toHaveLength(2);
+  });
   it("shows recorded chance probabilities even when the shot is saved", () => {
     render(<MatchPulse snapshot={snapshot([event(79, "Home", 0.25)])} />);
     expect(screen.getByText("0.25")).toBeInTheDocument();
