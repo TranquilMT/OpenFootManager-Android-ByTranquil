@@ -39,4 +39,12 @@ describe("recorded player match performance",()=>{
  });
 
 
+
+ it("freezes played minutes before the first shootout kick",()=>{
+  const snap=snapshot([event("ShootoutGoal","scorer",null,"Home",121),event("ShootoutMiss","helper",null,"Home",124)]);
+  snap.phase="PenaltyShootout";snap.current_minute=124;
+  expect(playerMatchPerformance(snap,"Home").find(row=>row.id==="scorer")?.minutes).toBe(120);
+ });
+
+
 });
