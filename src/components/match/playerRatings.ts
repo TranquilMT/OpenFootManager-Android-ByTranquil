@@ -33,7 +33,9 @@ export function playerMatchRatings(snapshot: MatchSnapshot, side: "Home" | "Away
       ratings[evt.player_id] = (ratings[evt.player_id] || 6) + 0.15;
     else if (evt.event_type === "Foul")
       ratings[evt.player_id] = (ratings[evt.player_id] || 6) - 0.2;
-    else if (evt.event_type === "YellowCard" || evt.event_type === "SecondYellow")
+    else if (evt.event_type === "SecondYellow")
+      ratings[evt.player_id] = (ratings[evt.player_id] || 6) - 2;
+    else if (evt.event_type === "YellowCard")
       ratings[evt.player_id] = (ratings[evt.player_id] || 6) - 0.5;
     else if (evt.event_type === "RedCard")
       ratings[evt.player_id] = (ratings[evt.player_id] || 6) - 1.5;

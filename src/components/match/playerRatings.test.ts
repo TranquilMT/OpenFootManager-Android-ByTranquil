@@ -26,6 +26,13 @@ const snapshot = (events: MatchEvent[] = []) =>
     ],
   }) as unknown as MatchSnapshot;
 describe("recorded post-match player ratings", () => {
+  it("second yellows include the dismissal consequence", () => {
+    expect(
+      playerMatchRatings(snapshot([event("SecondYellow")]), "Home").find(
+        (row) => row.id === "starter",
+      )?.rating,
+    ).toBe(4);
+  });
   it("recorded opposition saves credit the goalkeeper rating", () => {
     const save = {
       ...event("ShotSaved", "opponent", "keeper", "Away"),
