@@ -25,13 +25,16 @@ export function eventContext(evt: MatchEvent, events: MatchEvent[]) {
         JSON.stringify(e.detail) === JSON.stringify(evt.detail) &&
         JSON.stringify(e.shot) === JSON.stringify(evt.shot),
     );
-  const prefix =
-    index >= 0 ? events.slice(0, index + 1) : [...events.filter((e) => e.minute < evt.minute), evt];
-  const before = prefix
-    .slice(0, -1)
+  const before = events
     .filter(
-      (event) => Number.isFinite(event.minute) && event.minute >= 0 && event.minute <= evt.minute,
-    );
+      (event, eventIndex) =>
+        Number.isFinite(event.minute) &&
+        event.minute >= 0 &&
+        (event.minute < evt.minute ||
+          (event.minute === evt.minute && index >= 0 && eventIndex < index)),
+    )
+    .sort((left, right) => left.minute - right.minute);
+  const prefix = [...before, evt];
   let ownBefore = 0;
   let opponentBefore = 0;
   let trailed = false;
