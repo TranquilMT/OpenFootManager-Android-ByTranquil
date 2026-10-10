@@ -141,6 +141,16 @@ function createSnapshot(): MatchSnapshot {
 }
 
 describe("SubPanel", () => {
+  it("invalid booking counters cannot hide the most fatigued starter", () => {
+    const snapshot = createSnapshot();
+    snapshot.max_subs = 1;
+    snapshot.home_team.players = [
+      makePlayer({ id: "a", condition: 90 }),
+      makePlayer({ id: "z", condition: 20 }),
+    ];
+    snapshot.home_yellows = { z: Number.NaN };
+    expect(buildRecommendedSubstitutions(snapshot, "Home")[0]?.offId).toBe("z");
+  });
   it("excludes unusable active-player data from replacement rankings", () => {
     const snapshot = createSnapshot();
     snapshot.home_team.players = [

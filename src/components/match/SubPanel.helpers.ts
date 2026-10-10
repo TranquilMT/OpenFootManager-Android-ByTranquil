@@ -295,7 +295,9 @@ export function buildRecommendedSubstitutions(
             ? eligibleBench.filter((player) => normalisePosition(player.position) === "Goalkeeper")
             : [];
         const replacementPool = keeperBench.length > 0 ? keeperBench : eligibleBench;
-        const yellowCount = yellows[offPlayer.id] ?? 0;
+        const recordedYellows = yellows[offPlayer.id] ?? 0;
+        const yellowCount =
+          Number.isSafeInteger(recordedYellows) && recordedYellows >= 0 ? recordedYellows : 0;
         const onPlayer = [...replacementPool].sort((leftPlayer, rightPlayer) => {
           return (
             buildBenchPriority(rightPlayer, offPlayer, scenario.id) -
