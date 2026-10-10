@@ -275,4 +275,14 @@ describe("live match decisions", () => {
       expect(button).toBeDisabled();
     }
   });
+  it("drops a queued tactical command if the match closes before execution", async () => {
+    const props = { gameState: { teams: [], players: [] } as unknown as GameStateData,
+      userSide: "Home" as const, isSpectator: false, importantEvents: [],
+      onSnapshotUpdate: vi.fn(), onImportantEvent: vi.fn(), onHalfTime: vi.fn(), onFullTime: vi.fn() };
+    const view = render(<MatchLive {...props} snapshot={snapshot} />);
+    fireEvent.click(screen.getAllByRole("button", { name: "common.playStyles.Attacking" })[0]);
+    view.rerender(<MatchLive {...props} snapshot={{ ...snapshot, phase: "Finished" }} />);
+    await act(async () => {});
+    expect(invoke).not.toHaveBeenCalled();
+  });
 });

@@ -108,6 +108,17 @@ export default function MatchLive({
   const [matchCommandPending, setMatchCommandPending] = useState(false);
   const [matchError, setMatchError] = useState<string | null>(null);
   const operationGate = useRef(new MatchOperationGate());
+  const currentDecisionState = useRef({ snapshot, userSide, isSpectator });
+  currentDecisionState.current = { snapshot, userSide, isSpectator };
+  const publishSnapshot = useCallback((next: MatchSnapshot) => {
+    currentDecisionState.current.snapshot = next;
+    onSnapshotUpdate(next);
+  }, [onSnapshotUpdate]);
+  const canExecuteDecision = () => {
+    const current = currentDecisionState.current;
+    return current.userSide === userSide && !current.isSpectator &&
+      !["Finished", "PenaltyShootout"].includes(current.snapshot.phase);
+  };
   const [showSubPanel, setShowSubPanel] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(settings.spoken_match_commentary);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -163,7 +174,7 @@ export default function MatchLive({
 
             // Fetch full snapshot
             const snap = await invoke<MatchSnapshot>("get_match_snapshot");
-            onSnapshotUpdate(snap);
+            publishSnapshot(snap);
 
             // Check for phase transitions that should pause
             const phase = lastResult.phase;
@@ -207,7 +218,7 @@ export default function MatchLive({
         }
       }, setMatchCommandPending);
     },
-    [onSnapshotUpdate, onImportantEvent, onHalfTime, onFullTime, onPenaltyShootout, t],
+    [publishSnapshot, onImportantEvent, onHalfTime, onFullTime, onPenaltyShootout, t],
   );
 
   // Auto-step timer
@@ -258,13 +269,14 @@ export default function MatchLive({
     if (!userSide || isSpectator || decisionsClosed) return;
     setMatchError(null);
     await operationGate.current.runCommand(async () => {
+      if (!canExecuteDecision()) return;
       try {
         const snap = await invoke<MatchSnapshot>("apply_match_command", {
           command: {
             Substitute: { side: userSide, player_off_id: playerOffId, player_on_id: playerOnId },
           },
         });
-        onSnapshotUpdate(snap);
+        publishSnapshot(snap);
         setShowSubPanel(false);
       } catch (err) {
         setMatchError(resolveBackendError(err) || t("match.actionFailed"));
@@ -276,11 +288,12 @@ export default function MatchLive({
     if (!userSide || isSpectator || decisionsClosed) return;
     setMatchError(null);
     await operationGate.current.runCommand(async () => {
+      if (!canExecuteDecision()) return;
       try {
         const snap = await invoke<MatchSnapshot>("apply_match_command", {
           command: { ChangeFormation: { side: userSide, formation } },
         });
-        onSnapshotUpdate(snap);
+        publishSnapshot(snap);
       } catch (err) {
         setMatchError(resolveBackendError(err) || t("match.actionFailed"));
       }
@@ -291,11 +304,12 @@ export default function MatchLive({
     if (!userSide || isSpectator || decisionsClosed) return;
     setMatchError(null);
     await operationGate.current.runCommand(async () => {
+      if (!canExecuteDecision()) return;
       try {
         const snap = await invoke<MatchSnapshot>("apply_match_command", {
           command: { ChangePlayStyle: { side: userSide, play_style: playStyle } },
         });
-        onSnapshotUpdate(snap);
+        publishSnapshot(snap);
       } catch (err) {
         setMatchError(resolveBackendError(err) || t("match.actionFailed"));
       }
@@ -308,12 +322,13 @@ export default function MatchLive({
     if (instructions.length === 0) return;
     setMatchError(null);
     await operationGate.current.runCommand(async () => {
+      if (!canExecuteDecision()) return;
       try {
         for (const instruction of instructions) {
           const snap = await invoke<MatchSnapshot>("apply_match_command", {
             command: { ChangeTacticalInstruction: { side: userSide, instruction } },
           });
-          onSnapshotUpdate(snap);
+          publishSnapshot(snap);
         }
       } catch (err) {
         setMatchError(resolveBackendError(err) || t("match.actionFailed"));
