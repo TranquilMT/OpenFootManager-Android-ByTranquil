@@ -27,7 +27,7 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
    shots:metrics.shots,onTarget:metrics.onTarget,
    passes:own.filter(event=>event.event_type==="PassCompleted").length,
    tackles:own.filter(event=>event.event_type==="TackleWon").length,
-   saves:snapshot.events.filter(event=>event.side!==side && event.event_type==="ShotSaved" && event.shot?.goalkeeper_id===player.id).length,
+   saves:snapshot.events.filter(event=>event.side!==side && event.event_type==="ShotSaved" && (event.shot?.goalkeeper_id || event.secondary_player_id)===player.id).length,
    yellows:own.filter(event=>["YellowCard","SecondYellow"].includes(event.event_type)).length,
    reds:own.filter(event=>["RedCard","SecondYellow"].includes(event.event_type)).length,
   };

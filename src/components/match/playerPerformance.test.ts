@@ -32,4 +32,11 @@ describe("recorded player match performance",()=>{
  });
 
 
+
+ it("uses recorded secondary keeper identities when legacy shots lack xG metadata",()=>{
+  const snap=snapshot([event("ShotSaved","opponent","keeper","Away")]);
+  expect(playerMatchPerformance(snap,"Home").find(row=>row.id==="keeper")?.saves).toBe(1);
+ });
+
+
 });
