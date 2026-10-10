@@ -26,4 +26,11 @@ describe("six-month squad plan", () => {
     expect(plan.projectedCount).toBe(1);
     expect(plan.expiring).toHaveLength(0);
   });
+
+ it("does not count mirrored player records as extra squad depth",()=>{
+  const base={...createGameState().players[0],contract_end:"2028-01-01"};
+  expect(buildSquadPlan([base,{...base}],"4-4-2","2026-07-10").projectedCount).toBe(1);
+ });
+
+
 });

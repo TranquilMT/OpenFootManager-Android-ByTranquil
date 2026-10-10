@@ -4,7 +4,11 @@ import { isSeniorSquadPlayer } from "../../lib/playerSquad";
 import { buildRoleCoverageSummary, buildStartingXIIds } from "./SquadTab.helpers";
 
 export function buildSquadPlan(players: PlayerData[], formation: string, today: string) {
-  const seniors = players.filter((player) => !player.retired && isSeniorSquadPlayer(player));
+  const seen = new Set<string>();
+  const seniors = players.filter((player) => {
+    if(player.retired || !isSeniorSquadPlayer(player) || !player.id || seen.has(player.id)) return false;
+    seen.add(player.id); return true;
+  });
   const expiring = seniors
     .filter(
       (player) =>
