@@ -12,6 +12,9 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
     .filter(
       (sub) =>
         sub.side === side &&
+        Boolean(sub.player_on_id) &&
+        Boolean(sub.player_off_id) &&
+        sub.player_on_id !== sub.player_off_id &&
         Number.isFinite(sub.minute) &&
         sub.minute >= 0 &&
         sub.minute <= snapshot.current_minute,

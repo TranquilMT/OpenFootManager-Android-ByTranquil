@@ -22,6 +22,13 @@ const snapshot = (events: MatchEvent[] = []) =>
     sent_off: [],
   }) as unknown as MatchSnapshot;
 describe("recorded player match performance", () => {
+  it("invalid self-substitutions cannot credit reserve participation", () => {
+    const snap = snapshot();
+    snap.substitutions = [
+      { side: "Home", minute: 30, player_off_id: "unused", player_on_id: "unused" },
+    ];
+    expect(playerMatchPerformance(snap, "Home").some((row) => row.id === "unused")).toBe(false);
+  });
   it("unordered shootout kicks use the earliest recorded transition", () => {
     const snap = snapshot([
       event("ShootoutMiss", "helper", null, "Home", 124),
