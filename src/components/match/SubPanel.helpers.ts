@@ -48,7 +48,13 @@ export function getAvailableMatchBench(snapshot: MatchSnapshot, side: "Home" | "
       .map((event) => event.player_id as string),
     ...team.players.map((player) => player.id),
     ...snapshot.substitutions
-      .filter((sub) => sub.side === side)
+      .filter(
+        (sub) =>
+          sub.side === side &&
+          Number.isFinite(sub.minute) &&
+          sub.minute >= 0 &&
+          sub.minute <= snapshot.current_minute,
+      )
       .flatMap((sub) => [sub.player_off_id, sub.player_on_id]),
   ]);
   const seen = new Set<string>();

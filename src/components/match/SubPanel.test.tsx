@@ -137,6 +137,22 @@ function createSnapshot(): MatchSnapshot {
 }
 
 describe("SubPanel", () => {
+  it("ignores future substitution records when filtering the bench", () => {
+    const snapshot = createSnapshot();
+    snapshot.substitutions.push({
+      side: "Home",
+      minute: 45,
+      player_off_id: "starter-1",
+      player_on_id: "bench-1",
+    });
+    expect(getAvailableMatchBench(snapshot, "Home").map((player) => player.id)).toContain(
+      "bench-1",
+    );
+    snapshot.current_minute = 45;
+    expect(getAvailableMatchBench(snapshot, "Home").map((player) => player.id)).not.toContain(
+      "bench-1",
+    );
+  });
   it("keeps reserves available until their recorded injury occurs", () => {
     const snapshot = createSnapshot();
     snapshot.events.push({
