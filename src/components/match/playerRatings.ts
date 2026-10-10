@@ -38,8 +38,7 @@ export function playerMatchRatings(snapshot: MatchSnapshot, side: "Home" | "Away
       evt.secondary_player_id !== evt.player_id &&
       ratings[evt.secondary_player_id] !== undefined
     ) {
-      if (evt.event_type === "Goal" || evt.event_type === "PenaltyGoal")
-        ratings[evt.secondary_player_id] += 0.7;
+      if (evt.event_type === "Goal") ratings[evt.secondary_player_id] += 0.7;
     }
   });
   const won =

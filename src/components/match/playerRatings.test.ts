@@ -26,6 +26,13 @@ const snapshot = (events: MatchEvent[] = []) =>
     ],
   }) as unknown as MatchSnapshot;
 describe("recorded post-match player ratings", () => {
+  it("penalty goals cannot award an assist bonus", () => {
+    expect(
+      playerMatchRatings(snapshot([event("PenaltyGoal", "starter", "keeper")]), "Home").find(
+        (row) => row.id === "keeper",
+      )?.rating,
+    ).toBe(6);
+  });
   it("a scorer cannot receive an assist bonus for their own goal", () => {
     expect(
       playerMatchRatings(snapshot([event("Goal", "starter", "starter")]), "Home").find(
