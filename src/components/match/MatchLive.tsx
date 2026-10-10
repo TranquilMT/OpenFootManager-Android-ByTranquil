@@ -8,6 +8,7 @@ import { resolveBackendError } from "../../utils/backendI18n";
 import { useMatchVisibility } from "./useMatchVisibility";
 import { formatMatchMinute } from "./matchClock";
 import { PlayerMatchPerformance } from "./PlayerMatchPerformance";
+import { MatchDecisionAlerts } from "./MatchDecisionAlerts";
 import MatchdayQuickActions from "./MatchdayQuickActions";
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { invoke } from "@tauri-apps/api/core";
@@ -109,15 +110,27 @@ export default function MatchLive({
   const [matchError, setMatchError] = useState<string | null>(null);
   const operationGate = useRef(new MatchOperationGate());
   const currentDecisionState = useRef({ snapshot, userSide, isSpectator });
-  currentDecisionState.current = { snapshot, userSide, isSpectator };
-  const publishSnapshot = useCallback((next: MatchSnapshot) => {
-    currentDecisionState.current.snapshot = next;
-    onSnapshotUpdate(next);
-  }, [onSnapshotUpdate]);
+  const lastSnapshotProp = useRef(snapshot);
+  if (lastSnapshotProp.current !== snapshot) {
+    currentDecisionState.current.snapshot = snapshot;
+    lastSnapshotProp.current = snapshot;
+  }
+  currentDecisionState.current.userSide = userSide;
+  currentDecisionState.current.isSpectator = isSpectator;
+  const publishSnapshot = useCallback(
+    (next: MatchSnapshot) => {
+      currentDecisionState.current.snapshot = next;
+      onSnapshotUpdate(next);
+    },
+    [onSnapshotUpdate],
+  );
   const canExecuteDecision = () => {
     const current = currentDecisionState.current;
-    return current.userSide === userSide && !current.isSpectator &&
-      !["Finished", "PenaltyShootout"].includes(current.snapshot.phase);
+    return (
+      current.userSide === userSide &&
+      !current.isSpectator &&
+      !["Finished", "PenaltyShootout"].includes(current.snapshot.phase)
+    );
   };
   const [showSubPanel, setShowSubPanel] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(settings.spoken_match_commentary);
@@ -438,6 +451,14 @@ export default function MatchLive({
               onPlayStyle={(style) => {
                 void handlePlayStyleChange(style);
               }}
+            />
+          )}
+          {!isSpectator && userSide && (
+            <MatchDecisionAlerts
+              snapshot={snapshot}
+              side={userSide}
+              pending={matchCommandPending}
+              onDecision={() => setShowSubPanel(true)}
             />
           )}
           {/* Possession bar */}

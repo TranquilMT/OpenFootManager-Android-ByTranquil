@@ -27,9 +27,12 @@ describe("fixture congestion guidance", () => {
     });
   });
   it("does not recommend rotation because of a club playing itself", () => {
-    expect(fixtureCongestion([
-      {...fixture("bad","2026-08-11"), away_team_id:"ours"},
-      fixture("valid","2026-08-13")
-    ],"ours","2026-08-10")).toMatchObject({count:1, minGap:null, congested:false});
+    expect(
+      fixtureCongestion(
+        [{ ...fixture("bad", "2026-08-11"), away_team_id: "ours" }, fixture("valid", "2026-08-13")],
+        "ours",
+        "2026-08-10",
+      ),
+    ).toMatchObject({ count: 1, minGap: null, congested: false });
   });
 });

@@ -2,14 +2,22 @@ import type { MatchSnapshot } from "./types";
 import { matchMetrics } from "./narrativeContext";
 
 export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "Away") {
-  const events = snapshot.events.filter((event) => Number.isFinite(event.minute) && event.minute >= 0 && event.minute <= snapshot.current_minute);
+  const events = snapshot.events.filter(
+    (event) =>
+      Number.isFinite(event.minute) && event.minute >= 0 && event.minute <= snapshot.current_minute,
+  );
   const team = side === "Home" ? snapshot.home_team : snapshot.away_team;
   const bench = side === "Home" ? snapshot.home_bench : snapshot.away_bench;
-  const substitutions = snapshot.substitutions.filter((sub) => sub.side === side && Number.isFinite(sub.minute) && sub.minute >= 0 && sub.minute <= snapshot.current_minute).sort((a,b) => a.minute - b.minute);
-  const used = new Set(
-    substitutions
-      .flatMap((sub) => [sub.player_on_id, sub.player_off_id]),
-  );
+  const substitutions = snapshot.substitutions
+    .filter(
+      (sub) =>
+        sub.side === side &&
+        Number.isFinite(sub.minute) &&
+        sub.minute >= 0 &&
+        sub.minute <= snapshot.current_minute,
+    )
+    .sort((a, b) => a.minute - b.minute);
+  const used = new Set(substitutions.flatMap((sub) => [sub.player_on_id, sub.player_off_id]));
   for (const event of events) {
     if (
       event.side === side &&
@@ -28,15 +36,17 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
       return true;
     })
     .map((player) => {
-      const own = events.filter(
-        (event) => event.side === side && event.player_id === player.id,
-      );
+      const own = events.filter((event) => event.side === side && event.player_id === player.id);
       const metrics = matchMetrics(own, side);
       const entered = substitutions.find((sub) => sub.player_on_id === player.id)?.minute ?? 0;
       const left = substitutions.find((sub) => sub.player_off_id === player.id)?.minute;
-      const dismissed = own.reduce((earliest, event) =>
-        ["RedCard", "SecondYellow"].includes(event.event_type)
-          ? Math.min(earliest, event.minute) : earliest, Infinity);
+      const dismissed = own.reduce(
+        (earliest, event) =>
+          ["RedCard", "SecondYellow"].includes(event.event_type)
+            ? Math.min(earliest, event.minute)
+            : earliest,
+        Infinity,
+      );
       const firstKick = events.find((event) =>
         ["ShootoutGoal", "ShootoutMiss"].includes(event.event_type),
       )?.minute;

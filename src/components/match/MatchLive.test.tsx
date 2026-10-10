@@ -264,11 +264,19 @@ describe("live match decisions", () => {
     expect(screen.getByRole("tabpanel")).toHaveAttribute("aria-labelledby", "match-tab-players");
   });
   it("closes header and sidebar tactical shortcuts during shootouts", () => {
-    render(<MatchLive snapshot={{ ...snapshot, phase: "PenaltyShootout" }}
-      gameState={{ teams: [], players: [] } as unknown as GameStateData}
-      userSide="Home" isSpectator={false} importantEvents={[]}
-      onSnapshotUpdate={vi.fn()} onImportantEvent={vi.fn()}
-      onHalfTime={vi.fn()} onFullTime={vi.fn()} />);
+    render(
+      <MatchLive
+        snapshot={{ ...snapshot, phase: "PenaltyShootout" }}
+        gameState={{ teams: [], players: [] } as unknown as GameStateData}
+        userSide="Home"
+        isSpectator={false}
+        importantEvents={[]}
+        onSnapshotUpdate={vi.fn()}
+        onImportantEvent={vi.fn()}
+        onHalfTime={vi.fn()}
+        onFullTime={vi.fn()}
+      />,
+    );
     expect(screen.getByRole("button", { name: "4-4-2" })).toBeDisabled();
     expect(screen.getByRole("button", { name: "dashboard.tactics" })).toBeDisabled();
     for (const button of screen.getAllByRole("button", { name: "common.playStyles.Attacking" })) {
@@ -276,13 +284,88 @@ describe("live match decisions", () => {
     }
   });
   it("drops a queued tactical command if the match closes before execution", async () => {
-    const props = { gameState: { teams: [], players: [] } as unknown as GameStateData,
-      userSide: "Home" as const, isSpectator: false, importantEvents: [],
-      onSnapshotUpdate: vi.fn(), onImportantEvent: vi.fn(), onHalfTime: vi.fn(), onFullTime: vi.fn() };
+    const props = {
+      gameState: { teams: [], players: [] } as unknown as GameStateData,
+      userSide: "Home" as const,
+      isSpectator: false,
+      importantEvents: [],
+      onSnapshotUpdate: vi.fn(),
+      onImportantEvent: vi.fn(),
+      onHalfTime: vi.fn(),
+      onFullTime: vi.fn(),
+    };
     const view = render(<MatchLive {...props} snapshot={snapshot} />);
     fireEvent.click(screen.getAllByRole("button", { name: "common.playStyles.Attacking" })[0]);
     view.rerender(<MatchLive {...props} snapshot={{ ...snapshot, phase: "Finished" }} />);
     await act(async () => {});
     expect(invoke).not.toHaveBeenCalled();
+  });
+  it("opens the decision panel from a recorded dismissal alert", () => {
+    const red = {
+      event_type: "RedCard",
+      player_id: "dismissed",
+      secondary_player_id: null,
+      minute: 29,
+      side: "Home" as const,
+      zone: "Midfield",
+    };
+    render(
+      <MatchLive
+        snapshot={{
+          ...snapshot,
+          events: [red],
+          home_bench: [
+            {
+              id: "dismissed",
+              name: "Dismissed",
+              position: "CentreBack",
+              condition: 80,
+              ovr: 60,
+            } as MatchSnapshot["home_bench"][number],
+          ],
+        }}
+        gameState={{ teams: [], players: [] } as unknown as GameStateData}
+        userSide="Home"
+        isSpectator={false}
+        importantEvents={[]}
+        onSnapshotUpdate={vi.fn()}
+        onImportantEvent={vi.fn()}
+        onHalfTime={vi.fn()}
+        onFullTime={vi.fn()}
+      />,
+    );
+    const alert = screen.getByRole("status");
+    expect(alert).toHaveTextContent("Dismissed");
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: /match.eventTypes.RedCard.*Dismissed.*dashboard.tactics/,
+      }),
+    );
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+  });
+  it("retains a newer backend phase while the parent still displays an older snapshot", async () => {
+    vi.mocked(invoke).mockResolvedValueOnce({ ...snapshot, phase: "Finished" });
+    render(
+      <MatchLive
+        snapshot={snapshot}
+        gameState={{ teams: [], players: [] } as unknown as GameStateData}
+        userSide="Home"
+        isSpectator={false}
+        importantEvents={[]}
+        onSnapshotUpdate={vi.fn()}
+        onImportantEvent={vi.fn()}
+        onHalfTime={vi.fn()}
+        onFullTime={vi.fn()}
+      />,
+    );
+    fireEvent.click(screen.getAllByRole("button", { name: "common.playStyles.Attacking" })[0]);
+    await waitFor(() =>
+      expect(
+        screen.getAllByRole("button", { name: "common.playStyles.Attacking" })[0],
+      ).not.toBeDisabled(),
+    );
+    fireEvent.click(screen.getAllByRole("button", { name: "common.playStyles.Attacking" })[0]);
+    await act(async () => {});
+    expect(invoke).toHaveBeenCalledTimes(1);
   });
 });

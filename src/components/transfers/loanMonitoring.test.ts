@@ -107,25 +107,55 @@ describe("club loan monitoring", () => {
   it("leaves impossible or fractional loan counters unknown", () => {
     const base = createGameState().players[0];
     for (const baseline of [-1, 0.5]) {
-      const player = { ...base, active_loan: { parent_team_id: "team-1", loan_team_id: "other",
-        start_date: "2026-08-01", end_date: "2027-06-01", wage_contribution_pct: 50,
-        loan_start_appearances: baseline, loan_start_minutes: 0 },
-        stats: { ...base.stats, appearances: 4, minutes_played: 300 } };
-      expect(monitoredLoans([player], "team-1")[0]).toMatchObject({ hasBaseline: false, appearances: 0, minutes: 0 });
+      const player = {
+        ...base,
+        active_loan: {
+          parent_team_id: "team-1",
+          loan_team_id: "other",
+          start_date: "2026-08-01",
+          end_date: "2027-06-01",
+          wage_contribution_pct: 50,
+          loan_start_appearances: baseline,
+          loan_start_minutes: 0,
+        },
+        stats: { ...base.stats, appearances: 4, minutes_played: 300 },
+      };
+      expect(monitoredLoans([player], "team-1")[0]).toMatchObject({
+        hasBaseline: false,
+        appearances: 0,
+        minutes: 0,
+      });
     }
   });
   it("does not show trustworthy zero usage after career counters roll back", () => {
     const base = createGameState().players[0];
-    const player = { ...base, active_loan: { parent_team_id: "team-1", loan_team_id: "other",
-      start_date: "2026-08-01", end_date: "2027-06-01", wage_contribution_pct: 50,
-      loan_start_appearances: 10, loan_start_minutes: 900 },
-      stats: { ...base.stats, appearances: 1, minutes_played: 90 } };
+    const player = {
+      ...base,
+      active_loan: {
+        parent_team_id: "team-1",
+        loan_team_id: "other",
+        start_date: "2026-08-01",
+        end_date: "2027-06-01",
+        wage_contribution_pct: 50,
+        loan_start_appearances: 10,
+        loan_start_minutes: 900,
+      },
+      stats: { ...base.stats, appearances: 1, minutes_played: 90 },
+    };
     expect(monitoredLoans([player], "team-1")[0].hasBaseline).toBe(false);
   });
   it("omits invalid loans which send a player back to the same club", () => {
     const base = createGameState().players[0];
-    const player = { ...base, active_loan: { parent_team_id: "team-1", loan_team_id: "team-1",
-      start_date: "2026-08-01", end_date: "2027-06-01", wage_contribution_pct: 50 } };
+    const player = {
+      ...base,
+      active_loan: {
+        parent_team_id: "team-1",
+        loan_team_id: "team-1",
+        start_date: "2026-08-01",
+        end_date: "2027-06-01",
+        wage_contribution_pct: 50,
+      },
+    };
     expect(monitoredLoans([player], "team-1")).toEqual([]);
   });
 });

@@ -73,8 +73,10 @@ describe("recorded player match performance", () => {
     );
   });
   it("does not display events recorded beyond the current live minute", () => {
-    const snap = snapshot([event("Goal", "scorer", "helper", "Home", 80),
-      event("ShotSaved", "opponent", "keeper", "Away", 81)]);
+    const snap = snapshot([
+      event("Goal", "scorer", "helper", "Home", 80),
+      event("ShotSaved", "opponent", "keeper", "Away", 81),
+    ]);
     const rows = playerMatchPerformance(snap, "Home");
     expect(rows.find((row) => row.id === "scorer")?.goals).toBe(0);
     expect(rows.find((row) => row.id === "helper")?.assists).toBe(0);
@@ -83,23 +85,34 @@ describe("recorded player match performance", () => {
   it("does not infer an assist from a goal with an unknown scorer", () => {
     const goal = event("Goal", "scorer", "helper");
     goal.player_id = null;
-    expect(playerMatchPerformance(snapshot([goal]), "Home").find((row) => row.id === "helper")?.assists).toBe(0);
+    expect(
+      playerMatchPerformance(snapshot([goal]), "Home").find((row) => row.id === "helper")?.assists,
+    ).toBe(0);
   });
   it("uses the first dismissal chronologically when recorded events are reordered", () => {
-    const snap = snapshot([event("RedCard", "scorer", null, "Home", 65),
-      event("SecondYellow", "scorer", null, "Home", 55)]);
-    expect(playerMatchPerformance(snap, "Home").find((row) => row.id === "scorer")?.minutes).toBe(55);
+    const snap = snapshot([
+      event("RedCard", "scorer", null, "Home", 65),
+      event("SecondYellow", "scorer", null, "Home", 55),
+    ]);
+    expect(playerMatchPerformance(snap, "Home").find((row) => row.id === "scorer")?.minutes).toBe(
+      55,
+    );
   });
   it("does not show a reserve before their recorded substitution takes place", () => {
     const snap = snapshot();
-    snap.substitutions = [{side:"Home", minute:80, player_off_id:"scorer", player_on_id:"unused"}];
-    expect(playerMatchPerformance(snap,"Home").some(row => row.id === "unused")).toBe(false);
+    snap.substitutions = [
+      { side: "Home", minute: 80, player_off_id: "scorer", player_on_id: "unused" },
+    ];
+    expect(playerMatchPerformance(snap, "Home").some((row) => row.id === "unused")).toBe(false);
   });
   it("uses the earliest entry when imported substitution records are unordered", () => {
     const snap = snapshot();
     snap.substitutions = [
-      {side:"Home",minute:65,player_off_id:"keeper",player_on_id:"helper"},
-      {side:"Home",minute:55,player_off_id:"scorer",player_on_id:"helper"}];
-    expect(playerMatchPerformance(snap,"Home").find(row => row.id === "helper")?.minutes).toBe(20);
+      { side: "Home", minute: 65, player_off_id: "keeper", player_on_id: "helper" },
+      { side: "Home", minute: 55, player_off_id: "scorer", player_on_id: "helper" },
+    ];
+    expect(playerMatchPerformance(snap, "Home").find((row) => row.id === "helper")?.minutes).toBe(
+      20,
+    );
   });
 });

@@ -49,8 +49,12 @@ describe("live feed scrolling", () => {
   it("follows a newly selected event stream even when its length is unchanged", () => {
     const view = render(<Feed count={2} />);
     const element = screen.getByTestId("feed");
-    Object.defineProperties(element,{scrollHeight:{value:1000},clientHeight:{value:200}});
-    element.scrollTop=200; fireEvent.scroll(element);
+    Object.defineProperties(element, {
+      scrollHeight: { value: 1000 },
+      clientHeight: { value: 200 },
+    });
+    element.scrollTop = 200;
+    fireEvent.scroll(element);
     view.rerender(<Feed count={2} stream="goals" />);
     expect(element.scrollTop).toBe(1000);
     expect(screen.queryByText("Live")).not.toBeInTheDocument();

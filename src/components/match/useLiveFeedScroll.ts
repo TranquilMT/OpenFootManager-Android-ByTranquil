@@ -4,7 +4,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export function useLiveFeedScroll(eventCount: number, enabled: boolean, streamKey = "all") {
   const feedRef = useRef<HTMLDivElement>(null);
   const [following, setFollowing] = useState(true);
-  useEffect(() => { setFollowing(true); }, [streamKey]);
+  useEffect(() => {
+    setFollowing(true);
+  }, [streamKey]);
   const jumpToLive = useCallback(() => {
     const element = feedRef.current;
     if (element) element.scrollTop = element.scrollHeight;

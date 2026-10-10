@@ -26,7 +26,12 @@ export function findNextFixture(fixtures: FixtureData[], teamId: string): Fixtur
   return fixtures.reduce<FixtureData | undefined>((nextFixture, fixture) => {
     const involvesTeam = fixture.home_team_id === teamId || fixture.away_team_id === teamId;
 
-    if (fixture.status !== "Scheduled" || fixture.home_team_id === fixture.away_team_id || !involvesTeam || !calendarDay(fixture.date)) {
+    if (
+      fixture.status !== "Scheduled" ||
+      fixture.home_team_id === fixture.away_team_id ||
+      !involvesTeam ||
+      !calendarDay(fixture.date)
+    ) {
       return nextFixture;
     }
 
@@ -68,7 +73,8 @@ export function hasFullLeagueSchedule(league: LeagueData): boolean {
   const teamIds = new Set(league.standings.map((entry) => entry.team_id));
   return (
     fixtures.length === expectedCount &&
-    new Set(fixtures.map((fixture) => JSON.stringify([fixture.home_team_id, fixture.away_team_id]))).size === expectedCount &&
+    new Set(fixtures.map((fixture) => JSON.stringify([fixture.home_team_id, fixture.away_team_id])))
+      .size === expectedCount &&
     new Set(fixtures.map((fixture) => fixture.id)).size === fixtures.length &&
     fixtures.every(
       (fixture) =>
