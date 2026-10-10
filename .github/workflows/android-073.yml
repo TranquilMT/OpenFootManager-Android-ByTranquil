@@ -63,6 +63,9 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
+      - name: Dependency vulnerability audit
+        run: npm audit
+
       - name: Portrait diversity regression guard
         run: node scripts/check-portrait-diversity.mjs
 
