@@ -8,4 +8,8 @@ describe("contract calendar estimates", () => {
     expect(getDaysUntil("2026-02-30", "2026-02-20")).toBeNaN();
     expect(getDaysUntil("2026-03-01", "2026-02-30")).toBeNaN();
   });
+  it("shows the unknown marker for invalid remaining-year dates", () => {
+    expect(getContractYearsRemaining("invalid", "2026-07-10")).toBe("—");
+    expect(getContractYearsRemaining("2027-07-10", "invalid")).toBe("—");
+  });
 });

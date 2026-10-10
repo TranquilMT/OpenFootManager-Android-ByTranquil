@@ -48,5 +48,5 @@ export function getContractYearsRemaining(contractEnd: string | null, currentDat
   }
 
   const daysUntilExpiry = Math.max(0, getDaysUntil(contractEnd, currentDate));
-  return (daysUntilExpiry / 365).toFixed(1);
+  return Number.isFinite(daysUntilExpiry) ? (daysUntilExpiry / 365).toFixed(1) : "—";
 }
