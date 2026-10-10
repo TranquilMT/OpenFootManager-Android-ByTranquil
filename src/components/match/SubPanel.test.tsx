@@ -353,4 +353,14 @@ describe("SubPanel", () => {
     snap.home_bench.reverse();
     expect(buildRecommendedSubstitutions(snap, "Home")).toEqual(before);
   });
+
+  it("offers injury cover even when the reserve is weaker and has another role", () => {
+    const snap = createSnapshot();
+    snap.home_team.players = [makePlayer({id:"injured",position:"Midfielder",condition:100,ovr:90})];
+    snap.home_bench = [makePlayer({id:"cover",position:"Defender",condition:80,ovr:50})];
+    snap.events = [{minute:30,event_type:"Injury",side:"Home",zone:"Midfield",player_id:"injured",secondary_player_id:null}];
+    expect(buildRecommendedSubstitutions(snap,"Home")[0]).toMatchObject({offId:"injured",onId:"cover"});
+  });
+
+
 });

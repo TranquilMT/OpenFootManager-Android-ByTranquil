@@ -253,7 +253,7 @@ export function buildRecommendedSubstitutions(
           yellowCount,
         });
 
-        if (reasons.length === 0) {
+        if (reasons.length === 0 && !injuredIds.has(offPlayer.id)) {
           return null;
         }
 
