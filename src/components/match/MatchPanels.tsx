@@ -137,13 +137,17 @@ export function EventFeed({
 
 export function MatchStats({ snapshot }: { snapshot: MatchSnapshot }) {
   const { t } = useTranslation();
-  const homeEvents = snapshot.events.filter((e) => e.side === "Home");
-  const awayEvents = snapshot.events.filter((e) => e.side === "Away");
+  const reachedEvents = snapshot.events.filter(
+    (event) =>
+      Number.isFinite(event.minute) && event.minute >= 0 && event.minute <= snapshot.current_minute,
+  );
+  const homeEvents = reachedEvents.filter((e) => e.side === "Home");
+  const awayEvents = reachedEvents.filter((e) => e.side === "Away");
   const ct = (events: MatchEvent[], type: string) =>
     events.filter((e) => e.event_type === type).length;
 
-  const homeMetrics = matchMetrics(snapshot.events, "Home");
-  const awayMetrics = matchMetrics(snapshot.events, "Away");
+  const homeMetrics = matchMetrics(reachedEvents, "Home");
+  const awayMetrics = matchMetrics(reachedEvents, "Away");
   const stats = [
     {
       label: t("phase70.metrics.xg"),

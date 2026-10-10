@@ -35,6 +35,11 @@ const row = (key: string) => {
   return element;
 };
 describe("integrated match panels", () => {
+  it("live statistics exclude future shots and bookings", () => {
+    const future = { ...event("ShotOnTarget"), minute: 90 };
+    render(<MatchStats snapshot={snapshot([future])} />);
+    expect(row("match.shots").firstElementChild).toHaveTextContent("0");
+  });
   it("counts missed match penalties as shots without counting shootout kicks", () => {
     render(<MatchStats snapshot={snapshot([event("PenaltyMiss"), event("ShootoutGoal")])} />);
     expect(row("match.shots").firstElementChild).toHaveTextContent("1");
