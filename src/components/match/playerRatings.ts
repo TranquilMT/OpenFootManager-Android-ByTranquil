@@ -61,6 +61,6 @@ export function playerMatchRatings(snapshot: MatchSnapshot, side: "Home" | "Away
   });
   const sorted = participants
     .map((p) => ({ ...p, rating: Math.round(ratings[p.id] * 10) / 10 }))
-    .sort((a, b) => b.rating - a.rating);
+    .sort((a, b) => b.rating - a.rating || a.id.localeCompare(b.id));
   return sorted;
 }

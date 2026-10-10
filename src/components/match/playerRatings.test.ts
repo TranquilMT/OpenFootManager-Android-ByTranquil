@@ -26,6 +26,16 @@ const snapshot = (events: MatchEvent[] = []) =>
     ],
   }) as unknown as MatchSnapshot;
 describe("recorded post-match player ratings", () => {
+  it("rating ties use stable identities rather than snapshot roster order", () => {
+    const first = snapshot();
+    const second = {
+      ...first,
+      home_team: { ...first.home_team, players: [...first.home_team.players].reverse() },
+    };
+    expect(playerMatchRatings(first, "Home").map((row) => row.id)).toEqual(
+      playerMatchRatings(second, "Home").map((row) => row.id),
+    );
+  });
   it("future records cannot increase report ratings", () => {
     expect(
       playerMatchRatings(snapshot([event("Goal", "starter", null, "Home", 100)]), "Home").find(
