@@ -112,7 +112,8 @@ export function narrativeKey(evt: MatchEvent, events: MatchEvent[]): string | nu
 
 /** Observational metrics: no momentum bonuses or invented shot locations. */
 export function matchMetrics(events: MatchEvent[], side: "Home" | "Away") {
-  const own = events.filter((e) => e.side === side);
+  const validEvents = events.filter((event) => Number.isFinite(event.minute) && event.minute >= 0);
+  const own = validEvents.filter((e) => e.side === side);
   const shots = own.filter((e) => SHOTS.has(e.event_type));
   const recorded = shots.filter((e) => e.shot && Number.isFinite(e.shot.expected_goals));
   return {
@@ -123,6 +124,6 @@ export function matchMetrics(events: MatchEvent[], side: "Home" | "Away") {
     xg: recorded.reduce((sum, e) => sum + Math.max(0, Math.min(1, e.shot?.expected_goals ?? 0)), 0),
     hasXg: recorded.length > 0,
     woodwork: own.filter((e) => e.detail === "Woodwork").length,
-    saves: events.filter((e) => e.side !== side && e.event_type === "ShotSaved").length,
+    saves: validEvents.filter((e) => e.side !== side && e.event_type === "ShotSaved").length,
   };
 }

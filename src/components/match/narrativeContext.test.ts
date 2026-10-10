@@ -15,6 +15,19 @@ const event = (
   zone: "Midfield",
 });
 describe("truthful match narratives", () => {
+  it("excludes invalid event timestamps from observed match metrics", () => {
+    expect(
+      matchMetrics(
+        [
+          event("Goal", -1),
+          event("ShotSaved", Infinity, "Away"),
+          event("ShotOffTarget", Number.NaN),
+          event("Goal", 20),
+        ],
+        "Home",
+      ),
+    ).toMatchObject({ shots: 1, onTarget: 1, saves: 0 });
+  });
   it("includes earlier goals stored after the current event", () => {
     const goal = event("Goal", 30);
     expect(eventContext(goal, [goal, event("Goal", 10, "Away")])).toMatchObject({
