@@ -137,6 +137,14 @@ function createSnapshot(): MatchSnapshot {
 }
 
 describe("SubPanel", () => {
+  it("invalid substitution allowances cannot produce recommendations", () => {
+    const snapshot = createSnapshot();
+    snapshot.max_subs = NaN;
+    expect(buildRecommendedSubstitutions(snapshot, "Home")).toEqual([]);
+    snapshot.max_subs = 5;
+    snapshot.home_subs_made = -1;
+    expect(buildRecommendedSubstitutions(snapshot, "Home")).toEqual([]);
+  });
   it("invalid bench fitness is not recommended for a substitution", () => {
     const snapshot = createSnapshot();
     snapshot.home_bench[0].condition = NaN;

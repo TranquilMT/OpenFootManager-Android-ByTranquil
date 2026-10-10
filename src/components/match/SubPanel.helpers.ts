@@ -218,6 +218,13 @@ export function buildRecommendedSubstitutions(
 ): RecommendedSubstitution[] {
   const { team, yellows } = getTeamState(snapshot, side);
   const subsMade = side === "Home" ? snapshot.home_subs_made : snapshot.away_subs_made;
+  if (
+    !Number.isSafeInteger(snapshot.max_subs) ||
+    snapshot.max_subs < 0 ||
+    !Number.isSafeInteger(subsMade) ||
+    subsMade < 0
+  )
+    return [];
   const remaining = Math.max(0, snapshot.max_subs - subsMade);
   if (snapshot.phase === "Finished" || snapshot.phase === "PenaltyShootout" || remaining === 0)
     return [];
