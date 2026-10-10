@@ -26,6 +26,13 @@ const snapshot = (events: MatchEvent[] = []) =>
     ],
   }) as unknown as MatchSnapshot;
 describe("recorded post-match player ratings", () => {
+  it("a scorer cannot receive an assist bonus for their own goal", () => {
+    expect(
+      playerMatchRatings(snapshot([event("Goal", "starter", "starter")]), "Home").find(
+        (row) => row.id === "starter",
+      )?.rating,
+    ).toBe(7.2);
+  });
   it("includes replaced participants but excludes unused reserves", () => {
     expect(
       playerMatchRatings(snapshot(), "Home")
