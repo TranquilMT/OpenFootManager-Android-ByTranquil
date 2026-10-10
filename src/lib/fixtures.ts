@@ -68,6 +68,7 @@ export function hasFullLeagueSchedule(league: LeagueData): boolean {
   const teamIds = new Set(league.standings.map((entry) => entry.team_id));
   return (
     fixtures.length === expectedCount &&
+    new Set(fixtures.map((fixture) => JSON.stringify([fixture.home_team_id, fixture.away_team_id]))).size === expectedCount &&
     new Set(fixtures.map((fixture) => fixture.id)).size === fixtures.length &&
     fixtures.every(
       (fixture) =>

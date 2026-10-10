@@ -807,4 +807,10 @@ describe("isSeasonComplete with unplayed season", () => {
     } as unknown as GameStateData;
     expect(getUserCompetition(state)?.id).toBe(legacy.id);
   });
+  it("rejects repeated pairings even when every fixture identity is unique", () => {
+    const league = makeFullScheduledLeague();
+    league.fixtures[1].home_team_id = league.fixtures[0].home_team_id;
+    league.fixtures[1].away_team_id = league.fixtures[0].away_team_id;
+    expect(hasFullLeagueSchedule(league)).toBe(false);
+  });
 });
