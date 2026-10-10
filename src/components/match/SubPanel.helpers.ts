@@ -221,7 +221,14 @@ export function buildRecommendedSubstitutions(
 
   const injuredIds = new Set(
     snapshot.events
-      .filter((event) => event.side === side && event.event_type === "Injury")
+      .filter(
+        (event) =>
+          event.side === side &&
+          event.event_type === "Injury" &&
+          Number.isFinite(event.minute) &&
+          event.minute >= 0 &&
+          event.minute <= snapshot.current_minute,
+      )
       .map((event) => event.player_id),
   );
   const usedOffIds = new Set<string>();

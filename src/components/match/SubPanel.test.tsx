@@ -137,6 +137,22 @@ function createSnapshot(): MatchSnapshot {
 }
 
 describe("SubPanel", () => {
+  it("future injuries do not prioritise a healthy starter", () => {
+    const snapshot = createSnapshot();
+    snapshot.home_team.players[0].condition = 100;
+    snapshot.home_team.players[0].ovr = 99;
+    snapshot.home_team.players[1].condition = 10;
+    snapshot.max_subs = 1;
+    snapshot.events.push({
+      event_type: "Injury",
+      player_id: "starter-1",
+      secondary_player_id: null,
+      minute: 90,
+      side: "Home",
+      zone: "Midfield",
+    });
+    expect(buildRecommendedSubstitutions(snapshot, "Home")[0]?.offId).toBe("starter-2");
+  });
   it("ignores future substitution records when filtering the bench", () => {
     const snapshot = createSnapshot();
     snapshot.substitutions.push({
