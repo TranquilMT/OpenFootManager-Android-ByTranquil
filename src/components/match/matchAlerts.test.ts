@@ -14,4 +14,10 @@ describe("actionable match alerts", () => {
     snapshot.home_team.players=[];
     expect(matchAlerts(snapshot,"Home")).toEqual([]);
   });
+  it("places dismissals above injury concerns and clears them after recorded tactical changes", () => {
+    const snapshot=snap([event("Injury"),event("RedCard","dismissed",32)]);
+    expect(matchAlerts(snapshot,"Home").map(alert=>alert.event.event_type)).toEqual(["RedCard","Injury"]);
+    snapshot.events.push(event("TacticalChange","manager",33));
+    expect(matchAlerts(snapshot,"Home").map(alert=>alert.event.event_type)).toEqual(["Injury"]);
+  });
 });
