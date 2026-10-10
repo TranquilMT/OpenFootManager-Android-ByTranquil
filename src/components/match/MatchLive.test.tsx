@@ -263,4 +263,16 @@ describe("live match decisions", () => {
     expect(screen.getByRole("table", { name: "Home FC" })).toBeInTheDocument();
     expect(screen.getByRole("tabpanel")).toHaveAttribute("aria-labelledby", "match-tab-players");
   });
+  it("closes header and sidebar tactical shortcuts during shootouts", () => {
+    render(<MatchLive snapshot={{ ...snapshot, phase: "PenaltyShootout" }}
+      gameState={{ teams: [], players: [] } as unknown as GameStateData}
+      userSide="Home" isSpectator={false} importantEvents={[]}
+      onSnapshotUpdate={vi.fn()} onImportantEvent={vi.fn()}
+      onHalfTime={vi.fn()} onFullTime={vi.fn()} />);
+    expect(screen.getByRole("button", { name: "4-4-2" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "dashboard.tactics" })).toBeDisabled();
+    for (const button of screen.getAllByRole("button", { name: "common.playStyles.Attacking" })) {
+      expect(button).toBeDisabled();
+    }
+  });
 });

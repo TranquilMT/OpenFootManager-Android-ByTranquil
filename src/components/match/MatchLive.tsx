@@ -132,6 +132,7 @@ export default function MatchLive({
     [snapshot.events],
   );
   const isFinished = snapshot.phase === "Finished";
+  const decisionsClosed = isFinished || snapshot.phase === "PenaltyShootout";
   const filteredEvents = useMemo(
     () => filterMatchEvents(snapshot.events, eventFilter),
     [visibleEvents, snapshot.events, eventFilter],
@@ -254,7 +255,7 @@ export default function MatchLive({
 
   // Apply substitution
   const handleSubstitution = async (playerOffId: string, playerOnId: string) => {
-    if (!userSide || isSpectator || isFinished) return;
+    if (!userSide || isSpectator || decisionsClosed) return;
     setMatchError(null);
     await operationGate.current.runCommand(async () => {
       try {
@@ -272,7 +273,7 @@ export default function MatchLive({
   };
 
   const handleFormationChange = async (formation: string) => {
-    if (!userSide || isSpectator || isFinished) return;
+    if (!userSide || isSpectator || decisionsClosed) return;
     setMatchError(null);
     await operationGate.current.runCommand(async () => {
       try {
@@ -287,7 +288,7 @@ export default function MatchLive({
   };
 
   const handlePlayStyleChange = async (playStyle: string) => {
-    if (!userSide || isSpectator || isFinished) return;
+    if (!userSide || isSpectator || decisionsClosed) return;
     setMatchError(null);
     await operationGate.current.runCommand(async () => {
       try {
@@ -302,7 +303,7 @@ export default function MatchLive({
   };
 
   const handleTacticsPhaseChange = async (patch: Partial<TacticsPhaseSettings>) => {
-    if (!userSide || isSpectator || isFinished) return;
+    if (!userSide || isSpectator || decisionsClosed) return;
     const instructions = buildTacticalInstructions(patch);
     if (instructions.length === 0) return;
     setMatchError(null);
@@ -413,7 +414,7 @@ export default function MatchLive({
 
           {!isSpectator && userSide && (
             <MatchdayQuickActions
-              disabled={isFinished || matchCommandPending}
+              disabled={decisionsClosed || matchCommandPending}
               playStyle={
                 userSide === "Home" ? snapshot.home_team.play_style : snapshot.away_team.play_style
               }
@@ -638,7 +639,7 @@ export default function MatchLive({
                   type="button"
                   key={s.id}
                   aria-pressed={speed === s.id}
-                  disabled={isFinished || matchCommandPending}
+                  disabled={decisionsClosed || matchCommandPending}
                   onClick={() => {
                     setSpeed(s.id);
                     setIsRunning(s.id !== "paused");
@@ -660,7 +661,7 @@ export default function MatchLive({
             {speed === "paused" && (
               <button
                 type="button"
-                disabled={isFinished || matchCommandPending}
+                disabled={decisionsClosed || matchCommandPending}
                 onClick={() => stepMatch(1)}
                 className="mt-2 flex min-h-11 w-full items-center justify-center gap-2 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-navy-700 dark:hover:bg-navy-600 rounded-lg text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 transition-colors"
               >
@@ -678,7 +679,7 @@ export default function MatchLive({
               </h3>
               <button
                 type="button"
-                disabled={isFinished || matchCommandPending}
+                disabled={decisionsClosed || matchCommandPending}
                 onClick={() => setShowSubPanel(!showSubPanel)}
                 className="flex min-h-11 items-center gap-2 px-3 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-navy-700 dark:hover:bg-navy-600 rounded-lg text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 transition-colors"
               >
@@ -701,7 +702,7 @@ export default function MatchLive({
                       <button
                         type="button"
                         key={f}
-                        disabled={isFinished || matchCommandPending}
+                        disabled={decisionsClosed || matchCommandPending}
                         onClick={() => handleFormationChange(f)}
                         className={`min-h-11 rounded px-2 py-1 text-xs font-heading transition-colors ${cur === f ? "bg-primary-500/20 text-primary-500 dark:text-primary-400 ring-1 ring-primary-500/50" : "bg-gray-100 text-gray-600 hover:text-gray-900 dark:bg-navy-700 dark:text-gray-400 dark:hover:text-gray-300"}`}
                       >
@@ -732,7 +733,7 @@ export default function MatchLive({
                       <button
                         type="button"
                         key={s.id}
-                        disabled={isFinished || matchCommandPending}
+                        disabled={decisionsClosed || matchCommandPending}
                         onClick={() => handlePlayStyleChange(s.id)}
                         className={`flex min-h-11 items-center gap-1 rounded px-2 py-1 text-xs font-heading transition-colors ${cur === s.id ? "bg-primary-500/20 text-primary-500 dark:text-primary-400 ring-1 ring-primary-500/50" : "bg-gray-100 text-gray-600 hover:text-gray-900 dark:bg-navy-700 dark:text-gray-400 dark:hover:text-gray-300"}`}
                       >
