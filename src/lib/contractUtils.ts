@@ -7,7 +7,8 @@ export function getDaysUntil(targetDate: string, currentDate: string): number {
   if (!calendarDay(targetDate) || !calendarDay(currentDate)) return NaN;
   const millisecondsPerDay = 1000 * 60 * 60 * 24;
   return Math.ceil(
-    (new Date(targetDate).getTime() - new Date(currentDate).getTime()) / millisecondsPerDay,
+    (Date.parse(calendarDay(targetDate)!) - Date.parse(calendarDay(currentDate)!)) /
+      millisecondsPerDay,
   );
 }
 
