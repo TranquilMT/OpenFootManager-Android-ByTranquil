@@ -748,4 +748,11 @@ describe("isSeasonComplete with unplayed season", () => {
     expect(hasFullLeagueSchedule(league)).toBe(true);
     expect(isSeasonComplete(league)).toBe(false);
   });
+
+ it("skips undated fixtures instead of hiding the next playable match",()=>{
+  const fixtures=[makeFixture({id:"bad",date:"",home_team_id:"team_1"}),makeFixture({id:"valid",date:"2026-08-12",home_team_id:"team_1"})];
+  expect(findNextFixture(fixtures,"team_1")?.id).toBe("valid");
+ });
+
+
 });

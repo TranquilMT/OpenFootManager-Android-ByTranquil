@@ -1,3 +1,4 @@
+import { calendarDay } from "./calendarDay";
 import type { TFunction } from "i18next";
 import type { FixtureData, GameStateData, LeagueData } from "../store/gameStore";
 
@@ -25,7 +26,7 @@ export function findNextFixture(fixtures: FixtureData[], teamId: string): Fixtur
   return fixtures.reduce<FixtureData | undefined>((nextFixture, fixture) => {
     const involvesTeam = fixture.home_team_id === teamId || fixture.away_team_id === teamId;
 
-    if (fixture.status !== "Scheduled" || !involvesTeam) {
+    if (fixture.status !== "Scheduled" || !involvesTeam || !calendarDay(fixture.date)) {
       return nextFixture;
     }
 
