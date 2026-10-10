@@ -168,4 +168,12 @@ describe("truthful match narratives", () => {
   });
 
 
+
+  it("does not link an unattributed injury to an unspecified substitution", () => {
+    const injury = {...event("Injury",30),player_id:null};
+    const sub = event("Substitution",31);
+    expect(eventContext(sub,[injury,sub]).injuryChange).toBe(false);
+  });
+
+
 });

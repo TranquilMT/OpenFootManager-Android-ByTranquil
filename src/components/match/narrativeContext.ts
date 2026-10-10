@@ -47,7 +47,7 @@ export function eventContext(evt: MatchEvent, events: MatchEvent[]) {
     recentShots: before.filter(
       (e) => e.side === evt.side && SHOTS.has(e.event_type) && e.minute >= evt.minute - 5 && e.minute <= evt.minute,
     ).length,
-    injuryChange: before.some(
+    injuryChange: Boolean(evt.secondary_player_id) && before.some(
       (e) =>
         e.event_type === "Injury" &&
         e.side === evt.side &&
