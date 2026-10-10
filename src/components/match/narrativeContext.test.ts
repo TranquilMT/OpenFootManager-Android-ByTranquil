@@ -15,6 +15,11 @@ const event = (
   zone: "Midfield",
 });
 describe("truthful match narratives", () => {
+  it("future injury records cannot explain an earlier substitution", () => {
+    const injury = event("Injury", 60);
+    const sub = { ...event("Substitution", 30), secondary_player_id: "p1" };
+    expect(eventContext(sub, [injury, sub]).injuryChange).toBe(false);
+  });
   it("does not read goals from the future", () => {
     const e = event("Goal", 10);
     expect(eventContext(e, [e, event("Goal", 50)]).ownAfter).toBe(1);

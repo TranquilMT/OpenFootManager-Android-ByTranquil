@@ -59,7 +59,8 @@ export function eventContext(evt: MatchEvent, events: MatchEvent[]) {
           e.event_type === "Injury" &&
           e.side === evt.side &&
           e.player_id === evt.secondary_player_id &&
-          e.minute >= evt.minute - 10,
+          e.minute >= evt.minute - 10 &&
+          e.minute <= evt.minute,
       ),
   };
 }
