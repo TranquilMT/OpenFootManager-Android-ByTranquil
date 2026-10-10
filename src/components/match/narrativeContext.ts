@@ -22,7 +22,8 @@ export function eventContext(evt: MatchEvent, events: MatchEvent[]) {
         e.side === evt.side &&
         e.player_id === evt.player_id &&
         e.secondary_player_id === evt.secondary_player_id &&
-        JSON.stringify(e.detail) === JSON.stringify(evt.detail),
+        JSON.stringify(e.detail) === JSON.stringify(evt.detail) &&
+        JSON.stringify(e.shot) === JSON.stringify(evt.shot),
     );
   const prefix =
     index >= 0 ? events.slice(0, index + 1) : [...events.filter((e) => e.minute < evt.minute), evt];

@@ -176,4 +176,12 @@ describe("truthful match narratives", () => {
   });
 
 
+
+  it("matches a copied event to its recorded shot rather than another same-minute attempt", () => {
+    const a = {...event("ShotSaved",30),shot:{expected_goals:0.1,goalkeeper_id:"gk"}};
+    const b = {...a,shot:{expected_goals:0.5,goalkeeper_id:"gk"}};
+    expect(eventContext({...b},[a,b]).recentShots).toBe(1);
+  });
+
+
 });
