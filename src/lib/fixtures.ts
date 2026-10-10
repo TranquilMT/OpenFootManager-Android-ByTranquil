@@ -26,7 +26,7 @@ export function findNextFixture(fixtures: FixtureData[], teamId: string): Fixtur
   return fixtures.reduce<FixtureData | undefined>((nextFixture, fixture) => {
     const involvesTeam = fixture.home_team_id === teamId || fixture.away_team_id === teamId;
 
-    if (fixture.status !== "Scheduled" || !involvesTeam || !calendarDay(fixture.date)) {
+    if (fixture.status !== "Scheduled" || fixture.home_team_id === fixture.away_team_id || !involvesTeam || !calendarDay(fixture.date)) {
       return nextFixture;
     }
 

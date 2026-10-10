@@ -190,7 +190,7 @@ describe("findNextFixture", () => {
   it("finds scheduled fixture for team", () => {
     const fixtures = [
       makeFixture({ id: "f1", status: "Completed", home_team_id: "team_1" }),
-      makeFixture({ id: "f2", status: "Scheduled", away_team_id: "team_1" }),
+      makeFixture({ id: "f2", status: "Scheduled", home_team_id: "team_2", away_team_id: "team_1" }),
     ];
     const next = findNextFixture(fixtures, "team_1");
     expect(next?.id).toBe("f2");
@@ -812,5 +812,16 @@ describe("isSeasonComplete with unplayed season", () => {
     league.fixtures[1].home_team_id = league.fixtures[0].home_team_id;
     league.fixtures[1].away_team_id = league.fixtures[0].away_team_id;
     expect(hasFullLeagueSchedule(league)).toBe(false);
+  });
+  it("rejects duplicate clubs in the league membership list", () => {
+    const league = makeFullScheduledLeague();
+    league.standings[3].team_id = league.standings[2].team_id;
+    expect(hasFullLeagueSchedule(league)).toBe(false);
+  });
+  it("skips self-matches when finding the next playable fixture", () => {
+    expect(findNextFixture([
+      makeFixture({id:"bad", home_team_id:"team_1", away_team_id:"team_1", date:"2026-08-01"}),
+      makeFixture({id:"good", home_team_id:"team_1", away_team_id:"team_2", date:"2026-08-02"})
+    ],"team_1")?.id).toBe("good");
   });
 });
