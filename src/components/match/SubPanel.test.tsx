@@ -363,4 +363,11 @@ describe("SubPanel", () => {
   });
 
 
+
+  it("does not recommend substitutions once a penalty shootout has started", () => {
+    const snap = createSnapshot(); snap.phase = "PenaltyShootout";
+    expect(buildRecommendedSubstitutions(snap,"Home")).toEqual([]);
+  });
+
+
 });
