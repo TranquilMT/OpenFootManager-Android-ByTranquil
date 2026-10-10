@@ -141,6 +141,15 @@ function createSnapshot(): MatchSnapshot {
 }
 
 describe("SubPanel", () => {
+  it("does not consume a reserve for an imported self-substitution", () => {
+    const snapshot = createSnapshot();
+    snapshot.substitutions = [
+      { side: "Home", minute: 20, player_off_id: "bench-1", player_on_id: "bench-1" },
+    ];
+    expect(getAvailableMatchBench(snapshot, "Home").some((player) => player.id === "bench-1")).toBe(
+      true,
+    );
+  });
   it("protects legacy GK aliases from outfield recommendations", () => {
     const snapshot = createSnapshot();
     snapshot.home_team.players = [
