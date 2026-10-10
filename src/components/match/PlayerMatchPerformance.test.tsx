@@ -22,10 +22,14 @@ describe("live player performance panel", () => {
     const table = screen.getByRole("table", { name: "Home" });
     const row = within(table).getByText("Scorer (#9)").closest("tr");
     if (!row) throw new Error("No player row");
+    expect(within(row).getByRole("rowheader", { name: "Scorer (#9)" })).toHaveAttribute(
+      "scope",
+      "row",
+    );
     expect(
       within(row)
         .getAllByRole("cell")
         .map((cell) => cell.textContent),
-    ).toEqual(["Scorer (#9)", "30", "1", "0", "1", "1", "0", "0", "0", "0", "0"]);
+    ).toEqual(["30", "1", "0", "1", "1", "0", "0", "0", "0", "0"]);
   });
 });

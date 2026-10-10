@@ -48,10 +48,10 @@ export function PlayerMatchPerformance({
                     const jersey = playerJerseyMap?.get(player.id);
                     return (
                       <tr key={player.id} className="border-t border-gray-100 dark:border-navy-600">
-                        <td className="whitespace-nowrap px-3 py-2 font-semibold">
+                        <th scope="row" className="whitespace-nowrap px-3 py-2 font-semibold">
                           {player.name}
                           {jersey != null ? ` (#${jersey})` : ""}
-                        </td>
+                        </th>
                         {columns.map((column) => (
                           <td key={column.key} className="px-3 py-2 text-right tabular-nums">
                             {player[column.key]}
