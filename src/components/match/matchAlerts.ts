@@ -11,5 +11,13 @@ export function matchAlerts(snapshot: MatchSnapshot, side: "Home" | "Away"): Mat
   const injuries: MatchAlert[] = events.filter(event=>event.event_type === "Injury" && active.has(event.player_id ?? "") &&
     !snapshot.sent_off.includes(event.player_id ?? ""))
     .map(event=>({event,action:"substitution" as const,priority:2}));
-  return [...dismissals, ...injuries].sort((a,b) => b.priority-a.priority || b.event.minute-a.event.minute);
+  const bookings: MatchAlert[] = events.filter(event => event.event_type === "YellowCard" && active.has(event.player_id ?? "") && !snapshot.sent_off.includes(event.player_id ?? ""))
+    .map(event => ({event,action:"substitution",priority:1}));
+  const seen = new Set<string>();
+  return [...dismissals, ...injuries, ...bookings].sort((a,b) => b.priority-a.priority || b.event.minute-a.event.minute)
+    .filter(alert => {
+      const id=alert.event.player_id ?? "";
+      if(seen.has(id)) return false;
+      seen.add(id); return true;
+    }).slice(0,3);
 }

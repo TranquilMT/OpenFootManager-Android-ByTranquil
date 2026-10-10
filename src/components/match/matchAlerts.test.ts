@@ -20,4 +20,10 @@ describe("actionable match alerts", () => {
     snapshot.events.push(event("TacticalChange","manager",33));
     expect(matchAlerts(snapshot,"Home").map(alert=>alert.event.event_type)).toEqual(["Injury"]);
   });
+  it("ranks booking risks below injuries and retains only one concern per player", () => {
+    const snapshot=snap([event("YellowCard","hurt",20),event("Injury","hurt",25),event("Injury","hurt",30),event("YellowCard","booked",28)]);
+    expect(matchAlerts(snapshot,"Home").map(alert=>[alert.event.player_id,alert.event.event_type])).toEqual([["hurt","Injury"],["booked","YellowCard"]]);
+    snapshot.sent_off=["booked"];
+    expect(matchAlerts(snapshot,"Home")).toHaveLength(1);
+  });
 });
