@@ -292,6 +292,7 @@ export default function MatchLive({
         });
         publishSnapshot(snap);
         setShowSubPanel(false);
+        setAlertPlayerId(null);
       } catch (err) {
         setMatchError(resolveBackendError(err) || t("match.actionFailed"));
       }

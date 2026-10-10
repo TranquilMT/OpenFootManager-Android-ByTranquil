@@ -115,6 +115,10 @@ export function SubPanel({
 
   const decisionClosed = snapshot.phase === "Finished" || snapshot.phase === "PenaltyShootout";
   const team = side === "Home" ? snapshot.home_team : snapshot.away_team;
+  useEffect(() => {
+    setSelectedOff(initialPlayerId);
+    setSelectedBench(null);
+  }, [side, team.id, initialPlayerId]);
   const subsMade = side === "Home" ? snapshot.home_subs_made : snapshot.away_subs_made;
 
   const subbedOnIds = new Set(

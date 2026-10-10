@@ -410,6 +410,16 @@ describe("SubPanel", () => {
     expect(props.onFormationChange).toHaveBeenCalledWith("4-3-3");
   });
 
+  it("clears prepared substitutions when the managed side changes", () => {
+    const props = createProps();
+    const view = render(<SubPanel {...props} />);
+    fireEvent.click(screen.getByTestId("recommended-sub-starter-1-bench-1"));
+    view.rerender(<SubPanel {...props} side="Away" />);
+    view.rerender(<SubPanel {...props} />);
+    expect(screen.getByTestId("sub-panel-off-starter-1")).toHaveAttribute("aria-pressed", "false");
+    expect(screen.queryByRole("button", { name: "Confirm substitution" })).not.toBeInTheDocument();
+  });
+
   it("lets a recommendation prefill the swap flow", () => {
     const props = createProps();
 
