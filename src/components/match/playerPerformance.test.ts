@@ -80,4 +80,9 @@ describe("recorded player match performance", () => {
     expect(rows.find((row) => row.id === "helper")?.assists).toBe(0);
     expect(rows.find((row) => row.id === "keeper")?.saves).toBe(0);
   });
+  it("does not infer an assist from a goal with an unknown scorer", () => {
+    const goal = event("Goal", "scorer", "helper");
+    goal.player_id = null;
+    expect(playerMatchPerformance(snapshot([goal]), "Home").find((row) => row.id === "helper")?.assists).toBe(0);
+  });
 });

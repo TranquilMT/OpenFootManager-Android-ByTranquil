@@ -54,6 +54,7 @@ export function playerMatchPerformance(snapshot: MatchSnapshot, side: "Home" | "
           (event) =>
             event.side === side &&
             event.event_type === "Goal" &&
+            Boolean(event.player_id) &&
             event.secondary_player_id === player.id &&
             event.player_id !== player.id,
         ).length,
