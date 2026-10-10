@@ -408,6 +408,42 @@ function makeGameState() {
 }
 
 describe("PostMatchScreen", (): void => {
+  it("uses shared shot accounting in the full-time summary", () => {
+    const snapshot = { ...makeSnapshot(), events: [] as MatchEvent[] };
+    snapshot.events = ["PenaltyMiss", "ShotOnTarget", "ShotBlocked"].map((event_type) => ({
+      event_type,
+      player_id: "p1",
+      secondary_player_id: null,
+      side: "Home" as const,
+      minute: 30,
+      zone: "Midfield",
+    }));
+    snapshot.events.push({
+      event_type: "Goal",
+      player_id: "p1",
+      secondary_player_id: null,
+      side: "Home",
+      minute: 100,
+      zone: "Midfield",
+    });
+    render(
+      <ThemeProvider>
+        <PostMatchScreen
+          snapshot={snapshot}
+          gameState={makeGameState()}
+          userSide="Home"
+          isSpectator={false}
+          importantEvents={[]}
+          onContinue={() => {}}
+          onFinish={() => {}}
+        />
+      </ThemeProvider>,
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "match.matchReport" }));
+    const row = screen.getByText("match.shots").parentElement;
+    expect(row?.firstElementChild).toHaveTextContent("3");
+    expect(row?.lastElementChild).toHaveTextContent("0");
+  });
   it("navigates full-time review tabs with arrow and Home/End keys", () => {
     render(
       <ThemeProvider>

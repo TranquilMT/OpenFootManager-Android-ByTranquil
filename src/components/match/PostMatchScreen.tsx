@@ -1,3 +1,4 @@
+import { matchMetrics } from "./narrativeContext";
 import { PlayerMatchPerformance } from "./PlayerMatchPerformance";
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
@@ -151,23 +152,17 @@ export default function PostMatchScreen({
     ].includes(e.event_type),
   );
 
-  const homeEvents = snapshot.events.filter((e) => e.side === "Home");
-  const awayEvents = snapshot.events.filter((e) => e.side === "Away");
+  const recordedEvents = snapshot.events.filter(
+    (event) =>
+      Number.isFinite(event.minute) && event.minute >= 0 && event.minute <= snapshot.current_minute,
+  );
+  const homeEvents = recordedEvents.filter((e) => e.side === "Home");
+  const awayEvents = recordedEvents.filter((e) => e.side === "Away");
   const countType = (events: MatchEvent[], type: string) =>
     events.filter((e) => e.event_type === type).length;
 
-  const homeShots =
-    countType(homeEvents, "Goal") +
-    countType(homeEvents, "PenaltyGoal") +
-    countType(homeEvents, "ShotSaved") +
-    countType(homeEvents, "ShotOffTarget") +
-    countType(homeEvents, "ShotBlocked");
-  const awayShots =
-    countType(awayEvents, "Goal") +
-    countType(awayEvents, "PenaltyGoal") +
-    countType(awayEvents, "ShotSaved") +
-    countType(awayEvents, "ShotOffTarget") +
-    countType(awayEvents, "ShotBlocked");
+  const homeShots = matchMetrics(recordedEvents, "Home").shots;
+  const awayShots = matchMetrics(recordedEvents, "Away").shots;
 
   const suggestedTalks: TeamTalkTone[] =
     resultType === "win"
