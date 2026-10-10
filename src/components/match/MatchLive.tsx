@@ -133,6 +133,7 @@ export default function MatchLive({
     );
   };
   const [showSubPanel, setShowSubPanel] = useState(false);
+  const [alertPlayerId, setAlertPlayerId] = useState<string | null>(null);
   const [voiceEnabled, setVoiceEnabled] = useState(settings.spoken_match_commentary);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Track phases we've already signaled to avoid double-firing
@@ -458,7 +459,10 @@ export default function MatchLive({
               snapshot={snapshot}
               side={userSide}
               pending={matchCommandPending}
-              onDecision={() => setShowSubPanel(true)}
+              onDecision={(alert) => {
+                setAlertPlayerId(alert.action === "substitution" ? alert.event.player_id : null);
+                setShowSubPanel(true);
+              }}
             />
           )}
           {/* Possession bar */}
@@ -837,12 +841,16 @@ export default function MatchLive({
         <SubPanel
           snapshot={snapshot}
           side={userSide}
+          initialPlayerId={alertPlayerId}
           onSubstitute={handleSubstitution}
           onFormationChange={handleFormationChange}
           onPlayStyleChange={handlePlayStyleChange}
           onTacticsPhaseChange={handleTacticsPhaseChange}
           pending={matchCommandPending}
-          onClose={() => setShowSubPanel(false)}
+          onClose={() => {
+            setShowSubPanel(false);
+            setAlertPlayerId(null);
+          }}
         />
       )}
     </MatchScreenLayout>

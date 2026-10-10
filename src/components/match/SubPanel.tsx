@@ -57,6 +57,7 @@ export function SubPanel({
   onClose,
   onTacticsPhaseChange,
   pending = false,
+  initialPlayerId = null,
 }: {
   snapshot: MatchSnapshot;
   side: "Home" | "Away";
@@ -66,6 +67,7 @@ export function SubPanel({
   onClose: () => void;
   onTacticsPhaseChange?: (patch: Partial<TacticsPhaseSettings>) => void;
   pending?: boolean;
+  initialPlayerId?: string | null;
 }) {
   const { t } = useTranslation();
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -108,7 +110,7 @@ export function SubPanel({
       if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus();
     };
   }, []);
-  const [selectedOff, setSelectedOff] = useState<string | null>(null);
+  const [selectedOff, setSelectedOff] = useState<string | null>(initialPlayerId);
   const [selectedBench, setSelectedBench] = useState<string | null>(null);
 
   const decisionClosed = snapshot.phase === "Finished" || snapshot.phase === "PenaltyShootout";

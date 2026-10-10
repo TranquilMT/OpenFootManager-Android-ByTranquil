@@ -137,6 +137,21 @@ function createSnapshot(): MatchSnapshot {
 }
 
 describe("SubPanel", () => {
+  it("preselects the injured player supplied by an actionable alert", () => {
+    render(
+      <SubPanel
+        snapshot={createSnapshot()}
+        side="Home"
+        initialPlayerId="starter-2"
+        onSubstitute={vi.fn()}
+        onFormationChange={vi.fn()}
+        onPlayStyleChange={vi.fn()}
+        onClose={vi.fn()}
+      />,
+    );
+    expect(screen.getByTestId("sub-panel-off-starter-2")).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByTestId("sub-panel-off-starter-1")).toHaveAttribute("aria-pressed", "false");
+  });
   const createProps = () => ({
     snapshot: createSnapshot(),
     side: "Home" as const,
