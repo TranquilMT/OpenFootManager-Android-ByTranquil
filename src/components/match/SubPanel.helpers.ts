@@ -137,7 +137,9 @@ function buildBenchPriority(
   const scenarioBonus = getPositionPriority(candidate.position, scenario) * 6;
 
   const keeperCover =
-    offPlayer.position === "Goalkeeper" ? (candidate.handling + candidate.reflexes) * 0.4 : 0;
+    normalisePosition(offPlayer.position) === "Goalkeeper"
+      ? (candidate.handling + candidate.reflexes) * 0.4
+      : 0;
   return exactRoleBonus + fitnessBonus + qualityBonus + scenarioBonus + keeperCover;
 }
 
@@ -272,11 +274,12 @@ export function buildRecommendedSubstitutions(
         const eligibleBench = availableBench.filter(
           (benchPlayer) =>
             !usedOnIds.has(benchPlayer.id) &&
-            (offPlayer.position === "Goalkeeper" || benchPlayer.position !== "Goalkeeper"),
+            (normalisePosition(offPlayer.position) === "Goalkeeper" ||
+              normalisePosition(benchPlayer.position) !== "Goalkeeper"),
         );
         const keeperBench =
-          offPlayer.position === "Goalkeeper"
-            ? eligibleBench.filter((player) => player.position === "Goalkeeper")
+          normalisePosition(offPlayer.position) === "Goalkeeper"
+            ? eligibleBench.filter((player) => normalisePosition(player.position) === "Goalkeeper")
             : [];
         const replacementPool = keeperBench.length > 0 ? keeperBench : eligibleBench;
         const yellowCount = yellows[offPlayer.id] ?? 0;
