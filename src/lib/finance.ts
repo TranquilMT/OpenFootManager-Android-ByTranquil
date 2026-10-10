@@ -1,3 +1,4 @@
+import { calendarDay } from "./calendarDay";
 import type { PlayerData, StaffData, TeamData } from "../store/gameStore";
 
 export type FinanceHealthLevel = "stable" | "watch" | "warning" | "critical";
@@ -164,7 +165,7 @@ function getMostSevereLevel(
 }
 
 function parseIsoDate(dateText: string | undefined): Date | null {
-  if (!dateText) {
+  if (!dateText || !calendarDay(dateText)) {
     return null;
   }
 

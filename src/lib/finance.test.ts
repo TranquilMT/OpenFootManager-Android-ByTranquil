@@ -234,6 +234,21 @@ it("converts report wages to weekly pay while keeping budgets annual", () => {
 });
 
 describe("robust financial inputs", () => {
+  it("impossible campaign dates cannot start a marketing cooldown", () => {
+    const team = createTeam({
+      financial_ledger: [
+        {
+          description: "Invalid campaign",
+          date: "2026-02-30",
+          amount: 0,
+          kind: "CommercialCampaign",
+        },
+      ],
+    });
+    expect(
+      getTeamFinanceSnapshot(team, [], [], "2026-03-02").marketingCampaignCooldownDaysRemaining,
+    ).toBe(0);
+  });
   it("invalid cash inputs keep runway estimates unknown", () => {
     expect(getCashRunwayWeeks(NaN, -1000)).toBeNull();
     expect(getCashRunwayWeeks(1000, -Infinity)).toBeNull();
