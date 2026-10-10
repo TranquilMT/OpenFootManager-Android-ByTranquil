@@ -105,7 +105,11 @@ export function getWeeklyWageSpend(
 }
 
 export function getCashRunwayWeeks(balance: number, projectedWeeklyNet: number): number | null {
-  if (projectedWeeklyNet >= 0) {
+  if (
+    !Number.isFinite(balance) ||
+    !Number.isFinite(projectedWeeklyNet) ||
+    projectedWeeklyNet >= 0
+  ) {
     return null;
   }
 

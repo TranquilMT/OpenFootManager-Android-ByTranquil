@@ -234,6 +234,11 @@ it("converts report wages to weekly pay while keeping budgets annual", () => {
 });
 
 describe("robust financial inputs", () => {
+  it("invalid cash inputs keep runway estimates unknown", () => {
+    expect(getCashRunwayWeeks(NaN, -1000)).toBeNull();
+    expect(getCashRunwayWeeks(1000, -Infinity)).toBeNull();
+    expect(getCashRunwayWeeks(1000, NaN)).toBeNull();
+  });
   it("rejects invalid annual amounts before converting them to weekly commitments", () => {
     expect(annualAmountToWeeklyCommitment(NaN)).toBe(0);
     expect(annualAmountToWeeklyCommitment(Infinity)).toBe(0);
