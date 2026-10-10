@@ -1,5 +1,5 @@
 import { useId, type ReactNode } from "react";
-import { buildPitchRows } from "../squad/SquadTab.helpers";
+import { buildPitchRows, normalisePosition } from "../squad/SquadTab.helpers";
 import type { EnginePlayerData } from "./types";
 
 interface FormationSlot {
@@ -72,10 +72,12 @@ export function buildFormationSlots(
     }));
   }
 
-  const gks = active.filter((p) => p.position === "Goalkeeper");
-  const defs = active.filter((p) => p.position === "Defender");
-  const mids = active.filter((p) => p.position === "Midfielder");
-  const fwds = active.filter((p) => p.position === "Forward");
+  const gks = active.filter((p) => normalisePosition(p.position) === "Goalkeeper");
+  const defs = active.filter((p) => normalisePosition(p.position) === "Defender");
+  const mids = active.filter(
+    (p) => !["Goalkeeper", "Defender", "Forward"].includes(normalisePosition(p.position)),
+  );
+  const fwds = active.filter((p) => normalisePosition(p.position) === "Forward");
 
   const rows: EnginePlayerData[][] = [gks];
   const n = nums.length;
