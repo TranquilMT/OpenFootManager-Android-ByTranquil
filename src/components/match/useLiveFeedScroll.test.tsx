@@ -17,6 +17,19 @@ function Feed({ count, stream = "all" }: { count: number; stream?: string }) {
 }
 
 describe("live feed scrolling", () => {
+  it("resumes following when a replacement feed has fewer events", () => {
+    const view = render(<Feed count={2} />);
+    const element = screen.getByTestId("feed");
+    Object.defineProperties(element, {
+      scrollHeight: { value: 1000 },
+      clientHeight: { value: 200 },
+    });
+    element.scrollTop = 200;
+    fireEvent.scroll(element);
+    view.rerender(<Feed count={0} />);
+    expect(screen.queryByText("Live")).not.toBeInTheDocument();
+    expect(element.scrollTop).toBe(1000);
+  });
   it("preserves the reading position when new events arrive and resumes on demand", () => {
     const view = render(<Feed count={1} />);
     const element = screen.getByTestId("feed");

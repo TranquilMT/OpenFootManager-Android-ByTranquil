@@ -4,6 +4,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export function useLiveFeedScroll(eventCount: number, enabled: boolean, streamKey = "all") {
   const feedRef = useRef<HTMLDivElement>(null);
   const [following, setFollowing] = useState(true);
+  const previousCount = useRef(eventCount);
+  useEffect(() => {
+    if (eventCount < previousCount.current) setFollowing(true);
+    previousCount.current = eventCount;
+  }, [eventCount]);
   useEffect(() => {
     setFollowing(true);
   }, [streamKey]);
