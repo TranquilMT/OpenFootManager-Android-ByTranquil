@@ -126,7 +126,12 @@ function buildBenchPriority(
   offPlayer: EnginePlayerData,
   scenario: MatchScenarioId,
 ): number {
-  const exactRoleBonus = candidate.position === offPlayer.position ? 24 : 0;
+  const exactRoleBonus =
+    candidate.position === offPlayer.position
+      ? 24
+      : normalisePosition(candidate.position) === normalisePosition(offPlayer.position)
+        ? 12
+        : 0;
   const fitnessBonus = candidate.condition * 0.9;
   const qualityBonus = candidate.ovr * 0.7;
   const scenarioBonus = getPositionPriority(candidate.position, scenario) * 6;

@@ -141,6 +141,17 @@ function createSnapshot(): MatchSnapshot {
 }
 
 describe("SubPanel", () => {
+  it("prefers an adjacent defensive role over an unrelated midfield replacement", () => {
+    const snapshot = createSnapshot();
+    snapshot.home_team.players = [
+      makePlayer({ id: "starter-1", position: "CenterBack", condition: 30 }),
+    ];
+    snapshot.home_bench = [
+      makePlayer({ id: "mid", position: "CentralMidfielder", condition: 90, ovr: 70 }),
+      makePlayer({ id: "back", position: "LeftBack", condition: 90, ovr: 65 }),
+    ];
+    expect(buildRecommendedSubstitutions(snapshot, "Home")[0]?.onId).toBe("back");
+  });
   it("recognises defensive and attacking cover from specific positions", () => {
     const base = {
       benchPlayer: makePlayer({ position: "RightBack" }),
