@@ -2643,7 +2643,10 @@
       "key": "Jugadas clave",
       "extended": "Resumen ampliado",
       "replay": "Repetición",
-      "recordedZones": "Acciones y zonas registradas; las posiciones muestran la disposición táctica."
+      "recordedZones": "Acciones y zonas registradas; las posiciones muestran la disposición táctica.",
+      "play": "Reproducir",
+      "previous": "Acción anterior",
+      "next": "Siguiente acción"
     }
   },
   "endOfSeason": {

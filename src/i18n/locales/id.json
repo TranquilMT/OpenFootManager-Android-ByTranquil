@@ -2643,7 +2643,10 @@
       "key": "Sorotan utama",
       "extended": "Sorotan lengkap",
       "replay": "Putar ulang",
-      "recordedZones": "Aksi dan zona lapangan yang tercatat; posisi pemain menunjukkan formasi taktis."
+      "recordedZones": "Aksi dan zona lapangan yang tercatat; posisi pemain menunjukkan formasi taktis.",
+      "play": "Putar",
+      "previous": "Aksi sebelumnya",
+      "next": "Aksi berikutnya"
     }
   },
   "endOfSeason": {

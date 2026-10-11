@@ -2643,7 +2643,10 @@
       "key": "Momentos principais",
       "extended": "Resumo alargado",
       "replay": "Repetição",
-      "recordedZones": "Ações e zonas registadas; as posições mostram a disposição tática."
+      "recordedZones": "Ações e zonas registadas; as posições mostram a disposição tática.",
+      "play": "Reproduzir",
+      "previous": "Ação anterior",
+      "next": "Próxima ação"
     }
   },
   "endOfSeason": {

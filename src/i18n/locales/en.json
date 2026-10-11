@@ -2643,7 +2643,10 @@
       "key": "Key highlights",
       "extended": "Extended highlights",
       "replay": "Replay",
-      "recordedZones": "Recorded actions and pitch zones; player positions show tactical shape."
+      "recordedZones": "Recorded actions and pitch zones; player positions show tactical shape.",
+      "play": "Play",
+      "previous": "Previous action",
+      "next": "Next action"
     }
   },
   "endOfSeason": {

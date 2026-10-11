@@ -2662,7 +2662,10 @@
       "key": "Azioni chiave",
       "extended": "Sintesi estesa",
       "replay": "Rivedi",
-      "recordedZones": "Azioni e zone registrate; le posizioni mostrano la disposizione tattica."
+      "recordedZones": "Azioni e zone registrate; le posizioni mostrano la disposizione tattica.",
+      "play": "Riproduci",
+      "previous": "Azione precedente",
+      "next": "Azione successiva"
     }
   },
   "notifications": {

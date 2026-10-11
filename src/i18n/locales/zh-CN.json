@@ -2643,7 +2643,10 @@
       "key": "关键集锦",
       "extended": "完整集锦",
       "replay": "回放",
-      "recordedZones": "已记录的动作和球场区域；球员位置显示战术阵型。"
+      "recordedZones": "已记录的动作和球场区域；球员位置显示战术阵型。",
+      "play": "播放",
+      "previous": "上一个动作",
+      "next": "下一个动作"
     }
   },
   "endOfSeason": {

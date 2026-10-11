@@ -2643,7 +2643,10 @@
       "key": "Kritik anlar",
       "extended": "Geniş özet",
       "replay": "Tekrar",
-      "recordedZones": "Kaydedilmiş hareketler ve saha bölgeleri; konumlar taktik dizilişi gösterir."
+      "recordedZones": "Kaydedilmiş hareketler ve saha bölgeleri; konumlar taktik dizilişi gösterir.",
+      "play": "Oynat",
+      "previous": "Önceki hareket",
+      "next": "Sonraki hareket"
     }
   },
   "endOfSeason": {

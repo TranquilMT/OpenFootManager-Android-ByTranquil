@@ -2643,7 +2643,10 @@
       "key": "Klíčové momenty",
       "extended": "Rozšířený sestřih",
       "replay": "Přehrát znovu",
-      "recordedZones": "Zaznamenané akce a zóny hřiště; pozice ukazují taktické rozestavení."
+      "recordedZones": "Zaznamenané akce a zóny hřiště; pozice ukazují taktické rozestavení.",
+      "play": "Přehrát",
+      "previous": "Předchozí akce",
+      "next": "Další akce"
     }
   },
   "endOfSeason": {

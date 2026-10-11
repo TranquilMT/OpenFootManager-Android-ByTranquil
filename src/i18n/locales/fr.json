@@ -2643,7 +2643,10 @@
       "key": "Temps forts clés",
       "extended": "Résumé étendu",
       "replay": "Revoir",
-      "recordedZones": "Actions et zones enregistrées ; les positions représentent le dispositif tactique."
+      "recordedZones": "Actions et zones enregistrées ; les positions représentent le dispositif tactique.",
+      "play": "Lire",
+      "previous": "Action précédente",
+      "next": "Action suivante"
     }
   },
   "endOfSeason": {

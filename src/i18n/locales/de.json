@@ -2643,7 +2643,10 @@
       "key": "Wichtige Szenen",
       "extended": "Erweiterte Höhepunkte",
       "replay": "Wiederholung",
-      "recordedZones": "Aufgezeichnete Aktionen und Zonen; die Positionen zeigen die taktische Aufstellung."
+      "recordedZones": "Aufgezeichnete Aktionen und Zonen; die Positionen zeigen die taktische Aufstellung.",
+      "play": "Abspielen",
+      "previous": "Vorherige Aktion",
+      "next": "Nächste Aktion"
     }
   },
   "endOfSeason": {

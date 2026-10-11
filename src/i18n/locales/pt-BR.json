@@ -2579,7 +2579,10 @@
       "key": "Lances principais",
       "extended": "Resumo ampliado",
       "replay": "Repetir",
-      "recordedZones": "Ações e zonas registradas; as posições mostram a disposição tática."
+      "recordedZones": "Ações e zonas registradas; as posições mostram a disposição tática.",
+      "play": "Reproduzir",
+      "previous": "Ação anterior",
+      "next": "Próxima ação"
     }
   },
   "endOfSeason": {

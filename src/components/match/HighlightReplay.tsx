@@ -51,6 +51,39 @@ export default function HighlightReplay({
           <HighlightActors frame={frame} snapshot={snapshot} />
           <HighlightChance frame={frame} />
         </div>
+        <footer className="flex shrink-0 flex-wrap items-center justify-center gap-2 border-t border-gray-200 p-3 dark:border-navy-700">
+          <button
+            type="button"
+            disabled={playback.frame === 0}
+            onClick={() => playback.dispatch({ type: "seek", frame: playback.frame - 1 })}
+            className="min-h-11 rounded-lg bg-gray-100 px-3 text-sm dark:bg-navy-700"
+          >
+            {t("match.highlights.previous")}
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              playback.dispatch({
+                type: playback.playing
+                  ? "pause"
+                  : playback.frame === clip.events.length - 1
+                    ? "restart"
+                    : "play",
+              })
+            }
+            className="min-h-11 rounded-lg bg-primary-600 px-4 text-sm font-semibold text-white dark:bg-primary-600"
+          >
+            {t(playback.playing ? "match.pause" : "match.highlights.play")}
+          </button>
+          <button
+            type="button"
+            disabled={playback.frame >= clip.events.length - 1}
+            onClick={() => playback.dispatch({ type: "seek", frame: playback.frame + 1 })}
+            className="min-h-11 rounded-lg bg-gray-100 px-3 text-sm dark:bg-navy-700"
+          >
+            {t("match.highlights.next")}
+          </button>
+        </footer>
       </section>
     </div>
   );
