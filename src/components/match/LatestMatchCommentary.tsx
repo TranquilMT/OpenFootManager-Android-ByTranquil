@@ -27,12 +27,19 @@ export default function LatestMatchCommentary({
           {formatMatchMinute(snapshot.phase, latest.minute)}'
         </span>
       )}
-      <p className="min-w-0 leading-snug">
-        {commentary?.line ??
-          (latest
-            ? getEventTypeLabel(latest.event_type, t)
-            : t(snapshot.phase === "PreKickOff" ? "match.waitingKickoff" : "match.noEventsYet"))}
-      </p>
+      <div className="min-w-0 flex-1">
+        {latest && (
+          <p className="break-words text-xs font-semibold">
+            {latest.side === "Home" ? snapshot.home_team.name : snapshot.away_team.name}
+          </p>
+        )}
+        <p className="min-w-0 break-words leading-snug">
+          {commentary?.line ??
+            (latest
+              ? getEventTypeLabel(latest.event_type, t)
+              : t(snapshot.phase === "PreKickOff" ? "match.waitingKickoff" : "match.noEventsYet"))}
+        </p>
+      </div>
     </div>
   );
 }
