@@ -12,6 +12,7 @@ import {
 } from "./types";
 import { makeTeamFallback } from "./helpers";
 import { getTalkIcon } from "./TeamTalkIcons";
+import { possessionShare } from "./possessionShare";
 import HalfTimeEvents from "./HalfTimeEvents";
 import { useBreakOperation } from "./useBreakOperation";
 import { SubPanel } from "./SubPanel";
@@ -64,6 +65,7 @@ export default function HalfTimeBreak({
       delta: number;
     }[]
   >([]);
+  const possession = possessionShare(snapshot.home_possession_pct, snapshot.away_possession_pct);
   const homeFullTeam = gameState.teams.find((t) => t.id === snapshot.home_team.id);
   const awayFullTeam = gameState.teams.find((t) => t.id === snapshot.away_team.id);
   const homeTeamColor = homeFullTeam?.colors?.primary || "#10b981";
@@ -187,22 +189,12 @@ export default function HalfTimeBreak({
             </div>
           </div>
           <div className="mx-auto mt-2 flex max-w-md items-center gap-2 text-xs">
-            <span className="w-10 text-right font-bold text-primary-500">
-              {snapshot.home_possession_pct.toFixed(0)}%
-            </span>
+            <span className="w-10 text-right font-bold text-primary-500">{possession.home}%</span>
             <div className="flex h-1.5 flex-1 overflow-hidden rounded-full bg-gray-300 dark:bg-navy-700">
-              <div
-                className="bg-primary-500"
-                style={{ width: `${snapshot.home_possession_pct}%` }}
-              />
-              <div
-                className="bg-indigo-500"
-                style={{ width: `${snapshot.away_possession_pct}%` }}
-              />
+              <div className="bg-primary-500" style={{ width: `${possession.home}%` }} />
+              <div className="bg-indigo-500" style={{ width: `${possession.away}%` }} />
             </div>
-            <span className="w-10 font-bold text-indigo-500">
-              {snapshot.away_possession_pct.toFixed(0)}%
-            </span>
+            <span className="w-10 font-bold text-indigo-500">{possession.away}%</span>
           </div>
         </div>
       </header>
