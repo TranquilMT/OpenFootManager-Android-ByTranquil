@@ -83,6 +83,38 @@ describe("live match decisions", () => {
     expect(screen.queryByRole("button", { name: "4-4-2" })).not.toBeInTheDocument();
   });
   beforeEach(() => vi.mocked(invoke).mockReset());
+  it("cancels delayed half-time navigation when the match view closes", async () => {
+    vi.useFakeTimers();
+    try {
+      const onHalfTime = vi.fn();
+      vi.mocked(invoke)
+        .mockResolvedValueOnce([{ phase: "HalfTime", events: [], is_finished: false }])
+        .mockResolvedValueOnce({ ...snapshot, phase: "HalfTime" });
+      const view = render(
+        <MatchLive
+          snapshot={snapshot}
+          gameState={{ teams: [], players: [] } as unknown as GameStateData}
+          userSide="Home"
+          isSpectator={false}
+          importantEvents={[]}
+          onSnapshotUpdate={vi.fn()}
+          onImportantEvent={vi.fn()}
+          onHalfTime={onHalfTime}
+          onFullTime={vi.fn()}
+        />,
+      );
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(2000);
+      });
+      view.unmount();
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(600);
+      });
+      expect(onHalfTime).not.toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
   it("shows a rejected tactical decision instead of silently logging it", async () => {
     vi.mocked(invoke).mockRejectedValueOnce(new Error("rejected"));
     render(

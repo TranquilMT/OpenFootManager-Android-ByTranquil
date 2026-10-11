@@ -126,6 +126,13 @@ export default function MatchLive({
   const [alertPlayerId, setAlertPlayerId] = useState<string | null>(null);
   const [voiceEnabled, setVoiceEnabled] = useState(settings.spoken_match_commentary);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const phaseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(
+    () => () => {
+      if (phaseTimerRef.current) clearTimeout(phaseTimerRef.current);
+    },
+    [],
+  );
   // Track phases we've already signaled to avoid double-firing
   const signaledRef = useRef<Set<string>>(new Set());
 
@@ -189,7 +196,7 @@ export default function MatchLive({
               setIsRunning(false);
               setSpeed("paused");
               // Small delay so the last event renders before transitioning
-              setTimeout(() => onHalfTime("HalfTime"), 600);
+              phaseTimerRef.current = setTimeout(() => onHalfTime("HalfTime"), 600);
               return;
             }
 
@@ -197,7 +204,7 @@ export default function MatchLive({
               signaledRef.current.add("ExtraTimeHalfTime");
               setIsRunning(false);
               setSpeed("paused");
-              setTimeout(() => onHalfTime("ExtraTimeHalfTime"), 600);
+              phaseTimerRef.current = setTimeout(() => onHalfTime("ExtraTimeHalfTime"), 600);
               return;
             }
 
@@ -205,7 +212,7 @@ export default function MatchLive({
               signaledRef.current.add("PenaltyShootout");
               setIsRunning(false);
               setSpeed("paused");
-              setTimeout(() => onPenaltyShootout?.(), 600);
+              phaseTimerRef.current = setTimeout(() => onPenaltyShootout?.(), 600);
               return;
             }
 
@@ -213,7 +220,7 @@ export default function MatchLive({
               signaledRef.current.add("Finished");
               setIsRunning(false);
               setSpeed("paused");
-              setTimeout(() => onFullTime(), 600);
+              phaseTimerRef.current = setTimeout(() => onFullTime(), 600);
               return;
             }
           }
