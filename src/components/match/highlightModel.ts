@@ -35,6 +35,12 @@ export function buildMatchHighlights(
   const clips: MatchHighlight[] = [];
   let sequence: MatchEvent[] = [];
   for (const [index, event] of reachedMatchEvents(events, minute).entries()) {
+    if (["KickOff", "HalfTime", "SecondHalfStart", "FullTime"].includes(event.event_type)) {
+      sequence = [];
+      continue;
+    }
+    if (["Corner", "FreeKick", "GoalKick", "PenaltyAwarded"].includes(event.event_type))
+      sequence = [];
     if (sequence.at(-1)?.side !== event.side) sequence = [];
     sequence.push(event);
     if (

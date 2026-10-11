@@ -55,3 +55,14 @@ it("starts a new buildup when possession changes sides", () => {
     event("Goal", 11),
   ]);
 });
+it("separates restarts and never replays actions across a half", () => {
+  const goal = event("Goal", 48),
+    corner = event("Corner", 48);
+  expect(
+    buildMatchHighlights([event("PassCompleted", 47), event("HalfTime", 48), goal], 48)[0].events,
+  ).toEqual([goal]);
+  expect(buildMatchHighlights([event("PassCompleted", 47), corner, goal], 48)[0].events).toEqual([
+    corner,
+    goal,
+  ]);
+});
