@@ -51,6 +51,23 @@ export default function HighlightReplay({
           <HighlightActors frame={frame} snapshot={snapshot} />
           <HighlightChance frame={frame} />
         </div>
+        <div className="flex shrink-0 items-center gap-3 px-3 pt-3">
+          <input
+            type="range"
+            aria-label={t("match.events")}
+            min={0}
+            max={Math.max(0, clip.events.length - 1)}
+            step={1}
+            value={playback.frame}
+            onChange={(event) =>
+              playback.dispatch({ type: "seek", frame: Number(event.target.value) })
+            }
+            className="min-h-11 min-w-0 flex-1 accent-primary-500"
+          />
+          <span className="shrink-0 text-xs tabular-nums">
+            {playback.frame + 1} / {clip.events.length}
+          </span>
+        </div>
         <footer className="flex shrink-0 flex-wrap items-center justify-center gap-2 border-t border-gray-200 p-3 dark:border-navy-700">
           <button
             type="button"

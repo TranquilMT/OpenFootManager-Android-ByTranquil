@@ -41,3 +41,14 @@ it("plays, pauses and steps through the recorded outcome", () => {
   fireEvent.click(screen.getByRole("button", { name: "match.highlights.previous" }));
   expect(screen.getByText("match.eventTypes.PassCompleted")).toBeInTheDocument();
 });
+
+it("seeks directly to an action and pauses continuous playback", () => {
+  render(<HighlightReplay clip={clip} snapshot={snapshot} onClose={vi.fn()} />);
+  fireEvent.click(screen.getByRole("button", { name: "match.highlights.play" }));
+  fireEvent.change(screen.getByRole("slider", { name: "match.events" }), {
+    target: { value: "1" },
+  });
+  expect(screen.getByText("match.eventTypes.Goal")).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "match.highlights.play" })).toBeInTheDocument();
+  expect(screen.getByText("2 / 2")).toBeInTheDocument();
+});
