@@ -1,12 +1,12 @@
 import type { TacticsPhaseSettings } from "../../store/types";
-import { PhaseBlueprintPanel } from "../tactics/PhaseBlueprintPanel";
+import MatchTacticsControls from "./MatchTacticsControls";
 import { useState, useEffect, useRef, type KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { type MatchSnapshot, FORMATIONS, PLAY_STYLES } from "./types";
+import { type MatchSnapshot } from "./types";
 import { getPlayerName } from "./helpers";
 import { FormationPitch } from "./FormationPitch";
 import { condBgColor, condColor } from "../../lib/playerConditionDisplay";
-import { Badge, Select } from "../ui";
+import { Badge } from "../ui";
 import {
   RefreshCw,
   AlertTriangle,
@@ -306,47 +306,14 @@ export function SubPanel({
               )}
             </div>
           )}
-
-          {/* Quick formation & play style selects */}
-          <div className="ml-auto flex items-center gap-2">
-            <Select
-              value={FORMATIONS.includes(team.formation) ? team.formation : FORMATIONS[0]}
-              onChange={(e) => onFormationChange(e.target.value)}
-              disabled={pending || decisionClosed}
-              aria-label={t("tactics.formation")}
-              selectSize="xs"
-            >
-              {FORMATIONS.map((f) => (
-                <option key={f} value={f}>
-                  {f}
-                </option>
-              ))}
-            </Select>
-            <Select
-              value={team.play_style}
-              onChange={(e) => onPlayStyleChange(e.target.value)}
-              disabled={pending || decisionClosed}
-              aria-label={t("tactics.playStyle")}
-              selectSize="xs"
-            >
-              {PLAY_STYLES.map((style) => (
-                <option key={style} value={style}>
-                  {t(`common.playStyles.${style}`, style)}
-                </option>
-              ))}
-            </Select>
-          </div>
         </div>
-
-        {onTacticsPhaseChange && (
-          <div className="max-h-64 shrink-0 overflow-y-auto border-b border-gray-200 dark:border-navy-700">
-            <PhaseBlueprintPanel
-              tacticsPhase={team.tactics}
-              onTacticsPhaseChange={onTacticsPhaseChange}
-              disabled={pending || decisionClosed}
-            />
-          </div>
-        )}
+        <MatchTacticsControls
+          team={team}
+          disabled={pending || decisionClosed}
+          onFormationChange={onFormationChange}
+          onPlayStyleChange={onPlayStyleChange}
+          onTacticsPhaseChange={onTacticsPhaseChange}
+        />
 
         {/* Main body: two columns */}
         <div className="flex min-h-0 flex-1 overflow-hidden">
