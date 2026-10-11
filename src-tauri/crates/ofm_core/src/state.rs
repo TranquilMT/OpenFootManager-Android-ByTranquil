@@ -145,6 +145,19 @@ impl StateManager {
         take_option(&self.live_match)
     }
 
+    /// Serialize completion against stepping/replacement and keep the session on failure.
+    /// The callback may lock the game; it must not reacquire the live-match lock.
+    pub fn complete_live_match<F, R>(&self, finish: F) -> Result<R, String>
+    where
+        F: FnOnce(&mut LiveMatchSession) -> Result<R, String>,
+    {
+        let mut slot = self.live_match.lock().unwrap();
+        let session = slot.as_mut().ok_or("be.error.noActiveLiveMatch")?;
+        let result = finish(session)?;
+        *slot = None;
+        Ok(result)
+    }
+
     pub fn with_live_match<F, R>(&self, f: F) -> Option<R>
     where
         F: FnOnce(&mut LiveMatchSession) -> R,
@@ -370,5 +383,20 @@ mod tests {
         assert_eq!(taken.mode, MatchMode::Instant);
         assert!(state.take_live_match().is_none());
         assert!(state.with_live_match(|_| ()).is_none());
+    }
+    #[test]
+    fn phase74_failed_match_completion_retains_session() {
+        let state = StateManager::new();
+        let game = make_game_with_fixture();
+        state.set_live_match(
+            live_match_manager::create_live_match(&game, 0, MatchMode::Spectator, false).unwrap(),
+        );
+        let failed: Result<(), String> =
+            state.complete_live_match(|_| Err("fixture unavailable".into()));
+        assert!(failed.is_err());
+        assert!(state.with_live_match(|_| ()).is_some());
+        assert_eq!(state.complete_live_match(|_| Ok(74)), Ok(74));
+        assert!(state.with_live_match(|_| ()).is_none());
+        assert!(state.complete_live_match(|_| Ok(74)).is_err());
     }
 }

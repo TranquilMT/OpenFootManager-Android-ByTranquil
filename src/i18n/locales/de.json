@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "OFMtouch 0.7.3 — Integrierte Spielsysteme",
+    "patchWelcome": "OFMtouch 0.7.4 — Intelligentere Spiele",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
@@ -1993,7 +1993,11 @@
       "suddenDeath": "Plötzlicher Tod",
       "shootoutScore": "Elfmeter: {{h}} – {{a}}",
       "homeKick": "Heimmannschaft schießt...",
-      "awayKick": "Gastmannschaft schießt..."
+      "awayKick": "Gastmannschaft schießt...",
+      "order": "Reihenfolge im Elfmeterschießen",
+      "earlier": "{{name}} früher antreten lassen",
+      "later": "{{name}} später antreten lassen",
+      "orderError": "Die Reihenfolge konnte nicht gespeichert werden."
     },
     "fullTime": "Vollzeit",
     "ft": "VZ",
@@ -2621,7 +2625,17 @@
     "pts": "Pkt.",
     "jumpToLive": "Zurück zum Live-Kommentar",
     "cards": "Karten",
-    "actionFailed": "Die Spielaktion konnte nicht abgeschlossen werden. Bitte versuche es erneut."
+    "actionFailed": "Die Spielaktion konnte nicht abgeschlossen werden. Bitte versuche es erneut.",
+    "analysis": {
+      "title": "Spielanalyse",
+      "metric": "Kennzahl",
+      "bigChances": "Großchancen (xG ≥ 0,30)",
+      "recordedShots": "Schüsse mit erfasstem xG",
+      "adjustments": "Taktische Anpassungen",
+      "afterSubs": "Nach letztem Wechsel: Schüsse / Gegentore",
+      "explanation": "Großchancen beruhen nur auf erfasstem xG. Zahlen nach Wechseln sind Beobachtungen und belegen keine Ursache.",
+      "since": "{{team}}: seit dem Wechsel in Minute {{minute}}."
+    }
   },
   "endOfSeason": {
     "seasonComplete": "Saison beendet",
@@ -4428,6 +4442,15 @@
       "squad": "Plane Leihen, Verträge und enge Spielpläne mit klarerer Verfügbarkeit und Rückkehrterminen.",
       "finance": "Zuverlässigere Finanzprognosen, Gehaltsschätzungen und Geschäftsplanung.",
       "reliability": "Sicherere Spielbefehle, Ereignisverläufe und importierte Daten mit erweiterten Regressionstests."
+    }
+  },
+  "phase74": {
+    "release": {
+      "ai": "KI-Trainer reagieren auf Müdigkeit, Verwarnungen, späte Spielstände, Platzverweise und aggressives gegnerisches Pressing.",
+      "match": "Torwarthandling beeinflusst Abpraller; gefangene Bälle zählen nicht mehr als Abstoß.",
+      "controls": "Die Reihenfolge im Elfmeterschießen lässt sich vor Spielen oder während einer Pause festlegen. Jeder berechtigte Spieler tritt vor einer Wiederholung an.",
+      "analysis": "Neue Analysen während und nach dem Spiel zeigen erfasste Großchancen, taktische Anpassungen und Ereignisse nach Wechseln.",
+      "reliability": "Elfmeterschießen laufen auch bei gleicher Spielminute weiter. Bei fehlgeschlagenem Ergebnisabschluss bleibt die Partie für einen erneuten Versuch erhalten."
     }
   }
 }

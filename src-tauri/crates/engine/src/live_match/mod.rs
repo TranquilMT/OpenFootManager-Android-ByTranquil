@@ -127,6 +127,10 @@ pub enum MatchCommand {
         side: Side,
         player_id: String,
     },
+    SetPenaltyOrder {
+        side: Side,
+        player_ids: Vec<String>,
+    },
     SetCaptain {
         side: Side,
         player_id: String,
@@ -165,6 +169,8 @@ pub struct SetPieceTakers {
     pub corner_taker: Option<String>,
     pub penalty_taker: Option<String>,
     pub captain: Option<String>,
+    #[serde(default)]
+    pub penalty_order: Vec<String>,
 }
 
 // ---------------------------------------------------------------------------
@@ -247,6 +253,7 @@ struct PenaltyShootoutState {
 // LiveMatchState — the core step-by-step simulation engine
 // ---------------------------------------------------------------------------
 
+#[derive(Clone)]
 pub struct LiveMatchState {
     // Teams (owned — subs mutate the player list)
     home: TeamData,
@@ -389,6 +396,9 @@ impl LiveMatchState {
                 player_off_id,
                 player_on_id,
             } => {
+                if self.phase == MatchPhase::PenaltyShootout {
+                    return Err("be.error.liveMatch.matchFinished".into());
+                }
                 if self.phase == MatchPhase::PreKickOff {
                     self.do_pre_match_swap(side, &player_off_id, &player_on_id)
                 } else {
@@ -435,19 +445,36 @@ impl LiveMatchState {
                 Ok(())
             }
             MatchCommand::SetFreeKickTaker { side, player_id } => {
-                self.set_pieces_mut(side).free_kick_taker = Some(player_id);
+                let assignment = self.validate_assignment(side, &player_id)?;
+                self.set_pieces_mut(side).free_kick_taker = assignment;
                 Ok(())
             }
             MatchCommand::SetCornerTaker { side, player_id } => {
-                self.set_pieces_mut(side).corner_taker = Some(player_id);
+                let assignment = self.validate_assignment(side, &player_id)?;
+                self.set_pieces_mut(side).corner_taker = assignment;
                 Ok(())
             }
             MatchCommand::SetPenaltyTaker { side, player_id } => {
-                self.set_pieces_mut(side).penalty_taker = Some(player_id);
+                let assignment = self.validate_assignment(side, &player_id)?;
+                self.set_pieces_mut(side).penalty_taker = assignment;
+                Ok(())
+            }
+            MatchCommand::SetPenaltyOrder { side, player_ids } => {
+                let mut seen = std::collections::HashSet::new();
+                for id in &player_ids {
+                    if !seen.insert(id)
+                        || !self.team_ref(side).players.iter().any(|p| p.id == *id)
+                        || self.sent_off.contains(id)
+                    {
+                        return Err("be.error.liveMatch.playerNotOnPitch".into());
+                    }
+                }
+                self.set_pieces_mut(side).penalty_order = player_ids;
                 Ok(())
             }
             MatchCommand::SetCaptain { side, player_id } => {
-                self.set_pieces_mut(side).captain = Some(player_id);
+                let assignment = self.validate_assignment(side, &player_id)?;
+                self.set_pieces_mut(side).captain = assignment;
                 Ok(())
             }
             MatchCommand::PreMatchSwap {

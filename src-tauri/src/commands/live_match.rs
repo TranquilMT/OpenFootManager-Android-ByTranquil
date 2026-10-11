@@ -1056,6 +1056,13 @@ mod tests {
             result.is_err(),
             "out-of-range fixture index must error, not panic"
         );
+        assert!(state
+            .with_live_match(|session| session.is_finished())
+            .unwrap());
+        assert_eq!(
+            state.get_game(|game| game.league.as_ref().unwrap().fixtures.len()),
+            Some(1)
+        );
     }
 
     #[test]

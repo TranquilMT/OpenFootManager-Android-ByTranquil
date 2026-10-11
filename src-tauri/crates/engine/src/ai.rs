@@ -1,5 +1,7 @@
 use rand::{Rng, RngExt};
 
+mod match_context;
+
 use crate::live_match::{LiveMatchState, MatchCommand, MatchPhase};
 use crate::types::{PlayStyle, PlayerData, PlayerRole, Position, Side, Zone};
 
@@ -77,8 +79,54 @@ pub fn ai_decide<R: Rng>(
         && let Some(sub_cmd) =
             consider_substitution(match_state, side, profile, minute, subs_made, rng)
     {
-        commands.push(sub_cmd);
+        // A tactical replacement needs a matching shape; the incoming player otherwise
+        // inherits the outgoing player's deployment slot and never becomes the extra attacker.
+        if let MatchCommand::Substitute {
+            player_off_id,
+            player_on_id,
+            ..
+        } = &sub_cmd
+        {
+            let team = if side == Side::Home {
+                &snap.home_team
+            } else {
+                &snap.away_team
+            };
+            let outgoing = team.players.iter().find(|p| p.id == *player_off_id);
+            let incoming = match_state
+                .bench(side)
+                .iter()
+                .find(|p| p.id == *player_on_id);
+            commands.push(sub_cmd.clone());
+            if let (Some(outgoing), Some(incoming)) = (outgoing, incoming)
+                && outgoing.position != incoming.position
+            {
+                let difference = if side == Side::Home {
+                    snap.home_score as i16 - snap.away_score as i16
+                } else {
+                    snap.away_score as i16 - snap.home_score as i16
+                };
+                let shape = match incoming.position {
+                    Position::Forward if difference < 0 => Some("4-3-3"),
+                    Position::Defender if difference > 0 => Some("4-5-1"),
+                    _ => None,
+                };
+                if let Some(shape) = shape
+                    && outgoing.position != Position::Goalkeeper
+                    && team.formation != shape
+                {
+                    commands.push(MatchCommand::ChangeFormation {
+                        side,
+                        formation: shape.into(),
+                    });
+                }
+            }
+        } else {
+            commands.push(sub_cmd);
+        }
     }
+
+    commands.extend(match_context::adjustments(&snap, side));
 
     // --- Tactical adjustments ---
     if let Some(tactic_cmd) = consider_tactic_change(match_state, side, profile, minute, rng) {
@@ -122,7 +170,7 @@ fn consider_substitution<R: Rng>(
         Side::Home => (snap.home_score, snap.away_score),
         Side::Away => (snap.away_score, snap.home_score),
     };
-    let goal_diff = own_goals as i8 - opp_goals as i8;
+    let goal_diff = own_goals as i16 - opp_goals as i16;
 
     // Higher experience → earlier and smarter substitutions
     let experience_factor = profile.experience as f64 / 100.0;
@@ -148,6 +196,34 @@ fn consider_substitution<R: Rng>(
             player_off_id: injured.id.clone(),
             player_on_id: replacement.id.clone(),
         });
+    }
+
+    // Reduce dismissal risk late on, but only with fresh cover in the same position.
+    let bookings = if side == Side::Home {
+        &snap.home_yellows
+    } else {
+        &snap.away_yellows
+    };
+    if minute >= 65 {
+        for player in &team.players {
+            if bookings.get(&player.id).copied().unwrap_or(0) == 0
+                || player.condition >= 75
+                || unavailable.contains(&player.id)
+            {
+                continue;
+            }
+            if let Some(replacement) =
+                find_best_bench_replacement(bench, player.position, &unavailable, None)
+                && replacement.position == player.position
+                && replacement.condition > player.condition
+            {
+                return Some(MatchCommand::Substitute {
+                    side,
+                    player_off_id: player.id.clone(),
+                    player_on_id: replacement.id.clone(),
+                });
+            }
+        }
     }
 
     // --- Fatigue-based substitutions (after minute 55+) ---
@@ -185,6 +261,7 @@ fn consider_substitution<R: Rng>(
         // Find best replacement from bench with same position
         if let Some(replacement) =
             find_best_bench_replacement(bench, tired_player.position, &unavailable, None)
+            && replacement.condition > tired_player.condition
         {
             return Some(MatchCommand::Substitute {
                 side,
@@ -195,7 +272,7 @@ fn consider_substitution<R: Rng>(
     }
 
     // --- Tactical substitutions (losing and past 65') ---
-    if goal_diff < 0 && minute >= 65 && subs_made < 3 {
+    if goal_diff < 0 && minute >= 65 && subs_made < snap.max_subs {
         // Bring on an attacker if losing.
         // When playing HighPress, prefer a PressingForward for role synergy.
         let chance = 0.03 * experience_factor * (1.0 + (minute as f64 - 65.0) / 25.0);
@@ -234,7 +311,7 @@ fn consider_substitution<R: Rng>(
     }
 
     // --- Defensive substitutions (winning and past 80') ---
-    if goal_diff > 0 && minute >= 80 && subs_made < 3 {
+    if goal_diff > 0 && minute >= 80 && subs_made < snap.max_subs {
         let chance = 0.04 * experience_factor;
         if rng.random_range(0.0..1.0f64) < chance {
             // Bring on a defender
@@ -343,7 +420,7 @@ fn consider_tactic_change<R: Rng>(
         Side::Home => (snap.home_score, snap.away_score),
         Side::Away => (snap.away_score, snap.home_score),
     };
-    let goal_diff = own_goals as i8 - opp_goals as i8;
+    let goal_diff = own_goals as i16 - opp_goals as i16;
     let experience_factor = profile.experience as f64 / 100.0;
 
     // Only consider changes after a meaningful period

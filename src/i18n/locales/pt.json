@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mais jogadores de destaque, incluindo raras estrelas de nível 96.",
     "patchMatches": "Mais reações, remates à trave e comentário por voz opcional.",
     "patchMobile": "Controlos móveis, caixa de entrada, seleções e início de carreira melhorados.",
-    "patchWelcome": "OFMtouch 0.7.3 — Sistemas de jogo integrados",
+    "patchWelcome": "OFMtouch 0.7.4 — Jogos mais inteligentes",
     "patchPortraits": "20 rostos fictícios de origem tornam os retratos dos jogadores mais variados.",
     "patchWorld": "Um mundo de futebol maior abrange 29 nações, com clubes mais fortes nas Américas e na Ásia.",
     "patchTransfers": "As estratégias dos clubes orientam empréstimos e transferências, com ofertas concorrentes e controlo do orçamento.",
@@ -1993,7 +1993,11 @@
       "suddenDeath": "Morte Súbita",
       "shootoutScore": "Penáltis: {{h}} – {{a}}",
       "homeKick": "Pontapé da equipa da casa...",
-      "awayKick": "Pontapé da equipa visitante..."
+      "awayKick": "Pontapé da equipa visitante...",
+      "order": "Ordem dos penáltis",
+      "earlier": "Antecipar {{name}}",
+      "later": "Adiar {{name}}",
+      "orderError": "Não foi possível guardar a ordem dos penáltis."
     },
     "fullTime": "Tempo Completo",
     "ft": "TC",
@@ -2621,7 +2625,17 @@
     "pts": "pts",
     "jumpToLive": "Voltar ao relato em direto",
     "cards": "Cartões",
-    "actionFailed": "Não foi possível concluir a ação do jogo. Tenta novamente."
+    "actionFailed": "Não foi possível concluir a ação do jogo. Tenta novamente.",
+    "analysis": {
+      "title": "Análise do jogo",
+      "metric": "Indicador",
+      "bigChances": "Grandes oportunidades (xG ≥ 0,30)",
+      "recordedShots": "Remates com xG registado",
+      "adjustments": "Ajustes táticos",
+      "afterSubs": "Após a última substituição: remates / golos sofridos",
+      "explanation": "As grandes oportunidades usam apenas o xG registado. Os valores após substituições são observações, não provas de causalidade.",
+      "since": "{{team}}: desde a substituição aos {{minute}} minutos."
+    }
   },
   "endOfSeason": {
     "seasonComplete": "Época Completa",
@@ -4428,6 +4442,15 @@
       "squad": "Planeia empréstimos, contratos e calendários apertados com disponibilidade e datas de recuperação mais claras.",
       "finance": "Previsões de caixa, estimativas salariais e planeamento comercial mais fiáveis.",
       "reliability": "Comandos de jogo, histórico de eventos e dados importados mais seguros, com mais testes de regressão."
+    }
+  },
+  "phase74": {
+    "release": {
+      "ai": "Os treinadores de IA reagem à fadiga, aos cartões, ao resultado no final do jogo, às expulsões e à pressão agressiva adversária.",
+      "match": "A capacidade de agarrar do guarda-redes influencia os ressaltos; as defesas seguras deixam de contar como pontapés de baliza.",
+      "controls": "A ordem dos penáltis pode ser escolhida antes do jogo ou com a série em pausa. Cada jogador elegível remata antes de se repetir a ordem.",
+      "analysis": "A nova análise em direto e após o jogo mostra grandes oportunidades registadas, ajustes táticos e acontecimentos após substituições.",
+      "reliability": "Os penáltis continuam mesmo no mesmo minuto de jogo. Se a confirmação do resultado falhar, a partida mantém-se disponível para nova tentativa."
     }
   }
 }

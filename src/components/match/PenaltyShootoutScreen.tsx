@@ -11,6 +11,8 @@ import {
 } from "./types";
 import { Play, Pause, FastForward, SkipForward } from "lucide-react";
 import { TeamLogo } from "../ui";
+import { MatchOperationGate } from "./matchOperationGate";
+import ShootoutOrder from "./ShootoutOrder";
 
 interface PenaltyShootoutScreenProps {
   snapshot: MatchSnapshot;
@@ -28,56 +30,90 @@ const SHOOTOUT_EVENTS = new Set(["ShootoutGoal", "ShootoutMiss"]);
 export default function PenaltyShootoutScreen({
   snapshot,
   gameState,
+  userSide,
+  isSpectator,
   onSnapshotUpdate,
   onImportantEvent,
   onFullTime,
 }: PenaltyShootoutScreenProps) {
   const { t } = useTranslation();
   const [speed, setSpeed] = useState<SimSpeed>("normal");
-  const [isRunning, setIsRunning] = useState(true);
+  const [isRunning, setIsRunning] = useState(isSpectator);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const signaledRef = useRef(false);
+  const gate = useRef(new MatchOperationGate());
+  const [pending, setPending] = useState(false);
+  const [orderPending, setOrderPending] = useState(false);
+  const completionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mounted = useRef(true);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      if (completionTimer.current) clearTimeout(completionTimer.current);
+    };
+  }, []);
   const homeFullTeam = gameState.teams.find((tm) => tm.id === snapshot.home_team.id);
   const awayFullTeam = gameState.teams.find((tm) => tm.id === snapshot.away_team.id);
   const ps = snapshot.penalty_shootout;
   const roundNumber = ps ? Math.max(ps.home_taken, ps.away_taken) : 0;
 
-  const stepMatch = useCallback(async () => {
-    try {
-      const results = await invoke<MinuteResult[]>("step_live_match", { minutes: 1 });
-      if (results.length > 0) {
-        for (const r of results)
-          for (const evt of r.events)
-            if (SHOOTOUT_EVENTS.has(evt.event_type)) onImportantEvent(evt);
-        const snap = await invoke<MatchSnapshot>("get_match_snapshot");
-        onSnapshotUpdate(snap);
-        const lastResult = results[results.length - 1];
-        if (lastResult.is_finished && !signaledRef.current) {
-          signaledRef.current = true;
-          setIsRunning(false);
-          setSpeed("paused");
-          setTimeout(() => onFullTime(), 800);
-        }
-      }
-    } catch (err) {
-      console.error("Failed to step penalty shootout:", err);
-      setIsRunning(false);
-    }
-  }, [onSnapshotUpdate, onImportantEvent, onFullTime]);
+  const stepMatch = useCallback(
+    async () =>
+      gate.current.run(
+        async () => {
+          if (signaledRef.current || !mounted.current) return;
+          try {
+            const results = await invoke<MinuteResult[]>("step_live_match", { minutes: 1 });
+            if (!mounted.current) return;
+            if (results.length > 0) {
+              for (const r of results)
+                for (const evt of r.events)
+                  if (SHOOTOUT_EVENTS.has(evt.event_type)) onImportantEvent(evt);
+              const snap = await invoke<MatchSnapshot>("get_match_snapshot");
+              if (!mounted.current) return;
+              onSnapshotUpdate(snap);
+              const lastResult = results[results.length - 1];
+              if (lastResult.is_finished && !signaledRef.current) {
+                signaledRef.current = true;
+                setIsRunning(false);
+                setSpeed("paused");
+                completionTimer.current = setTimeout(() => onFullTime(), 800);
+              }
+            }
+          } catch (err) {
+            console.error("Failed to step penalty shootout:", err);
+            setIsRunning(false);
+          }
+        },
+        (value) => {
+          if (mounted.current) setPending(value);
+        },
+      ),
+    [onSnapshotUpdate, onImportantEvent, onFullTime],
+  );
 
   useEffect(() => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
       timerRef.current = null;
     }
-    if (isRunning && speed !== "paused")
+    if (isRunning && speed !== "paused" && snapshot.phase === "PenaltyShootout")
       timerRef.current = setTimeout(async () => {
         await stepMatch();
       }, SPEED_MS[speed]);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [isRunning, speed, snapshot.current_minute, snapshot.phase, stepMatch]);
+  }, [
+    isRunning,
+    speed,
+    snapshot.current_minute,
+    snapshot.phase,
+    ps?.home_taken,
+    ps?.away_taken,
+    stepMatch,
+  ]);
 
   const shootoutEvents = snapshot.events.filter((e) => SHOOTOUT_EVENTS.has(e.event_type));
 
@@ -128,12 +164,18 @@ export default function PenaltyShootoutScreen({
           <div className="mt-4 sm:mt-6 space-y-3">
             <KickRow
               label={snapshot.home_team.name}
+              results={shootoutEvents
+                .filter((e) => e.side === "Home")
+                .map((e) => e.event_type === "ShootoutGoal")}
               taken={ps.home_taken}
               scored={ps.home_scored}
               maxRounds={ps.sudden_death ? ps.home_taken + 1 : 5}
             />
             <KickRow
               label={snapshot.away_team.name}
+              results={shootoutEvents
+                .filter((e) => e.side === "Away")
+                .map((e) => e.event_type === "ShootoutGoal")}
               taken={ps.away_taken}
               scored={ps.away_scored}
               maxRounds={ps.sudden_death ? ps.away_taken + 1 : 5}
@@ -141,6 +183,16 @@ export default function PenaltyShootoutScreen({
           </div>
         )}
       </div>
+
+      {!isSpectator && userSide && (
+        <ShootoutOrder
+          snapshot={snapshot}
+          side={userSide}
+          disabled={isRunning || pending}
+          onSnapshot={onSnapshotUpdate}
+          onPendingChange={setOrderPending}
+        />
+      )}
 
       {shootoutEvents.length > 0 && (
         <div className="w-full max-w-lg max-h-44 overflow-y-auto bg-white dark:bg-navy-800 rounded-xl p-3 sm:p-4 mb-3 sm:mb-4 space-y-1">
@@ -163,6 +215,10 @@ export default function PenaltyShootoutScreen({
               </span>
               <span className="truncate">
                 {evt.side === "Home" ? snapshot.home_team.name : snapshot.away_team.name}
+                {" · "}
+                {[...snapshot.home_team.players, ...snapshot.away_team.players].find(
+                  (player) => player.id === evt.player_id,
+                )?.name ?? "—"}
               </span>
             </div>
           ))}
@@ -172,6 +228,7 @@ export default function PenaltyShootoutScreen({
       <div className="sticky bottom-0 flex w-full max-w-lg items-center justify-center gap-3 rounded-2xl bg-gray-100/95 p-2 backdrop-blur dark:bg-navy-900/95 sm:static sm:w-auto sm:bg-transparent sm:p-0 dark:sm:bg-transparent">
         <button
           type="button"
+          disabled={pending || orderPending || snapshot.phase === "Finished"}
           onClick={() => {
             setIsRunning((r) => !r);
             if (!isRunning) setSpeed("normal");
@@ -188,6 +245,7 @@ export default function PenaltyShootoutScreen({
         </button>
         <button
           type="button"
+          disabled={pending || orderPending || snapshot.phase === "Finished"}
           onClick={() => {
             setSpeed("fast");
             setIsRunning(true);
@@ -199,6 +257,7 @@ export default function PenaltyShootoutScreen({
         </button>
         <button
           type="button"
+          disabled={pending || orderPending || snapshot.phase === "Finished"}
           onClick={async () => {
             setIsRunning(false);
             setSpeed("paused");
@@ -219,11 +278,13 @@ export function KickRow({
   taken,
   scored,
   maxRounds,
+  results,
 }: {
   label: string;
   taken: number;
   scored: number;
   maxRounds: number;
+  results?: boolean[];
 }) {
   const cells = Math.max(maxRounds, taken);
   return (
@@ -240,7 +301,7 @@ export function KickRow({
                 ?
               </span>
             );
-          const isGoal = i < scored;
+          const isGoal = results?.[i] ?? i < scored;
           return (
             <span
               key={i}

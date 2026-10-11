@@ -37,3 +37,14 @@ describe("KickRow", (): void => {
     expect(screen.queryAllByText("?")).toHaveLength(0);
   });
 });
+
+it("preserves the recorded kick sequence", () => {
+  const { container } = render(
+    <KickRow label="Home" taken={3} scored={2} maxRounds={3} results={[false, true, true]} />,
+  );
+  expect([...container.querySelectorAll("span")].slice(1).map((el) => el.textContent)).toEqual([
+    "✗",
+    "⚽",
+    "⚽",
+  ]);
+});

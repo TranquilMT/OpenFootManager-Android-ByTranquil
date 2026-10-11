@@ -84,6 +84,8 @@ impl LiveMatchState {
             Side::Away => &mut self.away_subs_made,
         } += 1;
 
+        self.clear_departed_assignments(side, player_off_id);
+
         // Record the substitution
         let evt = MatchEvent::new(
             self.current_minute,
@@ -157,6 +159,7 @@ impl LiveMatchState {
             Side::Away => self.away_bench.push(player_off),
         }
 
+        self.clear_departed_assignments(side, player_off_id);
         Ok(())
     }
 

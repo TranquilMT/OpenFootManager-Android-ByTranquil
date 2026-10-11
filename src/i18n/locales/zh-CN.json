@@ -1783,7 +1783,7 @@
     "patchPlayers": "新增更多优秀球员，包括稀有的96分球星和升级热门球队。",
     "patchMatches": "比赛解说更加丰富，加入门框射门和可选语音解说。",
     "patchMobile": "改进移动端操作、收件箱、国家队与生涯创建。",
-    "patchWelcome": "OFMtouch 0.7.3 — 整合游戏系统",
+    "patchWelcome": "OFMtouch 0.7.4 — 更智能的比赛",
     "patchPortraits": "20 张虚构原始人脸让生成球员的肖像更加多样。",
     "patchWorld": "足球世界扩展至 29 个国家，美洲和亚洲的俱乐部实力也得到提升。",
     "patchTransfers": "俱乐部策略会影响租借和转会，包括竞争报价与预算检查。",
@@ -1993,7 +1993,11 @@
       "suddenDeath": "突然死亡法",
       "shootoutScore": "点球：{{h}} – {{a}}",
       "homeKick": "主队主罚...",
-      "awayKick": "客队主罚..."
+      "awayKick": "客队主罚...",
+      "order": "点球大战顺序",
+      "earlier": "让{{name}}提前主罚",
+      "later": "让{{name}}延后主罚",
+      "orderError": "无法保存点球大战顺序。"
     },
     "fullTime": "全场结束",
     "ft": "全场",
@@ -2621,7 +2625,17 @@
     "pts": "分",
     "jumpToLive": "返回实时解说",
     "cards": "罚牌",
-    "actionFailed": "无法完成比赛操作，请重试。"
+    "actionFailed": "无法完成比赛操作，请重试。",
+    "analysis": {
+      "title": "比赛分析",
+      "metric": "指标",
+      "bigChances": "重大机会（xG ≥ 0.30）",
+      "recordedShots": "有xG记录的射门",
+      "adjustments": "战术调整",
+      "afterSubs": "最后一次换人后：射门／失球",
+      "explanation": "重大机会仅依据已记录的xG。换人后的数据只是观察结果，不能证明因果关系。",
+      "since": "{{team}}：自第{{minute}}分钟换人起。"
+    }
   },
   "endOfSeason": {
     "seasonComplete": "赛季结束",
@@ -4428,6 +4442,15 @@
       "squad": "通过更清晰的可用状态和康复日期，规划租借、合同和密集赛程。",
       "finance": "更可靠的现金预测、工资估算和商业规划。",
       "reliability": "更安全的比赛指令、事件记录和导入数据，并增加回归测试覆盖。"
+    }
+  },
+  "phase74": {
+    "release": {
+      "ai": "AI主教练会根据疲劳、黄牌、比赛末段比分、红牌以及对手的高强度逼抢作出调整。",
+      "match": "门将的接球能力会影响反弹球；接住的球不再记为球门球。",
+      "controls": "可在赛前或点球大战暂停时选择主罚顺序。每位符合资格的球员都完成主罚后才会重复。",
+      "analysis": "新的实时和赛后分析展示已记录的重大机会、战术调整以及换人后的事件。",
+      "reliability": "点球大战在比赛分钟不变时仍会继续。结果确认失败时会保留比赛，以便重试。"
     }
   }
 }

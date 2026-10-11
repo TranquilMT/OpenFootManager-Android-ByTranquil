@@ -71,6 +71,7 @@ export interface SetPieceTakers {
   corner_taker: string | null;
   penalty_taker: string | null;
   captain: string | null;
+  penalty_order?: string[];
 }
 
 export interface SubstitutionRecord {

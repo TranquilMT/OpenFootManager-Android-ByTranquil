@@ -1,3 +1,4 @@
+import MatchAnalysisPanel from "./MatchAnalysisPanel";
 import type { TacticsPhaseSettings } from "../../store/types";
 import { buildTacticalInstructions } from "../tactics/tacticalInstructions";
 import { MatchOperationGate } from "./matchOperationGate";
@@ -631,7 +632,12 @@ export default function MatchLive({
                 showCommentary={settings.show_match_commentary}
               />
             )}
-            {activePanel === "stats" && <MatchStats snapshot={snapshot} />}
+            {activePanel === "stats" && (
+              <>
+                <MatchStats snapshot={snapshot} />
+                <MatchAnalysisPanel snapshot={snapshot} />
+              </>
+            )}
             {activePanel === "players" && (
               <PlayerMatchPerformance snapshot={snapshot} playerJerseyMap={playerJerseyMap} />
             )}

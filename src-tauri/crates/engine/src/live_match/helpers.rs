@@ -189,6 +189,35 @@ impl LiveMatchState {
         }
     }
 
+    pub(super) fn validate_assignment(
+        &self,
+        side: Side,
+        id: &str,
+    ) -> Result<Option<String>, String> {
+        if id.is_empty() {
+            return Ok(None);
+        }
+        if self.sent_off.contains(id) || !self.team_ref(side).players.iter().any(|p| p.id == id) {
+            return Err("be.error.liveMatch.playerNotOnPitch".into());
+        }
+        Ok(Some(id.to_owned()))
+    }
+
+    pub(super) fn clear_departed_assignments(&mut self, side: Side, id: &str) {
+        let pieces = self.set_pieces_mut(side);
+        for assignment in [
+            &mut pieces.free_kick_taker,
+            &mut pieces.corner_taker,
+            &mut pieces.penalty_taker,
+            &mut pieces.captain,
+        ] {
+            if assignment.as_deref() == Some(id) {
+                *assignment = None;
+            }
+        }
+        pieces.penalty_order.retain(|player| player != id);
+    }
+
     pub(super) fn set_pieces_ref(&self, side: Side) -> &SetPieceTakers {
         match side {
             Side::Home => &self.home_set_pieces,

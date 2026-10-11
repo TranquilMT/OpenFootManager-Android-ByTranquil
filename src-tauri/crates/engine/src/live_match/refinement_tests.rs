@@ -324,3 +324,367 @@ fn refinement_second_yellow_counts_dismissal() {
     assert_eq!(report.home_stats.red_cards, 1);
     assert_eq!(report.player_stats["p"].red_cards, 1);
 }
+
+#[test]
+fn phase74_shootout_uses_distinct_eligible_takers() {
+    let mut s = make_live_match(true);
+    s.phase = MatchPhase::PenaltyShootout;
+    s.current_minute = 120;
+    let mut rng = StdRng::seed_from_u64(741);
+    let mut takers = std::collections::HashSet::new();
+    for _ in 0..6 {
+        let result = s.step_minute(&mut rng);
+        let kick = result
+            .events
+            .iter()
+            .find(|e| {
+                matches!(
+                    e.event_type,
+                    EventType::ShootoutGoal | EventType::ShootoutMiss
+                )
+            })
+            .unwrap();
+        assert!(
+            takers.insert((kick.side, kick.player_id.clone())),
+            "a player kicked twice before teammates"
+        );
+    }
+}
+
+#[test]
+fn phase74_substitutions_are_closed_during_shootout() {
+    let mut s = make_live_match(true);
+    s.phase = MatchPhase::PenaltyShootout;
+    assert!(
+        s.apply_command(MatchCommand::Substitute {
+            side: Side::Home,
+            player_off_id: "home_fwd1".into(),
+            player_on_id: "home_sub_fwd1".into()
+        })
+        .is_err()
+    );
+    assert_eq!(s.home_subs_made, 0);
+}
+
+#[test]
+fn phase74_ai_chases_late_deficit_with_tactical_instructions() {
+    let mut s = make_live_match(false);
+    s.phase = MatchPhase::SecondHalf;
+    s.current_minute = 80;
+    s.away_score = 1;
+    let commands = crate::ai::ai_decide(
+        &s,
+        Side::Home,
+        &crate::ai::AiProfile::default(),
+        &mut StdRng::seed_from_u64(74),
+    );
+    assert!(
+        commands
+            .iter()
+            .any(|c| matches!(c, MatchCommand::ChangeTacticalInstruction { .. }))
+    );
+}
+
+#[test]
+fn phase74_ai_rests_exhausted_press_instead_of_blindly_attacking() {
+    let mut s = make_live_match(false);
+    s.phase = MatchPhase::SecondHalf;
+    s.current_minute = 70;
+    s.home.tactics.pressing_intensity = crate::PressingIntensity::Aggressive;
+    for condition in s.player_conditions.values_mut() {
+        *condition = 35.0;
+    }
+    let commands = crate::ai::ai_decide(
+        &s,
+        Side::Home,
+        &crate::ai::AiProfile::default(),
+        &mut StdRng::seed_from_u64(74),
+    );
+    assert!(commands.iter().any(|c| matches!(
+        c,
+        MatchCommand::ChangeTacticalInstruction {
+            instruction: crate::types::TacticalInstruction::PressingIntensity(
+                crate::PressingIntensity::Passive
+            ),
+            ..
+        }
+    )));
+}
+
+#[test]
+fn phase74_penalty_order_is_validated_atomically() {
+    let mut s = make_live_match(true);
+    let valid = vec!["home_mid1".to_owned(), "home_fwd1".to_owned()];
+    s.apply_command(MatchCommand::SetPenaltyOrder {
+        side: Side::Home,
+        player_ids: valid.clone(),
+    })
+    .unwrap();
+    for invalid in [
+        vec!["home_mid1".into(), "home_mid1".into()],
+        vec!["away_mid1".into()],
+        vec!["home_sub_fwd1".into()],
+    ] {
+        assert!(
+            s.apply_command(MatchCommand::SetPenaltyOrder {
+                side: Side::Home,
+                player_ids: invalid
+            })
+            .is_err()
+        );
+        assert_eq!(s.home_set_pieces.penalty_order, valid);
+    }
+    s.phase = MatchPhase::PenaltyShootout;
+    s.current_minute = 120;
+    let result = s.step_minute(&mut StdRng::seed_from_u64(741));
+    assert_eq!(result.events[0].player_id.as_deref(), Some("home_mid1"));
+}
+
+#[test]
+fn phase74_old_set_pieces_deserialize_with_default_order() {
+    let pieces: super::SetPieceTakers = serde_json::from_str(
+        r#"{"free_kick_taker":null,"corner_taker":null,"penalty_taker":"legacy","captain":null}"#,
+    )
+    .unwrap();
+    assert!(pieces.penalty_order.is_empty());
+    assert_eq!(pieces.penalty_taker.as_deref(), Some("legacy"));
+}
+
+#[test]
+fn phase74_ai_context_has_cooldown() {
+    let mut s = make_live_match(true);
+    s.phase = MatchPhase::SecondHalf;
+    s.current_minute = 80;
+    s.away_score = 1;
+    let mut rng = StdRng::seed_from_u64(74);
+    let profile = crate::ai::AiProfile::default();
+    let commands = crate::ai::ai_decide(&s, Side::Home, &profile, &mut rng);
+    for command in commands {
+        s.apply_command(command).unwrap();
+    }
+    let repeated = crate::ai::ai_decide(&s, Side::Home, &profile, &mut rng);
+    assert!(
+        !repeated
+            .iter()
+            .any(|c| matches!(c, MatchCommand::ChangeTacticalInstruction { .. }))
+    );
+}
+
+#[test]
+fn phase74_ai_preserves_tired_player_if_reserves_are_worse() {
+    let mut s = make_live_match(false);
+    s.phase = MatchPhase::SecondHalf;
+    s.current_minute = 60;
+    s.player_conditions.insert("home_mid1".into(), 40.0);
+    for p in &mut s.home_bench {
+        p.condition = 10;
+    }
+    let commands = crate::ai::ai_decide(
+        &s,
+        Side::Home,
+        &crate::ai::AiProfile::default(),
+        &mut StdRng::seed_from_u64(74),
+    );
+    assert!(
+        !commands
+            .iter()
+            .any(|c| matches!(c, MatchCommand::Substitute { .. }))
+    );
+}
+
+#[test]
+fn phase74_ai_uses_fresh_cover_for_booked_defender() {
+    let mut s = make_live_match(false);
+    s.phase = MatchPhase::SecondHalf;
+    s.current_minute = 70;
+    s.yellows.insert("home_def1".into(), 1);
+    s.player_conditions.insert("home_def1".into(), 65.0);
+    let commands = crate::ai::ai_decide(
+        &s,
+        Side::Home,
+        &crate::ai::AiProfile::default(),
+        &mut StdRng::seed_from_u64(74),
+    );
+    assert!(commands.iter().any(|c| matches!(c, MatchCommand::Substitute { player_off_id, .. } if player_off_id == "home_def1")));
+}
+
+#[test]
+fn phase74_ai_closes_space_after_a_dismissal() {
+    let mut s = make_live_match(false);
+    s.phase = MatchPhase::FirstHalf;
+    s.current_minute = 30;
+    s.sent_off.insert("home_mid1".into());
+    let commands = crate::ai::ai_decide(
+        &s,
+        Side::Home,
+        &crate::ai::AiProfile::default(),
+        &mut StdRng::seed_from_u64(74),
+    );
+    assert!(commands.iter().any(|c| matches!(
+        c,
+        MatchCommand::ChangeTacticalInstruction {
+            instruction: crate::types::TacticalInstruction::DefensiveShape(
+                crate::types::DefensiveShape::Compact
+            ),
+            ..
+        }
+    )));
+}
+
+#[test]
+fn phase74_ai_changes_build_up_against_aggressive_opposition_press() {
+    let mut s = make_live_match(false);
+    s.phase = MatchPhase::FirstHalf;
+    s.current_minute = 30;
+    s.away.tactics.pressing_intensity = crate::PressingIntensity::Aggressive;
+    for p in &mut s.home.players {
+        p.passing = 50;
+    }
+    let commands = crate::ai::ai_decide(
+        &s,
+        Side::Home,
+        &crate::ai::AiProfile::default(),
+        &mut StdRng::seed_from_u64(74),
+    );
+    assert!(commands.iter().any(|c| matches!(
+        c,
+        MatchCommand::ChangeTacticalInstruction {
+            instruction: crate::types::TacticalInstruction::BuildUpStyle(
+                crate::types::TacticsBuildUpStyle::Long
+            ),
+            ..
+        }
+    )));
+}
+
+#[test]
+fn phase74_set_piece_assignment_rejects_ineligible_players_and_clears_auto() {
+    let mut s = make_live_match(false);
+    assert!(
+        s.apply_command(MatchCommand::SetPenaltyTaker {
+            side: Side::Home,
+            player_id: "away_fwd1".into()
+        })
+        .is_err()
+    );
+    s.apply_command(MatchCommand::SetPenaltyTaker {
+        side: Side::Home,
+        player_id: "home_fwd1".into(),
+    })
+    .unwrap();
+    s.apply_command(MatchCommand::SetPenaltyTaker {
+        side: Side::Home,
+        player_id: String::new(),
+    })
+    .unwrap();
+    assert!(s.home_set_pieces.penalty_taker.is_none());
+}
+
+#[test]
+fn phase74_substitution_clears_obsolete_set_piece_assignments() {
+    let mut s = make_live_match(false);
+    s.phase = MatchPhase::SecondHalf;
+    s.home_set_pieces.penalty_taker = Some("home_fwd1".into());
+    s.home_set_pieces.penalty_order = vec!["home_fwd1".into(), "home_fwd2".into()];
+    s.apply_command(MatchCommand::Substitute {
+        side: Side::Home,
+        player_off_id: "home_fwd1".into(),
+        player_on_id: "home_sub_fwd1".into(),
+    })
+    .unwrap();
+    assert!(s.home_set_pieces.penalty_taker.is_none());
+    assert_eq!(s.home_set_pieces.penalty_order, vec!["home_fwd2"]);
+}
+
+#[test]
+fn phase74_live_ai_seeded_stress() {
+    let mut goals = 0u32;
+    let mut subs = 0u32;
+    let mut tactical_events = 0u32;
+    let mut shootouts = 0u32;
+    for seed in 7400..7600 {
+        let mut s = make_live_match(true);
+        let mut rng = StdRng::seed_from_u64(seed);
+        let profile = crate::ai::AiProfile::default();
+        for _ in 0..1000 {
+            if s.is_finished() {
+                break;
+            }
+            s.step_minute(&mut rng);
+            for side in [Side::Home, Side::Away] {
+                for command in crate::ai::ai_decide(&s, side, &profile, &mut rng) {
+                    s.apply_command(command)
+                        .expect("AI commands must remain legal");
+                }
+            }
+        }
+        assert!(s.is_finished(), "seed {seed} did not complete");
+        let snap = s.snapshot();
+        assert!(snap.home_subs_made <= snap.max_subs && snap.away_subs_made <= snap.max_subs);
+        assert!(snap.home_possession_pct.is_finite());
+        goals += snap.home_score as u32 + snap.away_score as u32;
+        subs += snap.home_subs_made as u32 + snap.away_subs_made as u32;
+        tactical_events += snap
+            .events
+            .iter()
+            .filter(|e| e.event_type == EventType::TacticalChange)
+            .count() as u32;
+        if snap.penalty_shootout.is_some() {
+            shootouts += 1;
+        }
+        let report = s.into_report();
+        assert_eq!(
+            (report.home_goals, report.away_goals),
+            (snap.home_score, snap.away_score)
+        );
+        assert!(report.home_stats.expected_goals.is_finite());
+    }
+    println!(
+        "LIVE_AI_BENCH games=200 seed=7400 goals={goals} substitutions={subs} tactical_events={tactical_events} shootouts={shootouts}"
+    );
+}
+
+#[test]
+fn phase74_shootout_reduces_eligible_pools_and_repeats_only_after_a_cycle() {
+    let mut s = make_live_match(true);
+    s.phase = MatchPhase::PenaltyShootout;
+    s.current_minute = 120;
+    s.home
+        .players
+        .retain(|p| ["home_gk", "home_fwd1", "home_fwd2"].contains(&p.id.as_str()));
+    s.away
+        .players
+        .retain(|p| ["away_gk", "away_fwd1"].contains(&p.id.as_str()));
+    let mut home = Vec::new();
+    let mut away = Vec::new();
+    let mut rng = StdRng::seed_from_u64(741);
+    for _ in 0..6 {
+        for e in s.step_minute(&mut rng).events {
+            if matches!(
+                e.event_type,
+                EventType::ShootoutGoal | EventType::ShootoutMiss
+            ) {
+                if e.side == Side::Home {
+                    home.push(e.player_id.unwrap());
+                } else {
+                    away.push(e.player_id.unwrap());
+                }
+            }
+        }
+    }
+    assert_ne!(home[0], home[1]);
+    assert_eq!(home[0], home[2]);
+    assert_ne!(away[0], away[1]);
+    assert_eq!(away[0], away[2]);
+}
+
+#[test]
+fn phase74_shootout_skips_dismissed_designated_takers() {
+    let mut s = make_live_match(true);
+    s.phase = MatchPhase::PenaltyShootout;
+    s.current_minute = 120;
+    s.home_set_pieces.penalty_order = vec!["home_fwd1".into(), "home_fwd2".into()];
+    s.sent_off.insert("home_fwd1".into());
+    let result = s.step_minute(&mut StdRng::seed_from_u64(741));
+    assert_eq!(result.events[0].player_id.as_deref(), Some("home_fwd2"));
+}

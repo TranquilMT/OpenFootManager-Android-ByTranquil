@@ -1,7 +1,7 @@
 {
   "oversizedAggregate": {
-    "rust": 63351,
-    "ts": 36773
+    "rust": 63358,
+    "ts": 36783
   },
   "allowedOversized": {
     "src-tauri/crates/db/src/repositories/player_repo.rs": 1091,
@@ -31,7 +31,7 @@
     "src-tauri/crates/ofm_core/tests/transfers_tests.rs": 3845,
     "src-tauri/crates/ofm_core/tests/turn_tests.rs": 2085,
     "src-tauri/crates/ofm-cli/src/main.rs": 1118,
-    "src-tauri/src/commands/live_match.rs": 1110,
+    "src-tauri/src/commands/live_match.rs": 1117,
     "src-tauri/src/commands/package_editor.rs": 1392,
     "src-tauri/src/commands/squad.rs": 1314,
     "src-tauri/src/commands/time.rs": 1435,
@@ -46,10 +46,10 @@
     "src/components/home/HomeTab.helpers.test.ts": 704,
     "src/components/inbox/InboxMessageDetailPane.tsx": 532,
     "src/components/inbox/InboxTab.test.tsx": 1397,
-    "src/components/match/MatchLive.tsx": 860,
+    "src/components/match/MatchLive.tsx": 866,
     "src/components/match/PostMatchScreen.test.tsx": 789,
-    "src/components/match/PostMatchScreen.tsx": 817,
-    "src/components/match/PreMatchSetup.tsx": 711,
+    "src/components/match/PostMatchScreen.tsx": 819,
+    "src/components/match/PreMatchSetup.tsx": 713,
     "src/components/match/RoundDigestScreen.tsx": 603,
     "src/components/match/SubPanel.test.tsx": 651,
     "src/components/match/SubPanel.tsx": 721,

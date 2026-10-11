@@ -14,6 +14,14 @@ pub(crate) fn conversion(base: f64, shooter: f64, keeper: f64, shape: f64) -> f6
         .clamp(0.10, 0.70)
 }
 
+/// Difficult saves and weak handling leave more live balls in the penalty area.
+pub(crate) fn rebound_probability(handling: f64, xg: f64) -> f64 {
+    (0.04
+        + (100.0 - finite_or(handling, 50.0).clamp(0.0, 100.0)) / 2000.0
+        + finite_or(xg, 0.0).clamp(0.0, 1.0) * 0.08)
+        .clamp(0.03, 0.12)
+}
+
 pub(crate) fn penalty_conversion(shooter: f64, keeper: f64) -> f64 {
     (0.75 + (finite_or(shooter, 50.0) - finite_or(keeper, 50.0)) / 300.0).clamp(0.55, 0.92)
 }
@@ -150,5 +158,13 @@ mod tests {
     #[test]
     fn routine_save_is_not_called_world_class() {
         assert_eq!(save_difficulty(0.05), crate::event::SaveQuality::Routine);
+    }
+    #[test]
+    fn phase74_keeper_handling_limits_rebounds() {
+        assert!(rebound_probability(20.0, 0.2) > rebound_probability(90.0, 0.2));
+        assert!(rebound_probability(70.0, 0.4) > rebound_probability(70.0, 0.05));
+        for handling in [f64::NAN, -999.0, 999.0] {
+            assert!((0.03..=0.12).contains(&rebound_probability(handling, f64::INFINITY)));
+        }
     }
 }

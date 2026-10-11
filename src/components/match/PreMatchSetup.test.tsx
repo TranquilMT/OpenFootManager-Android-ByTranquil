@@ -89,6 +89,7 @@ function snapshot(): Record<string, unknown> {
       play_style: "Counter",
       players: awayPlayers,
     },
+    sent_off: [],
     home_bench: [],
     away_bench: [],
     home_set_pieces: emptySetPieces,

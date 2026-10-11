@@ -413,17 +413,19 @@ impl LiveMatchState {
                 });
             self.events.push(evt.clone());
             events.push(evt);
-            // 40% of saves → corner (keeper parries wide), 60% → goal kick (keeper catches)
-            if rng.random_range(0.0..1.0f64) < 0.40 {
+            // Handling determines whether the ball stays live; a catch is not a goal kick.
+            let rebound = crate::shot_model::rebound_probability(goalkeeper.handling as f64, xg);
+            let outcome = rng.random_range(0.0..1.0f64);
+            if outcome < 0.40 - rebound {
                 let corner_evt = MatchEvent::new(minute, EventType::Corner, att_side, zone);
                 self.events.push(corner_evt.clone());
                 events.push(corner_evt);
                 self.possession = att_side;
                 self.ball_zone = Zone::attacking_box(att_side);
+            } else if outcome < 0.40 {
+                self.possession = att_side;
+                self.ball_zone = Zone::attacking_box(att_side);
             } else {
-                let gk_evt = MatchEvent::new(minute, EventType::GoalKick, def_side, zone);
-                self.events.push(gk_evt.clone());
-                events.push(gk_evt);
                 self.ball_zone = Zone::defensive_third(def_side);
                 self.possession = def_side;
             }

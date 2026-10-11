@@ -1,3 +1,4 @@
+import ShootoutOrder from "./ShootoutOrder";
 import { useMemo, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { useTranslation } from "react-i18next";
@@ -410,6 +411,7 @@ export default function PreMatchSetup({
           </div>
         ))}
       </div>
+      <ShootoutOrder snapshot={snapshot} side={userSide} onSnapshot={onUpdateSnapshot} />
     </div>
   );
 

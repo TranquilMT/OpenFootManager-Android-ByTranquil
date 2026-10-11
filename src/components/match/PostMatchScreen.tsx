@@ -1,3 +1,4 @@
+import MatchAnalysisPanel from "./MatchAnalysisPanel";
 import { matchMetrics } from "./narrativeContext";
 import { PlayerMatchPerformance } from "./PlayerMatchPerformance";
 import { useState } from "react";
@@ -568,6 +569,7 @@ export default function PostMatchScreen({
             hidden={activeTab !== "matchReport"}
             className="grid grid-cols-2 gap-6"
           >
+            <MatchAnalysisPanel snapshot={snapshot} />
             {/* Scorers */}
             <div className="bg-white dark:bg-navy-800 rounded-xl border border-gray-200 dark:border-navy-700 shadow-sm p-4 transition-colors duration-300">
               <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-3">

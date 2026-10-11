@@ -4,6 +4,15 @@ import { ReleaseNotes } from "../settings/ReleaseNotes";
 
 const HISTORY = [
   {
+    version: "0.7.3",
+    keys: [
+      "phase73.release.match",
+      "phase73.release.squad",
+      "phase73.release.finance",
+      "phase73.release.reliability",
+    ],
+  },
+  {
     version: "0.7.2",
     keys: ["phase72.minutes", "phase72.stats", "phase72.fatigue", "phase72.tactics"],
   },

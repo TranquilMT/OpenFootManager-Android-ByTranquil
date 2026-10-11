@@ -1783,7 +1783,7 @@
     "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
     "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
     "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
-    "patchWelcome": "OFMtouch 0.7.3 — Integrated Gameplay",
+    "patchWelcome": "OFMtouch 0.7.4 — Match Intelligence",
     "patchPortraits": "20 fictional source faces bring more variety to generated player portraits.",
     "patchWorld": "A larger football world spans 29 nations, with stronger clubs across the Americas and Asia.",
     "patchTransfers": "Club strategies guide loans and transfer approaches, with competing offers and budget checks.",
@@ -2027,7 +2027,11 @@
       "suddenDeath": "Sudden Death",
       "shootoutScore": "Penalties: {{h}} – {{a}}",
       "homeKick": "Home kick coming...",
-      "awayKick": "Away kick coming..."
+      "awayKick": "Away kick coming...",
+      "order": "Shootout order",
+      "earlier": "Move {{name}} earlier",
+      "later": "Move {{name}} later",
+      "orderError": "Could not save the shootout order."
     },
     "fullTime": "Full Time",
     "ft": "FT",
@@ -2621,7 +2625,17 @@
     "pts": "pts",
     "jumpToLive": "Return to live commentary",
     "cards": "Cards",
-    "actionFailed": "Unable to complete the match action. Please try again."
+    "actionFailed": "Unable to complete the match action. Please try again.",
+    "analysis": {
+      "title": "Match analysis",
+      "metric": "Metric",
+      "bigChances": "Big chances (xG ≥ 0.30)",
+      "recordedShots": "Shots with recorded xG",
+      "adjustments": "Tactical adjustments",
+      "afterSubs": "After last substitution: shots / conceded",
+      "explanation": "Big chances use recorded xG only. Figures after substitutions are observations, not evidence of cause.",
+      "since": "{{team}}: since the substitution at {{minute}}′."
+    }
   },
   "endOfSeason": {
     "seasonComplete": "Season Complete",
@@ -4428,6 +4442,15 @@
       "squad": "Plan loans, contracts and fixture congestion with clearer availability and recovery dates.",
       "finance": "More reliable cash forecasts, wage estimates and commercial planning.",
       "reliability": "Safer match commands, event history and imported data, with expanded regression coverage."
+    }
+  },
+  "phase74": {
+    "release": {
+      "ai": "AI managers respond to fatigue, bookings, late scorelines, dismissals and aggressive opposition pressing.",
+      "match": "Goalkeeper handling influences rebounds; catches are no longer recorded as goal kicks.",
+      "controls": "Choose the shootout taker order before matches or while penalties are paused. Each eligible player takes a turn before repeating.",
+      "analysis": "New live and full-time analysis shows recorded big chances, tactical adjustments and events after substitutions.",
+      "reliability": "Shootouts keep progressing at the same match minute. Failed result finalization retains the live session for retry."
     }
   }
 }

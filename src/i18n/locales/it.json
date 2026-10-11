@@ -1802,7 +1802,7 @@
     "patchPlayers": "Più giocatori di spicco, incluse rare stelle da 96 e squadre in lotta per la promozione.",
     "patchMatches": "Più reazioni, tiri sui legni e telecronaca vocale facoltativa.",
     "patchMobile": "Comandi mobili, posta, nazionali e inizio carriera migliorati.",
-    "patchWelcome": "OFMtouch 0.7.3 — Sistemi di gioco integrati",
+    "patchWelcome": "OFMtouch 0.7.4 — Partite più intelligenti",
     "patchPortraits": "20 volti fittizi di partenza rendono più vari i ritratti dei giocatori generati.",
     "patchWorld": "Un mondo calcistico più ampio copre 29 nazioni, con club più forti nelle Americhe e in Asia.",
     "patchTransfers": "Le strategie dei club guidano prestiti e trasferimenti, con offerte concorrenti e controlli sul budget.",
@@ -2012,7 +2012,11 @@
       "suddenDeath": "Morte Improvvisa",
       "shootoutScore": "Rigori: {{h}} – {{a}}",
       "homeKick": "Calcio della squadra di casa...",
-      "awayKick": "Calcio della squadra ospite..."
+      "awayKick": "Calcio della squadra ospite...",
+      "order": "Ordine dei rigoristi",
+      "earlier": "Anticipa {{name}}",
+      "later": "Posticipa {{name}}",
+      "orderError": "Impossibile salvare l’ordine dei rigoristi."
     },
     "fullTime": "Fine partita",
     "ft": "FIN",
@@ -2640,7 +2644,17 @@
     "pts": "pts.",
     "jumpToLive": "Torna alla cronaca in diretta",
     "cards": "Cartellini",
-    "actionFailed": "Impossibile completare l’azione della partita. Riprova."
+    "actionFailed": "Impossibile completare l’azione della partita. Riprova.",
+    "analysis": {
+      "title": "Analisi della partita",
+      "metric": "Indicatore",
+      "bigChances": "Grandi occasioni (xG ≥ 0,30)",
+      "recordedShots": "Tiri con xG registrato",
+      "adjustments": "Modifiche tattiche",
+      "afterSubs": "Dopo l’ultima sostituzione: tiri / gol subiti",
+      "explanation": "Le grandi occasioni usano solo gli xG registrati. I dati dopo le sostituzioni sono osservazioni, non prove di causalità.",
+      "since": "{{team}}: dalla sostituzione al minuto {{minute}}."
+    }
   },
   "notifications": {
     "attentionRequired": "Attenzione Richiesta",
@@ -4428,6 +4442,15 @@
       "squad": "Pianifica prestiti, contratti e calendari intensi con disponibilità e date di recupero più chiare.",
       "finance": "Previsioni di cassa, stime degli stipendi e pianificazione commerciale più affidabili.",
       "reliability": "Comandi di partita, cronologia degli eventi e dati importati più sicuri, con test di regressione ampliati."
+    }
+  },
+  "phase74": {
+    "release": {
+      "ai": "Gli allenatori IA reagiscono a stanchezza, ammonizioni, punteggi nel finale, espulsioni e pressing aggressivo avversario.",
+      "match": "La presa del portiere influisce sui rimbalzi; le prese non vengono più registrate come rinvii dal fondo.",
+      "controls": "L’ordine dei rigoristi si può scegliere prima della partita o durante una pausa. Ogni giocatore idoneo tira prima che il turno si ripeta.",
+      "analysis": "La nuova analisi durante e dopo la partita mostra grandi occasioni registrate, modifiche tattiche ed eventi dopo le sostituzioni.",
+      "reliability": "I rigori continuano anche nello stesso minuto. Se la conferma del risultato fallisce, la partita resta disponibile per riprovare."
     }
   }
 }

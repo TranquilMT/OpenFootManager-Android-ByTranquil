@@ -22,7 +22,7 @@ impl LiveMatchState {
         };
 
         // Pick taker and goalkeeper (needs &self)
-        let taker = self.pick_penalty_taker(kicking_side, rng);
+        let taker = self.pick_shootout_taker(kicking_side);
         let gk = self.pick_goalkeeper(kicking_side.opposite());
 
         let shoot_skill = self.condition_adjusted_skill(
@@ -95,6 +95,62 @@ impl LiveMatchState {
             ball_zone: Zone::Midfield,
             is_finished: self.phase == super::MatchPhase::Finished,
         }
+    }
+
+    fn pick_shootout_taker(&self, side: Side) -> crate::shared::PlayerSnap {
+        let pieces = self.set_pieces_ref(side);
+        let mut eligible: Vec<_> = self
+            .team_ref(side)
+            .players
+            .iter()
+            .filter(|p| !self.sent_off.contains(&p.id))
+            .collect();
+        eligible.sort_by(|a, b| {
+            let priority = |id: &str| {
+                pieces.penalty_order.iter().position(|p| p == id).unwrap_or(
+                    if pieces.penalty_taker.as_deref() == Some(id) {
+                        pieces.penalty_order.len()
+                    } else {
+                        usize::MAX
+                    },
+                )
+            };
+            let skill = |p: &crate::types::PlayerData| {
+                self.condition_adjusted_skill(&p.id, (p.shooting as f64 + p.composure as f64) / 2.0)
+            };
+            priority(&a.id)
+                .cmp(&priority(&b.id))
+                .then_with(|| skill(b).total_cmp(&skill(a)))
+                .then_with(|| a.id.cmp(&b.id))
+        });
+        let opponents = self
+            .team_ref(side.opposite())
+            .players
+            .iter()
+            .filter(|p| !self.sent_off.contains(&p.id))
+            .count();
+        eligible.truncate(opponents);
+        if eligible.is_empty() {
+            return crate::shared::PlayerSnap::nobody();
+        }
+        let kicks: Vec<_> = self
+            .events
+            .iter()
+            .filter(|e| {
+                e.side == side
+                    && matches!(
+                        e.event_type,
+                        EventType::ShootoutGoal | EventType::ShootoutMiss
+                    )
+            })
+            .collect();
+        let cycle_start = kicks.len() - kicks.len() % eligible.len();
+        let next = eligible.iter().find(|p| {
+            !kicks[cycle_start..]
+                .iter()
+                .any(|e| e.player_id.as_deref() == Some(&p.id))
+        });
+        crate::shared::PlayerSnap::from(next.unwrap_or(&eligible[0]))
     }
 
     pub(super) fn check_penalty_decided(&self) -> bool {

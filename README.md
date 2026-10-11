@@ -342,6 +342,26 @@ Thank you for playing, testing and sharing feedback. Your reports help improve e
 
 Thanks, TranquilMT
 
+# OFMtouch v0.7.4 — Match Intelligence
+
+A focused matchday update built on 0.7.3.
+
+- Smarter AI managers respond to late scorelines, team fatigue, dismissal disadvantages and aggressive opposition pressing. Fresh positional cover can replace vulnerable booked players. Routine fatigue changes avoid even more exhausted reserves, and tactical replacements coordinate with formation changes.
+- Goalkeeper handling influences the split between rebounds and corners after saves. Caught balls no longer produce misleading goal-kick events. Live and background matches share the same bounded model.
+- Choose the shootout taker order before a match or while a managed shootout is paused. Eligible players take distinct turns before a new cycle; unequal player counts are reduced to equal pools. Ineligible/duplicate assignments are rejected, and outgoing players are removed from current-match assignments.
+- Live and full-time analysis shows recorded big chances, xG coverage, tactical changes and shots/goals conceded after the last substitution. It leaves legacy chance quality unknown and does not imply that a substitution caused subsequent events.
+- Shootouts continue when kicks share the same minute, display actual goal/miss order and taker names, prevent overlapping simulation requests and cancel delayed navigation when unmounted.
+- Failed match finalization retains the live session for retry. Fixture identity and completion status are validated before career results are changed, protecting unrelated fixtures and preventing duplicate application.
+- All new controls and release highlights are translated into 12 languages. Version 0.7.3 remains in Patch History; the gameplay ledger now distinguishes implemented controls from outstanding roadmap work.
+
+Android ARM64 · Build 363 · version code 7400363. The existing package name and persistent release signing certificate are retained, so the APK updates the installed signed app. Complete matching source, checksums and validation evidence accompany the release.
+
+Shootout orders are current-match instructions. This update does not add manual corner aiming or persistent replay of an interrupted match after process death. Physical-device installation/gameplay remains separate from automated and package verification.
+
+Thank you for playing, testing and sharing feedback.
+
+Thanks, TranquilMT
+
 # OFMtouch v0.7.3 — Integrated Gameplay
 
 200 development commits improve the matchday experience and connected club-management tools.

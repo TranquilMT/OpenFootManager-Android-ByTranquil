@@ -1783,7 +1783,7 @@
     "patchPlayers": "Plus de talents, dont de rares stars notées 96 et de solides candidats à la montée.",
     "patchMatches": "Plus de réactions, des frappes sur les montants et un commentaire vocal facultatif.",
     "patchMobile": "Commandes mobiles, boîte de réception, sélections nationales et carrière améliorées.",
-    "patchWelcome": "OFMtouch 0.7.3 — Systèmes de jeu intégrés",
+    "patchWelcome": "OFMtouch 0.7.4 — Des matchs plus intelligents",
     "patchPortraits": "20 visages fictifs de référence diversifient les portraits des joueurs générés.",
     "patchWorld": "Un monde du football plus vaste couvre 29 nations, avec des clubs renforcés en Amérique et en Asie.",
     "patchTransfers": "La stratégie des clubs guide prêts et transferts, avec offres concurrentes et contrôle du budget.",
@@ -1993,7 +1993,11 @@
       "suddenDeath": "Mort Subite",
       "shootoutScore": "Tirs au but: {{h}} – {{a}}",
       "homeKick": "Tir de l'équipe à domicile...",
-      "awayKick": "Tir de l'équipe visiteuse..."
+      "awayKick": "Tir de l'équipe visiteuse...",
+      "order": "Ordre des tirs au but",
+      "earlier": "Faire passer {{name}} plus tôt",
+      "later": "Faire passer {{name}} plus tard",
+      "orderError": "Impossible d’enregistrer l’ordre des tirs au but."
     },
     "fullTime": "Temps Plein",
     "ft": "TP",
@@ -2621,7 +2625,17 @@
     "pts": "pts",
     "jumpToLive": "Revenir au commentaire en direct",
     "cards": "Cartons",
-    "actionFailed": "Impossible de terminer cette action du match. Réessayez."
+    "actionFailed": "Impossible de terminer cette action du match. Réessayez.",
+    "analysis": {
+      "title": "Analyse du match",
+      "metric": "Indicateur",
+      "bigChances": "Grosses occasions (xG ≥ 0,30)",
+      "recordedShots": "Tirs avec xG enregistré",
+      "adjustments": "Ajustements tactiques",
+      "afterSubs": "Après le dernier changement : tirs / buts encaissés",
+      "explanation": "Les grosses occasions reposent uniquement sur le xG enregistré. Les chiffres après les changements sont des observations, sans lien de causalité établi.",
+      "since": "{{team}} : depuis le changement à la {{minute}}e minute."
+    }
   },
   "endOfSeason": {
     "seasonComplete": "Saison Terminée",
@@ -4428,6 +4442,15 @@
       "squad": "Planifiez les prêts, les contrats et les calendriers chargés avec une disponibilité et des dates de retour plus claires.",
       "finance": "Prévisions de trésorerie, estimations salariales et planification commerciale plus fiables.",
       "reliability": "Commandes de match, historique des événements et données importées plus sûrs, avec davantage de tests de régression."
+    }
+  },
+  "phase74": {
+    "release": {
+      "ai": "Les entraîneurs IA réagissent à la fatigue, aux avertissements, au score en fin de match, aux expulsions et au pressing adverse agressif.",
+      "match": "La prise de balle du gardien influence les rebonds ; les ballons captés ne comptent plus comme dégagements aux six mètres.",
+      "controls": "L’ordre des tirs au but peut être choisi avant le match ou pendant une pause. Chaque joueur admissible tire avant que l’ordre se répète.",
+      "analysis": "La nouvelle analyse en direct et après le match présente les grosses occasions enregistrées, les ajustements tactiques et les événements après les changements.",
+      "reliability": "Les tirs au but progressent même à la même minute. En cas d’échec de validation du résultat, le match reste disponible pour réessayer."
     }
   }
 }

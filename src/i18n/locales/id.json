@@ -1783,7 +1783,7 @@
     "patchPlayers": "Lebih banyak pemain unggulan, termasuk bintang langka berperingkat 96.",
     "patchMatches": "Lebih banyak reaksi, tembakan membentur tiang, dan komentar suara opsional.",
     "patchMobile": "Kontrol seluler, kotak masuk, tim nasional, dan awal karier ditingkatkan.",
-    "patchWelcome": "OFMtouch 0.7.3 — Sistem Permainan Terpadu",
+    "patchWelcome": "OFMtouch 0.7.4 — Pertandingan lebih cerdas",
     "patchPortraits": "20 wajah fiktif sumber membuat potret pemain hasil generasi lebih beragam.",
     "patchWorld": "Dunia sepak bola yang lebih luas mencakup 29 negara, dengan klub lebih kuat di Amerika dan Asia.",
     "patchTransfers": "Strategi klub memandu pinjaman dan transfer, dengan tawaran bersaing serta pemeriksaan anggaran.",
@@ -2027,7 +2027,11 @@
       "suddenDeath": "Sudden Death",
       "shootoutScore": "Penalti: {{h}} – {{a}}",
       "homeKick": "Tendangan tim kandang menyusul...",
-      "awayKick": "Tendangan tim tandang menyusul..."
+      "awayKick": "Tendangan tim tandang menyusul...",
+      "order": "Urutan adu penalti",
+      "earlier": "Majukan {{name}}",
+      "later": "Mundurkan {{name}}",
+      "orderError": "Urutan adu penalti tidak dapat disimpan."
     },
     "fullTime": "Waktu Penuh",
     "ft": "FT",
@@ -2621,7 +2625,17 @@
     "pts": "poin",
     "jumpToLive": "Kembali ke komentar langsung",
     "cards": "Kartu",
-    "actionFailed": "Tindakan pertandingan tidak dapat diselesaikan. Silakan coba lagi."
+    "actionFailed": "Tindakan pertandingan tidak dapat diselesaikan. Silakan coba lagi.",
+    "analysis": {
+      "title": "Analisis pertandingan",
+      "metric": "Ukuran",
+      "bigChances": "Peluang besar (xG ≥ 0,30)",
+      "recordedShots": "Tembakan dengan xG tercatat",
+      "adjustments": "Penyesuaian taktik",
+      "afterSubs": "Setelah pergantian terakhir: tembakan / kebobolan",
+      "explanation": "Peluang besar hanya memakai xG tercatat. Angka setelah pergantian adalah pengamatan, bukan bukti sebab akibat.",
+      "since": "{{team}}: sejak pergantian pada menit {{minute}}."
+    }
   },
   "endOfSeason": {
     "seasonComplete": "Musim Selesai",
@@ -4428,6 +4442,15 @@
       "squad": "Rencanakan pinjaman, kontrak dan jadwal padat dengan ketersediaan serta tanggal pemulihan yang lebih jelas.",
       "finance": "Proyeksi kas, perkiraan gaji dan perencanaan komersial yang lebih andal.",
       "reliability": "Perintah pertandingan, riwayat kejadian dan data impor yang lebih aman dengan pengujian regresi lebih luas."
+    }
+  },
+  "phase74": {
+    "release": {
+      "ai": "Manajer AI merespons kelelahan, kartu, skor di akhir laga, pengusiran pemain, dan tekanan agresif lawan.",
+      "match": "Kemampuan menangkap kiper memengaruhi bola pantul; tangkapan tidak lagi dicatat sebagai tendangan gawang.",
+      "controls": "Urutan adu penalti dapat dipilih sebelum pertandingan atau saat penalti dijeda. Setiap pemain yang memenuhi syarat menendang sebelum giliran diulang.",
+      "analysis": "Analisis baru saat laga dan setelah selesai menampilkan peluang besar tercatat, penyesuaian taktik, dan kejadian setelah pergantian.",
+      "reliability": "Adu penalti terus berjalan meskipun menit pertandingan tetap sama. Kegagalan pengesahan hasil mempertahankan sesi pertandingan untuk dicoba kembali."
     }
   }
 }

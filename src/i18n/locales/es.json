@@ -1783,7 +1783,7 @@
     "patchPlayers": "Más jugadores destacados, incluidas raras estrellas de 96 y aspirantes al ascenso.",
     "patchMatches": "Más reacciones, tiros al palo y narración de voz opcional.",
     "patchMobile": "Mejoras en controles móviles, bandeja de entrada, selecciones y carrera.",
-    "patchWelcome": "OFMtouch 0.7.3 — Sistemas de juego integrados",
+    "patchWelcome": "OFMtouch 0.7.4 — Partidos más inteligentes",
     "patchPortraits": "20 rostros ficticios de origen aportan más variedad a los retratos de los jugadores.",
     "patchWorld": "Un mundo futbolístico más amplio abarca 29 países, con clubes más fuertes en América y Asia.",
     "patchTransfers": "Las estrategias de los clubes guían cesiones y fichajes, con ofertas rivales y controles del presupuesto.",
@@ -1993,7 +1993,11 @@
       "suddenDeath": "Muerte Súbita",
       "shootoutScore": "Penaltis: {{h}} – {{a}}",
       "homeKick": "Disparo del equipo local...",
-      "awayKick": "Disparo del equipo visitante..."
+      "awayKick": "Disparo del equipo visitante...",
+      "order": "Orden de la tanda",
+      "earlier": "Adelantar a {{name}}",
+      "later": "Retrasar a {{name}}",
+      "orderError": "No se pudo guardar el orden de la tanda."
     },
     "fullTime": "Tiempo Completo",
     "ft": "TC",
@@ -2621,7 +2625,17 @@
     "pts": "pts.",
     "jumpToLive": "Volver a los comentarios en directo",
     "cards": "Tarjetas",
-    "actionFailed": "No se pudo completar la acción del partido. Inténtalo de nuevo."
+    "actionFailed": "No se pudo completar la acción del partido. Inténtalo de nuevo.",
+    "analysis": {
+      "title": "Análisis del partido",
+      "metric": "Indicador",
+      "bigChances": "Grandes ocasiones (xG ≥ 0,30)",
+      "recordedShots": "Tiros con xG registrado",
+      "adjustments": "Ajustes tácticos",
+      "afterSubs": "Tras el último cambio: tiros / goles encajados",
+      "explanation": "Las grandes ocasiones usan solo el xG registrado. Las cifras tras los cambios son observaciones, no pruebas de causalidad.",
+      "since": "{{team}}: desde el cambio en el minuto {{minute}}."
+    }
   },
   "endOfSeason": {
     "seasonComplete": "Temporada Completa",
@@ -4428,6 +4442,15 @@
       "squad": "Planifica cesiones, contratos y calendarios exigentes con disponibilidad y fechas de recuperación más claras.",
       "finance": "Previsiones de efectivo, estimaciones salariales y planificación comercial más fiables.",
       "reliability": "Órdenes de partido, historial de eventos y datos importados más seguros, con más pruebas de regresión."
+    }
+  },
+  "phase74": {
+    "release": {
+      "ai": "Los entrenadores de IA reaccionan al cansancio, las tarjetas, los marcadores tardíos, las expulsiones y la presión agresiva rival.",
+      "match": "El manejo del portero influye en los rechaces; atrapar el balón ya no cuenta como saque de puerta.",
+      "controls": "El orden de la tanda se puede elegir antes del partido o con los penaltis pausados. Cada jugador habilitado tira antes de repetir.",
+      "analysis": "El nuevo análisis en directo y al final muestra grandes ocasiones registradas, ajustes tácticos y hechos tras las sustituciones.",
+      "reliability": "Las tandas siguen avanzando aunque no cambie el minuto. Si falla la confirmación del resultado, el partido sigue disponible para reintentar."
     }
   }
 }

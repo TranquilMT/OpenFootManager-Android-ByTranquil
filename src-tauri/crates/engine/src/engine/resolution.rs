@@ -405,13 +405,17 @@ fn resolve_shot<R: Rng>(ctx: &mut MatchContext, minute: u8, att_side: Side, rng:
                     quality: crate::shot_model::save_difficulty(xg),
                 }),
         );
-        // 40% of saves → corner (keeper parries wide), 60% → goal kick (keeper catches)
-        if rng.random_range(0.0..1.0f64) < 0.40 {
+        // Handling determines whether the ball stays live; a catch is not a goal kick.
+        let rebound = crate::shot_model::rebound_probability(goalkeeper.handling as f64, xg);
+        let outcome = rng.random_range(0.0..1.0f64);
+        if outcome < 0.40 - rebound {
             ctx.emit(MatchEvent::new(minute, EventType::Corner, att_side, zone));
             ctx.possession = att_side;
             ctx.ball_zone = Zone::attacking_box(att_side);
+        } else if outcome < 0.40 {
+            ctx.possession = att_side;
+            ctx.ball_zone = Zone::attacking_box(att_side);
         } else {
-            ctx.emit(MatchEvent::new(minute, EventType::GoalKick, def_side, zone));
             ctx.possession = def_side;
             ctx.ball_zone = Zone::defensive_third(def_side);
         }
