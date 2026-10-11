@@ -41,6 +41,11 @@ describe("live pitch model", () => {
     expect(ballZonePosition("AwayBox")).toBe(92);
     expect(ballZonePosition("unknown")).toBeNull();
   });
+  it("rejects inherited object names as unknown ball zones", () => {
+    expect(ballZonePosition("toString")).toBeNull();
+    expect(ballZonePosition("constructor")).toBeNull();
+    expect(ballZonePosition("__proto__")).toBeNull();
+  });
   it("excludes future and malformed events and keeps same-minute order", () => {
     const events = [22, 0, 23, NaN, -1, 22].map(
       (minute, i) => ({ minute, player_id: String(i) }) as MatchEvent,

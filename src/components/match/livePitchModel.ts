@@ -17,15 +17,16 @@ export function buildLivePitchPlayers(
     }));
 }
 
+const BALL_ZONE_POSITIONS = new Map<string, number>([
+  ["HomeBox", 8],
+  ["HomeDefense", 25],
+  ["Midfield", 50],
+  ["AwayDefense", 75],
+  ["AwayBox", 92],
+]);
+
 export function ballZonePosition(zone: string): number | null {
-  const zones: Record<string, number> = {
-    HomeBox: 8,
-    HomeDefense: 25,
-    Midfield: 50,
-    AwayDefense: 75,
-    AwayBox: 92,
-  };
-  return zones[zone] ?? null;
+  return BALL_ZONE_POSITIONS.get(zone) ?? null;
 }
 
 export function reachedMatchEvents(events: MatchEvent[], minute: number): MatchEvent[] {
