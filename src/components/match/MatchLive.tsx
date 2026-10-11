@@ -84,6 +84,9 @@ export default function MatchLive({
   const [speed, setSpeed] = useState<SimSpeed>(initialSpeed);
   const [activePanel, setActivePanel] = useState<ActivePanel>("events");
   const [eventFilter, setEventFilter] = useState<EventFilter>("all");
+  const [replayActive, setReplayActive] = useState(false);
+  const replayActiveRef = useRef(false);
+  replayActiveRef.current = replayActive;
   const [isRunning, setIsRunning] = useState(true);
   const [matchCommandPending, setMatchCommandPending] = useState(false);
   const [matchError, setMatchError] = useState<string | null>(null);
@@ -167,6 +170,7 @@ export default function MatchLive({
       await operationGate.current.run(async () => {
         if (
           !mountedRef.current ||
+          replayActiveRef.current ||
           !canAdvanceLivePhase(currentDecisionState.current.snapshot.phase)
         )
           return;
@@ -249,6 +253,7 @@ export default function MatchLive({
       speed !== "paused" &&
       !playbackClosed &&
       !showSubPanel &&
+      !replayActive &&
       !matchCommandPending
     ) {
       timerRef.current = setTimeout(async () => {
@@ -268,6 +273,7 @@ export default function MatchLive({
     stepMatch,
     playbackClosed,
     showSubPanel,
+    replayActive,
     matchCommandPending,
   ]);
 
@@ -372,7 +378,7 @@ export default function MatchLive({
           awayScore={snapshot.away_score}
           phase={snapshot.phase}
           minute={snapshot.current_minute}
-          running={isRunning && matchVisible && !playbackClosed && !showSubPanel}
+          running={isRunning && matchVisible && !playbackClosed && !showSubPanel && !replayActive}
         />
       }
     >
@@ -401,7 +407,7 @@ export default function MatchLive({
                 snapshot={snapshot}
                 playerJerseyMap={playerJerseyMap}
                 userSide={isSpectator ? null : userSide}
-                disabled={decisionsClosed || matchCommandPending}
+                disabled={decisionsClosed || matchCommandPending || replayActive}
                 onPlayer={(id) => {
                   setDecisionView("substitutions");
                   setAlertPlayerId(id);
@@ -465,6 +471,7 @@ export default function MatchLive({
             >
               {activePanel === "highlights" && (
                 <MatchHighlightWorkspace
+                  onReplayChange={setReplayActive}
                   snapshot={snapshot}
                   showCommentary={settings.show_match_commentary}
                 />
@@ -506,7 +513,7 @@ export default function MatchLive({
           {/* Speed Controls */}
           <MatchPlaybackControls
             speed={speed}
-            disabled={playbackClosed || matchCommandPending}
+            disabled={playbackClosed || matchCommandPending || replayActive}
             onSpeedChange={(next) => {
               setSpeed(next);
               setIsRunning(next !== "paused");
@@ -519,7 +526,7 @@ export default function MatchLive({
 
           {!isSpectator && userSide && (
             <MatchdayQuickActions
-              disabled={decisionsClosed || matchCommandPending}
+              disabled={decisionsClosed || matchCommandPending || replayActive}
               playStyle={
                 userSide === "Home" ? snapshot.home_team.play_style : snapshot.away_team.play_style
               }
