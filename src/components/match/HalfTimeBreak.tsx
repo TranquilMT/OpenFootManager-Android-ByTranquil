@@ -389,9 +389,9 @@ export default function HalfTimeBreak({
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-gray-200 bg-white/95 p-3 pb-[max(.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_30px_rgba(0,0,0,.12)] backdrop-blur dark:border-navy-700 dark:bg-navy-800/95 sm:static sm:border-0 sm:bg-transparent sm:shadow-none">
         <button
           type="button"
-          disabled={pending}
+          disabled={pending || showSubPanel}
           onClick={() => {
-            if (!isPending()) onResume();
+            if (!isPending() && !showSubPanel) onResume();
           }}
           className="mx-auto flex min-h-12 w-full max-w-md items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary-500 to-primary-600 px-6 font-heading font-bold uppercase tracking-wider text-white shadow-lg active:scale-[.99]"
         >
