@@ -28,12 +28,12 @@ export default function MatchScoreboard({
         <p className="min-w-0 break-words text-right font-heading text-sm font-bold text-gray-900 dark:text-white sm:text-lg">
           {homeName}
         </p>
-        <div
+        <fieldset
           aria-label={t("common.score")}
           className="whitespace-nowrap text-center font-heading text-3xl font-bold tabular-nums text-gray-900 dark:text-white"
         >
           {homeScore} – {awayScore}
-        </div>
+        </fieldset>
         <p className="min-w-0 break-words font-heading text-sm font-bold text-gray-900 dark:text-white sm:text-lg">
           {awayName}
         </p>

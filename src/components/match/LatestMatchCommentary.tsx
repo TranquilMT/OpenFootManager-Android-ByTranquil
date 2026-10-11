@@ -6,7 +6,8 @@ import type { MatchSnapshot } from "./types";
 
 export default function LatestMatchCommentary({ snapshot }: { snapshot: MatchSnapshot }) {
   const { t } = useTranslation();
-  const latest = reachedMatchEvents(snapshot.events, snapshot.current_minute).at(-1);
+  const reached = reachedMatchEvents(snapshot.events, snapshot.current_minute);
+  const latest = reached[reached.length - 1];
   const commentary = latest ? getCommentary(latest, snapshot, t) : null;
   return (
     <div

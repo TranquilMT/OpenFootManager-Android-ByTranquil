@@ -1,3 +1,7 @@
+import MatchScoreboard from "./MatchScoreboard";
+import LiveMatchPitch from "./LiveMatchPitch";
+import LatestMatchCommentary from "./LatestMatchCommentary";
+import { reachedMatchEvents } from "./livePitchModel";
 import MatchAnalysisPanel from "./MatchAnalysisPanel";
 import type { TacticsPhaseSettings } from "../../store/types";
 import { buildTacticalInstructions } from "../tactics/tacticalInstructions";
@@ -7,7 +11,6 @@ import { filterMatchEvents, type EventFilter } from "./eventFilters";
 import { MatchEventFilters } from "./MatchEventFilters";
 import { resolveBackendError } from "../../utils/backendI18n";
 import { useMatchVisibility } from "./useMatchVisibility";
-import { formatMatchMinute } from "./matchClock";
 import { PlayerMatchPerformance } from "./PlayerMatchPerformance";
 import { MatchDecisionAlerts } from "./MatchDecisionAlerts";
 import MatchdayQuickActions from "./MatchdayQuickActions";
@@ -22,17 +25,10 @@ import {
   type SimSpeed,
   SPEED_MS,
   MINUTES_PER_TICK,
-  FORMATIONS,
   isPersistableSpeed,
 } from "./types";
-import {
-  getEventDisplay,
-  getEventTypeLabel,
-  getPlayerName,
-  makeTeamFallback,
-  phaseLabel,
-} from "./helpers";
-import { Badge, TeamLogo } from "../ui";
+import { getEventDisplay } from "./helpers";
+
 import { useSettingsStore } from "../../store/settingsStore";
 import { EventFeed, MatchStats, Lineups } from "./MatchPanels";
 import {
@@ -49,17 +45,10 @@ import {
   Pause,
   FastForward,
   SkipForward,
-  Clock,
   Users,
   BarChart3,
   MessageSquare,
-  RefreshCw,
   ChevronRight,
-  Zap,
-  Shield,
-  Crosshair,
-  Target,
-  Flag,
   Volume2,
   VolumeX,
 } from "lucide-react";
@@ -142,8 +131,6 @@ export default function MatchLive({
 
   const homeFullTeam = gameState.teams.find((t) => t.id === snapshot.home_team.id);
   const awayFullTeam = gameState.teams.find((t) => t.id === snapshot.away_team.id);
-  const homeTeamColor = homeFullTeam?.colors?.primary || "#10b981";
-  const awayTeamColor = awayFullTeam?.colors?.primary || "#6366f1";
 
   const playerJerseyMap = useMemo(() => {
     const m = new Map<string, number>();
@@ -153,15 +140,19 @@ export default function MatchLive({
     return m;
   }, [gameState.players]);
 
+  const reachedEvents = useMemo(
+    () => reachedMatchEvents(snapshot.events, snapshot.current_minute),
+    [snapshot.events, snapshot.current_minute],
+  );
   const visibleEvents = useMemo(
-    () => snapshot.events.filter((event) => getEventDisplay(event).important),
-    [snapshot.events],
+    () => reachedEvents.filter((event) => getEventDisplay(event).important),
+    [reachedEvents],
   );
   const isFinished = snapshot.phase === "Finished";
   const decisionsClosed = isFinished || snapshot.phase === "PenaltyShootout";
   const filteredEvents = useMemo(
-    () => filterMatchEvents(snapshot.events, eventFilter),
-    [visibleEvents, snapshot.events, eventFilter],
+    () => filterMatchEvents(reachedEvents, eventFilter),
+    [reachedEvents, eventFilter],
   );
   const liveFeed = useLiveFeedScroll(filteredEvents.length, activePanel === "events", eventFilter);
 
@@ -357,138 +348,18 @@ export default function MatchLive({
       headerClassName="bg-linear-to-r from-gray-200 via-white to-gray-200 dark:from-navy-800 dark:via-navy-900 dark:to-navy-800"
       headerContentClassName="max-w-7xl py-3"
       contentClassName="overflow-hidden"
+      contained
+      showThemeToggle={false}
       header={
-        <>
-          <div className="flex items-center justify-between gap-4">
-            {/* Live indicator */}
-            <div className="flex items-center gap-2">
-              {isRunning && matchVisible && !isFinished && (
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500" />
-                </span>
-              )}
-              <span className="text-xs font-heading uppercase tracking-widest text-gray-500 dark:text-gray-400">
-                {isRunning && matchVisible && !isFinished ? t("match.live") : t("match.paused")}
-              </span>
-            </div>
-
-            {/* Scoreboard */}
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-3">
-                <div className="text-right">
-                  <p className="font-heading font-bold text-sm uppercase tracking-wider text-gray-800 dark:text-gray-200">
-                    {snapshot.home_team.name}
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    {snapshot.home_team.formation}
-                  </p>
-                </div>
-                <TeamLogo
-                  team={homeFullTeam ?? makeTeamFallback(snapshot.home_team.name)}
-                  className="w-10 h-10 rounded-lg flex items-center justify-center font-heading font-bold text-sm overflow-hidden"
-                  imageClassName="h-8 w-8 object-contain drop-shadow"
-                  style={{
-                    backgroundColor: `${homeTeamColor}30`,
-                    borderColor: homeTeamColor,
-                    borderWidth: 2,
-                  }}
-                />
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span className="text-4xl font-heading font-bold text-gray-900 dark:text-white tabular-nums">
-                  {snapshot.home_score}
-                </span>
-                <div className="flex flex-col items-center">
-                  <span className="text-xs font-heading uppercase tracking-widest text-accent-700 dark:text-accent-400">
-                    {phaseLabel(snapshot.phase, t)}
-                  </span>
-                  <span className="text-2xl font-heading font-bold text-gray-500 dark:text-gray-400">
-                    {formatMatchMinute(snapshot.phase, snapshot.current_minute)}'
-                  </span>
-                </div>
-                <span className="text-4xl font-heading font-bold text-gray-900 dark:text-white tabular-nums">
-                  {snapshot.away_score}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <TeamLogo
-                  team={awayFullTeam ?? makeTeamFallback(snapshot.away_team.name)}
-                  className="w-10 h-10 rounded-lg flex items-center justify-center font-heading font-bold text-sm overflow-hidden"
-                  imageClassName="h-8 w-8 object-contain drop-shadow"
-                  style={{
-                    backgroundColor: `${awayTeamColor}30`,
-                    borderColor: awayTeamColor,
-                    borderWidth: 2,
-                  }}
-                />
-                <div className="text-left">
-                  <p className="font-heading font-bold text-sm uppercase tracking-wider text-gray-800 dark:text-gray-200">
-                    {snapshot.away_team.name}
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    {snapshot.away_team.formation}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-              <span className="text-sm font-heading text-gray-500 dark:text-gray-400 tabular-nums w-8">
-                {formatMatchMinute(snapshot.phase, snapshot.current_minute)}'
-              </span>
-            </div>
-          </div>
-
-          {!isSpectator && userSide && (
-            <MatchdayQuickActions
-              disabled={decisionsClosed || matchCommandPending}
-              playStyle={
-                userSide === "Home" ? snapshot.home_team.play_style : snapshot.away_team.play_style
-              }
-              onSubstitutions={() => setShowSubPanel(true)}
-              onTactics={() => setShowSubPanel(true)}
-              onPlayStyle={(style) => {
-                void handlePlayStyleChange(style);
-              }}
-            />
-          )}
-          {!isSpectator && userSide && (
-            <MatchDecisionAlerts
-              snapshot={snapshot}
-              side={userSide}
-              pending={matchCommandPending}
-              onDecision={(alert) => {
-                setAlertPlayerId(alert.action === "substitution" ? alert.event.player_id : null);
-                setShowSubPanel(true);
-              }}
-            />
-          )}
-          {/* Possession bar */}
-          <div className="mt-2">
-            <div className="flex items-center gap-2 text-xs">
-              <span className="font-heading font-bold text-primary-400 w-12 text-right">
-                {snapshot.home_possession_pct.toFixed(0)}%
-              </span>
-              <div className="flex-1 h-1.5 bg-gray-300 dark:bg-navy-700 rounded-full overflow-hidden flex transition-colors duration-300">
-                <div
-                  className="h-full bg-primary-500 transition-all duration-500"
-                  style={{ width: `${snapshot.home_possession_pct}%` }}
-                />
-                <div
-                  className="h-full bg-indigo-500 transition-all duration-500"
-                  style={{ width: `${snapshot.away_possession_pct}%` }}
-                />
-              </div>
-              <span className="font-heading font-bold text-indigo-400 w-12">
-                {snapshot.away_possession_pct.toFixed(0)}%
-              </span>
-            </div>
-          </div>
-        </>
+        <MatchScoreboard
+          homeName={snapshot.home_team.name}
+          awayName={snapshot.away_team.name}
+          homeScore={snapshot.home_score}
+          awayScore={snapshot.away_score}
+          phase={snapshot.phase}
+          minute={snapshot.current_minute}
+          running={isRunning && matchVisible && !isFinished}
+        />
       }
     >
       {/* Main Content */}
@@ -507,153 +378,178 @@ export default function MatchLive({
           </button>
         </div>
       )}
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         {/* Left Panel: Event Feed + Stats */}
-        <div className="flex-1 flex flex-col">
-          <div
-            role="tablist"
-            aria-label={t("match.matchDetails")}
-            className="touch-x flex overflow-x-auto bg-white dark:bg-navy-800 border-b border-gray-200 dark:border-navy-700 transition-colors duration-300"
-          >
-            {[
-              {
-                id: "events" as ActivePanel,
-                label: t("match.events"),
-                icon: <MessageSquare className="w-4 h-4" />,
-              },
-              {
-                id: "stats" as ActivePanel,
-                label: t("match.stats"),
-                icon: <BarChart3 className="w-4 h-4" />,
-              },
-              {
-                id: "lineups" as ActivePanel,
-                label: t("match.lineups"),
-                icon: <Users className="w-4 h-4" />,
-              },
-              {
-                id: "players" as ActivePanel,
-                label: `${t("match.player")} ${t("match.stats")}`,
-                icon: <BarChart3 className="w-4 h-4" />,
-              },
-            ].map((tab) => (
-              <button
-                type="button"
-                key={tab.id}
-                role="tab"
-                id={`match-tab-${tab.id}`}
-                aria-selected={activePanel === tab.id}
-                aria-controls={`match-panel-${tab.id}`}
-                tabIndex={activePanel === tab.id ? 0 : -1}
-                onKeyDown={(event) => {
-                  const index = ACTIVE_PANELS.indexOf(tab.id);
-                  const next =
-                    event.key === "ArrowRight"
-                      ? (index + 1) % ACTIVE_PANELS.length
-                      : event.key === "ArrowLeft"
-                        ? (index + ACTIVE_PANELS.length - 1) % ACTIVE_PANELS.length
-                        : event.key === "Home"
-                          ? 0
-                          : event.key === "End"
-                            ? ACTIVE_PANELS.length - 1
-                            : null;
-                  if (next == null) return;
-                  event.preventDefault();
-                  setActivePanel(ACTIVE_PANELS[next]);
-                  event.currentTarget.parentElement
-                    ?.querySelector<HTMLButtonElement>(`#match-tab-${ACTIVE_PANELS[next]}`)
-                    ?.focus();
-                }}
-                onClick={() => setActivePanel(tab.id)}
-                className={`flex min-h-11 shrink-0 items-center gap-2 px-4 py-3 sm:px-5 font-heading font-bold text-xs uppercase tracking-wider transition-colors border-b-2 ${
-                  activePanel === tab.id
-                    ? "text-primary-500 dark:text-primary-400 border-primary-500 bg-primary-50 dark:bg-navy-700/50"
-                    : "text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300"
-                }`}
-              >
-                {tab.icon}
-                {tab.label}
-              </button>
-            ))}
-            {spokenCommentaryAvailable() && (
-              <button
-                type="button"
-                aria-label={t(voiceEnabled ? "match.voiceOff" : "match.voiceOn")}
-                aria-pressed={voiceEnabled}
-                onClick={() => {
-                  setVoiceEnabled((enabled) => !enabled);
-                  void updateSettings({ spoken_match_commentary: !voiceEnabled });
-                  if (voiceEnabled) cancelSpokenCommentary();
-                }}
-                className="ml-auto flex min-h-11 min-w-11 shrink-0 items-center justify-center text-gray-500 dark:text-gray-300"
-              >
-                {voiceEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
-              </button>
-            )}
-          </div>
-
-          {activePanel === "events" && (
-            <MatchEventFilters
-              events={snapshot.events}
-              value={eventFilter}
-              onChange={setEventFilter}
-            />
-          )}
-          {activePanel === "events" && !liveFeed.following && (
-            <button
-              type="button"
-              onClick={liveFeed.jumpToLive}
-              className="min-h-11 bg-primary-50 px-4 text-sm font-semibold text-primary-600 dark:bg-navy-800 dark:text-primary-400"
-            >
-              {t("match.jumpToLive")}
-            </button>
-          )}
-          <div
-            role="tabpanel"
-            id={`match-panel-${activePanel}`}
-            aria-labelledby={`match-tab-${activePanel}`}
-            ref={liveFeed.feedRef}
-            onScroll={liveFeed.onScroll}
-            className="touch-scroll min-h-0 flex-1 overflow-auto p-3 sm:p-4"
-          >
-            {activePanel !== "lineups" && (
-              <MatchPulse
-                snapshot={snapshot}
-                derby={
-                  homeFullTeam && awayFullTeam ? isLocalDerby(homeFullTeam, awayFullTeam) : false
-                }
-              />
-            )}
-            {activePanel === "events" && (
-              <EventFeed
-                events={filteredEvents}
+        <div className="min-h-0 flex-1 flex flex-col landscape:flex-row">
+          <div className="shrink-0 landscape:w-1/2 landscape:overflow-auto">
+            <div className="mx-auto w-full max-w-sm shrink-0 px-3 pt-2 sm:max-w-md lg:max-w-lg">
+              <LiveMatchPitch
                 snapshot={snapshot}
                 playerJerseyMap={playerJerseyMap}
-                showCommentary={settings.show_match_commentary}
+                userSide={isSpectator ? null : userSide}
+                disabled={decisionsClosed || matchCommandPending}
+                onPlayer={(id) => {
+                  setAlertPlayerId(id);
+                  setShowSubPanel(true);
+                }}
+              />
+            </div>
+            <LatestMatchCommentary snapshot={snapshot} />
+            {!isSpectator && userSide && (
+              <MatchDecisionAlerts
+                snapshot={snapshot}
+                side={userSide}
+                pending={matchCommandPending}
+                onDecision={(alert) => {
+                  setAlertPlayerId(alert.action === "substitution" ? alert.event.player_id : null);
+                  setShowSubPanel(true);
+                }}
               />
             )}
-            {activePanel === "stats" && (
-              <>
-                <MatchStats snapshot={snapshot} />
-                <MatchAnalysisPanel snapshot={snapshot} />
-              </>
+          </div>
+          <div className="min-h-0 min-w-0 flex-1 flex flex-col">
+            <div
+              role="tablist"
+              aria-label={t("match.matchDetails")}
+              className="touch-x flex overflow-x-auto bg-white dark:bg-navy-800 border-b border-gray-200 dark:border-navy-700 transition-colors duration-300"
+            >
+              {[
+                {
+                  id: "events" as ActivePanel,
+                  label: t("match.events"),
+                  icon: <MessageSquare className="w-4 h-4" />,
+                },
+                {
+                  id: "stats" as ActivePanel,
+                  label: t("match.stats"),
+                  icon: <BarChart3 className="w-4 h-4" />,
+                },
+                {
+                  id: "lineups" as ActivePanel,
+                  label: t("match.lineups"),
+                  icon: <Users className="w-4 h-4" />,
+                },
+                {
+                  id: "players" as ActivePanel,
+                  label: `${t("match.player")} ${t("match.stats")}`,
+                  icon: <BarChart3 className="w-4 h-4" />,
+                },
+              ].map((tab) => (
+                <button
+                  type="button"
+                  key={tab.id}
+                  role="tab"
+                  id={`match-tab-${tab.id}`}
+                  aria-selected={activePanel === tab.id}
+                  aria-controls={`match-panel-${tab.id}`}
+                  tabIndex={activePanel === tab.id ? 0 : -1}
+                  onKeyDown={(event) => {
+                    const index = ACTIVE_PANELS.indexOf(tab.id);
+                    const next =
+                      event.key === "ArrowRight"
+                        ? (index + 1) % ACTIVE_PANELS.length
+                        : event.key === "ArrowLeft"
+                          ? (index + ACTIVE_PANELS.length - 1) % ACTIVE_PANELS.length
+                          : event.key === "Home"
+                            ? 0
+                            : event.key === "End"
+                              ? ACTIVE_PANELS.length - 1
+                              : null;
+                    if (next == null) return;
+                    event.preventDefault();
+                    setActivePanel(ACTIVE_PANELS[next]);
+                    event.currentTarget.parentElement
+                      ?.querySelector<HTMLButtonElement>(`#match-tab-${ACTIVE_PANELS[next]}`)
+                      ?.focus();
+                  }}
+                  onClick={() => setActivePanel(tab.id)}
+                  className={`flex min-h-11 shrink-0 items-center gap-2 px-4 py-3 sm:px-5 font-heading font-bold text-xs uppercase tracking-wider transition-colors border-b-2 ${
+                    activePanel === tab.id
+                      ? "text-primary-500 dark:text-primary-400 border-primary-500 bg-primary-50 dark:bg-navy-700/50"
+                      : "text-gray-500 dark:text-gray-400 border-transparent hover:text-gray-700 dark:hover:text-gray-300"
+                  }`}
+                >
+                  {tab.icon}
+                  {tab.label}
+                </button>
+              ))}
+              {spokenCommentaryAvailable() && (
+                <button
+                  type="button"
+                  aria-label={t(voiceEnabled ? "match.voiceOff" : "match.voiceOn")}
+                  aria-pressed={voiceEnabled}
+                  onClick={() => {
+                    setVoiceEnabled((enabled) => !enabled);
+                    void updateSettings({ spoken_match_commentary: !voiceEnabled });
+                    if (voiceEnabled) cancelSpokenCommentary();
+                  }}
+                  className="ml-auto flex min-h-11 min-w-11 shrink-0 items-center justify-center text-gray-500 dark:text-gray-300"
+                >
+                  {voiceEnabled ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
+                </button>
+              )}
+            </div>
+
+            {activePanel === "events" && (
+              <MatchEventFilters
+                events={reachedEvents}
+                value={eventFilter}
+                onChange={setEventFilter}
+              />
             )}
-            {activePanel === "players" && (
-              <PlayerMatchPerformance snapshot={snapshot} playerJerseyMap={playerJerseyMap} />
+            {activePanel === "events" && !liveFeed.following && (
+              <button
+                type="button"
+                onClick={liveFeed.jumpToLive}
+                className="min-h-11 bg-primary-50 px-4 text-sm font-semibold text-primary-600 dark:bg-navy-800 dark:text-primary-400"
+              >
+                {t("match.jumpToLive")}
+              </button>
             )}
-            {activePanel === "lineups" && (
-              <Lineups snapshot={snapshot} playerJerseyMap={playerJerseyMap} />
-            )}
+            <div
+              role="tabpanel"
+              id={`match-panel-${activePanel}`}
+              aria-labelledby={`match-tab-${activePanel}`}
+              ref={liveFeed.feedRef}
+              onScroll={liveFeed.onScroll}
+              className="touch-scroll min-h-0 flex-1 overflow-auto p-3 sm:p-4"
+            >
+              {activePanel === "stats" && (
+                <MatchPulse
+                  snapshot={snapshot}
+                  derby={
+                    homeFullTeam && awayFullTeam ? isLocalDerby(homeFullTeam, awayFullTeam) : false
+                  }
+                />
+              )}
+              {activePanel === "events" && (
+                <EventFeed
+                  events={filteredEvents}
+                  snapshot={snapshot}
+                  playerJerseyMap={playerJerseyMap}
+                  showCommentary={settings.show_match_commentary}
+                />
+              )}
+              {activePanel === "stats" && (
+                <>
+                  <MatchStats snapshot={snapshot} />
+                  <MatchAnalysisPanel snapshot={snapshot} />
+                </>
+              )}
+              {activePanel === "players" && (
+                <PlayerMatchPerformance snapshot={snapshot} playerJerseyMap={playerJerseyMap} />
+              )}
+              {activePanel === "lineups" && (
+                <Lineups snapshot={snapshot} playerJerseyMap={playerJerseyMap} />
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Right Panel: Controls */}
-        <aside className="w-full shrink-0 bg-white dark:bg-navy-800 border-t lg:w-72 lg:border-l lg:border-t-0 border-gray-200 dark:border-navy-700 flex flex-col transition-colors duration-300">
+        {/* Match controls stay visible while history scrolls. */}
+        <aside className="shrink-0 border-t border-gray-200 bg-white dark:border-navy-700 dark:bg-navy-800 landscape:flex landscape:items-center">
           {/* Speed Controls */}
-          <div className="p-4 border-b border-gray-200 dark:border-navy-700">
-            <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-3">
-              {t("match.simSpeed")}
-            </h3>
+          <div className="px-3 py-2 landscape:w-1/2">
             <div className="flex gap-1">
               {[
                 {
@@ -718,128 +614,19 @@ export default function MatchLive({
             )}
           </div>
 
-          {/* User Controls */}
           {!isSpectator && userSide && (
-            <div className="p-4 border-b border-gray-200 dark:border-navy-700 flex flex-col gap-2">
-              <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-1">
-                {t("match.teamControls")}
-              </h3>
-              <button
-                type="button"
-                disabled={decisionsClosed || matchCommandPending}
-                onClick={() => setShowSubPanel(!showSubPanel)}
-                className="flex min-h-11 items-center gap-2 px-3 py-2 bg-gray-200 hover:bg-gray-300 dark:bg-navy-700 dark:hover:bg-navy-600 rounded-lg text-sm font-heading uppercase tracking-wider text-gray-700 dark:text-gray-300 transition-colors"
-              >
-                <RefreshCw className="w-4 h-4" />
-                {t("match.subs")} (
-                {userSide === "Home" ? snapshot.home_subs_made : snapshot.away_subs_made}/
-                {snapshot.max_subs})
-              </button>
-              <div>
-                <p className="text-[10px] font-heading uppercase tracking-widest text-gray-600 dark:text-gray-500 mb-1">
-                  {t("match.formation")}
-                </p>
-                <div className="flex flex-wrap gap-1">
-                  {FORMATIONS.map((f) => {
-                    const cur =
-                      userSide === "Home"
-                        ? snapshot.home_team.formation
-                        : snapshot.away_team.formation;
-                    return (
-                      <button
-                        type="button"
-                        key={f}
-                        disabled={decisionsClosed || matchCommandPending}
-                        onClick={() => handleFormationChange(f)}
-                        className={`min-h-11 rounded px-2 py-1 text-xs font-heading transition-colors ${cur === f ? "bg-primary-500/20 text-primary-500 dark:text-primary-400 ring-1 ring-primary-500/50" : "bg-gray-100 text-gray-600 hover:text-gray-900 dark:bg-navy-700 dark:text-gray-400 dark:hover:text-gray-300"}`}
-                      >
-                        {f}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-              <div>
-                <p className="text-[10px] font-heading uppercase tracking-widest text-gray-600 dark:text-gray-500 mb-1">
-                  {t("match.playStyle")}
-                </p>
-                <div className="flex flex-wrap gap-1">
-                  {[
-                    { id: "Balanced", icon: <Target className="w-3 h-3" /> },
-                    { id: "Attacking", icon: <Zap className="w-3 h-3" /> },
-                    { id: "Defensive", icon: <Shield className="w-3 h-3" /> },
-                    { id: "Possession", icon: <RefreshCw className="w-3 h-3" /> },
-                    { id: "Counter", icon: <Crosshair className="w-3 h-3" /> },
-                    { id: "HighPress", icon: <Flag className="w-3 h-3" /> },
-                  ].map((s) => {
-                    const cur =
-                      userSide === "Home"
-                        ? snapshot.home_team.play_style
-                        : snapshot.away_team.play_style;
-                    return (
-                      <button
-                        type="button"
-                        key={s.id}
-                        disabled={decisionsClosed || matchCommandPending}
-                        onClick={() => handlePlayStyleChange(s.id)}
-                        className={`flex min-h-11 items-center gap-1 rounded px-2 py-1 text-xs font-heading transition-colors ${cur === s.id ? "bg-primary-500/20 text-primary-500 dark:text-primary-400 ring-1 ring-primary-500/50" : "bg-gray-100 text-gray-600 hover:text-gray-900 dark:bg-navy-700 dark:text-gray-400 dark:hover:text-gray-300"}`}
-                      >
-                        {s.icon}
-                        {t(`common.playStyles.${s.id}`, s.id)}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
+            <MatchdayQuickActions
+              disabled={decisionsClosed || matchCommandPending}
+              playStyle={
+                userSide === "Home" ? snapshot.home_team.play_style : snapshot.away_team.play_style
+              }
+              onSubstitutions={() => setShowSubPanel(true)}
+              onTactics={() => setShowSubPanel(true)}
+              onPlayStyle={(style) => {
+                void handlePlayStyleChange(style);
+              }}
+            />
           )}
-
-          {/* Key Events sidebar */}
-          <div className="p-4 flex-1 overflow-auto">
-            <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-3">
-              {t("match.keyEvents")}
-            </h3>
-            <div className="flex flex-col gap-1.5">
-              {visibleEvents
-                .filter((e) =>
-                  [
-                    "Goal",
-                    "PenaltyGoal",
-                    "YellowCard",
-                    "RedCard",
-                    "SecondYellow",
-                    "Substitution",
-                    "PenaltyMiss",
-                    "Injury",
-                  ].includes(e.event_type),
-                )
-                .slice(-12)
-                .reverse()
-                .map((evt, i) => {
-                  const display = getEventDisplay(evt);
-                  return (
-                    <div key={i} className="flex items-center gap-2 text-xs">
-                      <span className="text-gray-600 dark:text-gray-500 tabular-nums w-6 text-right font-heading">
-                        {evt.minute}'
-                      </span>
-                      <span>{display.icon}</span>
-                      <span className={`${display.color} font-medium truncate`}>
-                        {getPlayerName(snapshot, evt.player_id) ||
-                          getEventTypeLabel(evt.event_type, t)}
-                      </span>
-                      <Badge variant={evt.side === "Home" ? "primary" : "accent"} size="sm">
-                        {evt.side === "Home"
-                          ? snapshot.home_team.name.substring(0, 3)
-                          : snapshot.away_team.name.substring(0, 3)}
-                      </Badge>
-                    </div>
-                  );
-                })}
-              {visibleEvents.length === 0 && (
-                <p className="text-gray-600 dark:text-gray-500 text-xs">{t("match.noEventsYet")}</p>
-              )}
-            </div>
-          </div>
         </aside>
       </div>
 

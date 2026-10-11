@@ -1,5 +1,4 @@
-import { buildPitchRows } from "../squad/SquadTab.helpers";
-import { buildFormationSlots } from "./FormationPitch";
+import { buildPitchSlots } from "./FormationPitch";
 import type { EngineTeamData, MatchEvent } from "./types";
 
 /** A tactical shape, not tracking coordinates; preserve the engine XI slot order. */
@@ -8,18 +7,7 @@ export function buildLivePitchPlayers(
   side: "Home" | "Away",
   sentOff: string[],
 ) {
-  const rows = buildPitchRows(team.formation);
-  const positions = rows.flatMap((row) =>
-    row.positions.map((position, i) => ({
-      position,
-      x: (100 * (i + 1)) / (row.positions.length + 1),
-      y: Number.parseFloat(row.y),
-    })),
-  );
-  const slots =
-    positions.length === team.players.length
-      ? positions.map((slot, i) => ({ ...slot, player: team.players[i] }))
-      : buildFormationSlots(team.formation, team.players);
+  const slots = buildPitchSlots(team.formation, team.players, sentOff);
   return slots
     .filter((slot) => !sentOff.includes(slot.player.id))
     .map((slot) => ({

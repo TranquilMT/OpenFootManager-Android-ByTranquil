@@ -64,6 +64,24 @@ const snapshot = {
 } as unknown as MatchSnapshot;
 
 describe("live match decisions", () => {
+  it("shows a combined pitch and removes duplicate inline formation controls", () => {
+    render(
+      <MatchLive
+        snapshot={snapshot}
+        gameState={{ teams: [], players: [] } as unknown as GameStateData}
+        userSide="Home"
+        isSpectator={false}
+        importantEvents={[]}
+        onSnapshotUpdate={vi.fn()}
+        onImportantEvent={vi.fn()}
+        onHalfTime={vi.fn()}
+        onFullTime={vi.fn()}
+      />,
+    );
+    expect(screen.getByRole("figure", { name: "match.pitchView" })).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "dashboard.tactics" })).toHaveLength(1);
+    expect(screen.queryByRole("button", { name: "4-4-2" })).not.toBeInTheDocument();
+  });
   beforeEach(() => vi.mocked(invoke).mockReset());
   it("shows a rejected tactical decision instead of silently logging it", async () => {
     vi.mocked(invoke).mockRejectedValueOnce(new Error("rejected"));
@@ -99,7 +117,7 @@ describe("live match decisions", () => {
         onFullTime={vi.fn()}
       />,
     );
-    fireEvent.click(screen.getAllByRole("button", { name: /match.subs/ })[0]);
+    fireEvent.click(screen.getByRole("button", { name: "match.subs" }));
     fireEvent.click(screen.getByRole("combobox", { name: "tactics.phaseSettings.tempo" }));
     fireEvent.click(screen.getByRole("option", { name: "tactics.phaseSettings.tempo_Patient" }));
     await waitFor(() => expect(onSnapshotUpdate).toHaveBeenCalledWith(snapshot));
@@ -142,7 +160,7 @@ describe("live match decisions", () => {
       />,
     );
     expect(screen.getByRole("button", { name: "match.fast" })).toBeDisabled();
-    expect(screen.getByRole("button", { name: "4-4-2" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "dashboard.tactics" })).toBeDisabled();
     for (const button of screen.getAllByRole("button", { name: "common.playStyles.Attacking" })) {
       expect(button).toBeDisabled();
     }
@@ -277,7 +295,7 @@ describe("live match decisions", () => {
         onFullTime={vi.fn()}
       />,
     );
-    expect(screen.getByRole("button", { name: "4-4-2" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "dashboard.tactics" })).toBeDisabled();
     expect(screen.getByRole("button", { name: "dashboard.tactics" })).toBeDisabled();
     for (const button of screen.getAllByRole("button", { name: "common.playStyles.Attacking" })) {
       expect(button).toBeDisabled();

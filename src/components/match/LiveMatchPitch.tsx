@@ -16,7 +16,8 @@ export default function LiveMatchPitch({
   disabled?: boolean;
 }) {
   const { t } = useTranslation();
-  const latest = reachedMatchEvents(snapshot.events, snapshot.current_minute).at(-1);
+  const reached = reachedMatchEvents(snapshot.events, snapshot.current_minute);
+  const latest = reached[reached.length - 1];
   const ballX = ballZonePosition(snapshot.ball_zone);
   return (
     <figure aria-label={t("match.pitchView")} className="m-0 min-w-0">
@@ -28,7 +29,7 @@ export default function LiveMatchPitch({
           {snapshot.away_team.name} · {snapshot.away_team.formation}
         </span>
       </div>
-      <div className="relative aspect-4/3 w-full overflow-hidden rounded-xl bg-primary-800 dark:bg-primary-900 sm:aspect-video">
+      <div className="relative aspect-4/3 max-h-48 landscape:max-h-32 w-full overflow-hidden rounded-xl bg-primary-800 dark:bg-primary-900 sm:aspect-video">
         <svg
           aria-hidden="true"
           viewBox="0 0 100 70"

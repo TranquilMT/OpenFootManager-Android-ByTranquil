@@ -110,6 +110,18 @@ export function buildFormationSlots(
   });
 }
 
+/** Shared slot-preserving layout for formation and combined matchday views. */
+export function buildPitchSlots(
+  formation: string,
+  players: EnginePlayerData[],
+  sentOff: string[] = [],
+): FormationSlot[] {
+  return (
+    buildSlotAlignedSlots(formation, players, sentOff) ??
+    buildFormationSlots(formation, players, sentOff)
+  );
+}
+
 interface FormationPitchProps {
   formation: string;
   players: EnginePlayerData[];
@@ -143,9 +155,7 @@ export function FormationPitch({
   const uid = useId();
   const surfaceId = `pitch-surface-${uid}`;
   const stripesId = `pitch-stripes-${uid}`;
-  const slots =
-    buildSlotAlignedSlots(formation, players, sentOff) ??
-    buildFormationSlots(formation, players, sentOff);
+  const slots = buildPitchSlots(formation, players, sentOff);
 
   return (
     <div
