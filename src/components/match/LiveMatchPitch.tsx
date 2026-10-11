@@ -2,7 +2,7 @@ import PitchTeamIdentity from "./PitchTeamIdentity";
 import { pitchPlayerLabel } from "./pitchPlayerLabel";
 import { ArrowUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { buildLivePitchPlayers, ballZonePosition, reachedMatchEvents } from "./livePitchModel";
+import { buildLivePitchPlayers, ballZonePosition, latestReachedMatchEvent } from "./livePitchModel";
 import type { MatchSnapshot } from "./types";
 
 export default function LiveMatchPitch({
@@ -19,8 +19,7 @@ export default function LiveMatchPitch({
   disabled?: boolean;
 }) {
   const { t } = useTranslation();
-  const reached = reachedMatchEvents(snapshot.events, snapshot.current_minute);
-  const latest = reached[reached.length - 1];
+  const latest = latestReachedMatchEvent(snapshot.events, snapshot.current_minute);
   const subbedOn = new Set(
     (snapshot.substitutions ?? [])
       .filter(

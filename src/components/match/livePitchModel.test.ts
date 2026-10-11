@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { buildLivePitchPlayers, ballZonePosition, reachedMatchEvents } from "./livePitchModel";
+import {
+  buildLivePitchPlayers,
+  ballZonePosition,
+  reachedMatchEvents,
+  latestReachedMatchEvent,
+} from "./livePitchModel";
 import type { EnginePlayerData, EngineTeamData, MatchEvent } from "./types";
 const players = Array.from(
   { length: 11 },
@@ -59,6 +64,15 @@ describe("live pitch model", () => {
       ).toBe(true);
     },
   );
+  it("finds the latest reached actor in unsorted imports without mutating history", () => {
+    const events = [22, 30, 0, NaN, 22, -1].map(
+      (minute, i) => ({ minute, player_id: String(i) }) as MatchEvent,
+    );
+    expect(latestReachedMatchEvent(events, 22)?.player_id).toBe("4");
+    expect(events.map((event) => event.player_id)).toEqual(["0", "1", "2", "3", "4", "5"]);
+    expect(latestReachedMatchEvent([], 22)).toBeUndefined();
+    expect(latestReachedMatchEvent(events, NaN)?.player_id).toBe("2");
+  });
   it("excludes future and malformed events and keeps same-minute order", () => {
     const events = [22, 0, 23, NaN, -1, 22].map(
       (minute, i) => ({ minute, player_id: String(i) }) as MatchEvent,

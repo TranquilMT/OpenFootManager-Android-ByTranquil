@@ -36,3 +36,22 @@ export function reachedMatchEvents(events: MatchEvent[], minute: number): MatchE
     .filter((event) => Number.isFinite(event.minute) && event.minute >= 0 && event.minute <= clock)
     .sort((a, b) => a.minute - b.minute);
 }
+
+/** Linear lookup for the pitch: no sorted history allocation on every playback tick. */
+export function latestReachedMatchEvent(
+  events: readonly MatchEvent[],
+  minute: number,
+): MatchEvent | undefined {
+  const clock = Number.isFinite(minute) ? Math.max(0, minute) : 0;
+  let latest: MatchEvent | undefined;
+  for (const event of events) {
+    if (
+      Number.isFinite(event.minute) &&
+      event.minute >= 0 &&
+      event.minute <= clock &&
+      (!latest || event.minute >= latest.minute)
+    )
+      latest = event;
+  }
+  return latest;
+}
