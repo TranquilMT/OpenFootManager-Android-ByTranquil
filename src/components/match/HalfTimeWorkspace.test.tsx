@@ -1,9 +1,27 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { expect, it, vi } from "vitest";
 import type { GameStateData } from "../../store/gameStore";
 import HalfTimeBreak from "./HalfTimeBreak";
 import { createSnapshot } from "./SubPanel.testFixtures";
-vi.mock("@tauri-apps/api/core", () => ({ invoke: vi.fn() }));
+const invoke = vi.hoisted(() => vi.fn());
+vi.mock("@tauri-apps/api/core", () => ({ invoke }));
+vi.mock("../tactics/PhaseBlueprintPanel", () => ({
+  PhaseBlueprintPanel: ({
+    onTacticsPhaseChange,
+    disabled,
+  }: {
+    onTacticsPhaseChange: (patch: { tempo: "Patient" }) => void;
+    disabled: boolean;
+  }) => (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={() => onTacticsPhaseChange({ tempo: "Patient" })}
+    >
+      Patient tempo
+    </button>
+  ),
+}));
 vi.mock("react-i18next", () => ({ useTranslation: () => ({ t: (key: string) => key }) }));
 vi.mock("../ui", () => ({
   Badge: ({ children }: { children: React.ReactNode }) => <span>{children}</span>,
@@ -45,4 +63,15 @@ it("opens substitutions directly instead of a mixed tactics workspace", () => {
   setup();
   fireEvent.click(screen.getByRole("button", { name: "match.makeSubstitution" }));
   expect(screen.getByRole("dialog", { name: "substitutions" })).toBeInTheDocument();
+});
+
+it("applies phase instructions through the shared halftime decision lock", async () => {
+  const { props } = setup();
+  invoke.mockResolvedValueOnce(props.snapshot);
+  fireEvent.click(screen.getByRole("button", { name: "Patient tempo" }));
+  await act(async () => {});
+  expect(invoke).toHaveBeenCalledWith("apply_match_command", {
+    command: { ChangeTacticalInstruction: { side: "Home", instruction: { Tempo: "Patient" } } },
+  });
+  expect(props.onUpdateSnapshot).toHaveBeenCalledOnce();
 });

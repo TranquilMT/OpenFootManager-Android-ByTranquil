@@ -11,6 +11,7 @@ vi.mock("../ui", () => ({
   TeamLogo: () => null,
   ThemeToggle: () => null,
 }));
+vi.mock("../tactics/PhaseBlueprintPanel", () => ({ PhaseBlueprintPanel: () => null }));
 function setup() {
   const snapshot = { ...createSnapshot(), phase: "HalfTime", current_minute: 48 };
   const props = {

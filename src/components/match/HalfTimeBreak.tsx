@@ -1,6 +1,9 @@
 import { useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { useTranslation } from "react-i18next";
+import type { TacticsPhaseSettings } from "../../store/types";
+import { buildTacticalInstructions } from "../tactics/tacticalInstructions";
+import { PhaseBlueprintPanel } from "../tactics/PhaseBlueprintPanel";
 import type { GameStateData } from "../../store/gameStore";
 import {
   type MatchSnapshot,
@@ -93,6 +96,25 @@ export default function HalfTimeBreak({
       if (isActive() && currentBreakKey.current === breakKey)
         setActionError(t("match.actionFailed"));
     }
+  };
+  const handleTacticsPhaseChange = async (patch: Partial<TacticsPhaseSettings>) => {
+    const instructions = buildTacticalInstructions(patch);
+    if (!instructions.length) return;
+    await run(async () => {
+      setActionError(null);
+      try {
+        for (const instruction of instructions) {
+          if (!isActive() || currentBreakKey.current !== breakKey) return;
+          const snap = await invoke<MatchSnapshot>("apply_match_command", {
+            command: { ChangeTacticalInstruction: { side: userSide, instruction } },
+          });
+          if (isActive() && currentBreakKey.current === breakKey) onUpdateSnapshot(snap);
+        }
+      } catch {
+        if (isActive() && currentBreakKey.current === breakKey)
+          setActionError(t("match.actionFailed"));
+      }
+    });
   };
   const handleSubstitution = async (playerOffId: string, playerOnId: string) => {
     try {
@@ -287,6 +309,11 @@ export default function HalfTimeBreak({
         </section>
         {!isSpectator && (
           <section className="space-y-3">
+            <PhaseBlueprintPanel
+              tacticsPhase={userTeam.tactics}
+              onTacticsPhaseChange={handleTacticsPhaseChange}
+              disabled={pending}
+            />
             <div className="rounded-xl border border-gray-200 bg-white p-4 dark:border-navy-700 dark:bg-navy-800">
               <h3 className="mb-3 font-heading text-xs font-bold uppercase tracking-widest text-gray-500">
                 {t("match.formation")}
@@ -370,6 +397,7 @@ export default function HalfTimeBreak({
           onSubstitute={handleSubstitution}
           onFormationChange={handleFormationChange}
           onPlayStyleChange={handlePlayStyleChange}
+          onTacticsPhaseChange={handleTacticsPhaseChange}
           onClose={() => setShowSubPanel(false)}
         />
       )}{" "}
