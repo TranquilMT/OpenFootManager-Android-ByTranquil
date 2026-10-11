@@ -22,3 +22,24 @@ it("paces replay actions without invoking the match engine and cleans up on disp
   unmount();
   expect(vi.getTimerCount()).toBe(0);
 });
+
+it("suspends replay progression while the match surface is hidden", () => {
+  vi.useFakeTimers();
+  const { result, rerender } = renderHook(
+    ({ visible }) => useHighlightPlayback("clip", 4, visible),
+    { initialProps: { visible: true } },
+  );
+  act(() => {
+    result.current.dispatch({ type: "play" });
+  });
+  rerender({ visible: false });
+  act(() => {
+    vi.advanceTimersByTime(9000);
+  });
+  expect(result.current.frame).toBe(0);
+  rerender({ visible: true });
+  act(() => {
+    vi.advanceTimersByTime(900);
+  });
+  expect(result.current.frame).toBe(1);
+});
