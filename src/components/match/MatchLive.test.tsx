@@ -120,6 +120,35 @@ describe("live match decisions", () => {
       vi.useRealTimers();
     }
   });
+  it("ignores a tactical command response after leaving the match screen", async () => {
+    let complete: (value: unknown) => void = () => {};
+    vi.mocked(invoke).mockReturnValueOnce(
+      new Promise((resolve) => {
+        complete = resolve;
+      }),
+    );
+    const update = vi.fn();
+    const view = render(
+      <MatchLive
+        snapshot={snapshot}
+        gameState={{ teams: [], players: [] } as unknown as GameStateData}
+        userSide="Home"
+        isSpectator={false}
+        importantEvents={[]}
+        onSnapshotUpdate={update}
+        onImportantEvent={vi.fn()}
+        onHalfTime={vi.fn()}
+        onFullTime={vi.fn()}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "common.playStyles.Attacking" }));
+    await waitFor(() => expect(invoke).toHaveBeenCalledTimes(1));
+    view.unmount();
+    await act(async () => {
+      complete(snapshot);
+    });
+    expect(update).not.toHaveBeenCalled();
+  });
   it("cancels delayed half-time navigation when the match view closes", async () => {
     vi.useFakeTimers();
     try {

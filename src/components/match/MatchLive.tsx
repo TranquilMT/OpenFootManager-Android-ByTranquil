@@ -109,6 +109,7 @@ export default function MatchLive({
   currentDecisionState.current.isSpectator = isSpectator;
   const publishSnapshot = useCallback(
     (next: MatchSnapshot) => {
+      if (!mountedRef.current) return;
       currentDecisionState.current.snapshot = next;
       onSnapshotUpdate(next);
     },
@@ -117,6 +118,7 @@ export default function MatchLive({
   const canExecuteDecision = () => {
     const current = currentDecisionState.current;
     return (
+      mountedRef.current &&
       current.userSide === userSide &&
       !current.isSpectator &&
       !["Finished", "PenaltyShootout"].includes(current.snapshot.phase)
@@ -297,6 +299,7 @@ export default function MatchLive({
         setShowSubPanel(false);
         setAlertPlayerId(null);
       } catch (err) {
+        if (!mountedRef.current) return;
         setMatchError(resolveBackendError(err) || t("match.actionFailed"));
       }
     }, setMatchCommandPending);
@@ -313,6 +316,7 @@ export default function MatchLive({
         });
         publishSnapshot(snap);
       } catch (err) {
+        if (!mountedRef.current) return;
         setMatchError(resolveBackendError(err) || t("match.actionFailed"));
       }
     }, setMatchCommandPending);
@@ -329,6 +333,7 @@ export default function MatchLive({
         });
         publishSnapshot(snap);
       } catch (err) {
+        if (!mountedRef.current) return;
         setMatchError(resolveBackendError(err) || t("match.actionFailed"));
       }
     }, setMatchCommandPending);
@@ -343,12 +348,14 @@ export default function MatchLive({
       if (!canExecuteDecision()) return;
       try {
         for (const instruction of instructions) {
+          if (!canExecuteDecision()) return;
           const snap = await invoke<MatchSnapshot>("apply_match_command", {
             command: { ChangeTacticalInstruction: { side: userSide, instruction } },
           });
           publishSnapshot(snap);
         }
       } catch (err) {
+        if (!mountedRef.current) return;
         setMatchError(resolveBackendError(err) || t("match.actionFailed"));
       }
     }, setMatchCommandPending);
