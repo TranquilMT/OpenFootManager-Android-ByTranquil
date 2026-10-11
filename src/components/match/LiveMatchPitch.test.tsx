@@ -79,6 +79,17 @@ describe("combined live pitch", () => {
         .querySelector('[aria-label="match.eventTypes.Substitution"]'),
     ).not.toBeInTheDocument();
   });
+  it("clears stale player highlights when the next minute has no action", () => {
+    const event = { minute: 21, side: "Home", player_id: "home4", event_type: "ShotOnTarget" };
+    const view = render(
+      <LiveMatchPitch
+        snapshot={{ ...snapshot, current_minute: 21, events: [event] } as MatchSnapshot}
+      />,
+    );
+    expect(screen.getByTitle("home player 4")).toHaveClass("ring-2");
+    view.rerender(<LiveMatchPitch snapshot={{ ...snapshot, events: [event] } as MatchSnapshot} />);
+    expect(screen.getByTitle("home player 4")).not.toHaveClass("ring-2");
+  });
   it("does not expose decisions while a command is pending", () => {
     render(<LiveMatchPitch snapshot={snapshot} userSide="Home" onPlayer={vi.fn()} disabled />);
     expect(screen.getByRole("button", { name: "home player 4" })).toBeDisabled();

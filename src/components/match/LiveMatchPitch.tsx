@@ -57,7 +57,10 @@ export default function LiveMatchPitch({
           return buildLivePitchPlayers(team, side, snapshot.sent_off).map(({ player, x, y }) => {
             const booked =
               (side === "Home" ? snapshot.home_yellows : snapshot.away_yellows)?.[player.id] > 0;
-            const active = latest?.player_id === player.id;
+            const active =
+              latest?.minute === snapshot.current_minute &&
+              latest.side === side &&
+              latest.player_id === player.id;
             const interactive = side === userSide && onPlayer;
             const style = { left: `${x}%`, top: `${y}%` };
             const className = `absolute flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 dark:focus-visible:ring-accent-400 ${active ? "ring-2 ring-accent-400 dark:ring-accent-400" : ""}`;
