@@ -215,7 +215,7 @@ describe("live match decisions", () => {
         onFullTime={vi.fn()}
       />,
     );
-    fireEvent.click(screen.getByRole("button", { name: "match.subs" }));
+    fireEvent.click(screen.getByRole("button", { name: "dashboard.tactics" }));
     fireEvent.click(screen.getByRole("combobox", { name: "tactics.phaseSettings.tempo" }));
     fireEvent.click(screen.getByRole("option", { name: "tactics.phaseSettings.tempo_Patient" }));
     await waitFor(() => expect(onSnapshotUpdate).toHaveBeenCalledWith(snapshot));
@@ -238,7 +238,7 @@ describe("live match decisions", () => {
       />,
     );
     fireEvent.click(screen.getByRole("button", { name: "dashboard.tactics" }));
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByRole("dialog", { name: "match.tacticsTab" })).toBeInTheDocument();
     expect(screen.getByText("match.paused")).toBeInTheDocument();
     expect(screen.queryByText("match.live")).not.toBeInTheDocument();
     expect(

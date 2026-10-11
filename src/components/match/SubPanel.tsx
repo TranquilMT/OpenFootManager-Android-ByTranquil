@@ -36,6 +36,7 @@ export function SubPanel({
   onTacticsPhaseChange,
   pending = false,
   initialPlayerId = null,
+  initialView = "combined",
 }: {
   snapshot: MatchSnapshot;
   side: "Home" | "Away";
@@ -46,8 +47,11 @@ export function SubPanel({
   onTacticsPhaseChange?: (patch: Partial<TacticsPhaseSettings>) => void;
   pending?: boolean;
   initialPlayerId?: string | null;
+  initialView?: "substitutions" | "tactics" | "combined";
 }) {
   const { t } = useTranslation();
+  const [view, setView] = useState(initialView);
+  const titleKey = view === "tactics" ? "match.tacticsTab" : "match.substitutionsTitle";
   const closeRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const onCloseRef = useRef(onClose);
@@ -193,7 +197,7 @@ export function SubPanel({
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
-        aria-label={t("match.substitutionsTitle")}
+        aria-label={t(titleKey)}
         className="bg-white dark:bg-navy-800 rounded-2xl border border-gray-200 dark:border-navy-600 shadow-2xl w-full max-w-5xl max-h-[90dvh] flex flex-col overflow-hidden transition-colors duration-300"
         onClick={(e) => e.stopPropagation()}
       >
@@ -202,7 +206,7 @@ export function SubPanel({
           <div className="flex items-center gap-2.5">
             <RefreshCw className="h-4 w-4 text-accent-400" />
             <h3 className="font-heading text-sm font-bold uppercase tracking-widest text-gray-900 dark:text-white">
-              {t("match.substitutionsTitle")}
+              {t(titleKey)}
             </h3>
             <Badge variant={subsMade >= snapshot.max_subs ? "danger" : "primary"} size="sm">
               {t("match.subsUsed", { used: subsMade, max: snapshot.max_subs })}
@@ -219,7 +223,22 @@ export function SubPanel({
           </button>
         </div>
 
-        {subsMade >= snapshot.max_subs && (
+        {initialView !== "combined" && (
+          <div className="flex shrink-0 gap-2 border-b border-gray-200 p-2 dark:border-navy-700">
+            {(["substitutions", "tactics"] as const).map((next) => (
+              <button
+                key={next}
+                type="button"
+                aria-pressed={view === next}
+                onClick={() => setView(next)}
+                className={`min-h-11 flex-1 rounded-lg px-3 text-sm font-semibold ${view === next ? "bg-primary-100 text-primary-800 dark:bg-primary-800 dark:text-white" : "text-gray-700 dark:text-gray-300"}`}
+              >
+                {t(next === "tactics" ? "match.tacticsTab" : "match.substitutionsTitle")}
+              </button>
+            ))}
+          </div>
+        )}
+        {view !== "tactics" && subsMade >= snapshot.max_subs && (
           <div className="flex items-center justify-center p-3">
             <div className="flex flex-col items-center gap-3">
               <AlertTriangle className="h-8 w-8 text-yellow-500" />
@@ -250,7 +269,7 @@ export function SubPanel({
           </div>
 
           {/* Recommendation chips */}
-          {visibleRecommendations.length > 0 && (
+          {view !== "tactics" && visibleRecommendations.length > 0 && (
             <div className="flex flex-wrap items-center gap-1">
               {visibleRecommendations.slice(0, 3).map(({ rec, offPlayer, onPlayer }) => (
                 <button
@@ -285,16 +304,21 @@ export function SubPanel({
             </div>
           )}
         </div>
-        <MatchTacticsControls
-          team={team}
-          disabled={pending || decisionClosed}
-          onFormationChange={onFormationChange}
-          onPlayStyleChange={onPlayStyleChange}
-          onTacticsPhaseChange={onTacticsPhaseChange}
-        />
+        {view !== "substitutions" && (
+          <MatchTacticsControls
+            team={team}
+            disabled={pending || decisionClosed}
+            onFormationChange={onFormationChange}
+            onPlayStyleChange={onPlayStyleChange}
+            onTacticsPhaseChange={onTacticsPhaseChange}
+          />
+        )}
 
         {/* Main body: two columns */}
-        <div className="flex min-h-0 flex-1 overflow-hidden">
+        <div
+          hidden={view === "tactics"}
+          className={`${view === "tactics" ? "hidden" : "flex"} min-h-0 flex-1 overflow-hidden`}
+        >
           {/* Left: formation pitch + on-field player list */}
           <div className="flex min-w-0 flex-1 flex-col border-r border-gray-200 dark:border-navy-700">
             <div className="shrink-0 border-b border-gray-200 bg-gray-50 px-4 py-2 dark:border-navy-700 dark:bg-navy-800/50">
@@ -571,13 +595,15 @@ export function SubPanel({
         </div>
 
         {/* Sticky footer: comparison summary + confirm / cancel */}
-        <SubstitutionComparison
-          selectedPlayer={selectedPlayer}
-          comparedPlayer={comparedPlayer}
-          disabled={pending || decisionClosed || subsMade >= snapshot.max_subs}
-          onClear={handleClearSelection}
-          onConfirm={handleConfirmSubstitution}
-        />
+        {view !== "tactics" && (
+          <SubstitutionComparison
+            selectedPlayer={selectedPlayer}
+            comparedPlayer={comparedPlayer}
+            disabled={pending || decisionClosed || subsMade >= snapshot.max_subs}
+            onClear={handleClearSelection}
+            onConfirm={handleConfirmSubstitution}
+          />
+        )}
       </div>
     </div>
   );

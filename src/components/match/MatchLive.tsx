@@ -112,6 +112,7 @@ export default function MatchLive({
     );
   };
   const [showSubPanel, setShowSubPanel] = useState(false);
+  const [decisionView, setDecisionView] = useState<"substitutions" | "tactics">("substitutions");
   const [alertPlayerId, setAlertPlayerId] = useState<string | null>(null);
   const [voiceEnabled, setVoiceEnabled] = useState(settings.spoken_match_commentary);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -394,6 +395,7 @@ export default function MatchLive({
                 userSide={isSpectator ? null : userSide}
                 disabled={decisionsClosed || matchCommandPending}
                 onPlayer={(id) => {
+                  setDecisionView("substitutions");
                   setAlertPlayerId(id);
                   setShowSubPanel(true);
                 }}
@@ -409,6 +411,7 @@ export default function MatchLive({
                 side={userSide}
                 pending={matchCommandPending}
                 onDecision={(alert) => {
+                  setDecisionView(alert.action === "substitution" ? "substitutions" : "tactics");
                   setAlertPlayerId(alert.action === "substitution" ? alert.event.player_id : null);
                   setShowSubPanel(true);
                 }}
@@ -506,8 +509,14 @@ export default function MatchLive({
               playStyle={
                 userSide === "Home" ? snapshot.home_team.play_style : snapshot.away_team.play_style
               }
-              onSubstitutions={() => setShowSubPanel(true)}
-              onTactics={() => setShowSubPanel(true)}
+              onSubstitutions={() => {
+                setDecisionView("substitutions");
+                setShowSubPanel(true);
+              }}
+              onTactics={() => {
+                setDecisionView("tactics");
+                setShowSubPanel(true);
+              }}
               onPlayStyle={(style) => {
                 void handlePlayStyleChange(style);
               }}
@@ -522,6 +531,7 @@ export default function MatchLive({
           snapshot={snapshot}
           side={userSide}
           initialPlayerId={alertPlayerId}
+          initialView={decisionView}
           onSubstitute={handleSubstitution}
           onFormationChange={handleFormationChange}
           onPlayStyleChange={handlePlayStyleChange}

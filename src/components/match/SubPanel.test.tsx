@@ -347,6 +347,16 @@ describe("SubPanel", () => {
     onClose: vi.fn(),
   });
 
+  it("opens a dedicated tactical view and can switch to substitutions", () => {
+    render(<SubPanel {...createProps()} initialView="tactics" />);
+    expect(screen.getByRole("dialog", { name: "match.tacticsTab" })).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: "tactics.formation" })).toBeInTheDocument();
+    expect(screen.getByTestId("sub-panel-off-starter-1")).not.toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "match.substitutionsTitle" }));
+    expect(screen.getByRole("dialog", { name: "match.substitutionsTitle" })).toBeInTheDocument();
+    expect(screen.queryByRole("combobox", { name: "tactics.formation" })).not.toBeInTheDocument();
+    expect(screen.getByTestId("sub-panel-off-starter-1")).toBeVisible();
+  });
   it("names the decision dialog and supports Escape with focus restoration", () => {
     const props = createProps();
     const opener = document.createElement("button");
