@@ -100,6 +100,19 @@ describe("combined live pitch", () => {
     view.rerender(<LiveMatchPitch snapshot={{ ...snapshot, ball_zone: "Unknown" }} />);
     expect(view.container.querySelector("[data-ball-zone]")).not.toBeInTheDocument();
   });
+  it("identifies the goalkeeper slot even when an outfield player covers it", () => {
+    const homePlayers = snapshot.home_team.players.map((player, index) =>
+      index === 0 ? { ...player, position: "Forward" } : player,
+    );
+    render(
+      <LiveMatchPitch
+        snapshot={{ ...snapshot, home_team: { ...snapshot.home_team, players: homePlayers } }}
+      />,
+    );
+    expect(screen.getAllByLabelText("common.positions.Goalkeeper")).toHaveLength(2);
+    expect(screen.getByTitle("home player 0")).toHaveTextContent("common.posAbbr.Goalkeeper");
+    expect(screen.getByTitle("home player 4")).not.toHaveTextContent("common.posAbbr.Goalkeeper");
+  });
   it("does not expose decisions while a command is pending", () => {
     render(<LiveMatchPitch snapshot={snapshot} userSide="Home" onPlayer={vi.fn()} disabled />);
     expect(screen.getByRole("button", { name: "home player 4" })).toBeDisabled();

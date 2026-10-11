@@ -60,65 +60,77 @@ export default function LiveMatchPitch({
         </svg>
         {(["Home", "Away"] as const).flatMap((side) => {
           const team = side === "Home" ? snapshot.home_team : snapshot.away_team;
-          return buildLivePitchPlayers(team, side, snapshot.sent_off).map(({ player, x, y }) => {
-            const booked =
-              (side === "Home" ? snapshot.home_yellows : snapshot.away_yellows)?.[player.id] > 0;
-            const active =
-              latest?.minute === snapshot.current_minute &&
-              latest.side === side &&
-              latest.player_id === player.id;
-            const interactive = side === userSide && onPlayer;
-            const style = { left: `${x}%`, top: `${y}%` };
-            const className = `absolute flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 dark:focus-visible:ring-accent-400 ${active ? "ring-2 ring-accent-400 dark:ring-accent-400" : ""}`;
-            const token = (
-              <>
-                <span
-                  className={`flex h-7 w-7 items-center justify-center rounded-full border-2 text-xs font-bold shadow-sm ${side === "Home" ? "border-white bg-white text-navy-900 dark:border-white dark:bg-white dark:text-navy-900" : "border-accent-400 bg-accent-400 text-navy-900 dark:border-accent-400 dark:bg-accent-400 dark:text-navy-900"}`}
-                >
-                  {pitchPlayerLabel(player.name, playerJerseyMap?.get(player.id))}
-                </span>
-                {subbedOn.has(`${side}:${player.id}`) && (
+          return buildLivePitchPlayers(team, side, snapshot.sent_off).map(
+            ({ player, x, y, slotPosition }) => {
+              const goalkeeper = (slotPosition ?? player.position) === "Goalkeeper";
+              const booked =
+                (side === "Home" ? snapshot.home_yellows : snapshot.away_yellows)?.[player.id] > 0;
+              const active =
+                latest?.minute === snapshot.current_minute &&
+                latest.side === side &&
+                latest.player_id === player.id;
+              const interactive = side === userSide && onPlayer;
+              const style = { left: `${x}%`, top: `${y}%` };
+              const className = `absolute flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 dark:focus-visible:ring-accent-400 ${active ? "ring-2 ring-accent-400 dark:ring-accent-400" : ""}`;
+              const token = (
+                <>
                   <span
-                    role="img"
-                    aria-label={t("match.eventTypes.Substitution")}
-                    className="absolute bottom-0 right-0 rounded-full bg-primary-800 text-white dark:bg-primary-800 dark:text-white"
+                    className={`flex h-7 w-7 items-center justify-center rounded-full border-2 text-xs font-bold shadow-sm ${side === "Home" ? "border-white bg-white text-navy-900 dark:border-white dark:bg-white dark:text-navy-900" : "border-accent-400 bg-accent-400 text-navy-900 dark:border-accent-400 dark:bg-accent-400 dark:text-navy-900"}`}
                   >
-                    <ArrowUp aria-hidden="true" className="h-3 w-3" />
+                    {pitchPlayerLabel(player.name, playerJerseyMap?.get(player.id))}
                   </span>
-                )}
-                {booked && (
-                  <span
-                    role="img"
-                    aria-label={t("match.eventTypes.YellowCard")}
-                    className="absolute right-1 top-1 h-3 w-2 rounded-sm bg-yellow-400 dark:bg-yellow-400"
-                  />
-                )}
-              </>
-            );
-            return interactive ? (
-              <button
-                key={`${side}-${player.id}`}
-                type="button"
-                title={player.name}
-                aria-label={player.name}
-                disabled={disabled}
-                onClick={() => onPlayer(player.id)}
-                className={className}
-                style={style}
-              >
-                {token}
-              </button>
-            ) : (
-              <span
-                key={`${side}-${player.id}`}
-                title={player.name}
-                className={className}
-                style={style}
-              >
-                {token}
-              </span>
-            );
-          });
+                  {goalkeeper && (
+                    <span
+                      role="img"
+                      aria-label={t("common.positions.Goalkeeper")}
+                      className="pointer-events-none absolute -bottom-0.5 rounded bg-navy-900 px-1 text-[8px] font-bold text-white dark:bg-navy-900 dark:text-white"
+                    >
+                      {t("common.posAbbr.Goalkeeper")}
+                    </span>
+                  )}
+                  {subbedOn.has(`${side}:${player.id}`) && (
+                    <span
+                      role="img"
+                      aria-label={t("match.eventTypes.Substitution")}
+                      className="absolute bottom-0 right-0 rounded-full bg-primary-800 text-white dark:bg-primary-800 dark:text-white"
+                    >
+                      <ArrowUp aria-hidden="true" className="h-3 w-3" />
+                    </span>
+                  )}
+                  {booked && (
+                    <span
+                      role="img"
+                      aria-label={t("match.eventTypes.YellowCard")}
+                      className="absolute right-1 top-1 h-3 w-2 rounded-sm bg-yellow-400 dark:bg-yellow-400"
+                    />
+                  )}
+                </>
+              );
+              return interactive ? (
+                <button
+                  key={`${side}-${player.id}`}
+                  type="button"
+                  title={player.name}
+                  aria-label={player.name}
+                  disabled={disabled}
+                  onClick={() => onPlayer(player.id)}
+                  className={className}
+                  style={style}
+                >
+                  {token}
+                </button>
+              ) : (
+                <span
+                  key={`${side}-${player.id}`}
+                  title={player.name}
+                  className={className}
+                  style={style}
+                >
+                  {token}
+                </span>
+              );
+            },
+          );
         })}
         {ballX != null && (
           <span

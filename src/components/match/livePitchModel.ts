@@ -12,6 +12,7 @@ export function buildLivePitchPlayers(
     .filter((slot) => !sentOff.includes(slot.player.id))
     .map((slot) => ({
       player: slot.player,
+      slotPosition: slot.slotPosition,
       x: side === "Home" ? 4 + (100 - slot.y) * 0.44 : 96 - (100 - slot.y) * 0.44,
       y: side === "Home" ? slot.x : 100 - slot.x,
     }));
