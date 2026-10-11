@@ -1,3 +1,4 @@
+import MatchHighlightWorkspace from "./MatchHighlightWorkspace";
 import MatchAnalysisPanel from "./MatchAnalysisPanel";
 import { matchMetrics } from "./narrativeContext";
 import { PlayerMatchPerformance } from "./PlayerMatchPerformance";
@@ -40,7 +41,7 @@ interface PostMatchScreenProps {
   onFinish: () => void;
 }
 
-type PostMatchTab = "teamTalk" | "matchReport" | "playerRatings" | "tactics";
+type PostMatchTab = "teamTalk" | "matchReport" | "playerRatings" | "tactics" | "highlights";
 
 const SET_PIECE_CLEAR_EVENTS = new Set([
   "ShotOffTarget",
@@ -211,6 +212,11 @@ export default function PostMatchScreen({
       id: "matchReport",
       label: t("match.matchReport"),
       icon: <FileText className="w-4 h-4" />,
+    },
+    {
+      id: "highlights",
+      label: t("match.highlights.title"),
+      icon: <BarChart3 className="w-4 h-4" />,
     },
     {
       id: "playerRatings",
@@ -676,6 +682,11 @@ export default function PostMatchScreen({
           </div>
 
           {/* Player Ratings Tab */}
+          {activeTab === "highlights" && (
+            <div id="tabpanel-highlights" role="tabpanel" aria-labelledby="tab-highlights">
+              <MatchHighlightWorkspace snapshot={snapshot} />
+            </div>
+          )}
           <div
             id="tabpanel-playerRatings"
             role="tabpanel"
