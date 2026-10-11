@@ -12,6 +12,7 @@ import {
 } from "./types";
 import { getEventDisplay, getPlayerName, makeTeamFallback } from "./helpers";
 import { getTalkIcon } from "./TeamTalkIcons";
+import { useBreakOperation } from "./useBreakOperation";
 import { SubPanel } from "./SubPanel";
 import { Badge, TeamLogo, ThemeToggle } from "../ui";
 import { Play, RefreshCw, Shield, Zap, Target, Crosshair, Flag, MessageCircle } from "lucide-react";
@@ -45,6 +46,7 @@ export default function HalfTimeBreak({
 }: HalfTimeBreakProps) {
   const { t } = useTranslation();
   const teamTalkOptions = getTeamTalkOptions(t);
+  const { pending, run } = useBreakOperation();
   const [selectedTalk, setSelectedTalk] = useState<TeamTalkTone | null>(null);
   const [showSubPanel, setShowSubPanel] = useState(false);
   const [talkDelivered, setTalkDelivered] = useState(false);
@@ -74,8 +76,10 @@ export default function HalfTimeBreak({
     ].includes(e.event_type),
   );
   const command = async (command: unknown) => {
-    const snap = await invoke<MatchSnapshot>("apply_match_command", { command });
-    onUpdateSnapshot(snap);
+    return run(async () => {
+      const snap = await invoke<MatchSnapshot>("apply_match_command", { command });
+      onUpdateSnapshot(snap);
+    });
   };
   const handleFormationChange = async (formation: string) => {
     try {
@@ -93,10 +97,10 @@ export default function HalfTimeBreak({
   };
   const handleSubstitution = async (playerOffId: string, playerOnId: string) => {
     try {
-      await command({
+      const applied = await command({
         Substitute: { side: userSide, player_off_id: playerOffId, player_on_id: playerOnId },
       });
-      setShowSubPanel(false);
+      if (applied) setShowSubPanel(false);
     } catch (err) {
       console.error("Substitution failed:", err);
     }
@@ -311,6 +315,7 @@ export default function HalfTimeBreak({
                   <button
                     type="button"
                     key={f}
+                    disabled={pending}
                     onClick={() => handleFormationChange(f)}
                     className={`min-h-11 rounded-lg text-sm font-heading font-bold ${userTeam.formation === f ? "bg-primary-500/20 text-primary-500 ring-1 ring-primary-500/50" : "bg-gray-100 dark:bg-navy-700"}`}
                   >
@@ -328,6 +333,7 @@ export default function HalfTimeBreak({
                   <button
                     type="button"
                     key={style}
+                    disabled={pending}
                     onClick={() => handlePlayStyleChange(style)}
                     className={`flex min-h-12 items-center justify-center gap-2 rounded-lg px-2 text-xs font-heading font-bold ${userTeam.play_style === style ? "bg-primary-500/20 text-primary-500 ring-1 ring-primary-500/50" : "bg-gray-100 dark:bg-navy-700"}`}
                   >
@@ -373,6 +379,7 @@ export default function HalfTimeBreak({
         <SubPanel
           snapshot={snapshot}
           side={userSide}
+          pending={pending}
           onSubstitute={handleSubstitution}
           onFormationChange={handleFormationChange}
           onPlayStyleChange={handlePlayStyleChange}
