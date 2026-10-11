@@ -41,3 +41,8 @@ it("keeps the break open while a substitution workspace is open", () => {
   fireEvent.click(screen.getByRole("button", { name: "Close workspace" }));
   expect(resume).toBeEnabled();
 });
+it("opens substitutions directly instead of a mixed tactics workspace", () => {
+  setup();
+  fireEvent.click(screen.getByRole("button", { name: "match.makeSubstitution" }));
+  expect(screen.getByRole("dialog", { name: "substitutions" })).toBeInTheDocument();
+});

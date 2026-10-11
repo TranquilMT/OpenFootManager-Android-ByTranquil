@@ -411,6 +411,7 @@ export default function HalfTimeBreak({
           snapshot={snapshot}
           side={userSide}
           pending={pending}
+          initialView="substitutions"
           onSubstitute={handleSubstitution}
           onFormationChange={handleFormationChange}
           onPlayStyleChange={handlePlayStyleChange}
