@@ -25,3 +25,11 @@ it("serializes break decisions before React rerenders", async () => {
   });
   expect(result.current.pending).toBe(false);
 });
+it("rejects queued operations after disposal", async () => {
+  const { result, unmount } = renderHook(() => useBreakOperation());
+  const run = result.current.run;
+  unmount();
+  const task = vi.fn();
+  expect(await run(task)).toBe(false);
+  expect(task).not.toHaveBeenCalled();
+});

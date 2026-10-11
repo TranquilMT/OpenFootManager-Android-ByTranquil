@@ -46,7 +46,7 @@ export default function HalfTimeBreak({
 }: HalfTimeBreakProps) {
   const { t } = useTranslation();
   const teamTalkOptions = getTeamTalkOptions(t);
-  const { pending, run } = useBreakOperation();
+  const { pending, run, isActive } = useBreakOperation();
   const [selectedTalk, setSelectedTalk] = useState<TeamTalkTone | null>(null);
   const [showSubPanel, setShowSubPanel] = useState(false);
   const [talkDelivered, setTalkDelivered] = useState(false);
@@ -78,7 +78,7 @@ export default function HalfTimeBreak({
   const command = async (command: unknown) => {
     return run(async () => {
       const snap = await invoke<MatchSnapshot>("apply_match_command", { command });
-      onUpdateSnapshot(snap);
+      if (isActive()) onUpdateSnapshot(snap);
     });
   };
   const handleFormationChange = async (formation: string) => {
