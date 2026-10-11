@@ -37,11 +37,13 @@ export default function LiveMatchPitch({
           side="Home"
           name={snapshot.home_team.name}
           formation={snapshot.home_team.formation}
+          inPossession={snapshot.possession === "Home"}
         />
         <PitchTeamIdentity
           side="Away"
           name={snapshot.away_team.name}
           formation={snapshot.away_team.formation}
+          inPossession={snapshot.possession === "Away"}
         />
       </div>
       <div className="relative aspect-4/3 max-h-48 landscape:max-h-32 w-full overflow-hidden rounded-xl bg-primary-800 dark:bg-primary-900 sm:aspect-video">

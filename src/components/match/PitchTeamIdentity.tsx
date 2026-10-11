@@ -1,13 +1,16 @@
+import { CircleDot } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export default function PitchTeamIdentity({
   side,
   name,
   formation,
+  inPossession = false,
 }: {
   side: "Home" | "Away";
   name: string;
   formation: string;
+  inPossession?: boolean;
 }) {
   const { t } = useTranslation();
   return (
@@ -19,6 +22,11 @@ export default function PitchTeamIdentity({
         />
         <span className="font-semibold">{t(side === "Home" ? "match.home" : "match.away")}</span>
         <span>{formation}</span>
+        {inPossession && (
+          <span role="img" aria-label={t("match.possession")} title={t("match.possession")}>
+            <CircleDot aria-hidden="true" className="h-4 w-4" />
+          </span>
+        )}
       </div>
       <p className="break-words">{name}</p>
     </div>
