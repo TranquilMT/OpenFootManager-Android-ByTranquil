@@ -23,3 +23,17 @@ it("excludes future and malformed event clocks without mutating history", () => 
   expect(buildMatchHighlights(events, 20).map((clip) => clip.outcome.minute)).toEqual([10]);
   expect(events[0].minute).toBe(40);
 });
+it("includes major discipline, injuries and recorded exceptional chances", () => {
+  for (const outcome of [
+    event("RedCard"),
+    event("SecondYellow"),
+    event("Injury"),
+    event("PenaltyAwarded"),
+    event("PenaltyMiss"),
+    event("ShotOffTarget", 10, { detail: "Woodwork" }),
+    event("ShotSaved", 10, { detail: { Save: { quality: "WorldClass" } } }),
+    event("ShotBlocked", 10, { detail: { Shot: { danger: "BigChance" } } }),
+  ]) {
+    expect(buildMatchHighlights([outcome], 10)).toHaveLength(1);
+  }
+});
