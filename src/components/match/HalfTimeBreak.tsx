@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { useTranslation } from "react-i18next";
 import type { GameStateData } from "../../store/gameStore";
@@ -45,6 +45,9 @@ export default function HalfTimeBreak({
   onUpdateSnapshot,
 }: HalfTimeBreakProps) {
   const { t } = useTranslation();
+  const breakKey = `${snapshot.home_team.id}:${snapshot.away_team.id}:${snapshot.phase}:${userSide}:${isSpectator}`;
+  const currentBreakKey = useRef(breakKey);
+  currentBreakKey.current = breakKey;
   const teamTalkOptions = getTeamTalkOptions(t);
   const { pending, run, isActive, isPending } = useBreakOperation();
   const [actionError, setActionError] = useState<string | null>(null);
@@ -80,21 +83,23 @@ export default function HalfTimeBreak({
     return run(async () => {
       setActionError(null);
       const snap = await invoke<MatchSnapshot>("apply_match_command", { command });
-      if (isActive()) onUpdateSnapshot(snap);
+      if (isActive() && currentBreakKey.current === breakKey) onUpdateSnapshot(snap);
     });
   };
   const handleFormationChange = async (formation: string) => {
     try {
       await command({ ChangeFormation: { side: userSide, formation } });
     } catch {
-      if (isActive()) setActionError(t("match.actionFailed"));
+      if (isActive() && currentBreakKey.current === breakKey)
+        setActionError(t("match.actionFailed"));
     }
   };
   const handlePlayStyleChange = async (playStyle: string) => {
     try {
       await command({ ChangePlayStyle: { side: userSide, play_style: playStyle } });
     } catch {
-      if (isActive()) setActionError(t("match.actionFailed"));
+      if (isActive() && currentBreakKey.current === breakKey)
+        setActionError(t("match.actionFailed"));
     }
   };
   const handleSubstitution = async (playerOffId: string, playerOnId: string) => {
@@ -104,7 +109,8 @@ export default function HalfTimeBreak({
       });
       if (applied) setShowSubPanel(false);
     } catch {
-      if (isActive()) setActionError(t("match.actionFailed"));
+      if (isActive() && currentBreakKey.current === breakKey)
+        setActionError(t("match.actionFailed"));
     }
   };
   const handleDeliverTalk = async () => {
@@ -119,12 +125,13 @@ export default function HalfTimeBreak({
           tone: selectedTalk,
           context,
         });
-        if (isActive()) {
+        if (isActive() && currentBreakKey.current === breakKey) {
           setTalkResults(results);
           setTalkDelivered(true);
         }
       } catch {
-        if (isActive()) setActionError(t("match.teamTalkFailed"));
+        if (isActive() && currentBreakKey.current === breakKey)
+          setActionError(t("match.teamTalkFailed"));
       }
     });
   };

@@ -105,3 +105,19 @@ it("waits for saved decisions before resuming play", async () => {
   fireEvent.click(screen.getByRole("button", { name: "match.resumeMatch" }));
   expect(props.onResume).toHaveBeenCalledOnce();
 });
+it("ignores a break response after the match moves to another phase", async () => {
+  let release!: (value: ReturnType<typeof createSnapshot>) => void;
+  invoke.mockImplementation(
+    () =>
+      new Promise((resolve) => {
+        release = resolve;
+      }),
+  );
+  const { props, rerender } = setup();
+  fireEvent.click(screen.getByRole("button", { name: "4-3-3" }));
+  rerender(<HalfTimeBreak {...props} snapshot={{ ...props.snapshot, phase: "SecondHalf" }} />);
+  await act(async () => {
+    release(props.snapshot);
+  });
+  expect(props.onUpdateSnapshot).not.toHaveBeenCalled();
+});
