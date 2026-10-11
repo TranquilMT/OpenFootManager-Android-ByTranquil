@@ -11,3 +11,21 @@ it("plays, pauses and advances one recorded action at a time", () => {
   state = highlightPlayback(state, { type: "restart" }, 3);
   expect(state).toEqual({ frame: 0, playing: true });
 });
+
+it("stops on the final action and bounds invalid seek positions", () => {
+  expect(highlightPlayback({ frame: 1, playing: true }, { type: "advance" }, 2)).toEqual({
+    frame: 1,
+    playing: false,
+  });
+  expect(
+    highlightPlayback({ frame: 0, playing: false }, { type: "seek", frame: Infinity }, 2),
+  ).toEqual({ frame: 0, playing: false });
+  expect(highlightPlayback({ frame: 0, playing: true }, { type: "advance" }, 0)).toEqual({
+    frame: 0,
+    playing: false,
+  });
+  expect(highlightPlayback({ frame: 0, playing: true }, { type: "seek", frame: 100 }, 2)).toEqual({
+    frame: 1,
+    playing: false,
+  });
+});
