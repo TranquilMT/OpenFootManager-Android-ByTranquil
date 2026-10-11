@@ -43,3 +43,18 @@ it("suspends replay progression while the match surface is hidden", () => {
   });
   expect(result.current.frame).toBe(1);
 });
+
+it("resets playback when another clip is selected", () => {
+  vi.useFakeTimers();
+  const { result, rerender } = renderHook(({ id }) => useHighlightPlayback(id, 4), {
+    initialProps: { id: "first" },
+  });
+  act(() => {
+    result.current.dispatch({ type: "seek", frame: 2 });
+    result.current.dispatch({ type: "play" });
+  });
+  rerender({ id: "second" });
+  expect(result.current.frame).toBe(0);
+  expect(result.current.playing).toBe(false);
+  expect(vi.getTimerCount()).toBe(0);
+});

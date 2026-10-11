@@ -4,12 +4,15 @@ import {
   type HighlightPlaybackAction,
   type HighlightPlaybackState,
 } from "./highlightPlayback";
-export function useHighlightPlayback(_clipId: string, length: number, visible = true) {
+export function useHighlightPlayback(clipId: string, length: number, visible = true) {
   const [state, dispatch] = useReducer(
     (state: HighlightPlaybackState, action: HighlightPlaybackAction) =>
       highlightPlayback(state, action, length),
     { frame: 0, playing: false },
   );
+  useEffect(() => {
+    dispatch({ type: "seek", frame: 0 });
+  }, [clipId]);
   useEffect(() => {
     if (!state.playing || !visible) return;
     const timer = setTimeout(() => dispatch({ type: "advance" }), 900);
