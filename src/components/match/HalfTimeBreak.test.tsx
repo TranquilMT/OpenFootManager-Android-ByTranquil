@@ -67,3 +67,23 @@ it("does not mark a failed team talk as delivered", async () => {
   fireEvent.click(screen.getByRole("button", { name: "match.deliverTeamTalk" }));
   expect(await screen.findByText("match.delivered")).toBeInTheDocument();
 });
+it("locks team talk delivery and tactics together", async () => {
+  let release!: (value: never[]) => void;
+  invoke.mockImplementation(
+    () =>
+      new Promise((resolve) => {
+        release = resolve;
+      }),
+  );
+  setup();
+  fireEvent.click(screen.getByRole("button", { name: /match.teamTalkOptions.calm.label/ }));
+  const deliver = screen.getByRole("button", { name: "match.deliverTeamTalk" });
+  fireEvent.click(deliver);
+  fireEvent.click(deliver);
+  fireEvent.click(screen.getByRole("button", { name: "4-3-3" }));
+  expect(invoke).toHaveBeenCalledOnce();
+  expect(deliver).toBeDisabled();
+  await act(async () => {
+    release([]);
+  });
+});

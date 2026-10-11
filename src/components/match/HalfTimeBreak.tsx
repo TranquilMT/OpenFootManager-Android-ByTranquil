@@ -112,19 +112,21 @@ export default function HalfTimeBreak({
     const us = userSide === "Home" ? snapshot.home_score : snapshot.away_score;
     const them = userSide === "Home" ? snapshot.away_score : snapshot.home_score;
     const context = us > them ? "winning" : us < them ? "losing" : "drawing";
-    setActionError(null);
-    try {
-      const results = await invoke<typeof talkResults>("apply_team_talk", {
-        tone: selectedTalk,
-        context,
-      });
-      if (isActive()) {
-        setTalkResults(results);
-        setTalkDelivered(true);
+    await run(async () => {
+      setActionError(null);
+      try {
+        const results = await invoke<typeof talkResults>("apply_team_talk", {
+          tone: selectedTalk,
+          context,
+        });
+        if (isActive()) {
+          setTalkResults(results);
+          setTalkDelivered(true);
+        }
+      } catch {
+        if (isActive()) setActionError(t("match.teamTalkFailed"));
       }
-    } catch {
-      if (isActive()) setActionError(t("match.teamTalkFailed"));
-    }
+    });
   };
   return (
     <div
@@ -264,6 +266,7 @@ export default function HalfTimeBreak({
                       <button
                         type="button"
                         key={opt.id}
+                        disabled={pending}
                         onClick={() => setSelectedTalk(opt.id)}
                         className={`flex min-h-14 w-full items-center gap-3 rounded-xl p-3 text-left active:scale-[.99] ${selectedTalk === opt.id ? "bg-primary-500/20 ring-2 ring-primary-500/50" : "bg-gray-100 dark:bg-navy-700/50"}`}
                       >
@@ -278,6 +281,7 @@ export default function HalfTimeBreak({
                   {selectedTalk && (
                     <button
                       type="button"
+                      disabled={pending}
                       onClick={handleDeliverTalk}
                       className="mt-3 min-h-12 w-full rounded-xl bg-primary-500 font-heading font-bold uppercase tracking-wider text-white active:scale-[.99]"
                     >
