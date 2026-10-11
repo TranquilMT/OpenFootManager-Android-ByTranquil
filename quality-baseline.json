@@ -1,7 +1,7 @@
 {
   "oversizedAggregate": {
     "rust": 63358,
-    "ts": 36508
+    "ts": 36281
   },
   "allowedOversized": {
     "src-tauri/crates/db/src/repositories/player_repo.rs": 1091,
@@ -46,13 +46,13 @@
     "src/components/home/HomeTab.helpers.test.ts": 704,
     "src/components/inbox/InboxMessageDetailPane.tsx": 532,
     "src/components/inbox/InboxTab.test.tsx": 1397,
-    "src/components/match/MatchLive.tsx": 591,
+    "src/components/match/MatchLive.tsx": 556,
     "src/components/match/PostMatchScreen.test.tsx": 789,
     "src/components/match/PostMatchScreen.tsx": 819,
     "src/components/match/PreMatchSetup.tsx": 713,
     "src/components/match/RoundDigestScreen.tsx": 603,
-    "src/components/match/SubPanel.test.tsx": 651,
-    "src/components/match/SubPanel.tsx": 721,
+    "src/components/match/SubPanel.test.tsx": 560,
+    "src/components/match/SubPanel.tsx": 620,
     "src/components/menu/PackageEditor/CompetitionForm.tsx": 591,
     "src/components/menu/PackageEditor/sampleData.ts": 578,
     "src/components/news/NewsTab.tsx": 593,
