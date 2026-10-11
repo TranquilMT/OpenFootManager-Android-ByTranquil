@@ -126,13 +126,15 @@ export default function MatchLive({
   const [alertPlayerId, setAlertPlayerId] = useState<string | null>(null);
   const [voiceEnabled, setVoiceEnabled] = useState(settings.spoken_match_commentary);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mountedRef = useRef(true);
   const phaseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
       if (phaseTimerRef.current) clearTimeout(phaseTimerRef.current);
-    },
-    [],
-  );
+    };
+  }, []);
   // Track phases we've already signaled to avoid double-firing
   const signaledRef = useRef<Set<string>>(new Set());
 
@@ -172,6 +174,7 @@ export default function MatchLive({
       await operationGate.current.run(async () => {
         try {
           const results = await invoke<MinuteResult[]>("step_live_match", { minutes });
+          if (!mountedRef.current) return;
           if (results.length > 0) {
             const lastResult = results[results.length - 1];
 
@@ -187,6 +190,7 @@ export default function MatchLive({
 
             // Fetch full snapshot
             const snap = await invoke<MatchSnapshot>("get_match_snapshot");
+            if (!mountedRef.current) return;
             publishSnapshot(snap);
 
             // Check for phase transitions that should pause

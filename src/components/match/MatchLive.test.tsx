@@ -83,6 +83,43 @@ describe("live match decisions", () => {
     expect(screen.queryByRole("button", { name: "4-4-2" })).not.toBeInTheDocument();
   });
   beforeEach(() => vi.mocked(invoke).mockReset());
+  it("ignores an in-flight simulation result after leaving the screen", async () => {
+    vi.useFakeTimers();
+    try {
+      let complete: (value: unknown) => void = () => {};
+      vi.mocked(invoke).mockReturnValueOnce(
+        new Promise((resolve) => {
+          complete = resolve;
+        }),
+      );
+      const update = vi.fn();
+      const view = render(
+        <MatchLive
+          snapshot={snapshot}
+          gameState={{ teams: [], players: [] } as unknown as GameStateData}
+          userSide="Home"
+          isSpectator={false}
+          importantEvents={[]}
+          onSnapshotUpdate={update}
+          onImportantEvent={vi.fn()}
+          onHalfTime={vi.fn()}
+          onFullTime={vi.fn()}
+        />,
+      );
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(2000);
+      });
+      view.unmount();
+      vi.mocked(invoke).mockResolvedValueOnce(snapshot);
+      await act(async () => {
+        complete([{ phase: "FirstHalf", events: [], is_finished: false }]);
+      });
+      expect(update).not.toHaveBeenCalled();
+      expect(invoke).toHaveBeenCalledTimes(1);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
   it("cancels delayed half-time navigation when the match view closes", async () => {
     vi.useFakeTimers();
     try {
