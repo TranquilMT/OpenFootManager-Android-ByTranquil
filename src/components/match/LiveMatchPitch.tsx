@@ -1,3 +1,4 @@
+import PitchTeamIdentity from "./PitchTeamIdentity";
 import { pitchPlayerLabel } from "./pitchPlayerLabel";
 import { ArrowUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -32,12 +33,16 @@ export default function LiveMatchPitch({
   return (
     <figure aria-label={t("match.pitchView")} className="m-0 min-w-0">
       <div className="mb-2 flex justify-between gap-2 text-xs text-gray-600 dark:text-gray-300">
-        <span className="truncate">
-          {snapshot.home_team.name} · {snapshot.home_team.formation}
-        </span>
-        <span className="truncate text-right">
-          {snapshot.away_team.name} · {snapshot.away_team.formation}
-        </span>
+        <PitchTeamIdentity
+          side="Home"
+          name={snapshot.home_team.name}
+          formation={snapshot.home_team.formation}
+        />
+        <PitchTeamIdentity
+          side="Away"
+          name={snapshot.away_team.name}
+          formation={snapshot.away_team.formation}
+        />
       </div>
       <div className="relative aspect-4/3 max-h-48 landscape:max-h-32 w-full overflow-hidden rounded-xl bg-primary-800 dark:bg-primary-900 sm:aspect-video">
         <svg
