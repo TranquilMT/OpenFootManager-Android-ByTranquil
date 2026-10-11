@@ -133,3 +133,8 @@ it("exposes selected formation, style, and talk to assistive technology", () => 
   fireEvent.click(calm);
   expect(calm).toHaveAttribute("aria-pressed", "true");
 });
+it("uses the translated break instruction", () => {
+  setup();
+  expect(screen.getByText("match.makeChanges")).toBeInTheDocument();
+  expect(screen.queryByText("Make your changes, then resume.")).not.toBeInTheDocument();
+});

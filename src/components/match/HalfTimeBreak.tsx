@@ -140,7 +140,7 @@ export default function HalfTimeBreak({
                   : t("match.halfTime")}
               </p>
               <p className="text-xs text-gray-500 dark:text-gray-400 sm:hidden">
-                Make your changes, then resume.
+                {t("match.makeChanges")}
               </p>
             </div>
             <ThemeToggle />
