@@ -35,6 +35,22 @@ const row = (key: string) => {
   return element;
 };
 describe("integrated match panels", () => {
+  it("retains first-half stoppage timestamps when history is filtered to goals", () => {
+    const goal = { ...event("Goal"), minute: 47 };
+    const snap = {
+      ...snapshot([
+        { ...event("KickOff"), minute: 0 },
+        goal,
+        { ...event("HalfTime"), minute: 48 },
+        { ...event("SecondHalfStart"), minute: 48 },
+      ]),
+      phase: "SecondHalf",
+      current_minute: 60,
+    };
+    render(<EventFeed events={[goal]} snapshot={snap} showCommentary={false} />);
+    expect(screen.getByText("45+2'")).toBeInTheDocument();
+    expect(screen.queryByText("47'")).not.toBeInTheDocument();
+  });
   it("live statistics exclude future shots and bookings", () => {
     const future = { ...event("ShotOnTarget"), minute: 90 };
     render(<MatchStats snapshot={snapshot([future])} />);

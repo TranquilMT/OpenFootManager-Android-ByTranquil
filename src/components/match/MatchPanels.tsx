@@ -1,3 +1,6 @@
+import { eventClockLabels } from "./eventClock";
+import { reachedMatchEvents } from "./livePitchModel";
+import { formatMatchMinute } from "./matchClock";
 import { useTranslation } from "react-i18next";
 import type { MatchSnapshot, MatchEvent, EnginePlayerData } from "./types";
 import { getEventDisplay, getEventTypeLabel, getPlayerName } from "./helpers";
@@ -26,6 +29,9 @@ export function EventFeed({
     return jersey != null ? `${name} (#${jersey})` : name;
   }
   const { t } = useTranslation();
+  const clockLabels = eventClockLabels(
+    reachedMatchEvents(snapshot.events, snapshot.current_minute),
+  );
   const occurrenceCounts = new Map<string, number>();
   const eventKeys = events.map((event) => {
     const identity = JSON.stringify(event);
@@ -51,8 +57,8 @@ export function EventFeed({
               key={eventKeys[index]}
               className={`flex items-start gap-3 px-3 py-2 rounded-lg transition-colors ${display.important ? "bg-white dark:bg-navy-800/80 border border-gray-200 dark:border-navy-700 shadow-sm" : "opacity-60"}`}
             >
-              <span className="text-gray-600 dark:text-gray-500 tabular-nums font-heading text-sm w-8 text-right flex-shrink-0 pt-0.5">
-                {evt.minute}'
+              <span className="text-gray-600 dark:text-gray-500 tabular-nums font-heading text-sm min-w-8 text-right flex-shrink-0 pt-0.5">
+                {clockLabels.get(evt) ?? formatMatchMinute("", evt.minute)}'
               </span>
               <span aria-hidden="true" className={`text-lg flex-shrink-0 ${display.color}`}>
                 {display.icon}
