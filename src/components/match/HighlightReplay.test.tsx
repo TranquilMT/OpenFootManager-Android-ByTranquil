@@ -52,3 +52,23 @@ it("seeks directly to an action and pauses continuous playback", () => {
   expect(screen.getByRole("button", { name: "match.highlights.play" })).toBeInTheDocument();
   expect(screen.getByText("2 / 2")).toBeInTheDocument();
 });
+
+it("focuses close, traps keyboard focus and restores the opener after disposal", () => {
+  const opener = document.createElement("button");
+  document.body.append(opener);
+  opener.focus();
+  const { unmount } = render(<HighlightReplay clip={clip} snapshot={snapshot} onClose={vi.fn()} />);
+  const close = screen.getByRole("button", { name: "common.close" });
+  expect(close).toHaveFocus();
+  fireEvent.keyDown(screen.getByRole("dialog"), { key: "Tab", shiftKey: true });
+  expect(screen.getByRole("button", { name: "match.highlights.next" })).toHaveFocus();
+  unmount();
+  expect(opener).toHaveFocus();
+  opener.remove();
+});
+it("closes the replay with Escape", () => {
+  const close = vi.fn();
+  render(<HighlightReplay clip={clip} snapshot={snapshot} onClose={close} />);
+  fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
+  expect(close).toHaveBeenCalledOnce();
+});

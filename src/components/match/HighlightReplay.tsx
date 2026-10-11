@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import type { MatchHighlight } from "./highlightModel";
 import type { MatchSnapshot } from "./types";
@@ -17,6 +18,15 @@ export default function HighlightReplay({
   snapshot: MatchSnapshot;
   onClose: () => void;
 }) {
+  const dialogRef = useRef<HTMLElement>(null),
+    closeRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    const previous = document.activeElement;
+    closeRef.current?.focus();
+    return () => {
+      if (previous instanceof HTMLElement && previous.isConnected) previous.focus();
+    };
+  }, []);
   const { t } = useTranslation();
   const playback = useHighlightPlayback(clip.id, clip.events.length, useMatchVisibility());
   const frame = clip.events[playback.frame];
@@ -25,6 +35,27 @@ export default function HighlightReplay({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/80 p-3">
       <section
+        ref={dialogRef}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            event.preventDefault();
+            event.stopPropagation();
+            onClose();
+          }
+          if (event.key !== "Tab") return;
+          const controls = Array.from(
+            dialogRef.current?.querySelectorAll<HTMLElement>("button, input") ?? [],
+          ).filter((element) => !element.hasAttribute("disabled"));
+          const first = controls[0],
+            last = controls[controls.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last?.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first?.focus();
+          }
+        }}
         role="dialog"
         aria-modal="true"
         aria-label={t("match.highlights.replay")}
@@ -34,6 +65,7 @@ export default function HighlightReplay({
           <h2 className="font-heading text-lg font-bold">{t("match.highlights.replay")}</h2>
           <button
             type="button"
+            ref={closeRef}
             onClick={onClose}
             className="min-h-11 rounded-lg px-3 font-semibold"
           >
