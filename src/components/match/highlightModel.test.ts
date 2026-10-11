@@ -18,3 +18,8 @@ it("replays recorded buildup before a goal", () => {
   const events = [event("PassCompleted", 9), event("Cross"), event("Goal")];
   expect(buildMatchHighlights(events, 10)[0].events).toEqual(events);
 });
+it("excludes future and malformed event clocks without mutating history", () => {
+  const events = [event("Goal", 40), event("Goal", 10), event("Goal", -1), event("Goal", NaN)];
+  expect(buildMatchHighlights(events, 20).map((clip) => clip.outcome.minute)).toEqual([10]);
+  expect(events[0].minute).toBe(40);
+});
