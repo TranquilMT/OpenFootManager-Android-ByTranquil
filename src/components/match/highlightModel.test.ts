@@ -37,3 +37,13 @@ it("includes major discipline, injuries and recorded exceptional chances", () =>
     expect(buildMatchHighlights([outcome], 10)).toHaveLength(1);
   }
 });
+it("offers extended chances while keeping routine shots out of key mode", () => {
+  const events = [
+    event("ShotSaved"),
+    event("ShotOffTarget", 11),
+    event("ShotBlocked", 12),
+    event("YellowCard", 13),
+  ];
+  expect(buildMatchHighlights(events, 20, "key")).toHaveLength(0);
+  expect(buildMatchHighlights(events, 20, "extended")).toHaveLength(4);
+});
