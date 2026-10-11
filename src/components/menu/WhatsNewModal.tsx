@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Activity } from "lucide-react";
+import { ArrowRight, Gamepad2, Sparkles } from "lucide-react";
 import { APP_VERSION } from "../../lib/appVersion";
 import { ReleaseNotes } from "../settings/ReleaseNotes";
 
@@ -21,9 +21,14 @@ export function WhatsNewModal() {
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (visible) continueRef.current?.focus();
+    if (!visible) return;
+    const previousFocus = document.activeElement;
+    continueRef.current?.focus();
     const timer = setTimeout(() => setRevealed(true), 40);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus();
+    };
   }, [visible]);
 
   if (!visible) return null;
@@ -58,35 +63,61 @@ export function WhatsNewModal() {
             first.focus();
           }
         }}
-        className="max-h-[calc(100dvh-1.5rem)] w-full max-w-lg overflow-y-auto overscroll-contain rounded-2xl bg-white p-5 text-gray-900 shadow-2xl dark:bg-navy-800 dark:text-gray-100 sm:p-7"
+        className="flex max-h-[calc(100dvh-1.5rem)] w-full max-w-2xl flex-col overflow-hidden rounded-3xl border border-gray-200 bg-white text-gray-900 shadow-2xl dark:border-navy-600 dark:bg-navy-800 dark:text-gray-100"
       >
-        <div
-          aria-hidden="true"
-          className="mb-3 flex size-12 items-center justify-center rounded-2xl bg-primary-500/15 text-primary-600 dark:text-primary-400"
-        >
-          <Activity className="size-7" />
+        <div className="min-h-0 overflow-y-auto overscroll-contain">
+          <header className="border-b border-primary-100 bg-linear-to-br from-primary-50 to-primary-100 p-5 dark:border-navy-600 dark:from-navy-900 dark:to-navy-700 sm:p-7">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <span className="inline-flex items-center gap-2 font-heading text-sm font-bold uppercase tracking-widest text-primary-800 dark:text-primary-300">
+                <Sparkles aria-hidden="true" className="size-4" />
+                {t("settings.whatsNew")}
+              </span>
+              <span className="rounded-full border border-primary-200 bg-white px-3 py-1 font-heading text-sm font-bold text-primary-800 dark:border-navy-600 dark:bg-navy-800 dark:text-primary-300">
+                {VERSION}
+              </span>
+            </div>
+            <div className="flex items-start gap-4">
+              <span
+                aria-hidden="true"
+                className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-primary-700 text-white shadow-lg dark:bg-primary-600 dark:text-white"
+              >
+                <Gamepad2 className="size-8" />
+              </span>
+              <div className="min-w-0">
+                <h2
+                  id="ofm-whats-new-title"
+                  className="font-heading text-2xl font-bold uppercase tracking-wide sm:text-3xl"
+                >
+                  {t("settings.patchWelcome")}
+                </h2>
+                <p className="mt-2 text-sm leading-relaxed text-primary-900 dark:text-gray-200">
+                  {t("phase74.intro")}
+                </p>
+              </div>
+            </div>
+          </header>
+          <div className="px-5 pb-5 sm:px-7">
+            <ReleaseNotes embedded />
+          </div>
         </div>
-        <h2 id="ofm-whats-new-title" className="text-xl font-heading font-bold">
-          {t("settings.patchWelcome")}
-        </h2>
-        <ReleaseNotes embedded />
-        <div className="mt-5 flex flex-col gap-3 border-t border-gray-200 pt-4 dark:border-navy-700">
+        <div className="flex shrink-0 flex-col gap-3 border-t border-gray-200 bg-white px-5 py-4 dark:border-navy-600 dark:bg-navy-800 sm:px-7">
           <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm">
             <input
               type="checkbox"
               checked={doNotShowAgain}
               onChange={(event) => setDoNotShowAgain(event.target.checked)}
-              className="size-5 accent-primary-500"
+              className="size-5 accent-primary-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-700 dark:accent-primary-400 dark:focus-visible:outline-primary-400"
             />
-            {t("menu.doNotShowWhatsNew")}
+            {t("menu.doNotShowWhatsNew", { version: VERSION })}
           </label>
           <button
             ref={continueRef}
             type="button"
             onClick={close}
-            className="min-h-11 rounded-xl bg-primary-500 px-5 font-semibold text-white hover:bg-primary-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
+            className="flex min-h-12 items-center justify-center gap-3 rounded-xl bg-primary-700 px-5 font-heading text-base font-bold uppercase tracking-wider text-white transition-colors hover:bg-primary-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-700 motion-reduce:transition-none dark:bg-primary-600 dark:text-white dark:hover:bg-primary-700 dark:focus-visible:outline-primary-400"
           >
             {t("menu.continueToGame")}
+            <ArrowRight aria-hidden="true" className="size-5" />
           </button>
         </div>
       </div>

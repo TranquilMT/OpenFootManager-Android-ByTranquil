@@ -24,7 +24,7 @@
     "openGithub": "OFMtouch GitHub deposunu aç",
     "openOriginalGithub": "Orijinal OpenFootManager GitHub deposunu aç",
     "originalGame": "Orijinal oyun",
-    "doNotShowWhatsNew": "v0.6.6 için bir daha gösterme",
+    "doNotShowWhatsNew": "{{version}} için bir daha gösterme",
     "continueToGame": "Devam et",
     "mainMenu": "Ana Menü",
     "worldEditor": "Dünya Editörü",
@@ -4451,6 +4451,14 @@
       "controls": "Penaltı sırası maçtan önce veya penaltılar duraklatıldığında seçilebilir. Uygun her oyuncu sırayla kullanır, sonra sıra tekrarlanır.",
       "analysis": "Yeni canlı ve maç sonu analizi kayıtlı büyük fırsatları, taktik değişikliklerini ve oyuncu değişiklikleri sonrası olayları gösterir.",
       "reliability": "Penaltılar aynı maç dakikasında da ilerler. Sonucun kesinleştirilmesi başarısız olursa maç yeniden denemek için korunur."
+    },
+    "intro": "Daha net analizlerle daha akıllı maç günlerinin kontrolünü ele al.",
+    "labels": {
+      "ai": "Daha akıllı teknik direktörler",
+      "match": "Kaleci kararları",
+      "controls": "Penaltı serisi kontrolü",
+      "analysis": "Maç analizi",
+      "reliability": "Maç günü güvenilirliği"
     }
   }
 }

@@ -24,7 +24,7 @@
     "openGithub": "Abrir repositório GitHub do OFMtouch",
     "openOriginalGithub": "Abrir repositório GitHub original do OpenFootManager",
     "originalGame": "Jogo original",
-    "doNotShowWhatsNew": "Não voltar a mostrar na v0.6.6",
+    "doNotShowWhatsNew": "Não voltar a mostrar na {{version}}",
     "continueToGame": "Continuar",
     "mainMenu": "Menu principal",
     "worldEditor": "Editor de Mundo",
@@ -4451,6 +4451,14 @@
       "controls": "A ordem dos penáltis pode ser escolhida antes do jogo ou com a série em pausa. Cada jogador elegível remata antes de se repetir a ordem.",
       "analysis": "A nova análise em direto e após o jogo mostra grandes oportunidades registadas, ajustes táticos e acontecimentos após substituições.",
       "reliability": "Os penáltis continuam mesmo no mesmo minuto de jogo. Se a confirmação do resultado falhar, a partida mantém-se disponível para nova tentativa."
+    },
+    "intro": "Comanda jogos mais inteligentes com uma visão mais clara.",
+    "labels": {
+      "ai": "Treinadores mais inteligentes",
+      "match": "Decisões do guarda-redes",
+      "controls": "Controlo dos penáltis",
+      "analysis": "Análise do jogo",
+      "reliability": "Fiabilidade em jogo"
     }
   }
 }

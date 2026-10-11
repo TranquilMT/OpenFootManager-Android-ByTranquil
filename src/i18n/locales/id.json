@@ -24,7 +24,7 @@
     "openGithub": "Buka repositori GitHub OFMtouch",
     "openOriginalGithub": "Buka repositori GitHub asli OpenFootManager",
     "originalGame": "Game asli",
-    "doNotShowWhatsNew": "Jangan tampilkan lagi untuk v0.6.6",
+    "doNotShowWhatsNew": "Jangan tampilkan lagi untuk {{version}}",
     "continueToGame": "Lanjutkan",
     "mainMenu": "Menu Utama",
     "worldEditor": "Editor Dunia",
@@ -4451,6 +4451,14 @@
       "controls": "Urutan adu penalti dapat dipilih sebelum pertandingan atau saat penalti dijeda. Setiap pemain yang memenuhi syarat menendang sebelum giliran diulang.",
       "analysis": "Analisis baru saat laga dan setelah selesai menampilkan peluang besar tercatat, penyesuaian taktik, dan kejadian setelah pergantian.",
       "reliability": "Adu penalti terus berjalan meskipun menit pertandingan tetap sama. Kegagalan pengesahan hasil mempertahankan sesi pertandingan untuk dicoba kembali."
+    },
+    "intro": "Kendalikan hari pertandingan yang lebih cerdas dengan wawasan yang lebih jelas.",
+    "labels": {
+      "ai": "Pelatih lebih cerdas",
+      "match": "Keputusan penjaga gawang",
+      "controls": "Kontrol adu penalti",
+      "analysis": "Wawasan pertandingan",
+      "reliability": "Keandalan hari pertandingan"
     }
   }
 }

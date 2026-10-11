@@ -24,7 +24,7 @@
     "openGithub": "打开 OFMtouch 的 GitHub 仓库",
     "openOriginalGithub": "打开原版 OpenFootManager 的 GitHub 仓库",
     "originalGame": "原版游戏",
-    "doNotShowWhatsNew": "不再显示 v0.6.6 更新提示",
+    "doNotShowWhatsNew": "不再显示 {{version}} 更新提示",
     "continueToGame": "继续",
     "mainMenu": "主菜单",
     "worldEditor": "世界编辑器",
@@ -4451,6 +4451,14 @@
       "controls": "可在赛前或点球大战暂停时选择主罚顺序。每位符合资格的球员都完成主罚后才会重复。",
       "analysis": "新的实时和赛后分析展示已记录的重大机会、战术调整以及换人后的事件。",
       "reliability": "点球大战在比赛分钟不变时仍会继续。结果确认失败时会保留比赛，以便重试。"
+    },
+    "intro": "掌控更智能的比赛日，获得更清晰的比赛洞察。",
+    "labels": {
+      "ai": "更智能的教练",
+      "match": "门将决策",
+      "controls": "点球大战控制",
+      "analysis": "比赛洞察",
+      "reliability": "比赛日稳定性"
     }
   }
 }

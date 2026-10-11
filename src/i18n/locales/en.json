@@ -24,7 +24,7 @@
     "openGithub": "Open OFMtouch GitHub repository",
     "openOriginalGithub": "Open original OpenFootManager GitHub repository",
     "originalGame": "Original game",
-    "doNotShowWhatsNew": "Don’t show this again for v0.6.6",
+    "doNotShowWhatsNew": "Don’t show this again for {{version}}",
     "continueToGame": "Continue",
     "mainMenu": "Main Menu",
     "worldEditor": "World Editor",
@@ -4451,6 +4451,14 @@
       "controls": "Choose the shootout taker order before matches or while penalties are paused. Each eligible player takes a turn before repeating.",
       "analysis": "New live and full-time analysis shows recorded big chances, tactical adjustments and events after substitutions.",
       "reliability": "Shootouts keep progressing at the same match minute. Failed result finalization retains the live session for retry."
+    },
+    "intro": "Take charge of smarter matchdays with clearer insight.",
+    "labels": {
+      "ai": "Smarter managers",
+      "match": "Keeper decisions",
+      "controls": "Shootout control",
+      "analysis": "Match insights",
+      "reliability": "Matchday reliability"
     }
   }
 }

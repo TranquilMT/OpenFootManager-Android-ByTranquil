@@ -24,7 +24,7 @@
     "openGithub": "Apri il repository GitHub di OFMtouch",
     "openOriginalGithub": "Apri il repository GitHub originale di OpenFootManager",
     "originalGame": "Gioco originale",
-    "doNotShowWhatsNew": "Non mostrare più per la v0.6.6",
+    "doNotShowWhatsNew": "Non mostrare più per la {{version}}",
     "continueToGame": "Continua",
     "mainMenu": "Menu principale",
     "worldEditor": "Editor Mondo",
@@ -4451,6 +4451,14 @@
       "controls": "L’ordine dei rigoristi si può scegliere prima della partita o durante una pausa. Ogni giocatore idoneo tira prima che il turno si ripeta.",
       "analysis": "La nuova analisi durante e dopo la partita mostra grandi occasioni registrate, modifiche tattiche ed eventi dopo le sostituzioni.",
       "reliability": "I rigori continuano anche nello stesso minuto. Se la conferma del risultato fallisce, la partita resta disponibile per riprovare."
+    },
+    "intro": "Guida partite più intelligenti con una visione più chiara.",
+    "labels": {
+      "ai": "Allenatori più intelligenti",
+      "match": "Decisioni del portiere",
+      "controls": "Controllo dei rigori",
+      "analysis": "Analisi della partita",
+      "reliability": "Affidabilità in partita"
     }
   }
 }

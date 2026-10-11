@@ -24,7 +24,7 @@
     "openGithub": "GitHub-Repository von OFMtouch öffnen",
     "openOriginalGithub": "Ursprüngliches GitHub-Repository von OpenFootManager öffnen",
     "originalGame": "Originalspiel",
-    "doNotShowWhatsNew": "Für v0.6.6 nicht erneut anzeigen",
+    "doNotShowWhatsNew": "Für {{version}} nicht erneut anzeigen",
     "continueToGame": "Weiter",
     "mainMenu": "Hauptmenü",
     "worldEditor": "Welt-Editor",
@@ -4451,6 +4451,14 @@
       "controls": "Die Reihenfolge im Elfmeterschießen lässt sich vor Spielen oder während einer Pause festlegen. Jeder berechtigte Spieler tritt vor einer Wiederholung an.",
       "analysis": "Neue Analysen während und nach dem Spiel zeigen erfasste Großchancen, taktische Anpassungen und Ereignisse nach Wechseln.",
       "reliability": "Elfmeterschießen laufen auch bei gleicher Spielminute weiter. Bei fehlgeschlagenem Ergebnisabschluss bleibt die Partie für einen erneuten Versuch erhalten."
+    },
+    "intro": "Übernimm die Kontrolle über intelligentere Spieltage mit klareren Einblicken.",
+    "labels": {
+      "ai": "Klügere Trainer",
+      "match": "Torwartentscheidungen",
+      "controls": "Elfmeterschießen steuern",
+      "analysis": "Spieleinblicke",
+      "reliability": "Zuverlässige Spieltage"
     }
   }
 }

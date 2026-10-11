@@ -24,7 +24,7 @@
     "openGithub": "Otevřít repozitář OFMtouch na GitHubu",
     "openOriginalGithub": "Otevřít původní repozitář OpenFootManager na GitHubu",
     "originalGame": "Původní hra",
-    "doNotShowWhatsNew": "Znovu nezobrazovat pro v0.6.6",
+    "doNotShowWhatsNew": "Znovu nezobrazovat pro {{version}}",
     "continueToGame": "Pokračovat",
     "mainMenu": "Hlavní menu",
     "worldEditor": "Editor světa",
@@ -4451,6 +4451,14 @@
       "controls": "Pořadí penalt lze zvolit před zápasem nebo při pozastavené sérii. Každý způsobilý hráč kope, než se pořadí opakuje.",
       "analysis": "Nová analýza během zápasu i po něm ukazuje zaznamenané velké šance, taktické změny a události po střídání.",
       "reliability": "Penalty pokračují i při stejném zápasovém čase. Při chybě uložení výsledku zůstává rozehraný zápas dostupný pro další pokus."
+    },
+    "intro": "Chytřejší rozhodování a přehlednější zápasový den pod tvou kontrolou.",
+    "labels": {
+      "ai": "Chytřejší trenéři",
+      "match": "Rozhodování brankáře",
+      "controls": "Řízení penaltového rozstřelu",
+      "analysis": "Přehled o zápase",
+      "reliability": "Spolehlivý zápasový den"
     }
   }
 }

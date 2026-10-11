@@ -24,7 +24,7 @@
     "openGithub": "Ouvrir le dépôt GitHub d’OFMtouch",
     "openOriginalGithub": "Ouvrir le dépôt GitHub original d’OpenFootManager",
     "originalGame": "Jeu original",
-    "doNotShowWhatsNew": "Ne plus afficher pour la v0.6.6",
+    "doNotShowWhatsNew": "Ne plus afficher pour la {{version}}",
     "continueToGame": "Continuer",
     "mainMenu": "Menu principal",
     "worldEditor": "Éditeur de Monde",
@@ -4451,6 +4451,14 @@
       "controls": "L’ordre des tirs au but peut être choisi avant le match ou pendant une pause. Chaque joueur admissible tire avant que l’ordre se répète.",
       "analysis": "La nouvelle analyse en direct et après le match présente les grosses occasions enregistrées, les ajustements tactiques et les événements après les changements.",
       "reliability": "Les tirs au but progressent même à la même minute. En cas d’échec de validation du résultat, le match reste disponible pour réessayer."
+    },
+    "intro": "Prenez les commandes de matchs plus intelligents avec une vision plus claire.",
+    "labels": {
+      "ai": "Entraîneurs plus malins",
+      "match": "Décisions du gardien",
+      "controls": "Contrôle des tirs au but",
+      "analysis": "Analyse du match",
+      "reliability": "Fiabilité en match"
     }
   }
 }
