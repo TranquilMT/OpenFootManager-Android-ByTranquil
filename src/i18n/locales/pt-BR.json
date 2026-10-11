@@ -2573,7 +2573,14 @@
       "since": "{{team}}: desde a substituição aos {{minute}} minutos."
     },
     "pitchView": "Campo tático",
-    "shapeOnly": "Formação tática · bola na zona registrada"
+    "shapeOnly": "Formação tática · bola na zona registrada",
+    "highlights": {
+      "title": "Melhores momentos",
+      "key": "Lances principais",
+      "extended": "Resumo ampliado",
+      "replay": "Repetir",
+      "recordedZones": "Ações e zonas registradas; as posições mostram a disposição tática."
+    }
   },
   "endOfSeason": {
     "seasonComplete": "Temporada Encerrada",

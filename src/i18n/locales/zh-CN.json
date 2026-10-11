@@ -2637,7 +2637,14 @@
       "since": "{{team}}：自第{{minute}}分钟换人起。"
     },
     "pitchView": "战术球场",
-    "shapeOnly": "战术阵型 · 球显示在已记录的区域"
+    "shapeOnly": "战术阵型 · 球显示在已记录的区域",
+    "highlights": {
+      "title": "精彩集锦",
+      "key": "关键集锦",
+      "extended": "完整集锦",
+      "replay": "回放",
+      "recordedZones": "已记录的动作和球场区域；球员位置显示战术阵型。"
+    }
   },
   "endOfSeason": {
     "seasonComplete": "赛季结束",

@@ -2637,7 +2637,14 @@
       "since": "{{team}}: desde a substituição aos {{minute}} minutos."
     },
     "pitchView": "Campo tático",
-    "shapeOnly": "Organização tática · bola na zona registada"
+    "shapeOnly": "Organização tática · bola na zona registada",
+    "highlights": {
+      "title": "Melhores momentos",
+      "key": "Momentos principais",
+      "extended": "Resumo alargado",
+      "replay": "Repetição",
+      "recordedZones": "Ações e zonas registadas; as posições mostram a disposição tática."
+    }
   },
   "endOfSeason": {
     "seasonComplete": "Época Completa",

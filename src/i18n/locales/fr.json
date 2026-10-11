@@ -2637,7 +2637,14 @@
       "since": "{{team}} : depuis le changement à la {{minute}}e minute."
     },
     "pitchView": "Terrain tactique",
-    "shapeOnly": "Disposition tactique · ballon dans la zone enregistrée"
+    "shapeOnly": "Disposition tactique · ballon dans la zone enregistrée",
+    "highlights": {
+      "title": "Temps forts",
+      "key": "Temps forts clés",
+      "extended": "Résumé étendu",
+      "replay": "Revoir",
+      "recordedZones": "Actions et zones enregistrées ; les positions représentent le dispositif tactique."
+    }
   },
   "endOfSeason": {
     "seasonComplete": "Saison Terminée",

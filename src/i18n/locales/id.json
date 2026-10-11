@@ -2637,7 +2637,14 @@
       "since": "{{team}}: sejak pergantian pada menit {{minute}}."
     },
     "pitchView": "Lapangan taktik",
-    "shapeOnly": "Formasi taktik · bola di zona yang tercatat"
+    "shapeOnly": "Formasi taktik · bola di zona yang tercatat",
+    "highlights": {
+      "title": "Sorotan",
+      "key": "Sorotan utama",
+      "extended": "Sorotan lengkap",
+      "replay": "Putar ulang",
+      "recordedZones": "Aksi dan zona lapangan yang tercatat; posisi pemain menunjukkan formasi taktis."
+    }
   },
   "endOfSeason": {
     "seasonComplete": "Musim Selesai",

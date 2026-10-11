@@ -2637,7 +2637,14 @@
       "since": "{{team}}: since the substitution at {{minute}}′."
     },
     "pitchView": "Tactical pitch",
-    "shapeOnly": "Tactical shape · ball shown by recorded zone"
+    "shapeOnly": "Tactical shape · ball shown by recorded zone",
+    "highlights": {
+      "title": "Highlights",
+      "key": "Key highlights",
+      "extended": "Extended highlights",
+      "replay": "Replay",
+      "recordedZones": "Recorded actions and pitch zones; player positions show tactical shape."
+    }
   },
   "endOfSeason": {
     "seasonComplete": "Season Complete",

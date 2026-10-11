@@ -2637,7 +2637,14 @@
       "since": "{{team}}: od střídání v {{minute}}. minutě."
     },
     "pitchView": "Taktické hřiště",
-    "shapeOnly": "Taktické rozestavení · míč v zaznamenané zóně"
+    "shapeOnly": "Taktické rozestavení · míč v zaznamenané zóně",
+    "highlights": {
+      "title": "Nejlepší momenty",
+      "key": "Klíčové momenty",
+      "extended": "Rozšířený sestřih",
+      "replay": "Přehrát znovu",
+      "recordedZones": "Zaznamenané akce a zóny hřiště; pozice ukazují taktické rozestavení."
+    }
   },
   "endOfSeason": {
     "seasonComplete": "Sezóna dokončena",

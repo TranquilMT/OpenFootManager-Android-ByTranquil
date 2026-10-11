@@ -2637,7 +2637,14 @@
       "since": "{{team}}: desde el cambio en el minuto {{minute}}."
     },
     "pitchView": "Campo táctico",
-    "shapeOnly": "Disposición táctica · balón según la zona registrada"
+    "shapeOnly": "Disposición táctica · balón según la zona registrada",
+    "highlights": {
+      "title": "Jugadas destacadas",
+      "key": "Jugadas clave",
+      "extended": "Resumen ampliado",
+      "replay": "Repetición",
+      "recordedZones": "Acciones y zonas registradas; las posiciones muestran la disposición táctica."
+    }
   },
   "endOfSeason": {
     "seasonComplete": "Temporada Completa",

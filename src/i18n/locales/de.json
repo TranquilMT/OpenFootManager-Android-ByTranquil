@@ -2637,7 +2637,14 @@
       "since": "{{team}}: seit dem Wechsel in Minute {{minute}}."
     },
     "pitchView": "Taktikfeld",
-    "shapeOnly": "Taktische Aufstellung · Ball in der erfassten Zone"
+    "shapeOnly": "Taktische Aufstellung · Ball in der erfassten Zone",
+    "highlights": {
+      "title": "Höhepunkte",
+      "key": "Wichtige Szenen",
+      "extended": "Erweiterte Höhepunkte",
+      "replay": "Wiederholung",
+      "recordedZones": "Aufgezeichnete Aktionen und Zonen; die Positionen zeigen die taktische Aufstellung."
+    }
   },
   "endOfSeason": {
     "seasonComplete": "Saison beendet",

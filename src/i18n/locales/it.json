@@ -2656,7 +2656,14 @@
       "since": "{{team}}: dalla sostituzione al minuto {{minute}}."
     },
     "pitchView": "Campo tattico",
-    "shapeOnly": "Disposizione tattica · palla nella zona registrata"
+    "shapeOnly": "Disposizione tattica · palla nella zona registrata",
+    "highlights": {
+      "title": "Momenti salienti",
+      "key": "Azioni chiave",
+      "extended": "Sintesi estesa",
+      "replay": "Rivedi",
+      "recordedZones": "Azioni e zone registrate; le posizioni mostrano la disposizione tattica."
+    }
   },
   "notifications": {
     "attentionRequired": "Attenzione Richiesta",
