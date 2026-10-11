@@ -82,3 +82,10 @@ it("shows managerial incidents alone and excludes tactical bookkeeping from atta
   const goal = event("Goal");
   expect(buildMatchHighlights([event("TacticalChange", 9), goal], 10)[0].events).toEqual([goal]);
 });
+it("keeps clip identity stable as history grows and distinguishes same-minute outcomes", () => {
+  const goal = event("Goal", 20);
+  const original = buildMatchHighlights([goal], 20)[0].id;
+  expect(buildMatchHighlights([event("PassCompleted", 1), goal], 20)[0].id).toBe(original);
+  const clips = buildMatchHighlights([goal, { ...goal }], 20);
+  expect(new Set(clips.map((clip) => clip.id)).size).toBe(2);
+});

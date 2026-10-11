@@ -33,8 +33,9 @@ export function buildMatchHighlights(
   mode: HighlightMode = "key",
 ): MatchHighlight[] {
   const clips: MatchHighlight[] = [];
+  const occurrences = new Map<string, number>();
   let sequence: MatchEvent[] = [];
-  for (const [index, event] of reachedMatchEvents(events, minute).entries()) {
+  for (const event of reachedMatchEvents(events, minute)) {
     if (["KickOff", "HalfTime", "SecondHalfStart", "FullTime"].includes(event.event_type)) {
       sequence = [];
       continue;
@@ -55,7 +56,22 @@ export function buildMatchHighlights(
           event.event_type,
         ))
     ) {
-      clips.push({ id: `highlight-${index}`, events: [...sequence], outcome: event });
+      clips.push({
+        id: (() => {
+          const key = JSON.stringify([
+            event.minute,
+            event.side,
+            event.event_type,
+            event.player_id,
+            event.secondary_player_id,
+          ]);
+          const occurrence = occurrences.get(key) ?? 0;
+          occurrences.set(key, occurrence + 1);
+          return `${key}:${occurrence}`;
+        })(),
+        events: [...sequence],
+        outcome: event,
+      });
       sequence = [];
     }
   }
