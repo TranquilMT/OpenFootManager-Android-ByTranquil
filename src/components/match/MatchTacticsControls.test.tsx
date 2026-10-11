@@ -43,3 +43,21 @@ describe("live tactical controls", () => {
     expect(screen.getByRole("combobox", { name: "tactics.playStyle" })).toBeDisabled();
   });
 });
+it("preserves an imported playing style without selecting an unapplied default", () => {
+  const change = vi.fn();
+  render(
+    <MatchTacticsControls
+      team={{ ...team, play_style: "CustomPress" }}
+      disabled={false}
+      onFormationChange={vi.fn()}
+      onPlayStyleChange={change}
+    />,
+  );
+  expect(screen.getByRole("combobox", { name: "tactics.playStyle" })).toHaveTextContent(
+    "common.playStyles.CustomPress",
+  );
+  expect(change).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByRole("combobox", { name: "tactics.playStyle" }));
+  fireEvent.click(screen.getByRole("option", { name: "common.playStyles.Balanced" }));
+  expect(change).toHaveBeenCalledWith("Balanced");
+});

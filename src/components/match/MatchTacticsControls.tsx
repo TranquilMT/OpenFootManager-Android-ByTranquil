@@ -21,6 +21,9 @@ export default function MatchTacticsControls({
   const formations = FORMATIONS.includes(team.formation)
     ? FORMATIONS
     : [team.formation, ...FORMATIONS];
+  const styles = PLAY_STYLES.some((style) => style === team.play_style)
+    ? PLAY_STYLES
+    : [team.play_style, ...PLAY_STYLES];
   return (
     <section aria-label={t("match.tacticsTab")} className="min-h-0 overflow-auto">
       <div className="flex flex-wrap gap-3 border-b border-gray-200 p-4 dark:border-navy-700">
@@ -47,9 +50,9 @@ export default function MatchTacticsControls({
             disabled={disabled}
             aria-label={t("tactics.playStyle")}
           >
-            {PLAY_STYLES.map((style) => (
+            {styles.map((style) => (
               <option key={style} value={style}>
-                {t(`common.playStyles.${style}`)}
+                {t(`common.playStyles.${style}`, { defaultValue: style })}
               </option>
             ))}
           </Select>
