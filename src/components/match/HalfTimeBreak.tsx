@@ -112,12 +112,19 @@ export default function HalfTimeBreak({
     const us = userSide === "Home" ? snapshot.home_score : snapshot.away_score;
     const them = userSide === "Home" ? snapshot.away_score : snapshot.home_score;
     const context = us > them ? "winning" : us < them ? "losing" : "drawing";
+    setActionError(null);
     try {
-      setTalkResults(await invoke("apply_team_talk", { tone: selectedTalk, context }));
+      const results = await invoke<typeof talkResults>("apply_team_talk", {
+        tone: selectedTalk,
+        context,
+      });
+      if (isActive()) {
+        setTalkResults(results);
+        setTalkDelivered(true);
+      }
     } catch {
-      console.error("Team talk failed");
+      if (isActive()) setActionError(t("match.teamTalkFailed"));
     }
-    setTalkDelivered(true);
   };
   return (
     <div

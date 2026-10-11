@@ -55,3 +55,15 @@ it("shows a translated tactical error and allows retry", async () => {
   expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   expect(props.onUpdateSnapshot).toHaveBeenCalledOnce();
 });
+it("does not mark a failed team talk as delivered", async () => {
+  invoke.mockRejectedValueOnce(new Error("offline"));
+  setup();
+  fireEvent.click(screen.getByRole("button", { name: /match.teamTalkOptions.calm.label/ }));
+  fireEvent.click(screen.getByRole("button", { name: "match.deliverTeamTalk" }));
+  expect(await screen.findByRole("alert")).toHaveTextContent("match.teamTalkFailed");
+  expect(screen.getByRole("button", { name: "match.deliverTeamTalk" })).toBeEnabled();
+  expect(screen.queryByText("match.delivered")).not.toBeInTheDocument();
+  invoke.mockResolvedValueOnce([]);
+  fireEvent.click(screen.getByRole("button", { name: "match.deliverTeamTalk" }));
+  expect(await screen.findByText("match.delivered")).toBeInTheDocument();
+});
