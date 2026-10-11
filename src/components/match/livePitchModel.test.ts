@@ -46,6 +46,19 @@ describe("live pitch model", () => {
     expect(ballZonePosition("constructor")).toBeNull();
     expect(ballZonePosition("__proto__")).toBeNull();
   });
+  it.each(["4.5-3-2", "Infinity-3-2", "4-0-6", "4-3", "4-3-4", "4-x-3-3"])(
+    "keeps every player visible for malformed formation %s",
+    (formation) => {
+      const result = buildLivePitchPlayers({ ...team, formation }, "Home", []);
+      expect(result).toHaveLength(11);
+      expect(
+        result.every(
+          ({ x, y }) =>
+            Number.isFinite(x) && Number.isFinite(y) && x > 0 && x < 50 && y > 0 && y < 100,
+        ),
+      ).toBe(true);
+    },
+  );
   it("excludes future and malformed events and keeps same-minute order", () => {
     const events = [22, 0, 23, NaN, -1, 22].map(
       (minute, i) => ({ minute, player_id: String(i) }) as MatchEvent,

@@ -2,6 +2,16 @@ import { useId, type ReactNode } from "react";
 import { buildPitchRows, normalisePosition } from "../squad/SquadTab.helpers";
 import type { EnginePlayerData } from "./types";
 
+function isValidPitchFormation(formation: string): boolean {
+  const lines = formation.split("-").map(Number);
+  return (
+    lines.length >= 3 &&
+    lines.length <= 5 &&
+    lines.every((count) => Number.isInteger(count) && count > 0 && count <= 10) &&
+    lines.reduce((total, count) => total + count, 0) === 10
+  );
+}
+
 interface FormationSlot {
   player: EnginePlayerData;
   x: number;
@@ -23,6 +33,7 @@ function buildSlotAlignedSlots(
   players: EnginePlayerData[],
   sentOff: string[],
 ): FormationSlot[] | null {
+  if (!isValidPitchFormation(formation)) return null;
   const rows = buildPitchRows(formation);
   const slotCount = rows.reduce((sum, row) => sum + row.positions.length, 0);
   if (slotCount !== players.length) {
@@ -64,7 +75,7 @@ export function buildFormationSlots(
   // or non-numeric ("442", "5-5", "abc") can't be laid out by the row logic
   // below without dropping the midfield/forward rows, so fall back to an even
   // single-row spread that still renders every player.
-  if (nums.length < 3 || nums.some((n) => Number.isNaN(n))) {
+  if (!isValidPitchFormation(formation)) {
     return active.map((p, i) => ({
       player: p,
       x: Math.round((100 * (i + 1)) / (active.length + 1)),
