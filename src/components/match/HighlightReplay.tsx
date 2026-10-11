@@ -42,6 +42,22 @@ export default function HighlightReplay({
             event.stopPropagation();
             onClose();
           }
+          if (!(event.target instanceof HTMLInputElement)) {
+            const frame =
+              event.key === "ArrowLeft"
+                ? playback.frame - 1
+                : event.key === "ArrowRight"
+                  ? playback.frame + 1
+                  : event.key === "Home"
+                    ? 0
+                    : event.key === "End"
+                      ? clip.events.length - 1
+                      : null;
+            if (frame !== null) {
+              event.preventDefault();
+              playback.dispatch({ type: "seek", frame });
+            }
+          }
           if (event.key !== "Tab") return;
           const controls = Array.from(
             dialogRef.current?.querySelectorAll<HTMLElement>("button, input") ?? [],

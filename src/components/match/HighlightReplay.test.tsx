@@ -72,3 +72,17 @@ it("closes the replay with Escape", () => {
   fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
   expect(close).toHaveBeenCalledOnce();
 });
+it("supports action navigation keys without overriding the native seek slider", () => {
+  render(<HighlightReplay clip={clip} snapshot={snapshot} onClose={vi.fn()} />);
+  const dialog = screen.getByRole("dialog");
+  fireEvent.keyDown(dialog, { key: "ArrowRight" });
+  expect(screen.getByText("match.eventTypes.Goal")).toBeInTheDocument();
+  fireEvent.keyDown(dialog, { key: "Home" });
+  expect(screen.getByText("match.eventTypes.PassCompleted")).toBeInTheDocument();
+  fireEvent.keyDown(screen.getByRole("slider"), { key: "End" });
+  expect(screen.getByText("match.eventTypes.PassCompleted")).toBeInTheDocument();
+  fireEvent.keyDown(dialog, { key: "End" });
+  expect(screen.getByText("match.eventTypes.Goal")).toBeInTheDocument();
+  fireEvent.keyDown(dialog, { key: "ArrowLeft" });
+  expect(screen.getByText("match.eventTypes.PassCompleted")).toBeInTheDocument();
+});
