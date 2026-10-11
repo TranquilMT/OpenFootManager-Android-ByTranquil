@@ -220,6 +220,14 @@ export default function HalfTimeBreak({
           </div>
         </div>
       </header>
+      {pending && (
+        <p
+          role="status"
+          className="mx-3 mt-3 rounded-lg bg-primary-50 p-3 text-sm text-primary-800 dark:bg-primary-900 dark:text-white"
+        >
+          {t("common.loading")}
+        </p>
+      )}
       {actionError && (
         <p
           role="alert"
@@ -365,6 +373,7 @@ export default function HalfTimeBreak({
               </div>
               <button
                 type="button"
+                disabled={pending}
                 onClick={() => setShowSubPanel(true)}
                 className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-gray-200 font-heading text-sm font-bold uppercase tracking-wider dark:bg-navy-700"
               >

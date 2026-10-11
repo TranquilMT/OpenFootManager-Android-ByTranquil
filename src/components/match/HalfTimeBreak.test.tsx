@@ -139,3 +139,20 @@ it("uses the translated break instruction", () => {
   expect(screen.getByText("match.makeChanges")).toBeInTheDocument();
   expect(screen.queryByText("Make your changes, then resume.")).not.toBeInTheDocument();
 });
+it("announces pending break changes and disables opening another workspace", async () => {
+  let release!: (value: ReturnType<typeof createSnapshot>) => void;
+  invoke.mockImplementation(
+    () =>
+      new Promise((resolve) => {
+        release = resolve;
+      }),
+  );
+  const { props } = setup();
+  fireEvent.click(screen.getByRole("button", { name: "4-3-3" }));
+  expect(screen.getByRole("status")).toHaveTextContent("common.loading");
+  expect(screen.getByRole("button", { name: "match.makeSubstitution" })).toBeDisabled();
+  await act(async () => {
+    release(props.snapshot);
+  });
+  expect(screen.queryByRole("status")).not.toBeInTheDocument();
+});
