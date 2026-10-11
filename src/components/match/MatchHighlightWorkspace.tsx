@@ -4,6 +4,7 @@ import { buildMatchHighlights, type MatchHighlight } from "./highlightModel";
 import HighlightModeControls, { type HighlightPreference } from "./HighlightModeControls";
 import HighlightList from "./HighlightList";
 import HighlightReplay from "./HighlightReplay";
+import { reachedMatchEvents } from "./livePitchModel";
 import { EventFeed } from "./MatchPanels";
 export default function MatchHighlightWorkspace({
   snapshot,
@@ -39,7 +40,11 @@ export default function MatchHighlightWorkspace({
         }}
       />
       {mode === "off" ? (
-        <EventFeed events={snapshot.events} snapshot={snapshot} showCommentary={showCommentary} />
+        <EventFeed
+          events={reachedMatchEvents(snapshot.events, snapshot.current_minute)}
+          snapshot={snapshot}
+          showCommentary={showCommentary}
+        />
       ) : (
         <HighlightList
           clips={clips}

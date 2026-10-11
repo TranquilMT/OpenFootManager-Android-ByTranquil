@@ -31,3 +31,11 @@ it("opens a clip and reports replay ownership until close or disposal", () => {
   unmount();
   expect(ownership).toHaveBeenLastCalledWith(false);
 });
+it("keeps commentary-only mode within the reached match clock", () => {
+  const future = { ...snapshot.events[0], minute: 60, event_type: "RedCard" };
+  render(
+    <MatchHighlightWorkspace snapshot={{ ...snapshot, events: [...snapshot.events, future] }} />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "match.events" }));
+  expect(screen.queryByText("60'")).not.toBeInTheDocument();
+});

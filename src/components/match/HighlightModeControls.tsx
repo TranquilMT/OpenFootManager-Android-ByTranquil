@@ -10,8 +10,7 @@ export default function HighlightModeControls({
 }) {
   const { t } = useTranslation();
   return (
-    <div
-      role="group"
+    <fieldset
       aria-label={t("match.highlights.title")}
       className="flex shrink-0 flex-wrap gap-2 p-2"
     >
@@ -26,6 +25,6 @@ export default function HighlightModeControls({
           {t(mode === "off" ? "match.events" : `match.highlights.${mode}`)}
         </button>
       ))}
-    </div>
+    </fieldset>
   );
 }

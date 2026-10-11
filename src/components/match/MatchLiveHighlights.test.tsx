@@ -81,7 +81,7 @@ it("holds live engine stepping while a historical replay is open", async () => {
 });
 it("suspends live spoken commentary while a recorded replay is being reviewed", () => {
   setup();
-  expect(speech.mock.calls.at(-1)?.[4]).toBe(false);
+  expect(speech.mock.calls[speech.mock.calls.length - 1]?.[4]).toBe(false);
   fireEvent.click(screen.getByRole("button", { name: "common.close" }));
-  expect(speech.mock.calls.at(-1)?.[4]).toBe(true);
+  expect(speech.mock.calls[speech.mock.calls.length - 1]?.[4]).toBe(true);
 });
