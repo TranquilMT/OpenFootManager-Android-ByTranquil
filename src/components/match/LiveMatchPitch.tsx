@@ -1,6 +1,6 @@
 import PitchTeamIdentity from "./PitchTeamIdentity";
 import { pitchPlayerLabel } from "./pitchPlayerLabel";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, BatteryLow } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { buildLivePitchPlayers, ballZonePosition, latestReachedMatchEvent } from "./livePitchModel";
 import type { MatchSnapshot } from "./types";
@@ -64,6 +64,8 @@ export default function LiveMatchPitch({
           return buildLivePitchPlayers(team, side, snapshot.sent_off).map(
             ({ player, x, y, slotPosition }) => {
               const goalkeeper = (slotPosition ?? player.position) === "Goalkeeper";
+              const lowFitness =
+                Number.isFinite(player.condition) && player.condition >= 0 && player.condition < 50;
               const booked =
                 (side === "Home" ? snapshot.home_yellows : snapshot.away_yellows)?.[player.id] > 0;
               const active =
@@ -80,6 +82,16 @@ export default function LiveMatchPitch({
                   >
                     {pitchPlayerLabel(player.name, playerJerseyMap?.get(player.id))}
                   </span>
+                  {lowFitness && (
+                    <span
+                      role="img"
+                      aria-label={`${t("common.condition")}: ${Math.round(player.condition)}%`}
+                      title={`${t("common.condition")}: ${Math.round(player.condition)}%`}
+                      className="pointer-events-none absolute left-0 top-0 rounded-full bg-navy-900 p-0.5 text-yellow-400 dark:bg-navy-900 dark:text-yellow-400"
+                    >
+                      <BatteryLow aria-hidden="true" className="h-3 w-3" />
+                    </span>
+                  )}
                   {goalkeeper && (
                     <span
                       role="img"

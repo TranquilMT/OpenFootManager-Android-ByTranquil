@@ -113,6 +113,23 @@ describe("combined live pitch", () => {
     expect(screen.getByTitle("home player 0")).toHaveTextContent("common.posAbbr.Goalkeeper");
     expect(screen.getByTitle("home player 4")).not.toHaveTextContent("common.posAbbr.Goalkeeper");
   });
+  it("flags recorded low fitness and clears the warning when the player recovers", () => {
+    const withCondition = (condition: number) => ({
+      ...snapshot,
+      home_team: {
+        ...snapshot.home_team,
+        players: snapshot.home_team.players.map((player, index) =>
+          index === 4 ? { ...player, condition } : player,
+        ),
+      },
+    });
+    const view = render(<LiveMatchPitch snapshot={withCondition(23)} />);
+    expect(screen.getByLabelText("common.condition: 23%")).toBeInTheDocument();
+    view.rerender(<LiveMatchPitch snapshot={withCondition(80)} />);
+    expect(screen.queryByLabelText("common.condition: 23%")).not.toBeInTheDocument();
+    view.rerender(<LiveMatchPitch snapshot={withCondition(NaN)} />);
+    expect(screen.queryByLabelText(/common.condition:/)).not.toBeInTheDocument();
+  });
   it("does not expose decisions while a command is pending", () => {
     render(<LiveMatchPitch snapshot={snapshot} userSide="Home" onPlayer={vi.fn()} disabled />);
     expect(screen.getByRole("button", { name: "home player 4" })).toBeDisabled();
