@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { getEventTypeLabel } from "./helpers";
+import { getEventTypeLabel, getPlayerName } from "./helpers";
 import { getCommentary } from "./commentary";
 import { reachedMatchEvents } from "./livePitchModel";
 import { formatMatchMinute } from "./matchClock";
@@ -39,6 +39,9 @@ export default function LatestMatchCommentary({
               ? getEventTypeLabel(latest.event_type, t)
               : t(snapshot.phase === "PreKickOff" ? "match.waitingKickoff" : "match.noEventsYet"))}
         </p>
+        {!showCommentary && latest?.player_id && (
+          <p className="break-words text-xs">{getPlayerName(snapshot, latest.player_id)}</p>
+        )}
       </div>
     </div>
   );

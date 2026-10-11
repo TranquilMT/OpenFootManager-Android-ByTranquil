@@ -10,8 +10,8 @@ vi.mock("./commentary", () => ({
   }),
 }));
 const snapshot = {
-  home_team: { name: "Home FC" },
-  away_team: { name: "Away FC" },
+  home_team: { name: "Home FC", players: [] },
+  away_team: { name: "Away FC", players: [{ id: "now", name: "Away Striker" }] },
   phase: "FirstHalf",
   current_minute: 22,
   events: [
@@ -30,6 +30,7 @@ describe("latest commentary", () => {
   it("respects concise event mode when commentary is disabled", () => {
     render(<LatestMatchCommentary snapshot={snapshot} showCommentary={false} />);
     expect(screen.queryByText("Action now")).not.toBeInTheDocument();
+    expect(screen.getByText("Away Striker")).toBeInTheDocument();
     expect(screen.getByText("match.eventTypes.ShotOnTarget")).toBeInTheDocument();
   });
   it("identifies the team behind the latest action", () => {
