@@ -273,6 +273,7 @@ export default function HalfTimeBreak({
                       <button
                         type="button"
                         key={opt.id}
+                        aria-pressed={selectedTalk === opt.id}
                         disabled={pending}
                         onClick={() => setSelectedTalk(opt.id)}
                         className={`flex min-h-14 w-full items-center gap-3 rounded-xl p-3 text-left active:scale-[.99] ${selectedTalk === opt.id ? "bg-primary-500/20 ring-2 ring-primary-500/50" : "bg-gray-100 dark:bg-navy-700/50"}`}
@@ -343,6 +344,7 @@ export default function HalfTimeBreak({
                   <button
                     type="button"
                     key={f}
+                    aria-pressed={userTeam.formation === f}
                     disabled={pending}
                     onClick={() => handleFormationChange(f)}
                     className={`min-h-11 rounded-lg text-sm font-heading font-bold ${userTeam.formation === f ? "bg-primary-500/20 text-primary-500 ring-1 ring-primary-500/50" : "bg-gray-100 dark:bg-navy-700"}`}
@@ -361,6 +363,7 @@ export default function HalfTimeBreak({
                   <button
                     type="button"
                     key={style}
+                    aria-pressed={userTeam.play_style === style}
                     disabled={pending}
                     onClick={() => handlePlayStyleChange(style)}
                     className={`flex min-h-12 items-center justify-center gap-2 rounded-lg px-2 text-xs font-heading font-bold ${userTeam.play_style === style ? "bg-primary-500/20 text-primary-500 ring-1 ring-primary-500/50" : "bg-gray-100 dark:bg-navy-700"}`}

@@ -121,3 +121,15 @@ it("ignores a break response after the match moves to another phase", async () =
   });
   expect(props.onUpdateSnapshot).not.toHaveBeenCalled();
 });
+it("exposes selected formation, style, and talk to assistive technology", () => {
+  setup();
+  expect(screen.getByRole("button", { name: "4-4-2" })).toHaveAttribute("aria-pressed", "true");
+  expect(screen.getByRole("button", { name: "common.playStyles.Balanced" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  const calm = screen.getByRole("button", { name: /match.teamTalkOptions.calm.label/ });
+  expect(calm).toHaveAttribute("aria-pressed", "false");
+  fireEvent.click(calm);
+  expect(calm).toHaveAttribute("aria-pressed", "true");
+});
