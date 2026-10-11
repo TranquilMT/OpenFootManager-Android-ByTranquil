@@ -15,6 +15,8 @@ export default function HighlightList({
 }) {
   const { t } = useTranslation();
   const clocks = eventClockLabels(reachedMatchEvents(snapshot.events, snapshot.current_minute));
+  if (!clips.length)
+    return <p className="p-4 text-sm text-gray-500 dark:text-gray-400">{t("match.noEventsYet")}</p>;
   return (
     <ol className="space-y-2">
       {[...clips].reverse().map((clip) => (

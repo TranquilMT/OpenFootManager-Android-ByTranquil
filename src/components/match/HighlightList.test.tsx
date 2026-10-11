@@ -23,3 +23,8 @@ it("offers reached clips with their outcome, player and club", () => {
   fireEvent.click(screen.getByRole("button", { name: /match.highlights.replay/ }));
   expect(select).toHaveBeenCalledWith(clips[0]);
 });
+
+it("shows an explicit empty state rather than a blank highlight panel", () => {
+  render(<HighlightList clips={[]} snapshot={createSnapshot()} onSelect={vi.fn()} />);
+  expect(screen.getByText("match.noEventsYet")).toBeInTheDocument();
+});
