@@ -210,6 +210,8 @@ describe("live match decisions", () => {
     );
     fireEvent.click(screen.getByRole("button", { name: "dashboard.tactics" }));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByText("match.paused")).toBeInTheDocument();
+    expect(screen.queryByText("match.live")).not.toBeInTheDocument();
     expect(
       screen.getByRole("combobox", { name: "tactics.phaseSettings.tempo" }),
     ).toBeInTheDocument();

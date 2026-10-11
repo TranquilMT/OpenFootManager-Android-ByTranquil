@@ -369,7 +369,7 @@ export default function MatchLive({
           awayScore={snapshot.away_score}
           phase={snapshot.phase}
           minute={snapshot.current_minute}
-          running={isRunning && matchVisible && !isFinished}
+          running={isRunning && matchVisible && !decisionsClosed && !showSubPanel}
         />
       }
     >
