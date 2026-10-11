@@ -405,7 +405,10 @@ export default function MatchLive({
                 }}
               />
             </div>
-            <LatestMatchCommentary snapshot={snapshot} />
+            <LatestMatchCommentary
+              snapshot={snapshot}
+              showCommentary={settings.show_match_commentary}
+            />
             {!isSpectator && userSide && (
               <MatchDecisionAlerts
                 snapshot={snapshot}

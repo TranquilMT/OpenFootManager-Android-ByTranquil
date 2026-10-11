@@ -25,6 +25,11 @@ describe("latest commentary", () => {
     expect(screen.queryByText("Action start")).not.toBeInTheDocument();
     expect(screen.queryByText("Action future")).not.toBeInTheDocument();
   });
+  it("respects concise event mode when commentary is disabled", () => {
+    render(<LatestMatchCommentary snapshot={snapshot} showCommentary={false} />);
+    expect(screen.queryByText("Action now")).not.toBeInTheDocument();
+    expect(screen.getByText("match.eventTypes.ShotOnTarget")).toBeInTheDocument();
+  });
   it("shows waiting text when no reached action exists", () => {
     render(<LatestMatchCommentary snapshot={{ ...snapshot, events: [] }} />);
     expect(screen.getByText("match.noEventsYet")).toBeInTheDocument();

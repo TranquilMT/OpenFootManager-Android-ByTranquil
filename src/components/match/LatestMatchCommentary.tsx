@@ -1,14 +1,21 @@
 import { useTranslation } from "react-i18next";
+import { getEventTypeLabel } from "./helpers";
 import { getCommentary } from "./commentary";
 import { reachedMatchEvents } from "./livePitchModel";
 import { formatMatchMinute } from "./matchClock";
 import type { MatchSnapshot } from "./types";
 
-export default function LatestMatchCommentary({ snapshot }: { snapshot: MatchSnapshot }) {
+export default function LatestMatchCommentary({
+  snapshot,
+  showCommentary = true,
+}: {
+  snapshot: MatchSnapshot;
+  showCommentary?: boolean;
+}) {
   const { t } = useTranslation();
   const reached = reachedMatchEvents(snapshot.events, snapshot.current_minute);
   const latest = reached[reached.length - 1];
-  const commentary = latest ? getCommentary(latest, snapshot, t) : null;
+  const commentary = latest && showCommentary ? getCommentary(latest, snapshot, t) : null;
   return (
     <div
       aria-live="polite"
@@ -22,7 +29,9 @@ export default function LatestMatchCommentary({ snapshot }: { snapshot: MatchSna
       )}
       <p className="min-w-0 leading-snug">
         {commentary?.line ??
-          t(snapshot.phase === "PreKickOff" ? "match.waitingKickoff" : "match.noEventsYet")}
+          (latest
+            ? getEventTypeLabel(latest.event_type, t)
+            : t(snapshot.phase === "PreKickOff" ? "match.waitingKickoff" : "match.noEventsYet"))}
       </p>
     </div>
   );
