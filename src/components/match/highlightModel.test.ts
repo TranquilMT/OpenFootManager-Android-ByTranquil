@@ -104,3 +104,12 @@ it("uses valid recorded xG to include big chances without accepting invalid prob
       ),
     ).toHaveLength(0);
 });
+
+it("shows shootout kicks as standalone clips", () => {
+  const goal = event("ShootoutGoal", 125);
+  expect(
+    buildMatchHighlights([event("PassCompleted", 124), goal, event("ShootoutMiss", 126)], 126).map(
+      (clip) => clip.events.length,
+    ),
+  ).toEqual([1, 1]);
+});

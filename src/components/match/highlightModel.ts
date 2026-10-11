@@ -11,6 +11,8 @@ const OUTCOMES = new Set([
   "PenaltyGoal",
   "PenaltyAwarded",
   "PenaltyMiss",
+  "ShootoutGoal",
+  "ShootoutMiss",
   "RedCard",
   "SecondYellow",
   "Injury",
@@ -54,7 +56,11 @@ export function buildMatchHighlights(
     if (sequence.at(-1)?.side !== event.side) sequence = [];
     if (sequence.length && event.minute - sequence[sequence.length - 1].minute > 3) sequence = [];
     if (["Substitution", "TacticalChange"].includes(event.event_type)) continue;
-    if (["Injury", "RedCard", "SecondYellow", "YellowCard"].includes(event.event_type))
+    if (
+      ["Injury", "RedCard", "SecondYellow", "YellowCard", "ShootoutGoal", "ShootoutMiss"].includes(
+        event.event_type,
+      )
+    )
       sequence = [];
     sequence.push(event);
     sequence = sequence.slice(-8);
