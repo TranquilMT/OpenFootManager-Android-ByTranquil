@@ -44,6 +44,18 @@ describe("combined live pitch", () => {
     fireEvent.click(screen.getByRole("button", { name: "home player 4" }));
     expect(onPlayer).toHaveBeenCalledWith("home4");
   });
+  it("identifies booked players without replacing their jersey", () => {
+    render(
+      <LiveMatchPitch
+        snapshot={{ ...snapshot, home_yellows: { home4: 1 }, away_yellows: {} }}
+        playerJerseyMap={new Map([["home4", 8]])}
+      />,
+    );
+    const player = screen.getByTitle("home player 4");
+    expect(player).toHaveTextContent("8");
+    expect(player.querySelector('[aria-label="match.eventTypes.YellowCard"]')).toBeInTheDocument();
+    expect(screen.getAllByLabelText("match.eventTypes.YellowCard")).toHaveLength(1);
+  });
   it("does not expose decisions while a command is pending", () => {
     render(<LiveMatchPitch snapshot={snapshot} userSide="Home" onPlayer={vi.fn()} disabled />);
     expect(screen.getByRole("button", { name: "home player 4" })).toBeDisabled();

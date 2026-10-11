@@ -46,21 +46,32 @@ export default function LiveMatchPitch({
         {(["Home", "Away"] as const).flatMap((side) => {
           const team = side === "Home" ? snapshot.home_team : snapshot.away_team;
           return buildLivePitchPlayers(team, side, snapshot.sent_off).map(({ player, x, y }) => {
+            const booked =
+              (side === "Home" ? snapshot.home_yellows : snapshot.away_yellows)?.[player.id] > 0;
             const active = latest?.player_id === player.id;
             const interactive = side === userSide && onPlayer;
             const style = { left: `${x}%`, top: `${y}%` };
             const className = `absolute flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-400 dark:focus-visible:ring-accent-400 ${active ? "ring-2 ring-accent-400 dark:ring-accent-400" : ""}`;
             const token = (
-              <span
-                className={`flex h-7 w-7 items-center justify-center rounded-full border-2 text-xs font-bold shadow-sm ${side === "Home" ? "border-white bg-white text-navy-900 dark:border-white dark:bg-white dark:text-navy-900" : "border-accent-400 bg-accent-400 text-navy-900 dark:border-accent-400 dark:bg-accent-400 dark:text-navy-900"}`}
-              >
-                {playerJerseyMap?.get(player.id) ??
-                  player.name
-                    .split(" ")
-                    .map((part) => part[0])
-                    .slice(0, 2)
-                    .join("")}
-              </span>
+              <>
+                <span
+                  className={`flex h-7 w-7 items-center justify-center rounded-full border-2 text-xs font-bold shadow-sm ${side === "Home" ? "border-white bg-white text-navy-900 dark:border-white dark:bg-white dark:text-navy-900" : "border-accent-400 bg-accent-400 text-navy-900 dark:border-accent-400 dark:bg-accent-400 dark:text-navy-900"}`}
+                >
+                  {playerJerseyMap?.get(player.id) ??
+                    player.name
+                      .split(" ")
+                      .map((part) => part[0])
+                      .slice(0, 2)
+                      .join("")}
+                </span>
+                {booked && (
+                  <span
+                    role="img"
+                    aria-label={t("match.eventTypes.YellowCard")}
+                    className="absolute right-1 top-1 h-3 w-2 rounded-sm bg-yellow-400 dark:bg-yellow-400"
+                  />
+                )}
+              </>
             );
             return interactive ? (
               <button
