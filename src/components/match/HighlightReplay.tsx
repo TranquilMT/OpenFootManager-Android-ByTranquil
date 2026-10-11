@@ -1,0 +1,57 @@
+import { useTranslation } from "react-i18next";
+import type { MatchHighlight } from "./highlightModel";
+import type { MatchSnapshot } from "./types";
+import { useHighlightPlayback } from "./useHighlightPlayback";
+import { useMatchVisibility } from "./useMatchVisibility";
+import { highlightScore } from "./highlightScore";
+import HighlightZonePitch from "./HighlightZonePitch";
+import HighlightNarration from "./HighlightNarration";
+import HighlightActors from "./HighlightActors";
+import HighlightChance from "./HighlightChance";
+export default function HighlightReplay({
+  clip,
+  snapshot,
+  onClose,
+}: {
+  clip: MatchHighlight;
+  snapshot: MatchSnapshot;
+  onClose: () => void;
+}) {
+  const { t } = useTranslation();
+  const playback = useHighlightPlayback(clip.id, clip.events.length, useMatchVisibility());
+  const frame = clip.events[playback.frame];
+  if (!frame) return null;
+  const score = highlightScore(snapshot.events, frame);
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/80 p-3">
+      <section
+        role="dialog"
+        aria-modal="true"
+        aria-label={t("match.highlights.replay")}
+        className="flex max-h-[calc(100dvh-1.5rem)] w-full max-w-2xl flex-col overflow-hidden rounded-xl bg-white text-gray-900 shadow-xl dark:bg-navy-800 dark:text-white"
+      >
+        <header className="flex shrink-0 items-center justify-between gap-3 border-b border-gray-200 p-3 dark:border-navy-700">
+          <h2 className="font-heading text-lg font-bold">{t("match.highlights.replay")}</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className="min-h-11 rounded-lg px-3 font-semibold"
+          >
+            {t("common.close")}
+          </button>
+        </header>
+        <div className="touch-scroll min-h-0 space-y-3 overflow-auto p-3">
+          {score && (
+            <p className="text-center text-2xl font-bold tabular-nums">
+              {score.home} – {score.away}
+            </p>
+          )}
+          <HighlightZonePitch zone={frame.zone} />
+          <HighlightNarration frame={frame} snapshot={snapshot} />
+          <HighlightActors frame={frame} snapshot={snapshot} />
+          <HighlightChance frame={frame} />
+        </div>
+      </section>
+    </div>
+  );
+}
