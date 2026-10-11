@@ -2654,7 +2654,9 @@
       "afterSubs": "Dopo l’ultima sostituzione: tiri / gol subiti",
       "explanation": "Le grandi occasioni usano solo gli xG registrati. I dati dopo le sostituzioni sono osservazioni, non prove di causalità.",
       "since": "{{team}}: dalla sostituzione al minuto {{minute}}."
-    }
+    },
+    "pitchView": "Campo tattico",
+    "shapeOnly": "Disposizione tattica · palla nella zona registrata"
   },
   "notifications": {
     "attentionRequired": "Attenzione Richiesta",

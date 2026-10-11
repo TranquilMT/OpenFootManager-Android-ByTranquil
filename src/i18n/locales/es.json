@@ -2635,7 +2635,9 @@
       "afterSubs": "Tras el último cambio: tiros / goles encajados",
       "explanation": "Las grandes ocasiones usan solo el xG registrado. Las cifras tras los cambios son observaciones, no pruebas de causalidad.",
       "since": "{{team}}: desde el cambio en el minuto {{minute}}."
-    }
+    },
+    "pitchView": "Campo táctico",
+    "shapeOnly": "Disposición táctica · balón según la zona registrada"
   },
   "endOfSeason": {
     "seasonComplete": "Temporada Completa",

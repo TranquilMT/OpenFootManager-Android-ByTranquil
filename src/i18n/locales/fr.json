@@ -2635,7 +2635,9 @@
       "afterSubs": "Après le dernier changement : tirs / buts encaissés",
       "explanation": "Les grosses occasions reposent uniquement sur le xG enregistré. Les chiffres après les changements sont des observations, sans lien de causalité établi.",
       "since": "{{team}} : depuis le changement à la {{minute}}e minute."
-    }
+    },
+    "pitchView": "Terrain tactique",
+    "shapeOnly": "Disposition tactique · ballon dans la zone enregistrée"
   },
   "endOfSeason": {
     "seasonComplete": "Saison Terminée",

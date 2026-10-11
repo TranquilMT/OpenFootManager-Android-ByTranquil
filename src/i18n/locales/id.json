@@ -2635,7 +2635,9 @@
       "afterSubs": "Setelah pergantian terakhir: tembakan / kebobolan",
       "explanation": "Peluang besar hanya memakai xG tercatat. Angka setelah pergantian adalah pengamatan, bukan bukti sebab akibat.",
       "since": "{{team}}: sejak pergantian pada menit {{minute}}."
-    }
+    },
+    "pitchView": "Lapangan taktik",
+    "shapeOnly": "Formasi taktik · bola di zona yang tercatat"
   },
   "endOfSeason": {
     "seasonComplete": "Musim Selesai",

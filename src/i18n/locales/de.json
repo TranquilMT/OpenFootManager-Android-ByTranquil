@@ -2635,7 +2635,9 @@
       "afterSubs": "Nach letztem Wechsel: Schüsse / Gegentore",
       "explanation": "Großchancen beruhen nur auf erfasstem xG. Zahlen nach Wechseln sind Beobachtungen und belegen keine Ursache.",
       "since": "{{team}}: seit dem Wechsel in Minute {{minute}}."
-    }
+    },
+    "pitchView": "Taktikfeld",
+    "shapeOnly": "Taktische Aufstellung · Ball in der erfassten Zone"
   },
   "endOfSeason": {
     "seasonComplete": "Saison beendet",

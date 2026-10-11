@@ -2635,7 +2635,9 @@
       "afterSubs": "Son değişiklikten sonra: şut / yenilen gol",
       "explanation": "Büyük fırsatlar yalnızca kayıtlı xG kullanır. Değişiklik sonrası rakamlar gözlemdir, neden sonuç kanıtı değildir.",
       "since": "{{team}}: {{minute}}. dakikadaki değişiklikten itibaren."
-    }
+    },
+    "pitchView": "Taktik sahası",
+    "shapeOnly": "Taktik diziliş · top kaydedilen bölgede gösterilir"
   },
   "endOfSeason": {
     "seasonComplete": "Sezon Tamamlandı",

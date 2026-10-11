@@ -2635,7 +2635,9 @@
       "afterSubs": "After last substitution: shots / conceded",
       "explanation": "Big chances use recorded xG only. Figures after substitutions are observations, not evidence of cause.",
       "since": "{{team}}: since the substitution at {{minute}}′."
-    }
+    },
+    "pitchView": "Tactical pitch",
+    "shapeOnly": "Tactical shape · ball shown by recorded zone"
   },
   "endOfSeason": {
     "seasonComplete": "Season Complete",

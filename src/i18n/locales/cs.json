@@ -2635,7 +2635,9 @@
       "afterSubs": "Po posledním střídání: střely / inkasované góly",
       "explanation": "Velké šance vycházejí pouze ze zaznamenaného xG. Údaje po střídání jsou pozorování, nikoli důkaz příčiny.",
       "since": "{{team}}: od střídání v {{minute}}. minutě."
-    }
+    },
+    "pitchView": "Taktické hřiště",
+    "shapeOnly": "Taktické rozestavení · míč v zaznamenané zóně"
   },
   "endOfSeason": {
     "seasonComplete": "Sezóna dokončena",

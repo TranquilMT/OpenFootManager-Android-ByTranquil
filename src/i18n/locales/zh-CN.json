@@ -2635,7 +2635,9 @@
       "afterSubs": "最后一次换人后：射门／失球",
       "explanation": "重大机会仅依据已记录的xG。换人后的数据只是观察结果，不能证明因果关系。",
       "since": "{{team}}：自第{{minute}}分钟换人起。"
-    }
+    },
+    "pitchView": "战术球场",
+    "shapeOnly": "战术阵型 · 球显示在已记录的区域"
   },
   "endOfSeason": {
     "seasonComplete": "赛季结束",

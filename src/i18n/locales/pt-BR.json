@@ -2571,7 +2571,9 @@
       "afterSubs": "Após a última substituição: finalizações / gols sofridos",
       "explanation": "As grandes chances usam apenas o xG registrado. Os números após substituições são observações, não provas de causalidade.",
       "since": "{{team}}: desde a substituição aos {{minute}} minutos."
-    }
+    },
+    "pitchView": "Campo tático",
+    "shapeOnly": "Formação tática · bola na zona registrada"
   },
   "endOfSeason": {
     "seasonComplete": "Temporada Encerrada",
