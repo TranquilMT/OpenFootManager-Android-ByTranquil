@@ -1,11 +1,10 @@
-import MatchHighlightWorkspace from "./MatchHighlightWorkspace";
+import LiveMatchDetailContent from "./LiveMatchDetailContent";
 import { canAdvanceLivePhase } from "./livePlaybackPhase";
 import MatchDetailTabs, { type ActivePanel } from "./MatchDetailTabs";
 import MatchScoreboard from "./MatchScoreboard";
 import LiveMatchPitch from "./LiveMatchPitch";
 import LatestMatchCommentary from "./LatestMatchCommentary";
 import { reachedMatchEvents } from "./livePitchModel";
-import MatchAnalysisPanel from "./MatchAnalysisPanel";
 import type { TacticsPhaseSettings } from "../../store/types";
 import { buildTacticalInstructions } from "../tactics/tacticalInstructions";
 import { MatchOperationGate } from "./matchOperationGate";
@@ -14,7 +13,6 @@ import { filterMatchEvents, type EventFilter } from "./eventFilters";
 import { MatchEventFilters } from "./MatchEventFilters";
 import { resolveBackendError } from "../../utils/backendI18n";
 import { useMatchVisibility } from "./useMatchVisibility";
-import { PlayerMatchPerformance } from "./PlayerMatchPerformance";
 import { MatchDecisionAlerts } from "./MatchDecisionAlerts";
 import MatchdayQuickActions from "./MatchdayQuickActions";
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
@@ -33,7 +31,6 @@ import {
 import { getEventDisplay } from "./helpers";
 
 import { useSettingsStore } from "../../store/settingsStore";
-import { EventFeed, MatchStats, Lineups } from "./MatchPanels";
 import {
   cancelSpokenCommentary,
   spokenCommentaryAvailable,
@@ -41,7 +38,6 @@ import {
 } from "./useSpokenCommentary";
 import MatchScreenLayout from "./MatchScreenLayout";
 import { isLocalDerby } from "./derbyContext";
-import { MatchPulse } from "./MatchPulse";
 import { SubPanel } from "./SubPanel";
 import MatchPlaybackControls from "./MatchPlaybackControls";
 
@@ -469,41 +465,15 @@ export default function MatchLive({
               onScroll={liveFeed.onScroll}
               className="touch-scroll min-h-0 flex-1 overflow-auto p-3 sm:p-4"
             >
-              {activePanel === "highlights" && (
-                <MatchHighlightWorkspace
-                  onReplayChange={setReplayActive}
-                  snapshot={snapshot}
-                  showCommentary={settings.show_match_commentary}
-                />
-              )}
-              {activePanel === "stats" && (
-                <MatchPulse
-                  snapshot={snapshot}
-                  derby={
-                    homeFullTeam && awayFullTeam ? isLocalDerby(homeFullTeam, awayFullTeam) : false
-                  }
-                />
-              )}
-              {activePanel === "events" && (
-                <EventFeed
-                  events={filteredEvents}
-                  snapshot={snapshot}
-                  playerJerseyMap={playerJerseyMap}
-                  showCommentary={settings.show_match_commentary}
-                />
-              )}
-              {activePanel === "stats" && (
-                <>
-                  <MatchStats snapshot={snapshot} />
-                  <MatchAnalysisPanel snapshot={snapshot} />
-                </>
-              )}
-              {activePanel === "players" && (
-                <PlayerMatchPerformance snapshot={snapshot} playerJerseyMap={playerJerseyMap} />
-              )}
-              {activePanel === "lineups" && (
-                <Lineups snapshot={snapshot} playerJerseyMap={playerJerseyMap} />
-              )}
+              <LiveMatchDetailContent
+                activePanel={activePanel}
+                snapshot={snapshot}
+                filteredEvents={filteredEvents}
+                playerJerseyMap={playerJerseyMap}
+                showCommentary={settings.show_match_commentary}
+                derby={!!homeFullTeam && !!awayFullTeam && isLocalDerby(homeFullTeam, awayFullTeam)}
+                onReplayChange={setReplayActive}
+              />
             </div>
           </div>
         </div>
