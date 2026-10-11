@@ -10,8 +10,9 @@ import {
   getTeamTalkOptions,
   type TeamTalkTone,
 } from "./types";
-import { getEventDisplay, getPlayerName, makeTeamFallback } from "./helpers";
+import { makeTeamFallback } from "./helpers";
 import { getTalkIcon } from "./TeamTalkIcons";
+import HalfTimeEvents from "./HalfTimeEvents";
 import { useBreakOperation } from "./useBreakOperation";
 import { SubPanel } from "./SubPanel";
 import { Badge, TeamLogo, ThemeToggle } from "../ui";
@@ -68,17 +69,6 @@ export default function HalfTimeBreak({
   const homeTeamColor = homeFullTeam?.colors?.primary || "#10b981";
   const awayTeamColor = awayFullTeam?.colors?.primary || "#6366f1";
   const userTeam = userSide === "Home" ? snapshot.home_team : snapshot.away_team;
-  const firstHalfEvents = importantEvents.filter((e) =>
-    [
-      "Goal",
-      "PenaltyGoal",
-      "YellowCard",
-      "RedCard",
-      "SecondYellow",
-      "Injury",
-      "PenaltyMiss",
-    ].includes(e.event_type),
-  );
   const command = async (command: unknown) => {
     return run(async () => {
       setActionError(null);
@@ -225,37 +215,7 @@ export default function HalfTimeBreak({
         </p>
       )}
       <main className="mx-auto grid w-full max-w-6xl gap-3 p-3 sm:gap-4 sm:p-5 lg:grid-cols-3">
-        <section className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-navy-700 dark:bg-navy-800">
-          <h3 className="mb-3 font-heading text-xs font-bold uppercase tracking-widest text-gray-500">
-            {t("match.firstHalfEvents")}
-          </h3>
-          {firstHalfEvents.length === 0 ? (
-            <p className="text-sm text-gray-500">{t("match.noMajorEvents")}</p>
-          ) : (
-            <div className="space-y-2">
-              {firstHalfEvents.map((evt, i) => {
-                const d = getEventDisplay(evt);
-                return (
-                  <div
-                    key={i}
-                    className="flex min-h-11 items-center gap-2 rounded-lg bg-gray-50 px-2 dark:bg-navy-700/50"
-                  >
-                    <span className="w-7 text-right text-xs text-gray-500">{evt.minute}'</span>
-                    <span>{d.icon}</span>
-                    <span className={`min-w-0 flex-1 truncate text-sm ${d.color}`}>
-                      {getPlayerName(snapshot, evt.player_id)}
-                    </span>
-                    <Badge variant={evt.side === "Home" ? "primary" : "accent"} size="sm">
-                      {evt.side === "Home"
-                        ? snapshot.home_team.name.substring(0, 3)
-                        : snapshot.away_team.name.substring(0, 3)}
-                    </Badge>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </section>
+        <HalfTimeEvents snapshot={snapshot} events={importantEvents} />
         <section className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-navy-700 dark:bg-navy-800">
           {!isSpectator ? (
             <>
