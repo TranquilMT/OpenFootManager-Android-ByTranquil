@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Users, BarChart3, MessageSquare, Volume2, VolumeX } from "lucide-react";
-const ACTIVE_PANELS = ["events", "stats", "lineups", "players"] as const;
+const ACTIVE_PANELS = ["events", "stats", "lineups", "highlights", "players"] as const;
 export type ActivePanel = (typeof ACTIVE_PANELS)[number];
 export default function MatchDetailTabs({
   activePanel,
@@ -37,6 +37,11 @@ export default function MatchDetailTabs({
           id: "lineups" as ActivePanel,
           label: t("match.lineups"),
           icon: <Users className="w-4 h-4" />,
+        },
+        {
+          id: "highlights" as ActivePanel,
+          label: t("match.highlights.title"),
+          icon: <BarChart3 className="w-4 h-4" />,
         },
         {
           id: "players" as ActivePanel,

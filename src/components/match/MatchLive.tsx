@@ -1,3 +1,4 @@
+import MatchHighlightWorkspace from "./MatchHighlightWorkspace";
 import { canAdvanceLivePhase } from "./livePlaybackPhase";
 import MatchDetailTabs, { type ActivePanel } from "./MatchDetailTabs";
 import MatchScoreboard from "./MatchScoreboard";
@@ -462,6 +463,12 @@ export default function MatchLive({
               onScroll={liveFeed.onScroll}
               className="touch-scroll min-h-0 flex-1 overflow-auto p-3 sm:p-4"
             >
+              {activePanel === "highlights" && (
+                <MatchHighlightWorkspace
+                  snapshot={snapshot}
+                  showCommentary={settings.show_match_commentary}
+                />
+              )}
               {activePanel === "stats" && (
                 <MatchPulse
                   snapshot={snapshot}

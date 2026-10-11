@@ -43,3 +43,17 @@ describe("match detail navigation", () => {
     );
   });
 });
+it("makes recorded highlights reachable as a keyboard tab", () => {
+  const change = vi.fn();
+  render(
+    <MatchDetailTabs
+      activePanel="events"
+      onChange={change}
+      voiceEnabled={false}
+      voiceAvailable={false}
+      onToggleVoice={vi.fn()}
+    />,
+  );
+  fireEvent.click(screen.getByRole("tab", { name: "match.highlights.title" }));
+  expect(change).toHaveBeenCalledWith("highlights");
+});
