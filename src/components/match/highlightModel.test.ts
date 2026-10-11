@@ -89,3 +89,18 @@ it("keeps clip identity stable as history grows and distinguishes same-minute ou
   const clips = buildMatchHighlights([goal, { ...goal }], 20);
   expect(new Set(clips.map((clip) => clip.id)).size).toBe(2);
 });
+it("uses valid recorded xG to include big chances without accepting invalid probabilities", () => {
+  expect(
+    buildMatchHighlights(
+      [event("ShotSaved", 10, { shot: { expected_goals: 0.45, goalkeeper_id: "gk" } })],
+      10,
+    ),
+  ).toHaveLength(1);
+  for (const expected_goals of [-1, NaN, Infinity, 2, 0.1])
+    expect(
+      buildMatchHighlights(
+        [event("ShotSaved", 10, { shot: { expected_goals, goalkeeper_id: "gk" } })],
+        10,
+      ),
+    ).toHaveLength(0);
+});

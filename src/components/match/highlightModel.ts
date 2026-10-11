@@ -17,6 +17,15 @@ const OUTCOMES = new Set([
 ]);
 function isKeyOutcome(event: MatchEvent) {
   const detail = event.detail;
+  const xg = event.shot?.expected_goals;
+  if (
+    xg !== undefined &&
+    Number.isFinite(xg) &&
+    xg >= 0.3 &&
+    xg <= 1 &&
+    ["ShotOnTarget", "ShotSaved", "ShotOffTarget", "ShotBlocked"].includes(event.event_type)
+  )
+    return true;
   return (
     OUTCOMES.has(event.event_type) ||
     detail === "Woodwork" ||
