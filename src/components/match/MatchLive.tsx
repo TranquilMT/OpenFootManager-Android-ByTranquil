@@ -282,7 +282,7 @@ export default function MatchLive({
     snapshot,
     t,
     i18n.language,
-    voiceEnabled && settings.show_match_commentary,
+    voiceEnabled && settings.show_match_commentary && !replayActive,
   );
 
   // Apply substitution
