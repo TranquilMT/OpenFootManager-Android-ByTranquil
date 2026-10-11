@@ -76,3 +76,9 @@ it("bounds buildup length and breaks gaps in sparse recordings", () => {
     )[0].events,
   ).toHaveLength(8);
 });
+it("shows managerial incidents alone and excludes tactical bookkeeping from attacks", () => {
+  const injury = event("Injury");
+  expect(buildMatchHighlights([event("PassCompleted", 9), injury], 10)[0].events).toEqual([injury]);
+  const goal = event("Goal");
+  expect(buildMatchHighlights([event("TacticalChange", 9), goal], 10)[0].events).toEqual([goal]);
+});
