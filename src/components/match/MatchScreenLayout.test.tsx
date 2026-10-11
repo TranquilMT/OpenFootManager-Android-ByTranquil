@@ -4,6 +4,14 @@ import MatchScreenLayout from "./MatchScreenLayout";
 vi.mock("../ui", () => ({ ThemeToggle: () => <button type="button">Theme</button> }));
 
 describe("mobile match layout", () => {
+  it("bounds live match content to the viewport while retaining normal page scrolling elsewhere", () => {
+    const live = render(<MatchScreenLayout contained>Live</MatchScreenLayout>);
+    expect(live.container.firstElementChild).toHaveClass("h-dvh", "overflow-hidden");
+    expect(screen.getByRole("main")).toHaveClass("flex", "flex-col", "min-h-0");
+    live.unmount();
+    const normal = render(<MatchScreenLayout>Report</MatchScreenLayout>);
+    expect(normal.container.firstElementChild).not.toHaveClass("h-dvh");
+  });
   it("protects all four safe areas and keeps the score header sticky at every width", () => {
     const { container } = render(
       <MatchScreenLayout header="Score">Match content</MatchScreenLayout>,

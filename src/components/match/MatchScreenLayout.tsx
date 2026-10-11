@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { ThemeToggle } from "../ui";
 interface MatchScreenLayoutProps {
   children: ReactNode;
+  contained?: boolean;
   contentClassName?: string;
   footer?: ReactNode;
   header?: ReactNode;
@@ -15,6 +16,7 @@ function joinClasses(...classes: Array<string | false | null | undefined>): stri
 }
 export default function MatchScreenLayout({
   children,
+  contained = false,
   contentClassName,
   footer,
   header,
@@ -24,7 +26,12 @@ export default function MatchScreenLayout({
   themeToggleClassName,
 }: MatchScreenLayoutProps) {
   return (
-    <div className="flex min-h-[100dvh] flex-col overflow-x-hidden bg-gray-100 text-gray-900 transition-colors duration-300 dark:bg-navy-900 dark:text-white pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] pl-[env(safe-area-inset-left,0px)] pr-[env(safe-area-inset-right,0px)]">
+    <div
+      className={joinClasses(
+        contained ? "h-dvh overflow-hidden" : "min-h-[100dvh]",
+        "flex flex-col overflow-x-hidden bg-gray-100 text-gray-900 transition-colors duration-300 dark:bg-navy-900 dark:text-white pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] pl-[env(safe-area-inset-left,0px)] pr-[env(safe-area-inset-right,0px)]",
+      )}
+    >
       {header && (
         <header
           className={joinClasses(
@@ -50,7 +57,13 @@ export default function MatchScreenLayout({
           </div>
         </header>
       )}
-      <main className={joinClasses("min-h-0 min-w-0 flex-1 overflow-x-hidden", contentClassName)}>
+      <main
+        className={joinClasses(
+          "min-h-0 min-w-0 flex-1 overflow-x-hidden",
+          contained && "flex flex-col overflow-hidden",
+          contentClassName,
+        )}
+      >
         {children}
       </main>
       {footer ? <div className="shrink-0">{footer}</div> : null}
