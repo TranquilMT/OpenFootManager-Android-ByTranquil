@@ -1,3 +1,4 @@
+import { canAdvanceLivePhase } from "./livePlaybackPhase";
 import MatchDetailTabs, { type ActivePanel } from "./MatchDetailTabs";
 import MatchScoreboard from "./MatchScoreboard";
 import LiveMatchPitch from "./LiveMatchPitch";
@@ -148,6 +149,7 @@ export default function MatchLive({
     [reachedEvents],
   );
   const isFinished = snapshot.phase === "Finished";
+  const playbackClosed = !canAdvanceLivePhase(snapshot.phase);
   const decisionsClosed = isFinished || snapshot.phase === "PenaltyShootout";
   const filteredEvents = useMemo(
     () => filterMatchEvents(reachedEvents, eventFilter),
@@ -162,6 +164,11 @@ export default function MatchLive({
   const stepMatch = useCallback(
     async (minutes: number) => {
       await operationGate.current.run(async () => {
+        if (
+          !mountedRef.current ||
+          !canAdvanceLivePhase(currentDecisionState.current.snapshot.phase)
+        )
+          return;
         try {
           const results = await invoke<MinuteResult[]>("step_live_match", { minutes });
           if (!mountedRef.current) return;
@@ -239,7 +246,7 @@ export default function MatchLive({
       matchVisible &&
       isRunning &&
       speed !== "paused" &&
-      !isFinished &&
+      !playbackClosed &&
       !showSubPanel &&
       !matchCommandPending
     ) {
@@ -258,7 +265,7 @@ export default function MatchLive({
     snapshot.current_minute,
     snapshot.phase,
     stepMatch,
-    isFinished,
+    playbackClosed,
     showSubPanel,
     matchCommandPending,
   ]);
@@ -364,7 +371,7 @@ export default function MatchLive({
           awayScore={snapshot.away_score}
           phase={snapshot.phase}
           minute={snapshot.current_minute}
-          running={isRunning && matchVisible && !decisionsClosed && !showSubPanel}
+          running={isRunning && matchVisible && !playbackClosed && !showSubPanel}
         />
       }
     >
@@ -492,7 +499,7 @@ export default function MatchLive({
           {/* Speed Controls */}
           <MatchPlaybackControls
             speed={speed}
-            disabled={decisionsClosed || matchCommandPending}
+            disabled={playbackClosed || matchCommandPending}
             onSpeedChange={(next) => {
               setSpeed(next);
               setIsRunning(next !== "paused");
