@@ -1,3 +1,4 @@
+import { pitchPlayerLabel } from "./pitchPlayerLabel";
 import { ArrowUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { buildLivePitchPlayers, ballZonePosition, reachedMatchEvents } from "./livePitchModel";
@@ -69,12 +70,7 @@ export default function LiveMatchPitch({
                 <span
                   className={`flex h-7 w-7 items-center justify-center rounded-full border-2 text-xs font-bold shadow-sm ${side === "Home" ? "border-white bg-white text-navy-900 dark:border-white dark:bg-white dark:text-navy-900" : "border-accent-400 bg-accent-400 text-navy-900 dark:border-accent-400 dark:bg-accent-400 dark:text-navy-900"}`}
                 >
-                  {playerJerseyMap?.get(player.id) ??
-                    player.name
-                      .split(" ")
-                      .map((part) => part[0])
-                      .slice(0, 2)
-                      .join("")}
+                  {pitchPlayerLabel(player.name, playerJerseyMap?.get(player.id))}
                 </span>
                 {subbedOn.has(`${side}:${player.id}`) && (
                   <span
