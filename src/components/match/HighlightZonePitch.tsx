@@ -1,7 +1,9 @@
 import { useTranslation } from "react-i18next";
+import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { ballZonePosition } from "./livePitchModel";
 export default function HighlightZonePitch({ zone }: { zone: string }) {
   const { t } = useTranslation();
+  const reduced = useReducedMotion();
   const x = ballZonePosition(zone);
   return (
     <figure className="m-0 min-w-0" aria-label={t("match.pitchView")}>
@@ -22,7 +24,7 @@ export default function HighlightZonePitch({ zone }: { zone: string }) {
           <span
             aria-hidden="true"
             data-recorded-ball
-            className="pointer-events-none absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-navy-900 bg-white shadow transition-[left] duration-700 dark:border-navy-900 dark:bg-white"
+            className={`${reduced ? "transition-none" : "transition-[left] duration-700"} pointer-events-none absolute top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-navy-900 bg-white shadow dark:border-navy-900 dark:bg-white`}
             style={{ left: `${x}%` }}
           />
         )}
