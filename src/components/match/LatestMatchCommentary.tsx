@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { getEventTypeLabel, getPlayerName } from "./helpers";
 import { getCommentary } from "./commentary";
 import { reachedMatchEvents } from "./livePitchModel";
-import { formatMatchMinute } from "./matchClock";
+import { eventClockLabels } from "./eventClock";
 import type { MatchSnapshot } from "./types";
 
 export default function LatestMatchCommentary({
@@ -15,6 +15,7 @@ export default function LatestMatchCommentary({
   const { t } = useTranslation();
   const reached = reachedMatchEvents(snapshot.events, snapshot.current_minute);
   const latest = reached[reached.length - 1];
+  const labels = eventClockLabels(reached);
   const commentary = latest && showCommentary ? getCommentary(latest, snapshot, t) : null;
   return (
     <div
@@ -22,11 +23,7 @@ export default function LatestMatchCommentary({
       aria-atomic="true"
       className="flex min-h-12 shrink-0 items-center gap-3 border-y border-primary-200 bg-primary-50 px-3 py-2 text-sm text-gray-900 dark:border-primary-800 dark:bg-primary-900 dark:text-white"
     >
-      {latest && (
-        <span className="shrink-0 font-bold tabular-nums">
-          {formatMatchMinute(snapshot.phase, latest.minute)}'
-        </span>
-      )}
+      {latest && <span className="shrink-0 font-bold tabular-nums">{labels.get(latest)}'</span>}
       <div className="min-w-0 flex-1">
         {latest && (
           <p className="break-words text-xs font-semibold">

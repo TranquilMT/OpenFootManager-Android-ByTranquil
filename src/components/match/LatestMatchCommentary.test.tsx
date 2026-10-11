@@ -38,6 +38,25 @@ describe("latest commentary", () => {
     expect(screen.getByText("Away FC")).toBeInTheDocument();
     expect(screen.queryByText("Home FC")).not.toBeInTheDocument();
   });
+  it("keeps the latest half-time marker in its original stoppage-time phase", () => {
+    render(
+      <LatestMatchCommentary
+        snapshot={
+          {
+            ...snapshot,
+            phase: "SecondHalf",
+            current_minute: 60,
+            events: [
+              { minute: 0, event_type: "KickOff", side: "Home", player_id: null },
+              { minute: 48, event_type: "HalfTime", side: "Home", player_id: null },
+            ],
+          } as MatchSnapshot
+        }
+      />,
+    );
+    expect(screen.getByText("45+3'")).toBeInTheDocument();
+    expect(screen.queryByText("48'")).not.toBeInTheDocument();
+  });
   it("shows waiting text when no reached action exists", () => {
     render(<LatestMatchCommentary snapshot={{ ...snapshot, events: [] }} />);
     expect(screen.getByText("match.noEventsYet")).toBeInTheDocument();
