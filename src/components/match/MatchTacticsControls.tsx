@@ -24,8 +24,8 @@ export default function MatchTacticsControls({
   return (
     <section aria-label={t("match.tacticsTab")} className="min-h-0 overflow-auto">
       <div className="flex flex-wrap gap-3 border-b border-gray-200 p-4 dark:border-navy-700">
-        <label className="min-w-0 flex-1 space-y-1 text-xs text-gray-700 dark:text-gray-300">
-          <span>{t("tactics.formation")}</span>
+        <fieldset className="min-w-0 flex-1 space-y-1 text-xs text-gray-700 dark:text-gray-300">
+          <legend>{t("tactics.formation")}</legend>
           <Select
             value={team.formation}
             onChange={(event) => onFormationChange(event.target.value)}
@@ -38,9 +38,9 @@ export default function MatchTacticsControls({
               </option>
             ))}
           </Select>
-        </label>
-        <label className="min-w-0 flex-1 space-y-1 text-xs text-gray-700 dark:text-gray-300">
-          <span>{t("tactics.playStyle")}</span>
+        </fieldset>
+        <fieldset className="min-w-0 flex-1 space-y-1 text-xs text-gray-700 dark:text-gray-300">
+          <legend>{t("tactics.playStyle")}</legend>
           <Select
             value={team.play_style}
             onChange={(event) => onPlayStyleChange(event.target.value)}
@@ -53,7 +53,7 @@ export default function MatchTacticsControls({
               </option>
             ))}
           </Select>
-        </label>
+        </fieldset>
       </div>
       {onTacticsPhaseChange && (
         <PhaseBlueprintPanel

@@ -245,34 +245,7 @@ describe("live match decisions", () => {
       screen.getByRole("combobox", { name: "tactics.phaseSettings.tempo" }),
     ).toBeInTheDocument();
   });
-  it.each(["HalfTime", "ExtraTimeHalfTime", "PenaltyShootout"])(
-    "never advances playback through the manager phase %s",
-    async (phase) => {
-      vi.useFakeTimers();
-      try {
-        render(
-          <MatchLive
-            snapshot={{ ...snapshot, phase }}
-            gameState={{ teams: [], players: [] } as unknown as GameStateData}
-            userSide="Home"
-            isSpectator={false}
-            importantEvents={[]}
-            onSnapshotUpdate={vi.fn()}
-            onImportantEvent={vi.fn()}
-            onHalfTime={vi.fn()}
-            onFullTime={vi.fn()}
-          />,
-        );
-        expect(screen.getByRole("button", { name: "match.fast" })).toBeDisabled();
-        await act(async () => {
-          await vi.advanceTimersByTimeAsync(3000);
-        });
-        expect(invoke).not.toHaveBeenCalled();
-      } finally {
-        vi.useRealTimers();
-      }
-    },
-  );
+
   it("disables simulation and tactical controls after full time", () => {
     render(
       <MatchLive

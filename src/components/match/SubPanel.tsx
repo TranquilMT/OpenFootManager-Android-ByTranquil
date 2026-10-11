@@ -3,7 +3,7 @@ import type { TacticsPhaseSettings } from "../../store/types";
 import MatchTacticsControls from "./MatchTacticsControls";
 import { useState, useEffect, useRef, type KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { type MatchSnapshot } from "./types";
+import type { MatchSnapshot } from "./types";
 import { getPlayerName } from "./helpers";
 import { FormationPitch } from "./FormationPitch";
 import { condBgColor, condColor } from "../../lib/playerConditionDisplay";
@@ -197,6 +197,7 @@ export function SubPanel({
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
+        aria-busy={pending}
         aria-label={t(titleKey)}
         className="bg-white dark:bg-navy-800 rounded-2xl border border-gray-200 dark:border-navy-600 shadow-2xl w-full max-w-5xl max-h-[90dvh] flex flex-col overflow-hidden transition-colors duration-300"
         onClick={(e) => e.stopPropagation()}
@@ -223,6 +224,14 @@ export function SubPanel({
           </button>
         </div>
 
+        {pending && (
+          <p
+            role="status"
+            className="shrink-0 border-b border-primary-200 bg-primary-50 px-4 py-2 text-sm text-primary-800 dark:border-primary-800 dark:bg-primary-900 dark:text-white"
+          >
+            {t("common.loading")}
+          </p>
+        )}
         {initialView !== "combined" && (
           <div className="flex shrink-0 gap-2 border-b border-gray-200 p-2 dark:border-navy-700">
             {(["substitutions", "tactics"] as const).map((next) => (
