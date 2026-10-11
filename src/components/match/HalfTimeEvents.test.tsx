@@ -18,3 +18,13 @@ it("orders reached major events and excludes future and invalid clocks", () => {
   expect(screen.queryByText("-1'")).not.toBeInTheDocument();
   expect(screen.getAllByText(/^(10|40)'$/).map((node) => node.textContent)).toEqual(["10'", "40'"]);
 });
+it("formats halftime stoppage time from the full recorded history", () => {
+  const goal = event(47);
+  const snapshot = {
+    ...createSnapshot(),
+    current_minute: 48,
+    events: [event(0, "KickOff"), goal, event(48, "HalfTime")],
+  };
+  render(<HalfTimeEvents snapshot={snapshot} events={[goal]} />);
+  expect(screen.getByText("45+2'")).toBeInTheDocument();
+});
