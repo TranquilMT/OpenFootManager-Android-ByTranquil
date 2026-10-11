@@ -56,6 +56,29 @@ describe("combined live pitch", () => {
     expect(player.querySelector('[aria-label="match.eventTypes.YellowCard"]')).toBeInTheDocument();
     expect(screen.getAllByLabelText("match.eventTypes.YellowCard")).toHaveLength(1);
   });
+  it("marks only substitutes who have entered by the current minute", () => {
+    render(
+      <LiveMatchPitch
+        snapshot={{
+          ...snapshot,
+          substitutions: [
+            { minute: 20, side: "Home", player_off_id: "old", player_on_id: "home4" },
+            { minute: 30, side: "Away", player_off_id: "old2", player_on_id: "away4" },
+          ],
+        }}
+      />,
+    );
+    expect(
+      screen
+        .getByTitle("home player 4")
+        .querySelector('[aria-label="match.eventTypes.Substitution"]'),
+    ).toBeInTheDocument();
+    expect(
+      screen
+        .getByTitle("away player 4")
+        .querySelector('[aria-label="match.eventTypes.Substitution"]'),
+    ).not.toBeInTheDocument();
+  });
   it("does not expose decisions while a command is pending", () => {
     render(<LiveMatchPitch snapshot={snapshot} userSide="Home" onPlayer={vi.fn()} disabled />);
     expect(screen.getByRole("button", { name: "home player 4" })).toBeDisabled();

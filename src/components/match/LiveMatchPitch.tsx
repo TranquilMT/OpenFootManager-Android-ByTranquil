@@ -1,3 +1,4 @@
+import { ArrowUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { buildLivePitchPlayers, ballZonePosition, reachedMatchEvents } from "./livePitchModel";
 import type { MatchSnapshot } from "./types";
@@ -18,6 +19,14 @@ export default function LiveMatchPitch({
   const { t } = useTranslation();
   const reached = reachedMatchEvents(snapshot.events, snapshot.current_minute);
   const latest = reached[reached.length - 1];
+  const subbedOn = new Set(
+    (snapshot.substitutions ?? [])
+      .filter(
+        (sub) =>
+          Number.isFinite(sub.minute) && sub.minute >= 0 && sub.minute <= snapshot.current_minute,
+      )
+      .map((sub) => `${sub.side}:${sub.player_on_id}`),
+  );
   const ballX = ballZonePosition(snapshot.ball_zone);
   return (
     <figure aria-label={t("match.pitchView")} className="m-0 min-w-0">
@@ -64,6 +73,15 @@ export default function LiveMatchPitch({
                       .slice(0, 2)
                       .join("")}
                 </span>
+                {subbedOn.has(`${side}:${player.id}`) && (
+                  <span
+                    role="img"
+                    aria-label={t("match.eventTypes.Substitution")}
+                    className="absolute bottom-0 right-0 rounded-full bg-primary-800 text-white dark:bg-primary-800 dark:text-white"
+                  >
+                    <ArrowUp aria-hidden="true" className="h-3 w-3" />
+                  </span>
+                )}
                 {booked && (
                   <span
                     role="img"
