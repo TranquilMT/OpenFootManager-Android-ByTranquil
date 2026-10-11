@@ -24,5 +24,5 @@ export function useBreakOperation() {
       if (mounted.current) setPending(false);
     }
   };
-  return { pending, run, isActive };
+  return { pending, run, isActive, isPending: () => lock.current };
 }

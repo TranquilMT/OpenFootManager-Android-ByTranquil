@@ -87,3 +87,21 @@ it("locks team talk delivery and tactics together", async () => {
     release([]);
   });
 });
+it("waits for saved decisions before resuming play", async () => {
+  let release!: (value: ReturnType<typeof createSnapshot>) => void;
+  invoke.mockImplementation(
+    () =>
+      new Promise((resolve) => {
+        release = resolve;
+      }),
+  );
+  const { props } = setup();
+  fireEvent.click(screen.getByRole("button", { name: "4-3-3" }));
+  fireEvent.click(screen.getByRole("button", { name: "match.resumeMatch" }));
+  expect(props.onResume).not.toHaveBeenCalled();
+  await act(async () => {
+    release(props.snapshot);
+  });
+  fireEvent.click(screen.getByRole("button", { name: "match.resumeMatch" }));
+  expect(props.onResume).toHaveBeenCalledOnce();
+});
