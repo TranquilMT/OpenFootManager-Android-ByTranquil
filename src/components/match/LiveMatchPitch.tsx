@@ -118,7 +118,8 @@ export default function LiveMatchPitch({
         {ballX != null && (
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 z-10 h-3 w-3 -translate-x-1/2 rounded-full border-2 border-navy-900 bg-white shadow dark:border-navy-900 dark:bg-white"
+            data-ball-zone={snapshot.ball_zone}
+            className="transition-[left] duration-150 ease-out motion-reduce:transition-none pointer-events-none absolute top-1/2 z-10 h-3 w-3 -translate-x-1/2 rounded-full border-2 border-navy-900 bg-white shadow dark:border-navy-900 dark:bg-white"
             style={{ left: `${ballX}%` }}
           />
         )}

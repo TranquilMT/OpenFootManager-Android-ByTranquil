@@ -90,6 +90,16 @@ describe("combined live pitch", () => {
     view.rerender(<LiveMatchPitch snapshot={{ ...snapshot, events: [event] } as MatchSnapshot} />);
     expect(screen.getByTitle("home player 4")).not.toHaveClass("ring-2");
   });
+  it("updates the ball to recorded zones and removes it for an unknown location", () => {
+    const view = render(<LiveMatchPitch snapshot={{ ...snapshot, ball_zone: "HomeBox" }} />);
+    expect(view.container.querySelector('[data-ball-zone="HomeBox"]')).toHaveStyle({ left: "8%" });
+    view.rerender(<LiveMatchPitch snapshot={{ ...snapshot, ball_zone: "AwayDefense" }} />);
+    expect(view.container.querySelector('[data-ball-zone="AwayDefense"]')).toHaveStyle({
+      left: "75%",
+    });
+    view.rerender(<LiveMatchPitch snapshot={{ ...snapshot, ball_zone: "Unknown" }} />);
+    expect(view.container.querySelector("[data-ball-zone]")).not.toBeInTheDocument();
+  });
   it("does not expose decisions while a command is pending", () => {
     render(<LiveMatchPitch snapshot={snapshot} userSide="Home" onPlayer={vi.fn()} disabled />);
     expect(screen.getByRole("button", { name: "home player 4" })).toBeDisabled();
