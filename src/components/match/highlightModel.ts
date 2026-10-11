@@ -42,7 +42,9 @@ export function buildMatchHighlights(
     if (["Corner", "FreeKick", "GoalKick", "PenaltyAwarded"].includes(event.event_type))
       sequence = [];
     if (sequence.at(-1)?.side !== event.side) sequence = [];
+    if (sequence.length && event.minute - sequence[sequence.length - 1].minute > 3) sequence = [];
     sequence.push(event);
+    sequence = sequence.slice(-8);
     if (
       isKeyOutcome(event) ||
       (mode === "extended" &&

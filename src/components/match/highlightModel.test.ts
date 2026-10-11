@@ -66,3 +66,13 @@ it("separates restarts and never replays actions across a half", () => {
     goal,
   ]);
 });
+it("bounds buildup length and breaks gaps in sparse recordings", () => {
+  const goal = event("Goal", 20);
+  expect(buildMatchHighlights([event("PassCompleted", 10), goal], 20)[0].events).toEqual([goal]);
+  expect(
+    buildMatchHighlights(
+      [...Array.from({ length: 20 }, () => event("PassCompleted", 19)), goal],
+      20,
+    )[0].events,
+  ).toHaveLength(8);
+});
