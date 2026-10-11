@@ -28,3 +28,9 @@ it("formats halftime stoppage time from the full recorded history", () => {
   render(<HalfTimeEvents snapshot={snapshot} events={[goal]} />);
   expect(screen.getByText("45+2'")).toBeInTheDocument();
 });
+it("names each event and its full club without relying on icons or abbreviations", () => {
+  const snapshot = createSnapshot();
+  render(<HalfTimeEvents snapshot={snapshot} events={[event(10)]} />);
+  expect(screen.getByText("match.eventTypes.Goal")).toBeInTheDocument();
+  expect(screen.getByText("Alpha FC")).toBeInTheDocument();
+});

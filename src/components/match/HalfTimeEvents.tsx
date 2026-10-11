@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Badge } from "../ui";
-import { getEventDisplay, getPlayerName } from "./helpers";
+import { getEventDisplay, getEventTypeLabel, getPlayerName } from "./helpers";
 import { eventClockLabels } from "./eventClock";
 import { reachedMatchEvents } from "./livePitchModel";
 import type { MatchEvent, MatchSnapshot } from "./types";
@@ -56,15 +56,15 @@ export default function HalfTimeEvents({
                     event.minute}
                   '
                 </span>
-                <span>{display.icon}</span>
-                <span className={`min-w-0 flex-1 truncate text-sm ${display.color}`}>
+                <span aria-hidden="true">{display.icon}</span>
+                <span className={`min-w-0 flex-1 break-words text-sm ${display.color}`}>
+                  <span className="block text-xs font-semibold">
+                    {getEventTypeLabel(event.event_type, t)}
+                  </span>
                   {getPlayerName(snapshot, event.player_id)}
                 </span>
                 <Badge variant={event.side === "Home" ? "primary" : "accent"} size="sm">
-                  {(event.side === "Home"
-                    ? snapshot.home_team.name
-                    : snapshot.away_team.name
-                  ).substring(0, 3)}
+                  {event.side === "Home" ? snapshot.home_team.name : snapshot.away_team.name}
                 </Badge>
               </div>
             );
