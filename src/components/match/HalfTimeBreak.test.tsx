@@ -44,3 +44,14 @@ it("prevents overlapping halftime tactics while saving", async () => {
   });
   expect(props.onUpdateSnapshot).toHaveBeenCalledOnce();
 });
+it("shows a translated tactical error and allows retry", async () => {
+  invoke.mockRejectedValueOnce(new Error("offline"));
+  const { props } = setup();
+  fireEvent.click(screen.getByRole("button", { name: "4-3-3" }));
+  expect(await screen.findByRole("alert")).toHaveTextContent("match.actionFailed");
+  invoke.mockResolvedValueOnce(props.snapshot);
+  fireEvent.click(screen.getByRole("button", { name: "4-3-3" }));
+  await act(async () => {});
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  expect(props.onUpdateSnapshot).toHaveBeenCalledOnce();
+});

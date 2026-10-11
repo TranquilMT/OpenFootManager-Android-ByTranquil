@@ -47,6 +47,7 @@ export default function HalfTimeBreak({
   const { t } = useTranslation();
   const teamTalkOptions = getTeamTalkOptions(t);
   const { pending, run, isActive } = useBreakOperation();
+  const [actionError, setActionError] = useState<string | null>(null);
   const [selectedTalk, setSelectedTalk] = useState<TeamTalkTone | null>(null);
   const [showSubPanel, setShowSubPanel] = useState(false);
   const [talkDelivered, setTalkDelivered] = useState(false);
@@ -77,6 +78,7 @@ export default function HalfTimeBreak({
   );
   const command = async (command: unknown) => {
     return run(async () => {
+      setActionError(null);
       const snap = await invoke<MatchSnapshot>("apply_match_command", { command });
       if (isActive()) onUpdateSnapshot(snap);
     });
@@ -84,15 +86,15 @@ export default function HalfTimeBreak({
   const handleFormationChange = async (formation: string) => {
     try {
       await command({ ChangeFormation: { side: userSide, formation } });
-    } catch (err) {
-      console.error("Formation change failed:", err);
+    } catch {
+      if (isActive()) setActionError(t("match.actionFailed"));
     }
   };
   const handlePlayStyleChange = async (playStyle: string) => {
     try {
       await command({ ChangePlayStyle: { side: userSide, play_style: playStyle } });
-    } catch (err) {
-      console.error("Play style change failed:", err);
+    } catch {
+      if (isActive()) setActionError(t("match.actionFailed"));
     }
   };
   const handleSubstitution = async (playerOffId: string, playerOnId: string) => {
@@ -101,8 +103,8 @@ export default function HalfTimeBreak({
         Substitute: { side: userSide, player_off_id: playerOffId, player_on_id: playerOnId },
       });
       if (applied) setShowSubPanel(false);
-    } catch (err) {
-      console.error("Substitution failed:", err);
+    } catch {
+      if (isActive()) setActionError(t("match.actionFailed"));
     }
   };
   const handleDeliverTalk = async () => {
@@ -112,8 +114,8 @@ export default function HalfTimeBreak({
     const context = us > them ? "winning" : us < them ? "losing" : "drawing";
     try {
       setTalkResults(await invoke("apply_team_talk", { tone: selectedTalk, context }));
-    } catch (err) {
-      console.error("Team talk failed:", err);
+    } catch {
+      console.error("Team talk failed");
     }
     setTalkDelivered(true);
   };
@@ -198,6 +200,14 @@ export default function HalfTimeBreak({
           </div>
         </div>
       </header>
+      {actionError && (
+        <p
+          role="alert"
+          className="mx-3 mt-3 rounded-lg bg-red-500/10 p-3 text-sm text-red-600 dark:text-red-400"
+        >
+          {actionError}
+        </p>
+      )}
       <main className="mx-auto grid w-full max-w-6xl gap-3 p-3 sm:gap-4 sm:p-5 lg:grid-cols-3">
         <section className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-navy-700 dark:bg-navy-800">
           <h3 className="mb-3 font-heading text-xs font-bold uppercase tracking-widest text-gray-500">
