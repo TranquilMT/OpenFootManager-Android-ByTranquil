@@ -47,3 +47,11 @@ it("offers extended chances while keeping routine shots out of key mode", () => 
   expect(buildMatchHighlights(events, 20, "key")).toHaveLength(0);
   expect(buildMatchHighlights(events, 20, "extended")).toHaveLength(4);
 });
+it("starts a new buildup when possession changes sides", () => {
+  const away = event("PassCompleted", 9, { side: "Away" });
+  const home = event("PassCompleted", 10);
+  expect(buildMatchHighlights([away, home, event("Goal", 11)], 11)[0].events).toEqual([
+    home,
+    event("Goal", 11),
+  ]);
+});

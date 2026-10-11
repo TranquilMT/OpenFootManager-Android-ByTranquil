@@ -35,6 +35,7 @@ export function buildMatchHighlights(
   const clips: MatchHighlight[] = [];
   let sequence: MatchEvent[] = [];
   for (const [index, event] of reachedMatchEvents(events, minute).entries()) {
+    if (sequence.at(-1)?.side !== event.side) sequence = [];
     sequence.push(event);
     if (
       isKeyOutcome(event) ||
