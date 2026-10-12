@@ -1,0 +1,32 @@
+name: OFMtouch signing verification tools
+
+on:
+  push:
+    branches: [release/0.7.5-signing-tools]
+
+permissions:
+  contents: read
+
+jobs:
+  signing-tools:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Collect installed Android verification tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          TOOL="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          DIR="$(dirname "$TOOL")"
+          mkdir -p signing-tools
+          cp "$DIR/lib/apksigner.jar" "$DIR/zipalign" "$DIR/aapt" signing-tools/
+          if [ -d "$DIR/lib64" ]; then cp -a "$DIR/lib64" signing-tools/; fi
+          if [ -f "$DIR/NOTICE.txt" ]; then cp "$DIR/NOTICE.txt" signing-tools/; fi
+          cd signing-tools
+          sha256sum apksigner.jar zipalign aapt > TOOL-SHA256SUMS.txt
+      - name: Upload verification tools
+        uses: actions/upload-artifact@v4
+        with:
+          name: OFMtouch-Signing-Verification-Tools
+          path: signing-tools/
+          retention-days: 1
