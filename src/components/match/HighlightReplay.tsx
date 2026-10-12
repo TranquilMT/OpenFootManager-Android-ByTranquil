@@ -13,10 +13,14 @@ export default function HighlightReplay({
   clip,
   snapshot,
   onClose,
+  onPreviousClip,
+  onNextClip,
 }: {
   clip: MatchHighlight;
   snapshot: MatchSnapshot;
   onClose: () => void;
+  onPreviousClip?: () => void;
+  onNextClip?: () => void;
 }) {
   const dialogRef = useRef<HTMLElement>(null),
     closeRef = useRef<HTMLButtonElement>(null);
@@ -155,6 +159,26 @@ export default function HighlightReplay({
             </button>
           ))}
         </fieldset>
+        {(onPreviousClip || onNextClip) && (
+          <nav aria-label={t("match.highlights.title")} className="flex justify-between gap-2 px-3">
+            <button
+              type="button"
+              disabled={!onPreviousClip}
+              onClick={onPreviousClip}
+              className="min-h-11 rounded-lg px-3 text-sm"
+            >
+              {t("match.highlights.previousClip")}
+            </button>
+            <button
+              type="button"
+              disabled={!onNextClip}
+              onClick={onNextClip}
+              className="min-h-11 rounded-lg px-3 text-sm"
+            >
+              {t("match.highlights.nextClip")}
+            </button>
+          </nav>
+        )}
         <footer className="flex shrink-0 flex-wrap items-center justify-center gap-2 border-t border-gray-200 p-3 dark:border-navy-700">
           <button
             type="button"

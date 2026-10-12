@@ -116,3 +116,22 @@ it("keeps a closeable dialog when the selected recording has no actions", () => 
   fireEvent.click(screen.getByRole("button", { name: "common.close" }));
   expect(close).toHaveBeenCalledOnce();
 });
+
+it("provides distinct playlist controls while keeping action controls separate", () => {
+  const previous = vi.fn(),
+    next = vi.fn();
+  render(
+    <HighlightReplay
+      clip={clip}
+      snapshot={snapshot}
+      onClose={vi.fn()}
+      onPreviousClip={previous}
+      onNextClip={next}
+    />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "match.highlights.previousClip" }));
+  fireEvent.click(screen.getByRole("button", { name: "match.highlights.nextClip" }));
+  expect(previous).toHaveBeenCalledOnce();
+  expect(next).toHaveBeenCalledOnce();
+  expect(screen.getByRole("button", { name: "match.highlights.next" })).toBeInTheDocument();
+});
