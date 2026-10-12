@@ -36,7 +36,29 @@ export default function HighlightReplay({
     pace === "slow" ? 1500 : pace === "fast" ? 400 : 900,
   );
   const frame = clip.events[playback.frame];
-  if (!frame) return null;
+  if (!frame)
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/80 p-3">
+        <section
+          role="dialog"
+          aria-modal="true"
+          aria-label={t("match.highlights.replay")}
+          onKeyDown={(event) => {
+            if (event.key === "Escape") {
+              event.preventDefault();
+              event.stopPropagation();
+              onClose();
+            }
+          }}
+          className="rounded-xl bg-white p-4 dark:bg-navy-800"
+        >
+          <p>{t("match.highlights.unavailable")}</p>
+          <button type="button" ref={closeRef} onClick={onClose} className="min-h-11 px-3">
+            {t("common.close")}
+          </button>
+        </section>
+      </div>
+    );
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/80 p-3">
       <section

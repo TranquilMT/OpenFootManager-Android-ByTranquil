@@ -108,3 +108,11 @@ it("identifies both clubs around the historical replay score", () => {
   expect(screen.getByLabelText("common.score")).toHaveTextContent("Alpha FC");
   expect(screen.getByLabelText("common.score")).toHaveTextContent("Beta FC");
 });
+
+it("keeps a closeable dialog when the selected recording has no actions", () => {
+  const close = vi.fn();
+  render(<HighlightReplay clip={{ ...clip, events: [] }} snapshot={snapshot} onClose={close} />);
+  expect(screen.getByRole("dialog")).toHaveTextContent("match.highlights.unavailable");
+  fireEvent.click(screen.getByRole("button", { name: "common.close" }));
+  expect(close).toHaveBeenCalledOnce();
+});
