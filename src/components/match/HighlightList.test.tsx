@@ -28,3 +28,25 @@ it("shows an explicit empty state rather than a blank highlight panel", () => {
   render(<HighlightList clips={[]} snapshot={createSnapshot()} onSelect={vi.fn()} />);
   expect(screen.getByText("match.noEventsYet")).toBeInTheDocument();
 });
+
+it("pages long highlight catalogues in manageable groups", () => {
+  const clips = buildMatchHighlights(
+    Array.from(
+      { length: 25 },
+      (_, i) =>
+        ({
+          event_type: "Goal",
+          minute: i + 1,
+          side: "Home",
+          zone: "AwayBox",
+          player_id: "starter-1",
+          secondary_player_id: null,
+        }) as MatchEvent,
+    ),
+    30,
+  );
+  render(<HighlightList clips={clips} snapshot={createSnapshot()} onSelect={vi.fn()} />);
+  expect(screen.getAllByRole("button", { name: /match.highlights.replay/ })).toHaveLength(12);
+  fireEvent.click(screen.getByRole("button", { name: "match.highlights.more" }));
+  expect(screen.getAllByRole("button", { name: /match.highlights.replay/ })).toHaveLength(24);
+});
