@@ -89,3 +89,36 @@ it("collapses expanded history and resets the page when its filter scope changes
   );
   expect(screen.getAllByRole("button", { name: /match.highlights.replay/ })).toHaveLength(12);
 });
+
+it("preserves the selected catalogue ordering instead of reversing it again", () => {
+  const events = [
+    {
+      event_type: "Goal",
+      minute: 10,
+      side: "Home",
+      zone: "AwayBox",
+      player_id: "starter-1",
+      secondary_player_id: null,
+    },
+    {
+      event_type: "Goal",
+      minute: 20,
+      side: "Home",
+      zone: "AwayBox",
+      player_id: "starter-1",
+      secondary_player_id: null,
+    },
+  ] as MatchEvent[];
+  const clips = buildMatchHighlights(events, 30);
+  render(
+    <HighlightList
+      clips={clips}
+      snapshot={{ ...createSnapshot(), events }}
+      onSelect={vi.fn()}
+      ordered
+    />,
+  );
+  expect(screen.getAllByRole("button", { name: /match.highlights.replay/ })[0]).toHaveTextContent(
+    "10'",
+  );
+});

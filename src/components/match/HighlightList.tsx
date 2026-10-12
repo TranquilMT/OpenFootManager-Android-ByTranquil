@@ -31,39 +31,32 @@ export default function HighlightList({
   return (
     <>
       <ol className="space-y-2">
-        {[...clips]
-          .reverse()
-          .slice(0, limit)
-          .map((clip) => (
-            <li key={clip.id}>
-              <button
-                type="button"
-                disabled={disabled}
-                onClick={() => onSelect(clip)}
-                className="flex min-h-14 w-full items-center gap-3 rounded-xl bg-gray-100 p-3 text-left text-gray-900 dark:bg-navy-700 dark:text-white"
-              >
-                <span className="shrink-0 font-bold tabular-nums">
-                  {clocks.get(clip.outcome) ?? clip.outcome.minute}'
+        {(ordered ? clips : [...clips].reverse()).slice(0, limit).map((clip) => (
+          <li key={clip.id}>
+            <button
+              type="button"
+              disabled={disabled}
+              onClick={() => onSelect(clip)}
+              className="flex min-h-14 w-full items-center gap-3 rounded-xl bg-gray-100 p-3 text-left text-gray-900 dark:bg-navy-700 dark:text-white"
+            >
+              <span className="shrink-0 font-bold tabular-nums">
+                {clocks.get(clip.outcome) ?? clip.outcome.minute}'
+              </span>
+              <span className="min-w-0 flex-1 break-words">
+                <span className="block font-semibold">
+                  {getEventTypeLabel(clip.outcome.event_type, t)}
                 </span>
-                <span className="min-w-0 flex-1 break-words">
-                  <span className="block font-semibold">
-                    {getEventTypeLabel(clip.outcome.event_type, t)}
-                  </span>
-                  <span className="block text-xs">
-                    {clip.outcome.side === "Home"
-                      ? snapshot.home_team.name
-                      : snapshot.away_team.name}
-                  </span>
-                  <span className="block text-xs">
-                    {getPlayerName(snapshot, clip.outcome.player_id)}
-                  </span>
+                <span className="block text-xs">
+                  {clip.outcome.side === "Home" ? snapshot.home_team.name : snapshot.away_team.name}
                 </span>
-                <span className="shrink-0 text-xs font-semibold">
-                  {t("match.highlights.replay")}
+                <span className="block text-xs">
+                  {getPlayerName(snapshot, clip.outcome.player_id)}
                 </span>
-              </button>
-            </li>
-          ))}
+              </span>
+              <span className="shrink-0 text-xs font-semibold">{t("match.highlights.replay")}</span>
+            </button>
+          </li>
+        ))}
       </ol>
       {limit < clips.length && (
         <button
