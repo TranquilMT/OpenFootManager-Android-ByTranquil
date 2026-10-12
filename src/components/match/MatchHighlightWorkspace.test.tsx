@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { expect, it, vi } from "vitest";
+import { afterEach, expect, it, vi } from "vitest";
 import MatchHighlightWorkspace from "./MatchHighlightWorkspace";
 import { createSnapshot } from "./SubPanel.testFixtures";
 import type { MatchEvent } from "./types";
@@ -96,3 +96,5 @@ it("captures a filtered playlist and navigates without returning to the catalogu
   expect(screen.getByRole("dialog")).toHaveTextContent("match.eventTypes.Goal");
   expect(screen.getByRole("button", { name: "match.highlights.nextClip" })).toBeDisabled();
 });
+
+afterEach(() => localStorage.clear());

@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { MatchSnapshot } from "./types";
 import { buildMatchHighlights, type MatchHighlight } from "./highlightModel";
-import HighlightModeControls, { type HighlightPreference } from "./HighlightModeControls";
+import HighlightModeControls from "./HighlightModeControls";
+import { useHighlightPreference } from "./useHighlightPreference";
 import HighlightList from "./HighlightList";
 import HighlightReplay from "./HighlightReplay";
 import { reachedMatchEvents } from "./livePitchModel";
@@ -22,7 +23,7 @@ export default function MatchHighlightWorkspace({
   const [order, setOrder] = useState<"oldest" | "newest">("newest");
   const [category, setCategory] = useState<HighlightCategory>("all");
   const [side, setSide] = useState<"all" | "Home" | "Away">("all");
-  const [mode, setMode] = useState<HighlightPreference>("key");
+  const [mode, setMode] = useHighlightPreference();
   const [selection, setSelection] = useState<{
     clip: MatchHighlight;
     playlist: MatchHighlight[];
