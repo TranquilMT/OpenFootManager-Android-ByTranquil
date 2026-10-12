@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { MatchHighlight } from "./highlightModel";
 import type { MatchSnapshot } from "./types";
@@ -9,12 +9,17 @@ export default function HighlightList({
   clips,
   snapshot,
   onSelect,
+  catalogueKey = "all",
 }: {
   clips: MatchHighlight[];
   snapshot: MatchSnapshot;
   onSelect: (clip: MatchHighlight) => void;
+  catalogueKey?: string;
 }) {
   const [limit, setLimit] = useState(12);
+  useEffect(() => {
+    setLimit(12);
+  }, [catalogueKey]);
   const { t } = useTranslation();
   const clocks = eventClockLabels(reachedMatchEvents(snapshot.events, snapshot.current_minute));
   if (!clips.length)
@@ -62,6 +67,15 @@ export default function HighlightList({
           className="mt-3 min-h-11 rounded-lg bg-gray-100 px-4 text-sm font-semibold dark:bg-navy-700"
         >
           {t("match.highlights.more")}
+        </button>
+      )}
+      {limit > 12 && (
+        <button
+          type="button"
+          onClick={() => setLimit(12)}
+          className="mt-3 min-h-11 rounded-lg bg-gray-100 px-4 text-sm font-semibold dark:bg-navy-700"
+        >
+          {t("match.highlights.less")}
         </button>
       )}
     </>

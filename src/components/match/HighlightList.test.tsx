@@ -50,3 +50,42 @@ it("pages long highlight catalogues in manageable groups", () => {
   fireEvent.click(screen.getByRole("button", { name: "match.highlights.more" }));
   expect(screen.getAllByRole("button", { name: /match.highlights.replay/ })).toHaveLength(24);
 });
+
+it("collapses expanded history and resets the page when its filter scope changes", () => {
+  const clips = buildMatchHighlights(
+    Array.from(
+      { length: 20 },
+      (_, i) =>
+        ({
+          event_type: "Goal",
+          minute: i + 1,
+          side: "Home",
+          zone: "AwayBox",
+          player_id: "starter-1",
+          secondary_player_id: null,
+        }) as MatchEvent,
+    ),
+    30,
+  );
+  const { rerender } = render(
+    <HighlightList
+      clips={clips}
+      snapshot={createSnapshot()}
+      onSelect={vi.fn()}
+      catalogueKey="home"
+    />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "match.highlights.more" }));
+  fireEvent.click(screen.getByRole("button", { name: "match.highlights.less" }));
+  expect(screen.getAllByRole("button", { name: /match.highlights.replay/ })).toHaveLength(12);
+  fireEvent.click(screen.getByRole("button", { name: "match.highlights.more" }));
+  rerender(
+    <HighlightList
+      clips={clips}
+      snapshot={createSnapshot()}
+      onSelect={vi.fn()}
+      catalogueKey="away"
+    />,
+  );
+  expect(screen.getAllByRole("button", { name: /match.highlights.replay/ })).toHaveLength(12);
+});
