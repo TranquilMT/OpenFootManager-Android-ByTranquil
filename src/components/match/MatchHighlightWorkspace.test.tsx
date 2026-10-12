@@ -39,3 +39,20 @@ it("keeps commentary-only mode within the reached match clock", () => {
   fireEvent.click(screen.getByRole("button", { name: "match.events" }));
   expect(screen.queryByText("60'")).not.toBeInTheDocument();
 });
+
+it("captures replay data without sharing mutable source objects", () => {
+  const mutable = {
+    ...snapshot,
+    home_team: {
+      ...snapshot.home_team,
+      players: snapshot.home_team.players.map((p) => ({ ...p })),
+    },
+  };
+  const { rerender } = render(<MatchHighlightWorkspace snapshot={mutable} />);
+  fireEvent.click(screen.getByRole("button", { name: /match.highlights.replay/ }));
+  mutable.home_team.players[0].name = "Changed after selection";
+  rerender(<MatchHighlightWorkspace snapshot={{ ...mutable }} />);
+  const dialog = screen.getByRole("dialog");
+  expect(dialog).toHaveTextContent("Starter One");
+  expect(dialog).not.toHaveTextContent("Changed after selection");
+});

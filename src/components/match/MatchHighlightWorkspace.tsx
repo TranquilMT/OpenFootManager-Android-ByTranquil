@@ -50,7 +50,7 @@ export default function MatchHighlightWorkspace({
           clips={clips}
           snapshot={snapshot}
           onSelect={(clip) => {
-            setSelection({ clip, snapshot });
+            setSelection(structuredClone({ clip, snapshot }));
             onReplayChange?.(true);
           }}
         />
