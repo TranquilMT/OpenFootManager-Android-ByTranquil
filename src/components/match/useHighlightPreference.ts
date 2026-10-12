@@ -4,7 +4,8 @@ export const HIGHLIGHT_PREFERENCE_KEY = "ofm-highlight-mode";
 export function useHighlightPreference() {
   const [mode, setMode] = useState<HighlightPreference>(() => {
     try {
-      return (localStorage.getItem(HIGHLIGHT_PREFERENCE_KEY) as HighlightPreference) || "key";
+      const saved = localStorage.getItem(HIGHLIGHT_PREFERENCE_KEY);
+      return saved === "key" || saved === "extended" || saved === "off" ? saved : "key";
     } catch {
       return "key";
     }
