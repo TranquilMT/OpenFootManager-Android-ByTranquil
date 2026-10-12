@@ -1,3 +1,4 @@
+import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { useHighlightAutoNext } from "./useHighlightAutoNext";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -34,16 +35,22 @@ export default function HighlightReplay({
   }, []);
   const { t } = useTranslation();
   const [pace, setPace] = useState<"slow" | "normal" | "fast">("normal");
+  const visible = useMatchVisibility();
+  const reduced = useReducedMotion();
   const playback = useHighlightPlayback(
     clip.id,
     clip.events.length,
-    useMatchVisibility(),
+    visible,
     pace === "slow" ? 1500 : pace === "fast" ? 400 : 900,
   );
   const [autoNext, setAutoNext] = useState(false);
   useHighlightAutoNext(
     clip.id,
-    autoNext && playback.frame === clip.events.length - 1 && !playback.playing,
+    autoNext &&
+      visible &&
+      !reduced &&
+      playback.frame === clip.events.length - 1 &&
+      !playback.playing,
     onNextClip,
   );
   const frame = clip.events[playback.frame];

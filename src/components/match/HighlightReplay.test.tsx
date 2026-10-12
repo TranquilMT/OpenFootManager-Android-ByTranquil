@@ -147,3 +147,19 @@ it("advances the playlist only after the viewer enables automatic next", () => {
   act(() => vi.advanceTimersByTime(1500));
   expect(next).toHaveBeenCalledOnce();
 });
+
+it("holds the selected clip when the system requests reduced motion", () => {
+  vi.useFakeTimers();
+  vi.stubGlobal("matchMedia", () => ({
+    matches: true,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }));
+  const next = vi.fn();
+  render(<HighlightReplay clip={clip} snapshot={snapshot} onClose={vi.fn()} onNextClip={next} />);
+  fireEvent.click(screen.getByRole("button", { name: "match.highlights.next" }));
+  fireEvent.click(screen.getByRole("checkbox", { name: "match.highlights.autoNext" }));
+  act(() => vi.advanceTimersByTime(2000));
+  expect(next).not.toHaveBeenCalled();
+  vi.unstubAllGlobals();
+});
