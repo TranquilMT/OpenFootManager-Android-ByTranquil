@@ -37,3 +37,15 @@ it("rejects malformed clip lengths instead of starting an empty replay", () => {
       playing: false,
     });
 });
+
+it("repairs invalid playback positions before resuming or pausing", () => {
+  for (const frame of [NaN, Infinity, -9])
+    expect(highlightPlayback({ frame, playing: false }, { type: "play" }, 3)).toEqual({
+      frame: 0,
+      playing: true,
+    });
+  expect(highlightPlayback({ frame: 100, playing: true }, { type: "pause" }, 3)).toEqual({
+    frame: 2,
+    playing: false,
+  });
+});

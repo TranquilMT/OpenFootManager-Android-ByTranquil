@@ -14,15 +14,16 @@ export function highlightPlayback(
   const bounded = (frame: number) =>
     Number.isFinite(frame) ? Math.min(last, Math.max(0, Math.floor(frame))) : 0;
   if (!Number.isSafeInteger(length) || length <= 0) return { frame: 0, playing: false };
+  const current = { ...state, frame: bounded(state.frame) };
   switch (action.type) {
     case "play":
-      return { ...state, playing: state.frame < last };
+      return { ...current, playing: current.frame < last };
     case "pause":
-      return { ...state, playing: false };
+      return { ...current, playing: false };
     case "restart":
       return { frame: 0, playing: true };
     case "advance":
-      return { ...state, frame: bounded(state.frame + 1), playing: state.frame + 1 < last };
+      return { ...current, frame: bounded(current.frame + 1), playing: current.frame + 1 < last };
     case "seek":
       return { frame: bounded(action.frame), playing: false };
   }
