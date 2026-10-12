@@ -13,6 +13,7 @@ export default function LiveMatchDetailContent({
   showCommentary,
   derby,
   onReplayChange,
+  replayDisabled = false,
 }: {
   activePanel: ActivePanel;
   snapshot: MatchSnapshot;
@@ -20,6 +21,7 @@ export default function LiveMatchDetailContent({
   playerJerseyMap: Map<string, number>;
   showCommentary: boolean;
   derby: boolean;
+  replayDisabled?: boolean;
   onReplayChange: (active: boolean) => void;
 }) {
   return (
@@ -29,6 +31,7 @@ export default function LiveMatchDetailContent({
         <MatchHighlightWorkspace
           onReplayChange={onReplayChange}
           snapshot={snapshot}
+          replayDisabled={replayDisabled}
           showCommentary={showCommentary}
         />
       )}

@@ -14,10 +14,12 @@ export default function MatchHighlightWorkspace({
   snapshot,
   onReplayChange,
   showCommentary = true,
+  replayDisabled = false,
 }: {
   snapshot: MatchSnapshot;
   onReplayChange?: (active: boolean) => void;
   showCommentary?: boolean;
+  replayDisabled?: boolean;
 }) {
   const { t } = useTranslation();
   const [order, setOrder] = useState<"oldest" | "newest">("newest");
@@ -140,10 +142,12 @@ export default function MatchHighlightWorkspace({
       ) : (
         <HighlightList
           clips={filteredClips}
+          disabled={replayDisabled}
           snapshot={snapshot}
           ordered
           catalogueKey={`${mode}:${side}:${category}:${order}`}
           onSelect={(clip) => {
+            if (replayDisabled) return;
             setSelection(structuredClone({ clip, snapshot, playlist: filteredClips }));
           }}
         />

@@ -11,12 +11,14 @@ export default function HighlightList({
   onSelect,
   catalogueKey = "all",
   ordered = false,
+  disabled = false,
 }: {
   clips: MatchHighlight[];
   snapshot: MatchSnapshot;
   onSelect: (clip: MatchHighlight) => void;
   catalogueKey?: string;
   ordered?: boolean;
+  disabled?: boolean;
 }) {
   const [limit, setLimit] = useState(12);
   useEffect(() => {
@@ -36,6 +38,7 @@ export default function HighlightList({
             <li key={clip.id}>
               <button
                 type="button"
+                disabled={disabled}
                 onClick={() => onSelect(clip)}
                 className="flex min-h-14 w-full items-center gap-3 rounded-xl bg-gray-100 p-3 text-left text-gray-900 dark:bg-navy-700 dark:text-white"
               >

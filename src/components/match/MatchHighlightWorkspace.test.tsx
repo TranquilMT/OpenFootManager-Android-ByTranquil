@@ -98,3 +98,11 @@ it("captures a filtered playlist and navigates without returning to the catalogu
 });
 
 afterEach(() => localStorage.clear());
+
+it("does not open a replay while a live match command is pending", () => {
+  render(<MatchHighlightWorkspace snapshot={snapshot} replayDisabled />);
+  const replay = screen.getByRole("button", { name: /match.highlights.replay/ });
+  expect(replay).toBeDisabled();
+  fireEvent.click(replay);
+  expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+});

@@ -473,6 +473,7 @@ export default function MatchLive({
                 showCommentary={settings.show_match_commentary}
                 derby={!!homeFullTeam && !!awayFullTeam && isLocalDerby(homeFullTeam, awayFullTeam)}
                 onReplayChange={setReplayActive}
+                replayDisabled={matchCommandPending || showSubPanel}
               />
             </div>
           </div>
