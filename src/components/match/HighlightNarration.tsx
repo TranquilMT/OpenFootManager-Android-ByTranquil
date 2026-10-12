@@ -1,3 +1,4 @@
+import { highlightSnapshot } from "./highlightSnapshot";
 import { useTranslation } from "react-i18next";
 import { getCommentary } from "./commentary";
 import { getEventTypeLabel } from "./helpers";
@@ -13,12 +14,7 @@ export default function HighlightNarration({
 }) {
   const { t } = useTranslation();
   const history = reachedMatchEvents(snapshot.events, frame.minute);
-  const index = history.indexOf(frame);
-  const replaySnapshot = {
-    ...snapshot,
-    current_minute: frame.minute,
-    events: index < 0 ? [frame] : history.slice(0, index + 1),
-  };
+  const replaySnapshot = highlightSnapshot(snapshot, frame);
   const line = getCommentary(frame, replaySnapshot, t)?.line;
   return (
     <div
