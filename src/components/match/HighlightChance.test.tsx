@@ -25,3 +25,17 @@ it("labels xG as probability rather than a shot count", () => {
   );
   expect(screen.getByText(/match.highlights.chanceProbability/)).toHaveTextContent("0.25");
 });
+
+it("does not display stray xG metadata on non-shooting events", () => {
+  const { container } = render(
+    <HighlightChance
+      frame={
+        {
+          event_type: "PassCompleted",
+          shot: { expected_goals: 0.25, goalkeeper_id: "gk" },
+        } as MatchEvent
+      }
+    />,
+  );
+  expect(container).toBeEmptyDOMElement();
+});
