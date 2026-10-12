@@ -40,3 +40,10 @@ it("ends a missed chance before the next attack even in key mode", () => {
     buildMatchHighlights([event("PassCompleted", 9), event("ShotSaved"), pass, goal], 12)[0].events,
   ).toEqual([pass, goal]);
 });
+
+it("does not join a lost pass to a later same-side goal", () => {
+  const goal = event("Goal", 12);
+  expect(
+    buildMatchHighlights([event("PassCompleted", 9), event("PassIntercepted"), goal], 12)[0].events,
+  ).toEqual([goal]);
+});
