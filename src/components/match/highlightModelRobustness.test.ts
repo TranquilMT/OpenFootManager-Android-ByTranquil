@@ -32,3 +32,11 @@ it("handles malformed optional chance details without breaking match playback", 
   for (const detail of [{ Shot: null }, { Save: null }, {}, []])
     expect(() => buildMatchHighlights([event("ShotSaved", 10, { detail })], 10)).not.toThrow();
 });
+
+it("ends a missed chance before the next attack even in key mode", () => {
+  const goal = event("Goal", 12),
+    pass = event("PassCompleted", 11);
+  expect(
+    buildMatchHighlights([event("PassCompleted", 9), event("ShotSaved"), pass, goal], 12)[0].events,
+  ).toEqual([pass, goal]);
+});

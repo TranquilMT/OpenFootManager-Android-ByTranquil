@@ -94,7 +94,7 @@ export function buildMatchHighlights(
         outcome: event,
       });
       sequence = [];
-    }
+    } else if (SHOT_TYPES.has(event.event_type)) sequence = [];
   }
   return clips;
 }
