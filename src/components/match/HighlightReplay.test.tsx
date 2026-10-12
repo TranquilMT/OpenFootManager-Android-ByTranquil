@@ -135,3 +135,15 @@ it("provides distinct playlist controls while keeping action controls separate",
   expect(next).toHaveBeenCalledOnce();
   expect(screen.getByRole("button", { name: "match.highlights.next" })).toBeInTheDocument();
 });
+
+it("advances the playlist only after the viewer enables automatic next", () => {
+  vi.useFakeTimers();
+  const next = vi.fn();
+  render(<HighlightReplay clip={clip} snapshot={snapshot} onClose={vi.fn()} onNextClip={next} />);
+  fireEvent.click(screen.getByRole("button", { name: "match.highlights.next" }));
+  act(() => vi.advanceTimersByTime(2000));
+  expect(next).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByRole("checkbox", { name: "match.highlights.autoNext" }));
+  act(() => vi.advanceTimersByTime(1500));
+  expect(next).toHaveBeenCalledOnce();
+});

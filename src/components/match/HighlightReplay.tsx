@@ -1,3 +1,4 @@
+import { useHighlightAutoNext } from "./useHighlightAutoNext";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { MatchHighlight } from "./highlightModel";
@@ -38,6 +39,12 @@ export default function HighlightReplay({
     clip.events.length,
     useMatchVisibility(),
     pace === "slow" ? 1500 : pace === "fast" ? 400 : 900,
+  );
+  const [autoNext, setAutoNext] = useState(false);
+  useHighlightAutoNext(
+    clip.id,
+    autoNext && playback.frame === clip.events.length - 1 && !playback.playing,
+    onNextClip,
   );
   const frame = clip.events[playback.frame];
   if (!frame)
@@ -178,6 +185,16 @@ export default function HighlightReplay({
               {t("match.highlights.nextClip")}
             </button>
           </nav>
+        )}
+        {onNextClip && (
+          <label className="flex min-h-11 items-center justify-center gap-2 px-3 text-sm">
+            <input
+              type="checkbox"
+              checked={autoNext}
+              onChange={(event) => setAutoNext(event.target.checked)}
+            />
+            {t("match.highlights.autoNext")}
+          </label>
         )}
         <footer className="flex shrink-0 flex-wrap items-center justify-center gap-2 border-t border-gray-200 p-3 dark:border-navy-700">
           <button
