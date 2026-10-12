@@ -88,6 +88,20 @@ export default function HighlightReplay({
             event.stopPropagation();
             onClose();
           }
+          if (
+            event.key === " " &&
+            !(event.target instanceof HTMLInputElement) &&
+            !(event.target instanceof HTMLButtonElement)
+          ) {
+            event.preventDefault();
+            playback.dispatch({
+              type: playback.playing
+                ? "pause"
+                : playback.frame === clip.events.length - 1
+                  ? "restart"
+                  : "play",
+            });
+          }
           if (!(event.target instanceof HTMLInputElement)) {
             const frame =
               event.key === "ArrowLeft"

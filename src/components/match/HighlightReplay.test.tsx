@@ -163,3 +163,13 @@ it("holds the selected clip when the system requests reduced motion", () => {
   expect(next).not.toHaveBeenCalled();
   vi.unstubAllGlobals();
 });
+
+it("toggles playback with Space without hijacking native control keys", () => {
+  render(<HighlightReplay clip={clip} snapshot={snapshot} onClose={vi.fn()} />);
+  fireEvent.keyDown(screen.getByRole("dialog"), { key: " " });
+  expect(screen.getByRole("button", { name: "match.pause" })).toBeInTheDocument();
+  fireEvent.keyDown(screen.getByRole("slider"), { key: " " });
+  expect(screen.getByRole("button", { name: "match.pause" })).toBeInTheDocument();
+  fireEvent.keyDown(screen.getByRole("dialog"), { key: " " });
+  expect(screen.getByRole("button", { name: "match.highlights.play" })).toBeInTheDocument();
+});
