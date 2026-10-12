@@ -143,6 +143,7 @@ export default function HighlightReplay({
         </div>
         <HighlightActionTimeline
           events={clip.events}
+          history={snapshot.events}
           frame={playback.frame}
           onSeek={(frame) => playback.dispatch({ type: "seek", frame })}
         />
