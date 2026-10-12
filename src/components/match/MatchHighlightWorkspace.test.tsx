@@ -83,3 +83,16 @@ it("keeps replay ownership active when the parent callback changes", () => {
   rerender(<MatchHighlightWorkspace snapshot={snapshot} onReplayChange={second} />);
   expect(second).toHaveBeenLastCalledWith(true);
 });
+
+it("captures a filtered playlist and navigates without returning to the catalogue", () => {
+  const second = { ...snapshot.events[0], minute: 30, event_type: "PenaltyGoal" };
+  render(
+    <MatchHighlightWorkspace
+      snapshot={{ ...snapshot, current_minute: 30, events: [...snapshot.events, second] }}
+    />,
+  );
+  fireEvent.click(screen.getAllByRole("button", { name: /match.highlights.replay/ })[0]);
+  fireEvent.click(screen.getByRole("button", { name: "match.highlights.nextClip" }));
+  expect(screen.getByRole("dialog")).toHaveTextContent("match.eventTypes.Goal");
+  expect(screen.getByRole("button", { name: "match.highlights.nextClip" })).toBeDisabled();
+});

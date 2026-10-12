@@ -7,6 +7,7 @@ import HighlightReplay from "./HighlightReplay";
 import { reachedMatchEvents } from "./livePitchModel";
 import { selectHighlights, type HighlightCategory } from "./highlightCatalogue";
 import { useTranslation } from "react-i18next";
+import { playlistNeighbour } from "./highlightPlaylist";
 import { EventFeed } from "./MatchPanels";
 export default function MatchHighlightWorkspace({
   snapshot,
@@ -24,6 +25,7 @@ export default function MatchHighlightWorkspace({
   const [mode, setMode] = useState<HighlightPreference>("key");
   const [selection, setSelection] = useState<{
     clip: MatchHighlight;
+    playlist: MatchHighlight[];
     snapshot: MatchSnapshot;
   } | null>(null);
   const clips = useMemo(
@@ -55,6 +57,10 @@ export default function MatchHighlightWorkspace({
     onReplayChange,
   ]);
   const filteredClips = selectHighlights(clips, { side, category, order });
+  const previousClip = selection && playlistNeighbour(selection.playlist, selection.clip.id, -1);
+  const nextClip = selection && playlistNeighbour(selection.playlist, selection.clip.id, 1);
+  const navigate = (clip: MatchHighlight) =>
+    setSelection((current) => (current ? { ...current, clip } : null));
   const close = () => {
     setSelection(null);
   };
@@ -137,12 +143,18 @@ export default function MatchHighlightWorkspace({
           ordered
           catalogueKey={`${mode}:${side}:${category}:${order}`}
           onSelect={(clip) => {
-            setSelection(structuredClone({ clip, snapshot }));
+            setSelection(structuredClone({ clip, snapshot, playlist: filteredClips }));
           }}
         />
       )}{" "}
       {selection && (
-        <HighlightReplay clip={selection.clip} snapshot={selection.snapshot} onClose={close} />
+        <HighlightReplay
+          clip={selection.clip}
+          snapshot={selection.snapshot}
+          onClose={close}
+          onPreviousClip={previousClip ? () => navigate(previousClip) : undefined}
+          onNextClip={nextClip ? () => navigate(nextClip) : undefined}
+        />
       )}
     </section>
   );
