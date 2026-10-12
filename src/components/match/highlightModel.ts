@@ -61,7 +61,7 @@ export function buildMatchHighlights(
       sequence = [];
     if (sequence[sequence.length - 1]?.side !== event.side) sequence = [];
     if (sequence.length && event.minute - sequence[sequence.length - 1].minute > 3) sequence = [];
-    if (["PassIntercepted", "DribbleTackled", "Clearance"].includes(event.event_type)) {
+    if (["PassIntercepted", "DribbleTackled", "Clearance", "Foul"].includes(event.event_type)) {
       sequence = [];
       continue;
     }

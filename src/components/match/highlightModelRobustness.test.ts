@@ -47,3 +47,10 @@ it("does not join a lost pass to a later same-side goal", () => {
     buildMatchHighlights([event("PassCompleted", 9), event("PassIntercepted"), goal], 12)[0].events,
   ).toEqual([goal]);
 });
+
+it("separates stopped play from the following attack", () => {
+  const goal = event("Goal", 12);
+  expect(
+    buildMatchHighlights([event("PassCompleted", 9), event("Foul"), goal], 12)[0].events,
+  ).toEqual([goal]);
+});
