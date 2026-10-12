@@ -10,6 +10,7 @@ import HighlightReplayScore from "./HighlightReplayScore";
 import HighlightZonePitch from "./HighlightZonePitch";
 import HighlightNarration from "./HighlightNarration";
 import HighlightActors from "./HighlightActors";
+import HighlightActionTimeline from "./HighlightActionTimeline";
 import HighlightChance from "./HighlightChance";
 export default function HighlightReplay({
   clip,
@@ -140,6 +141,11 @@ export default function HighlightReplay({
           <HighlightActors frame={frame} snapshot={snapshot} />
           <HighlightChance frame={frame} />
         </div>
+        <HighlightActionTimeline
+          events={clip.events}
+          frame={playback.frame}
+          onSeek={(frame) => playback.dispatch({ type: "seek", frame })}
+        />
         <div className="flex shrink-0 items-center gap-3 px-3 pt-3">
           <input
             type="range"
