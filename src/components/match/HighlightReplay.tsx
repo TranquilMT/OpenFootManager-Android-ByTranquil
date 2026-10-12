@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import { useReplayScrollLock } from "./useReplayScrollLock";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { useHighlightAutoNext } from "./useHighlightAutoNext";
@@ -58,7 +59,7 @@ export default function HighlightReplay({
   );
   const frame = clip.events[playback.frame];
   if (!frame)
-    return (
+    return createPortal(
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/80 p-3">
         <section
           role="dialog"
@@ -78,9 +79,10 @@ export default function HighlightReplay({
             {t("common.close")}
           </button>
         </section>
-      </div>
+      </div>,
+      document.body,
     );
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/80 p-3">
       <section
         ref={dialogRef}
@@ -260,6 +262,7 @@ export default function HighlightReplay({
           </button>
         </footer>
       </section>
-    </div>
+    </div>,
+    document.body,
   );
 }

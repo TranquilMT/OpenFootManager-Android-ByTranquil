@@ -173,3 +173,16 @@ it("toggles playback with Space without hijacking native control keys", () => {
   fireEvent.keyDown(screen.getByRole("dialog"), { key: " " });
   expect(screen.getByRole("button", { name: "match.highlights.play" })).toBeInTheDocument();
 });
+
+it("mounts above parent stacking and clipping contexts", () => {
+  const parent = document.createElement("div");
+  document.body.append(parent);
+  const { unmount } = render(
+    <HighlightReplay clip={clip} snapshot={snapshot} onClose={vi.fn()} />,
+    { container: parent },
+  );
+  expect(parent.contains(screen.getByRole("dialog"))).toBe(false);
+  expect(document.body.contains(screen.getByRole("dialog"))).toBe(true);
+  unmount();
+  parent.remove();
+});
