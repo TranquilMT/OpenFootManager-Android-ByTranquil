@@ -1,7 +1,7 @@
 {
   "oversizedAggregate": {
     "rust": 63358,
-    "ts": 36232
+    "ts": 36220
   },
   "allowedOversized": {
     "src-tauri/crates/db/src/repositories/player_repo.rs": 1091,
@@ -46,7 +46,7 @@
     "src/components/home/HomeTab.helpers.test.ts": 704,
     "src/components/inbox/InboxMessageDetailPane.tsx": 532,
     "src/components/inbox/InboxTab.test.tsx": 1397,
-    "src/components/match/MatchLive.tsx": 540,
+    "src/components/match/MatchLive.tsx": 528,
     "src/components/match/PostMatchScreen.test.tsx": 789,
     "src/components/match/PostMatchScreen.tsx": 786,
     "src/components/match/PreMatchSetup.tsx": 713,

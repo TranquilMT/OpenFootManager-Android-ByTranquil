@@ -43,6 +43,16 @@ OFMtouch is a free, open-source football management game for Android, based on O
 
 Read the game with chance quality, goalkeeper saves, woodwork and recent pressure. React to formation and style changes, follow score-aware commentary and review the match after the final whistle.
 
+### 🎬 Recorded Match Highlights
+
+The completed 150-commit matchday development programme adds live and post-match highlight review:
+filter by club or event, choose key or extended recordings, and browse chronologically. Replay a
+captured playlist with play/pause, adjustable speed, action seeking and optional next-clip playback.
+Historical scores, separate penalty tallies, recorded ball zones and matching commentary help explain
+the action. Live play and match decisions wait while a replay is open.
+
+This development branch has passed the frontend checks; a new signed Android release remains separate.
+
 ### 🔄 Transfer Market V2.0
 
 Build the right squad for your football ambitions.

@@ -5,7 +5,14 @@ const clip = (event_type: string, side: "Home" | "Away", minute = 10) =>
   ({
     id: `${event_type}:${side}:${minute}`,
     events: [],
-    outcome: { event_type, side, minute },
+    outcome: {
+      event_type,
+      side,
+      minute,
+      zone: "AwayBox",
+      player_id: null,
+      secondary_player_id: null,
+    },
   }) as MatchHighlight;
 it("filters replay clips by the recorded club side", () => {
   const home = clip("Goal", "Home"),

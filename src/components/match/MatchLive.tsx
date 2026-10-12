@@ -1,3 +1,4 @@
+import { matchPhaseTransition } from "./matchPhaseTransition";
 import { useDeferredMatchTransition } from "./useDeferredMatchTransition";
 import LiveMatchDetailContent from "./LiveMatchDetailContent";
 import { canAdvanceLivePhase } from "./livePlaybackPhase";
@@ -191,42 +192,20 @@ export default function MatchLive({
             if (!mountedRef.current) return;
             publishSnapshot(snap);
 
-            // Check for phase transitions that should pause
-            const phase = lastResult.phase;
-            if (phase === "HalfTime" && !signaledRef.current.has("HalfTime")) {
-              signaledRef.current.add("HalfTime");
+            const transition = matchPhaseTransition(lastResult.phase, lastResult.is_finished, {
+              half: onHalfTime,
+              full: onFullTime,
+              penalties: onPenaltyShootout,
+            });
+            if (transition && !signaledRef.current.has(transition.phase)) {
+              signaledRef.current.add(transition.phase);
               setIsRunning(false);
               setSpeed("paused");
-              // Small delay so the last event renders before transitioning
-              scheduleTransition(() => onHalfTime("HalfTime"));
-              return;
-            }
-
-            if (phase === "ExtraTimeHalfTime" && !signaledRef.current.has("ExtraTimeHalfTime")) {
-              signaledRef.current.add("ExtraTimeHalfTime");
-              setIsRunning(false);
-              setSpeed("paused");
-              scheduleTransition(() => onHalfTime("ExtraTimeHalfTime"));
-              return;
-            }
-
-            if (phase === "PenaltyShootout" && !signaledRef.current.has("PenaltyShootout")) {
-              signaledRef.current.add("PenaltyShootout");
-              setIsRunning(false);
-              setSpeed("paused");
-              scheduleTransition(() => onPenaltyShootout?.());
-              return;
-            }
-
-            if (lastResult.is_finished && !signaledRef.current.has("Finished")) {
-              signaledRef.current.add("Finished");
-              setIsRunning(false);
-              setSpeed("paused");
-              scheduleTransition(() => onFullTime());
-              return;
+              scheduleTransition(transition.callback);
             }
           }
         } catch (err) {
+          if (!mountedRef.current) return;
           setMatchError(resolveBackendError(err) || t("match.actionFailed"));
           setIsRunning(false);
           setSpeed("paused");

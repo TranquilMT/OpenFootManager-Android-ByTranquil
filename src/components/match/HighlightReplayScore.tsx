@@ -1,2 +1,32 @@
-import {useTranslation} from "react-i18next";import {highlightScore,highlightShootout} from "./highlightScore";import type {MatchSnapshot,MatchEvent} from "./types";
-export default function HighlightReplayScore({snapshot,frame}:{snapshot:MatchSnapshot;frame:MatchEvent}){const {t}=useTranslation();const score=highlightScore(snapshot.events,frame);const shootout=highlightShootout(snapshot.events,frame);return <div aria-label={t("common.score")} className="space-y-1 text-center"><p className="flex justify-between gap-3 text-sm font-semibold"><span>{snapshot.home_team.name}</span><span>{snapshot.away_team.name}</span></p>{score&&<p className="text-2xl font-bold tabular-nums">{score.home} – {score.away}</p>}{shootout&&<p className="text-sm tabular-nums">{t("match.shootout.shootoutScore",{h:shootout.home,a:shootout.away})}</p>}</div>}
+import { useTranslation } from "react-i18next";
+import { highlightScore, highlightShootout } from "./highlightScore";
+import type { MatchSnapshot, MatchEvent } from "./types";
+export default function HighlightReplayScore({
+  snapshot,
+  frame,
+}: {
+  snapshot: MatchSnapshot;
+  frame: MatchEvent;
+}) {
+  const { t } = useTranslation();
+  const score = highlightScore(snapshot.events, frame);
+  const shootout = highlightShootout(snapshot.events, frame);
+  return (
+    <section aria-label={t("common.score")} className="space-y-1 text-center">
+      <p className="flex justify-between gap-3 text-sm font-semibold">
+        <span>{snapshot.home_team.name}</span>
+        <span>{snapshot.away_team.name}</span>
+      </p>
+      {score && (
+        <p className="text-2xl font-bold tabular-nums">
+          {score.home} – {score.away}
+        </p>
+      )}
+      {shootout && (
+        <p className="text-sm tabular-nums">
+          {t("match.shootout.shootoutScore", { h: shootout.home, a: shootout.away })}
+        </p>
+      )}
+    </section>
+  );
+}
