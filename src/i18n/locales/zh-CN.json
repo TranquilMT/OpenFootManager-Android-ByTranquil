@@ -2646,7 +2646,18 @@
       "recordedZones": "已记录的动作和球场区域；球员位置显示战术阵型。",
       "play": "播放",
       "previous": "上一个动作",
-      "next": "下一个动作"
+      "next": "下一个动作",
+      "more": "显示更多",
+      "less": "显示更少",
+      "oldest": "最早优先",
+      "newest": "最新优先",
+      "autoNext": "自动播放下一个精彩瞬间",
+      "previousClip": "上一个精彩瞬间",
+      "nextClip": "下一个精彩瞬间",
+      "chanceProbability": "机会概率（xG）",
+      "unavailable": "录像不可用",
+      "incidents": "比赛事件",
+      "updateNote": "使用回放控件查看已记录的比赛集锦，并体验更清晰的比赛决策。"
     }
   },
   "endOfSeason": {

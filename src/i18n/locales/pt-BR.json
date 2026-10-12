@@ -2582,7 +2582,18 @@
       "recordedZones": "Ações e zonas registradas; as posições mostram a disposição tática.",
       "play": "Reproduzir",
       "previous": "Ação anterior",
-      "next": "Próxima ação"
+      "next": "Próxima ação",
+      "more": "Mostrar mais",
+      "less": "Mostrar menos",
+      "oldest": "Mais antigos primeiro",
+      "newest": "Mais recentes primeiro",
+      "autoNext": "Reproduzir automaticamente o próximo lance",
+      "previousClip": "Lance anterior",
+      "nextClip": "Próximo lance",
+      "chanceProbability": "Probabilidade da chance (xG)",
+      "unavailable": "Gravação indisponível",
+      "incidents": "Incidentes da partida",
+      "updateNote": "Reveja os lances registrados com controles de repetição e decisões de partida mais claras."
     }
   },
   "endOfSeason": {

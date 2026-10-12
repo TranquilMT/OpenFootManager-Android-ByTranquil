@@ -2646,7 +2646,18 @@
       "recordedZones": "Recorded actions and pitch zones; player positions show tactical shape.",
       "play": "Play",
       "previous": "Previous action",
-      "next": "Next action"
+      "next": "Next action",
+      "more": "Show more",
+      "less": "Show fewer",
+      "oldest": "Oldest first",
+      "newest": "Newest first",
+      "autoNext": "Play next highlight automatically",
+      "previousClip": "Previous highlight",
+      "nextClip": "Next highlight",
+      "chanceProbability": "Chance probability (xG)",
+      "unavailable": "Recording unavailable",
+      "incidents": "Match incidents",
+      "updateNote": "Review recorded match highlights with replay controls and clearer match decisions."
     }
   },
   "endOfSeason": {

@@ -2665,7 +2665,18 @@
       "recordedZones": "Azioni e zone registrate; le posizioni mostrano la disposizione tattica.",
       "play": "Riproduci",
       "previous": "Azione precedente",
-      "next": "Azione successiva"
+      "next": "Azione successiva",
+      "more": "Mostra altri",
+      "less": "Mostra meno",
+      "oldest": "Prima i meno recenti",
+      "newest": "Prima i più recenti",
+      "autoNext": "Riproduci automaticamente il momento successivo",
+      "previousClip": "Momento precedente",
+      "nextClip": "Momento successivo",
+      "chanceProbability": "Probabilità dell’occasione (xG)",
+      "unavailable": "Registrazione non disponibile",
+      "incidents": "Episodi della partita",
+      "updateNote": "Rivedi i momenti registrati con comandi di riproduzione e decisioni di partita più chiare."
     }
   },
   "notifications": {

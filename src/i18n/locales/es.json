@@ -2646,7 +2646,18 @@
       "recordedZones": "Acciones y zonas registradas; las posiciones muestran la disposición táctica.",
       "play": "Reproducir",
       "previous": "Acción anterior",
-      "next": "Siguiente acción"
+      "next": "Siguiente acción",
+      "more": "Mostrar más",
+      "less": "Mostrar menos",
+      "oldest": "Más antiguos primero",
+      "newest": "Más recientes primero",
+      "autoNext": "Reproducir automáticamente la siguiente jugada",
+      "previousClip": "Jugada anterior",
+      "nextClip": "Siguiente jugada",
+      "chanceProbability": "Probabilidad de ocasión (xG)",
+      "unavailable": "Grabación no disponible",
+      "incidents": "Incidentes del partido",
+      "updateNote": "Revisa las jugadas grabadas con controles de repetición y decisiones de partido más claras."
     }
   },
   "endOfSeason": {

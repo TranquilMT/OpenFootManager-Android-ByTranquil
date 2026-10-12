@@ -2646,7 +2646,18 @@
       "recordedZones": "Aksi dan zona lapangan yang tercatat; posisi pemain menunjukkan formasi taktis.",
       "play": "Putar",
       "previous": "Aksi sebelumnya",
-      "next": "Aksi berikutnya"
+      "next": "Aksi berikutnya",
+      "more": "Tampilkan lebih banyak",
+      "less": "Tampilkan lebih sedikit",
+      "oldest": "Terlama dahulu",
+      "newest": "Terbaru dahulu",
+      "autoNext": "Putar sorotan berikutnya secara otomatis",
+      "previousClip": "Sorotan sebelumnya",
+      "nextClip": "Sorotan berikutnya",
+      "chanceProbability": "Probabilitas peluang (xG)",
+      "unavailable": "Rekaman tidak tersedia",
+      "incidents": "Insiden pertandingan",
+      "updateNote": "Tinjau sorotan yang tercatat dengan kontrol pemutaran dan keputusan pertandingan yang lebih jelas."
     }
   },
   "endOfSeason": {

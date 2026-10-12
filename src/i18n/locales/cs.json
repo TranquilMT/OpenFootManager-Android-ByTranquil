@@ -2646,7 +2646,18 @@
       "recordedZones": "Zaznamenané akce a zóny hřiště; pozice ukazují taktické rozestavení.",
       "play": "Přehrát",
       "previous": "Předchozí akce",
-      "next": "Další akce"
+      "next": "Další akce",
+      "more": "Zobrazit více",
+      "less": "Zobrazit méně",
+      "oldest": "Od nejstarších",
+      "newest": "Od nejnovějších",
+      "autoNext": "Automaticky přehrát další moment",
+      "previousClip": "Předchozí moment",
+      "nextClip": "Další moment",
+      "chanceProbability": "Pravděpodobnost šance (xG)",
+      "unavailable": "Záznam není dostupný",
+      "incidents": "Události zápasu",
+      "updateNote": "Prohlédněte si zaznamenané momenty s ovládáním přehrávání a přehlednějšími rozhodnutími během zápasu."
     }
   },
   "endOfSeason": {

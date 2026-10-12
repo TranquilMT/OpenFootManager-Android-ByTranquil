@@ -2646,7 +2646,18 @@
       "recordedZones": "Kaydedilmiş hareketler ve saha bölgeleri; konumlar taktik dizilişi gösterir.",
       "play": "Oynat",
       "previous": "Önceki hareket",
-      "next": "Sonraki hareket"
+      "next": "Sonraki hareket",
+      "more": "Daha fazla göster",
+      "less": "Daha az göster",
+      "oldest": "Önce en eskiler",
+      "newest": "Önce en yeniler",
+      "autoNext": "Sonraki önemli anı otomatik oynat",
+      "previousClip": "Önceki önemli an",
+      "nextClip": "Sonraki önemli an",
+      "chanceProbability": "Pozisyon olasılığı (xG)",
+      "unavailable": "Kayıt kullanılamıyor",
+      "incidents": "Maç olayları",
+      "updateNote": "Tekrar kontrolleri ve daha anlaşılır maç kararlarıyla kaydedilmiş önemli anları inceleyin."
     }
   },
   "endOfSeason": {
