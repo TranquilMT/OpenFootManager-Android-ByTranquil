@@ -2,7 +2,7 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { WhatsNewModal, WHATS_NEW_DISMISSED_KEY, WHATS_NEW_SEEN_KEY } from "./WhatsNewModal";
 
-vi.mock("../../lib/appVersion", () => ({ APP_VERSION: "0.7.4" }));
+vi.mock("../../lib/appVersion", () => ({ APP_VERSION: "0.7.5" }));
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, options?: { version: string }) =>
@@ -20,16 +20,14 @@ describe("WhatsNewModal", () => {
   it("presents each current update as a labelled feature", () => {
     render(<WhatsNewModal />);
     const dialog = screen.getByRole("dialog", { name: "settings.patchWelcome" });
-    for (const feature of ["ai", "match", "controls", "analysis", "reliability"]) {
-      expect(
-        within(dialog).getByRole("heading", { name: `phase74.labels.${feature}` }),
-      ).toBeVisible();
-      expect(within(dialog).getByText(`phase74.release.${feature}`)).toBeVisible();
+    for (const feature of ["pitch", "commentary", "replay", "decisions", "reliability"]) {
+      expect(within(dialog).getByText(`phase75.release.${feature}`)).toBeVisible();
     }
+    expect(within(dialog).getByText("phase75.intro")).toBeVisible();
   });
   it("uses the current version and remembers a permanent dismissal", () => {
     render(<WhatsNewModal />);
-    fireEvent.click(screen.getByRole("checkbox", { name: "menu.doNotShowWhatsNew v0.7.4" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "menu.doNotShowWhatsNew v0.7.5" }));
     fireEvent.click(screen.getByRole("button", { name: "menu.continueToGame" }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(window.localStorage.getItem(WHATS_NEW_DISMISSED_KEY)).toBe("1");

@@ -1783,7 +1783,7 @@
     "patchPlayers": "Plus de talents, dont de rares stars notées 96 et de solides candidats à la montée.",
     "patchMatches": "Plus de réactions, des frappes sur les montants et un commentaire vocal facultatif.",
     "patchMobile": "Commandes mobiles, boîte de réception, sélections nationales et carrière améliorées.",
-    "patchWelcome": "OFMtouch 0.7.4 — Des matchs plus intelligents",
+    "patchWelcome": "OFMtouch 0.7.5 — Matchs et temps forts",
     "patchPortraits": "20 visages fictifs de référence diversifient les portraits des joueurs générés.",
     "patchWorld": "Un monde du football plus vaste couvre 29 nations, avec des clubs renforcés en Amérique et en Asie.",
     "patchTransfers": "La stratégie des clubs guide prêts et transferts, avec offres concurrentes et contrôle du budget.",
@@ -4482,6 +4482,16 @@
       "controls": "Contrôle des tirs au but",
       "analysis": "Analyse du match",
       "reliability": "Fiabilité en match"
+    }
+  },
+  "phase75": {
+    "intro": "Lis le match. Revis les moments décisifs.",
+    "release": {
+      "pitch": "Suis les deux équipes sur un terrain tactique avec un score compact et des commandes toujours accessibles.",
+      "commentary": "Les commentaires suivent les événements atteints, avec filtres et défilement du direct.",
+      "replay": "Parcours les temps forts courts ou étendus par club et événement ; règle la vitesse, les actions et les listes de lecture.",
+      "decisions": "Ouvre les décisions tactiques et les remplacements depuis les alertes et examine les performances.",
+      "reliability": "Les ralentis suspendent le jeu et les décisions ; commandes en attente, visibilité et changements de phase sont gérés en sécurité."
     }
   }
 }

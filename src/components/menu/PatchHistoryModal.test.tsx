@@ -2,7 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { PatchHistoryModal } from "./PatchHistoryModal";
 
-vi.mock("../../lib/appVersion", () => ({ APP_VERSION: "0.7.4" }));
+vi.mock("../../lib/appVersion", () => ({ APP_VERSION: "0.7.5" }));
 
 vi.mock("react-i18next", () => ({ useTranslation: () => ({ t: (key: string) => key }) }));
 vi.mock("@tauri-apps/plugin-opener", () => ({ openUrl: vi.fn() }));
@@ -36,4 +36,12 @@ describe("PatchHistoryModal", () => {
     expect(within(notes as HTMLElement).getByText("settings.hotfixOfferReview")).toBeTruthy();
     expect(within(notes as HTMLElement).queryByText("phase6.patchNames")).toBeNull();
   });
+});
+
+it("preserves the previous match intelligence release beneath the current notes", () => {
+  render(<PatchHistoryModal onClose={vi.fn()} />);
+  const heading = screen.getByRole("heading", { name: "v0.7.4" });
+  expect(
+    within(heading.nextElementSibling as HTMLElement).getByText("phase74.release.ai"),
+  ).toBeInTheDocument();
 });

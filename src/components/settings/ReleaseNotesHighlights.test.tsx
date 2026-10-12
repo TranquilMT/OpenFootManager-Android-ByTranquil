@@ -5,6 +5,6 @@ vi.mock("react-i18next", () => ({ useTranslation: () => ({ t: (key: string) => k
 vi.mock("@tauri-apps/plugin-opener", () => ({ openUrl: vi.fn() }));
 it("introduces recorded highlight review in the in-game update notes", () => {
   render(<ReleaseNotes />);
-  expect(screen.getByText("match.highlights.updateNote")).toBeInTheDocument();
+  expect(screen.getByText("phase75.release.replay")).toBeInTheDocument();
   expect(screen.getByText("match.highlights.title")).toBeInTheDocument();
 });

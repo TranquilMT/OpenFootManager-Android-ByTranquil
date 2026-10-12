@@ -1783,7 +1783,7 @@
     "patchPlayers": "Více výjimečných hráčů, včetně vzácných hvězd s hodnocením 96.",
     "patchMatches": "Více reakcí ze zápasů, střel do tyče a volitelný mluvený komentář.",
     "patchMobile": "Lepší ovládání na mobilu, pošta, reprezentace a začátek kariéry.",
-    "patchWelcome": "OFMtouch 0.7.4 — Chytřejší zápasy",
+    "patchWelcome": "OFMtouch 0.7.5 — Zápasy a nejlepší momenty",
     "patchPortraits": "20 fiktivních výchozích tváří přináší pestřejší portréty hráčů.",
     "patchWorld": "Fotbalový svět zahrnuje 29 zemí a silnější kluby v Americe a Asii.",
     "patchTransfers": "Strategie klubů řídí hostování a přestupy včetně konkurenčních nabídek a kontroly rozpočtu.",
@@ -4482,6 +4482,16 @@
       "controls": "Řízení penaltového rozstřelu",
       "analysis": "Přehled o zápase",
       "reliability": "Spolehlivý zápasový den"
+    }
+  },
+  "phase75": {
+    "intro": "Čti hru. Přehraj si rozhodující okamžiky.",
+    "release": {
+      "pitch": "Sleduj oba týmy na jednom taktickém hřišti s kompaktním skóre a vždy dostupným ovládáním.",
+      "commentary": "Komentář sleduje dosažené události, s filtry a posouváním podle živého dění.",
+      "replay": "Procházej klíčové nebo rozšířené záznamy podle klubu a události; ovládej rychlost, výběr akcí a seznam přehrávání.",
+      "decisions": "Otevírej taktiku a střídání z upozornění a sleduj výkony hráčů.",
+      "reliability": "Přehrávání pozastaví živou hru a rozhodování; čekající příkazy, viditelnost a změny fáze se zpracují bezpečně."
     }
   }
 }

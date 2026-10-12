@@ -1783,7 +1783,7 @@
     "patchPlayers": "Nadir 96 puanlı yıldızlar dahil daha fazla öne çıkan oyuncu.",
     "patchMatches": "Daha fazla maç tepkisi, direğe çarpan şutlar ve isteğe bağlı sesli anlatım.",
     "patchMobile": "Mobil kontroller, gelen kutusu, millî takımlar ve kariyer başlangıcı iyileştirildi.",
-    "patchWelcome": "OFMtouch 0.7.4 — Daha akıllı maçlar",
+    "patchWelcome": "OFMtouch 0.7.5 — Maç günü ve özetler",
     "patchPortraits": "20 kurgusal kaynak yüz, üretilen oyuncu portrelerini daha çeşitli kılıyor.",
     "patchWorld": "Futbol dünyası 29 ülkeyi kapsıyor; Amerika ve Asya kulüpleri güçlendirildi.",
     "patchTransfers": "Kulüp stratejileri kiralık ve bonservisli transferleri, rakip teklifleri ve bütçe kontrollerini yönlendiriyor.",
@@ -4482,6 +4482,16 @@
       "controls": "Penaltı serisi kontrolü",
       "analysis": "Maç analizi",
       "reliability": "Maç günü güvenilirliği"
+    }
+  },
+  "phase75": {
+    "intro": "Maçı oku. Önemli anları yeniden izle.",
+    "release": {
+      "pitch": "Kompakt skor tablosu ve sürekli erişilebilir kontrollerle iki takımı tek taktik sahada takip et.",
+      "commentary": "Anlatım gerçekleşen olayları takip eder; filtreler ve canlı akışı izleyen kaydırma sunar.",
+      "replay": "Kaydedilmiş kısa veya geniş özetleri kulüp ve olaya göre incele; hız, aksiyon geçişi ve oynatma listelerini kontrol et.",
+      "decisions": "Uyarılardan taktik ve oyuncu değişikliği kararlarını aç, oyuncu performansını incele.",
+      "reliability": "Tekrarlar canlı oyunu ve kararları bekletir; bekleyen komutlar, görünürlük ve aşama değişiklikleri güvenle yönetilir."
     }
   }
 }

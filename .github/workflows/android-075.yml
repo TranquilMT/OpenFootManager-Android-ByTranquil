@@ -1,0 +1,212 @@
+name: OFMtouch Android 0.7.5 Matchday and Highlights
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feat/0.7.5-matchday-redesign
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-nightly-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    env:
+      OFM_RELEASE_BUILD: 364
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@1.95.0
+        with:
+          targets: aarch64-linux-android
+
+      - name: Install Linux Rust build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libglib2.0-dev libgtk-3-dev libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev pkg-config
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+          shared-key: android-polish
+          cache-on-failure: true
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Dependency vulnerability audit
+        run: npm audit
+
+      - name: Portrait diversity regression guard
+        run: node scripts/check-portrait-diversity.mjs
+
+      - name: Source quality guard
+        run: npm run quality:check
+
+      - name: Frontend regression tests
+        run: npm test -- --maxWorkers=2 --testTimeout=15000
+
+      - name: Frontend lint
+        run: npm run lint
+
+      - name: Frontend formatting
+        run: npm run format:check
+
+      - name: Translation coverage
+        run: node scripts/audit-i18n.mjs --check
+
+      - name: Rust workspace tests
+        working-directory: src-tauri
+        run: cargo test --workspace --all-targets --locked
+
+      - name: Rust strict lint
+        working-directory: src-tauri
+        run: cargo clippy --workspace --all-targets --locked
+
+      - name: Frontend production build
+        env:
+          OFM_CHANNEL: stable
+          VITE_APP_BUILD_NUMBER: ${{ env.OFM_RELEASE_BUILD }}
+        run: npm run build
+
+      - name: Initialize Android project if needed
+        run: |
+          if [ ! -d src-tauri/gen/android ]; then
+            npx tauri android init --ci
+          fi
+
+      - name: Build ARM64 APK for persistent signing
+        env:
+          RUSTFLAGS: "-C debuginfo=0"
+          NDK_HOME: ${{ env.ANDROID_NDK_HOME }}
+          OFM_CHANNEL: stable
+          VITE_APP_BUILD_NUMBER: ${{ env.OFM_RELEASE_BUILD }}
+        run: |
+          # Preserve monotonic update codes over the released 0.7.3 APK.
+          export OFM_ANDROID_VERSION_CODE=$((7500000 + OFM_RELEASE_BUILD))
+          node -e 'require("fs").writeFileSync("tauri.android.nightly.conf.json", JSON.stringify({bundle:{android:{versionCode:Number(process.env.OFM_ANDROID_VERSION_CODE)}}}))'
+          npx tauri android build --debug --apk --target aarch64 --config tauri.android.nightly.conf.json
+
+      - name: Verify APK signature and ARM64 payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK="$(find src-tauri/gen/android/app/build/outputs/apk -type f -name '*.apk' | head -n 1)"
+          test -n "$APK"
+          echo "APK: $APK"
+          AAPT="$(find "$ANDROID_HOME/build-tools" -type f -name aapt | sort -V | tail -n 1)"
+          PACKAGE_LINE="$("$AAPT" dump badging "$APK" | sed -n '1p')"
+          echo "$PACKAGE_LINE"
+          [[ "$PACKAGE_LINE" == *"name='com.tranquilmt.openfootmanager'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionName='0.7.5'"* ]]
+          [[ "$PACKAGE_LINE" == *"versionCode='$((7500000 + OFM_RELEASE_BUILD))'"* ]]
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          "$APKSIGNER" verify --verbose "$APK"
+          # A debug build is only an intermediate artifact. Final delivery is signed
+          # with the persistent release keystore and its certificate is checked.
+          unzip -l "$APK" | grep -E 'lib/arm64-v8a/.*\.so' >/dev/null
+          if unzip -l "$APK" | grep -E 'lib/(armeabi-v7a|x86|x86_64)/.*\.so'; then
+            echo 'Unexpected non-ARM64 native libraries found'
+            exit 1
+          fi
+          mkdir -p dist-apk
+          cp "$APK" "dist-apk/OFMtouch-0.7.5-Matchday-Highlights-Build${OFM_RELEASE_BUILD}-CI-INTERMEDIATE.apk"
+          sha256sum "dist-apk/OFMtouch-0.7.5-Matchday-Highlights-Build${OFM_RELEASE_BUILD}-CI-INTERMEDIATE.apk" | tee "dist-apk/OFMtouch-0.7.5-Matchday-Highlights-Build${OFM_RELEASE_BUILD}-CI-INTERMEDIATE.apk.sha256"
+
+      - name: Archive exact source and notes
+        run: |
+          git archive --format=zip --prefix=OFMtouch-0.7.5/ HEAD > dist-apk/OFMtouch-0.7.5-Build364-SOURCE.zip
+          git rev-parse HEAD > dist-apk/SOURCE-COMMIT.txt
+          cp docs/releases/0.7.5.md dist-apk/OFMtouch-0.7.5-Build364-Release-Notes.md
+
+      - name: Upload ARM64 APK for persistent signing
+        uses: actions/upload-artifact@v4
+        with:
+          name: OFMtouch-0.7.5-Matchday-Highlights-Build${{ env.OFM_RELEASE_BUILD }}-CI-INTERMEDIATE
+          path: dist-apk/*
+          if-no-files-found: error
+
+
+      - name: Check persistent signing availability
+        id: signing
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE" ] && [ -n "$STORE_PASSWORD" ] && [ -n "$KEY_ALIAS" ] && [ -n "$KEY_PASSWORD" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Intermediate APK uploaded. Original persistent signing credentials are required before release publication."
+          fi
+
+      - name: Sign and verify the update with the original certificate
+        if: steps.signing.outputs.available == 'true'
+        env:
+          KEYSTORE: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s' "$KEYSTORE" | base64 --decode > "$RUNNER_TEMP/ofmtouch-release.jks"
+          chmod 600 "$RUNNER_TEMP/ofmtouch-release.jks"
+          APKSIGNER="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          ZIPALIGN="$(find "$ANDROID_HOME/build-tools" -type f -name zipalign | sort -V | tail -n 1)"
+          APK="dist-apk/OFMtouch-0.7.5-Matchday-Highlights-Build364-CI-INTERMEDIATE.apk"
+          "$ZIPALIGN" -f -P 16 4 "$APK" "$RUNNER_TEMP/aligned.apk"
+          "$APKSIGNER" sign --ks "$RUNNER_TEMP/ofmtouch-release.jks" --ks-key-alias "$KEY_ALIAS" --ks-pass env:STORE_PASSWORD --key-pass env:KEY_PASSWORD --out dist-apk/OFMtouch-0.7.5-Matchday-Highlights-Build364-SIGNED.apk "$RUNNER_TEMP/aligned.apk"
+          "$APKSIGNER" verify --verbose --print-certs dist-apk/OFMtouch-0.7.5-Matchday-Highlights-Build364-SIGNED.apk > dist-apk/OFMtouch-0.7.5-Build364-Signature.txt
+          grep -iq '3f0d869bfaa5f7c78a7d2a9474d44424ae4f4399e64d76b6fb9e691695412e60' dist-apk/OFMtouch-0.7.5-Build364-Signature.txt
+          "$ZIPALIGN" -c -P 16 4 dist-apk/OFMtouch-0.7.5-Matchday-Highlights-Build364-SIGNED.apk
+          rm -f "$RUNNER_TEMP/ofmtouch-release.jks" "$RUNNER_TEMP/aligned.apk"
+          printf 'Source: %s\nVersion: 0.7.5\nBuild: 364\nVersion code: 7500364\nPackage: com.tranquilmt.openfootmanager\nFrontend, Rust workspace, Clippy, translations, portrait and quality checks: passed\nOriginal signing certificate and ZIP alignment: verified\nPhysical device installation/gameplay: not performed\n' "$(git rev-parse HEAD)" > dist-apk/OFMtouch-0.7.5-Build364-Validation.txt
+          python3 - <<'PYCODE'
+          import hashlib,json,subprocess
+          from pathlib import Path
+          paths=[p for p in Path('dist-apk').iterdir() if p.is_file() and 'INTERMEDIATE' not in p.name and p.name != 'SOURCE-COMMIT.txt']
+          manifest={'product':'OFMtouch','version':'0.7.5','build':364,'versionCode':7500364,'package':'com.tranquilmt.openfootmanager','architecture':'arm64-v8a','sourceCommit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'signingCertificateSha256':'3f0d869bfaa5f7c78a7d2a9474d44424ae4f4399e64d76b6fb9e691695412e60','physicalDeviceTested':False,'assets':[{'name':p.name,'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in sorted(paths)]}
+          Path('dist-apk/OFMtouch-0.7.5-Build364-Manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          PYCODE
+          cd dist-apk
+          sha256sum *SIGNED.apk *SOURCE.zip *Release-Notes.md *Validation.txt *Signature.txt *Manifest.json > OFMtouch-0.7.5-Build364-SHA256SUMS.txt
+
+      - name: Publish verified release and mark it latest
+        if: steps.signing.outputs.available == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG=v0.7.5-build364
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo 'Release already exists; refusing to overwrite published artifacts.'
+            exit 1
+          fi
+          gh release create "$TAG" --target "$GITHUB_SHA" --draft --title 'OFMtouch v0.7.5 — Matchday & Highlights · Build 364' --notes-file docs/releases/0.7.5.md
+          gh release upload "$TAG" dist-apk/*SIGNED.apk dist-apk/*SOURCE.zip dist-apk/*Release-Notes.md dist-apk/*Validation.txt dist-apk/*Signature.txt dist-apk/*Manifest.json dist-apk/*SHA256SUMS.txt
+          gh release edit "$TAG" --draft=false --prerelease=false --latest
+          test "$(gh api repos/$GITHUB_REPOSITORY/releases/latest --jq .tag_name)" = "$TAG"

@@ -91,7 +91,7 @@ export function WhatsNewModal() {
                   {t("settings.patchWelcome")}
                 </h2>
                 <p className="mt-2 text-sm leading-relaxed text-primary-900 dark:text-gray-200">
-                  {t("phase74.intro")}
+                  {t("phase75.intro")}
                 </p>
               </div>
             </div>

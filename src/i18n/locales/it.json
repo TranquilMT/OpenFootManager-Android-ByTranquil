@@ -1802,7 +1802,7 @@
     "patchPlayers": "Più giocatori di spicco, incluse rare stelle da 96 e squadre in lotta per la promozione.",
     "patchMatches": "Più reazioni, tiri sui legni e telecronaca vocale facoltativa.",
     "patchMobile": "Comandi mobili, posta, nazionali e inizio carriera migliorati.",
-    "patchWelcome": "OFMtouch 0.7.4 — Partite più intelligenti",
+    "patchWelcome": "OFMtouch 0.7.5 — Partite e highlights",
     "patchPortraits": "20 volti fittizi di partenza rendono più vari i ritratti dei giocatori generati.",
     "patchWorld": "Un mondo calcistico più ampio copre 29 nazioni, con club più forti nelle Americhe e in Asia.",
     "patchTransfers": "Le strategie dei club guidano prestiti e trasferimenti, con offerte concorrenti e controlli sul budget.",
@@ -4482,6 +4482,16 @@
       "controls": "Controllo dei rigori",
       "analysis": "Analisi della partita",
       "reliability": "Affidabilità in partita"
+    }
+  },
+  "phase75": {
+    "intro": "Leggi la partita. Rivivi i momenti decisivi.",
+    "release": {
+      "pitch": "Segui entrambe le squadre su un campo tattico con tabellone compatto e comandi sempre disponibili.",
+      "commentary": "La cronaca segue gli eventi raggiunti, con filtri e scorrimento in diretta.",
+      "replay": "Sfoglia gli highlights essenziali o estesi per club ed evento; controlla velocità, azioni e playlist.",
+      "decisions": "Apri tattiche e sostituzioni dagli avvisi e consulta le prestazioni dei giocatori.",
+      "reliability": "I replay sospendono gioco e decisioni; comandi in attesa, visibilità e cambi di fase sono gestiti in sicurezza."
     }
   }
 }

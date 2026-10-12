@@ -1,10 +1,10 @@
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { useTranslation } from "react-i18next";
 import {
-  BrainCircuit,
-  Hand,
-  Target,
-  ChartNoAxesCombined,
+  LandPlot,
+  MessagesSquare,
+  Clapperboard,
+  SlidersHorizontal,
   ShieldCheck,
   Heart,
   Bug,
@@ -12,13 +12,12 @@ import {
 
 const ISSUE_URL = "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new";
 
-const HIGHLIGHT_KEYS = [
-  { key: "match.highlights.updateNote", title: "match.highlights.title", Icon: Target },
-  { key: "phase74.release.ai", title: "phase74.labels.ai", Icon: BrainCircuit },
-  { key: "phase74.release.match", title: "phase74.labels.match", Icon: Hand },
-  { key: "phase74.release.controls", title: "phase74.labels.controls", Icon: Target },
-  { key: "phase74.release.analysis", title: "phase74.labels.analysis", Icon: ChartNoAxesCombined },
-  { key: "phase74.release.reliability", title: "phase74.labels.reliability", Icon: ShieldCheck },
+export const RELEASE_FEATURES = [
+  { key: "phase75.release.pitch", title: "match.pitchView", Icon: LandPlot },
+  { key: "phase75.release.commentary", title: "match.events", Icon: MessagesSquare },
+  { key: "phase75.release.replay", title: "match.highlights.title", Icon: Clapperboard },
+  { key: "phase75.release.decisions", title: "dashboard.tactics", Icon: SlidersHorizontal },
+  { key: "phase75.release.reliability", title: "phase74.labels.reliability", Icon: ShieldCheck },
 ] as const;
 
 export function ReleaseNotes({ embedded = false }: { embedded?: boolean }) {
@@ -35,7 +34,7 @@ export function ReleaseNotes({ embedded = false }: { embedded?: boolean }) {
         </>
       )}
       <ul className="mt-4 grid gap-3 text-sm leading-relaxed text-gray-700 dark:text-gray-200 md:grid-cols-2">
-        {HIGHLIGHT_KEYS.map(({ key, title, Icon }) => (
+        {RELEASE_FEATURES.map(({ key, title, Icon }) => (
           <li
             key={key}
             className="flex min-w-0 items-start gap-3 rounded-2xl border border-gray-200 bg-gray-50 p-4 last:md:col-span-2 dark:border-navy-600 dark:bg-navy-700"

@@ -2,9 +2,9 @@
 
 **Your club. Your tactics. Your career. Anywhere.**
 
-OFMtouch is a free, open-source football management game for Android, based on OpenFootManager and adapted for mobile by **TranquilMT**. Build a squad, develop young talent and lead your club through seasons of league and cup football. Every career brings decisions on the pitch, in the transfer market and behind the scenes.
+OFMtouch is a free, open-source football management game for Android, based on OpenFootManager and adapted for mobile by **TranquilMT**. Take charge of a club, build your squad and create a football dynasty. Follow matches on a combined 11-v-11 tactical pitch, read commentary as play unfolds, change tactics and substitutions, and revisit decisive moments through recorded highlights. Away from matchday, manage recruitment, player development, finances, staff and the board across a long-term career.
 
-**Current version: v0.7.0 — Match Engine V2 · Android ARM64**
+**Current version: v0.7.5 — Matchday & Highlights · Android ARM64**
 
 [Download OFMtouch](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/latest) · [Previous releases](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases) · [Report an issue](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new)
 
@@ -14,6 +14,11 @@ OFMtouch is a free, open-source football management game for Android, based on O
 - 👥 **Build and manage your squad**, balancing prospects, established players and experienced leaders.
 - 📋 **Choose your starting XI**, match roles, captain and substitutes.
 - 🧠 **Create formations and tactics**, then adapt your approach to the players available.
+- 🎬 **Review match highlights**, choosing key or extended clips, club and event filters, chronological browsing and replay playlists.
+- ⏯️ **Control your replays**, with play/pause, adjustable speed, action seeking and optional next-highlight playback.
+- 🏟️ **Follow the full match**, with a combined 11-v-11 tactical pitch, reached-event commentary and follow-live scrolling.
+- 📊 **Study match performance**, reviewing player statistics, ratings, recorded chance quality and historical replay scores.
+- 🎯 **Plan your penalty shootout**, setting eligible taker order before the match or while penalties are paused.
 - 🔄 **Make substitutions and matchday decisions**, responding to fatigue and the match situation.
 - 🔎 **Scout players and build a shortlist**, comparing position, age, ability, potential, value and club.
 - 💰 **Buy, sell and loan players** through **Transfer Market V2.0**, with smarter recruitment and squad planning.
@@ -45,13 +50,11 @@ Read the game with chance quality, goalkeeper saves, woodwork and recent pressur
 
 ### 🎬 Recorded Match Highlights
 
-The completed 150-commit matchday development programme adds live and post-match highlight review:
+Review highlights during a match or after the final whistle:
 filter by club or event, choose key or extended recordings, and browse chronologically. Replay a
 captured playlist with play/pause, adjustable speed, action seeking and optional next-clip playback.
 Historical scores, separate penalty tallies, recorded ball zones and matching commentary help explain
 the action. Live play and match decisions wait while a replay is open.
-
-This development branch has passed the frontend checks; a new signed Android release remains separate.
 
 ### 🔄 Transfer Market V2.0
 
@@ -98,7 +101,99 @@ Your job extends beyond the next result.
 - A compact What's New screen, optional launch-summary hiding and patch history from the main menu.
 - Interface and update summaries in 12 supported languages.
 
-## What's New — Version History
+## What's New — v0.7.5 · Matchday & Highlights
+
+- 🏟️ **Clearer matches:** combined 11-v-11 tactical pitch, compact scoreboard and persistent controls.
+- 🎙️ **Commentary that follows play:** reached events, useful filters and follow-live scrolling.
+- 🎬 **Recorded highlights:** key/extended clips, club and incident filters, ordered browsing and playlists.
+- ⏯️ **Replay your way:** speed controls, play/pause, action timeline, seeking and optional next-clip playback.
+- 📊 **Understand each moment:** historical scores, separate penalty tallies, recorded participants and xG.
+- 🧠 **Make better decisions:** tactical/substitution shortcuts, match alerts and performance review.
+- ♿ **Smoother mobile use:** keyboard focus, background scroll locking and reduced-motion support.
+- 🛡️ **Safer match flow:** replay holds, pending-command guards and deferred manager phase changes.
+- 🌍 **12-language update:** translated controls and refreshed in-game release notes.
+
+[Full 0.7.5 release notes](docs/releases/0.7.5.md) · [Download the latest release](https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/releases/latest)
+
+## Version History
+
+### v0.7.4 — Match Intelligence
+
+A focused matchday update built on 0.7.3.
+
+- Smarter AI managers respond to late scorelines, team fatigue, dismissal disadvantages and aggressive opposition pressing. Fresh positional cover can replace vulnerable booked players. Routine fatigue changes avoid even more exhausted reserves, and tactical replacements coordinate with formation changes.
+- Goalkeeper handling influences the split between rebounds and corners after saves. Caught balls no longer produce misleading goal-kick events. Live and background matches share the same bounded model.
+- Choose the shootout taker order before a match or while a managed shootout is paused. Eligible players take distinct turns before a new cycle; unequal player counts are reduced to equal pools. Ineligible/duplicate assignments are rejected, and outgoing players are removed from current-match assignments.
+- Live and full-time analysis shows recorded big chances, xG coverage, tactical changes and shots/goals conceded after the last substitution. It leaves legacy chance quality unknown and does not imply that a substitution caused subsequent events.
+- Shootouts continue when kicks share the same minute, display actual goal/miss order and taker names, prevent overlapping simulation requests and cancel delayed navigation when unmounted.
+- Failed match finalization retains the live session for retry. Fixture identity and completion status are validated before career results are changed, protecting unrelated fixtures and preventing duplicate application.
+- A redesigned What’s New dialog adds distinct feature icons, labelled cards, a responsive Matchday header and an always-visible Continue action. Its dismissal label uses the current version, and keyboard focus returns to the menu. All new controls and release highlights are translated into 12 languages. Version 0.7.3 remains in Patch History; the gameplay ledger now distinguishes implemented controls from outstanding roadmap work.
+
+Android ARM64 · Build 363 · version code 7400363. The existing package name and persistent release signing certificate are retained, so the APK updates the installed signed app. Complete matching source, checksums and validation evidence accompany the release.
+
+Shootout orders are current-match instructions. This update does not add manual corner aiming or persistent replay of an interrupted match after process death. Physical-device installation/gameplay remains separate from automated and package verification.
+
+
+
+
+### v0.7.3 — Integrated Gameplay
+
+200 development commits improve the matchday experience and connected club-management tools.
+
+- Live player performance tables track minutes, goals, assists, shots, passes, tackles, interceptions, saves and discipline. The same statistics remain available at full time.
+- Full-time ratings include replaced and dismissed participants, recognise goalkeeper saves and shootout victories, and exclude unused reserves, self-assists, penalty assists and future events.
+- Clearer injury, booking and dismissal alerts open relevant decisions and preselect affected players. Concerns remain actionable after the substitution allowance is exhausted.
+- Replacement recommendations favour positional cover, recognise imported position aliases, protect reserve goalkeepers and rank emergency cover using goalkeeper attributes.
+- Safer match command sequencing, prepared substitutions, pause/resume handling and recorded event chronology protect match state.
+- More accessible match controls, keyboard navigation, event filters, follow-live scrolling and fallback pitch layouts that retain specialised players after dismissals.
+- Improved loan monitoring and return planning, contract estimates, injury recovery dates, fixture congestion guidance, training and academy review validation.
+- More reliable cash runway, wage forecasts, commercial planning and imported-data validation.
+- Release highlights are translated into all 12 languages. Version 0.7.2 remains in Patch History.
+
+Android ARM64 · Build 362 · version code 7300362. Install over your existing signed OFMtouch app to retain your careers. The package name and persistent release certificate are retained. Matching source and SHA-256 checksums accompany the release.
+
+Automated regression and package checks are recorded separately from physical-device testing. The 200 development commits do not mean every proposed future feature is implemented; the detailed roadmap retains outstanding work.
+
+
+
+
+### v0.7.2 — Match Engine V2 Refinements
+
+37 new development commits bring 16 targeted engine fixes and regression coverage.
+
+- Correct substitute playing time after later substitutions or dismissals.
+- Pre-match lineup swaps preserve the match substitution allowance.
+- Dismissed reserves cannot enter through pre-match swaps; rejected swaps preserve match state.
+- Penalties count once, with compatibility for older event logs.
+- Second yellow cards are recorded as dismissals in player and team statistics.
+- Goal reports expire old set-piece attribution and clear it after harmless free kicks.
+- Empty assist identities no longer create phantom player records.
+- Fatigue cannot restore condition or benefit from excessive imported fitness values.
+- Live condition displays and overall/effective ratings respect their intended limits.
+- Formation labels match the applied shape; tactical notifications reflect actual changes.
+- Large possession counters and imported expected-goals values are processed safely.
+- Dismissed players are never restored by fallback player selection.
+- Updated highlights in all 12 languages, with 0.7.1 retained in Patch History.
+
+Android ARM64 · Build 361 · original package and persistent signing certificate.
+
+
+
+
+### v0.7.1 — Match Engine V2 Polish
+
+- Removed the duplicate What’s New menu card; Patch History remains the single menu entry for current and previous release notes.
+- Dismissed substitutes are rejected before any lineup, bench, event or substitution-count changes.
+- Fallback penalty takers consider composure and current fatigue while respecting your designated taker.
+- Imported condition values cannot boost skills beyond full fitness or introduce invalid numeric results.
+- Possession comparisons retain the correct ratio even for unusually large finite ratings.
+- Formation parsing rejects malformed segments and oversized shapes without integer overflow.
+- Updated highlights in all 12 languages; 0.7.0 notes remain in Patch History.
+
+Android ARM64 · Build 360 · original package and signing certificate.
+
+
+
 
 ### v0.7.0 — Match Engine V2
 
@@ -132,6 +227,17 @@ Your job extends beyond the next result.
 
 Expected goals are the engine’s simulated chance probabilities, not tracking-data measurements or guaranteed goals. Recent pressure is based on actual shot events and gives no artificial scoring bonus. Existing career, economy, transfers, academy and board systems remain part of this full release.
 
+### v0.6.9 — Season Economy Fixes
+
+- 🏆 Corrected competition prize and promotion handling.
+- 🤝 Improved sponsorship and club-economy safeguards.
+- 💾 Kept the existing package and persistent signing identity for career-preserving updates.
+
+### v0.6.8 — Squad, Sponsorship & Economy Polish
+
+- 👥 Improved squad numbering and matchday eligibility.
+- 🤝 Better sponsorship generation and commercial planning.
+- 💰 Refined economy safeguards and career save reliability.
 
 ### v0.6.7 — Economy & Gameplay Balance
 
@@ -160,107 +266,6 @@ Expected goals are the engine’s simulated chance probabilities, not tracking-d
 - Update the compact release summary in all 12 supported languages.
 
 Published turnover informs game budgets; cash and transfer spending remain separate. [Financial sources and model](docs/ECONOMY-0.6.5.md).
-
-
-### v0.1.0 — Early Android Foundations
-
-- Established the Android adaptation of OpenFootManager.
-- Brought core squad management, tactics, match simulation, scouting and transfer workflows into the mobile project.
-- Retained career saving, training, staff management and club news as the foundation for later updates.
-
-### v0.2.0 — Early Mobile & World Improvements
-
-- Expanded world-generation coverage with Malta and additional European leagues.
-- Added responsive layout support for portrait and landscape displays.
-- Continued adapting the management experience for Android.
-
-### v0.3.0 — Gameplay & Mobile Update
-
-- Improved player ability, potential, age profiles and position-specific attributes.
-- Connected generated squad quality, finances and wage expectations more closely to club strength.
-- Improved transfers, contracts, renewals, loan decisions and budget awareness.
-- Rebalanced fitness, morale, form, injuries, development and match strength.
-- Improved lineup selection, substitutions, youth intake and scouting uncertainty.
-- Reworked management screens with larger touch controls, mobile cards, scrolling and safer screen layouts.
-
-### v0.3.1 — Player Variety & Matchday Polish
-
-- Expanded fictional portrait variety to 20 source faces and introduced rare players reaching 96 OVR.
-- Improved elite clubs, second-tier standouts and world balancing across Europe, the Americas and Asia.
-- Expanded goal and woodwork commentary, with optional spoken commentary.
-- Improved Android navigation, settings switches, scrolling and touch controls.
-- Added a welcome summary with an option to hide it on later launches.
-- Fixed unreadable injury names, Inbox reliability and repeated generated club names.
-
-### v0.3.5 — Recruitment & Development Expansion
-
-- Expanded **Transfer Market V2.0** with recruitment based on club strategy, squad needs, age and potential.
-- Expanded **Player Development V2.0** by connecting playing time, youth handling and loan opportunities.
-- Added stronger deadline-day urgency and more affordable loan wage negotiation.
-- Improved generated squad consistency, elite-player balancing and portrait variety.
-- Improved message reading on smaller phone screens.
-
-### v0.3.6 — Mobile Hotfix
-
-- Improved Inbox reading and reduced memory use when acknowledging messages.
-- Moved manual Save into Settings and gave the game date more room.
-- Made match injuries persist into careers with medical Inbox updates.
-- Improved saving, message actions, translated text and mobile layouts.
-
-### v0.5.0 — Career Update
-
-- Connected club decisions, post-match updates and season transitions more closely to manager progression.
-- Made career news and decisions easier to follow through the Inbox.
-- Improved career reliability and management screens on phones.
-- Made version information clearer in-game and kept repository links on the opening menu.
-
-### v0.5.1 — Career & Academy Expansion
-
-- Added manager history covering club spells, match results and named league and cup honours.
-- Separated the academy from the 22–26 player senior squad, with up to 12 prospects, coach reports and promotion decisions.
-- Separated senior scouting and youth recruitment, and added Academy Challenge opportunities.
-- Required at least 14 available players for senior matchdays.
-- Added commentary, optional spoken key moments and patch history from the main menu.
-- Improved career saves, lineup roles, position coverage and shirt-number presentation.
-- Updated 2026/27 rules guidance and offside-review presentation.
-
-### v0.5.2 — Career Hotfix
-
-- Fixed injury names in match and date-advance recaps.
-- Fixed Inbox review actions opening the wrong place for loan and transfer offers.
-- Corrected portrait neck and skin recolouring and refreshed affected cached images.
-- Extended playing-time conversations to allow two matches to fulfil a promise.
-
-### v0.6.0 — Board & Dressing Room
-
-- Added manager salary, contract-length and league-target negotiations.
-- Added broader board goals covering finances, youth development and playing style.
-- Added club takeovers, ownership changes and board support for facility upgrades.
-- Improved visibility of player happiness, contract concerns, transfer requests and promises.
-- Gave new managers fairer first-season expectations and time to establish themselves.
-- Improved captaincy reactions, promise deadlines and saved board decisions.
-- Made What's New summaries shorter and easier to read.
-
-### v0.6.1 — Gameplay Polish
-
-- Added 2,818 distinct first names and surnames, with name pools for all 211 selectable nationalities.
-- Prevented repeated full names in new worlds and youth scouting reports; existing saved players keep their names.
-- Fixed formation menus to scroll within the list and fit smaller screens and keyboard layouts.
-- Made goalscoring objectives fairer in small leagues.
-- Fixed manager salary accrual and final payments at contract expiry.
-- Fixed takeover timing, repeated funding and ownership reviews interrupting pending sales.
-- Updated the compact What's New summary across all 12 supported languages.
-- Removed unnecessary debugging information for a smaller APK download.
-
-### v0.6.2 — Career & Gameplay Polish
-
-- Clubs adapt their transfer and loan recruitment to season results, with strategies retained when you save and reload your career.
-- Improved club finances: spending the transfer budget no longer puts a financially healthy club into crisis mode.
-- Rebuilding clubs can recover after stronger results, while facility influence stays balanced and incomplete league records no longer distort strategy reviews.
-- Safer autosaving keeps later squad, contract and Inbox decisions marked for saving.
-- Academy Challenge eligibility now checks actual birthdays and excludes invalid dates and retired players.
-- Fixed the in-game patch history so each version shows its own updates.
-- Updated the compact What's New summary in all 12 supported languages.
 
 ### v0.6.4 — Manager Progression & Planning
 
@@ -293,7 +298,6 @@ Every earned level adds 2% training growth, capped at 10%. Match composure, deci
 
 Forecasts use current recurring cash flow and agreed registrations. Future match income, contract expiries and loan returns can change the result. Legacy milestone dates are labelled as earlier career progress rather than inventing exact dates.
 
-
 ### v0.6.3 — Career & Gameplay Polish
 
 - Incoming transfer acceptances recheck the buyer’s cash and transfer budget before moving a player.
@@ -304,6 +308,106 @@ Forecasts use current recurring cash flow and agreed registrations. Future match
 - Corrected birthday calculations across leap years for seasonal aging and retirement decisions.
 - Added complete career save/reload coverage for recruitment strategies and retained old-save migration checks.
 - Updated the compact What’s New summary in all 12 supported languages.
+
+### v0.6.2 — Career & Gameplay Polish
+
+- Clubs adapt their transfer and loan recruitment to season results, with strategies retained when you save and reload your career.
+- Improved club finances: spending the transfer budget no longer puts a financially healthy club into crisis mode.
+- Rebuilding clubs can recover after stronger results, while facility influence stays balanced and incomplete league records no longer distort strategy reviews.
+- Safer autosaving keeps later squad, contract and Inbox decisions marked for saving.
+- Academy Challenge eligibility now checks actual birthdays and excludes invalid dates and retired players.
+- Fixed the in-game patch history so each version shows its own updates.
+- Updated the compact What's New summary in all 12 supported languages.
+
+### v0.6.1 — Gameplay Polish
+
+- Added 2,818 distinct first names and surnames, with name pools for all 211 selectable nationalities.
+- Prevented repeated full names in new worlds and youth scouting reports; existing saved players keep their names.
+- Fixed formation menus to scroll within the list and fit smaller screens and keyboard layouts.
+- Made goalscoring objectives fairer in small leagues.
+- Fixed manager salary accrual and final payments at contract expiry.
+- Fixed takeover timing, repeated funding and ownership reviews interrupting pending sales.
+- Updated the compact What's New summary across all 12 supported languages.
+- Removed unnecessary debugging information for a smaller APK download.
+
+### v0.6.0 — Board & Dressing Room
+
+- Added manager salary, contract-length and league-target negotiations.
+- Added broader board goals covering finances, youth development and playing style.
+- Added club takeovers, ownership changes and board support for facility upgrades.
+- Improved visibility of player happiness, contract concerns, transfer requests and promises.
+- Gave new managers fairer first-season expectations and time to establish themselves.
+- Improved captaincy reactions, promise deadlines and saved board decisions.
+- Made What's New summaries shorter and easier to read.
+
+### v0.5.2 — Career Hotfix
+
+- Fixed injury names in match and date-advance recaps.
+- Fixed Inbox review actions opening the wrong place for loan and transfer offers.
+- Corrected portrait neck and skin recolouring and refreshed affected cached images.
+- Extended playing-time conversations to allow two matches to fulfil a promise.
+
+### v0.5.1 — Career & Academy Expansion
+
+- Added manager history covering club spells, match results and named league and cup honours.
+- Separated the academy from the 22–26 player senior squad, with up to 12 prospects, coach reports and promotion decisions.
+- Separated senior scouting and youth recruitment, and added Academy Challenge opportunities.
+- Required at least 14 available players for senior matchdays.
+- Added commentary, optional spoken key moments and patch history from the main menu.
+- Improved career saves, lineup roles, position coverage and shirt-number presentation.
+- Updated 2026/27 rules guidance and offside-review presentation.
+
+### v0.5.0 — Career Update
+
+- Connected club decisions, post-match updates and season transitions more closely to manager progression.
+- Made career news and decisions easier to follow through the Inbox.
+- Improved career reliability and management screens on phones.
+- Made version information clearer in-game and kept repository links on the opening menu.
+
+### v0.3.6 — Mobile Hotfix
+
+- Improved Inbox reading and reduced memory use when acknowledging messages.
+- Moved manual Save into Settings and gave the game date more room.
+- Made match injuries persist into careers with medical Inbox updates.
+- Improved saving, message actions, translated text and mobile layouts.
+
+### v0.3.5 — Recruitment & Development Expansion
+
+- Expanded **Transfer Market V2.0** with recruitment based on club strategy, squad needs, age and potential.
+- Expanded **Player Development V2.0** by connecting playing time, youth handling and loan opportunities.
+- Added stronger deadline-day urgency and more affordable loan wage negotiation.
+- Improved generated squad consistency, elite-player balancing and portrait variety.
+- Improved message reading on smaller phone screens.
+
+### v0.3.1 — Player Variety & Matchday Polish
+
+- Expanded fictional portrait variety to 20 source faces and introduced rare players reaching 96 OVR.
+- Improved elite clubs, second-tier standouts and world balancing across Europe, the Americas and Asia.
+- Expanded goal and woodwork commentary, with optional spoken commentary.
+- Improved Android navigation, settings switches, scrolling and touch controls.
+- Added a welcome summary with an option to hide it on later launches.
+- Fixed unreadable injury names, Inbox reliability and repeated generated club names.
+
+### v0.3.0 — Gameplay & Mobile Update
+
+- Improved player ability, potential, age profiles and position-specific attributes.
+- Connected generated squad quality, finances and wage expectations more closely to club strength.
+- Improved transfers, contracts, renewals, loan decisions and budget awareness.
+- Rebalanced fitness, morale, form, injuries, development and match strength.
+- Improved lineup selection, substitutions, youth intake and scouting uncertainty.
+- Reworked management screens with larger touch controls, mobile cards, scrolling and safer screen layouts.
+
+### v0.2.0 — Early Mobile & World Improvements
+
+- Expanded world-generation coverage with Malta and additional European leagues.
+- Added responsive layout support for portrait and landscape displays.
+- Continued adapting the management experience for Android.
+
+### v0.1.0 — Early Android Foundations
+
+- Established the Android adaptation of OpenFootManager.
+- Brought core squad management, tactics, match simulation, scouting and transfer workflows into the mobile project.
+- Retained career saving, training, staff management and club news as the foundation for later updates.
 
 ## Download & Play
 
@@ -335,85 +439,3 @@ Thank you to everyone taking time to play, test and share feedback. Your support
 **Thanks, TranquilMT**
 
 **Build your club. Create your story. Chase trophies.**
-
-# OFMtouch v0.7.1 — Match Engine V2 Polish
-
-- Removed the duplicate What’s New menu card; Patch History remains the single menu entry for current and previous release notes.
-- Dismissed substitutes are rejected before any lineup, bench, event or substitution-count changes.
-- Fallback penalty takers consider composure and current fatigue while respecting your designated taker.
-- Imported condition values cannot boost skills beyond full fitness or introduce invalid numeric results.
-- Possession comparisons retain the correct ratio even for unusually large finite ratings.
-- Formation parsing rejects malformed segments and oversized shapes without integer overflow.
-- Updated highlights in all 12 languages; 0.7.0 notes remain in Patch History.
-
-Android ARM64 · Build 360 · original package and signing certificate.
-
-Thank you for playing, testing and sharing feedback. Your reports help improve every match.
-
-Thanks, TranquilMT
-
-# OFMtouch v0.7.4 — Match Intelligence
-
-A focused matchday update built on 0.7.3.
-
-- Smarter AI managers respond to late scorelines, team fatigue, dismissal disadvantages and aggressive opposition pressing. Fresh positional cover can replace vulnerable booked players. Routine fatigue changes avoid even more exhausted reserves, and tactical replacements coordinate with formation changes.
-- Goalkeeper handling influences the split between rebounds and corners after saves. Caught balls no longer produce misleading goal-kick events. Live and background matches share the same bounded model.
-- Choose the shootout taker order before a match or while a managed shootout is paused. Eligible players take distinct turns before a new cycle; unequal player counts are reduced to equal pools. Ineligible/duplicate assignments are rejected, and outgoing players are removed from current-match assignments.
-- Live and full-time analysis shows recorded big chances, xG coverage, tactical changes and shots/goals conceded after the last substitution. It leaves legacy chance quality unknown and does not imply that a substitution caused subsequent events.
-- Shootouts continue when kicks share the same minute, display actual goal/miss order and taker names, prevent overlapping simulation requests and cancel delayed navigation when unmounted.
-- Failed match finalization retains the live session for retry. Fixture identity and completion status are validated before career results are changed, protecting unrelated fixtures and preventing duplicate application.
-- A redesigned What’s New dialog adds distinct feature icons, labelled cards, a responsive Matchday header and an always-visible Continue action. Its dismissal label uses the current version, and keyboard focus returns to the menu. All new controls and release highlights are translated into 12 languages. Version 0.7.3 remains in Patch History; the gameplay ledger now distinguishes implemented controls from outstanding roadmap work.
-
-Android ARM64 · Build 363 · version code 7400363. The existing package name and persistent release signing certificate are retained, so the APK updates the installed signed app. Complete matching source, checksums and validation evidence accompany the release.
-
-Shootout orders are current-match instructions. This update does not add manual corner aiming or persistent replay of an interrupted match after process death. Physical-device installation/gameplay remains separate from automated and package verification.
-
-Thank you for playing, testing and sharing feedback.
-
-Thanks, TranquilMT
-
-# OFMtouch v0.7.3 — Integrated Gameplay
-
-200 development commits improve the matchday experience and connected club-management tools.
-
-- Live player performance tables track minutes, goals, assists, shots, passes, tackles, interceptions, saves and discipline. The same statistics remain available at full time.
-- Full-time ratings include replaced and dismissed participants, recognise goalkeeper saves and shootout victories, and exclude unused reserves, self-assists, penalty assists and future events.
-- Clearer injury, booking and dismissal alerts open relevant decisions and preselect affected players. Concerns remain actionable after the substitution allowance is exhausted.
-- Replacement recommendations favour positional cover, recognise imported position aliases, protect reserve goalkeepers and rank emergency cover using goalkeeper attributes.
-- Safer match command sequencing, prepared substitutions, pause/resume handling and recorded event chronology protect match state.
-- More accessible match controls, keyboard navigation, event filters, follow-live scrolling and fallback pitch layouts that retain specialised players after dismissals.
-- Improved loan monitoring and return planning, contract estimates, injury recovery dates, fixture congestion guidance, training and academy review validation.
-- More reliable cash runway, wage forecasts, commercial planning and imported-data validation.
-- Release highlights are translated into all 12 languages. Version 0.7.2 remains in Patch History.
-
-Android ARM64 · Build 362 · version code 7300362. Install over your existing signed OFMtouch app to retain your careers. The package name and persistent release certificate are retained. Matching source and SHA-256 checksums accompany the release.
-
-Automated regression and package checks are recorded separately from physical-device testing. The 200 development commits do not mean every proposed future feature is implemented; the detailed roadmap retains outstanding work.
-
-Thank you for playing, testing and sharing feedback.
-
-Thanks, TranquilMT
-
-# OFMtouch v0.7.2 — Match Engine V2 Refinements
-
-37 new development commits bring 16 targeted engine fixes and regression coverage.
-
-- Correct substitute playing time after later substitutions or dismissals.
-- Pre-match lineup swaps preserve the match substitution allowance.
-- Dismissed reserves cannot enter through pre-match swaps; rejected swaps preserve match state.
-- Penalties count once, with compatibility for older event logs.
-- Second yellow cards are recorded as dismissals in player and team statistics.
-- Goal reports expire old set-piece attribution and clear it after harmless free kicks.
-- Empty assist identities no longer create phantom player records.
-- Fatigue cannot restore condition or benefit from excessive imported fitness values.
-- Live condition displays and overall/effective ratings respect their intended limits.
-- Formation labels match the applied shape; tactical notifications reflect actual changes.
-- Large possession counters and imported expected-goals values are processed safely.
-- Dismissed players are never restored by fallback player selection.
-- Updated highlights in all 12 languages, with 0.7.1 retained in Patch History.
-
-Android ARM64 · Build 361 · original package and persistent signing certificate.
-
-Thank you for playing, testing and sharing your feedback. Your reports help us make every match better.
-
-Thanks, TranquilMT

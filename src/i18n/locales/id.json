@@ -1783,7 +1783,7 @@
     "patchPlayers": "Lebih banyak pemain unggulan, termasuk bintang langka berperingkat 96.",
     "patchMatches": "Lebih banyak reaksi, tembakan membentur tiang, dan komentar suara opsional.",
     "patchMobile": "Kontrol seluler, kotak masuk, tim nasional, dan awal karier ditingkatkan.",
-    "patchWelcome": "OFMtouch 0.7.4 — Pertandingan lebih cerdas",
+    "patchWelcome": "OFMtouch 0.7.5 — Pertandingan dan sorotan",
     "patchPortraits": "20 wajah fiktif sumber membuat potret pemain hasil generasi lebih beragam.",
     "patchWorld": "Dunia sepak bola yang lebih luas mencakup 29 negara, dengan klub lebih kuat di Amerika dan Asia.",
     "patchTransfers": "Strategi klub memandu pinjaman dan transfer, dengan tawaran bersaing serta pemeriksaan anggaran.",
@@ -4482,6 +4482,16 @@
       "controls": "Kontrol adu penalti",
       "analysis": "Wawasan pertandingan",
       "reliability": "Keandalan hari pertandingan"
+    }
+  },
+  "phase75": {
+    "intro": "Baca pertandingan. Putar ulang momen penting.",
+    "release": {
+      "pitch": "Ikuti kedua tim di satu lapangan taktis dengan papan skor ringkas dan kontrol yang selalu tersedia.",
+      "commentary": "Komentar mengikuti kejadian yang sudah tercapai, dengan filter dan gulir mengikuti siaran langsung.",
+      "replay": "Telusuri sorotan utama atau panjang berdasarkan klub dan kejadian; atur kecepatan, perpindahan aksi dan daftar putar.",
+      "decisions": "Buka keputusan taktik dan pergantian dari peringatan serta tinjau performa pemain.",
+      "reliability": "Tayangan ulang menahan permainan dan keputusan; perintah tertunda, visibilitas dan perubahan fase ditangani dengan aman."
     }
   }
 }

@@ -1783,7 +1783,7 @@
     "patchPlayers": "Mehr Spitzenspieler, darunter seltene 96er-Stars und starke Aufstiegskandidaten.",
     "patchMatches": "Mehr Spielreaktionen, Aluminiumtreffer und optionaler gesprochener Kommentar.",
     "patchMobile": "Verbesserte mobile Bedienung, Postfach, Nationalteams und Karrierestart.",
-    "patchWelcome": "OFMtouch 0.7.4 — Intelligentere Spiele",
+    "patchWelcome": "OFMtouch 0.7.5 — Spieltag & Höhepunkte",
     "patchPortraits": "20 fiktive Quellgesichter sorgen für vielfältigere generierte Spielerporträts.",
     "patchWorld": "Die Fußballwelt umfasst 29 Nationen und stärkere Vereine in Amerika und Asien.",
     "patchTransfers": "Vereinsstrategien steuern Leihen und Transfers mit konkurrierenden Angeboten und Budgetprüfung.",
@@ -4482,6 +4482,16 @@
       "controls": "Elfmeterschießen steuern",
       "analysis": "Spieleinblicke",
       "reliability": "Zuverlässige Spieltage"
+    }
+  },
+  "phase75": {
+    "intro": "Lies das Spiel. Erlebe entscheidende Momente erneut.",
+    "release": {
+      "pitch": "Verfolge beide Teams auf einem taktischen Spielfeld mit kompakter Anzeige und dauerhaft verfügbaren Bedienelementen.",
+      "commentary": "Kommentare folgen den erreichten Ereignissen, mit Filtern und automatischem Folgen des Spiels.",
+      "replay": "Durchsuche aufgezeichnete kurze oder ausführliche Highlights nach Verein und Ereignis; steuere Tempo, Aktionen und Wiedergabelisten.",
+      "decisions": "Öffne Taktik und Wechsel über Hinweise und prüfe die Spielerleistung.",
+      "reliability": "Wiederholungen halten Spiel und Entscheidungen an; laufende Befehle, Sichtbarkeit und Phasenwechsel werden sicher behandelt."
     }
   }
 }

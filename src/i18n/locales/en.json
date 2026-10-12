@@ -1783,7 +1783,7 @@
     "patchPlayers": "More standout players, including rare 96-rated stars and stronger promotion challengers.",
     "patchMatches": "More match reactions, woodwork moments, and optional spoken commentary.",
     "patchMobile": "Improved mobile controls, inbox actions, international teams and career setup.",
-    "patchWelcome": "OFMtouch 0.7.4 — Match Intelligence",
+    "patchWelcome": "OFMtouch 0.7.5 — Matchday & Highlights",
     "patchPortraits": "20 fictional source faces bring more variety to generated player portraits.",
     "patchWorld": "A larger football world spans 29 nations, with stronger clubs across the Americas and Asia.",
     "patchTransfers": "Club strategies guide loans and transfer approaches, with competing offers and budget checks.",
@@ -4482,6 +4482,16 @@
       "controls": "Shootout control",
       "analysis": "Match insights",
       "reliability": "Matchday reliability"
+    }
+  },
+  "phase75": {
+    "intro": "Read the match. Replay the moments that matter.",
+    "release": {
+      "pitch": "Follow both teams on one tactical pitch with a compact scoreboard and persistent controls.",
+      "commentary": "Commentary follows reached events, with filters and follow-live scrolling.",
+      "replay": "Browse recorded key or extended highlights by club and event; control replay speed, action seeking and playlists.",
+      "decisions": "Open tactical and substitution decisions from alerts and review player performance.",
+      "reliability": "Replays hold live play and decisions; pending commands, background visibility and phase changes are handled safely."
     }
   }
 }
