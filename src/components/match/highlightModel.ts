@@ -47,6 +47,10 @@ export function buildMatchHighlights(
   const occurrences = new Map<string, number>();
   let sequence: MatchEvent[] = [];
   for (const event of reachedMatchEvents(events, minute)) {
+    if (event.side !== "Home" && event.side !== "Away") {
+      sequence = [];
+      continue;
+    }
     if (["KickOff", "HalfTime", "SecondHalfStart", "FullTime"].includes(event.event_type)) {
       sequence = [];
       continue;
