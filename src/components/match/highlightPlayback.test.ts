@@ -29,3 +29,11 @@ it("stops on the final action and bounds invalid seek positions", () => {
     playing: false,
   });
 });
+
+it("rejects malformed clip lengths instead of starting an empty replay", () => {
+  for (const length of [NaN, Infinity, -1, 1.5])
+    expect(highlightPlayback({ frame: 0, playing: false }, { type: "restart" }, length)).toEqual({
+      frame: 0,
+      playing: false,
+    });
+});

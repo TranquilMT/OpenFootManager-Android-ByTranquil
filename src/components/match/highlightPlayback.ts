@@ -13,7 +13,7 @@ export function highlightPlayback(
   const last = Math.max(0, Number.isFinite(length) ? Math.floor(length) - 1 : 0);
   const bounded = (frame: number) =>
     Number.isFinite(frame) ? Math.min(last, Math.max(0, Math.floor(frame))) : 0;
-  if (length <= 0) return { frame: 0, playing: false };
+  if (!Number.isSafeInteger(length) || length <= 0) return { frame: 0, playing: false };
   switch (action.type) {
     case "play":
       return { ...state, playing: state.frame < last };
