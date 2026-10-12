@@ -102,3 +102,9 @@ it("lets the viewer slow down recorded actions independently of match speed", ()
   });
   expect(screen.getByText("match.eventTypes.Goal")).toBeInTheDocument();
 });
+
+it("identifies both clubs around the historical replay score", () => {
+  render(<HighlightReplay clip={clip} snapshot={snapshot} onClose={vi.fn()} />);
+  expect(screen.getByLabelText("common.score")).toHaveTextContent("Alpha FC");
+  expect(screen.getByLabelText("common.score")).toHaveTextContent("Beta FC");
+});

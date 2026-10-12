@@ -4,7 +4,7 @@ import type { MatchHighlight } from "./highlightModel";
 import type { MatchSnapshot } from "./types";
 import { useHighlightPlayback } from "./useHighlightPlayback";
 import { useMatchVisibility } from "./useMatchVisibility";
-import { highlightScore } from "./highlightScore";
+import HighlightReplayScore from "./HighlightReplayScore";
 import HighlightZonePitch from "./HighlightZonePitch";
 import HighlightNarration from "./HighlightNarration";
 import HighlightActors from "./HighlightActors";
@@ -37,7 +37,6 @@ export default function HighlightReplay({
   );
   const frame = clip.events[playback.frame];
   if (!frame) return null;
-  const score = highlightScore(snapshot.events, frame);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/80 p-3">
       <section
@@ -95,11 +94,7 @@ export default function HighlightReplay({
           </button>
         </header>
         <div className="touch-scroll min-h-0 space-y-3 overflow-auto p-3">
-          {score && (
-            <p className="text-center text-2xl font-bold tabular-nums">
-              {score.home} – {score.away}
-            </p>
-          )}
+          <HighlightReplayScore snapshot={snapshot} frame={frame} />
           <HighlightZonePitch zone={frame.zone} />
           <HighlightNarration frame={frame} snapshot={snapshot} />
           <HighlightActors frame={frame} snapshot={snapshot} />
