@@ -56,3 +56,10 @@ it("keeps a single-action replay stopped after restart", () => {
     playing: false,
   });
 });
+
+it("ignores stale timer advances after the viewer pauses", () => {
+  expect(highlightPlayback({ frame: 1, playing: false }, { type: "advance" }, 4)).toEqual({
+    frame: 1,
+    playing: false,
+  });
+});
