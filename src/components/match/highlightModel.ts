@@ -35,8 +35,8 @@ function isKeyOutcome(event: MatchEvent) {
       (detail === "Woodwork" ||
         (typeof detail === "object" &&
           detail !== null &&
-          (("Shot" in detail && detail.Shot.danger === "BigChance") ||
-            ("Save" in detail && detail.Save.quality === "WorldClass")))))
+          (("Shot" in detail && detail.Shot?.danger === "BigChance") ||
+            ("Save" in detail && detail.Save?.quality === "WorldClass")))))
   );
 }
 /** Replay engine events; these are observations, not continuous tracking coordinates. */

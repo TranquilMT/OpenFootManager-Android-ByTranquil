@@ -27,3 +27,8 @@ it("ignores shooting qualifiers attached to non-shooting events", () => {
       0,
     );
 });
+
+it("handles malformed optional chance details without breaking match playback", () => {
+  for (const detail of [{ Shot: null }, { Save: null }, {}, []])
+    expect(() => buildMatchHighlights([event("ShotSaved", 10, { detail })], 10)).not.toThrow();
+});
