@@ -4,7 +4,13 @@ import {
   type HighlightPlaybackAction,
   type HighlightPlaybackState,
 } from "./highlightPlayback";
-export function useHighlightPlayback(clipId: string, length: number, visible = true) {
+export function useHighlightPlayback(
+  clipId: string,
+  length: number,
+  visible = true,
+  intervalMs = 900,
+) {
+  const delay = Number.isFinite(intervalMs) ? Math.min(3000, Math.max(200, intervalMs)) : 900;
   const [state, dispatch] = useReducer(
     (state: HighlightPlaybackState, action: HighlightPlaybackAction) =>
       highlightPlayback(state, action, length),
@@ -18,8 +24,8 @@ export function useHighlightPlayback(clipId: string, length: number, visible = t
   }, [length]);
   useEffect(() => {
     if (!state.playing || !visible) return;
-    const timer = setTimeout(() => dispatch({ type: "advance" }), 900);
+    const timer = setTimeout(() => dispatch({ type: "advance" }), delay);
     return () => clearTimeout(timer);
-  }, [state.frame, state.playing, visible]);
+  }, [state.frame, state.playing, visible, delay]);
   return { ...state, dispatch };
 }

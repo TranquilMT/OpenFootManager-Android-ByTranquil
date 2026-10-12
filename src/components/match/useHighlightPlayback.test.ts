@@ -71,3 +71,23 @@ it("clamps and pauses a replay when its recording becomes shorter", () => {
   expect(result.current.frame).toBe(1);
   expect(result.current.playing).toBe(false);
 });
+
+it("supports bounded action pacing and cancels the previous pace timer", () => {
+  vi.useFakeTimers();
+  const { result, rerender } = renderHook(
+    ({ delay }) => useHighlightPlayback("clip", 4, true, delay),
+    { initialProps: { delay: 1500 } },
+  );
+  act(() => {
+    result.current.dispatch({ type: "play" });
+  });
+  act(() => {
+    vi.advanceTimersByTime(900);
+  });
+  expect(result.current.frame).toBe(0);
+  rerender({ delay: 400 });
+  act(() => {
+    vi.advanceTimersByTime(400);
+  });
+  expect(result.current.frame).toBe(1);
+});
