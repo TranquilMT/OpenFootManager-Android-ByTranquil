@@ -1,3 +1,4 @@
+import { useDeferredMatchTransition } from "./useDeferredMatchTransition";
 import LiveMatchDetailContent from "./LiveMatchDetailContent";
 import { canAdvanceLivePhase } from "./livePlaybackPhase";
 import MatchDetailTabs, { type ActivePanel } from "./MatchDetailTabs";
@@ -118,12 +119,11 @@ export default function MatchLive({
   const [voiceEnabled, setVoiceEnabled] = useState(settings.spoken_match_commentary);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const mountedRef = useRef(true);
-  const phaseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scheduleTransition = useDeferredMatchTransition(replayActive || !matchVisible);
   useEffect(() => {
     mountedRef.current = true;
     return () => {
       mountedRef.current = false;
-      if (phaseTimerRef.current) clearTimeout(phaseTimerRef.current);
     };
   }, []);
   // Track phases we've already signaled to avoid double-firing
@@ -198,7 +198,7 @@ export default function MatchLive({
               setIsRunning(false);
               setSpeed("paused");
               // Small delay so the last event renders before transitioning
-              phaseTimerRef.current = setTimeout(() => onHalfTime("HalfTime"), 600);
+              scheduleTransition(() => onHalfTime("HalfTime"));
               return;
             }
 
@@ -206,7 +206,7 @@ export default function MatchLive({
               signaledRef.current.add("ExtraTimeHalfTime");
               setIsRunning(false);
               setSpeed("paused");
-              phaseTimerRef.current = setTimeout(() => onHalfTime("ExtraTimeHalfTime"), 600);
+              scheduleTransition(() => onHalfTime("ExtraTimeHalfTime"));
               return;
             }
 
@@ -214,7 +214,7 @@ export default function MatchLive({
               signaledRef.current.add("PenaltyShootout");
               setIsRunning(false);
               setSpeed("paused");
-              phaseTimerRef.current = setTimeout(() => onPenaltyShootout?.(), 600);
+              scheduleTransition(() => onPenaltyShootout?.());
               return;
             }
 
@@ -222,7 +222,7 @@ export default function MatchLive({
               signaledRef.current.add("Finished");
               setIsRunning(false);
               setSpeed("paused");
-              phaseTimerRef.current = setTimeout(() => onFullTime(), 600);
+              scheduleTransition(() => onFullTime());
               return;
             }
           }
@@ -233,7 +233,15 @@ export default function MatchLive({
         }
       }, setMatchCommandPending);
     },
-    [publishSnapshot, onImportantEvent, onHalfTime, onFullTime, onPenaltyShootout, t],
+    [
+      publishSnapshot,
+      onImportantEvent,
+      onHalfTime,
+      onFullTime,
+      onPenaltyShootout,
+      scheduleTransition,
+      t,
+    ],
   );
 
   // Auto-step timer
