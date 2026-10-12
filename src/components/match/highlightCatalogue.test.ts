@@ -13,3 +13,10 @@ it("filters replay clips by the recorded club side", () => {
   expect(selectHighlights([home, away], { side: "Home" })).toEqual([home]);
   expect(selectHighlights([home, away], { side: "all" })).toEqual([home, away]);
 });
+
+it("separates goal, chance and incident catalogues", () => {
+  const clips = [clip("Goal", "Home"), clip("ShotSaved", "Home"), clip("Injury", "Away")];
+  expect(selectHighlights(clips, { category: "goals" })).toEqual([clips[0]]);
+  expect(selectHighlights(clips, { category: "chances" })).toEqual(clips.slice(0, 2));
+  expect(selectHighlights(clips, { category: "incidents" })).toEqual([clips[2]]);
+});

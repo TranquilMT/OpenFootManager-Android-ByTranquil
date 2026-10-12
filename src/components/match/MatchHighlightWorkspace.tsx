@@ -5,7 +5,7 @@ import HighlightModeControls, { type HighlightPreference } from "./HighlightMode
 import HighlightList from "./HighlightList";
 import HighlightReplay from "./HighlightReplay";
 import { reachedMatchEvents } from "./livePitchModel";
-import { selectHighlights } from "./highlightCatalogue";
+import { selectHighlights, type HighlightCategory } from "./highlightCatalogue";
 import { useTranslation } from "react-i18next";
 import { EventFeed } from "./MatchPanels";
 export default function MatchHighlightWorkspace({
@@ -18,6 +18,7 @@ export default function MatchHighlightWorkspace({
   showCommentary?: boolean;
 }) {
   const { t } = useTranslation();
+  const [category, setCategory] = useState<HighlightCategory>("all");
   const [side, setSide] = useState<"all" | "Home" | "Away">("all");
   const [mode, setMode] = useState<HighlightPreference>("key");
   const [selection, setSelection] = useState<{
@@ -52,7 +53,7 @@ export default function MatchHighlightWorkspace({
     snapshot.current_minute,
     onReplayChange,
   ]);
-  const filteredClips = selectHighlights(clips, { side });
+  const filteredClips = selectHighlights(clips, { side, category });
   const close = () => {
     setSelection(null);
   };
@@ -84,6 +85,29 @@ export default function MatchHighlightWorkspace({
           ))}
         </fieldset>
       )}
+      {mode !== "off" && (
+        <fieldset aria-label={t("match.events")} className="flex flex-wrap gap-2">
+          {(["all", "goals", "chances", "incidents"] as const).map((value) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={category === value}
+              onClick={() => setCategory(value)}
+              className="min-h-11 rounded-lg bg-gray-100 px-3 text-sm dark:bg-navy-700"
+            >
+              {t(
+                value === "all"
+                  ? "common.all"
+                  : value === "goals"
+                    ? "match.eventTypes.Goal"
+                    : value === "chances"
+                      ? "match.shots"
+                      : "match.highlights.incidents",
+              )}
+            </button>
+          ))}
+        </fieldset>
+      )}
       {mode === "off" ? (
         <EventFeed
           events={reachedMatchEvents(snapshot.events, snapshot.current_minute)}
@@ -94,7 +118,7 @@ export default function MatchHighlightWorkspace({
         <HighlightList
           clips={filteredClips}
           snapshot={snapshot}
-          catalogueKey={`${mode}:${side}`}
+          catalogueKey={`${mode}:${side}:${category}`}
           onSelect={(clip) => {
             setSelection(structuredClone({ clip, snapshot }));
           }}
