@@ -17,11 +17,12 @@ const TYPES = {
   incidents: new Set(["YellowCard", "RedCard", "SecondYellow", "Injury"]),
 };
 export interface HighlightQuery {
+  order?: "oldest" | "newest";
   category?: HighlightCategory;
   side?: "all" | "Home" | "Away";
 }
 export function selectHighlights(clips: MatchHighlight[], query: HighlightQuery): MatchHighlight[] {
-  return clips
+  const selected = clips
     .filter(
       (clip) =>
         !query.category ||
@@ -29,4 +30,11 @@ export function selectHighlights(clips: MatchHighlight[], query: HighlightQuery)
         TYPES[query.category].has(clip.outcome.event_type),
     )
     .filter((clip) => !query.side || query.side === "all" || clip.outcome.side === query.side);
+  return query.order
+    ? selected.sort((a, b) =>
+        query.order === "oldest"
+          ? a.outcome.minute - b.outcome.minute
+          : b.outcome.minute - a.outcome.minute,
+      )
+    : selected;
 }

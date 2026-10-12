@@ -10,11 +10,13 @@ export default function HighlightList({
   snapshot,
   onSelect,
   catalogueKey = "all",
+  ordered = false,
 }: {
   clips: MatchHighlight[];
   snapshot: MatchSnapshot;
   onSelect: (clip: MatchHighlight) => void;
   catalogueKey?: string;
+  ordered?: boolean;
 }) {
   const [limit, setLimit] = useState(12);
   useEffect(() => {

@@ -18,6 +18,7 @@ export default function MatchHighlightWorkspace({
   showCommentary?: boolean;
 }) {
   const { t } = useTranslation();
+  const [order, setOrder] = useState<"oldest" | "newest">("newest");
   const [category, setCategory] = useState<HighlightCategory>("all");
   const [side, setSide] = useState<"all" | "Home" | "Away">("all");
   const [mode, setMode] = useState<HighlightPreference>("key");
@@ -53,7 +54,7 @@ export default function MatchHighlightWorkspace({
     snapshot.current_minute,
     onReplayChange,
   ]);
-  const filteredClips = selectHighlights(clips, { side, category });
+  const filteredClips = selectHighlights(clips, { side, category, order });
   const close = () => {
     setSelection(null);
   };
@@ -108,6 +109,21 @@ export default function MatchHighlightWorkspace({
           ))}
         </fieldset>
       )}
+      {mode !== "off" && (
+        <fieldset aria-label={t("match.highlights.newest")} className="flex gap-2">
+          {(["newest", "oldest"] as const).map((value) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={order === value}
+              onClick={() => setOrder(value)}
+              className="min-h-11 rounded-lg bg-gray-100 px-3 text-sm dark:bg-navy-700"
+            >
+              {t(`match.highlights.${value}`)}
+            </button>
+          ))}
+        </fieldset>
+      )}
       {mode === "off" ? (
         <EventFeed
           events={reachedMatchEvents(snapshot.events, snapshot.current_minute)}
@@ -118,7 +134,8 @@ export default function MatchHighlightWorkspace({
         <HighlightList
           clips={filteredClips}
           snapshot={snapshot}
-          catalogueKey={`${mode}:${side}:${category}`}
+          ordered
+          catalogueKey={`${mode}:${side}:${category}:${order}`}
           onSelect={(clip) => {
             setSelection(structuredClone({ clip, snapshot }));
           }}

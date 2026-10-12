@@ -20,3 +20,14 @@ it("separates goal, chance and incident catalogues", () => {
   expect(selectHighlights(clips, { category: "chances" })).toEqual(clips.slice(0, 2));
   expect(selectHighlights(clips, { category: "incidents" })).toEqual([clips[2]]);
 });
+
+it("orders replays chronologically without mutating the catalogue", () => {
+  const clips = [clip("Goal", "Home", 20), clip("Goal", "Away", 10)];
+  expect(selectHighlights(clips, { order: "oldest" }).map((c) => c.outcome.minute)).toEqual([
+    10, 20,
+  ]);
+  expect(selectHighlights(clips, { order: "newest" }).map((c) => c.outcome.minute)).toEqual([
+    20, 10,
+  ]);
+  expect(clips[0].outcome.minute).toBe(20);
+});
