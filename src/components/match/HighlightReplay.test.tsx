@@ -1,5 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { expect, it, vi } from "vitest";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, expect, it, vi } from "vitest";
 import HighlightReplay from "./HighlightReplay";
 import { createSnapshot } from "./SubPanel.testFixtures";
 import { buildMatchHighlights } from "./highlightModel";
@@ -85,4 +85,20 @@ it("supports action navigation keys without overriding the native seek slider", 
   expect(screen.getByText("match.eventTypes.Goal")).toBeInTheDocument();
   fireEvent.keyDown(dialog, { key: "ArrowLeft" });
   expect(screen.getByText("match.eventTypes.PassCompleted")).toBeInTheDocument();
+});
+
+afterEach(() => vi.useRealTimers());
+it("lets the viewer slow down recorded actions independently of match speed", () => {
+  vi.useFakeTimers();
+  render(<HighlightReplay clip={clip} snapshot={snapshot} onClose={vi.fn()} />);
+  fireEvent.click(screen.getByRole("button", { name: "match.slow" }));
+  fireEvent.click(screen.getByRole("button", { name: "match.highlights.play" }));
+  act(() => {
+    vi.advanceTimersByTime(900);
+  });
+  expect(screen.getByText("match.eventTypes.PassCompleted")).toBeInTheDocument();
+  act(() => {
+    vi.advanceTimersByTime(600);
+  });
+  expect(screen.getByText("match.eventTypes.Goal")).toBeInTheDocument();
 });

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { MatchHighlight } from "./highlightModel";
 import type { MatchSnapshot } from "./types";
@@ -28,7 +28,13 @@ export default function HighlightReplay({
     };
   }, []);
   const { t } = useTranslation();
-  const playback = useHighlightPlayback(clip.id, clip.events.length, useMatchVisibility());
+  const [pace, setPace] = useState<"slow" | "normal" | "fast">("normal");
+  const playback = useHighlightPlayback(
+    clip.id,
+    clip.events.length,
+    useMatchVisibility(),
+    pace === "slow" ? 1500 : pace === "fast" ? 400 : 900,
+  );
   const frame = clip.events[playback.frame];
   if (!frame) return null;
   const score = highlightScore(snapshot.events, frame);
@@ -116,6 +122,22 @@ export default function HighlightReplay({
             {playback.frame + 1} / {clip.events.length}
           </span>
         </div>
+        <fieldset
+          aria-label={t("match.highlights.play")}
+          className="flex shrink-0 flex-wrap justify-center gap-2 px-3 py-2"
+        >
+          {(["slow", "normal", "fast"] as const).map((value) => (
+            <button
+              type="button"
+              key={value}
+              aria-pressed={pace === value}
+              onClick={() => setPace(value)}
+              className={`min-h-11 rounded-lg px-3 text-sm ${pace === value ? "bg-primary-100 text-primary-800 dark:bg-primary-900 dark:text-white" : "bg-gray-100 dark:bg-navy-700"}`}
+            >
+              {t(`match.${value}`)}
+            </button>
+          ))}
+        </fieldset>
         <footer className="flex shrink-0 flex-wrap items-center justify-center gap-2 border-t border-gray-200 p-3 dark:border-navy-700">
           <button
             type="button"
