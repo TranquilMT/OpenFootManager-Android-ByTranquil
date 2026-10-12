@@ -16,3 +16,12 @@ it("shows only valid recorded chance probability", () => {
   rerender(<HighlightChance frame={{ ...frame, shot: null }} />);
   expect(container).toBeEmptyDOMElement();
 });
+
+it("labels xG as probability rather than a shot count", () => {
+  render(
+    <HighlightChance
+      frame={{ shot: { expected_goals: 0.25, goalkeeper_id: "gk" } } as MatchEvent}
+    />,
+  );
+  expect(screen.getByText(/match.highlights.chanceProbability/)).toHaveTextContent("0.25");
+});
