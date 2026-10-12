@@ -1,3 +1,4 @@
+import { useReplayScrollLock } from "./useReplayScrollLock";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { useHighlightAutoNext } from "./useHighlightAutoNext";
 import { useEffect, useRef, useState } from "react";
@@ -25,6 +26,7 @@ export default function HighlightReplay({
   onPreviousClip?: () => void;
   onNextClip?: () => void;
 }) {
+  useReplayScrollLock();
   const dialogRef = useRef<HTMLElement>(null),
     closeRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
