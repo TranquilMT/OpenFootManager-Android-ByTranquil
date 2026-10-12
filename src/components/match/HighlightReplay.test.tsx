@@ -186,3 +186,13 @@ it("mounts above parent stacking and clipping contexts", () => {
   unmount();
   parent.remove();
 });
+
+it("returns focus to the replay when background controls receive it", () => {
+  const background = document.createElement("button");
+  document.body.append(background);
+  const { unmount } = render(<HighlightReplay clip={clip} snapshot={snapshot} onClose={vi.fn()} />);
+  background.focus();
+  expect(screen.getByRole("button", { name: "common.close" })).toHaveFocus();
+  unmount();
+  background.remove();
+});

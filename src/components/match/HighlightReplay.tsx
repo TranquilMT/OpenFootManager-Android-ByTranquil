@@ -33,7 +33,13 @@ export default function HighlightReplay({
   useEffect(() => {
     const previous = document.activeElement;
     closeRef.current?.focus();
+    const keepFocus = (event: FocusEvent) => {
+      if (event.target instanceof Node && !dialogRef.current?.contains(event.target))
+        closeRef.current?.focus();
+    };
+    document.addEventListener("focusin", keepFocus);
     return () => {
+      document.removeEventListener("focusin", keepFocus);
       if (previous instanceof HTMLElement && previous.isConnected) previous.focus();
     };
   }, []);
@@ -62,6 +68,7 @@ export default function HighlightReplay({
     return createPortal(
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-navy-900/80 p-3">
         <section
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label={t("match.highlights.replay")}
