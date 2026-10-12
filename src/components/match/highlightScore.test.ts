@@ -30,3 +30,8 @@ it("counts shootout kicks separately through the current recorded kick", () => {
   expect(highlightShootout(events, events[3])).toEqual({ home: 1, away: 1 });
   expect(highlightShootout(events, events[0])).toBeNull();
 });
+
+it("requires a kickoff marker before the selected frame rather than later in its minute", () => {
+  const goal = event("Goal", 0);
+  expect(highlightScore([goal, event("KickOff", 0)], goal)).toBeNull();
+});

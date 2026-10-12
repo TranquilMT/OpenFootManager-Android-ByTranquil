@@ -4,7 +4,12 @@ import type { MatchEvent } from "./types";
 export function highlightScore(events: MatchEvent[], frame: MatchEvent) {
   const history = reachedMatchEvents(events, frame.minute);
   const index = history.indexOf(frame);
-  if (index < 0 || !history.some((event) => event.event_type === "KickOff" && event.minute === 0))
+  if (
+    index < 0 ||
+    !history
+      .slice(0, index + 1)
+      .some((event) => event.event_type === "KickOff" && event.minute === 0)
+  )
     return null;
   const score = { home: 0, away: 0 };
   for (const event of history.slice(0, index + 1)) {
