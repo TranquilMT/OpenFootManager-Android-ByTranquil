@@ -59,3 +59,12 @@ it("keeps unsupported imported actions out of replay buildup", () => {
   const goal = event("Goal", 11);
   expect(buildMatchHighlights([event("ImportedBookkeeping"), goal], 11)[0].events).toEqual([goal]);
 });
+
+it("separates attacks across recorded substitutions and tactical changes", () => {
+  for (const event_type of ["Substitution", "TacticalChange"]) {
+    const goal = event("Goal", 12);
+    expect(
+      buildMatchHighlights([event("PassCompleted"), event(event_type, 11), goal], 12)[0].events,
+    ).toEqual([goal]);
+  }
+});

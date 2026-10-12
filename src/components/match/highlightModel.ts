@@ -65,7 +65,10 @@ export function buildMatchHighlights(
       sequence = [];
       continue;
     }
-    if (["Substitution", "TacticalChange"].includes(event.event_type)) continue;
+    if (["Substitution", "TacticalChange"].includes(event.event_type)) {
+      sequence = [];
+      continue;
+    }
     if (
       ["Injury", "RedCard", "SecondYellow", "YellowCard", "ShootoutGoal", "ShootoutMiss"].includes(
         event.event_type,
