@@ -54,3 +54,8 @@ it("separates stopped play from the following attack", () => {
     buildMatchHighlights([event("PassCompleted", 9), event("Foul"), goal], 12)[0].events,
   ).toEqual([goal]);
 });
+
+it("keeps unsupported imported actions out of replay buildup", () => {
+  const goal = event("Goal", 11);
+  expect(buildMatchHighlights([event("ImportedBookkeeping"), goal], 11)[0].events).toEqual([goal]);
+});

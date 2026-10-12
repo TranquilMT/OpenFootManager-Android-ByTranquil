@@ -72,6 +72,24 @@ export function buildMatchHighlights(
       )
     )
       sequence = [];
+    const replayable =
+      SHOT_TYPES.has(event.event_type) ||
+      OUTCOMES.has(event.event_type) ||
+      [
+        "PassCompleted",
+        "Dribble",
+        "Cross",
+        "Corner",
+        "FreeKick",
+        "GoalKick",
+        "Tackle",
+        "Interception",
+        "YellowCard",
+      ].includes(event.event_type);
+    if (!replayable) {
+      sequence = [];
+      continue;
+    }
     sequence.push(event);
     sequence = sequence.slice(-8);
     if (
