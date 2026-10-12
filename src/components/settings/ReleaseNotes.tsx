@@ -13,6 +13,7 @@ import {
 const ISSUE_URL = "https://github.com/TranquilMT/OpenFootManager-Android-ByTranquil/issues/new";
 
 const HIGHLIGHT_KEYS = [
+  { key: "match.highlights.updateNote", title: "match.highlights.title", Icon: Target },
   { key: "phase74.release.ai", title: "phase74.labels.ai", Icon: BrainCircuit },
   { key: "phase74.release.match", title: "phase74.labels.match", Icon: Hand },
   { key: "phase74.release.controls", title: "phase74.labels.controls", Icon: Target },
