@@ -58,3 +58,16 @@ it("resets playback when another clip is selected", () => {
   expect(result.current.playing).toBe(false);
   expect(vi.getTimerCount()).toBe(0);
 });
+
+it("clamps and pauses a replay when its recording becomes shorter", () => {
+  const { result, rerender } = renderHook(({ length }) => useHighlightPlayback("clip", length), {
+    initialProps: { length: 5 },
+  });
+  act(() => {
+    result.current.dispatch({ type: "seek", frame: 3 });
+    result.current.dispatch({ type: "play" });
+  });
+  rerender({ length: 2 });
+  expect(result.current.frame).toBe(1);
+  expect(result.current.playing).toBe(false);
+});

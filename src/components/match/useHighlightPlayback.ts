@@ -14,6 +14,9 @@ export function useHighlightPlayback(clipId: string, length: number, visible = t
     dispatch({ type: "seek", frame: 0 });
   }, [clipId]);
   useEffect(() => {
+    dispatch({ type: "reconcile" });
+  }, [length]);
+  useEffect(() => {
     if (!state.playing || !visible) return;
     const timer = setTimeout(() => dispatch({ type: "advance" }), 900);
     return () => clearTimeout(timer);

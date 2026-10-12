@@ -3,7 +3,7 @@ export interface HighlightPlaybackState {
   playing: boolean;
 }
 export type HighlightPlaybackAction =
-  | { type: "play" | "pause" | "advance" | "restart" }
+  | { type: "play" | "pause" | "advance" | "restart" | "reconcile" }
   | { type: "seek"; frame: number };
 export function highlightPlayback(
   state: HighlightPlaybackState,
@@ -18,6 +18,7 @@ export function highlightPlayback(
   switch (action.type) {
     case "play":
       return { ...current, playing: current.frame < last };
+    case "reconcile":
     case "pause":
       return { ...current, playing: false };
     case "restart":
