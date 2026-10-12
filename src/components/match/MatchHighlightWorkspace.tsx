@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { MatchSnapshot } from "./types";
 import { buildMatchHighlights, type MatchHighlight } from "./highlightModel";
 import HighlightModeControls, { type HighlightPreference } from "./HighlightModeControls";
@@ -25,7 +25,12 @@ export default function MatchHighlightWorkspace({
       buildMatchHighlights(snapshot.events, snapshot.current_minute, mode === "off" ? "key" : mode),
     [snapshot.events, snapshot.current_minute, mode],
   );
-  useEffect(() => () => onReplayChange?.(false), [onReplayChange]);
+  const ownershipRef = useRef(onReplayChange);
+  ownershipRef.current = onReplayChange;
+  useEffect(() => {
+    onReplayChange?.(!!selection);
+  }, [selection, onReplayChange]);
+  useEffect(() => () => ownershipRef.current?.(false), []);
   useEffect(() => {
     if (
       selection &&
@@ -45,7 +50,6 @@ export default function MatchHighlightWorkspace({
   ]);
   const close = () => {
     setSelection(null);
-    onReplayChange?.(false);
   };
   return (
     <section className="space-y-3">
@@ -68,7 +72,6 @@ export default function MatchHighlightWorkspace({
           snapshot={snapshot}
           onSelect={(clip) => {
             setSelection(structuredClone({ clip, snapshot }));
-            onReplayChange?.(true);
           }}
         />
       )}{" "}

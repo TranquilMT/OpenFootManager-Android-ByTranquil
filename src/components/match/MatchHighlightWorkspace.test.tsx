@@ -72,3 +72,14 @@ it("releases an old replay when another fixture or rewound match arrives", () =>
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   expect(change).toHaveBeenLastCalledWith(false);
 });
+
+it("keeps replay ownership active when the parent callback changes", () => {
+  const first = vi.fn(),
+    second = vi.fn();
+  const { rerender } = render(
+    <MatchHighlightWorkspace snapshot={snapshot} onReplayChange={first} />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: /match.highlights.replay/ }));
+  rerender(<MatchHighlightWorkspace snapshot={snapshot} onReplayChange={second} />);
+  expect(second).toHaveBeenLastCalledWith(true);
+});
