@@ -20,3 +20,10 @@ it("rejects invalid team identities and resets their buildup", () => {
   expect(clips).toHaveLength(1);
   expect(clips[0].events).toEqual([goal]);
 });
+
+it("ignores shooting qualifiers attached to non-shooting events", () => {
+  for (const event_type of ["PassCompleted", "Corner", "TacticalChange"])
+    expect(buildMatchHighlights([event(event_type, 10, { detail: "Woodwork" })], 10)).toHaveLength(
+      0,
+    );
+});

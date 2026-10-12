@@ -17,6 +17,7 @@ const OUTCOMES = new Set([
   "SecondYellow",
   "Injury",
 ]);
+const SHOT_TYPES = new Set(["ShotOnTarget", "ShotSaved", "ShotOffTarget", "ShotBlocked"]);
 function isKeyOutcome(event: MatchEvent) {
   const detail = event.detail;
   const xg = event.shot?.expected_goals;
@@ -30,11 +31,12 @@ function isKeyOutcome(event: MatchEvent) {
     return true;
   return (
     OUTCOMES.has(event.event_type) ||
-    detail === "Woodwork" ||
-    (typeof detail === "object" &&
-      detail !== null &&
-      (("Shot" in detail && detail.Shot.danger === "BigChance") ||
-        ("Save" in detail && detail.Save.quality === "WorldClass")))
+    (SHOT_TYPES.has(event.event_type) &&
+      (detail === "Woodwork" ||
+        (typeof detail === "object" &&
+          detail !== null &&
+          (("Shot" in detail && detail.Shot.danger === "BigChance") ||
+            ("Save" in detail && detail.Save.quality === "WorldClass")))))
   );
 }
 /** Replay engine events; these are observations, not continuous tracking coordinates. */
