@@ -15,3 +15,18 @@ export function highlightScore(events: MatchEvent[], frame: MatchEvent) {
   }
   return score;
 }
+
+export function highlightShootout(events: MatchEvent[], frame: MatchEvent) {
+  const index = events.indexOf(frame);
+  if (index < 0) return null;
+  const kicks = events
+    .slice(0, index + 1)
+    .filter((event) => event.event_type === "ShootoutGoal" || event.event_type === "ShootoutMiss");
+  if (!kicks.length) return null;
+  return {
+    home: kicks.filter((event) => event.event_type === "ShootoutGoal" && event.side === "Home")
+      .length,
+    away: kicks.filter((event) => event.event_type === "ShootoutGoal" && event.side === "Away")
+      .length,
+  };
+}

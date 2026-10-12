@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { highlightScore } from "./highlightScore";
+import { highlightScore, highlightShootout } from "./highlightScore";
 import type { MatchEvent } from "./types";
 const event = (event_type: string, minute: number, side: "Home" | "Away" = "Home") =>
   ({ event_type, minute, side }) as MatchEvent;
@@ -17,4 +17,16 @@ it("does not invent a score for incomplete imported histories", () => {
   const goal = event("Goal", 10);
   expect(highlightScore([goal], goal)).toBeNull();
   expect(highlightScore([event("KickOff", 0)], goal)).toBeNull();
+});
+
+it("counts shootout kicks separately through the current recorded kick", () => {
+  const events = [
+    event("KickOff", 0),
+    event("ShootoutGoal", 125),
+    event("ShootoutMiss", 125, "Away"),
+    event("ShootoutGoal", 125, "Away"),
+  ];
+  expect(highlightShootout(events, events[2])).toEqual({ home: 1, away: 0 });
+  expect(highlightShootout(events, events[3])).toEqual({ home: 1, away: 1 });
+  expect(highlightShootout(events, events[0])).toBeNull();
 });
