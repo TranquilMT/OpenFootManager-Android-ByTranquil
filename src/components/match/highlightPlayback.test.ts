@@ -49,3 +49,10 @@ it("repairs invalid playback positions before resuming or pausing", () => {
     playing: false,
   });
 });
+
+it("keeps a single-action replay stopped after restart", () => {
+  expect(highlightPlayback({ frame: 0, playing: false }, { type: "restart" }, 1)).toEqual({
+    frame: 0,
+    playing: false,
+  });
+});

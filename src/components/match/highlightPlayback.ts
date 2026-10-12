@@ -21,7 +21,7 @@ export function highlightPlayback(
     case "pause":
       return { ...current, playing: false };
     case "restart":
-      return { frame: 0, playing: true };
+      return { frame: 0, playing: last > 0 };
     case "advance":
       return { ...current, frame: bounded(current.frame + 1), playing: current.frame + 1 < last };
     case "seek":
