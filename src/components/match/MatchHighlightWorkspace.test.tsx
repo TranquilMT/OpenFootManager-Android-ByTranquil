@@ -56,3 +56,19 @@ it("captures replay data without sharing mutable source objects", () => {
   expect(dialog).toHaveTextContent("Starter One");
   expect(dialog).not.toHaveTextContent("Changed after selection");
 });
+
+it("releases an old replay when another fixture or rewound match arrives", () => {
+  const change = vi.fn();
+  const { rerender } = render(
+    <MatchHighlightWorkspace snapshot={snapshot} onReplayChange={change} />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: /match.highlights.replay/ }));
+  rerender(
+    <MatchHighlightWorkspace
+      snapshot={{ ...snapshot, home_team: { ...snapshot.home_team, id: "another-club" } }}
+      onReplayChange={change}
+    />,
+  );
+  expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  expect(change).toHaveBeenLastCalledWith(false);
+});

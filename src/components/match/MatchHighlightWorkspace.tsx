@@ -26,6 +26,23 @@ export default function MatchHighlightWorkspace({
     [snapshot.events, snapshot.current_minute, mode],
   );
   useEffect(() => () => onReplayChange?.(false), [onReplayChange]);
+  useEffect(() => {
+    if (
+      selection &&
+      (selection.snapshot.home_team.id !== snapshot.home_team.id ||
+        selection.snapshot.away_team.id !== snapshot.away_team.id ||
+        snapshot.current_minute < selection.snapshot.current_minute)
+    ) {
+      setSelection(null);
+      onReplayChange?.(false);
+    }
+  }, [
+    selection,
+    snapshot.home_team.id,
+    snapshot.away_team.id,
+    snapshot.current_minute,
+    onReplayChange,
+  ]);
   const close = () => {
     setSelection(null);
     onReplayChange?.(false);
