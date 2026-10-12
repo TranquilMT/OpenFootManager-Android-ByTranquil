@@ -5,6 +5,8 @@ import HighlightModeControls, { type HighlightPreference } from "./HighlightMode
 import HighlightList from "./HighlightList";
 import HighlightReplay from "./HighlightReplay";
 import { reachedMatchEvents } from "./livePitchModel";
+import { selectHighlights } from "./highlightCatalogue";
+import { useTranslation } from "react-i18next";
 import { EventFeed } from "./MatchPanels";
 export default function MatchHighlightWorkspace({
   snapshot,
@@ -15,6 +17,8 @@ export default function MatchHighlightWorkspace({
   onReplayChange?: (active: boolean) => void;
   showCommentary?: boolean;
 }) {
+  const { t } = useTranslation();
+  const [side, setSide] = useState<"all" | "Home" | "Away">("all");
   const [mode, setMode] = useState<HighlightPreference>("key");
   const [selection, setSelection] = useState<{
     clip: MatchHighlight;
@@ -48,6 +52,7 @@ export default function MatchHighlightWorkspace({
     snapshot.current_minute,
     onReplayChange,
   ]);
+  const filteredClips = selectHighlights(clips, { side });
   const close = () => {
     setSelection(null);
   };
@@ -60,6 +65,25 @@ export default function MatchHighlightWorkspace({
           if (next === "off") close();
         }}
       />
+      {mode !== "off" && (
+        <fieldset aria-label={t("match.highlights.title")} className="flex flex-wrap gap-2">
+          {(["all", "Home", "Away"] as const).map((value) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={side === value}
+              onClick={() => setSide(value)}
+              className="min-h-11 rounded-lg bg-gray-100 px-3 text-sm dark:bg-navy-700"
+            >
+              {value === "all"
+                ? t("common.all")
+                : value === "Home"
+                  ? snapshot.home_team.name
+                  : snapshot.away_team.name}
+            </button>
+          ))}
+        </fieldset>
+      )}
       {mode === "off" ? (
         <EventFeed
           events={reachedMatchEvents(snapshot.events, snapshot.current_minute)}
@@ -68,8 +92,9 @@ export default function MatchHighlightWorkspace({
         />
       ) : (
         <HighlightList
-          clips={clips}
+          clips={filteredClips}
           snapshot={snapshot}
+          catalogueKey={`${mode}:${side}`}
           onSelect={(clip) => {
             setSelection(structuredClone({ clip, snapshot }));
           }}
